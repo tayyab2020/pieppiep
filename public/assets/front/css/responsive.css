@@ -1,0 +1,152 @@
+/* Medium Layout: 1280px. */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+/*----------Starting of header area----------*/
+.mainmenu li a {padding-left: 25px;}
+/*----------Ending of header area----------*/
+
+/*  Starting of Blogs  */
+.blog-text .blog-meta-text {height: 150px;}
+.blog-text {height: 322px;}
+/*  Ending of Blogs  */
+
+/*  Starting of Blogs Details  */
+.post-sidebar-area li a {font-size: 14px;}
+/*  Ending of Blogs Details  */
+
+/*  Starting of footer area  */
+.single-footer-area {padding-top: 30px;}
+.footer-title {margin-bottom: 10px;}
+/*  Ending of footer area  */
+
+/*  Starting of Login area area  */ 
+.login-form {padding: 50px; padding-top: 100px;}
+/*  Ending of Login area area  */
+
+/*----------Starting of Hero area----------*/
+.hero-area h1 {font-size: 35px; margin-top: 30px;}
+/*----------Ending of Hero area----------*/
+
+}
+
+/* Tablet Layout: 768px. */
+@media only screen and (min-width: 768px) and (max-width: 991px) { 
+.single-team-area {margin-bottom: 30px;}
+.header-top-area li {padding: 0 8px;}
+.mainmenu li a {padding-left: 9px; font-size: 12px;}
+    
+/*  Starting of Blogs  */
+.blog-text .blog-meta-text {height: 130px;}
+.blog-text {height: 302px;}
+/*  Ending of Blogs  */
+
+/*  Starting of footer area  */
+.footer-email-subs {margin-top: 30px;}
+.single-footer-area {padding-top: 30px;}
+.footer-title {margin-bottom: 10px;}
+.section-padding.footer-area-wrapper {padding-bottom: 30px;}
+/*  Ending of footer area  */
+
+/*  Starting of subscribe newsletter area  */
+.subscribe-newsletter-area form button {width: 30%;font-size: 13px;}
+/*  Ending of subscribe newsletter area  */
+
+/*----------Starting of Hero area----------*/
+.hero-area h1, .hero-area h1.donors-header {margin-top: 0;}
+.hero-form {margin-left: 50px;}
+/*----------Ending of Hero area----------*/
+
+}
+
+/* Mobile Layout: 320px. */
+@media only screen and (max-width: 767px) {
+/*  Starting of Header area  */ 
+.header-area-wrapper {padding: 30px 0;}
+.top-column-left {display: none;}
+.top-column-right {text-align: left;}
+.header-top-area li {padding: 0 4px;}
+.mainmenu {display: none;}
+.slicknav_menu {
+	display: block; 
+	background-color: transparent; 
+	position: absolute; 
+	left: 0; 
+	top: -22px; 
+	z-index: 99;
+	width: 100%;
+}
+.logo {
+	position: absolute;
+	color: #fff;
+	top: -11px;
+	right: 17px;
+}
+.logo img {height: 30px;}
+.menuLi .fa-angle-down {display: none;}
+/*  Ending of Header area  */
+
+/*  Starting of Blogs  */
+.blog-text .blog-meta-text {height: 130px;}
+.blog-text {height: 302px;}
+/*  Ending of Blogs  */
+
+/* Starting of Contact area */
+.contact-info i {left: -15px;}
+.contact-info {padding-left: 20px;}
+/* Ending of Contact area */
+
+/*  Starting of Blogs Details  */
+.social-sharing a {padding: 5px 6px 5px; margin-right: 5px;}
+/*  Ending of Blogs Details  */
+
+/*  Starting of footer area  */
+.single-footer-area {padding-top: 20px}
+.footer-title {margin-bottom: 10px;}
+.section-padding.footer-area-wrapper {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.footer-social-links li a {margin-right: 8px;}
+.copy-right-side, .footer-social-links {text-align: center;}
+/*  Ending of footer area  */
+
+/*  Starting of subscribe newsletter area  */
+.subscribe-newsletter-area form button {width: 35%; font-size: 12px;}
+.subscribe-newsletter-area form input {width: 65%;}
+.subscribe-newsletter-area {padding: 20px; top: -80px;}
+.subscribe-newsletter-wrapper {padding-top: 30px; padding-bottom: 30px;}
+.subscribe-newsletter-area h4 {margin: 0; margin-top: 0; margin-bottom: 10px; font-size: 17px;}
+/*  Ending of subscribe newsletter area  */
+
+/*  Starting of Login area area  */ 
+ .login-form {padding: 10px; padding-top: 100px;}
+/*  Ending of Login area area  */
+
+/*  Starting of Testimonial Area  */
+.testimonial-wrapper .section-title.pb_50 {padding-bottom: 100px;}
+/*  Ending of Testimonial Area  */
+
+/*----------Starting of Hero area----------*/
+.hero-area h1, .hero-area h1.donors-header {margin-top: 0;}
+.hero-form {margin-bottom: 30px; margin-left: 0;}
+/*----------Ending of Hero area----------*/
+
+/*----------Starting of All - sectors area----------*/
+.single-campaignCategories-area h3 {font-size: 14px;}
+/*----------Ending of All - sectors area----------*/
+
+}
+
+/* Wide Mobile Layout: 480px. */
+@media only screen and (min-width: 480px) and (max-width: 767px) { 
+
+}
+
+@media only screen and (min-width: 991px) and (max-width: 1199px) { 
+	.mid-break-9 {
+		width: 80%;
+	}
+	.mid-break-3 {
+		width: 20%;
+	}
+
+	}
