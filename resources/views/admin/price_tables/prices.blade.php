@@ -22,17 +22,17 @@
                                         <div class="row">
                                             <div class="col-sm-12">
 
-                                                <table id="example"
+                                                <table id="example1"
                                                        class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline"
                                                        role="grid" aria-describedby="product-table_wrapper_info"
-                                                       style="width: 100%;" width="100%" cellspacing="0">
+                                                       style="width: 100%;display: block;overflow-x: auto;" width="100%" cellspacing="0">
                                                     <thead>
 
                                                     <tr role="row">
 
                                                         <th class="sorting_asc" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
-                                                            colspan="1" style="width: 344px;" aria-sort="ascending"
+                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
 
                                                         </th>
@@ -41,7 +41,7 @@
 
                                                             <th class="sorting_asc" tabindex="0"
                                                                 aria-controls="product-table_wrapper" rowspan="1"
-                                                                colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                                colspan="1" style="width: 144px;border: 1px solid #e7e7e7;" aria-sort="ascending"
                                                                 aria-label="Blood Group Name: activate to sort column descending">
                                                                 {{$width}}
                                                             </th>
@@ -57,7 +57,7 @@
 
                                                         <tr role="row">
 
-                                                            <td>{{$height}}</td>
+                                                            <td style="background-color: #e9e9e9;text-align: center;">{{$height}}</td>
 
                                                             @foreach($prices[$org_heights[$i]] as $key)
 
@@ -83,6 +83,15 @@
             </div>
         </div>
     </div>
+
+    <style>
+
+        table.dataTable thead .sorting::after, table.dataTable thead .sorting_asc::after, table.dataTable thead .sorting_desc::after, table.dataTable thead .sorting_asc_disabled::after, table.dataTable thead .sorting_desc_disabled::after
+        {
+            display: none;
+        }
+
+    </style>
 
 @endsection
 
