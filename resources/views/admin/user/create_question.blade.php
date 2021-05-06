@@ -313,7 +313,7 @@
             {
                 $(".service_box").append('<div class="form-group">\n' +
                     '\n' +
-                    '                <label class="control-label col-sm-4">Service* </label>\n' +
+                    '                <label class="control-label col-sm-4">Category* </label>\n' +
                     '\n' +
                     '                <div class="col-sm-6">\n' +
                     '                <select class="form-control validate js-data-example-ajax" name="services[]" required>\n' +

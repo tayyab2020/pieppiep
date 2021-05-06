@@ -26,7 +26,7 @@ class StoreValidationRequest4 extends FormRequest
     {
 
         return [
-            'slug'=>'unique:services,slug,'.$request->service_id,
+            'slug'=>'unique:services,slug,'.$request->service_id.',id,deleted_at,NULL',
             'photo' => 'mimes:jpeg,jpg,png',
             'email' => 'unique:users|unique:admins',
             'logo'  => 'mimes:jpeg,jpg,png',

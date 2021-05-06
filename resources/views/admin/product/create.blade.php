@@ -241,9 +241,100 @@
 
                                                     <div id="menu3" class="tab-pane fade">
 
+                                                        <div class="color_box" style="margin-bottom: 20px;">
+
+                                                            <div class="form-group">
+
+                                                                <label class="control-label col-sm-2">Color* </label>
+
+                                                                <div class="col-sm-4">
+
+                                                                    <select class="form-control validate js-data-example-ajax3" name="colors[]" required>
+
+                                                                        <option value="">Select Color</option>
+
+                                                                        @foreach($colors as $key)
+
+                                                                            <option value="{{$key->id}}">{{$key->title}}</option>
+
+                                                                        @endforeach
+
+                                                                    </select>
+
+                                                                </div>
+
+                                                                <div class="col-xs-5 col-sm-5">
+                                                                    <input class="form-control" name="color_id[]" id="blood_group_slug" placeholder="Unique ID" required type="text">
+                                                                </div>
+
+                                                                <div class="col-xs-1 col-sm-1">
+                                                                    <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group add-color">
+                                                            <label class="control-label col-sm-3" for=""></label>
+
+                                                            <div class="col-sm-12 text-center">
+                                                                <button class="btn btn-default featured-btn" type="button" id="add-color-btn"><i class="fa fa-plus"></i> Add More Colors</button>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
 
                                                     <div id="menu4" class="tab-pane fade">
+
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+
+                                                                <table id="example1"
+                                                                       class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline"
+                                                                       role="grid" aria-describedby="product-table_wrapper_info"
+                                                                       style="width: 100%;display: inline-table;overflow-x: auto;" width="100%" cellspacing="0">
+                                                                    <thead>
+
+                                                                    <tr role="row">
+
+                                                                        <th tabindex="0"
+                                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
+                                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                                            ID
+                                                                        </th>
+
+                                                                        <th tabindex="0"
+                                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
+                                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                                            Table
+                                                                        </th>
+
+                                                                        <th tabindex="0"
+                                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
+                                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                                            Color
+                                                                        </th>
+
+                                                                        <th tabindex="0"
+                                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
+                                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                                            Action
+                                                                        </th>
+
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
 
                                                     </div>
 
@@ -279,6 +370,164 @@
     </script>
 
 <script type="text/javascript">
+
+    $(document).ready(function() {
+
+        var $selects = $('.js-data-example-ajax3').change(function() {
+
+
+            var id = this.value;
+            var selector = this;
+
+            if ($selects.find('option[value=' + id + ']:selected').length > 1) {
+                Swal.fire({
+                    title: 'Oops...',
+                    text: 'Color already selected!',
+
+                })
+                this.options[0].selected = true;
+
+                $(selector).val('');
+
+
+            }
+            else
+            {
+                $.ajax({
+                    type:"GET",
+                    data: "id=" + id ,
+                    url: "<?php echo url('/logstof/product/get-prices-tables')?>",
+                    success: function(data) {
+
+                        $.each(data, function(index, value) {
+
+                            $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
+
+                        });
+
+                    }
+                });
+            }
+
+        });
+
+
+    });
+
+    $("#add-color-btn").on('click',function() {
+
+
+        $(".color_box").append('<div class="form-group">\n' +
+            '\n' +
+            '                <label class="control-label col-sm-2">Color* </label>\n' +
+            '\n' +
+            '                <div class="col-sm-4">\n' +
+            '                <select class="form-control validate js-data-example-ajax3" name="colors[]" required>\n' +
+            '\n' +
+            '            <option value="">Select Color</option>\n' +
+            '\n' +
+            '            @foreach($colors as $key)\n' +
+            '\n' +
+            '            <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+            '\n' +
+            '                @endforeach\n' +
+            '\n' +
+            '                </select>\n' +
+            '                </div>\n' +
+            '\n' +
+            '                <div class="col-xs-5 col-sm-5">\n' +
+            '                <input class="form-control" name="color_id[]" id="blood_group_slug" placeholder="Unique ID" required type="text">\n' +
+            '                </div>\n' +
+            '\n' +
+            '                <div class="col-xs-1 col-sm-1">\n' +
+            '                <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>\n' +
+            '                </div>\n' +
+            '\n' +
+            '                </div>');
+
+        var $selects = $('.js-data-example-ajax3').change(function() {
+
+
+            var id = this.value;
+            var selector = this;
+
+            if ($selects.find('option[value=' + id + ']:selected').length > 1) {
+                Swal.fire({
+                    title: 'Oops...',
+                    text: 'Color already selected!',
+
+                })
+                this.options[0].selected = true;
+
+                $(selector).val('');
+
+
+            }
+            else
+            {
+                $.ajax({
+                    type:"GET",
+                    data: "id=" + id ,
+                    url: "<?php echo url('/logstof/product/get-prices-tables')?>",
+                    success: function(data) {
+
+                        $.each(data, function(index, value) {
+
+                            $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
+
+                        });
+
+                    }
+                });
+            }
+
+        });
+
+    });
+
+    $(document).on('click', '.remove-color' ,function() {
+
+        var parent = this.parentNode.parentNode;
+
+        $(parent).hide();
+        $(parent).remove();
+
+        if($(".color_box .form-group").length == 0)
+        {
+            $(".color_box").append('<div class="form-group">\n' +
+                '\n' +
+                '                <label class="control-label col-sm-4">Color* </label>\n' +
+                '\n' +
+                '                <div class="col-sm-6">\n' +
+                '                <select class="form-control validate js-data-example-ajax3" name="colors[]" required>\n' +
+                '\n' +
+                '            <option value="">Select Color</option>\n' +
+                '\n' +
+                '            @foreach($colors as $key)\n' +
+                '\n' +
+                '            <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+                '\n' +
+                '                @endforeach\n' +
+                '\n' +
+                '                </select>\n' +
+                '                </div>\n' +
+                '\n' +
+                '                <div class="col-xs-5 col-sm-5">\n' +
+                '                <input class="form-control" name="color_id[]" id="blood_group_slug" placeholder="Unique ID" required type="text">\n' +
+                '                </div>\n' +
+                '\n' +
+                '                <div class="col-xs-1 col-sm-1">\n' +
+                '                <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>\n' +
+                '                </div>\n' +
+                '\n' +
+                '                </div>');
+
+
+        }
+
+
+
+    });
 
     $(".js-data-example-ajax").select2({
         width: '100%',
@@ -353,6 +602,22 @@
 </script>
 
 <style type="text/css">
+
+    .table.products > tbody > tr td
+    {
+        border-right: 1px solid #e3e3e3;
+        text-align: center;
+    }
+
+    .table.products > tbody > tr td:first-child
+    {
+        border-left: 1px solid #e3e3e3;
+    }
+
+    .table.products > tbody > tr td:last-child
+    {
+        border-right: 1px solid #e3e3e3;
+    }
 
     .product-configuration a[aria-expanded="false"]::before, a[aria-expanded="true"]::before
     {

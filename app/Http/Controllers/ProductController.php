@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Brand;
+use App\colors;
 use App\estimated_prices;
 use App\Exports\ProductsExport;
 use App\Imports\ProductsImport;
 use App\Model1;
+use App\price_tables;
 use App\product;
 use App\Products;
 use App\vats;
@@ -52,8 +54,16 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands = Brand::all();
+        $colors = colors::all();
 
-        return view('admin.product.create',compact('categories','brands'));
+        return view('admin.product.create',compact('categories','brands','colors'));
+    }
+
+    public function pricesTables(Request $request)
+    {
+        $tables = price_tables::leftjoin('colors','colors.id','=','price_tables.color_id')->where('price_tables.color_id',$request->id)->select('price_tables.*','colors.title as color')->get();
+
+        return $tables;
     }
 
     public function import()

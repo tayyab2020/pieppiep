@@ -301,6 +301,7 @@
   Route::post('/product/update/{id}', 'ProductController@update')->name('admin-product-update');
   Route::get('/product/delete/{id}', 'ProductController@destroy')->name('admin-product-delete');
   Route::get('/product/products-models-by-brands', 'ProductController@productsModelsByBrands');
+  Route::get('/product/get-prices-tables', 'ProductController@pricesTables');
 
  Route::get('/price-tables', 'PriceTablesController@index')->name('admin-price-tables');
  Route::get('/price-tables/create', 'PriceTablesController@create')->name('admin-price-tables-create');

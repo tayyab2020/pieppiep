@@ -25,7 +25,7 @@ class StoreValidationRequest5 extends FormRequest
     public function rules(\Illuminate\Http\Request $request)
     {
         return [
-            'title'=>'unique:colors,title,'.$request->id,
+            'title'=>'unique:colors,title,'.$request->id.',id,deleted_at,NULL',
         ];
     }
 

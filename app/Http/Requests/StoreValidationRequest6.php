@@ -25,7 +25,7 @@ class StoreValidationRequest6 extends FormRequest
     public function rules(\Illuminate\Http\Request $request)
     {
         return [
-            'title'=>'unique:price_tables,title,'.$request->id,
+            'title'=>'unique:price_tables,title,'.$request->id.',id,deleted_at,NULL',
         ];
     }
 

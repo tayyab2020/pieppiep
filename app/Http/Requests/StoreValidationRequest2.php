@@ -27,7 +27,7 @@ class StoreValidationRequest2 extends FormRequest
 
         return [
             /*'cat_name'=>'unique:models,cat_name,NULL,id,deleted_at,NULL',*/
-            'cat_slug'=>'unique:models,cat_slug,'.$request->cat_id,
+            'cat_slug'=>'unique:models,cat_slug,'.$request->cat_id.',id,deleted_at,NULL',
             'photo' => 'mimes:jpeg,jpg,png',
             'email' => 'unique:users|unique:admins',
             'logo'  => 'mimes:jpeg,jpg,png',
