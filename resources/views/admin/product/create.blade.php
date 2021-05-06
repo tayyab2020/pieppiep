@@ -401,7 +401,7 @@
 
                         $.each(data, function(index, value) {
 
-                            $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
+                            $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/logstof/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
 
                         });
 
@@ -473,7 +473,7 @@
 
                         $.each(data, function(index, value) {
 
-                            $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
+                            $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/logstof/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
 
                         });
 
