@@ -52,6 +52,12 @@
                                                             aria-label="Blood Group Name: activate to sort column descending">
                                                             Color
                                                         </th>
+                                                        <th class="sorting_asc" tabindex="0"
+                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                            Color Code
+                                                        </th>
                                                         <th class="sorting" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
                                                             colspan="1" style="width: 314px;"
@@ -67,6 +73,7 @@
                                                             <td>{{$cat->id}}</td>
                                                             <td>{{$cat->title}}</td>
                                                             <td>{{$cat->color}}</td>
+                                                            <td>{{$cat->color_code}}</td>
                                                             <td>
                                                                 <a href="{{route('admin-price-tables-edit',$cat->id)}}"
                                                                    class="btn btn-primary product-btn"><i

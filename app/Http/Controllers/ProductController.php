@@ -61,7 +61,7 @@ class ProductController extends Controller
 
     public function pricesTables(Request $request)
     {
-        $tables = price_tables::leftjoin('colors','colors.id','=','price_tables.color_id')->where('price_tables.color_id',$request->id)->select('price_tables.*','colors.title as color')->get();
+        $tables = price_tables::leftjoin('colors','colors.id','=','price_tables.color_id')->where('price_tables.color_id',$request->id)->select('price_tables.*','colors.title as color','colors.color_code')->get();
 
         return $tables;
     }
@@ -275,8 +275,9 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
         $models = Model1::where('brand_id',$cats->brand_id)->get();
+        $colors = colors::all();
 
-        return view('admin.product.create',compact('cats','categories','brands','models'));
+        return view('admin.product.create',compact('cats','categories','brands','models','colors'));
     }
 
     public function update(UpdateValidationRequest $request, $id)

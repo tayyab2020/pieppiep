@@ -40,7 +40,7 @@ class PriceTablesController extends Controller
 
     public function index()
     {
-        $cats = price_tables::leftjoin('colors','colors.id','=','price_tables.color_id')->orderBy('price_tables.id','desc')->select('price_tables.*','colors.title as color')->get();
+        $cats = price_tables::leftjoin('colors','colors.id','=','price_tables.color_id')->orderBy('price_tables.id','desc')->select('price_tables.*','colors.title as color','colors.color_code')->get();
 
         return view('admin.price_tables.index',compact('cats'));
     }

@@ -255,7 +255,7 @@
 
                                                                         @foreach($colors as $key)
 
-                                                                            <option value="{{$key->id}}">{{$key->title}}</option>
+                                                                            <option value="{{$key->id}}">{{$key->title}} ({{$key->color_code}})</option>
 
                                                                         @endforeach
 
@@ -264,7 +264,11 @@
                                                                 </div>
 
                                                                 <div class="col-xs-5 col-sm-5">
-                                                                    <input class="form-control" name="color_id[]" id="blood_group_slug" placeholder="Unique ID" required type="text">
+                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>
+
+                                                                        <option value="">Select Price Table</option>
+
+                                                                    </select>
                                                                 </div>
 
                                                                 <div class="col-xs-1 col-sm-1">
@@ -378,6 +382,7 @@
 
             var id = this.value;
             var selector = this;
+            var options = '';
 
             if ($selects.find('option[value=' + id + ']:selected').length > 1) {
                 Swal.fire({
@@ -400,6 +405,15 @@
                     success: function(data) {
 
                         $.each(data, function(index, value) {
+
+                            var opt = '<option value="'+value.id+'" >'+value.title+'</option>';
+
+                            options = options + opt;
+
+                            $(selector).parent().next('div').find('.js-data-example-ajax4').find('option')
+                                .remove()
+                                .end()
+                                .append('<option value="">Select Price Table</option>'+options);
 
                             $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/logstof/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
 
@@ -428,7 +442,7 @@
             '\n' +
             '            @foreach($colors as $key)\n' +
             '\n' +
-            '            <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+            '            <option value="{{$key->id}}">{{$key->title}} ({{$key->color_code}})</option>\n' +
             '\n' +
             '                @endforeach\n' +
             '\n' +
@@ -436,7 +450,11 @@
             '                </div>\n' +
             '\n' +
             '                <div class="col-xs-5 col-sm-5">\n' +
-            '                <input class="form-control" name="color_id[]" id="blood_group_slug" placeholder="Unique ID" required type="text">\n' +
+            '                <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>\n' +
+            '\n' +
+            '                                                                        <option value="">Select Price Table</option>\n' +
+            '\n' +
+            '                                                                    </select>\n' +
             '                </div>\n' +
             '\n' +
             '                <div class="col-xs-1 col-sm-1">\n' +
@@ -450,6 +468,7 @@
 
             var id = this.value;
             var selector = this;
+            var options = '';
 
             if ($selects.find('option[value=' + id + ']:selected').length > 1) {
                 Swal.fire({
@@ -472,6 +491,15 @@
                     success: function(data) {
 
                         $.each(data, function(index, value) {
+
+                            var opt = '<option value="'+value.id+'" >'+value.title+'</option>';
+
+                            options = options + opt;
+
+                            $(selector).parent().next('div').find('.js-data-example-ajax4').find('option')
+                                .remove()
+                                .end()
+                                .append('<option value="">Select Price Table</option>'+options);
 
                             $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/logstof/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
 
@@ -505,7 +533,7 @@
                 '\n' +
                 '            @foreach($colors as $key)\n' +
                 '\n' +
-                '            <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+                '            <option value="{{$key->id}}">{{$key->title}} ({{$key->color_code}})</option>\n' +
                 '\n' +
                 '                @endforeach\n' +
                 '\n' +
@@ -513,7 +541,11 @@
                 '                </div>\n' +
                 '\n' +
                 '                <div class="col-xs-5 col-sm-5">\n' +
-                '                <input class="form-control" name="color_id[]" id="blood_group_slug" placeholder="Unique ID" required type="text">\n' +
+                '                <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>\n' +
+                '\n' +
+                '                                                                        <option value="">Select Price Table</option>\n' +
+                '\n' +
+                '                                                                    </select>\n' +
                 '                </div>\n' +
                 '\n' +
                 '                <div class="col-xs-1 col-sm-1">\n' +
