@@ -51,7 +51,7 @@ class ColorController extends Controller
     {
         if($request->id)
         {
-            colors::where('id',$request->id)->update(['title' => $request->title]);
+            colors::where('id',$request->id)->update(['title' => $request->title, 'color_code' => $request->color_code]);
 
             Session::flash('success', 'Color edited successfully.');
         }
@@ -59,6 +59,7 @@ class ColorController extends Controller
         {
             $color = new colors;
             $color->title = $request->title;
+            $color->color_code = $request->color_code;
             $color->save();
 
             Session::flash('success', 'Color created successfully.');

@@ -43,6 +43,13 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Color Code*</label>
+                                                <div class="col-sm-6">
+                                                    <input value="{{isset($color) ? $color->color_code : null}}" class="form-control" name="color_code" id="blood_group_display_name" placeholder="Enter Color Code" required="" type="text">
+                                                </div>
+                                            </div>
+
                                             <hr>
 
                                             <div class="add-product-footer">

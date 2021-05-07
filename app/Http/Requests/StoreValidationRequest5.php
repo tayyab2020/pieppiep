@@ -25,14 +25,14 @@ class StoreValidationRequest5 extends FormRequest
     public function rules(\Illuminate\Http\Request $request)
     {
         return [
-            'title'=>'unique:colors,title,'.$request->id.',id,deleted_at,NULL',
+            'color_code'=>'unique:colors,color_code,'.$request->id.',id,deleted_at,NULL',
         ];
     }
 
     public function messages()
     {
         return [
-            'title.unique' => 'This name has already been taken.',
+            'color_code.unique' => 'This code has already been taken.',
         ];
     }
 }
