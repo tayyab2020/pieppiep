@@ -36,7 +36,7 @@ class ColorController extends Controller
 
     public function index()
     {
-        $colors = colors::orderBy('id','desc')->get();
+        $colors = colors::leftjoin('products','products.id','=','colors.product_id')->leftjoin('price_tables','price_tables.id','=','colors.table_id')->orderBy('colors.id','desc')->select('colors.*','products.title as product','price_tables.title as table')->get();
 
         return view('admin.color.index',compact('colors'));
     }
@@ -70,7 +70,7 @@ class ColorController extends Controller
 
     public function edit($id)
     {
-        $color = colors::where('id','=',$id)->first();
+        $color = colors::leftjoin('products','products.id','=','colors.product_id')->leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.id','=',$id)->orderBy('colors.id','desc')->select('colors.*','products.title as product','price_tables.title as table')->first();
 
         return view('admin.color.create',compact('color'));
     }

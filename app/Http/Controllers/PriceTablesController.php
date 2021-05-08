@@ -40,16 +40,14 @@ class PriceTablesController extends Controller
 
     public function index()
     {
-        $cats = price_tables::leftjoin('colors','colors.id','=','price_tables.color_id')->orderBy('price_tables.id','desc')->select('price_tables.*','colors.title as color','colors.color_code')->get();
+        $cats = price_tables::orderBy('id','desc')->get();
 
         return view('admin.price_tables.index',compact('cats'));
     }
 
     public function create()
     {
-        $colors = colors::all();
-
-        return view('admin.price_tables.create',compact('colors'));
+        return view('admin.price_tables.create');
     }
 
     public function import()
@@ -92,14 +90,13 @@ class PriceTablesController extends Controller
 
         if($request->id)
         {
-            price_tables::where('id',$request->id)->update(['title' => $request->title, 'color_id' => $request->color_id]);
+            price_tables::where('id',$request->id)->update(['title' => $request->title]);
             Session::flash('success', 'Table edited successfully.');
         }
         else
         {
             $post = new price_tables;
             $post->title = $request->title;
-            $post->color_id = $request->color_id;
             $post->save();
 
             Session::flash('success', 'New Table added successfully.');
@@ -110,10 +107,9 @@ class PriceTablesController extends Controller
 
     public function edit($id)
     {
-        $cats = price_tables::leftjoin('colors','colors.id','=','price_tables.color_id')->where('price_tables.id',$id)->select('price_tables.*','colors.id as color_id')->first();
-        $colors = color::all();
+        $cats = price_tables::where('id',$id)->first();
 
-        return view('admin.price_tables.create',compact('cats','colors'));
+        return view('admin.price_tables.create',compact('cats'));
     }
 
     public function viewPrices($id)

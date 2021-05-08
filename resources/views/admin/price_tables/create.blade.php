@@ -43,20 +43,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Color*</label>
-                                                <div class="col-sm-6">
-                                                    <select class="js-data-example-ajax form-control" style="height: 40px;" name="color_id" id="blood_grp" required>
-
-                                                        <option value="">Select Color</option>
-
-                                                        @foreach($colors as $key)
-                                                            <option @if(isset($cats)) @if($cats->color_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->title}}</option>
-                                                        @endforeach
-
-                                                    </select>
-                                                </div>
-                                            </div>
 
                                             <hr>
 

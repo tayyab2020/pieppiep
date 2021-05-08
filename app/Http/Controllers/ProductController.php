@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Brand;
+use App\color;
 use App\colors;
 use App\estimated_prices;
 use App\Exports\ProductsExport;
@@ -54,14 +55,14 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands = Brand::all();
-        $colors = colors::all();
+        $tables = price_tables::where('connected',1)->get();
 
-        return view('admin.product.create',compact('categories','brands','colors'));
+        return view('admin.product.create',compact('categories','brands','tables'));
     }
 
     public function pricesTables(Request $request)
     {
-        $tables = price_tables::leftjoin('colors','colors.id','=','price_tables.color_id')->where('price_tables.color_id',$request->id)->select('price_tables.*','colors.title as color','colors.color_code')->get();
+        $tables = price_tables::where('id',$request->id)->get();
 
         return $tables;
     }
@@ -112,6 +113,7 @@ class ProductController extends Controller
     public function store(StoreValidationRequest3 $request)
     {
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
+        $colors = $request->colors;
 
         if($prices)
         {
@@ -137,6 +139,52 @@ class ProductController extends Controller
             }
 
             $cat->fill($input)->save();
+
+            $col = color::where('product_id',$request->cat_id)->get();
+
+            if(count($col) == 0)
+            {
+                foreach ($colors as $c => $key)
+                {
+                    $col = new colors;
+                    $col->title = $key;
+                    $col->color_code = $request->color_codes[$c];
+                    $col->product_id = $request->cat_id;
+                    $col->table_id = $request->price_tables[$c];
+                    $col->save();
+                }
+            }
+            else
+            {
+                if(count($colors) > 0)
+                {
+                    foreach ($colors as $c => $key)
+                    {
+                        $col_check = colors::where('product_id',$request->cat_id)->skip($c)->first();
+
+                        if($col_check)
+                        {
+                            $col_check->title = $key;
+                            $col_check->color_code = $request->color_codes[$c];
+                            $col_check->table_id = $request->price_tables[$c];
+                            $col_check->save();
+                        }
+                        else
+                        {
+                            $col = new colors;
+                            $col->title = $key;
+                            $col->color_code = $request->color_codes[$c];
+                            $col->product_id = $request->cat_id;
+                            $col->table_id = $request->price_tables[$c];
+                            $col->save();
+                        }
+                    }
+                }
+                else
+                {
+                    colors::where('product_id',$request->cat_id)->delete();
+                }
+            }
 
             $est = estimated_prices::where('product_id',$request->cat_id)->get();
 
@@ -198,6 +246,16 @@ class ProductController extends Controller
 
                 $cat->fill($input)->save();
 
+                foreach ($colors as $c => $key)
+                {
+                    $col = new colors;
+                    $col->title = $key;
+                    $col->color_code = $request->color_codes[$c];
+                    $col->product_id = $cat->id;
+                    $col->table_id = $request->price_tables[$c];
+                    $col->save();
+                }
+
                 foreach ($pricesArray as $x => $price)
                 {
                     $est = new estimated_prices;
@@ -220,6 +278,52 @@ class ProductController extends Controller
                 }
 
                 $check->fill($input)->save();
+
+                $col = color::where('product_id',$check->id)->get();
+
+                if(count($col) == 0)
+                {
+                    foreach ($colors as $c => $key)
+                    {
+                        $col = new colors;
+                        $col->title = $key;
+                        $col->color_code = $request->color_codes[$c];
+                        $col->product_id = $check->id;
+                        $col->table_id = $request->price_tables[$c];
+                        $col->save();
+                    }
+                }
+                else
+                {
+                    if(count($colors) > 0)
+                    {
+                        foreach ($colors as $c => $key)
+                        {
+                            $col_check = colors::where('product_id',$check->id)->skip($c)->first();
+
+                            if($col_check)
+                            {
+                                $col_check->title = $key;
+                                $col_check->color_code = $request->color_codes[$c];
+                                $col_check->table_id = $request->price_tables[$c];
+                                $col_check->save();
+                            }
+                            else
+                            {
+                                $col = new colors;
+                                $col->title = $key;
+                                $col->color_code = $request->color_codes[$c];
+                                $col->product_id = $check->id;
+                                $col->table_id = $request->price_tables[$c];
+                                $col->save();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        colors::where('product_id',$check->id)->delete();
+                    }
+                }
 
                 $est = estimated_prices::where('product_id',$check->id)->get();
 
@@ -272,12 +376,14 @@ class ProductController extends Controller
     {
         $cats = Products::where('id','=',$id)->first();
 
+        $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.title as color','colors.color_code','colors.table_id','price_tables.title as table')->get();
+
         $categories = Category::all();
         $brands = Brand::all();
         $models = Model1::where('brand_id',$cats->brand_id)->get();
-        $colors = colors::all();
+        $tables = price_tables::where('connected',1)->get();
 
-        return view('admin.product.create',compact('cats','categories','brands','models','colors'));
+        return view('admin.product.create',compact('cats','categories','brands','models','tables','colors_data'));
     }
 
     public function update(UpdateValidationRequest $request, $id)

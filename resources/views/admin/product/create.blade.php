@@ -243,39 +243,83 @@
 
                                                         <div class="color_box" style="margin-bottom: 20px;">
 
-                                                            <div class="form-group">
+                                                            @if(isset($colors_data))
 
-                                                                <label class="control-label col-sm-2">Color* </label>
+                                                                @foreach($colors_data as $i => $key)
 
-                                                                <div class="col-sm-4">
+                                                                    <div class="form-group" data-id="{{$i}}">
 
-                                                                    <select class="form-control validate js-data-example-ajax3" name="colors[]" required>
+                                                                        <div class="col-sm-4">
 
-                                                                        <option value="">Select Color</option>
+                                                                            <input value="{{$key->color}}" class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" required type="text">
 
-                                                                        @foreach($colors as $key)
+                                                                        </div>
 
-                                                                            <option value="{{$key->id}}">{{$key->title}} ({{$key->color_code}})</option>
+                                                                        <div class="col-sm-3">
 
-                                                                        @endforeach
+                                                                            <input value="{{$key->color_code}}" class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" required type="text">
 
-                                                                    </select>
+                                                                        </div>
+
+                                                                        <div class="col-sm-4">
+                                                                            <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>
+
+                                                                                <option value="">Select Price Table</option>
+
+                                                                                @foreach($tables as $table)
+
+                                                                                    <option @if($table->id == $key->table_id) selected @endif value="{{$table->id}}">{{$table->title}}</option>
+
+                                                                                @endforeach
+
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <div class="col-xs-1 col-sm-1">
+                                                                            <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                @endforeach
+
+                                                            @else
+
+                                                                <div class="form-group" data-id="">
+
+                                                                    <div class="col-sm-4">
+
+                                                                        <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" required type="text">
+
+                                                                    </div>
+
+                                                                    <div class="col-sm-3">
+
+                                                                        <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" required type="text">
+
+                                                                    </div>
+
+                                                                    <div class="col-sm-4">
+                                                                        <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>
+
+                                                                            <option value="">Select Price Table</option>
+
+                                                                            @foreach($tables as $table)
+
+                                                                                <option value="{{$table->id}}">{{$table->title}}</option>
+
+                                                                            @endforeach
+
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-xs-1 col-sm-1">
+                                                                        <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>
+                                                                    </div>
 
                                                                 </div>
 
-                                                                <div class="col-xs-5 col-sm-5">
-                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>
-
-                                                                        <option value="">Select Price Table</option>
-
-                                                                    </select>
-                                                                </div>
-
-                                                                <div class="col-xs-1 col-sm-1">
-                                                                    <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>
-                                                                </div>
-
-                                                            </div>
+                                                            @endif
 
                                                         </div>
 
@@ -327,6 +371,13 @@
                                                                             aria-controls="product-table_wrapper" rowspan="1"
                                                                             colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
                                                                             aria-label="Blood Group Name: activate to sort column descending">
+                                                                            Code
+                                                                        </th>
+
+                                                                        <th tabindex="0"
+                                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
+                                                                            aria-label="Blood Group Name: activate to sort column descending">
                                                                             Action
                                                                         </th>
 
@@ -334,6 +385,22 @@
                                                                     </thead>
 
                                                                     <tbody>
+
+                                                                    @if(isset($colors_data))
+
+                                                                        @foreach($colors_data as $i => $key)
+
+                                                                            <tr data-id="{{$i}}">
+                                                                                <td>{{$key->table_id}}</td>
+                                                                                <td>{{$key->table}}</td>
+                                                                                <td>{{$key->color}}</td>
+                                                                                <td>{{$key->color_code}}</td>
+                                                                                <td><a href="/logstof/price-tables/prices/view/{{$key->table_id}}">View</a></td>
+                                                                            </tr>
+
+                                                                        @endforeach
+
+                                                                    @endif
 
                                                                     </tbody>
                                                                 </table>
@@ -377,85 +444,121 @@
 
     $(document).ready(function() {
 
-        var $selects = $('.js-data-example-ajax3').change(function() {
+        var row = 0;
 
+        $('body').on('input', '.color_title', function() {
 
-            var id = this.value;
-            var selector = this;
-            var options = '';
+            var val = $(this).val();
+            var id = $(this).parent().parent().attr("data-id");
 
-            if ($selects.find('option[value=' + id + ']:selected').length > 1) {
-                Swal.fire({
-                    title: 'Oops...',
-                    text: 'Color already selected!',
-
-                })
-                this.options[0].selected = true;
-
-                $(selector).val('');
-
-
-            }
-            else
+            if(id)
             {
-                $.ajax({
-                    type:"GET",
-                    data: "id=" + id ,
-                    url: "<?php echo url('/logstof/product/get-prices-tables')?>",
-                    success: function(data) {
-
-                        $.each(data, function(index, value) {
-
-                            var opt = '<option value="'+value.id+'" >'+value.title+'</option>';
-
-                            options = options + opt;
-
-                            $(selector).parent().next('div').find('.js-data-example-ajax4').find('option')
-                                .remove()
-                                .end()
-                                .append('<option value="">Select Price Table</option>'+options);
-
-                            $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/logstof/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
-
-                        });
-
-                    }
-                });
+                $('#example1 tbody').find("[data-id='" + id + "']").find('.color_col').text(val);
             }
 
         });
 
+        $('body').on('input', '.color_code', function() {
+
+            var val = $(this).val();
+            var id = $(this).parent().parent().attr("data-id");
+
+            if(id)
+            {
+                $('#example1 tbody').find("[data-id='" + id + "']").find('.code_col').text(val);
+            }
+
+        });
+
+        $('body').on('change', '.js-data-example-ajax4', function() {
+
+            var id = this.value;
+            var selector = this;
+            var code = $(selector).parent().prev('div').find('input').val();
+            var color = $(selector).parent().prev('div').prev('div').find('input').val();
+            var row_id = $(this).parent().parent().attr("data-id");
+
+            $.ajax({
+                type:"GET",
+                data: "id=" + id ,
+                url: "<?php echo url('/logstof/product/get-prices-tables')?>",
+                success: function(data) {
+
+                    $.each(data, function(index, value) {
+
+                        if(row_id && $('#example1 tbody').find("[data-id='" + row_id + "']").length > 0)
+                        {
+
+                            $('#example1 tbody').find("[data-id='" + row_id + "']").find('td', this).each(function (index) {
+
+                                if(index == 0)
+                                {
+                                    $(this).text(value.id);
+                                }
+                                else if(index == 1)
+                                {
+                                    $(this).text(value.title);
+                                }
+                                else if(index == 2)
+                                {
+                                    $(this).text(color);
+                                }
+                                else if(index == 3)
+                                {
+                                    $(this).text(code);
+                                }
+                                else if(index == 4)
+                                {
+                                    $(this).html('<a href="/logstof/price-tables/prices/view/'+value.id+'">View</a>');
+                                }
+
+                            })
+                        }
+                        else
+                        {
+                            $("#example1").append('<tr data-id="'+row+'"><td>'+value.id+'</td><td>'+value.title+'</td><td class="color_col">'+color+'</td><td class="code_col">'+code+'</td><td><a href="/logstof/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
+                            $(selector).parent().parent().attr('data-id',row);
+                            row++;
+                        }
+
+                    });
+
+                }
+            });
+        });
 
     });
 
     $("#add-color-btn").on('click',function() {
 
 
-        $(".color_box").append('<div class="form-group">\n' +
+        $(".color_box").append('<div class="form-group" data-id="">\n' +
             '\n' +
-            '                <label class="control-label col-sm-2">Color* </label>\n' +
+            '<div class="col-sm-4">\n' +
             '\n' +
-            '                <div class="col-sm-4">\n' +
-            '                <select class="form-control validate js-data-example-ajax3" name="colors[]" required>\n' +
+            '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" required type="text">\n' +
             '\n' +
-            '            <option value="">Select Color</option>\n' +
+            '                                                                </div>\n' +
             '\n' +
-            '            @foreach($colors as $key)\n' +
+            '                                                                <div class="col-sm-3">\n' +
             '\n' +
-            '            <option value="{{$key->id}}">{{$key->title}} ({{$key->color_code}})</option>\n' +
+            '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" required type="text">\n' +
             '\n' +
-            '                @endforeach\n' +
+            '                                                                </div>\n' +
             '\n' +
-            '                </select>\n' +
-            '                </div>\n' +
-            '\n' +
-            '                <div class="col-xs-5 col-sm-5">\n' +
-            '                <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>\n' +
+            '                                                                <div class="col-sm-4">\n' +
+            '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>\n' +
             '\n' +
             '                                                                        <option value="">Select Price Table</option>\n' +
             '\n' +
+            '                                                                        @foreach($tables as $table)\n' +
+            '\n' +
+            '                                                                            <option value="{{$table->id}}">{{$table->title}}</option>\n' +
+            '\n' +
+            '                                                                        @endforeach\n' +
+            '\n' +
             '                                                                    </select>\n' +
-            '                </div>\n' +
+            '                                                                </div>\n'+
             '\n' +
             '                <div class="col-xs-1 col-sm-1">\n' +
             '                <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>\n' +
@@ -463,90 +566,60 @@
             '\n' +
             '                </div>');
 
-        var $selects = $('.js-data-example-ajax3').change(function() {
 
 
-            var id = this.value;
-            var selector = this;
-            var options = '';
-
-            if ($selects.find('option[value=' + id + ']:selected').length > 1) {
-                Swal.fire({
-                    title: 'Oops...',
-                    text: 'Color already selected!',
-
-                })
-                this.options[0].selected = true;
-
-                $(selector).val('');
-
-
-            }
-            else
-            {
-                $.ajax({
-                    type:"GET",
-                    data: "id=" + id ,
-                    url: "<?php echo url('/logstof/product/get-prices-tables')?>",
-                    success: function(data) {
-
-                        $.each(data, function(index, value) {
-
-                            var opt = '<option value="'+value.id+'" >'+value.title+'</option>';
-
-                            options = options + opt;
-
-                            $(selector).parent().next('div').find('.js-data-example-ajax4').find('option')
-                                .remove()
-                                .end()
-                                .append('<option value="">Select Price Table</option>'+options);
-
-                            $("#example1").append('<tr><td>'+value.id+'</td><td>'+value.title+'</td><td>'+value.color+'</td><td><a href="/logstof/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
-
-                        });
-
-                    }
-                });
-            }
-
+        $(".js-data-example-ajax4").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Price Table",
+            allowClear: true,
         });
+
 
     });
 
     $(document).on('click', '.remove-color' ,function() {
 
         var parent = this.parentNode.parentNode;
+        var id = $(this).parent().parent().attr("data-id");
+
+        if(id)
+        {
+            $('#example1 tbody').find("[data-id='" + id + "']").remove();
+        }
 
         $(parent).hide();
         $(parent).remove();
 
         if($(".color_box .form-group").length == 0)
         {
-            $(".color_box").append('<div class="form-group">\n' +
+            $(".color_box").append('<div class="form-group" data-id="">\n' +
                 '\n' +
-                '                <label class="control-label col-sm-4">Color* </label>\n' +
+                '<div class="col-sm-4">\n' +
                 '\n' +
-                '                <div class="col-sm-6">\n' +
-                '                <select class="form-control validate js-data-example-ajax3" name="colors[]" required>\n' +
+                '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" required type="text">\n' +
                 '\n' +
-                '            <option value="">Select Color</option>\n' +
+                '                                                                </div>\n' +
                 '\n' +
-                '            @foreach($colors as $key)\n' +
+                '                                                                <div class="col-sm-3">\n' +
                 '\n' +
-                '            <option value="{{$key->id}}">{{$key->title}} ({{$key->color_code}})</option>\n' +
+                '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" required type="text">\n' +
                 '\n' +
-                '                @endforeach\n' +
+                '                                                                </div>\n' +
                 '\n' +
-                '                </select>\n' +
-                '                </div>\n' +
-                '\n' +
-                '                <div class="col-xs-5 col-sm-5">\n' +
-                '                <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>\n' +
+                '                                                                <div class="col-sm-4">\n' +
+                '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>\n' +
                 '\n' +
                 '                                                                        <option value="">Select Price Table</option>\n' +
                 '\n' +
+                '                                                                        @foreach($tables as $table)\n' +
+                '\n' +
+                '                                                                            <option value="{{$table->id}}">{{$table->title}}</option>\n' +
+                '\n' +
+                '                                                                        @endforeach\n' +
+                '\n' +
                 '                                                                    </select>\n' +
-                '                </div>\n' +
+                '                                                                </div>\n'+
                 '\n' +
                 '                <div class="col-xs-1 col-sm-1">\n' +
                 '                <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>\n' +
@@ -555,9 +628,15 @@
                 '                </div>');
 
 
+            $(".js-data-example-ajax4").select2({
+                width: '100%',
+                height: '200px',
+                placeholder: "Select Price Table",
+                allowClear: true,
+            });
+
+
         }
-
-
 
     });
 
@@ -581,6 +660,15 @@
         placeholder: "Select Model",
         allowClear: true,
     });
+
+
+    $(".js-data-example-ajax4").select2({
+        width: '100%',
+        height: '200px',
+        placeholder: "Select Price Table",
+        allowClear: true,
+    });
+
 
     $('.js-data-example-ajax1').on('change', function() {
 
@@ -704,15 +792,5 @@
 
 </style>
 
-
-    <script>
-            $('#cp1').colorpicker();
-            $('#cp2').colorpicker();
-    </script>
-
-
-
-<script src="{{asset('assets/admin/js/jquery152.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/jqueryui.min.js')}}"></script>
 
 @endsection

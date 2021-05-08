@@ -50,11 +50,25 @@
                                                 </div>
                                             </div>
 
-                                            <hr>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Product*</label>
+                                                <div class="col-sm-6">
+                                                    <input value="{{isset($color) ? $color->product : null}}" class="form-control" name="product" id="blood_group_display_name" placeholder="Product Title" required="" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Table*</label>
+                                                <div class="col-sm-6">
+                                                    <input value="{{isset($color) ? $color->table : null}}" class="form-control" name="table" id="blood_group_display_name" placeholder="Price Table" required="" type="text">
+                                                </div>
+                                            </div>
+
+                                            {{--<hr>
 
                                             <div class="add-product-footer">
                                                 <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($color) ? 'Edit Color' : 'Add Color'}}</button>
-                                            </div>
+                                            </div>--}}
 
                                         </form>
 

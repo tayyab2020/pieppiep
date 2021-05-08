@@ -12,8 +12,8 @@
                                 <div class="add-product-box">
                                     <div style="justify-content: flex-end;" class="add-product-header products">
                                         <h2 style="width: 100%;">Colors</h2>
-                                        <a style="margin-right: 10px;" href="{{route('admin-color-create')}}" class="btn add-newProduct-btn">
-                                            <i style="font-size: 12px;" class="fa fa-plus"></i> Add Color Product</a>
+                                        {{--<a style="margin-right: 10px;" href="{{route('admin-color-create')}}" class="btn add-newProduct-btn">
+                                            <i style="font-size: 12px;" class="fa fa-plus"></i> Add Color Product</a>--}}
                                     </div>
                                     <hr>
                                     <div>
@@ -48,6 +48,18 @@
                                                             aria-label="Blood Group Name: activate to sort column descending">
                                                             Color Code
                                                         </th>
+                                                        <th class="sorting_asc" tabindex="0"
+                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                            Product
+                                                        </th>
+                                                        <th class="sorting_asc" tabindex="0"
+                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                            Price Table
+                                                        </th>
                                                         <th class="sorting" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
                                                             colspan="1" style="width: 314px;"
@@ -63,10 +75,12 @@
                                                             <td>{{$color->id}}</td>
                                                             <td>{{$color->title}}</td>
                                                             <td>{{$color->color_code}}</td>
+                                                            <td>{{$color->product}}</td>
+                                                            <td>{{$color->table}}</td>
                                                             <td>
                                                                 <a href="{{route('admin-color-edit',$color->id)}}"
                                                                    class="btn btn-primary product-btn"><i
-                                                                        class="fa fa-edit"></i> Edit</a>
+                                                                        class="fa fa-edit"></i> View</a>
                                                                 <a href="{{route('admin-color-delete',$color->id)}}"
                                                                    class="btn btn-danger product-btn"><i
                                                                         class="fa fa-trash"></i> Remove</a>
