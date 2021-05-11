@@ -124,6 +124,10 @@
                         </li>--}}
 
                         <li>
+                            <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i>Create Quotation (New)</a>
+                        </li>
+
+                        <li>
                             <a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-fw fa-file-text"></i>{{__('text.Quotation Requests')}}</a>
                         </li>
 

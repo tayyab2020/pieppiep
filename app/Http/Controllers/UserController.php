@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Brand;
+use App\color;
+use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
 use App\handyman_quotes;
@@ -96,6 +98,31 @@ class UserController extends Controller
         }
 
         $this->gs = Generalsetting::findOrFail(1);
+    }
+
+    public function CreateNewQuotation()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+
+        $products = Products::all();
+        $items = items::where('user_id',$user_id)->get();
+
+        return view('user.create_new_quotation', compact('products','items'));
+    }
+
+    public function GetColors(Request $request)
+    {
+        $data = Products::leftjoin('colors','colors.product_id','=','products.id')->where('products.id',$request->id)->select('products.measure','colors.id','colors.title')->get();
+
+        return $data;
+    }
+
+    public function GetPrice(Request $request)
+    {
+        $data = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis',$request->width)->where('prices.y_axis',$request->height)->select('prices.value')->first();
+
+        return $data;
     }
 
     public function index()

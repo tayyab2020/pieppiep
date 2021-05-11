@@ -69,6 +69,9 @@
 
   Route::prefix('aanbieder')->group(function() {
 
+  Route::get('/create-new-quotation', 'UserController@CreateNewQuotation')->name('create-new-quotation');
+  Route::get('/get-colors', 'UserController@GetColors');
+  Route::get('/get-price', 'UserController@GetPrice');
   Route::get('/klanten', 'UserController@Customers')->name('customers');
   Route::get('/klant-bewerken/{id}', 'UserController@EditCustomer')->name('edit-customer');
   Route::get('/klant-verwijderen/{id}', 'UserController@DeleteCustomer')->name('delete-customer');
@@ -239,6 +242,7 @@
   Route::post('/create-question', 'AdminUserController@SubmitQuestion')->name('save-question');
   Route::get('/edit-question/{id}', 'AdminUserController@EditQuestion')->name('edit-question');
   Route::get('/delete-question/{id}', 'AdminUserController@DeleteQuestion')->name('delete-question');
+
 
   Route::get('/services-quotation-questions', 'AdminUserController@ServicesQuotationQuestions')->name('services-quotation-questions');
   Route::get('/create-services-question', 'AdminUserController@CreateServicesQuestion')->name('create-services-question');
