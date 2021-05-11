@@ -120,7 +120,7 @@ class UserController extends Controller
 
     public function GetPrice(Request $request)
     {
-        $data = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis',$request->width)->where('prices.y_axis',$request->height)->select('prices.value')->first();
+        $data = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
 
         return $data;
     }
