@@ -60,7 +60,7 @@
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row">
 
-                                                    <table>
+                                                    <table style="width: 100%;">
                                                         <thead>
                                                         <tr>
                                                             <th style="padding: 5px;"></th>
