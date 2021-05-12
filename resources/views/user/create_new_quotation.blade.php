@@ -396,6 +396,42 @@
                 },
             });
 
+            $('.js-data-example-ajax2').change(function(){
+
+                var current = $(this);
+
+                var color = current.val();
+
+                var width = current.parent().parent().find('.width').find('input').val();
+                width = width.replace(/\,/g, '.');
+
+                var height = current.parent().parent().find('.height').find('input').val();
+                height = height.replace(/\,/g, '.');
+
+                var product = current.parent().parent().find('.products').find('select').val();
+
+                if(width && height && color && product)
+                {
+                    $.ajax({
+                        type:"GET",
+                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height,
+                        url: "<?php echo url('/aanbieder/get-price')?>",
+                        success: function(data) {
+
+                            if(typeof data.value !== 'undefined')
+                            {
+                                current.parent().parent().find('.price').text('€ ' + data.value);
+                            }
+                            else
+                            {
+                                current.parent().parent().find('.price').text('');
+                            }
+                        }
+                    });
+                }
+
+            });
+
             $(document).on('focusout', '#productInput', function(){
 
                 var check = $(this).next('input').val();
