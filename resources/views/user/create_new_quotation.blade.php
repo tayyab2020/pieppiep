@@ -420,6 +420,49 @@
 
                             if(typeof data.value !== 'undefined')
                             {
+                                if(data.value === 'both')
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Width & Height are greater than max values',
+                                    });
+
+                                    current.parent().parent().find('.price').text('');
+                                }
+                                else if(data.value === 'x_axis')
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Width is greater than max value',
+                                    });
+
+                                    current.parent().parent().find('.price').text('');
+                                }
+                                else if(data.value === 'y_axis')
+                                {
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Height is greater than max value',
+                                    });
+
+                                    current.parent().parent().find('.price').text('');
+                                }
+                                else
+                                {
+                                    current.parent().parent().find('.price').text('€ ' + data.value);
+                                }
+                            }
+                            else
+                            {
+                                current.parent().parent().find('.price').text('');
+                            }
+
+                            if(typeof data.value !== 'undefined')
+                            {
                                 current.parent().parent().find('.price').text('€ ' + data.value);
                             }
                             else
@@ -918,7 +961,41 @@
 
                             if(typeof data.value !== 'undefined')
                             {
-                                current.parent().parent().parent().find('.price').text('€ ' + data.value);
+                                if(data.value === 'both')
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Width & Height are greater than max values',
+                                    });
+
+                                    current.parent().parent().parent().find('.price').text('');
+                                }
+                                else if(data.value === 'x_axis')
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Width is greater than max value',
+                                    });
+
+                                    current.parent().parent().parent().find('.price').text('');
+                                }
+                                else if(data.value === 'y_axis')
+                                {
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Height is greater than max value',
+                                    });
+
+                                    current.parent().parent().parent().find('.price').text('');
+                                }
+                                else
+                                {
+                                    current.parent().parent().parent().find('.price').text('€ ' + data.value);
+                                }
                             }
                             else
                             {
@@ -953,7 +1030,41 @@
 
                             if(typeof data.value !== 'undefined')
                             {
-                                current.parent().parent().parent().find('.price').text('€ ' + data.value);
+                                if(data.value === 'both')
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Width & Height are greater than max values',
+                                    });
+
+                                    current.parent().parent().parent().find('.price').text('');
+                                }
+                                else if(data.value === 'x_axis')
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Width is greater than max value',
+                                    });
+
+                                    current.parent().parent().parent().find('.price').text('');
+                                }
+                                else if(data.value === 'y_axis')
+                                {
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Height is greater than max value',
+                                    });
+
+                                    current.parent().parent().parent().find('.price').text('');
+                                }
+                                else
+                                {
+                                    current.parent().parent().parent().find('.price').text('€ ' + data.value);
+                                }
                             }
                             else
                             {

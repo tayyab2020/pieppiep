@@ -146,12 +146,15 @@ class ProductController extends Controller
             {
                 foreach ($colors as $c => $key)
                 {
-                    $col = new colors;
-                    $col->title = $key;
-                    $col->color_code = $request->color_codes[$c];
-                    $col->product_id = $request->cat_id;
-                    $col->table_id = $request->price_tables[$c];
-                    $col->save();
+                    if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                    {
+                        $col = new colors;
+                        $col->title = $key;
+                        $col->color_code = $request->color_codes[$c];
+                        $col->product_id = $request->cat_id;
+                        $col->table_id = $request->price_tables[$c];
+                        $col->save();
+                    }
                 }
             }
             else
@@ -164,19 +167,25 @@ class ProductController extends Controller
 
                         if($col_check)
                         {
-                            $col_check->title = $key;
-                            $col_check->color_code = $request->color_codes[$c];
-                            $col_check->table_id = $request->price_tables[$c];
-                            $col_check->save();
+                            if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                            {
+                                $col_check->title = $key;
+                                $col_check->color_code = $request->color_codes[$c];
+                                $col_check->table_id = $request->price_tables[$c];
+                                $col_check->save();
+                            }
                         }
                         else
                         {
-                            $col = new colors;
-                            $col->title = $key;
-                            $col->color_code = $request->color_codes[$c];
-                            $col->product_id = $request->cat_id;
-                            $col->table_id = $request->price_tables[$c];
-                            $col->save();
+                            if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                            {
+                                $col = new colors;
+                                $col->title = $key;
+                                $col->color_code = $request->color_codes[$c];
+                                $col->product_id = $request->cat_id;
+                                $col->table_id = $request->price_tables[$c];
+                                $col->save();
+                            }
                         }
                     }
                 }
@@ -248,12 +257,15 @@ class ProductController extends Controller
 
                 foreach ($colors as $c => $key)
                 {
-                    $col = new colors;
-                    $col->title = $key;
-                    $col->color_code = $request->color_codes[$c];
-                    $col->product_id = $cat->id;
-                    $col->table_id = $request->price_tables[$c];
-                    $col->save();
+                    if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                    {
+                        $col = new colors;
+                        $col->title = $key;
+                        $col->color_code = $request->color_codes[$c];
+                        $col->product_id = $cat->id;
+                        $col->table_id = $request->price_tables[$c];
+                        $col->save();
+                    }
                 }
 
                 foreach ($pricesArray as $x => $price)
@@ -285,12 +297,15 @@ class ProductController extends Controller
                 {
                     foreach ($colors as $c => $key)
                     {
-                        $col = new colors;
-                        $col->title = $key;
-                        $col->color_code = $request->color_codes[$c];
-                        $col->product_id = $check->id;
-                        $col->table_id = $request->price_tables[$c];
-                        $col->save();
+                        if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                        {
+                            $col = new colors;
+                            $col->title = $key;
+                            $col->color_code = $request->color_codes[$c];
+                            $col->product_id = $check->id;
+                            $col->table_id = $request->price_tables[$c];
+                            $col->save();
+                        }
                     }
                 }
                 else
@@ -303,19 +318,25 @@ class ProductController extends Controller
 
                             if($col_check)
                             {
-                                $col_check->title = $key;
-                                $col_check->color_code = $request->color_codes[$c];
-                                $col_check->table_id = $request->price_tables[$c];
-                                $col_check->save();
+                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                                {
+                                    $col_check->title = $key;
+                                    $col_check->color_code = $request->color_codes[$c];
+                                    $col_check->table_id = $request->price_tables[$c];
+                                    $col_check->save();
+                                }
                             }
                             else
                             {
-                                $col = new colors;
-                                $col->title = $key;
-                                $col->color_code = $request->color_codes[$c];
-                                $col->product_id = $check->id;
-                                $col->table_id = $request->price_tables[$c];
-                                $col->save();
+                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                                {
+                                    $col = new colors;
+                                    $col->title = $key;
+                                    $col->color_code = $request->color_codes[$c];
+                                    $col->product_id = $check->id;
+                                    $col->table_id = $request->price_tables[$c];
+                                    $col->save();
+                                }
                             }
                         }
                     }

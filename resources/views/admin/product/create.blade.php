@@ -243,7 +243,7 @@
 
                                                         <div class="color_box" style="margin-bottom: 20px;">
 
-                                                            @if(isset($colors_data))
+                                                            @if(isset($colors_data) && count($colors_data) > 0)
 
                                                                 @foreach($colors_data as $i => $key)
 
@@ -251,18 +251,18 @@
 
                                                                         <div class="col-sm-4">
 
-                                                                            <input value="{{$key->color}}" class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" required type="text">
+                                                                            <input value="{{$key->color}}" class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">
 
                                                                         </div>
 
                                                                         <div class="col-sm-3">
 
-                                                                            <input value="{{$key->color_code}}" class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" required type="text">
+                                                                            <input value="{{$key->color_code}}" class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">
 
                                                                         </div>
 
                                                                         <div class="col-sm-4">
-                                                                            <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>
+                                                                            <select class="form-control validate js-data-example-ajax4" name="price_tables[]">
 
                                                                                 <option value="">Select Price Table</option>
 
@@ -289,18 +289,18 @@
 
                                                                     <div class="col-sm-4">
 
-                                                                        <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" required type="text">
+                                                                        <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">
 
                                                                     </div>
 
                                                                     <div class="col-sm-3">
 
-                                                                        <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" required type="text">
+                                                                        <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">
 
                                                                     </div>
 
                                                                     <div class="col-sm-4">
-                                                                        <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>
+                                                                        <select class="form-control validate js-data-example-ajax4" name="price_tables[]">
 
                                                                             <option value="">Select Price Table</option>
 
@@ -536,18 +536,18 @@
             '\n' +
             '<div class="col-sm-4">\n' +
             '\n' +
-            '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" required type="text">\n' +
+            '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
             '\n' +
             '                                                                </div>\n' +
             '\n' +
             '                                                                <div class="col-sm-3">\n' +
             '\n' +
-            '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" required type="text">\n' +
+            '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">\n' +
             '\n' +
             '                                                                </div>\n' +
             '\n' +
             '                                                                <div class="col-sm-4">\n' +
-            '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>\n' +
+            '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
             '\n' +
             '                                                                        <option value="">Select Price Table</option>\n' +
             '\n' +
@@ -597,18 +597,18 @@
                 '\n' +
                 '<div class="col-sm-4">\n' +
                 '\n' +
-                '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" required type="text">\n' +
+                '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
                 '\n' +
                 '                                                                </div>\n' +
                 '\n' +
                 '                                                                <div class="col-sm-3">\n' +
                 '\n' +
-                '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" required type="text">\n' +
+                '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">\n' +
                 '\n' +
                 '                                                                </div>\n' +
                 '\n' +
                 '                                                                <div class="col-sm-4">\n' +
-                '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]" required>\n' +
+                '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
                 '\n' +
                 '                                                                        <option value="">Select Price Table</option>\n' +
                 '\n' +

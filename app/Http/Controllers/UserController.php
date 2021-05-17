@@ -120,7 +120,27 @@ class UserController extends Controller
 
     public function GetPrice(Request $request)
     {
-        $data = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
+        $request->width = (int)$request->width;
+        $request->height = (int)$request->height;
+        $max_x_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.x_axis');
+        $max_y_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.y_axis');
+
+        if($max_x_axis >= $request->width && $max_y_axis >= $request->height)
+        {
+            $data = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
+        }
+        else if($max_x_axis < $request->width && $max_y_axis < $request->height)
+        {
+            $data = ['value' => 'both'];
+        }
+        else if($max_x_axis < $request->width)
+        {
+            $data = ['value' => 'x_axis'];
+        }
+        else
+        {
+            $data = ['value' => 'y_axis'];
+        }
 
         return $data;
     }
