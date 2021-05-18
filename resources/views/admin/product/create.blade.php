@@ -35,6 +35,7 @@
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu2">General Options</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu3">Colors Options</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu4">Price Tables</a></li>
+                                                <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu5">Features</a></li>
                                             </ul>
 
                                             <form style="padding: 0;" class="form-horizontal" action="{{route('admin-product-store')}}" method="POST" enctype="multipart/form-data">
@@ -243,6 +244,8 @@
 
                                                         <div class="color_box" style="margin-bottom: 20px;">
 
+                                                            <input type="hidden" name="removed_colors" id="removed_colors">
+
                                                             @if(isset($colors_data) && count($colors_data) > 0)
 
                                                                 @foreach($colors_data as $i => $key)
@@ -276,7 +279,7 @@
                                                                         </div>
 
                                                                         <div class="col-xs-1 col-sm-1">
-                                                                            <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>
+                                                                            <span class="ui-close remove-color" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
                                                                         </div>
 
                                                                     </div>
@@ -314,7 +317,7 @@
                                                                     </div>
 
                                                                     <div class="col-xs-1 col-sm-1">
-                                                                        <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>
+                                                                        <span class="ui-close remove-color" data-id="" style="margin:0;right:70%;">X</span>
                                                                     </div>
 
                                                                 </div>
@@ -409,6 +412,152 @@
 
                                                     </div>
 
+                                                    <div id="menu5" class="tab-pane fade">
+
+                                                        <div class="form-group" style="margin-bottom: 20px;">
+
+                                                            <div class="row" style="margin: 0;">
+
+                                                                <div style="font-family: monospace;" class="col-sm-4">
+                                                                    <h4>Feature</h4>
+                                                                </div>
+
+                                                                <div style="font-family: monospace;" class="col-sm-3">
+                                                                    <h4>Value</h4>
+                                                                </div>
+
+                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
+                                                                    <h4>Price Impact</h4>
+                                                                </div>
+
+                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
+                                                                    <h4>Impact Type</h4>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="row feature_box" style="margin: 15px 0;">
+
+                                                                <input type="hidden" name="removed" id="removed_rows">
+
+                                                                @if(isset($features_data) && count($features_data) > 0)
+
+                                                                    @foreach($features_data as $f => $key)
+
+                                                                        <div class="form-group" style="margin: 0 0 20px 0;">
+
+                                                                            <div class="col-sm-4">
+
+                                                                                <input class="form-control feature_title" value="{{$key->title}}" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+
+                                                                            </div>
+
+                                                                            <div class="col-sm-3">
+
+                                                                                <input class="form-control feature_value" value="{{$key->value}}" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+
+                                                                            </div>
+
+                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                                <input type="hidden" name="price_impact[]" id="price_impact" value="{{$key->price_impact}}">
+
+                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                <label style="margin: 0;" class="switch">
+                                                                                    <input class="price_impact" type="checkbox" {{$key->price_impact ? 'checked' : null}}>
+                                                                                    <span class="slider round"></span>
+                                                                                </label>
+                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                            </div>
+
+                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                                <input type="hidden" name="impact_type[]" id="impact_type" value="{{$key->impact_type}}">
+
+                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                <label style="margin: 0;" class="switch">
+                                                                                    <input class="impact_type" type="checkbox" {{$key->impact_type ? 'checked' : null}}>
+                                                                                    <span class="slider round"></span>
+                                                                                </label>
+                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                            </div>
+
+
+                                                                            <div class="col-xs-1 col-sm-1">
+                                                                                <span class="ui-close remove-feature" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    @endforeach
+
+                                                                @else
+
+                                                                    <div class="form-group" style="margin: 0 0 20px 0;">
+
+                                                                        <div class="col-sm-4">
+
+                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+
+                                                                        </div>
+
+                                                                        <div class="col-sm-3">
+
+                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+
+                                                                        </div>
+
+                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                            <input type="hidden" name="price_impact[]" id="price_impact" value="0">
+
+                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                            <label style="margin: 0;" class="switch">
+                                                                                <input class="price_impact" type="checkbox">
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                        </div>
+
+                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                            <input type="hidden" name="impact_type[]" id="impact_type" value="0">
+
+                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                            <label style="margin: 0;" class="switch">
+                                                                                <input class="impact_type" type="checkbox">
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                        </div>
+
+
+                                                                        <div class="col-xs-1 col-sm-1">
+                                                                            <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                @endif
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group add-color">
+                                                            <label class="control-label col-sm-3" for=""></label>
+
+                                                            <div class="col-sm-12 text-center">
+                                                                <button class="btn btn-default featured-btn" type="button" id="add-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
                                                     <hr style="margin: 30px 0;">
 
                                                     <div style="padding: 0;" class="add-product-footer">
@@ -445,6 +594,35 @@
     $(document).ready(function() {
 
         var row = 0;
+        var rem_index = 0;
+        var rem_arr = [];
+        var rem_col_arr = [];
+
+        $('body').on('change', '.price_impact', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#price_impact').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#price_impact').val(0);
+            }
+
+        });
+
+        $('body').on('change', '.impact_type', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#impact_type').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#impact_type').val(0);
+            }
+
+        });
 
         $('body').on('input', '.color_title', function() {
 
@@ -527,72 +705,9 @@
             });
         });
 
-    });
-
-    $("#add-color-btn").on('click',function() {
+        $("#add-color-btn").on('click',function() {
 
 
-        $(".color_box").append('<div class="form-group" data-id="">\n' +
-            '\n' +
-            '<div class="col-sm-4">\n' +
-            '\n' +
-            '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
-            '\n' +
-            '                                                                </div>\n' +
-            '\n' +
-            '                                                                <div class="col-sm-3">\n' +
-            '\n' +
-            '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">\n' +
-            '\n' +
-            '                                                                </div>\n' +
-            '\n' +
-            '                                                                <div class="col-sm-4">\n' +
-            '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
-            '\n' +
-            '                                                                        <option value="">Select Price Table</option>\n' +
-            '\n' +
-            '                                                                        @foreach($tables as $table)\n' +
-            '\n' +
-            '                                                                            <option value="{{$table->id}}">{{$table->title}}</option>\n' +
-            '\n' +
-            '                                                                        @endforeach\n' +
-            '\n' +
-            '                                                                    </select>\n' +
-            '                                                                </div>\n'+
-            '\n' +
-            '                <div class="col-xs-1 col-sm-1">\n' +
-            '                <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>\n' +
-            '                </div>\n' +
-            '\n' +
-            '                </div>');
-
-
-
-        $(".js-data-example-ajax4").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "Select Price Table",
-            allowClear: true,
-        });
-
-
-    });
-
-    $(document).on('click', '.remove-color' ,function() {
-
-        var parent = this.parentNode.parentNode;
-        var id = $(this).parent().parent().attr("data-id");
-
-        if(id)
-        {
-            $('#example1 tbody').find("[data-id='" + id + "']").remove();
-        }
-
-        $(parent).hide();
-        $(parent).remove();
-
-        if($(".color_box .form-group").length == 0)
-        {
             $(".color_box").append('<div class="form-group" data-id="">\n' +
                 '\n' +
                 '<div class="col-sm-4">\n' +
@@ -622,10 +737,11 @@
                 '                                                                </div>\n'+
                 '\n' +
                 '                <div class="col-xs-1 col-sm-1">\n' +
-                '                <span class="ui-close remove-color" style="margin:0;right:70%;">X</span>\n' +
+                '                <span class="ui-close remove-color" data-id="" style="margin:0;right:70%;">X</span>\n' +
                 '                </div>\n' +
                 '\n' +
                 '                </div>');
+
 
 
             $(".js-data-example-ajax4").select2({
@@ -636,88 +752,298 @@
             });
 
 
-        }
+        });
 
-    });
-
-    $(".js-data-example-ajax").select2({
-        width: '100%',
-        height: '200px',
-        placeholder: "Select Category",
-        allowClear: true,
-    });
-
-    $(".js-data-example-ajax1").select2({
-        width: '100%',
-        height: '200px',
-        placeholder: "Select Brand",
-        allowClear: true,
-    });
-
-    $(".js-data-example-ajax2").select2({
-        width: '100%',
-        height: '200px',
-        placeholder: "Select Model",
-        allowClear: true,
-    });
+        $("#add-feature-btn").on('click',function() {
 
 
-    $(".js-data-example-ajax4").select2({
-        width: '100%',
-        height: '200px',
-        placeholder: "Select Price Table",
-        allowClear: true,
-    });
+            $(".feature_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
+                '\n' +
+                '<div class="col-sm-4">\n' +
+                '\n' +
+                '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '                                                                    <div class="col-sm-3">\n' +
+                '\n' +
+                '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                '\n' +
+                '                                                                   <input type="hidden" name="price_impact[]" id="price_impact" value="0">\n' +
+                '\n' +
+                '                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                        <label style="margin: 0;" class="switch">\n' +
+                '                                                                            <input class="price_impact" type="checkbox">\n' +
+                '                                                                            <span class="slider round"></span>\n' +
+                '                                                                        </label>\n' +
+                '                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                '\n' +
+                '                                                                   <input type="hidden" name="impact_type[]" id="impact_type" value="0">\n' +
+                '\n' +
+                '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                '                                                                        <label style="margin: 0;" class="switch">\n' +
+                '                                                                            <input class="impact_type" type="checkbox">\n' +
+                '                                                                            <span class="slider round"></span>\n' +
+                '                                                                        </label>\n' +
+                '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '\n' +
+                '                                                                    <div class="col-xs-1 col-sm-1">\n' +
+                '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                '                                                                    </div>\n'+
+                '\n' +
+                '                </div>');
 
 
-    $('.js-data-example-ajax1').on('change', function() {
 
-        var brand_id = $(this).val();
-        var options = '';
+            $(".js-data-example-ajax4").select2({
+                width: '100%',
+                height: '200px',
+                placeholder: "Select Price Table",
+                allowClear: true,
+            });
 
-        $.ajax({
-            type:"GET",
-            data: "id=" + brand_id ,
-            url: "<?php echo url('/logstof/product/products-models-by-brands')?>",
-            success: function(data) {
 
-                $.each(data, function(index, value) {
+        });
 
-                    var opt = '<option value="'+value.id+'" >'+value.cat_slug+'</option>';
+
+        $(".js-data-example-ajax").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Category",
+            allowClear: true,
+        });
+
+        $(".js-data-example-ajax1").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Brand",
+            allowClear: true,
+        });
+
+        $(".js-data-example-ajax2").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Model",
+            allowClear: true,
+        });
+
+
+        $(".js-data-example-ajax4").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Price Table",
+            allowClear: true,
+        });
+
+
+        $('.js-data-example-ajax1').on('change', function() {
+
+            var brand_id = $(this).val();
+            var options = '';
+
+            $.ajax({
+                type:"GET",
+                data: "id=" + brand_id ,
+                url: "<?php echo url('/logstof/product/products-models-by-brands')?>",
+                success: function(data) {
+
+                    $.each(data, function(index, value) {
+
+                        var opt = '<option value="'+value.id+'" >'+value.cat_slug+'</option>';
 
                         options = options + opt;
 
+                    });
+
+                    $('.js-data-example-ajax2').find('option')
+                        .remove()
+                        .end()
+                        .append('<option value="">Select Model</option>'+options);
+
+                }
+            });
+
+        });
+
+        function uploadclick(){
+            $("#uploadFile").click();
+            $("#uploadFile").change(function(event) {
+                readURL(this);
+                $("#uploadTrigger").html($("#uploadFile").val());
+            });
+
+        }
+
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#adminimg').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $('body').on('click', '.remove-color' ,function() {
+
+            var parent = this.parentNode.parentNode;
+            var id = $(this).parent().parent().attr("data-id");
+
+            if(id)
+            {
+                $('#example1 tbody').find("[data-id='" + id + "']").remove();
+            }
+
+            var rem_id = $(this).data('id');
+
+            if(rem_id)
+            {
+                rem_col_arr.push(rem_id);
+                $('#removed_colors').val(rem_col_arr);
+            }
+
+            $(parent).hide();
+            $(parent).remove();
+
+            if($(".color_box .form-group").length == 0)
+            {
+                $(".color_box").append('<div class="form-group" data-id="">\n' +
+                    '\n' +
+                    '<div class="col-sm-4">\n' +
+                    '\n' +
+                    '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
+                    '\n' +
+                    '                                                                </div>\n' +
+                    '\n' +
+                    '                                                                <div class="col-sm-3">\n' +
+                    '\n' +
+                    '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">\n' +
+                    '\n' +
+                    '                                                                </div>\n' +
+                    '\n' +
+                    '                                                                <div class="col-sm-4">\n' +
+                    '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
+                    '\n' +
+                    '                                                                        <option value="">Select Price Table</option>\n' +
+                    '\n' +
+                    '                                                                        @foreach($tables as $table)\n' +
+                    '\n' +
+                    '                                                                            <option value="{{$table->id}}">{{$table->title}}</option>\n' +
+                    '\n' +
+                    '                                                                        @endforeach\n' +
+                    '\n' +
+                    '                                                                    </select>\n' +
+                    '                                                                </div>\n'+
+                    '\n' +
+                    '                <div class="col-xs-1 col-sm-1">\n' +
+                    '                <span class="ui-close remove-color" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                    '                </div>\n' +
+                    '\n' +
+                    '                </div>');
+
+
+                $(".js-data-example-ajax4").select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "Select Price Table",
+                    allowClear: true,
                 });
 
-                $('.js-data-example-ajax2').find('option')
-                    .remove()
-                    .end()
-                    .append('<option value="">Select Model</option>'+options);
 
             }
+
+        });
+
+        $('body').on('click', '.remove-feature' ,function() {
+
+            var id = $(this).data('id');
+
+            if(id)
+            {
+                rem_arr.push(id);
+                $('#removed_rows').val(rem_arr);
+            }
+
+            var parent = this.parentNode.parentNode;
+
+            $(parent).hide();
+            $(parent).remove();
+
+            if($(".feature_box .form-group").length == 0)
+            {
+                $(".feature_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
+                    '\n' +
+                    '<div class="col-sm-4">\n' +
+                    '\n' +
+                    '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                                                                    <div class="col-sm-3">\n' +
+                    '\n' +
+                    '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                    '\n' +
+                    '                                                                   <input type="hidden" name="price_impact[]" id="price_impact" value="0">\n' +
+                    '\n' +
+                    '                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                        <label style="margin: 0;" class="switch">\n' +
+                    '                                                                            <input class="price_impact" type="checkbox">\n' +
+                    '                                                                            <span class="slider round"></span>\n' +
+                    '                                                                        </label>\n' +
+                    '                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                    '\n' +
+                    '                                                                   <input type="hidden" name="impact_type[]" id="impact_type" value="0">\n' +
+                    '\n' +
+                    '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                    '                                                                        <label style="margin: 0;" class="switch">\n' +
+                    '                                                                            <input class="impact_type" type="checkbox">\n' +
+                    '                                                                            <span class="slider round"></span>\n' +
+                    '                                                                        </label>\n' +
+                    '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '\n' +
+                    '                                                                    <div class="col-xs-1 col-sm-1">\n' +
+                    '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                    '                                                                    </div>\n'+
+                    '\n' +
+                    '                </div>');
+
+
+                $(".js-data-example-ajax4").select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "Select Price Table",
+                    allowClear: true,
+                });
+
+
+            }
+
         });
 
     });
-
-  function uploadclick(){
-    $("#uploadFile").click();
-    $("#uploadFile").change(function(event) {
-          readURL(this);
-        $("#uploadTrigger").html($("#uploadFile").val());
-    });
-
-}
-
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#adminimg').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 
 </script>
 
@@ -789,6 +1115,66 @@
   {
     font-size: 16px;
   }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 20px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 13px;
+        width: 13px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
 
 </style>
 

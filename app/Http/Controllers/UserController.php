@@ -7,6 +7,7 @@ use App\color;
 use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
+use App\features;
 use App\handyman_quotes;
 use App\handyman_services;
 use App\instruction_manual;
@@ -127,19 +128,22 @@ class UserController extends Controller
 
         if($max_x_axis >= $request->width && $max_y_axis >= $request->height)
         {
-            $data = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
+            $price = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
+            $features = features::leftjoin('colors','colors.product_id','=','features.product_id')->where('colors.id',$request->color)->where('features.price_impact',1)->select('features.*')->get();
+
+            $data = array($price,$features);
         }
         else if($max_x_axis < $request->width && $max_y_axis < $request->height)
         {
-            $data = ['value' => 'both'];
+            $data[0] = ['value' => 'both'];
         }
         else if($max_x_axis < $request->width)
         {
-            $data = ['value' => 'x_axis'];
+            $data[0] = ['value' => 'x_axis'];
         }
         else
         {
-            $data = ['value' => 'y_axis'];
+            $data[0] = ['value' => 'y_axis'];
         }
 
         return $data;

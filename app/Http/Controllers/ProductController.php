@@ -7,6 +7,7 @@ use App\color;
 use App\colors;
 use App\estimated_prices;
 use App\Exports\ProductsExport;
+use App\features;
 use App\Imports\ProductsImport;
 use App\Model1;
 use App\price_tables;
@@ -114,6 +115,7 @@ class ProductController extends Controller
     {
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
         $colors = $request->colors;
+        $features = $request->features;
 
         if($prices)
         {
@@ -128,6 +130,12 @@ class ProductController extends Controller
 
         if($request->cat_id)
         {
+            $removed = explode(',', $request->removed);
+            features::whereIn('id',$removed)->delete();
+
+            $removed_colors = explode(',', $request->removed_colors);
+            colors::whereIn('id',$removed_colors)->delete();
+
             $cat = Products::where('id',$request->cat_id)->first();
 
             if($file = $request->file('photo'))
@@ -139,6 +147,64 @@ class ProductController extends Controller
             }
 
             $cat->fill($input)->save();
+
+            $fea = features::where('product_id',$request->cat_id)->get();
+
+            if(count($fea) == 0)
+            {
+                foreach ($features as $f => $key)
+                {
+                    if($key != NULL && $request->feature_values[$f] != NULL)
+                    {
+                        $fea = new features;
+                        $fea->title = $key;
+                        $fea->value = $request->feature_values[$f];
+                        $fea->product_id = $request->cat_id;
+                        $fea->price_impact = $request->price_impact[$f];
+                        $fea->impact_type = $request->impact_type[$f];
+                        $fea->save();
+                    }
+                }
+            }
+            else
+            {
+                if(count($features) > 0)
+                {
+                    foreach ($features as $f => $key)
+                    {
+                        $fea_check = features::where('product_id',$request->cat_id)->skip($f)->first();
+
+                        if($fea_check)
+                        {
+                            if($key != NULL && $request->feature_values[$f] != NULL)
+                            {
+                                $fea_check->title = $key;
+                                $fea_check->value = $request->feature_values[$f];
+                                $fea_check->price_impact = $request->price_impact[$f];
+                                $fea_check->impact_type = $request->impact_type[$f];
+                                $fea_check->save();
+                            }
+                        }
+                        else
+                        {
+                            if($key != NULL && $request->feature_values[$f] != NULL)
+                            {
+                                $fea = new features;
+                                $fea->product_id = $request->cat_id;
+                                $fea->title = $key;
+                                $fea->value = $request->feature_values[$f];
+                                $fea->price_impact = $request->price_impact[$f];
+                                $fea->impact_type = $request->impact_type[$f];
+                                $fea->save();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    features::where('product_id',$request->cat_id)->delete();
+                }
+            }
 
             $col = color::where('product_id',$request->cat_id)->get();
 
@@ -255,6 +321,20 @@ class ProductController extends Controller
 
                 $cat->fill($input)->save();
 
+                foreach ($features as $f => $key)
+                {
+                    if($key != NULL && $request->feature_values[$f] != NULL)
+                    {
+                        $feature = new features;
+                        $feature->product_id = $cat->id;
+                        $feature->title = $key;
+                        $feature->value = $request->feature_values[$f];
+                        $feature->price_impact = $request->price_impact[$f];
+                        $feature->impact_type = $request->impact_type[$f];
+                        $feature->save();
+                    }
+                }
+
                 foreach ($colors as $c => $key)
                 {
                     if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
@@ -290,6 +370,64 @@ class ProductController extends Controller
                 }
 
                 $check->fill($input)->save();
+
+                $fea = features::where('product_id',$check->id)->get();
+
+                if(count($fea) == 0)
+                {
+                    foreach ($features as $f => $key)
+                    {
+                        if($key != NULL && $request->feature_values[$f] != NULL)
+                        {
+                            $feature = new features;
+                            $feature->product_id = $check->id;
+                            $feature->title = $key;
+                            $feature->value = $request->feature_values[$f];
+                            $feature->price_impact = $request->price_impact[$f];
+                            $feature->impact_type = $request->impact_type[$f];
+                            $feature->save();
+                        }
+                    }
+                }
+                else
+                {
+                    if(count($features) > 0)
+                    {
+                        foreach ($features as $f => $key)
+                        {
+                            $fea_check = features::where('product_id',$check->id)->skip($f)->first();
+
+                            if($fea_check)
+                            {
+                                if($key != NULL && $request->feature_values[$f] != NULL)
+                                {
+                                    $fea_check->title = $key;
+                                    $fea_check->value = $request->feature_values[$f];
+                                    $fea_check->price_impact = $request->price_impact[$f];
+                                    $fea_check->impact_type = $request->impact_type[$f];
+                                    $fea_check->save();
+                                }
+                            }
+                            else
+                            {
+                                if($key != NULL && $request->feature_values[$f] != NULL)
+                                {
+                                    $fea = new features;
+                                    $fea->title = $key;
+                                    $fea->value = $request->feature_values[$f];
+                                    $fea->product_id = $check->id;
+                                    $fea->price_impact = $request->price_impact[$f];
+                                    $fea->impact_type = $request->impact_type[$f];
+                                    $fea->save();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        features::where('product_id',$check->id)->delete();
+                    }
+                }
 
                 $col = color::where('product_id',$check->id)->get();
 
@@ -397,14 +535,14 @@ class ProductController extends Controller
     {
         $cats = Products::where('id','=',$id)->first();
 
-        $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.title as color','colors.color_code','colors.table_id','price_tables.title as table')->get();
-
+        $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','price_tables.title as table')->get();
+        $features_data = features::where('product_id',$id)->get();
         $categories = Category::all();
         $brands = Brand::all();
         $models = Model1::where('brand_id',$cats->brand_id)->get();
         $tables = price_tables::where('connected',1)->get();
 
-        return view('admin.product.create',compact('cats','categories','brands','models','tables','colors_data'));
+        return view('admin.product.create',compact('cats','categories','brands','models','tables','colors_data','features_data'));
     }
 
     public function update(UpdateValidationRequest $request, $id)

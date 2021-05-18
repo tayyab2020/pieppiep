@@ -418,9 +418,9 @@
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
-                            if(typeof data.value !== 'undefined')
+                            if(typeof data[0].value !== 'undefined')
                             {
-                                if(data.value === 'both')
+                                if(data[0].value === 'both')
                                 {
                                     Swal.fire({
                                         icon: 'error',
@@ -430,7 +430,7 @@
 
                                     current.parent().parent().find('.price').text('');
                                 }
-                                else if(data.value === 'x_axis')
+                                else if(data[0].value === 'x_axis')
                                 {
                                     Swal.fire({
                                         icon: 'error',
@@ -440,7 +440,7 @@
 
                                     current.parent().parent().find('.price').text('');
                                 }
-                                else if(data.value === 'y_axis')
+                                else if(data[0].value === 'y_axis')
                                 {
 
                                     Swal.fire({
@@ -453,17 +453,24 @@
                                 }
                                 else
                                 {
-                                    current.parent().parent().find('.price').text('€ ' + data.value);
-                                }
-                            }
-                            else
-                            {
-                                current.parent().parent().find('.price').text('');
-                            }
+                                    var price = parseInt(data[0].value);
+                                    var org = parseInt(data[0].value);
 
-                            if(typeof data.value !== 'undefined')
-                            {
-                                current.parent().parent().find('.price').text('€ ' + data.value);
+                                    $.each(data[1], function(index, value) {
+
+                                        if(value.impact_type == 0)
+                                        {
+                                            price = price + parseInt(value.value);
+                                        }
+                                        else
+                                        {
+                                            var per = (parseInt(value.value))/100;
+                                            price = price + (org * per);
+                                        }
+
+                                    });
+                                    current.parent().parent().find('.price').text('€ ' + price);
+                                }
                             }
                             else
                             {
@@ -959,9 +966,9 @@
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
-                            if(typeof data.value !== 'undefined')
+                            if(typeof data[0].value !== 'undefined')
                             {
-                                if(data.value === 'both')
+                                if(data[0].value === 'both')
                                 {
                                     Swal.fire({
                                         icon: 'error',
@@ -971,7 +978,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                 }
-                                else if(data.value === 'x_axis')
+                                else if(data[0].value === 'x_axis')
                                 {
                                     Swal.fire({
                                         icon: 'error',
@@ -981,7 +988,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                 }
-                                else if(data.value === 'y_axis')
+                                else if(data[0].value === 'y_axis')
                                 {
 
                                     Swal.fire({
@@ -994,7 +1001,23 @@
                                 }
                                 else
                                 {
-                                    current.parent().parent().parent().find('.price').text('€ ' + data.value);
+                                    var price = parseInt(data[0].value);
+                                    var org = parseInt(data[0].value);
+
+                                    $.each(data[1], function(index, value) {
+
+                                        if(value.impact_type == 0)
+                                        {
+                                            price = price + parseInt(value.value);
+                                        }
+                                        else
+                                        {
+                                            var per = (parseInt(value.value))/100;
+                                            price = price + (org * per);
+                                        }
+
+                                    });
+                                    current.parent().parent().parent().find('.price').text('€ ' + price);
                                 }
                             }
                             else
@@ -1028,9 +1051,9 @@
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
-                            if(typeof data.value !== 'undefined')
+                            if(typeof data[0].value !== 'undefined')
                             {
-                                if(data.value === 'both')
+                                if(data[0].value === 'both')
                                 {
                                     Swal.fire({
                                         icon: 'error',
@@ -1040,7 +1063,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                 }
-                                else if(data.value === 'x_axis')
+                                else if(data[0].value === 'x_axis')
                                 {
                                     Swal.fire({
                                         icon: 'error',
@@ -1050,7 +1073,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                 }
-                                else if(data.value === 'y_axis')
+                                else if(data[0].value === 'y_axis')
                                 {
 
                                     Swal.fire({
@@ -1063,7 +1086,23 @@
                                 }
                                 else
                                 {
-                                    current.parent().parent().parent().find('.price').text('€ ' + data.value);
+                                    var price = parseInt(data[0].value);
+                                    var org = parseInt(data[0].value);
+
+                                    $.each(data[1], function(index, value) {
+
+                                        if(value.impact_type == 0)
+                                        {
+                                            price = price + parseInt(value.value);
+                                        }
+                                        else
+                                        {
+                                            var per = (parseInt(value.value))/100;
+                                            price = price + (org * per);
+                                        }
+
+                                    });
+                                    current.parent().parent().parent().find('.price').text('€ ' + price);
                                 }
                             }
                             else
