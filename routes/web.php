@@ -72,6 +72,7 @@
   Route::get('/create-new-quotation', 'UserController@CreateNewQuotation')->name('create-new-quotation');
   Route::get('/get-colors', 'UserController@GetColors');
   Route::get('/get-price', 'UserController@GetPrice');
+  Route::get('/get-feature-price', 'UserController@GetFeaturePrice');
   Route::get('/klanten', 'UserController@Customers')->name('customers');
   Route::get('/klant-bewerken/{id}', 'UserController@EditCustomer')->name('edit-customer');
   Route::get('/klant-verwijderen/{id}', 'UserController@DeleteCustomer')->name('delete-customer');
@@ -345,6 +346,13 @@
   Route::get('/item/edit/{id}', 'ItemController@edit')->name('admin-item-edit');
   Route::post('/item/update/{id}', 'ItemController@update')->name('admin-item-update');
   Route::get('/item/delete/{id}', 'ItemController@destroy')->name('admin-item-delete');
+
+  Route::get('/features', 'FeaturesController@index')->name('admin-feature-index');
+  Route::get('/features/create', 'FeaturesController@create')->name('admin-feature-create');
+  Route::post('/features/create', 'FeaturesController@store')->name('admin-feature-store');
+  Route::get('/features/edit/{id}', 'FeaturesController@edit')->name('admin-feature-edit');
+  Route::post('/features/update/{id}', 'FeaturesController@update')->name('admin-feature-update');
+  Route::get('/features/delete/{id}', 'FeaturesController@destroy')->name('admin-feature-delete');
 
   Route::get('/faq', 'FaqController@index')->name('admin-fq-index');
   Route::get('/faq/create', 'FaqController@create')->name('admin-fq-create');

@@ -60,7 +60,7 @@
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row">
 
-                                                    <table style="width: 100%;">
+                                                    <table id="products_table" style="width: 100%;">
                                                         <thead>
                                                         <tr>
                                                             <th style="padding: 5px;"></th>
@@ -79,7 +79,8 @@
 
                                                         <tbody>
 
-                                                        <tr>
+                                                        <tr data-id="1">
+                                                            <input type="hidden" id="row_total" name="total[]">
                                                             <td>1</td>
                                                             <td class="products">
                                                                 <select class="js-data-example-ajax">
@@ -144,6 +145,22 @@
 
                                                 </div>
 
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                    <ul style="border: 0;" class="nav nav-tabs feature-tab">
+                                                        <li style="margin-bottom: 0;" class="active"><a data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
+                                                    </ul>
+
+                                                    <div style="padding: 40px 15px 20px 15px;border: 1px solid #24232329;" class="tab-content">
+
+                                                        <div id="menu1" class="tab-pane fade active in">
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
                                             </div>
                                         </form>
                                     </div>
@@ -158,6 +175,11 @@
     </div>
 
     <style>
+
+        .feature-tab li a[aria-expanded="false"]::before, a[aria-expanded="true"]::before
+        {
+            display: none;
+        }
 
         .m-box
         {
@@ -1033,6 +1055,7 @@
             $("input[name='height[]'").on('input',function(e){
 
                 var current = $(this);
+                var row_id = $(this).parent().parent().parent().data('id');
 
                 var height = current.val();
                 height = height.replace(/\,/g, '.');
@@ -1088,21 +1111,59 @@
                                 {
                                     var price = parseInt(data[0].value);
                                     var org = parseInt(data[0].value);
+                                    var features = '';
+                                    var f_value = 0;
+
 
                                     $.each(data[1], function(index, value) {
 
-                                        if(value.impact_type == 0)
-                                        {
-                                            price = price + parseInt(value.value);
-                                        }
-                                        else
-                                        {
-                                            var per = (parseInt(value.value))/100;
-                                            price = price + (org * per);
-                                        }
+                                        var opt = '';
+
+                                        $.each(value.features, function(index1, value1) {
+                                            if(value1.price_impact == 1)
+                                            {
+                                                if(index1 == 0)
+                                                {
+                                                    if(value1.impact_type == 0)
+                                                    {
+                                                        f_value = value1.value;
+                                                        price = price + parseInt(f_value);
+                                                    }
+                                                    else
+                                                    {
+                                                        var per = (parseInt(f_value))/100;
+                                                        f_value = org * per;
+                                                        price = price + f_value;
+                                                    }
+                                                }
+
+                                                opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                            }
+                                        });
+
+                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features[]">'+opt+'</select>\n' +
+                                            '<input value="'+f_value+'" name="f_price" id="f_price" type="hidden">'+
+                                            '</div></div>\n';
+
+                                        features = features + content;
 
                                     });
+
+                                    if($('#menu1').find(`[data-id='${row_id}']`).length == 0)
+                                    {
+                                        $('#menu1').append('<div data-id="'+row_id+'" class="form-group">' +
+                                            '\n' +
+                                            '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                            '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+                                            '</div></div>' + features +
+                                            '</div>');
+                                    }
+
                                     current.parent().parent().parent().find('.price').text('€ ' + price);
+                                    current.parent().parent().parent().find('#row_total').val(price);
                                 }
                             }
                             else
@@ -1112,6 +1173,42 @@
                         }
                     });
                 }
+
+            });
+
+            $(document).on('change', '.feature-select', function(){
+
+                var current = $(this);
+                var feature_select = current.val();
+                var impact_value = current.next('input').val();
+                var row_id = current.parent().parent().parent().data('id');
+                var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
+
+                total = total - impact_value;
+
+                $.ajax({
+                    type: "GET",
+                    data: "id=" + feature_select,
+                    url: "<?php echo url('/aanbieder/get-feature-price')?>",
+                    success: function (data) {
+
+                        if(data.impact_type == 0)
+                        {
+                            impact_value = data.value;
+                            total = total + parseInt(impact_value);
+                        }
+                        else
+                        {
+                            var per = (parseInt(data.value))/100;
+                            impact_value = total * per;
+                            total = total + (impact_value);
+                        }
+
+                        current.next('input').val(impact_value);
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+                    }
+                });
 
             });
 

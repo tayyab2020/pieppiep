@@ -418,11 +418,15 @@
 
                                                             <div class="row" style="margin: 0;">
 
-                                                                <div style="font-family: monospace;" class="col-sm-4">
+                                                                <div style="font-family: monospace;" class="col-sm-3">
+                                                                    <h4>Heading</h4>
+                                                                </div>
+
+                                                                <div style="font-family: monospace;" class="col-sm-2">
                                                                     <h4>Feature</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-3">
+                                                                <div style="font-family: monospace;" class="col-sm-2">
                                                                     <h4>Value</h4>
                                                                 </div>
 
@@ -446,13 +450,29 @@
 
                                                                         <div class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                            <div class="col-sm-4">
+                                                                            <div class="col-sm-3">
+
+                                                                                <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">
+
+                                                                                    <option value="">Select Feature Heading</option>
+
+                                                                                    @foreach($features_headings as $heading)
+
+                                                                                        <option {{$heading->id == $key->heading_id ? 'selected' : null}} value="{{$heading->id}}">{{$heading->title}}</option>
+
+                                                                                    @endforeach
+
+                                                                                </select>
+
+                                                                            </div>
+
+                                                                            <div class="col-sm-2">
 
                                                                                 <input class="form-control feature_title" value="{{$key->title}}" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
 
                                                                             </div>
 
-                                                                            <div class="col-sm-3">
+                                                                            <div class="col-sm-2">
 
                                                                                 <input class="form-control feature_value" value="{{$key->value}}" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
@@ -497,13 +517,29 @@
 
                                                                     <div class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                        <div class="col-sm-4">
+                                                                        <div class="col-sm-3">
+
+                                                                            <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">
+
+                                                                                <option value="">Select Feature Heading</option>
+
+                                                                                @foreach($features_headings as $feature)
+
+                                                                                    <option value="{{$feature->id}}">{{$feature->title}}</option>
+
+                                                                                @endforeach
+
+                                                                            </select>
+
+                                                                        </div>
+
+                                                                        <div class="col-sm-2">
 
                                                                             <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
 
                                                                         </div>
 
-                                                                        <div class="col-sm-3">
+                                                                        <div class="col-sm-2">
 
                                                                             <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
@@ -759,13 +795,29 @@
 
             $(".feature_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
                 '\n' +
-                '<div class="col-sm-4">\n' +
+                '<div class="col-sm-3">\n' +
+                '\n' +
+                '                                                                            <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">\n' +
+                '\n' +
+                '                                                                                <option value="">Select Feature Heading</option>\n' +
+                '\n' +
+                '                                                                                @foreach($features_headings as $feature)\n' +
+                '\n' +
+                '                                                                                    <option value="{{$feature->id}}">{{$feature->title}}</option>\n' +
+                '\n' +
+                '                                                                                @endforeach\n' +
+                '\n' +
+                '                                                                            </select>\n' +
+                '\n' +
+                '                                                                        </div>\n'+
+                '\n' +
+                '<div class="col-sm-2">\n' +
                 '\n' +
                 '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
-                '                                                                    <div class="col-sm-3">\n' +
+                '                                                                    <div class="col-sm-2">\n' +
                 '\n' +
                 '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '\n' +
@@ -806,10 +858,10 @@
 
 
 
-            $(".js-data-example-ajax4").select2({
+            $(".js-data-example-ajax5").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "Select Price Table",
+                placeholder: "Select Feature Heading",
                 allowClear: true,
             });
 
@@ -843,6 +895,13 @@
             width: '100%',
             height: '200px',
             placeholder: "Select Price Table",
+            allowClear: true,
+        });
+
+        $(".js-data-example-ajax5").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Feature Heading",
             allowClear: true,
         });
 
@@ -985,6 +1044,22 @@
             {
                 $(".feature_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
                     '\n' +
+                    '<div class="col-sm-3">\n' +
+                    '\n' +
+                    '                                                                            <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">\n' +
+                    '\n' +
+                    '                                                                                <option value="">Select Feature Heading</option>\n' +
+                    '\n' +
+                    '                                                                                @foreach($features_headings as $feature)\n' +
+                    '\n' +
+                    '                                                                                    <option value="{{$feature->id}}">{{$feature->title}}</option>\n' +
+                    '\n' +
+                    '                                                                                @endforeach\n' +
+                    '\n' +
+                    '                                                                            </select>\n' +
+                    '\n' +
+                    '                                                                        </div>\n'+
+                    '\n' +
                     '<div class="col-sm-4">\n' +
                     '\n' +
                     '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
@@ -1031,10 +1106,10 @@
                     '                </div>');
 
 
-                $(".js-data-example-ajax4").select2({
+                $(".js-data-example-ajax5").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "Select Price Table",
+                    placeholder: "Select Feature Heading",
                     allowClear: true,
                 });
 

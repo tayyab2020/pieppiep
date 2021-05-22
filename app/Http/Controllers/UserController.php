@@ -14,6 +14,7 @@ use App\instruction_manual;
 use App\items;
 use App\Model1;
 use App\product;
+use App\product_features;
 use App\Products;
 use App\quotation_invoices_data;
 use App\quotation_invoices;
@@ -129,7 +130,9 @@ class UserController extends Controller
         if($max_x_axis >= $request->width && $max_y_axis >= $request->height)
         {
             $price = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
-            $features = features::leftjoin('colors','colors.product_id','=','features.product_id')->where('colors.id',$request->color)->where('features.price_impact',1)->select('features.*')->get();
+            $features = features::with(['features'=>function($query) use($request){
+                $query->where('product_id',$request->product)->where('price_impact',1);
+            }])->get();
 
             $data = array($price,$features);
         }
@@ -145,6 +148,13 @@ class UserController extends Controller
         {
             $data[0] = ['value' => 'y_axis'];
         }
+
+        return $data;
+    }
+
+    public function GetFeaturePrice(Request $request)
+    {
+        $data = product_features::where('id',$request->id)->first();
 
         return $data;
     }
