@@ -37,7 +37,7 @@
                                                             <span class="tooltiptext">Remove</span>
                                                         </span>
 
-                                                        <span class="tooltip1" style="cursor: pointer;font-size: 20px;">
+                                                        <span class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;">
                                                             <i class="fa fa-fw fa-copy"></i>
                                                             <span class="tooltiptext">Copy</span>
                                                         </span>
@@ -565,110 +565,224 @@
                 $('#menu1').find(`[data-id='${id}']`).show();
             }
 
-            function add_row()
+            function numbering()
+            {
+                $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
+            }
+
+            function add_row(copy = false,price = null,products = null,product = null,items = null,item = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
 
-                $("#products_table tbody").append('<tr data-id="'+rowCount+'">\n' +
-                    '                                                            <td>'+rowCount+'</td>\n' +
-                    '                                                            <input type="hidden" id="row_total" name="total[]">\n' +
-                    '                                                            <td class="products">\n' +
-                    '                                                                <select class="js-data-example-ajax">\n' +
-                    '\n' +
-                    '                                                                    <option value=""></option>\n' +
-                    '\n' +
-                    '                                                                    @foreach($products as $key)\n' +
-                    '\n' +
-                    '                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
-                    '\n' +
-                    '                                                                    @endforeach\n' +
-                    '\n' +
-                    '                                                                </select>\n' +
-                    '                                                            </td>\n' +
-                    '                                                            <td class="items">\n' +
-                    '                                                                <select class="js-data-example-ajax1">\n' +
-                    '\n' +
-                    '                                                                    <option value=""></option>\n' +
-                    '\n' +
-                    '                                                                    @foreach($items as $key)\n' +
-                    '\n' +
-                    '                                                                        <option value="{{$key->id}}">{{$key->cat_name}}</option>\n' +
-                    '\n' +
-                    '                                                                    @endforeach\n' +
-                    '\n' +
-                    '                                                                </select>\n' +
-                    '                                                            </td>\n' +
-                    '                                                            <td class="color">\n' +
-                    '                                                                <select class="js-data-example-ajax2">\n' +
-                    '\n' +
-                    '                                                                    <option value=""></option>\n' +
-                    '\n' +
-                    '                                                                </select>\n' +
-                    '                                                            </td>\n' +
-                    '                                                            <td class="width" style="width: 80px;">\n' +
-                    '                                                                <div class="m-box">\n' +
-                    '                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
-                    '                                                                    <span class="measure-unit">cm</span>\n' +
-                    '                                                                </div>\n' +
-                    '                                                            </td>\n' +
-                    '                                                            <td class="height" style="width: 80px;">\n' +
-                    '                                                                <div class="m-box">\n' +
-                    '                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
-                    '                                                                    <span class="measure-unit">cm</span>\n' +
-                    '                                                                </div>\n' +
-                    '                                                            </td>\n' +
-                    '                                                            <td>1 x 17</td>\n' +
-                    '                                                            <td></td>\n' +
-                    '                                                            <td></td>\n' +
-                    '                                                            <td class="price"></td>\n' +
-                    '                                                            <td id="next-row-td" style="padding: 0;">\n' +
-                    '                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
-                    '                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>\n' +
-                    '                                                                    <span style="top: 45px;" class="tooltiptext">Next</span>\n' +
-                    '                                                                </span>\n' +
-                    '                                                            </td>\n' +
-                    '                                                        </tr>');
+                if(!copy)
+                {
+                    $("#products_table tbody").append('<tr data-id="'+rowCount+'">\n' +
+                        '                                                            <td>'+rowCount+'</td>\n' +
+                        '                                                            <input type="hidden" id="row_total" name="total[]">\n' +
+                        '                                                            <td class="products">\n' +
+                        '                                                                <select class="js-data-example-ajax">\n' +
+                        '\n' +
+                        '                                                                    <option value=""></option>\n' +
+                        '\n' +
+                        '                                                                    @foreach($products as $key)\n' +
+                        '\n' +
+                        '                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+                        '\n' +
+                        '                                                                    @endforeach\n' +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="items">\n' +
+                        '                                                                <select class="js-data-example-ajax1">\n' +
+                        '\n' +
+                        '                                                                    <option value=""></option>\n' +
+                        '\n' +
+                        '                                                                    @foreach($items as $key)\n' +
+                        '\n' +
+                        '                                                                        <option value="{{$key->id}}">{{$key->cat_name}}</option>\n' +
+                        '\n' +
+                        '                                                                    @endforeach\n' +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="color">\n' +
+                        '                                                                <select class="js-data-example-ajax2">\n' +
+                        '\n' +
+                        '                                                                    <option value=""></option>\n' +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="width" style="width: 80px;">\n' +
+                        '                                                                <div class="m-box">\n' +
+                        '                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
+                        '                                                                    <span class="measure-unit">cm</span>\n' +
+                        '                                                                </div>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="height" style="width: 80px;">\n' +
+                        '                                                                <div class="m-box">\n' +
+                        '                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
+                        '                                                                    <span class="measure-unit">cm</span>\n' +
+                        '                                                                </div>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td>1 x 17</td>\n' +
+                        '                                                            <td></td>\n' +
+                        '                                                            <td></td>\n' +
+                        '                                                            <td class="price"></td>\n' +
+                        '                                                            <td id="next-row-td" style="padding: 0;">\n' +
+                        '                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
+                        '                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>\n' +
+                        '                                                                    <span style="top: 45px;" class="tooltiptext">Next</span>\n' +
+                        '                                                                </span>\n' +
+                        '                                                            </td>\n' +
+                        '                                                        </tr>');
 
-                var last_row = $('#products_table tbody tr:last');
+                    var last_row = $('#products_table tbody tr:last');
 
-                focus_row(last_row);
+                    focus_row(last_row);
 
-                last_row.find(".js-data-example-ajax").select2({
-                    width: '100%',
-                    height: '200px',
-                    placeholder: "{{__('text.Select Products')}}",
-                    allowClear: true,
-                    "language": {
-                        "noResults": function(){
-                            return '{{__('text.No results found')}}';
-                        }
-                    },
-                });
+                    last_row.find(".js-data-example-ajax").select2({
+                        width: '100%',
+                        height: '200px',
+                        placeholder: "{{__('text.Select Products')}}",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function(){
+                                return '{{__('text.No results found')}}';
+                            }
+                        },
+                    });
 
-                last_row.find(".js-data-example-ajax1").select2({
-                    width: '100%',
-                    height: '200px',
-                    placeholder: "",
-                    allowClear: true,
-                    "language": {
-                        "noResults": function(){
-                            return '{{__('text.No results found')}}';
-                        }
-                    },
-                });
+                    last_row.find(".js-data-example-ajax1").select2({
+                        width: '100%',
+                        height: '200px',
+                        placeholder: "",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function(){
+                                return '{{__('text.No results found')}}';
+                            }
+                        },
+                    });
 
-                last_row.find(".js-data-example-ajax2").select2({
-                    width: '100%',
-                    height: '200px',
-                    placeholder: "",
-                    allowClear: true,
-                    "language": {
-                        "noResults": function(){
-                            return '{{__('text.No results found')}}';
-                        }
-                    },
-                });
+                    last_row.find(".js-data-example-ajax2").select2({
+                        width: '100%',
+                        height: '200px',
+                        placeholder: "",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function(){
+                                return '{{__('text.No results found')}}';
+                            }
+                        },
+                    });
+                }
+                else
+                {
+
+                    $("#products_table tbody").append('<tr data-id="'+rowCount+'">\n' +
+                        '                                                            <td>'+rowCount+'</td>\n' +
+                        '                                                            <input value="'+price+'" type="hidden" id="row_total" name="total[]">\n' +
+                        '                                                            <td class="products">\n' +
+                        '                                                                <select class="js-data-example-ajax">\n' +
+                        '\n' +
+                        products +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="items">\n' +
+                        '                                                                <select class="js-data-example-ajax1">\n' +
+                        '\n' +
+                        items +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="color">\n' +
+                        '                                                                <select class="js-data-example-ajax2">\n' +
+                        '\n' +
+                        colors +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="width" style="width: 80px;">\n' +
+                        '                                                                <div class="m-box">\n' +
+                        '                                                                    <input value="'+width+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
+                        '                                                                    <span class="measure-unit">'+width_unit+'</span>\n' +
+                        '                                                                </div>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="height" style="width: 80px;">\n' +
+                        '                                                                <div class="m-box">\n' +
+                        '                                                                    <input value="'+height+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
+                        '                                                                    <span class="measure-unit">'+height_unit+'</span>\n' +
+                        '                                                                </div>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td>1 x 17</td>\n' +
+                        '                                                            <td></td>\n' +
+                        '                                                            <td></td>\n' +
+                        '                                                            <td class="price">'+price_text+'</td>\n' +
+                        '                                                            <td id="next-row-td" style="padding: 0;">\n' +
+                        '                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
+                        '                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>\n' +
+                        '                                                                    <span style="top: 45px;" class="tooltiptext">Next</span>\n' +
+                        '                                                                </span>\n' +
+                        '                                                            </td>\n' +
+                        '                                                        </tr>');
+
+                    var last_row = $('#products_table tbody tr:last');
+
+                    last_row.find('.js-data-example-ajax').val(product);
+                    last_row.find('.js-data-example-ajax1').val(item);
+                    last_row.find('.js-data-example-ajax2').val(color);
+
+                    if(features)
+                    {
+                        $('#menu1').append('<div data-id="'+rowCount+'" style="margin: 0;" class="form-group">\n' + features + '</div>');
+
+                        $('#menu1').find(`[data-id='${rowCount}']`).find('input[name="qty[]"]').val(qty);
+
+                        features_selects.each(function(index,select){
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
+                        });
+                    }
+
+                    focus_row(last_row);
+
+                    last_row.find(".js-data-example-ajax").select2({
+                        width: '100%',
+                        height: '200px',
+                        placeholder: "{{__('text.Select Products')}}",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function(){
+                                return '{{__('text.No results found')}}';
+                            }
+                        },
+                    });
+
+                    last_row.find(".js-data-example-ajax1").select2({
+                        width: '100%',
+                        height: '200px',
+                        placeholder: "",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function(){
+                                return '{{__('text.No results found')}}';
+                            }
+                        },
+                    });
+
+                    last_row.find(".js-data-example-ajax2").select2({
+                        width: '100%',
+                        height: '200px',
+                        placeholder: "",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function(){
+                                return '{{__('text.No results found')}}';
+                            }
+                        },
+                    });
+                }
             }
 
             $(document).on('click', '#products_table tbody tr', function(e){
@@ -709,8 +823,34 @@
                 var next = current.next('tr');
 
                 focus_row(next);
-                
+
                 current.remove();
+
+                numbering();
+
+            });
+
+            $(document).on('click', '.copy-row', function(){
+
+                var current = $('#products_table tbody tr.active');
+                var id = current.data('id');
+                var price = current.find('#row_total').val();
+                var products = current.find('.js-data-example-ajax').html();
+                var product = current.find('.js-data-example-ajax').val();
+                var items = current.find('.js-data-example-ajax1').html();
+                var item = current.find('.js-data-example-ajax1').val();
+                var colors = current.find('.js-data-example-ajax2').html();
+                var color = current.find('.js-data-example-ajax2').val();
+                var width = current.find('.width').find('.m-input').val();
+                var width_unit = current.find('.width').find('.measure-unit').text();
+                var height = current.find('.height').find('.m-input').val();
+                var height_unit = current.find('.height').find('.measure-unit').text();
+                var price_text = current.find('.price').text();
+                var features = $('#menu1').find(`[data-id='${id}']`).html();
+                var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
+                var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
+
+                add_row(true,price,products,product,items,item,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty);
 
             });
 
