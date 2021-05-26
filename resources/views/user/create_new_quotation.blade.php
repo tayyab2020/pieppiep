@@ -7,10 +7,10 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <!-- Starting of Dashboard data-table area -->
-                    <div class="section-padding add-product-1" style="padding-top: 0;">
+                    <div class="section-padding add-product-1" style="padding: 0;">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="add-product-box">
+                                <div style="box-shadow: none;" class="add-product-box">
                                     <div class="add-product-header products">
                                         <h2>{{__('text.Create Quotation')}}</h2>
 
@@ -19,20 +19,20 @@
                                     <div>
                                         @include('includes.form-success')
 
-                                        <form class="form-horizontal" action="{{route('store-quotation')}}" method="POST" enctype="multipart/form-data">
+                                        <form style="padding: 0;" class="form-horizontal" action="{{route('store-quotation')}}" method="POST" enctype="multipart/form-data">
                                             {{csrf_field()}}
 
-                                            <div style="margin: 0;" class="row">
+                                            <div style="margin: 0;background: #f5f5f5;" class="row">
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 first-row">
 
                                                     <div>
-                                                        <span class="tooltip1" style="margin-right: 10px;">
+                                                        <span class="tooltip1 add-row" style="margin-right: 10px;">
                                                             <i class="fa fa-fw fa-plus-circle"></i>
                                                             <span class="tooltiptext">Add</span>
                                                         </span>
 
-                                                        <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                        <span class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                             <i class="fa fa-fw fa-minus-circle"></i>
                                                             <span class="tooltiptext">Remove</span>
                                                         </span>
@@ -57,8 +57,7 @@
 
                                                 </div>
 
-
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="margin-bottom: 10px;">
 
                                                     <table id="products_table" style="width: 100%;">
                                                         <thead>
@@ -79,9 +78,9 @@
 
                                                         <tbody>
 
-                                                        <tr data-id="1">
-                                                            <input type="hidden" id="row_total" name="total[]">
+                                                        <tr class="active" data-id="1">
                                                             <td>1</td>
+                                                            <input type="hidden" id="row_total" name="total[]">
                                                             <td class="products">
                                                                 <select class="js-data-example-ajax">
 
@@ -131,9 +130,9 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td class="price"></td>
-                                                            <td style="padding: 0;">
-                                                                <span class="tooltip1" style="cursor: pointer;font-size: 20px;">
-                                                                    <i style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+                                                            <td id="next-row-td" style="padding: 0;">
+                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
                                                                     <span style="top: 45px;" class="tooltiptext">Next</span>
                                                                 </span>
                                                             </td>
@@ -145,13 +144,13 @@
 
                                                 </div>
 
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: white;padding: 15px 0 0 0;">
 
                                                     <ul style="border: 0;" class="nav nav-tabs feature-tab">
-                                                        <li style="margin-bottom: 0;" class="active"><a data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
+                                                        <li style="margin-bottom: 0;" class="active"><a style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
                                                     </ul>
 
-                                                    <div style="padding: 40px 15px 20px 15px;border: 1px solid #24232329;" class="tab-content">
+                                                    <div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
 
                                                         <div id="menu1" class="tab-pane fade active in">
 
@@ -277,19 +276,24 @@
         {
             font-family: system-ui;
             font-weight: 500;
-            border-top: 2px solid #cecece;
-            border-bottom: 2px solid #cecece;
             padding: 0 10px;
             color: #3c3c3c;
         }
 
-        table tbody tr td:first-child {
+        table tbody tr.active td
+        {
+            border-top: 2px solid #cecece;
+            border-bottom: 2px solid #cecece;
+        }
+
+        table tbody tr.active td:first-child
+        {
             border-left: 2px solid #cecece;
             border-bottom-left-radius: 4px;
             border-top-left-radius: 4px;
         }
 
-        table tbody tr td:last-child {
+        table tbody tr.active td:last-child {
             border-right: 2px solid #cecece;
             border-bottom-right-radius: 4px;
             border-top-right-radius: 4px;
@@ -347,11 +351,12 @@
                 },
             });
 
-            $('.js-data-example-ajax').change(function(){
+            $(document).on('change', ".js-data-example-ajax", function(e){
 
                 var current = $(this);
 
                 var id = current.val();
+                var row_id = current.parent().parent().data('id');
                 var options = '';
 
                 $.ajax({
@@ -359,6 +364,11 @@
                     data: "id=" + id,
                     url: "<?php echo url('/aanbieder/get-colors')?>",
                     success: function(data) {
+
+                        $('#menu1').find(`[data-id='${row_id}']`).remove();
+
+                        current.parent().parent().find('.price').text('');
+                        current.parent().parent().find('#row_total').val('');
 
                         $.each(data, function(index, value) {
 
@@ -393,7 +403,6 @@
 
             });
 
-
             $(".js-data-example-ajax1").select2({
                 width: '100%',
                 height: '200px',
@@ -418,9 +427,10 @@
                 },
             });
 
-            $('.js-data-example-ajax2').change(function(){
+            $(document).on('change', ".js-data-example-ajax2", function(e){
 
                 var current = $(this);
+                var row_id = current.parent().parent().data('id');
 
                 var color = current.val();
 
@@ -477,21 +487,61 @@
                                 {
                                     var price = parseInt(data[0].value);
                                     var org = parseInt(data[0].value);
+                                    var features = '';
+                                    var f_value = 0;
 
                                     $.each(data[1], function(index, value) {
 
-                                        if(value.impact_type == 0)
-                                        {
-                                            price = price + parseInt(value.value);
-                                        }
-                                        else
-                                        {
-                                            var per = (parseInt(value.value))/100;
-                                            price = price + (org * per);
-                                        }
+                                        var opt = '';
+
+                                        $.each(value.features, function(index1, value1) {
+                                            if(value1.price_impact == 1)
+                                            {
+                                                if(index1 == 0)
+                                                {
+                                                    if(value1.impact_type == 0)
+                                                    {
+                                                        f_value = value1.value;
+                                                        price = price + parseInt(f_value);
+                                                    }
+                                                    else
+                                                    {
+                                                        var per = (parseInt(f_value))/100;
+                                                        f_value = org * per;
+                                                        price = price + f_value;
+                                                    }
+                                                }
+
+                                                opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                            }
+                                        });
+
+                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="'+value.title+row_id+'">'+opt+'</select>\n' +
+                                            '<input value="'+f_value+'" name="f_price" id="f_price" type="hidden">'+
+                                            '</div></div>\n';
+
+                                        features = features + content;
 
                                     });
+
+                                    if($('#menu1').find(`[data-id='${row_id}']`).length > 0)
+                                    {
+                                        $('#menu1').find(`[data-id='${row_id}']`).remove();
+                                    }
+
+                                    $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
+                                        '\n' +
+                                        '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+                                        '</div></div>' + features +
+                                        '</div>');
+
                                     current.parent().parent().find('.price').text('€ ' + price);
+                                    current.parent().parent().find('#row_total').val(price);
+
                                 }
                             }
                             else
@@ -504,391 +554,167 @@
 
             });
 
-            $(document).on('focusout', '#productInput', function(){
+            function focus_row(last_row)
+            {
+                $('#products_table tbody tr.active').removeClass('active');
+                last_row.addClass('active');
 
-                var check = $(this).next('input').val();
+                var id = last_row.data('id');
 
-                if(check == 0)
-                {
-                    $(this).val('');
-                }
-            });
+                $('#menu1').children().not(`[data-id='${id}']`).hide();
+                $('#menu1').find(`[data-id='${id}']`).show();
+            }
 
-            /*An array containing all the country names in the world:*/
-            options = [];
-            texts = [];
-            categories = [];
+            function add_row()
+            {
+                var rowCount = $('#products_table tbody tr:last').data('id');
+                rowCount = rowCount + 1;
 
-            var sel = $(".all-products");
-            var length = sel.children('option').length;
+                $("#products_table tbody").append('<tr data-id="'+rowCount+'">\n' +
+                    '                                                            <td>'+rowCount+'</td>\n' +
+                    '                                                            <input type="hidden" id="row_total" name="total[]">\n' +
+                    '                                                            <td class="products">\n' +
+                    '                                                                <select class="js-data-example-ajax">\n' +
+                    '\n' +
+                    '                                                                    <option value=""></option>\n' +
+                    '\n' +
+                    '                                                                    @foreach($products as $key)\n' +
+                    '\n' +
+                    '                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+                    '\n' +
+                    '                                                                    @endforeach\n' +
+                    '\n' +
+                    '                                                                </select>\n' +
+                    '                                                            </td>\n' +
+                    '                                                            <td class="items">\n' +
+                    '                                                                <select class="js-data-example-ajax1">\n' +
+                    '\n' +
+                    '                                                                    <option value=""></option>\n' +
+                    '\n' +
+                    '                                                                    @foreach($items as $key)\n' +
+                    '\n' +
+                    '                                                                        <option value="{{$key->id}}">{{$key->cat_name}}</option>\n' +
+                    '\n' +
+                    '                                                                    @endforeach\n' +
+                    '\n' +
+                    '                                                                </select>\n' +
+                    '                                                            </td>\n' +
+                    '                                                            <td class="color">\n' +
+                    '                                                                <select class="js-data-example-ajax2">\n' +
+                    '\n' +
+                    '                                                                    <option value=""></option>\n' +
+                    '\n' +
+                    '                                                                </select>\n' +
+                    '                                                            </td>\n' +
+                    '                                                            <td class="width" style="width: 80px;">\n' +
+                    '                                                                <div class="m-box">\n' +
+                    '                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
+                    '                                                                    <span class="measure-unit">cm</span>\n' +
+                    '                                                                </div>\n' +
+                    '                                                            </td>\n' +
+                    '                                                            <td class="height" style="width: 80px;">\n' +
+                    '                                                                <div class="m-box">\n' +
+                    '                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
+                    '                                                                    <span class="measure-unit">cm</span>\n' +
+                    '                                                                </div>\n' +
+                    '                                                            </td>\n' +
+                    '                                                            <td>1 x 17</td>\n' +
+                    '                                                            <td></td>\n' +
+                    '                                                            <td></td>\n' +
+                    '                                                            <td class="price"></td>\n' +
+                    '                                                            <td id="next-row-td" style="padding: 0;">\n' +
+                    '                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
+                    '                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>\n' +
+                    '                                                                    <span style="top: 45px;" class="tooltiptext">Next</span>\n' +
+                    '                                                                </span>\n' +
+                    '                                                            </td>\n' +
+                    '                                                        </tr>');
 
-            $(".all-products > option").each(function() {
-                if(this.getAttribute('data-type') != 'Product')
-                {
-                    var category = this.getAttribute('data-type');
-                }
-                else
-                {
-                    var category = this.getAttribute('data-cat');
-                }
-                if (this.value) options.push(this.value); texts.push(this.text); categories.push(category);
-            });
+                var last_row = $('#products_table tbody tr:last');
 
-            $(document).on('click', '.add-row', function(){
-
-                var rowCount = $('.items-table tr').length;
-
-                $(".items-table").append('<tr>\n' +
-                    '                                                                        <td>'+rowCount+'</td>\n' +
-                    '                                                                           <td class="main_box">\n' +
-                    '                                                                            <div class="autocomplete" style="width:100%;">\n' +
-                    '                                                                                <input autocomplete="off" required name="productInput[]" id="productInput" class="form-control" type="text" placeholder="{{__('text.Select Product')}}">\n' +
-                    '                                                                                <input type="hidden" id="check" value="0">\n' +
-                    '                                                                            </div>\n' +
-                    '                                                                            <input type="hidden" id="item" name="item[]" value="">\n' +
-                    '                                                                            <input type="hidden" id="service_title" name="service_title[]">\n' +
-                    '                                                                            <input type="hidden" id="brand" name="brand[]" value="">\n' +
-                    '                                                                            <input type="hidden" id="brand_title" name="brand_title[]">\n' +
-                    '                                                                            <input type="hidden" id="model" name="model[]" value="">\n' +
-                    '                                                                            <input type="hidden" id="model_title" name="model_title[]">\n' +
-                    '                                                                        </td>'+
-                    '                                                                        <td class="td-qty">\n' +
-                    '                                                                            <input name="qty[]" maskedFormat="9,1" autocomplete="off" class="form-control" type="text" required>\n' +
-                    '                                                                        </td>\n' +
-                    '                                                                        <td class="td-rate">\n' +
-                    '                                                                            <input name="cost[]" maskedFormat="9,1" autocomplete="off" class="form-control" type="text" value="" required>\n' +
-                    '                                                                        </td>\n' +
-                    '                                                                        <td class="td-amount">\n' +
-                    '                                                                            <input name="amount[]" class="form-control" readonly="" type="text">\n' +
-                    '                                                                        </td>\n' +
-                    '                                                                        <td style="text-align: center;" class="td-desc">\n' +
-                    '                                                                            <input type="hidden" name="description[]" id="description" class="form-control">\n' +
-                    '                                                                            <a href="javascript:void(0)" class="add-desc" title="<?php echo __('text.Add Description') ?>" style="color: black;"><i style="font-size: 20px;" class="fa fa-plus-square"></i></a>\n'+
-                    '                                                                        </td>\n' +
-                    '                                                                        <td style="text-align: center;"><a href="javascript:void(0)" class="text-success font-18 add-row" title=""><i class="fa fa-plus"></i></a><a href="javascript:void(0)" class="text-danger font-18 remove-row" title="<?php echo __('text.Remove') ?>"><i class="fa fa-trash-o"></i></a></td>\n' +
-                    '                                                                    </tr>');
-
-                $(".add-desc").click(function(){
-                    current_desc = $(this);
-                    var d = current_desc.prev('input').val();
-                    $('#description-text').val(d);
-                    $("#myModal").modal('show');
-                });
-
-                var last_row = $('.items-table tr:last');
-
-                autocomplete(last_row.find('#productInput')[0], texts, options, categories);
+                focus_row(last_row);
 
                 last_row.find(".js-data-example-ajax").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "{{__('text.Select Category/Item')}}",
+                    placeholder: "{{__('text.Select Products')}}",
                     allowClear: true,
+                    "language": {
+                        "noResults": function(){
+                            return '{{__('text.No results found')}}';
+                        }
+                    },
                 });
 
                 last_row.find(".js-data-example-ajax1").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "{{__('text.Select Brand')}}",
+                    placeholder: "",
                     allowClear: true,
+                    "language": {
+                        "noResults": function(){
+                            return '{{__('text.No results found')}}';
+                        }
+                    },
                 });
 
                 last_row.find(".js-data-example-ajax2").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "{{__('text.Select Model')}}",
+                    placeholder: "",
                     allowClear: true,
-                });
-
-
-                $('.estimate_date').datepicker({
-
-                    format: 'dd-mm-yyyy',
-                    startDate: new Date(),
-
-                });
-
-
-                $(".remove-row").click(function(){
-
-                    var rowCount = $('.items-table tr').length;
-
-                    $(this).parent().parent().remove();
-
-                    $(".items-table tbody tr").each(function(index) {
-                        $(this).children('td:first-child').text(index+1);
-                    });
-
-                    var vat_percentage = parseInt($('#vat_percentage').val());
-                    vat_percentage = vat_percentage + 100;
-
-                    var amounts = [];
-                    $("input[name='amount[]']").each(function() {
-                        amounts.push($(this).val().replace(/\,/g, '.'));
-                    });
-
-                    var grand_total = 0;
-
-                    for (let i = 0; i < amounts.length; ++i) {
-
-                        if(isNaN(parseFloat(amounts[i])))
-                        {
-                            amounts[i] = 0;
+                    "language": {
+                        "noResults": function(){
+                            return '{{__('text.No results found')}}';
                         }
-
-                        grand_total = (parseFloat(amounts[i]) + parseFloat(grand_total)).toFixed(2);
-                    }
-
-                    var vat = grand_total/vat_percentage * 100;
-                    vat = grand_total - vat;
-                    vat = parseFloat(vat).toFixed(2);
-
-                    var sub_total = grand_total - vat;
-                    sub_total = parseFloat(sub_total).toFixed(2);
-
-                    $('#sub_total').val(sub_total.replace(/\./g, ','));
-                    $('#tax_amount').val(vat.replace(/\./g, ','));
-                    $('#grand_total').val(grand_total);
-
-                    $('#grand_total_cell').text('€ ' + grand_total.replace(/\./g, ','));
-
+                    },
                 });
+            }
 
-                $("input[name='cost[]'").keypress(function(e){
+            $(document).on('click', '#products_table tbody tr', function(e){
 
-                    e = e || window.event;
-                    var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-                    var val = String.fromCharCode(charCode);
-
-                    if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-                    {
-                        e.preventDefault();
-                        return false;
-                    }
-
-                    if(e.which == 44)
-                    {
-                        if(this.value.indexOf(',') > -1)
-                        {
-                            e.preventDefault();
-                            return false;
-                        }
-                    }
-
-                    var num = $(this).attr("maskedFormat").toString().split(',');
-                    var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-                    if (!regex.test(this.value)) {
-                        this.value = this.value.substring(0, this.value.length - 1);
-                    }
-
-                });
-
-                $("input[name='qty[]'").keypress(function(e){
-
-                    e = e || window.event;
-                    var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-                    var val = String.fromCharCode(charCode);
-
-                    if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-                    {
-                        e.preventDefault();
-                        return false;
-                    }
-
-                    if(e.which == 44)
-                    {
-                        if(this.value.indexOf(',') > -1)
-                        {
-                            e.preventDefault();
-                            return false;
-                        }
-                    }
-
-
-                    var num = $(this).attr("maskedFormat").toString().split(',');
-                    var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-                    if (!regex.test(this.value)) {
-                        this.value = this.value.substring(0, this.value.length - 1);
-                    }
-
-                });
-
-                $("input[name='cost[]'").on('focusout',function(e){
-                    if($(this).val().slice($(this).val().length - 1) == ',')
-                    {
-                        var val = $(this).val();
-                        val = val + '00';
-                        $(this).val(val);
-                    }
-                });
-
-                $("input[name='qty[]'").on('focusout',function(e){
-                    if($(this).val().slice($(this).val().length - 1) == ',')
-                    {
-                        var val = $(this).val();
-                        val = val + '00';
-                        $(this).val(val);
-                    }
-                });
-
-                $("input[name='cost[]'").on('input',function(e){
-
-                    var vat_percentage = parseInt($('#vat_percentage').val());
-                    vat_percentage = vat_percentage + 100;
-                    var cost = $(this).val();
-                    cost = cost.replace(/\,/g, '.');
-                    var qty = $(this).parent().parent().find('.td-qty').children('input').val();
-                    qty = qty.replace(/\,/g, '.');
-
-                    var amount = cost * qty;
-
-                    amount = parseFloat(amount).toFixed(2);
-
-                    if(isNaN(amount))
-                    {
-                        amount = 0;
-                    }
-
-                    amount = amount.replace(/\./g, ',');
-
-                    $(this).parent().parent().find('.td-amount').children('input').val(amount);
-
-                    var amounts = [];
-                    $("input[name='amount[]']").each(function() {
-                        amounts.push($(this).val().replace(/\,/g, '.'));
-                    });
-
-                    var grand_total = 0;
-
-                    for (let i = 0; i < amounts.length; ++i) {
-
-                        if(isNaN(parseFloat(amounts[i])))
-                        {
-                            amounts[i] = 0;
-                        }
-
-                        grand_total = (parseFloat(amounts[i]) + parseFloat(grand_total)).toFixed(2);
-                    }
-
-                    var vat = grand_total/vat_percentage * 100;
-                    vat = grand_total - vat;
-                    vat = parseFloat(vat).toFixed(2);
-
-                    var sub_total = grand_total - vat;
-                    sub_total = parseFloat(sub_total).toFixed(2);
-
-                    $('#sub_total').val(sub_total.replace(/\./g, ','));
-                    $('#tax_amount').val(vat.replace(/\./g, ','));
-                    $('#grand_total').val(grand_total);
-
-                    $('#grand_total_cell').text('€ ' + grand_total.replace(/\./g, ','));
-
-                });
-
-                $("input[name='qty[]'").on('input',function(e){
-
-                    var vat_percentage = parseInt($('#vat_percentage').val());
-                    vat_percentage = vat_percentage + 100;
-                    var qty = $(this).val();
-                    qty = qty.replace(/\,/g, '.');
-                    var cost = $(this).parent().parent().find('.td-rate').children('input').val();
-                    cost = cost.replace(/\,/g, '.');
-
-                    var amount = cost * qty;
-
-                    amount = parseFloat(amount).toFixed(2);
-
-                    if(isNaN(amount))
-                    {
-                        amount = 0;
-                    }
-
-                    amount = amount.replace(/\./g, ',');
-
-                    $(this).parent().parent().find('.td-amount').children('input').val(amount);
-
-                    var amounts = [];
-                    $("input[name='amount[]']").each(function() {
-                        amounts.push($(this).val().replace(/\,/g, '.'));
-                    });
-
-                    var grand_total = 0;
-
-                    for (let i = 0; i < amounts.length; ++i) {
-
-                        if(isNaN(parseFloat(amounts[i])))
-                        {
-                            amounts[i] = 0;
-                        }
-
-                        grand_total = (parseFloat(amounts[i]) + parseFloat(grand_total)).toFixed(2);
-                    }
-
-                    var vat = grand_total/vat_percentage * 100;
-                    vat = grand_total - vat;
-                    vat = parseFloat(vat).toFixed(2);
-
-                    var sub_total = grand_total - vat;
-                    sub_total = parseFloat(sub_total).toFixed(2);
-
-                    $('#sub_total').val(sub_total.replace(/\./g, ','));
-                    $('#tax_amount').val(vat.replace(/\./g, ','));
-                    $('#grand_total').val(grand_total);
-
-                    $('#grand_total_cell').text('€ ' + grand_total.replace(/\./g, ','));
-
-                });
-
-            });
-
-
-            $(".remove-row").click(function(){
-
-                var rowCount = $('.items-table tr').length;
-
-                $(this).parent().parent().remove();
-
-                $(".items-table tbody tr").each(function(index) {
-                    $(this).children('td:first-child').text(index+1);
-                });
-
-                var vat_percentage = parseFloat($('#vat_percentage').val());
-                vat_percentage = vat_percentage + 100;
-
-                var amounts = [];
-                $("input[name='amount[]']").each(function() {
-                    amounts.push($(this).val().replace(/\,/g, '.'));
-                });
-
-                var grand_total = 0;
-
-                for (let i = 0; i < amounts.length; ++i) {
-
-                    if(isNaN(parseFloat(amounts[i])))
-                    {
-                        amounts[i] = 0;
-                    }
-
-                    grand_total = (parseFloat(amounts[i]) + parseFloat(grand_total)).toFixed(2);
+                if(e.target.id !== "next-row-td" && e.target.id !== "next-row-span" && e.target.id !== "next-row-icon"){
+                    focus_row($(this));
                 }
 
-                var vat = grand_total/vat_percentage * 100;
-                vat = grand_total - vat;
-                vat = parseFloat(vat).toFixed(2);
+            });
 
-                var sub_total = grand_total - vat;
-                sub_total = parseFloat(sub_total).toFixed(2);
+            $(document).on('click', '.next-row', function(){
 
-                $('#sub_total').val(sub_total.replace(/\./g, ','));
-                $('#tax_amount').val(vat.replace(/\./g, ','));
-                $('#grand_total').val(grand_total);
+                if($(this).parent().parent().next('tr').length == 0)
+                {
+                    add_row();
+                }
+                else
+                {
+                    var next_row = $(this).parent().parent().next('tr');
+                    focus_row(next_row);
+                }
+            });
 
-                $('#grand_total_cell').text('€ ' + grand_total.replace(/\./g, ','));
+            $(document).on('click', '.add-row', function(){
+
+                add_row();
 
             });
 
+            $(document).on('click', '.remove-row', function(){
 
-            $("input[name='width[]'").keypress(function(e){
+                var current = $('#products_table tbody tr.active');
+
+                var id = current.data('id');
+
+                $('#menu1').find(`[data-id='${id}']`).remove();
+
+                var next = current.next('tr');
+
+                focus_row(next);
+                
+                current.remove();
+
+            });
+
+            $(document).on('keypress', "input[name='width[]']", function(e){
 
                 e = e || window.event;
                 var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -917,8 +743,7 @@
 
             });
 
-
-            $("input[name='height[]'").keypress(function(e){
+            $(document).on('keypress', "input[name='height[]']", function(e){
 
                 e = e || window.event;
                 var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -947,8 +772,7 @@
 
             });
 
-
-            $("input[name='width[]'").on('focusout',function(e){
+            $(document).on('focusout', "input[name='width[]']", function(e){
 
                 if($(this).val().slice($(this).val().length - 1) == ',')
                 {
@@ -958,7 +782,7 @@
                 }
             });
 
-            $("input[name='height[]'").on('focusout',function(e){
+            $(document).on('focusout', "input[name='height[]']", function(e){
                 if($(this).val().slice($(this).val().length - 1) == ',')
                 {
                     var val = $(this).val();
@@ -967,7 +791,7 @@
                 }
             });
 
-            $("input[name='width[]'").on('input',function(e){
+            $(document).on('input', "input[name='width[]']", function(e){
 
                 var current = $(this);
                 var row_id = current.parent().parent().parent().data('id');
@@ -1065,16 +889,18 @@
 
                                     });
 
-                                    if($('#menu1').find(`[data-id='${row_id}']`).length == 0)
+                                    if($('#menu1').find(`[data-id='${row_id}']`).length > 0)
                                     {
-                                        $('#menu1').append('<div data-id="'+row_id+'" class="form-group">' +
-                                            '\n' +
-                                            '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
-                                            '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-                                            '</div></div>' + features +
-                                            '</div>');
+                                        $('#menu1').find(`[data-id='${row_id}']`).remove();
                                     }
+
+                                    $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
+                                        '\n' +
+                                        '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+                                        '</div></div>' + features +
+                                        '</div>');
 
                                     current.parent().parent().parent().find('.price').text('€ ' + price);
                                     current.parent().parent().parent().find('#row_total').val(price);
@@ -1091,7 +917,7 @@
 
             });
 
-            $("input[name='height[]'").on('input',function(e){
+            $(document).on('input', "input[name='height[]']", function(e){
 
                 var current = $(this);
                 var row_id = current.parent().parent().parent().data('id');
@@ -1183,23 +1009,25 @@
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features[]">'+opt+'</select>\n' +
-                                            '<input value="'+f_value+'" name="f_price" id="f_price" type="hidden">'+
+                                            '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
 
                                     });
 
-                                    if($('#menu1').find(`[data-id='${row_id}']`).length == 0)
+                                    if($('#menu1').find(`[data-id='${row_id}']`).length > 0)
                                     {
-                                        $('#menu1').append('<div data-id="'+row_id+'" class="form-group">' +
-                                            '\n' +
-                                            '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
-                                            '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-                                            '</div></div>' + features +
-                                            '</div>');
+                                        $('#menu1').find(`[data-id='${row_id}']`).remove();
                                     }
+
+                                    $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
+                                        '\n' +
+                                        '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+                                        '</div></div>' + features +
+                                        '</div>');
 
                                     current.parent().parent().parent().find('.price').text('€ ' + price);
                                     current.parent().parent().parent().find('#row_total').val(price);
