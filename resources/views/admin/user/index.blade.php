@@ -12,8 +12,18 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                   <div class="add-product-box">
                                       <div class="add-product-header products">
-                                          <h2>Handymen</h2>
-                                          <a href="{{route('admin-user-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add Handyman</a>
+                                          <h2>@if(Route::currentRouteName() == 'admin-user-index') Retailers @else Suppliers @endif</h2>
+
+                                          @if(Route::currentRouteName() == 'admin-user-index')
+
+                                              <a href="{{route('admin-user-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add Retailer</a>
+
+                                          @else
+
+                                              <a href="{{route('admin-supplier-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add Supplier</a>
+
+                                          @endif
+
                                       </div>
                                       <hr>
                   <div>
@@ -23,10 +33,23 @@
     <table id="example" class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline" role="grid" aria-describedby="product-table_wrapper_info" style="width: 100%;" width="100%" cellspacing="0">
                                               <thead>
                                                   <tr role="row">
-                                                      <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Handyman ID</th>
-                                                      <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">Handyman's Photo</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Handyman's Name</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Email</th>
-                                                      <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Rating</th>
-                                                      <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Registration Fee</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Services</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">Actions</th>
+
+                                                      @if(Route::currentRouteName() == 'admin-user-index')
+
+                                                          <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Retailer ID</th>
+                                                          <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">Retailer's Photo</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Retailer's Company Name</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Email</th>
+                                                          <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Rating</th>
+                                                          <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Registration Fee</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Suppliers</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">Actions</th>
+
+                                                      @else
+
+                                                          <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Supplier ID</th>
+                                                          <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">Supplier's Photo</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Supplier's Company Name</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Email</th>
+                                                          <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Rating</th>
+                                                          <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Registration Fee</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Products</th><th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">Actions</th>
+
+                                                      @endif
+
                                                   </tr>
                                               </thead>
 
@@ -53,18 +76,32 @@
                                                     Pending
                                                   @endif</td>
 
-                                                        <td>
+                                                  @if(Route::currentRouteName() == 'admin-user-index')
 
-                                                        <?php for ($i=0; $i < sizeof($categories[$x]); $i++) { ?>
+                                                      <td></td>
 
+                                                  @else
 
+                                                      <td>
 
-                                                          <?php if($i == 0){ echo $categories[$x][$i]->cat_name; } else{ echo ','.$categories[$x][$i]->cat_name; } ?>
+                                                          @if(count($products[$x]) > 0)
 
+                                                              <select>
 
-                                                        <?php } ?>
+                                                                  @foreach($products[$x] as $product)
 
-                                                        </td>
+                                                                      <option value="{{$product->title}}">{{$product->title}}</option>
+
+                                                                  @endforeach
+
+                                                              </select>
+
+                                                          @endif
+
+                                                      </td>
+
+                                                  @endif
+
 
                                                       <td>
                                                         @if($user->active == 1)
@@ -74,12 +111,12 @@
 
                                                         <a href="{{route('admin-user-st',['id1'=>$user->id,'id2'=>1])}}" class="btn btn-success product-btn"><i class="fa fa-times"></i> Active</a>
                                                         @endif
-                                                        <a href="{{route('admin-user-edit',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
+                                                        <a href="{{Route::currentRouteName() == 'admin-user-index' ? route('admin-user-edit',$user->id) : route('admin-supplier-edit',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
                                                         <a href="{{route('admin-user-delete',$user->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
 
                                                         <a href="{{route('admin-user-insurance',$user->id)}}" class="btn btn-primary product-btn" style="background-color: black;"><i class="fa fa-clipboard" ></i> Insurance</a>
 
-                                                        <a href="{{route('admin-user-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;"><i class="fa fa-user" ></i> Details</a>
+                                                        <a href="{{Route::currentRouteName() == 'admin-user-index' ? route('admin-user-details',$user->id) : route('admin-supplier-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;"><i class="fa fa-user" ></i> Details</a>
 
                                                       </td>
                                                   </tr>

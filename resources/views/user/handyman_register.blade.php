@@ -52,7 +52,6 @@
                                 </div>
                               </div>
 
-
                               <div class="form-group">
                                 <div class="input-group">
                                   <div class="input-group-addon">
@@ -64,17 +63,17 @@
 
 
                               <div class="form-group">
-                                <div class="input-group">
+                                <div id="ad_box1" class="input-group">
                                   <div class="input-group-addon">
                                       <i class="fa fa-user"></i>
                                   </div>
-                                  <input name="address" id="address" class="form-control" placeholder="{{$lang->ad}}" type="text" value="{{ old('address') }}">
+                                    <input name="address" id="address" class="form-control" placeholder="{{$lang->ad}}" type="text" value="{{ old('address') }}">
                                     <input type="hidden" id="check_address" value="0">
                                 </div>
                               </div>
 
                                 <div class="form-group">
-                                    <div class="input-group">
+                                    <div id="pc_box" class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-user"></i>
                                         </div>
@@ -83,7 +82,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <div class="input-group">
+                                    <div id="ct_box" class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-user"></i>
                                         </div>
@@ -119,8 +118,19 @@
                               </div>--}}
 
                               <input type="hidden" name="category_id" value="20">
-                              <input type="hidden" name="role_id" value="2">
 
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                        <select class="form-control" name="role_id">
+                                            <option {{ old('role_id') == 2 ? 'selected' : null }} value="2">Retailer</option>
+                                            <option {{ old('role_id') == 4 ? 'selected' : null }} value="4">Supplier</option>
+                                        </select>
+                                    </div>
+                                </div>
 
                               <div class="form-group">
                                 <div class="input-group">
@@ -130,6 +140,7 @@
                                   <input name="email" class="form-control" placeholder="{{$lang->sue}}" type="email" value="{{ old('email') }}">
                                 </div>
                               </div>
+
                               <div class="form-group">
                                 <div class="input-group">
                                   <div class="input-group-addon">
@@ -209,11 +220,11 @@
             }
             else
             {
-                var string = $('#address').val().substring(0, $('#address').val().indexOf(',')); //first string before comma
+                var string = $('#ad_box1 #address').val().substring(0, $('#ad_box1 #address').val().indexOf(',')); //first string before comma
 
                 if(string)
                 {
-                    var is_number = $('#address').val().match(/\d+/);
+                    var is_number = $('#ad_box1 #address').val().match(/\d+/);
 
                     if(is_number === null)
                     {
@@ -257,37 +268,37 @@
 
             if(!flag)
             {
-                $('#check_address').val(1);
-                $("#address-error").remove();
-                $('#postcode').val(postal_code);
-                $("#city").val(city);
+                $('#ad_box1 #check_address').val(1);
+                $("#ad_box1").next('#address-error').remove();
+                $('#pc_box #postcode').val(postal_code);
+                $("#ct_box #city").val(city);
             }
             else
             {
-                $('#address').val('');
-                $('#postcode').val('');
-                $("#city").val('');
+                $('#ad_box1 #address').val('');
+                $('#pc_box #postcode').val('');
+                $("#ct_box #city").val('');
 
-                $("#address-error").remove();
-                $('#address').parent().parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;">{{__('text.Kindly write your full address with house/building number so system can detect postal code and city from it!')}}</small>');
+                $("#ad_box1").next('#address-error').remove();
+                $('#ad_box1 #address').parent().parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;">{{__('text.Kindly write your full address with house/building number so system can detect postal code and city from it!')}}</small>');
             }
 
         });
     }
 
-    $("#address").on('input',function(e){
+    $("#ad_box1 #address").on('input',function(e){
         $(this).next('input').val(0);
     });
 
-    $("#address").focusout(function(){
+    $("#ad_box1 #address").focusout(function(){
 
         var check = $(this).next('input').val();
 
         if(check == 0)
         {
             $(this).val('');
-            $('#postcode').val('');
-            $("#city").val('');
+            $('#pc_box #postcode').val('');
+            $("#ct_box #city").val('');
         }
     });
 

@@ -50,6 +50,7 @@ use App\cancelled_invoices;
 use App\handyman_unavailability_hours;
 use File;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use PDF;
 
 class UserController extends Controller
@@ -900,9 +901,36 @@ class UserController extends Controller
         return view('user.customers',compact('customers'));
     }
 
+    public function Employees()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $role_id = $user->role_id;
+
+        if($role_id == 2)
+        {
+            $employees = User::where('role_id',2)->where('main_id',$user_id)->get();
+        }
+        elseif($role_id == 4)
+        {
+            $employees = User::where('role_id',4)->where('main_id',$user_id)->get();
+        }
+        else
+        {
+            return redirect()->route('user-dashboard');
+        }
+
+        return view('user.employees',compact('employees'));
+    }
+
     public function CreateCustomerForm()
     {
         return view('user.create_customer');
+    }
+
+    public function CreateEmployeeForm()
+    {
+        return view('user.create_employee');
     }
 
     public function EditCustomer($id)
@@ -915,6 +943,16 @@ class UserController extends Controller
         return view('user.create_customer',compact('customer'));
     }
 
+    public function EditEmployee($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+
+        $employee = User::where('id',$id)->where('main_id',$user_id)->first();
+
+        return view('user.create_employee',compact('employee'));
+    }
+
     public function DeleteCustomer($id)
     {
         $user = Auth::guard('user')->user();
@@ -924,6 +962,17 @@ class UserController extends Controller
 
         Session::flash('success', __('text.Customer deleted successfully'));
         return redirect()->route('customers');
+    }
+
+    public function DeleteEmployee($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+
+        User::where('id',$id)->where('main_id',$user_id)->delete();
+
+        Session::flash('success', 'Employee deleted successfully');
+        return redirect()->route('employees');
     }
 
     public function PostCustomer(Request $request)
@@ -962,6 +1011,186 @@ class UserController extends Controller
 
             Session::flash('success', __('text.Customer created successfully'));
             return redirect()->route('customers');
+        }
+    }
+
+    public function PostEmployee(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $role_id = $user->role_id;
+        $company_name = $user->company_name;
+
+        if($request->emp_id)
+        {
+
+            if($request->password)
+            {
+                $this->validate($request, [
+                    'email' => [
+                        'required',
+                        'string',
+                        'email',
+                        Rule::unique('users')->where(function($query) use($request) {
+                            $query->where('allowed', '=', '1')->where('deleted_at', NULL)->where('email', '!=', $request->email);
+                        })
+                    ],
+                    'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
+                    'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
+                    /*'company_name' => 'required',*/
+                    'registration_number' => 'required',
+                    'postcode' => 'required',
+                    'city' => 'required',
+                    /*'bank_account' => 'required',*/
+                    /*'tax_number' => 'required',*/
+                    'address' => 'required',
+                    'phone' => 'required',
+                    'password' => 'required|min:8|confirmed',
+                ],
+
+                    [
+                        'email.required' => $this->lang->erv,
+                        'email.unique' => $this->lang->euv,
+                        'name.required' => $this->lang->nrv,
+                        'name.max' => $this->lang->nmv,
+                        'name.regex' => $this->lang->niv,
+                        'family_name.required' => $this->lang->fnrv,
+                        'family_name.max' => $this->lang->fnmrv,
+                        'family_name.regex' => $this->lang->fniv,
+                        /*'company_name.required' => $this->lang->cnrv,*/
+                        'registration_number.required' => $this->lang->rnrv,
+                        /*'bank_account.required' => $this->lang->barv,
+                        'tax_number.required' => $this->lang->tnrv,*/
+                        'postcode.required' => $this->lang->pcrv,
+                        'city.required' => $this->lang->crv,
+                        'address.required' => $this->lang->arv,
+                        'phone.required' => $this->lang->prv,
+                        'password.required' => $this->lang->parv,
+                        'password.min' => $this->lang->pamv,
+                        'password.confirmed' => $this->lang->pacv,
+                    ]);
+
+                User::where('id',$request->emp_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'registration_number' => $request->registration_number, 'company_name' => $company_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone, 'email' => $request->email, 'password' => bcrypt($request['password'])]);
+            }
+            else
+            {
+                $this->validate($request, [
+                    'email' => [
+                        'required',
+                        'string',
+                        'email',
+                        Rule::unique('users')->where(function($query) use($request) {
+                            $query->where('allowed', '=', '1')->where('deleted_at', NULL)->where('email', '!=', $request->email);
+                        })
+                    ],
+                    'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
+                    'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
+                    /*'company_name' => 'required',*/
+                    'registration_number' => 'required',
+                    'postcode' => 'required',
+                    'city' => 'required',
+                    /*'bank_account' => 'required',*/
+                    /*'tax_number' => 'required',*/
+                    'address' => 'required',
+                    'phone' => 'required',
+                ],
+
+                    [
+                        'email.required' => $this->lang->erv,
+                        'email.unique' => $this->lang->euv,
+                        'name.required' => $this->lang->nrv,
+                        'name.max' => $this->lang->nmv,
+                        'name.regex' => $this->lang->niv,
+                        'family_name.required' => $this->lang->fnrv,
+                        'family_name.max' => $this->lang->fnmrv,
+                        'family_name.regex' => $this->lang->fniv,
+                        /*'company_name.required' => $this->lang->cnrv,*/
+                        'registration_number.required' => $this->lang->rnrv,
+                        /*'bank_account.required' => $this->lang->barv,
+                        'tax_number.required' => $this->lang->tnrv,*/
+                        'postcode.required' => $this->lang->pcrv,
+                        'city.required' => $this->lang->crv,
+                        'address.required' => $this->lang->arv,
+                        'phone.required' => $this->lang->prv,
+                    ]);
+
+                User::where('id',$request->emp_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'registration_number' => $request->registration_number, 'company_name' => $company_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone, 'email' => $request->email]);
+            }
+
+
+            Session::flash('success', 'Employee information updated successfully');
+            return redirect()->route('employees');
+        }
+        else
+        {
+
+            $this->validate($request, [
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    Rule::unique('users')->where(function($query) {
+                        $query->where('allowed', '=', '1')->where('deleted_at', NULL);
+                    })
+                ],
+                'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
+                'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
+                /*'company_name' => 'required',*/
+                'registration_number' => 'required',
+                'postcode' => 'required',
+                'city' => 'required',
+                /*'bank_account' => 'required',*/
+                /*'tax_number' => 'required',*/
+                'address' => 'required',
+                'phone' => 'required',
+                'password' => 'required|min:8|confirmed',
+            ],
+
+                [
+                    'email.required' => $this->lang->erv,
+                    'email.unique' => $this->lang->euv,
+                    'name.required' => $this->lang->nrv,
+                    'name.max' => $this->lang->nmv,
+                    'name.regex' => $this->lang->niv,
+                    'family_name.required' => $this->lang->fnrv,
+                    'family_name.max' => $this->lang->fnmrv,
+                    'family_name.regex' => $this->lang->fniv,
+                    /*'company_name.required' => $this->lang->cnrv,*/
+                    'registration_number.required' => $this->lang->rnrv,
+                    /*'bank_account.required' => $this->lang->barv,
+                    'tax_number.required' => $this->lang->tnrv,*/
+                    'postcode.required' => $this->lang->pcrv,
+                    'city.required' => $this->lang->crv,
+                    'address.required' => $this->lang->arv,
+                    'phone.required' => $this->lang->prv,
+                    'password.required' => $this->lang->parv,
+                    'password.min' => $this->lang->pamv,
+                    'password.confirmed' => $this->lang->pacv,
+                ]);
+
+
+            $user = new User;
+            $user->category_id = $request->category_id;
+            $user->role_id = $role_id;
+            $user->password = bcrypt($request['password']);
+            $user->name = $request->name;
+            $user->family_name = $request->family_name;
+            $user->registration_number = $request->registration_number;
+            $user->company_name = $company_name;
+            $user->address = $request->address;
+            $user->postcode = $request->postcode;
+            $user->city = $request->city;
+            $user->phone = $request->phone;
+            $user->email = $request->email;
+            $user->main_id = $user_id;
+            $user->status = 1;
+            $user->active = 0;
+            $user->is_featured = 1;
+            $user->featured = 0;
+            $user->save();
+
+            Session::flash('success', 'Employee created successfully!');
+            return redirect()->route('employees');
         }
     }
 

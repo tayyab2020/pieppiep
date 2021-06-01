@@ -284,15 +284,29 @@ class AdminUserController extends Controller
     public function index()
     {
         $users = User::where('role_id','=',2)->orderBy('created_at','desc')->get();
-        $categories = array();
+        $products = array();
 
         foreach ($users as $key) {
 
-             $categories[] = handyman_products::leftjoin('categories','categories.id','=','handyman_products.product_id')->where('handyman_products.handyman_id',$key->id)->select('categories.cat_name')->get();
+            $products[] = handyman_products::leftjoin('products','products.id','=','handyman_products.product_id')->where('handyman_products.handyman_id',$key->id)->select('products.title')->get();
 
         }
 
-        return view('admin.user.index',compact('users','categories'));
+        return view('admin.user.index',compact('users','products'));
+    }
+
+    public function Suppliers()
+    {
+        $users = User::where('role_id','=',4)->orderBy('created_at','desc')->get();
+        $products = array();
+
+        foreach ($users as $key) {
+
+            $products[] = handyman_products::leftjoin('products','products.id','=','handyman_products.product_id')->where('handyman_products.handyman_id',$key->id)->select('products.title')->get();
+
+        }
+
+        return view('admin.user.index',compact('users','products'));
     }
 
 
@@ -639,15 +653,8 @@ class AdminUserController extends Controller
     public function Clients()
     {
         $users = User::where('role_id','=',3)->where('allowed',1)->orderBy('created_at','desc')->get();
-        $categories = array();
 
-        foreach ($users as $key) {
-
-             $categories[] = handyman_products::leftjoin('categories','categories.id','=','handyman_products.product_id')->where('handyman_products.handyman_id',$key->id)->select('categories.cat_name')->get();
-
-        }
-
-        return view('admin.user.clients',compact('users','categories'));
+        return view('admin.user.clients',compact('users'));
     }
 
     public function UserBookings()
@@ -738,7 +745,12 @@ class AdminUserController extends Controller
     public function create()
     {
         $cats = Category::all();
-        return view('admin.user.create',compact('cats'));
+        return view('admin.user.create');
+    }
+
+    public function createSupplier()
+    {
+        return view('admin.user.create');
     }
 
     public function store(StoreValidationRequest $request)
@@ -768,24 +780,30 @@ class AdminUserController extends Controller
                 $input['title'] = implode(',', $request->title);
                 $input['details'] = implode(',', $request->details);
             }
-            if(strpos($request->address,'&')===true)
-            {
-                $input['address'] = str_replace("&","and",$request->address);
-            }
         if (!empty($request->special))
          {
             $input['special'] = implode(',', $request->special);
          }
+
+        $input['category_id'] = 20;
         $input['password'] = bcrypt($request['password']);
         $user->fill($input)->save();
-        Session::flash('success', 'New User added successfully.');
-        return redirect()->route('admin-user-index');
+
+        if($input['role_id'] == 2)
+        {
+            Session::flash('success', 'New Retailer added successfully.');
+            return redirect()->route('admin-user-index');
+        }
+        else
+        {
+            Session::flash('success', 'New Supplier added successfully.');
+            return redirect()->route('admin-supplier-index');
+        }
     }
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $cats = Category::all();
 
         if($user->title!=null && $user->details!=null)
         {
@@ -807,7 +825,34 @@ class AdminUserController extends Controller
             $specials = '';
         }
 
-        return view('admin.user.edit',compact('user','cats','title','details','specials'));
+        return view('admin.user.edit',compact('user','title','details','specials'));
+    }
+
+    public function editSupplier($id)
+    {
+        $user = User::findOrFail($id);
+
+        if($user->title!=null && $user->details!=null)
+        {
+            $title = explode(',', $user->title);
+            $details = explode(',', $user->details);
+        }
+        else
+        {
+            $title = '';
+            $details = '';
+        }
+
+        if($user->special != null)
+        {
+            $specials = explode(',', $user->special);
+        }
+        else
+        {
+            $specials = '';
+        }
+
+        return view('admin.user.edit',compact('user','title','details','specials'));
     }
 
     public function update(UpdateValidationRequest $request,$id)
@@ -871,8 +916,17 @@ class AdminUserController extends Controller
             }
 
         $user->update($input);
-        Session::flash('success', 'Successfully updated the User');
-        return redirect()->route('admin-user-index');
+
+        if($input['role_id'] == 2)
+        {
+            Session::flash('success', 'Successfully updated the Retailer');
+            return redirect()->route('admin-user-index');
+        }
+        else
+        {
+            Session::flash('success', 'Successfully updated the Supplier');
+            return redirect()->route('admin-supplier-index');
+        }
     }
 
      public function InsuranceUpdate(Request $request)
@@ -934,16 +988,14 @@ class AdminUserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $no = 0;
+        return view('admin.user.details',compact('user'));
+    }
 
-        $post = invoices::where('handyman_id','=',$id)->where('is_completed',1)->get();
+    public function DetailsSupplier($id)
+    {
+        $user = User::findOrFail($id);
 
-        foreach ($post as $temp) {
-
-            $no = $no + 1;
-        }
-
-        return view('admin.user.details',compact('user','no'));
+        return view('admin.user.details',compact('user'));
     }
 
     public function ClientDetails($id)

@@ -20,7 +20,7 @@
                                 @include('includes.form-error')
                                 @include('includes.form-success')
 
-                                <div style="margin-bottom: 30px;" class="form-group">
+                                <div style="margin-bottom: 30px;display: none;" class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-home"></i>

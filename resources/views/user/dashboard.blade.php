@@ -9,7 +9,8 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <!-- Starting of Dashboard header items area -->
                     <div class="panel panel-default admin">
-                        <div class="panel-heading admin-title">{{$lang->hdt}}</div>
+
+                        <div class="panel-heading admin-title">{{Auth::guard('user')->user()->role_id == 2 ? 'Retailer Dashboard' : 'Supplier Dashboard'}}</div>
 
                     </div>
                     <!-- Ending of Dashboard header items area -->

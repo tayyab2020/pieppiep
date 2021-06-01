@@ -18,31 +18,40 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="add-product-box">
                                         <div class="add-product-header">
-                                            <h2>Add New Handyman</h2>
-                                            <a href="{{route('admin-user-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <h2>@if(Route::currentRouteName() == 'admin-user-create') Add New Retailer @else Add New Supplier @endif</h2>
+                                            <a href="{{url()->previous()}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-user-store')}}" method="POST" enctype="multipart/form-data">
                                           @include('includes.form-error')
                                           @include('includes.form-success')
                                           {{csrf_field()}}
+
+
+                                            @if(Route::currentRouteName() == 'admin-user-create')
+
+                                                <input type="hidden" name="role_id" value="2">
+
+                                            @else
+
+                                                <input type="hidden" name="role_id" value="4">
+
+                                            @endif
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="name">Name*</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="name" id="name" placeholder="Enter Name" required="" type="text">
+                                                </div>
+                                            </div>
+
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="full_name">Full Name*</label>
+                                            <label class="control-label col-sm-4" for="family_name">Family Name*</label>
                                             <div class="col-sm-6">
-                                              <input class="form-control" name="name" id="full_name" placeholder="Enter Full Name" required="" type="text">
+                                              <input class="form-control" name="family_name" id="family_name" placeholder="Enter Family Name" required="" type="text">
                                             </div>
                                           </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="cat">Category*</label>
-                                            <div class="col-sm-6">
-                                            <select class="form-control" name="category_id" id="cat" required="">
-                                                  <option value="">Select Category</option>
-                                              @foreach($cats as $cat)
-                                                  <option value="{{$cat->id}}">{{$cat->cat_name}}</option>
-                                              @endforeach
-                                              </select>
-                                            </div>
-                                          </div>
+
                                           <div class="form-group">
                                             <label class="control-label col-sm-4" for="adminimg">Current Photo*</label>
                                             <div class="col-sm-6">
@@ -96,7 +105,21 @@
                               </div>
                           </div>
                           <br>
-                                          <div class="form-group">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="registration_number">Registration Number*</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="registration_number" id="registration_number" placeholder="Enter Registration Number" required="" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="company_name">Company Name*</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="company_name" id="company_name" placeholder="Enter Company Name" required="" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
                                             <label class="control-label col-sm-4" for="language">Language*</label>
                                             <div class="col-sm-6">
                                               <input class="form-control" name="language" id="language" placeholder="Enter Language" required="" type="text">
@@ -105,7 +128,7 @@
                                           <div class="form-group">
                                             <label class="control-label col-sm-4" for="age">Age*</label>
                                             <div class="col-sm-6">
-                                              <input class="form-control" name="age" id="age" placeholder="Enter Age" required="" type="text">
+                                              <input class="form-control" name="age" id="age" placeholder="Enter Age" required="" type="number">
                                             </div>
                                           </div>
                                           <div class="form-group">
@@ -121,17 +144,26 @@
                                             </div>
                                           </div>
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="profession">Profession</label>
+                                            <label class="control-label col-sm-4" for="profession">Profession*</label>
                                             <div class="col-sm-6">
                                               <input class="form-control" name="profession" id="profession" placeholder="Enter Profession" required="" type="text">
                                             </div>
                                           </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="city">City</label>
+
+                                            <div class="form-group">
+                                            <label class="control-label col-sm-4" for="city">City*</label>
                                             <div class="col-sm-6">
                                               <input class="form-control" name="city" id="city" placeholder="Enter City" required="" type="text">
                                             </div>
                                           </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="postcode">Postcode*</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="postcode" id="postcode" placeholder="Enter Postcode" required="" type="text">
+                                                </div>
+                                            </div>
+
                                           <div class="form-group">
                                             <label class="control-label col-sm-4" for="address">Address*</label>
                                             <div class="col-sm-6">
@@ -192,7 +224,7 @@
                                               <input class="form-control" name="password" id="pass" placeholder="Enter Password" type="password" required="">
                                             </div>                                              </div>
 
-                                         <div class="form-group">
+                                         <div style="display: none;" class="form-group">
                                             <label class="control-label col-sm-4" for="check1"></label>
                                             <div class="col-sm-6">
 <div class="btn btn-default checkbox1">
@@ -294,7 +326,7 @@
 </script>
 
 <script src="{{asset('assets/admin/js/jquery152.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/jqueryui.min.js')}}"></script>    
+<script src="{{asset('assets/admin/js/jqueryui.min.js')}}"></script>
 <script src="{{asset('assets/admin/js/tag-it.js')}}" type="text/javascript" charset="utf-8"></script>
 
 
@@ -303,7 +335,7 @@
     $(document).ready(function() {
         $("#myTags").tagit({
           fieldName: "special[]",
-          allowSpaces: true 
+          allowSpaces: true
         });
     });
 </script>

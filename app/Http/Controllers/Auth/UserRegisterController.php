@@ -281,10 +281,8 @@ class UserRegisterController extends Controller
 
         else
         {
-
-             Session::flash('message', $this->lang->grv);
+            Session::flash('message', $this->lang->grv);
             return redirect()->back();
-
         }
 
     }

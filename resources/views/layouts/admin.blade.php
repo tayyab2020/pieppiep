@@ -85,7 +85,8 @@
                                 <li>
                                     <a href="#profiles" data-toggle="collapse" @if(Route::currentRouteName() == 'admin-user-index' || Route::currentRouteName() == 'admin-user-client' || Route::currentRouteName() == 'admin-user-requests') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> Profiles</a>
                                     <ul class="collapse list-unstyled submenu" id="profiles">
-                                        <li><a href="{{route('admin-user-index')}}"><i class="fa fa-angle-right"></i> Handymen</a></li>
+                                        <li><a href="{{route('admin-user-index')}}"><i class="fa fa-angle-right"></i> Retailers</a></li>
+                                        <li><a href="{{route('admin-supplier-index')}}"><i class="fa fa-angle-right"></i> Suppliers</a></li>
                                         <li><a href="{{route('admin-user-client')}}"><i class="fa fa-angle-right"></i> Clients</a></li>
                                         <li><a href="{{route('admin-user-requests')}}"><i class="fa fa-angle-right"></i> Update Requests</a></li>
                                     </ul>

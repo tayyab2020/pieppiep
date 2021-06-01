@@ -77,6 +77,11 @@
   Route::get('/klant-bewerken/{id}', 'UserController@EditCustomer')->name('edit-customer');
   Route::get('/klant-verwijderen/{id}', 'UserController@DeleteCustomer')->name('delete-customer');
   Route::post('/klanten','UserController@PostCustomer')->name('post-create-customer');
+  Route::get('/employees', 'UserController@Employees')->name('employees');
+  Route::get('/employee-create', 'UserController@CreateEmployeeForm')->name('employee-create');
+  Route::post('/employee-create','UserController@PostEmployee')->name('post-create-employee');
+  Route::get('/edit-employee/{id}', 'UserController@EditEmployee')->name('edit-employee');
+  Route::get('/delete-employee/{id}', 'UserController@DeleteEmployee')->name('delete-employee');
   Route::get('/klant-aanmaken', 'UserController@CreateCustomerForm')->name('handyman-user-create');
   Route::get('/handleiding','UserController@InstructionManual')->name('instruction-manual');
   Route::post('/create-customer','UserController@CreateCustomer');
@@ -264,6 +269,7 @@
   Route::post('/send-quote-request', 'AdminUserController@SendQuoteRequestHandymen')->name('send-quote-request');
   Route::post('/approve-handyman-quotations', 'AdminUserController@ApproveHandymanQuotations')->name('approve-handyman-quotations');
   Route::get('/handymans', 'AdminUserController@index')->name('admin-user-index');
+  Route::get('/suppliers', 'AdminUserController@Suppliers')->name('admin-supplier-index');
   Route::get('/clients', 'AdminUserController@Clients')->name('admin-user-client');
   Route::get('/bookings', 'AdminUserController@UserBookings')->name('admin-user-bookings');
   Route::get('/user-requests', 'AdminUserController@UserRequests')->name('admin-user-requests');
@@ -276,6 +282,10 @@
   Route::post('/handymans/insurance-update/{id}', 'AdminUserController@InsuranceUpdate')->name('admin-user-insurance-update');
   Route::get('/handymans/delete/{id}', 'AdminUserController@destroy')->name('admin-user-delete');
   Route::get('/handymans/insurance/{id}', 'AdminUserController@Insurance')->name('admin-user-insurance');
+
+  Route::get('/suppliers/create', 'AdminUserController@createSupplier')->name('admin-supplier-create');
+  Route::get('/suppliers/edit/{id}', 'AdminUserController@editSupplier')->name('admin-supplier-edit');
+  Route::get('/suppliers/details/{id}', 'AdminUserController@DetailsSupplier')->name('admin-supplier-details');
 
   Route::get('/handymans/details/{id}', 'AdminUserController@Details')->name('admin-user-details');
 

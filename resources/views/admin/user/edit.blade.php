@@ -19,33 +19,40 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="add-product-box">
                                         <div class="add-product-header">
-                                            <h2>Edit Handyman</h2>
-                                            <a href="{{route('admin-user-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <h2>@if(Route::currentRouteName() == 'admin-user-edit') Edit Retailer @else Edit Supplier @endif</h2>
+                                            <a href="{{url()->previous()}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-user-update',$user->id)}}" method="POST" enctype="multipart/form-data">
                                           @include('includes.form-error')
                                           @include('includes.form-success')
                                           {{csrf_field()}}
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="edit_full_name">Full Name*</label>
+
+
+                                            @if(Route::currentRouteName() == 'admin-user-edit')
+
+                                                <input type="hidden" name="role_id" value="2">
+
+                                            @else
+
+                                                <input type="hidden" name="role_id" value="4">
+
+                                            @endif
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="edit_name">Name*</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="name" id="edit_name" placeholder="Enter Name" required="" type="text" value="{{$user->name}}">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                            <label class="control-label col-sm-4" for="edit_family_name">Family Name*</label>
                                             <div class="col-sm-6">
-                                              <input class="form-control" name="name" id="edit_full_name" placeholder="Enter Full Name" required="" type="text" value="{{$user->name}}">
+                                              <input class="form-control" name="family_name" id="edit_family_name" placeholder="Enter Family Name" required="" type="text" value="{{$user->family_name}}">
                                             </div>
                                           </div>
-                                          {{--<div class="form-group" style="display: none;">
-                                            <label class="control-label col-sm-4" for="edit_blood_group">Category*</label>
-                                            <div class="col-sm-6">
-                                              <select class="form-control" name="category_id" id="edit_blood_group" required="">
-                                                  <option value="">Select Category</option>
 
-                                                      @foreach($cats as $cat)
-                                                          <option value="{{$cat->id}}" {{$cat->cat_name == $user->category->cat_name?"selected":""}}>{{$cat->cat_name}}</option>
-                                                      @endforeach
-
-                                              </select>
-                                            </div>
-                                          </div>--}}
                                           <div class="form-group">
                                             <label class="control-label col-sm-4" for="edit_current_photo">Current Photo*</label>
                                             <div class="col-sm-6">
@@ -125,6 +132,22 @@
 
 
                           <br>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="registration_number">Registration Number*</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="registration_number" id="registration_number" placeholder="Enter Registration Number" required="" type="text" value="{{$user->registration_number}}">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="company_name">Company Name*</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="company_name" id="company_name" placeholder="Enter Company Name" required="" type="text" value="{{$user->company_name}}">
+                                                </div>
+                                            </div>
+
+
                                           <div class="form-group">
                                             <label class="control-label col-sm-4" for="edit_language">Language*</label>
                                             <div class="col-sm-6">
@@ -134,7 +157,7 @@
                                           <div class="form-group" style="display: none;">
                                             <label class="control-label col-sm-4" for="edit_age">Age*</label>
                                             <div class="col-sm-6">
-                                              <input class="form-control" name="age" id="edit_age" placeholder="Enter Age"  type="text" value="0">
+                                              <input class="form-control" name="age" id="edit_age" placeholder="Enter Age" type="number" value="0">
                                             </div>
                                           </div>
                                           <div class="form-group">
@@ -150,17 +173,27 @@
                                             </div>
                                           </div>
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="edit_profession">Profession</label>
+                                            <label class="control-label col-sm-4" for="edit_profession">Profession*</label>
                                             <div class="col-sm-6">
                                               <input class="form-control" name="profession" id="edit_profession" placeholder="Enter Profession" required="" type="text"  value="{{$user->profession}}">
                                             </div>
                                           </div>
+
+
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="edit_city">City</label>
+                                            <label class="control-label col-sm-4" for="edit_city">City*</label>
                                             <div class="col-sm-6">
                                               <input class="form-control" name="city" id="edit_city" placeholder="Enter City" required="" type="text"  value="{{$user->city}}">
                                             </div>
                                           </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="postcode">Postcode*</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="postcode" id="postcode" placeholder="Enter Postcode" required="" type="text" value="{{$user->postcode}}">
+                                                </div>
+                                            </div>
+
                                           <div class="form-group">
                                             <label class="control-label col-sm-4" for="edit_address">Address*</label>
                                             <div class="col-sm-6">

@@ -22,7 +22,6 @@ class UserLoginController extends Controller
     public function login(Request $request)
     {
 
-
       // Validate the form data
 
 		$this->validate($request,[
@@ -33,7 +32,8 @@ class UserLoginController extends Controller
       // Attempt to log the user in
       if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password, 'allowed' => 1])) {
 
-        if( Auth::guard('user')->user()->role_id == 2)
+
+        if( Auth::guard('user')->user()->role_id == 2 || Auth::guard('user')->user()->role_id == 4)
         {
 
           // if successful, then redirect to their intended location
@@ -52,7 +52,7 @@ class UserLoginController extends Controller
       }
 
       // if unsuccessful, then redirect back to the login with the form data
-      Session::flash('message',"f");
+      Session::flash('message',"Failed!");
       return redirect()->back()->withInput($request->only('email'));
     }
 
