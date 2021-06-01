@@ -457,7 +457,7 @@
                                                                     if (zipCode.length >= 6) {
                                                                         $.ajax({
                                                                             type: 'GET',
-                                                                            url: 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCdCPSjhOgaYXo6twWkseoaSHc2Ipob024&address=' + zipCode + ',+Netherlands&sensor=false',
+                                                                            url: 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&address=' + zipCode + ',+Netherlands&sensor=false',
                                                                             success: function (data) {
 
                                                                                 if (data.status == 'OK') {
@@ -623,7 +623,7 @@
 
 //     $.ajax({
 //                                             type: 'GET',
-//                                             url: 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCdCPSjhOgaYXo6twWkseoaSHc2Ipob024&latlng='+latitude+','+longitude+'&countryCode=Pk',
+//                                             url: 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&latlng='+latitude+','+longitude+'&countryCode=Pk',
 //                                             success: function (data) {
 //                                                 console.log(data);
 
@@ -672,7 +672,7 @@
                                                     </script>
 
                                                     <script async defer
-                                                            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdCPSjhOgaYXo6twWkseoaSHc2Ipob024&callback=initMap"></script>
+                                                            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&callback=initMap"></script>
 
                                                 </div>
 

@@ -18,7 +18,7 @@
     <div class="cd-filter filter-is-visible" id="cd-filter" style="position: relative;float: left;/*height: 915px;*/height: auto;z-index: 1;border-right: 1px solid #e0e0e0;">
 
         <a href="#0" class="cd-filter-trigger filter-is-visible" style="margin-left: 15px;">{{$lang->ft}}</a>
-        
+
         <form action="{{route('front.products')}}" method="get">
 
             {{csrf_field()}}
@@ -479,7 +479,7 @@
 
     </div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdCPSjhOgaYXo6twWkseoaSHc2Ipob024&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap" async defer></script>
 
     <script type="text/javascript">
 
