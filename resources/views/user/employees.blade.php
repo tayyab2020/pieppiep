@@ -23,14 +23,13 @@
                                                 <table id="example" class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline" role="grid" aria-describedby="product-table_wrapper_info" style="width: 100%;" width="100%" cellspacing="0">
                                                     <thead>
                                                     <tr role="row">
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">ID</th>
-                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">{{__('text.Name')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Family Name')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Email')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Company Name</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Address')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Contact Number')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">{{__('text.Actions')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Blood Group: activate to sort column ascending">ID</th>
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">{{__('text.Name')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Family Name')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Blood Group: activate to sort column ascending">{{__('text.Email')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Blood Group: activate to sort column ascending">Company Name</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="City: activate to sort column ascending">Permission(s)</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending">{{__('text.Actions')}}</th>
                                                     </tr>
                                                     </thead>
 
@@ -50,11 +49,26 @@
 
                                                             <td>{{$user->company_name}}</td>
 
-                                                            <td>{{$user->address}}</td>
+                                                            <td>
 
-                                                            <td>{{$user->phone}}</td>
+                                                                @if(count($user->permissions) > 0)
+
+                                                                    <select style="width: 100%;padding: 10px 5px;outline: none;border:1px solid #cecece;">
+
+                                                                        @foreach($user->permissions as $key)
+
+                                                                            <option value="{{$key->id}}">{{$key->name}}</option>
+
+                                                                        @endforeach
+
+                                                                    </select>
+
+                                                                @endif
+
+                                                            </td>
 
                                                             <td>
+                                                                <a href="{{route('employee-permissions',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit Permissions</a>
                                                                 <a href="{{route('edit-employee',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
                                                                 <a href="{{route('delete-employee',$user->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
                                                             </td>

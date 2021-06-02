@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('styles')
 
@@ -18,16 +18,16 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <!-- Starting of Dashboard area -->
-                    <div class="section-padding add-product-1">
+                    <div style="padding: 0;" class="section-padding add-product-1">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header">
                                         <h2>Assign permissions to {{$user->name . ' ' . $user->family_name . ' (' . $user->email . ')'}}</h2>
-                                        <a href="{{route('admin-assign-permissions')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('employees')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                     </div>
                                     <hr>
-                                    <form class="form-horizontal" action="{{route('admin-assign-permission-store')}}" method="POST" enctype="multipart/form-data">
+                                    <form class="form-horizontal" action="{{route('employee-permission-store')}}" method="POST" enctype="multipart/form-data">
                                         @include('includes.form-error')
                                         @include('includes.form-success')
                                         {{csrf_field()}}
@@ -240,7 +240,6 @@
 
 
             }
-
 
 
         });

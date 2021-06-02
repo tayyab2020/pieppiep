@@ -15,6 +15,8 @@ use App\User;
 use App\terms_conditions;
 use APP\Rules\Captcha;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UserRegisterController extends Controller
 {
@@ -256,6 +258,9 @@ class UserRegisterController extends Controller
         $input['is_featured'] = 1;
         $input['featured'] = 0;
         $user->fill($input)->save();
+
+        $user->givePermissionTo('show-dashboard');
+
         Auth::guard('user')->login($user);
 
         $link = url('/').'/aanbieder/complete-profile';

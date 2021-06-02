@@ -77,6 +77,8 @@
   Route::get('/klant-bewerken/{id}', 'UserController@EditCustomer')->name('edit-customer');
   Route::get('/klant-verwijderen/{id}', 'UserController@DeleteCustomer')->name('delete-customer');
   Route::post('/klanten','UserController@PostCustomer')->name('post-create-customer');
+  Route::get('/employee-permissions/{id}', 'UserController@EmployeePermissions')->name('employee-permissions');
+  Route::post('/employee-permission-store', 'UserController@EmployeePermissionStore')->name('employee-permission-store');
   Route::get('/employees', 'UserController@Employees')->name('employees');
   Route::get('/employee-create', 'UserController@CreateEmployeeForm')->name('employee-create');
   Route::post('/employee-create','UserController@PostEmployee')->name('post-create-employee');

@@ -109,12 +109,38 @@
                     <ul class="list-unstyled components">
 
                         <li>
+
                             <a href="#dashboard1" data-toggle="collapse" @if(Route::currentRouteName() == 'user-dashboard' || Route::currentRouteName() == 'user-profile' || Route::currentRouteName() == 'radius-management' || Route::currentRouteName() == 'user-complete-profile') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> {{$lang->dashboard}}</a>
+
                             <ul class="collapse list-unstyled submenu" id="dashboard1">
-                                <li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li>
-                                <li><a href="{{route('user-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->edit}}</a></li>
-                                <li><a href="{{route('radius-management')}}"><i class="fa fa-angle-right"></i> {{$lang->rm}}</a></li>
-                                <li><a href="{{route('user-complete-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->cmpt}}</a></li>
+
+                                @if(auth()->user()->can('show-dashboard'))
+
+                                    <li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li>
+
+                                @endif
+
+
+                                    @if(auth()->user()->can('edit-profile'))
+
+                                        <li><a href="{{route('user-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->edit}}</a></li>
+
+                                    @endif
+
+
+                                    @if(auth()->user()->can('radius-management'))
+
+                                        <li><a href="{{route('radius-management')}}"><i class="fa fa-angle-right"></i> {{$lang->rm}}</a></li>
+
+                                    @endif
+
+
+                                    @if(auth()->user()->can('user-complete-profile'))
+
+                                        <li><a href="{{route('user-complete-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->cmpt}}</a></li>
+
+                                    @endif
+
                             </ul>
                         </li>
 
@@ -124,65 +150,145 @@
                         </li>--}}
 
 
-                        <li>
-                            <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i>Assign Permissions</a>
-                        </li>
+                        @if(auth()->user()->can('create-new-quotation'))
+
+                            <li>
+                                <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i>Create Quotation (New)</a>
+                            </li>
+
+                        @endif
 
 
-                        <li>
-                            <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i>Create Quotation (New)</a>
-                        </li>
+                        @if(auth()->user()->can('handyman-quotation-requests'))
 
-                        <li>
-                            <a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-fw fa-file-text"></i>{{__('text.Quotation Requests')}}</a>
-                        </li>
+                            <li>
+                                <a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-fw fa-file-text"></i>{{__('text.Quotation Requests')}}</a>
+                            </li>
 
-                        <li>
-                            <a href="{{route('quotations')}}"><i class="fa fa-fw fa-file-text"></i> {{__('text.Quotations')}}</a>
-                        </li>
-
-                        <li>
-                            <a href="{{route('quotations-invoices')}}"><i class="fa fa-fw fa-file-text"></i> {{__('text.Quotation Invoices')}}</a>
-                        </li>
-
-                        <li>
-                            <a href="{{route('commission-invoices')}}"><i class="fa fa-fw fa-file-text"></i> {{__('text.Commission Invoices')}}</a>
-                        </li>
-
-                        <li>
-                            <a href="{{route('customers')}}"><i class="fa fa-fw fa-file-text"></i> {{__('text.Customers')}}</a>
-                        </li>
-
-                        <li>
-                            <a href="{{route('employees')}}"><i class="fa fa-fw fa-file-text"></i> Employees</a>
-                        </li>
-
-                        <li>
-                            <a href="#sales" data-toggle="collapse" @if(Route::currentRouteName() == 'user-products' || Route::currentRouteName() == 'product-create') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> {{__('text.Sales')}}</a>
-                            <ul class="collapse list-unstyled submenu" id="sales">
-                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotations')}}</a></li>
-                                <li><a href="{{route('customer-invoices')}}"><i class="fa fa-angle-right"></i> {{__('text.Invoices')}}</a></li>
-                            </ul>
-                        </li>
+                        @endif
 
 
-                        <li>
-                            <a href="#services" data-toggle="collapse" @if(Route::currentRouteName() == 'user-products' || Route::currentRouteName() == 'product-create' || Route::currentRouteName() == 'user-items') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> {{__('text.My Products')}}</a>
-                            <ul class="collapse list-unstyled submenu" id="services">
-                                <li><a href="{{route('user-products')}}"><i class="fa fa-angle-right"></i> {{__('text.Products Overview')}}</a></li>
-                                <li><a href="{{route('product-create')}}"><i class="fa fa-angle-right"></i> {{__('text.Add Products')}}</a></li>
-                                <li><a href="{{route('user-items')}}"><i class="fa fa-angle-right"></i> {{__('text.My Items')}}</a></li>
-                            </ul>
-                        </li>
+                        @if(auth()->user()->can('quotations'))
+
+                            <li>
+                                <a href="{{route('quotations')}}"><i class="fa fa-fw fa-file-text"></i> {{__('text.Quotations')}}</a>
+                            </li>
+
+                        @endif
 
 
-                        <li>
-                            <a href="#services1" data-toggle="collapse" @if(Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'service-create') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> My Services</a>
-                            <ul class="collapse list-unstyled submenu" id="services1">
-                                <li><a href="{{route('my-services')}}"><i class="fa fa-angle-right"></i> Services Overview</a></li>
-                                <li><a href="{{route('service-create')}}"><i class="fa fa-angle-right"></i> Add Services</a></li>
-                            </ul>
-                        </li>
+                        @if(auth()->user()->can('quotations-invoices'))
+
+                            <li>
+                                <a href="{{route('quotations-invoices')}}"><i class="fa fa-fw fa-file-text"></i> {{__('text.Quotation Invoices')}}</a>
+                            </li>
+
+                        @endif
+
+
+                        @if(auth()->user()->can('commission-invoices'))
+
+                            <li>
+                                <a href="{{route('commission-invoices')}}"><i class="fa fa-fw fa-file-text"></i> {{__('text.Commission Invoices')}}</a>
+                            </li>
+
+                        @endif
+
+
+                        @if(auth()->user()->can('customers'))
+
+                            <li>
+                                <a href="{{route('customers')}}"><i class="fa fa-fw fa-file-text"></i> {{__('text.Customers')}}</a>
+                            </li>
+
+                        @endif
+
+
+                        @if(auth()->user()->can('employees'))
+
+                            <li>
+                                <a href="{{route('employees')}}"><i class="fa fa-fw fa-file-text"></i> Employees</a>
+                            </li>
+
+                        @endif
+
+
+                        @if(auth()->user()->hasAnyPermission(['customer-quotations', 'customer-invoices']))
+
+                            <li>
+                                <a href="#sales" data-toggle="collapse" @if(Route::currentRouteName() == 'user-products' || Route::currentRouteName() == 'product-create') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> {{__('text.Sales')}}</a>
+                                <ul class="collapse list-unstyled submenu" id="sales">
+
+                                    @if(auth()->user()->can('customer-quotations'))
+
+                                        <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotations')}}</a></li>
+
+                                    @endif
+
+                                    @if(auth()->user()->can('customer-invoices'))
+
+                                        <li><a href="{{route('customer-invoices')}}"><i class="fa fa-angle-right"></i> {{__('text.Invoices')}}</a></li>
+
+                                    @endif
+
+                                </ul>
+                            </li>
+
+                        @endif
+
+
+                        @if(auth()->user()->hasAnyPermission(['user-products', 'product-create', 'user-items']))
+
+                            <li>
+                                <a href="#services" data-toggle="collapse" @if(Route::currentRouteName() == 'user-products' || Route::currentRouteName() == 'product-create' || Route::currentRouteName() == 'user-items') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> {{__('text.My Products')}}</a>
+                                <ul class="collapse list-unstyled submenu" id="services">
+
+                                    @if(auth()->user()->can('user-products'))
+
+                                        <li><a href="{{route('user-products')}}"><i class="fa fa-angle-right"></i> {{__('text.Products Overview')}}</a></li>
+
+                                    @endif
+
+                                    @if(auth()->user()->can('product-create'))
+
+                                        <li><a href="{{route('product-create')}}"><i class="fa fa-angle-right"></i> {{__('text.Add Products')}}</a></li>
+
+                                    @endif
+
+                                    @if(auth()->user()->can('user-items'))
+
+                                        <li><a href="{{route('user-items')}}"><i class="fa fa-angle-right"></i> {{__('text.My Items')}}</a></li>
+
+                                    @endif
+
+                                </ul>
+                            </li>
+
+                        @endif
+
+
+                        @if(auth()->user()->hasAnyPermission(['my-services', 'service-create']))
+
+                            <li>
+                                <a href="#services1" data-toggle="collapse" @if(Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'service-create') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> My Services</a>
+                                <ul class="collapse list-unstyled submenu" id="services1">
+
+                                    @if(auth()->user()->can('my-services'))
+
+                                        <li><a href="{{route('my-services')}}"><i class="fa fa-angle-right"></i> Services Overview</a></li>
+
+                                    @endif
+
+                                    @if(auth()->user()->can('service-create'))
+
+                                        <li><a href="{{route('service-create')}}"><i class="fa fa-angle-right"></i> Add Services</a></li>
+
+                                    @endif
+
+                                </ul>
+                            </li>
+
+                        @endif
 
                         {{--<li>
                             <a href="{{ route('user-subservices') }}" id="sub-services"><i
@@ -209,13 +315,22 @@
                                     class="fa fa-fw fa-book"></i> {{$lang->ist}}</a>
                         </li>--}}
 
-                        <li>
-                            <a href="{{ route('ratings') }}" id="rating"><i class="fa fa-fw fa-book"></i> {{$lang->hpmrt}}</a>
-                        </li>
+                        @if(auth()->user()->can('ratings'))
 
-                        <li>
-                            <a href="{{ route('instruction-manual') }}" id="instruction"><i class="fa fa-fw fa-book"></i> {{__('text.Instruction Manual')}}</a>
-                        </li>
+                            <li>
+                                <a href="{{ route('ratings') }}" id="rating"><i class="fa fa-fw fa-book"></i> {{$lang->hpmrt}}</a>
+                            </li>
+
+                        @endif
+
+
+                        @if(auth()->user()->can('instruction-manual'))
+
+                            <li>
+                                <a href="{{ route('instruction-manual') }}" id="instruction"><i class="fa fa-fw fa-book"></i> {{__('text.Instruction Manual')}}</a>
+                            </li>
+
+                        @endif
 
                         <li class="lang-list" style="text-align: center;margin-top: 20px;">
 
