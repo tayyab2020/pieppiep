@@ -179,31 +179,31 @@ class UserController extends Controller
             return redirect()->route('user-login');
         }
 
+        $check_permission = Permission::where('name','=','show-dashboard')->first();
+
+        if($check_permission)
+        {
+            $users = User::whereIn('role_id',[2,4])->get();
+
+            foreach ($users as $key)
+            {
+                $key->givePermissionTo('show-dashboard');
+            }
+        }
+        else
+        {
+            Permission::create(['guard_name' => 'user', 'name' => 'show-dashboard']);
+            $users = User::whereIn('role_id',[2,4])->get();
+
+            foreach ($users as $key)
+            {
+                $key->givePermissionTo('show-dashboard');
+            }
+        }
+
+
         if($user->can('show-dashboard'))
         {
-            $check_permission = Permission::where('name','=','show-dashboard')->first();
-
-            if($check_permission)
-            {
-                $users = User::whereIn('role_id',[2,4])->get();
-
-                foreach ($users as $key)
-                {
-                    $key->givePermissionTo('show-dashboard');
-                }
-            }
-            else
-            {
-                Permission::create(['guard_name' => 'user', 'name' => 'show-dashboard']);
-                $users = User::whereIn('role_id',[2,4])->get();
-
-                foreach ($users as $key)
-                {
-                    $key->givePermissionTo('show-dashboard');
-                }
-            }
-
-
             $no = 0;
             $commission_percentage = Generalsetting::findOrFail(1);
 
