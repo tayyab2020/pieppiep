@@ -18,11 +18,14 @@ use App\terminals;
 use App\bookings;
 use App\Generalsetting;
 use App\invoices;
+use Illuminate\Validation\Rule;
 use PDF;
 use App\how_it_works;
 use App\reasons_to_book;
 use App\cancelled_invoices;
 use App\terms_conditions;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class AdminController extends Controller
 {
@@ -31,9 +34,89 @@ class AdminController extends Controller
         $this->middleware('auth:admin');
     }
 
-    public function index()
+    public function Permissions()
+    {
+        $permissions = Permission::all();
+
+        return view('admin.permissions',compact('permissions'));
+    }
+
+    public function PermissionsCreate()
+    {
+        return view('admin.permission_create');
+    }
+
+    public function PermissionsStore(Request $request)
     {
 
+        if($request->id)
+        {
+            $this->validate($request, [
+                'name' => [
+                    Rule::unique('permissions')->where(function($query) use($request) {
+                        $query->where('id', '!=', $request->id);
+                    })
+                ],
+            ],
+                [
+                    'name.unique' => 'Name should be unique',
+                ]);
+
+            Permission::where('id',$request->id)->update(['name' => $request->name]);
+
+            Session::flash('success', 'Successfully updated permission');
+        }
+        else
+        {
+            $this->validate($request, [
+                'name' => 'unique:permissions',
+            ],
+                [
+                    'name.unique' => 'Name should be unique',
+                ]);
+
+            Permission::create(['guard_name' => 'user', 'name' => $request->name]);
+
+            Session::flash('success', 'Successfully created permission');
+        }
+
+        return redirect()->route('admin-permissions-index');
+    }
+
+    public function PermissionEdit($id)
+    {
+        $permission = Permission::where('id',$id)->first();
+
+        return view('admin.permission_create',compact('permission'));
+    }
+
+    public function AssignPermissions()
+    {
+        $users = User::with('permissions')->whereIn('role_id',[2,4])->get();
+
+        return view('admin.assign_permissions',compact('users'));
+    }
+
+    public function AssignPermissionEdit($id)
+    {
+        $permissions = Permission::all();
+        $user = User::with('permissions')->find($id);
+
+        return view('admin.assign_permission',compact('permissions','user'));
+    }
+
+    public function AssignPermissionsStore(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        $user->syncPermissions($request->permissions);
+
+        Session::flash('success', 'Permission(s) assigned successfully');
+        return redirect()->route('admin-assign-permissions');
+    }
+
+    public function index()
+    {
         $users = User::all();
         $cats = Category::all();
         $ads = Advertise::all();

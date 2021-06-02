@@ -33,7 +33,7 @@ class UserLoginController extends Controller
       if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password, 'allowed' => 1])) {
 
 
-        if( Auth::guard('user')->user()->role_id == 2 || Auth::guard('user')->user()->role_id == 4)
+        if(Auth::guard('user')->user()->role_id == 2 || Auth::guard('user')->user()->role_id == 4)
         {
 
           // if successful, then redirect to their intended location

@@ -52,6 +52,8 @@ use File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use PDF;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {

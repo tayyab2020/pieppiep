@@ -403,6 +403,13 @@
 
 
 
+  Route::get('/assign-permissions', 'AdminController@AssignPermissions')->name('admin-assign-permissions');
+  Route::get('/assign-permissions/edit/{id}', 'AdminController@AssignPermissionEdit')->name('admin-assign-permission-edit');
+  Route::post('/assign-permissions/store', 'AdminController@AssignPermissionsStore')->name('admin-assign-permission-store');
+  Route::get('/permissions', 'AdminController@Permissions')->name('admin-permissions-index');
+  Route::get('/permissions/create', 'AdminController@PermissionsCreate')->name('admin-permission-create');
+  Route::post('/permissions/create', 'AdminController@PermissionsStore')->name('admin-permission-store');
+  Route::get('/permissions/edit/{id}', 'AdminController@PermissionEdit')->name('admin-permission-edit');
   Route::get('/social', 'SocialSettingController@index')->name('admin-social-index');
   Route::get('/how-it-works', 'AdminController@HowItWorks')->name('admin-how-it-works');
   Route::post('/social/update', 'SocialSettingController@update')->name('admin-social-update');
