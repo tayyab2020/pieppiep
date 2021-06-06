@@ -495,25 +495,22 @@
                                         var opt = '';
 
                                         $.each(value.features, function(index1, value1) {
-                                            if(value1.price_impact == 1)
+                                            if(index1 == 0)
                                             {
-                                                if(index1 == 0)
+                                                if(value1.impact_type == 0)
                                                 {
-                                                    if(value1.impact_type == 0)
-                                                    {
-                                                        f_value = value1.value;
-                                                        price = price + parseInt(f_value);
-                                                    }
-                                                    else
-                                                    {
-                                                        var per = (parseInt(f_value))/100;
-                                                        f_value = org * per;
-                                                        price = price + f_value;
-                                                    }
+                                                    f_value = value1.value;
+                                                    price = price + parseInt(f_value);
                                                 }
-
-                                                opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                                else
+                                                {
+                                                    var per = (parseInt(f_value))/100;
+                                                    f_value = org * per;
+                                                    price = price + f_value;
+                                                }
                                             }
+
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
                                         });
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
@@ -998,25 +995,22 @@
                                         var opt = '';
 
                                         $.each(value.features, function(index1, value1) {
-                                            if(value1.price_impact == 1)
+                                            if(index1 == 0)
                                             {
-                                                if(index1 == 0)
+                                                if(value1.impact_type == 0)
                                                 {
-                                                    if(value1.impact_type == 0)
-                                                    {
-                                                        f_value = value1.value;
-                                                        price = price + parseInt(f_value);
-                                                    }
-                                                    else
-                                                    {
-                                                        var per = (parseInt(f_value))/100;
-                                                        f_value = org * per;
-                                                        price = price + f_value;
-                                                    }
+                                                    f_value = value1.value;
+                                                    price = price + parseInt(f_value);
                                                 }
-
-                                                opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                                else
+                                                {
+                                                    var per = (parseInt(f_value))/100;
+                                                    f_value = org * per;
+                                                    price = price + f_value;
+                                                }
                                             }
+
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
                                         });
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
@@ -1125,25 +1119,22 @@
                                         var opt = '';
 
                                         $.each(value.features, function(index1, value1) {
-                                            if(value1.price_impact == 1)
+                                            if(index1 == 0)
                                             {
-                                                if(index1 == 0)
+                                                if(value1.impact_type == 0)
                                                 {
-                                                    if(value1.impact_type == 0)
-                                                    {
-                                                        f_value = value1.value;
-                                                        price = price + parseInt(f_value);
-                                                    }
-                                                    else
-                                                    {
-                                                        var per = (parseInt(f_value))/100;
-                                                        f_value = org * per;
-                                                        price = price + f_value;
-                                                    }
+                                                    f_value = value1.value;
+                                                    price = price + parseInt(f_value);
                                                 }
-
-                                                opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                                else
+                                                {
+                                                    var per = (parseInt(f_value))/100;
+                                                    f_value = org * per;
+                                                    price = price + f_value;
+                                                }
                                             }
+
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
                                         });
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +

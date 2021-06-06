@@ -142,7 +142,7 @@ class UserController extends Controller
             $price = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
             $features = features::whereHas('features', function($query) use($request)
             {
-                $query->where('product_features.product_id',$request->product)->where('product_features.price_impact',1);
+                $query->where('product_features.product_id',$request->product);
 
             })->with('features')->get();
 
