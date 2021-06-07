@@ -13,7 +13,13 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
                                         <h2>{{__('text.Customers')}}</h2>
-                                        <a href="{{route('handyman-user-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create Customer')}}</a>
+
+                                        @if(auth()->user()->can('handyman-user-create'))
+
+                                            <a href="{{route('handyman-user-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create Customer')}}</a>
+
+                                        @endif
+
                                     </div>
                                     <hr>
                                     <div>
@@ -55,8 +61,17 @@
                                                             <td>{{$user->phone}}</td>
 
                                                             <td>
-                                                                <a href="{{route('edit-customer',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
-                                                                <a href="{{route('delete-customer',$user->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+                                                                    @if(auth()->user()->can('edit-customer'))
+
+                                                                        <a href="{{route('edit-customer',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
+
+                                                                    @endif
+
+                                                                    @if(auth()->user()->can('delete-customer'))
+
+                                                                        <a href="{{route('delete-customer',$user->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+
+                                                                    @endif
                                                             </td>
                                                         </tr>
 

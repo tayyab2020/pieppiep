@@ -371,18 +371,38 @@ class FrontendController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
         if($request->type == 'product')
         {
-            $data = Products::leftjoin('handyman_products','handyman_products.product_id','=','products.id')->leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('handyman_products.handyman_id',$user_id)->where('products.id','=',$request->id)->select('products.category_id','products.brand_id','products.model_id','categories.cat_name','brands.cat_name as brand_name','models.cat_name as model_name','handyman_products.sell_rate as rate')->first();
+            $data = Products::leftjoin('handyman_products','handyman_products.product_id','=','products.id')->leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_products.handyman_id', $user_id)
+                    ->orWhere('handyman_products.handyman_id', $main_id)
+                    ->orWhereIn('handyman_products.handyman_id', $users);
+            })->where('products.id','=',$request->id)->select('products.category_id','products.brand_id','products.model_id','categories.cat_name','brands.cat_name as brand_name','models.cat_name as model_name','handyman_products.sell_rate as rate')->first();
         }
         elseif($request->type == 'service')
         {
-            $data = Service::leftjoin('handyman_services','handyman_services.service_id','=','services.id')->where('handyman_services.handyman_id',$user_id)->where('services.id','=',$request->id)->select('services.id as service_id','services.title as service_name','handyman_services.sell_rate as rate')->first();
+            $data = Service::leftjoin('handyman_services','handyman_services.service_id','=','services.id')->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_services.handyman_id', $user_id)
+                    ->orWhere('handyman_services.handyman_id', $main_id)
+                    ->orWhereIn('handyman_services.handyman_id', $users);
+            })->where('services.id','=',$request->id)->select('services.id as service_id','services.title as service_name','handyman_services.sell_rate as rate')->first();
         }
         else
         {
-            $data = items::where('user_id',$user_id)->where('id','=',$request->id)->select('items.id as item_id','items.cat_name as item_name','items.rate')->first();
+            $data = items::where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('user_id', $user_id)
+                    ->orWhere('user_id', $main_id)
+                    ->orWhereIn('user_id', $users);
+            })->where('id','=',$request->id)->select('items.id as item_id','items.cat_name as item_name','items.rate')->first();
         }
 
         return $data;

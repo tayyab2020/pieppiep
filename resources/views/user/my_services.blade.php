@@ -111,7 +111,11 @@
                                                                     </tbody>
                                                                 </table>
 
-                                                                <button type="button" style="margin: auto;" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add Service (s)</button>
+                                                                @if(auth()->user()->can('service-store'))
+
+                                                                    <button type="button" style="margin: auto;" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add Service (s)</button>
+
+                                                                @endif
 
                                                             </div>
                                                         </div>
@@ -179,12 +183,23 @@
                                                                         <td>{{$cat->sell_rate}}</td>
                                                                         <td data-editable="false">21</td>
                                                                         <td data-editable="false">
-                                                                            <a href="{{route('service-edit',$cat->id)}}"
-                                                                               class="btn btn-primary product-btn"><i
-                                                                                    class="fa fa-edit"></i> {{__('text.Edit')}}</a>
-                                                                            <a href="{{route('service-delete',$cat->id)}}"
-                                                                               class="btn btn-danger product-btn"><i
-                                                                                    class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+
+                                                                                @if(auth()->user()->can('service-edit'))
+
+                                                                                    <a href="{{route('service-edit',$cat->id)}}"
+                                                                                       class="btn btn-primary product-btn"><i
+                                                                                            class="fa fa-edit"></i> {{__('text.Edit')}}</a>
+
+                                                                                @endif
+
+                                                                                @if(auth()->user()->can('service-delete'))
+
+                                                                                    <a href="{{route('service-delete',$cat->id)}}"
+                                                                                       class="btn btn-danger product-btn"><i
+                                                                                            class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+
+                                                                                @endif
+
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach

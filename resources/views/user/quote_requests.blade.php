@@ -135,33 +135,63 @@
                                                                     <button style="outline: none;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{__('text.Action')}}
                                                                         <span class="caret"></span></button>
                                                                     <ul class="dropdown-menu">
-                                                                        <li><a href="{{ url('/aanbieder/bekijk-offerteaanvraag-aanbieder/'.$key->id) }}">{{__('text.View')}}</a></li>
-                                                                        @if($invoices[$i])
-                                                                        <li><a href="{{ url('/aanbieder/bekijk-offerte/'.$invoices[$i]->id) }}">{{__('text.View Quotation')}}</a></li>
+
+                                                                        @if(auth()->user()->can('handyman-quote-request'))
+
+                                                                            <li><a href="{{ url('/aanbieder/bekijk-offerteaanvraag-aanbieder/'.$key->id) }}">{{__('text.View')}}</a></li>
+
                                                                         @endif
-                                                                        <li><a href="{{ url('/aanbieder/download-handyman-quote-request/'.$key->id) }}">{{__('text.Download PDF')}}</a></li>
 
-                                                                        @if($key->status == 2 && $invoices[$i] && $invoices[$i]->accepted)
+                                                                            @if(auth()->user()->can('view-handyman-quotation'))
 
-                                                                            <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$invoices[$i]->id) }}">{{__('text.Create Invoice')}}</a></li>
-
-                                                                        @elseif($key->status != 2 && $key->status != 3)
-
-                                                                            @if($invoices[$i])
-
-                                                                                @if($invoices[$i]->ask_customization)
-
-                                                                                    <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$invoices[$i]->id) }}">{{__('text.Edit Quotation')}}</a></li>
-
+                                                                                @if($invoices[$i])
+                                                                                    <li><a href="{{ url('/aanbieder/bekijk-offerte/'.$invoices[$i]->id) }}">{{__('text.View Quotation')}}</a></li>
                                                                                 @endif
-
-                                                                            @else
-
-                                                                                <li><a href="{{ url('/aanbieder/opstellen-offerte/'.$key->id) }}">{{__('text.Create Quotation')}}</a></li>
 
                                                                             @endif
 
-                                                                        @endif
+
+                                                                            @if(auth()->user()->can('download-handyman-quote-request'))
+
+                                                                                <li><a href="{{ url('/aanbieder/download-handyman-quote-request/'.$key->id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                            @endif
+
+
+                                                                            @if($key->status == 2 && $invoices[$i] && $invoices[$i]->accepted)
+
+                                                                                @if(auth()->user()->can('create-handyman-invoice'))
+
+                                                                                    <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$invoices[$i]->id) }}">{{__('text.Create Invoice')}}</a></li>
+
+                                                                                @endif
+
+                                                                            @elseif($key->status != 2 && $key->status != 3)
+
+                                                                                @if($invoices[$i])
+
+                                                                                    @if($invoices[$i]->ask_customization)
+
+                                                                                        @if(auth()->user()->can('edit-handyman-quotation'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$invoices[$i]->id) }}">{{__('text.Edit Quotation')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @endif
+
+                                                                                @else
+
+                                                                                    @if(auth()->user()->can('create-quotation'))
+
+                                                                                        <li><a href="{{ url('/aanbieder/opstellen-offerte/'.$key->id) }}">{{__('text.Create Quotation')}}</a></li>
+
+                                                                                    @endif
+
+                                                                                @endif
+
+                                                                            @endif
+
                                                                     </ul>
                                                                 </div>
                                                             </td>

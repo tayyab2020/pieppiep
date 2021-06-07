@@ -113,7 +113,11 @@
                                                                 </tbody>
                                                             </table>
 
-                                                            <button type="button" style="margin: auto;" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Add Product(s)')}}</button>
+                                                            @if(auth()->user()->can('product-store'))
+
+                                                                <button type="button" style="margin: auto;" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Add Product(s)')}}</button>
+
+                                                            @endif
 
                                                         </div>
                                                     </div>
@@ -207,12 +211,24 @@
                                                                     <td>{!! $sell_rates !!}</td>
                                                                     <td data-editable="false">{{$cat->vat_percentage}}</td>
                                                                     <td data-editable="false">
-                                                                        <a href="{{route('product-edit',$cat->id)}}"
-                                                                           class="btn btn-primary product-btn"><i
-                                                                                class="fa fa-edit"></i> {{__('text.Edit')}}</a>
-                                                                        <a href="{{route('product-delete',$cat->id)}}"
-                                                                           class="btn btn-danger product-btn"><i
-                                                                                class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+
+                                                                        @if(auth()->user()->can('product-edit'))
+
+                                                                            <a href="{{route('product-edit',$cat->id)}}"
+                                                                               class="btn btn-primary product-btn"><i
+                                                                                    class="fa fa-edit"></i> {{__('text.Edit')}}</a>
+
+                                                                        @endif
+
+
+                                                                            @if(auth()->user()->can('product-delete'))
+
+                                                                                <a href="{{route('product-delete',$cat->id)}}"
+                                                                                   class="btn btn-danger product-btn"><i
+                                                                                        class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+
+                                                                            @endif
+
                                                                     </td>
                                                                 </tr>
                                                             @endforeach

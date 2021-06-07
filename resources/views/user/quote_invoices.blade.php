@@ -22,11 +22,19 @@
 
                                             @if(Route::currentRouteName() == 'customer-quotations')
 
-                                                <a style="float: right;" href="{{route('create-custom-quotation')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create New Quotation')}}</a>
+                                                @if(auth()->user()->can('create-custom-quotation'))
+
+                                                    <a style="float: right;" href="{{route('create-custom-quotation')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create New Quotation')}}</a>
+
+                                                @endif
 
                                             @elseif(Route::currentRouteName() == 'customer-invoices')
 
-                                                <a style="float: right;margin-right: 10px;" href="{{route('create-direct-invoice')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create New Invoice')}}</a>
+                                                @if(auth()->user()->can('create-direct-invoice'))
+
+                                                    <a style="float: right;margin-right: 10px;" href="{{route('create-direct-invoice')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create New Invoice')}}</a>
+
+                                                @endif
 
                                             @endif
                                     </div>
@@ -219,68 +227,141 @@
 
                                                                             @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
 
-                                                                                <li><a href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
-                                                                                <li><a href="{{ url('/aanbieder/download-custom-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
-                                                                                @if(!$key->approved)
+                                                                                @if(auth()->user()->can('view-custom-quotation'))
 
-                                                                                    <li><a href="{{ url('/aanbieder/versturen-eigen-offerte/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
+                                                                                    <li><a href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
 
                                                                                 @endif
 
-                                                                                @if($key->status == 2 && $key->accepted)
 
-                                                                                    <li><a href="{{ url('/aanbieder/opstellen-eigen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
+                                                                                    @if(auth()->user()->can('download-custom-quotation'))
 
-                                                                                @endif
-
-                                                                                @if($key->status != 2 && $key->status != 3)
-
-                                                                                    @if($key->ask_customization)
-
-                                                                                        <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
+                                                                                        <li><a href="{{ url('/aanbieder/download-custom-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
                                                                                     @endif
 
-                                                                                        <li><a href="{{ url('/aanbieder/bewerk-eigen-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
 
-                                                                                @endif
 
-                                                                                @if($key->status == 3 && $key->delivered == 0)
+                                                                                    @if(!$key->approved)
 
-                                                                                    <li><a href="{{ url('/aanbieder/custom-mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
+                                                                                        @if(auth()->user()->can('send-custom-quotation'))
 
-                                                                                @endif
+                                                                                            <li><a href="{{ url('/aanbieder/versturen-eigen-offerte/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @endif
+
+
+                                                                                    @if($key->status == 2 && $key->accepted)
+
+                                                                                        @if(auth()->user()->can('create-custom-invoice'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/opstellen-eigen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @endif
+
+
+                                                                                    @if($key->status != 2 && $key->status != 3)
+
+                                                                                            @if($key->ask_customization)
+
+                                                                                                <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
+
+                                                                                            @endif
+
+
+                                                                                            @if(auth()->user()->can('edit-custom-quotation'))
+
+                                                                                                <li><a href="{{ url('/aanbieder/bewerk-eigen-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+
+                                                                                            @endif
+
+                                                                                    @endif
+
+
+                                                                                    @if($key->status == 3 && $key->delivered == 0)
+
+                                                                                        @if(auth()->user()->can('custom-mark-delivered'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/custom-mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @endif
 
                                                                             @else
 
-                                                                                <li><a href="{{ url('/aanbieder/bekijk-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
-                                                                                <li><a href="{{ url('/aanbieder/bekijk-offerteaanvraag-aanbieder/'.$key->id) }}">{{__('text.View Request')}}</a></li>
-                                                                                @if(Route::currentRouteName() == 'commission-invoices')
-                                                                                    <li><a href="{{ url('/aanbieder/download-commission-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
-                                                                                @else
-                                                                                    <li><a href="{{ url('/aanbieder/download-quote-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
-                                                                                @endif
+                                                                                    @if(auth()->user()->can('view-handyman-quotation'))
 
+                                                                                        <li><a href="{{ url('/aanbieder/bekijk-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
 
-                                                                                @if($key->status == 2 && $key->accepted)
-
-                                                                                    <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
-
-                                                                                @elseif($key->status == 1)
-
-                                                                                    @if($key->ask_customization)
-                                                                                        <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
-                                                                                        <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
                                                                                     @endif
 
-                                                                                @endif
 
-                                                                                @if($key->status == 3 && $key->delivered == 0)
+                                                                                    @if(auth()->user()->can('handyman-quote-request'))
 
-                                                                                    <li><a href="{{ url('/aanbieder/mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
+                                                                                        <li><a href="{{ url('/aanbieder/bekijk-offerteaanvraag-aanbieder/'.$key->id) }}">{{__('text.View Request')}}</a></li>
 
-                                                                                @endif
+                                                                                    @endif
+
+
+                                                                                    @if(Route::currentRouteName() == 'commission-invoices')
+
+                                                                                        @if(auth()->user()->can('download-commission-invoice'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/download-commission-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @else
+
+                                                                                        @if(auth()->user()->can('handyman-quote-request'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/download-quote-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @endif
+
+
+
+                                                                                        @if($key->status == 2 && $key->accepted)
+
+                                                                                            @if(auth()->user()->can('create-handyman-invoice'))
+
+                                                                                                <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
+
+                                                                                            @endif
+
+                                                                                        @elseif($key->status == 1)
+
+                                                                                            @if($key->ask_customization)
+
+                                                                                                <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
+
+                                                                                                @if(auth()->user()->can('edit-handyman-quotation'))
+
+                                                                                                    <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+
+                                                                                                @endif
+
+                                                                                            @endif
+
+                                                                                        @endif
+
+                                                                                        @if($key->status == 3 && $key->delivered == 0)
+
+                                                                                            @if(auth()->user()->can('mark-delivered'))
+
+                                                                                                <li><a href="{{ url('/aanbieder/mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
+
+                                                                                            @endif
+
+                                                                                        @endif
 
                                                                             @endif
 

@@ -222,12 +222,24 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $user_role = $user->role_id;
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
         if($user->can('handyman-quotation-requests'))
         {
             $invoices = array();
 
-            $requests = handyman_quotes::leftjoin('quotes', 'quotes.id', '=', 'handyman_quotes.quote_id')->leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands', 'brands.id', '=', 'quotes.quote_brand')->leftjoin('models', 'models.id', '=', 'quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->where('handyman_quotes.handyman_id', $user_id)->select('quotes.*', 'categories.cat_name', 'services.title', 'handyman_quotes.quote_id', 'handyman_quotes.handyman_id','brands.cat_name as brand_name','models.cat_name as model_name')->orderBy('quotes.created_at','desc')->get();
+            $requests = handyman_quotes::leftjoin('quotes', 'quotes.id', '=', 'handyman_quotes.quote_id')->leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands', 'brands.id', '=', 'quotes.quote_brand')->leftjoin('models', 'models.id', '=', 'quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_quotes.handyman_id', $user_id)
+                    ->orWhere('handyman_quotes.handyman_id', $main_id)
+                    ->orWhereIn('handyman_quotes.handyman_id', $users);
+            })->select('quotes.*', 'categories.cat_name', 'services.title', 'handyman_quotes.quote_id', 'handyman_quotes.handyman_id','brands.cat_name as brand_name','models.cat_name as model_name')->orderBy('quotes.created_at','desc')->get();
 
             foreach ($requests as $key) {
                 $invoices[] = quotation_invoices::where('quote_id', $key->quote_id)->where('handyman_id', $key->handyman_id)->first();
@@ -463,23 +475,30 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
-        $invoice = quotation_invoices::where('id', $id)->where('handyman_id', $user_id)->first();
-
-        if (!$invoice) {
-            return redirect()->route('quotations');
-        }
-
-        $quotation_invoice_number = $invoice->quotation_invoice_number;
-
-        $filename = $quotation_invoice_number . '.pdf';
-
-        if($user_role == 2 && $invoice->invoice != 1)
+        if($user->can('download-quote-invoice'))
         {
-            return response()->download(public_path("assets/quotationsPDF/HandymanQuotations/{$filename}"));
+            $invoice = quotation_invoices::where('id', $id)->where('handyman_id', $user_id)->first();
+
+            if (!$invoice) {
+                return redirect()->route('quotations');
+            }
+
+            $quotation_invoice_number = $invoice->quotation_invoice_number;
+
+            $filename = $quotation_invoice_number . '.pdf';
+
+            if($user_role == 2 && $invoice->invoice != 1)
+            {
+                return response()->download(public_path("assets/quotationsPDF/HandymanQuotations/{$filename}"));
+            }
+            else
+            {
+                return response()->download(public_path("assets/quotationsPDF/{$filename}"));
+            }
         }
         else
         {
-            return response()->download(public_path("assets/quotationsPDF/{$filename}"));
+            return redirect()->route('user-login');
         }
     }
 
@@ -489,17 +508,24 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
-        $invoice = quotation_invoices::where('id', $id)->where('handyman_id', $user_id)->first();
+        if($user->can('download-commission-invoice'))
+        {
+            $invoice = quotation_invoices::where('id', $id)->where('handyman_id', $user_id)->first();
 
-        if (!$invoice) {
-            return redirect()->route('quotations');
+            if (!$invoice) {
+                return redirect()->route('quotations');
+            }
+
+            $commission_invoice_number = $invoice->commission_invoice_number;
+
+            $filename = $commission_invoice_number . '.pdf';
+
+            return response()->download(public_path("assets/quotationsPDF/CommissionInvoices/{$filename}"));
         }
-
-        $commission_invoice_number = $invoice->commission_invoice_number;
-
-        $filename = $commission_invoice_number . '.pdf';
-
-        return response()->download(public_path("assets/quotationsPDF/CommissionInvoices/{$filename}"));
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function DownloadCustomQuotation($id)
@@ -508,17 +534,24 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
-        $invoice = custom_quotations::where('id', $id)->where('handyman_id', $user_id)->first();
+        if($user->can('download-custom-quotation'))
+        {
+            $invoice = custom_quotations::where('id', $id)->where('handyman_id', $user_id)->first();
 
-        if (!$invoice) {
-            return redirect()->back();
+            if (!$invoice) {
+                return redirect()->back();
+            }
+
+            $quotation_invoice_number = $invoice->quotation_invoice_number;
+
+            $filename = $quotation_invoice_number . '.pdf';
+
+            return response()->download(public_path("assets/customQuotations/{$filename}"));
         }
-
-        $quotation_invoice_number = $invoice->quotation_invoice_number;
-
-        $filename = $quotation_invoice_number . '.pdf';
-
-        return response()->download(public_path("assets/customQuotations/{$filename}"));
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function DownloadClientQuoteInvoice($id)
@@ -923,15 +956,22 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
-        $request = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands', 'brands.id', '=', 'quotes.quote_brand')->leftjoin('models', 'models.id', '=', 'quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->where('quotes.id', $id)->select('quotes.*', 'categories.cat_name','services.title','brands.cat_name as brand_name','models.cat_name as model_name')->first();
+        if($user->can('handyman-quote-request'))
+        {
+            $request = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands', 'brands.id', '=', 'quotes.quote_brand')->leftjoin('models', 'models.id', '=', 'quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->where('quotes.id', $id)->select('quotes.*', 'categories.cat_name','services.title','brands.cat_name as brand_name','models.cat_name as model_name')->first();
 
-        $q_a = requests_q_a::where('request_id', $id)->get();
+            $q_a = requests_q_a::where('request_id', $id)->get();
 
-        $invoice = quotation_invoices::where('quote_id', $request->id)->where('handyman_id', $user_id)->first();
+            $invoice = quotation_invoices::where('quote_id', $request->id)->where('handyman_id', $user_id)->first();
 
-        $products = Products::all();
+            $products = Products::all();
 
-        return view('user.quote_request', compact('request', 'products', 'invoice', 'q_a'));
+            return view('user.quote_request', compact('request', 'products', 'invoice', 'q_a'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function HandymanCreateQuote()
@@ -939,22 +979,46 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $user_role = $user->role_id;
+        $check = 0;
 
-        if ($user_role == 2) {
+        if(\Route::currentRouteName() == 'create-custom-quotation')
+        {
+            if($user->can('create-custom-quotation'))
+            {
+                $check = 1;
+            }
+        }
 
-            $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where('handyman_products.handyman_id', $user_id)->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
-            $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where('handyman_services.handyman_id', $user_id)->select('services.*','handyman_services.sell_rate as rate')->get();
-            $items = items::where('user_id',$user_id)->get();
+        if(\Route::currentRouteName() == 'create-direct-invoice')
+        {
+            if($user->can('create-direct-invoice'))
+            {
+                $check = 1;
+            }
+        }
 
-            $settings = Generalsetting::findOrFail(1);
+        if($check)
+        {
+            if ($user_role == 2) {
 
-            $vat_percentage = $settings->vat;
+                $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where('handyman_products.handyman_id', $user_id)->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
+                $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where('handyman_services.handyman_id', $user_id)->select('services.*','handyman_services.sell_rate as rate')->get();
+                $items = items::where('user_id',$user_id)->get();
 
-            $customers = User::where('parent_id', $user_id)->get();
+                $settings = Generalsetting::findOrFail(1);
 
-            return view('user.create_custom_quote', compact('all_products','all_services', 'items', 'settings', 'vat_percentage', 'customers', 'user'));
-        } else {
-            return redirect()->back();
+                $vat_percentage = $settings->vat;
+
+                $customers = User::where('parent_id', $user_id)->get();
+
+                return view('user.create_custom_quote', compact('all_products','all_services', 'items', 'settings', 'vat_percentage', 'customers', 'user'));
+            } else {
+                return redirect()->back();
+            }
+        }
+        else
+        {
+            return redirect()->route('user-login');
         }
 
     }
@@ -1010,10 +1074,19 @@ class UserController extends Controller
 
     public function EmployeePermissions($id)
     {
-        $permissions = Permission::all();
-        $user = User::with('permissions')->find($id);
+        $user = Auth::guard('user')->user();
 
-        return view('user.employee_permission',compact('permissions','user'));
+        if($user->can('employee-permissions'))
+        {
+            $permissions = Permission::all();
+            $user = User::with('permissions')->find($id);
+
+            return view('user.employee_permission',compact('permissions','user'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function EmployeePermissionStore(Request $request)
@@ -1028,12 +1101,31 @@ class UserController extends Controller
 
     public function CreateCustomerForm()
     {
-        return view('user.create_customer');
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+
+        if($user->can('handyman-user-create'))
+        {
+            return view('user.create_customer');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function CreateEmployeeForm()
     {
-        return view('user.create_employee');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('employee-create'))
+        {
+            return view('user.create_employee');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function EditCustomer($id)
@@ -1041,9 +1133,16 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        $customer = User::where('id',$id)->where('parent_id',$user_id)->first();
+        if($user->can('edit-customer'))
+        {
+            $customer = User::where('id',$id)->where('parent_id',$user_id)->first();
 
-        return view('user.create_customer',compact('customer'));
+            return view('user.create_customer',compact('customer'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function EditEmployee($id)
@@ -1051,9 +1150,16 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        $employee = User::where('id',$id)->where('main_id',$user_id)->first();
+        if($user->can('edit-employee'))
+        {
+            $employee = User::where('id',$id)->where('main_id',$user_id)->first();
 
-        return view('user.create_employee',compact('employee'));
+            return view('user.create_employee',compact('employee'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function DeleteCustomer($id)
@@ -1061,10 +1167,17 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        User::where('id',$id)->where('parent_id',$user_id)->delete();
+        if($user->can('delete-customer'))
+        {
+            User::where('id',$id)->where('parent_id',$user_id)->delete();
 
-        Session::flash('success', __('text.Customer deleted successfully'));
-        return redirect()->route('customers');
+            Session::flash('success', __('text.Customer deleted successfully'));
+            return redirect()->route('customers');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function DeleteEmployee($id)
@@ -1072,10 +1185,17 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        User::where('id',$id)->where('main_id',$user_id)->delete();
+        if($user->can('delete-employee'))
+        {
+            User::where('id',$id)->where('main_id',$user_id)->delete();
 
-        Session::flash('success', 'Employee deleted successfully');
-        return redirect()->route('employees');
+            Session::flash('success', 'Employee deleted successfully');
+            return redirect()->route('employees');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function PostCustomer(Request $request)
@@ -1410,35 +1530,54 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+        $users = [];
 
-        $quote = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands', 'brands.id', '=', 'quotes.quote_brand')->leftjoin('models', 'models.id', '=', 'quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->leftjoin('handyman_quotes', 'handyman_quotes.quote_id', '=', 'quotes.id')->where('quotes.id', $id)->where('handyman_quotes.handyman_id', $user_id)->select('quotes.*','categories.cat_name','services.title','brands.cat_name as brand_name','models.cat_name as model_name')->first();
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
-        $q_a = requests_q_a::where('request_id', $id)->get();
+        if($user->can('download-handyman-quote-request'))
+        {
+            $quote = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands', 'brands.id', '=', 'quotes.quote_brand')->leftjoin('models', 'models.id', '=', 'quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->leftjoin('handyman_quotes', 'handyman_quotes.quote_id', '=', 'quotes.id')->where('quotes.id', $id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_quotes.handyman_id', $user_id)
+                    ->orWhere('handyman_quotes.handyman_id', $main_id)
+                    ->orWhereIn('handyman_quotes.handyman_id', $users);
+            })->select('quotes.*','categories.cat_name','services.title','brands.cat_name as brand_name','models.cat_name as model_name')->first();
 
-        if ($quote) {
+            $q_a = requests_q_a::where('request_id', $id)->get();
 
-            $date = strtotime($quote->created_at);
+            if ($quote) {
 
-            $quote_number = $quote->quote_number;
+                $date = strtotime($quote->created_at);
 
-            $filename = $quote_number . '.pdf';
+                $quote_number = $quote->quote_number;
 
-            $file = public_path() . '/assets/quotesPDF/' . $filename;
+                $filename = $quote_number . '.pdf';
 
-            if (!file_exists($file)) {
+                $file = public_path() . '/assets/quotesPDF/' . $filename;
 
-                $role = 2;
+                if (!file_exists($file)) {
 
-                ini_set('max_execution_time', 180);
+                    $role = 2;
 
-                $pdf = PDF::loadView('admin.user.pdf_quote', compact('quote', 'q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+                    ini_set('max_execution_time', 180);
 
-                $pdf->save(public_path() . '/assets/quotesPDF/' . $filename);
+                    $pdf = PDF::loadView('admin.user.pdf_quote', compact('quote', 'q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+
+                    $pdf->save(public_path() . '/assets/quotesPDF/' . $filename);
+                }
+
+                return response()->download(public_path("assets/quotesPDF/{$filename}"));
+            } else {
+                return redirect('aanbieder/dashboard');
             }
-
-            return response()->download(public_path("assets/quotesPDF/{$filename}"));
-        } else {
-            return redirect('aanbieder/dashboard');
+        }
+        else
+        {
+            return redirect()->route('user-login');
         }
     }
 
@@ -1446,21 +1585,52 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+        $users = [];
 
-        $quote = quotes::leftjoin('handyman_quotes', 'handyman_quotes.quote_id', '=', 'quotes.id')->where('quotes.id', $id)->where('handyman_quotes.handyman_id', $user_id)->select('quotes.*')->first();
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
-        $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where('handyman_products.handyman_id', $user_id)->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
-        $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where('handyman_services.handyman_id', $user_id)->select('services.*','handyman_services.sell_rate as rate')->get();
-        $items = items::where('user_id',$user_id)->get();
+        if($user->can('create-quotation'))
+        {
+            $quote = quotes::leftjoin('handyman_quotes', 'handyman_quotes.quote_id', '=', 'quotes.id')->where('quotes.id', $id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_quotes.handyman_id', $user_id)
+                    ->orWhere('handyman_quotes.handyman_id', $main_id)
+                    ->orWhereIn('handyman_quotes.handyman_id', $users);
+            })->select('quotes.*')->first();
 
-        $settings = Generalsetting::findOrFail(1);
+            $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_products.handyman_id', $user_id)
+                    ->orWhere('handyman_products.handyman_id', $main_id)
+                    ->orWhereIn('handyman_products.handyman_id', $users);
+            })->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
+            $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_services.handyman_id', $user_id)
+                    ->orWhere('handyman_services.handyman_id', $main_id)
+                    ->orWhereIn('handyman_services.handyman_id', $users);
+            })->select('services.*','handyman_services.sell_rate as rate')->get();
+            $items = items::where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('user_id', $user_id)
+                    ->orWhere('user_id', $main_id)
+                    ->orWhereIn('user_id', $users);
+            })->get();
 
-        $vat_percentage = $settings->vat;
+            $settings = Generalsetting::findOrFail(1);
 
-        if ($quote) {
-            return view('user.create_quotation', compact('quote', 'vat_percentage', 'items', 'all_services', 'all_products', 'user_id'));
-        } else {
-            return redirect('aanbieder/dashboard');
+            $vat_percentage = $settings->vat;
+
+            if ($quote) {
+                return view('user.create_quotation', compact('quote', 'vat_percentage', 'items', 'all_services', 'all_products', 'user_id'));
+            } else {
+                return redirect('aanbieder/dashboard');
+            }
+        }
+        else
+        {
+            return redirect()->route('user-login');
         }
     }
 
@@ -1469,23 +1639,79 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $user_role = $user->role_id;
+        $check = 0;
+        $main_id = $user->main_id;
+        $users = [];
 
-        $settings = Generalsetting::findOrFail(1);
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
-        $vat_percentage = $settings->vat;
+        if(\Route::currentRouteName() == 'view-handyman-quotation')
+        {
+            if($user->can('view-handyman-quotation'))
+            {
+                $check = 1;
+            }
+        }
 
-        $quotation = quotation_invoices::leftjoin('quotation_invoices_data', 'quotation_invoices_data.quotation_id', '=', 'quotation_invoices.id')->leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->where('quotation_invoices.id', $id)->where('quotation_invoices.handyman_id', $user_id)->select('quotation_invoices.*', 'quotes.quote_zipcode', 'quotes.quote_postcode', 'quotes.quote_city', 'quotes.id as quote_id', 'quotes.quote_number', 'quotes.created_at as quote_date', 'quotation_invoices_data.id as data_id', 'quotation_invoices_data.product_title', 'quotation_invoices_data.s_i_id', 'quotation_invoices_data.b_i_id', 'quotation_invoices_data.m_i_id', 'quotation_invoices_data.item', 'quotation_invoices_data.is_service', 'quotation_invoices_data.service', 'quotation_invoices_data.brand', 'quotation_invoices_data.model', 'quotation_invoices_data.rate', 'quotation_invoices_data.qty', 'quotation_invoices_data.description as data_description', 'quotation_invoices_data.estimated_date', 'quotation_invoices_data.amount')->get();
+        if(\Route::currentRouteName() == 'edit-handyman-quotation')
+        {
+            if($user->can('edit-handyman-quotation'))
+            {
+                $check = 1;
+            }
+        }
 
-        $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where('handyman_products.handyman_id', $user_id)->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
-        $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where('handyman_services.handyman_id', $user_id)->select('services.*','handyman_services.sell_rate as rate')->get();
-        $items = items::where('user_id',$user_id)->get();
+        if(\Route::currentRouteName() == 'create-handyman-invoice')
+        {
+            if($user->can('create-handyman-invoice'))
+            {
+                $check = 1;
+            }
+        }
 
-        if (count($quotation) != 0) {
+        if($check)
+        {
+            $settings = Generalsetting::findOrFail(1);
 
-            return view('user.quotation', compact('quotation', 'vat_percentage', 'user_id', 'all_products', 'all_services', 'items'));
+            $vat_percentage = $settings->vat;
 
-        } else {
-            return redirect('aanbieder/dashboard');
+            $quotation = quotation_invoices::leftjoin('quotation_invoices_data', 'quotation_invoices_data.quotation_id', '=', 'quotation_invoices.id')->leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->where('quotation_invoices.id', $id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('quotation_invoices.handyman_id', $user_id)
+                    ->orWhere('quotation_invoices.handyman_id', $main_id)
+                    ->orWhereIn('quotation_invoices.handyman_id', $users);
+            })->select('quotation_invoices.*', 'quotes.quote_zipcode', 'quotes.quote_postcode', 'quotes.quote_city', 'quotes.id as quote_id', 'quotes.quote_number', 'quotes.created_at as quote_date', 'quotation_invoices_data.id as data_id', 'quotation_invoices_data.product_title', 'quotation_invoices_data.s_i_id', 'quotation_invoices_data.b_i_id', 'quotation_invoices_data.m_i_id', 'quotation_invoices_data.item', 'quotation_invoices_data.is_service', 'quotation_invoices_data.service', 'quotation_invoices_data.brand', 'quotation_invoices_data.model', 'quotation_invoices_data.rate', 'quotation_invoices_data.qty', 'quotation_invoices_data.description as data_description', 'quotation_invoices_data.estimated_date', 'quotation_invoices_data.amount')->get();
+
+            $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_products.handyman_id', $user_id)
+                    ->orWhere('handyman_products.handyman_id', $main_id)
+                    ->orWhereIn('handyman_products.handyman_id', $users);
+            })->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
+            $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_services.handyman_id', $user_id)
+                    ->orWhere('handyman_services.handyman_id', $main_id)
+                    ->orWhereIn('handyman_services.handyman_id', $users);
+            })->select('services.*','handyman_services.sell_rate as rate')->get();
+            $items = items::where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('user_id', $user_id)
+                    ->orWhere('user_id', $main_id)
+                    ->orWhereIn('user_id', $users);
+            })->get();
+
+            if (count($quotation) != 0) {
+
+                return view('user.quotation', compact('quotation', 'vat_percentage', 'user_id', 'all_products', 'all_services', 'items'));
+
+            } else {
+                return redirect('aanbieder/dashboard');
+            }
+        }
+        else
+        {
+            return redirect()->route('user-login');
         }
 
     }
@@ -1495,23 +1721,55 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $user_role = $user->role_id;
+        $check = 0;
 
-        $settings = Generalsetting::findOrFail(1);
+        if(\Route::currentRouteName() == 'view-custom-quotation')
+        {
+            if($user->can('view-custom-quotation'))
+            {
+                $check = 1;
+            }
+        }
 
-        $vat_percentage = $settings->vat;
+        if(\Route::currentRouteName() == 'edit-custom-quotation')
+        {
+            if($user->can('edit-custom-quotation'))
+            {
+                $check = 1;
+            }
+        }
 
-        $quotation = custom_quotations::leftjoin('custom_quotations_data', 'custom_quotations_data.quotation_id', '=', 'custom_quotations.id')->where('custom_quotations.id', $id)->where('custom_quotations.handyman_id', $user_id)->select('custom_quotations.*', 'custom_quotations_data.id as data_id', 'custom_quotations_data.product_title', 'custom_quotations_data.s_i_id', 'custom_quotations_data.b_i_id', 'custom_quotations_data.m_i_id', 'custom_quotations_data.item', 'custom_quotations_data.is_service', 'custom_quotations_data.service', 'custom_quotations_data.brand', 'custom_quotations_data.model', 'custom_quotations_data.rate', 'custom_quotations_data.qty', 'custom_quotations_data.description as data_description', 'custom_quotations_data.estimated_date', 'custom_quotations_data.amount')->get();
+        if(\Route::currentRouteName() == 'create-custom-invoice')
+        {
+            if($user->can('create-custom-invoice'))
+            {
+                $check = 1;
+            }
+        }
 
-        $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where('handyman_products.handyman_id', $user_id)->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
-        $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where('handyman_services.handyman_id', $user_id)->select('services.*','handyman_services.sell_rate as rate')->get();
-        $items = items::where('user_id',$user_id)->get();
+        if($check)
+        {
+            $settings = Generalsetting::findOrFail(1);
 
-        if (count($quotation) != 0) {
+            $vat_percentage = $settings->vat;
 
-            return view('user.quotation', compact('quotation', 'all_products', 'all_services', 'vat_percentage', 'items', 'user_id'));
+            $quotation = custom_quotations::leftjoin('custom_quotations_data', 'custom_quotations_data.quotation_id', '=', 'custom_quotations.id')->where('custom_quotations.id', $id)->where('custom_quotations.handyman_id', $user_id)->select('custom_quotations.*', 'custom_quotations_data.id as data_id', 'custom_quotations_data.product_title', 'custom_quotations_data.s_i_id', 'custom_quotations_data.b_i_id', 'custom_quotations_data.m_i_id', 'custom_quotations_data.item', 'custom_quotations_data.is_service', 'custom_quotations_data.service', 'custom_quotations_data.brand', 'custom_quotations_data.model', 'custom_quotations_data.rate', 'custom_quotations_data.qty', 'custom_quotations_data.description as data_description', 'custom_quotations_data.estimated_date', 'custom_quotations_data.amount')->get();
 
-        } else {
-            return redirect('aanbieder/dashboard');
+            $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where('handyman_products.handyman_id', $user_id)->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
+            $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where('handyman_services.handyman_id', $user_id)->select('services.*','handyman_services.sell_rate as rate')->get();
+            $items = items::where('user_id',$user_id)->get();
+
+            if (count($quotation) != 0) {
+
+                return view('user.quotation', compact('quotation', 'all_products', 'all_services', 'vat_percentage', 'items', 'user_id'));
+
+            } else {
+                return redirect('aanbieder/dashboard');
+            }
+        }
+        else
+        {
+            return redirect()->route('user-login');
         }
 
     }
@@ -1564,8 +1822,25 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_name = $user->name;
-        $counter = $user->counter;
+
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user->id)->pluck('id');
+            $main_id = 0;
+            $parent_id = $user_id;
+            $parent_name = $user->name;
+            $parent_counter = $user->counter;
+        }
+        else
+        {
+            $parent = User::where('id',$main_id)->first();
+            $parent_id = $parent->id;
+            $parent_name = $parent->name;
+            $parent_counter = $parent->counter;
+        }
 
         $name = \Route::currentRouteName();
 
@@ -1578,12 +1853,12 @@ class UserController extends Controller
             $quote->save();
 
             $requested_quote_number = $quote->quote_number;
-            $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
+            $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $parent_id) . '-' . sprintf('%04u', $parent_counter);
 
             $invoice = new quotation_invoices;
             $invoice->quote_id = $request->quote_id;
             $invoice->quotation_invoice_number = $quotation_invoice_number;
-            $invoice->handyman_id = $user_id;
+            $invoice->handyman_id = $parent_id;
             $invoice->vat_percentage = $request->vat_percentage;
             $invoice->tax = str_replace(",",".",$request->tax_amount);
             $invoice->subtotal = str_replace(",",".",$request->sub_total);
@@ -1636,8 +1911,8 @@ class UserController extends Controller
             }
 
 
-            $counter = $counter + 1;
-            User::where('id',$user_id)->update(['counter' => $counter]);
+            $parent_counter = $parent_counter + 1;
+            User::where('id',$parent_id)->update(['counter' => $parent_counter]);
 
             $filename = $quotation_invoice_number . '.pdf';
 
@@ -1669,7 +1944,7 @@ class UserController extends Controller
 
             \Mail::send('user.quotation_invoice_mail',
                 array(
-                    'username' => $user_name,
+                    'username' => $parent_name,
                     'quote_number' => $requested_quote_number,
                     'quotation_invoice_number' => $quotation_invoice_number,
                     'type' => $type
@@ -1692,7 +1967,11 @@ class UserController extends Controller
 
             $quote = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->where('quotes.id', $request->quote_id)->select('quotes.*', 'categories.cat_name')->first();
 
-            $quotation = quotation_invoices::where('quote_id', $request->quote_id)->where('handyman_id', $user_id)->first();
+            $quotation = quotation_invoices::where('quote_id', $request->quote_id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_id', $user_id)
+                    ->orWhere('handyman_id', $main_id)
+                    ->orWhereIn('handyman_id', $users);
+            })->first();
             $quotation->ask_customization = 0;
             $quotation->vat_percentage = $request->vat_percentage;
             $quotation->subtotal = str_replace(",",".",$request->sub_total);
@@ -1777,7 +2056,7 @@ class UserController extends Controller
 
             \Mail::send('user.quotation_invoice_mail',
                 array(
-                    'username' => $user_name,
+                    'username' => $parent_name,
                     'client' => $client_name,
                     'quote_number' => $requested_quote_number,
                     'quotation_invoice_number' => $quotation_invoice_number,
@@ -1798,7 +2077,7 @@ class UserController extends Controller
 
             \Mail::send('user.quotation_invoice_mail',
                 array(
-                    'username' => $user_name,
+                    'username' => $parent_name,
                     'quote_number' => $requested_quote_number,
                     'quotation_invoice_number' => $quotation_invoice_number,
                     'type' => $type
@@ -1824,7 +2103,11 @@ class UserController extends Controller
             $quote->status = 3;
             $quote->save();
 
-            $quotation = quotation_invoices::where('quote_id', $request->quote_id)->where('handyman_id', $user_id)->first();
+            $quotation = quotation_invoices::where('quote_id', $request->quote_id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_id', $user_id)
+                    ->orWhere('handyman_id', $main_id)
+                    ->orWhereIn('handyman_id', $users);
+            })->first();
             $quotation->ask_customization = 0;
             $quotation->invoice = 1;
             $quotation->vat_percentage = $request->vat_percentage;
@@ -1888,7 +2171,7 @@ class UserController extends Controller
 
             \Mail::send('user.quotation_invoice_mail',
                 array(
-                    'username' => $user_name,
+                    'username' => $parent_name,
                     'client' => $client_name,
                     'quote_number' => $requested_quote_number,
                     'quotation_invoice_number' => $quotation_invoice_number,
@@ -1909,7 +2192,7 @@ class UserController extends Controller
 
             \Mail::send('user.quotation_invoice_mail',
                 array(
-                    'username' => $user_name,
+                    'username' => $parent_name,
                     'quote_number' => $requested_quote_number,
                     'quotation_invoice_number' => $quotation_invoice_number,
                     'type' => $type
@@ -1935,48 +2218,54 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_name = $user->name;
-        $user_email = $user->email;
-        $company_name = $user->company_name;
 
-        $result = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.user_id')->where('custom_quotations.id', $id)->select('users.company_name', 'users.id', 'users.name', 'users.family_name', 'users.email', 'custom_quotations.*')->first();
-        $result->approved = 1;
-        $result->status = 1;
-        $result->save();
+        if($user->can('send-custom-quotation'))
+        {
+            $user_name = $user->name;
+            $user_email = $user->email;
+            $company_name = $user->company_name;
+            $result = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.user_id')->where('custom_quotations.id', $id)->select('users.company_name', 'users.id', 'users.name', 'users.family_name', 'users.email', 'custom_quotations.*')->first();
+            $result->approved = 1;
+            $result->status = 1;
+            $result->save();
 
-        $quotation_invoice_number = $result->quotation_invoice_number;
+            $quotation_invoice_number = $result->quotation_invoice_number;
 
-        $filename = $quotation_invoice_number . '.pdf';
+            $filename = $quotation_invoice_number . '.pdf';
 
-        $file = public_path() . '/assets/customQuotations/' . $filename;
+            $file = public_path() . '/assets/customQuotations/' . $filename;
 
-        $type = 'new';
+            $type = 'new';
 
-        $client_email = $result->email;
-        $client_name = $result->name;
+            $client_email = $result->email;
+            $client_name = $result->name;
 
-        \Mail::send('user.custom_quotation_mail',
-            array(
-                'username' => $user_name,
-                'client' => $client_name,
-                'company_name' => $company_name,
-                'quotation_invoice_number' => $quotation_invoice_number,
-                'type' => $type
-            ), function ($message) use ($file, $client_email, $user_email, $user_name, $filename) {
-                $message->from('info@vloerofferte.nl');
-                $message->to($client_email)->subject(__('text.Quotation Created!'));
+            \Mail::send('user.custom_quotation_mail',
+                array(
+                    'username' => $user_name,
+                    'client' => $client_name,
+                    'company_name' => $company_name,
+                    'quotation_invoice_number' => $quotation_invoice_number,
+                    'type' => $type
+                ), function ($message) use ($file, $client_email, $user_email, $user_name, $filename) {
+                    $message->from('info@vloerofferte.nl');
+                    $message->to($client_email)->subject(__('text.Quotation Created!'));
 
-                $message->attach($file, [
-                    'as' => $filename,
-                    'mime' => 'application/pdf',
-                ]);
+                    $message->attach($file, [
+                        'as' => $filename,
+                        'mime' => 'application/pdf',
+                    ]);
 
-            });
+                });
 
 
-        Session::flash('success', __('text.Quotation has been sent to customer'));
-        return redirect()->route('customer-quotations');
-
+            Session::flash('success', __('text.Quotation has been sent to customer'));
+            return redirect()->route('customer-quotations');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function StoreCustomQuotation(Request $request)
@@ -3616,24 +3905,31 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = Auth::guard('user')->user()->id;
 
-        if ($user->role_id == 3) {
+        if($user->can('product-edit'))
+        {
+            if ($user->role_id == 3) {
+                return redirect()->route('user-login');
+            }
+
+            $my_product = handyman_products::leftjoin('products','products.id','=','handyman_products.product_id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->leftjoin('brands', 'brands.id', '=', 'products.brand_id')->leftjoin('models', 'models.id', '=', 'products.model_id')->where('handyman_products.id',$id)->select('products.*','handyman_products.*','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->first();
+
+            $ids = array();
+
+            $my_products = handyman_products::where('handyman_id',$user_id)->where('id','!=',$id)->get();
+
+            foreach($my_products as $key)
+            {
+                $ids[] = array('id' => $key->product_id);
+            }
+
+            $products = Products::whereNotIn('id',$ids)->get();
+
+            return view('user.create_product',compact('products','my_product'));
+        }
+        else
+        {
             return redirect()->route('user-login');
         }
-
-        $my_product = handyman_products::leftjoin('products','products.id','=','handyman_products.product_id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->leftjoin('brands', 'brands.id', '=', 'products.brand_id')->leftjoin('models', 'models.id', '=', 'products.model_id')->where('handyman_products.id',$id)->select('products.*','handyman_products.*','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->first();
-
-        $ids = array();
-
-        $my_products = handyman_products::where('handyman_id',$user_id)->where('id','!=',$id)->get();
-
-        foreach($my_products as $key)
-        {
-            $ids[] = array('id' => $key->product_id);
-        }
-
-        $products = Products::whereNotIn('id',$ids)->get();
-
-        return view('user.create_product',compact('products','my_product'));
     }
 
     public function ProductDetails(Request $request)
@@ -3718,11 +4014,20 @@ class UserController extends Controller
 
     public function ProductDelete($id)
     {
-        $my_product = handyman_products::findOrFail($id);
+        $user = Auth::guard('user')->user();
 
-        $my_product->delete();
-        Session::flash('success', __('text.Product deleted successfully.'));
-        return redirect()->back();
+        if($user->can('product-delete'))
+        {
+            $my_product = handyman_products::findOrFail($id);
+
+            $my_product->delete();
+            Session::flash('success', __('text.Product deleted successfully.'));
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function MyServices()
@@ -3814,33 +4119,49 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = Auth::guard('user')->user()->id;
 
-        if ($user->role_id == 3) {
+        if($user->can('service-edit'))
+        {
+            if ($user->role_id == 3) {
+                return redirect()->route('user-login');
+            }
+
+            $my_service = handyman_services::leftjoin('services','services.id','=','handyman_services.service_id')->where('handyman_services.id',$id)->select('services.*','handyman_services.*')->first();
+
+            $ids = array();
+
+            $my_services = handyman_services::where('handyman_id',$user_id)->where('id','!=',$id)->get();
+
+            foreach($my_services as $key)
+            {
+                $ids[] = array('id' => $key->service_id);
+            }
+
+            $services = Service::whereNotIn('id',$ids)->get();
+
+            return view('user.create_service',compact('services','my_service'));
+        }
+        else
+        {
             return redirect()->route('user-login');
         }
-
-        $my_service = handyman_services::leftjoin('services','services.id','=','handyman_services.service_id')->where('handyman_services.id',$id)->select('services.*','handyman_services.*')->first();
-
-        $ids = array();
-
-        $my_services = handyman_services::where('handyman_id',$user_id)->where('id','!=',$id)->get();
-
-        foreach($my_services as $key)
-        {
-            $ids[] = array('id' => $key->service_id);
-        }
-
-        $services = Service::whereNotIn('id',$ids)->get();
-
-        return view('user.create_service',compact('services','my_service'));
     }
 
     public function ServiceDelete($id)
     {
-        $my_service = handyman_services::findOrFail($id);
+        $user = Auth::guard('user')->user();
 
-        $my_service->delete();
-        Session::flash('success', 'Service deleted successfully.');
-        return redirect()->back();
+        if($user->can('service-delete'))
+        {
+            $my_service = handyman_services::findOrFail($id);
+
+            $my_service->delete();
+            Session::flash('success', 'Service deleted successfully.');
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function MyItems()
@@ -3866,7 +4187,16 @@ class UserController extends Controller
 
     public function CreateItem()
     {
-        return view('user.create_item');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('create-item'))
+        {
+            return view('user.create_item');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function StoreItem(Request $request)
@@ -3898,19 +4228,23 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = Auth::guard('user')->user()->id;
 
-        if ($user->role_id == 3) {
+        if($user->can('edit-item'))
+        {
+            if ($user->role_id == 3) {
+                return redirect()->route('user-login');
+            }
+
+            $item = items::where('id', $id)->where('user_id', $user_id)->first();
+            return view('user.edit_item', compact('item'));
+        }
+        else
+        {
             return redirect()->route('user-login');
         }
-
-        $item = items::where('id', $id)->where('user_id', $user_id)->first();
-
-
-        return view('user.edit_item', compact('item'));
     }
 
     public function UpdateItem(Request $request, $id)
     {
-
         $item = items::findOrFail($id);
         $input = $request->all();
 
@@ -3937,18 +4271,27 @@ class UserController extends Controller
 
     public function DestroyItem($id)
     {
-        $item = items::findOrFail($id);
+        $user = Auth::guard('user')->user();
 
-        if ($item->photo == null) {
+        if($user->can('delete-item'))
+        {
+            $item = items::findOrFail($id);
+
+            if ($item->photo == null) {
+                $item->delete();
+                Session::flash('success', 'Item deleted successfully.');
+                return redirect()->route('user-items');
+            }
+
+            unlink(public_path() . '/assets/item_images/' . $item->photo);
             $item->delete();
-            Session::flash('success', 'Item deleted successfully.');
+            Session::flash('success', __('text.Item deleted successfully.'));
             return redirect()->route('user-items');
         }
-
-        unlink(public_path() . '/assets/item_images/' . $item->photo);
-        $item->delete();
-        Session::flash('success', __('text.Item deleted successfully.'));
-        return redirect()->route('user-items');
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function MySubServices()
@@ -4615,44 +4958,51 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        $now = date('d-m-Y H:i:s');
-        $check = quotation_invoices::where('id',$id)->where('handyman_id',$user_id)->where('invoice',1)->update(['delivered' => 1,'delivered_date' => $now]);
-
-        iF($check)
+        if($user->can('mark-delivered'))
         {
-            $client = quotation_invoices::leftjoin('quotes','quotes.id','=','quotation_invoices.quote_id')->leftjoin('users','users.id','=','quotes.user_id')->where('quotation_invoices.id',$id)->select('users.*','quotation_invoices.quotation_invoice_number')->first();
+            $now = date('d-m-Y H:i:s');
+            $check = quotation_invoices::where('id',$id)->where('handyman_id',$user_id)->where('invoice',1)->update(['delivered' => 1,'delivered_date' => $now]);
 
-            $admin_email = $this->sl->admin_email;
-
-            $link = url('/') . '/aanbieder/quotation-requests';
-
-            if($this->lang->lang == 'du')
+            iF($check)
             {
-                $msg = "Beste $client->name,<br><br>De status van je bestelling met factuur INV# <b>" . $client->quotation_invoice_number . "</b> is zojuist gewijzigd naar afgeleverd. Je kan de status naar ontvangen wijzigen in je <a href='$link'>dashboard</a>. Doe dit alleen als je de goederen hebt ontvangen. Mocht, je de goederen op de bezorgdatum niet hebben ontvangen neem dan contact met ons op.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
+                $client = quotation_invoices::leftjoin('quotes','quotes.id','=','quotation_invoices.quote_id')->leftjoin('users','users.id','=','quotes.user_id')->where('quotation_invoices.id',$id)->select('users.*','quotation_invoices.quotation_invoice_number')->first();
+
+                $admin_email = $this->sl->admin_email;
+
+                $link = url('/') . '/aanbieder/quotation-requests';
+
+                if($this->lang->lang == 'du')
+                {
+                    $msg = "Beste $client->name,<br><br>De status van je bestelling met factuur INV# <b>" . $client->quotation_invoice_number . "</b> is zojuist gewijzigd naar afgeleverd. Je kan de status naar ontvangen wijzigen in je <a href='$link'>dashboard</a>. Doe dit alleen als je de goederen hebt ontvangen. Mocht, je de goederen op de bezorgdatum niet hebben ontvangen neem dan contact met ons op.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
+                }
+                else
+                {
+                    $msg = "Dear <b>Mr/Mrs " . $client->name . "</b>,<br><br>Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered. You can change this quotation status to 'Received' if goods have been delivered to you. After 7 days from now on it will automatically be marked as 'Received'.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+                }
+
+                \Mail::send(array(), array(), function ($message) use ($msg,$client) {
+                    $message->to($client->email)
+                        ->from('info@vloerofferte.nl')
+                        ->subject(__('text.Invoice Status Changed'))
+                        ->setBody($msg, 'text/html');
+                });
+
+                \Mail::send(array(), array(), function ($message) use ($admin_email, $client) {
+                    $message->to($admin_email)
+                        ->from('info@vloerofferte.nl')
+                        ->subject('Invoice Status Changed')
+                        ->setBody("Recent activity: Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                });
+
+                Session::flash('success', __('text.Status Updated Successfully!'));
             }
-            else
-            {
-                $msg = "Dear <b>Mr/Mrs " . $client->name . "</b>,<br><br>Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered. You can change this quotation status to 'Received' if goods have been delivered to you. After 7 days from now on it will automatically be marked as 'Received'.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
-            }
 
-            \Mail::send(array(), array(), function ($message) use ($msg,$client) {
-                $message->to($client->email)
-                    ->from('info@vloerofferte.nl')
-                    ->subject(__('text.Invoice Status Changed'))
-                    ->setBody($msg, 'text/html');
-            });
-
-            \Mail::send(array(), array(), function ($message) use ($admin_email, $client) {
-                $message->to($admin_email)
-                    ->from('info@vloerofferte.nl')
-                    ->subject('Invoice Status Changed')
-                    ->setBody("Recent activity: Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
-            });
-
-            Session::flash('success', __('text.Status Updated Successfully!'));
+            return redirect()->back();
         }
-
-        return redirect()->back();
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
 
@@ -4705,44 +5055,51 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        $now = date('d-m-Y H:i:s');
-        $check = custom_quotations::where('id',$id)->where('handyman_id',$user_id)->where('invoice',1)->update(['delivered' => 1,'delivered_date' => $now]);
-
-        iF($check)
+        if($user->can('custom-mark-delivered'))
         {
-            $client = custom_quotations::leftjoin('users','users.id','=','custom_quotations.user_id')->where('custom_quotations.id',$id)->select('users.*','custom_quotations.quotation_invoice_number')->first();
+            $now = date('d-m-Y H:i:s');
+            $check = custom_quotations::where('id',$id)->where('handyman_id',$user_id)->where('invoice',1)->update(['delivered' => 1,'delivered_date' => $now]);
 
-            $admin_email = $this->sl->admin_email;
-
-            $link = url('/') . '/aanbieder/quotation-requests';
-
-            if($this->lang->lang == 'du')
+            iF($check)
             {
-                $msg = "Beste $client->name,<br><br>De status van je bestelling met factuur INV# <b>" . $client->quotation_invoice_number . "</b> is zojuist gewijzigd naar afgeleverd. Je kan de status naar ontvangen wijzigen in je <a href='$link'>dashboard</a>. Doe dit alleen als je de goederen hebt ontvangen. Mocht, je de goederen op de bezorgdatum niet hebben ontvangen neem dan contact met ons op.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
+                $client = custom_quotations::leftjoin('users','users.id','=','custom_quotations.user_id')->where('custom_quotations.id',$id)->select('users.*','custom_quotations.quotation_invoice_number')->first();
+
+                $admin_email = $this->sl->admin_email;
+
+                $link = url('/') . '/aanbieder/quotation-requests';
+
+                if($this->lang->lang == 'du')
+                {
+                    $msg = "Beste $client->name,<br><br>De status van je bestelling met factuur INV# <b>" . $client->quotation_invoice_number . "</b> is zojuist gewijzigd naar afgeleverd. Je kan de status naar ontvangen wijzigen in je <a href='$link'>dashboard</a>. Doe dit alleen als je de goederen hebt ontvangen. Mocht, je de goederen op de bezorgdatum niet hebben ontvangen neem dan contact met ons op.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
+                }
+                else
+                {
+                    $msg = "Dear <b>Mr/Mrs " . $client->name . "</b>,<br><br>Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered. You can change this quotation status to 'Received' if goods have been delivered to you. After 7 days from now on it will automatically be marked as 'Received'.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+                }
+
+                \Mail::send(array(), array(), function ($message) use ($msg,$client) {
+                    $message->to($client->email)
+                        ->from('info@vloerofferte.nl')
+                        ->subject(__('text.Invoice Status Changed'))
+                        ->setBody($msg, 'text/html');
+                });
+
+                \Mail::send(array(), array(), function ($message) use ($admin_email, $client) {
+                    $message->to($admin_email)
+                        ->from('info@vloerofferte.nl')
+                        ->subject('Invoice Status Changed')
+                        ->setBody("Recent activity: Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                });
+
+                Session::flash('success', __('text.Status Updated Successfully!'));
             }
-            else
-            {
-                $msg = "Dear <b>Mr/Mrs " . $client->name . "</b>,<br><br>Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered. You can change this quotation status to 'Received' if goods have been delivered to you. After 7 days from now on it will automatically be marked as 'Received'.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
-            }
 
-            \Mail::send(array(), array(), function ($message) use ($msg,$client) {
-                $message->to($client->email)
-                    ->from('info@vloerofferte.nl')
-                    ->subject(__('text.Invoice Status Changed'))
-                    ->setBody($msg, 'text/html');
-            });
-
-            \Mail::send(array(), array(), function ($message) use ($admin_email, $client) {
-                $message->to($admin_email)
-                    ->from('info@vloerofferte.nl')
-                    ->subject('Invoice Status Changed')
-                    ->setBody("Recent activity: Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
-            });
-
-            Session::flash('success', __('text.Status Updated Successfully!'));
+            return redirect()->back();
         }
-
-        return redirect()->back();
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
 

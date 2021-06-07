@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <!-- Starting of Dashboard area -->
-                    <div class="section-padding add-product-1">
+                    <div style="padding: 0;" class="section-padding add-product-1">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">

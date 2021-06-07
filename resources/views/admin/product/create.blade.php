@@ -26,7 +26,11 @@
                                             <h2>{{isset($cats) ? 'Edit Product' : 'Add Product'}}</h2>
                                             <a href="{{route('admin-product-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                         </div>
+
                                         <hr>
+
+                                        @include('includes.form-error')
+                                        @include('includes.form-success')
 
                                         <div class="product-configuration" style="width: 85%;margin: auto;">
 
@@ -39,9 +43,6 @@
                                             </ul>
 
                                             <form style="padding: 0;" class="form-horizontal" action="{{route('admin-product-store')}}" method="POST" enctype="multipart/form-data">
-
-                                                @include('includes.form-error')
-                                                @include('includes.form-success')
 
                                                 {{csrf_field()}}
 

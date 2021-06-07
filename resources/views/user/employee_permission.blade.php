@@ -26,7 +26,14 @@
                                         <h2>Assign permissions to {{$user->name . ' ' . $user->family_name . ' (' . $user->email . ')'}}</h2>
                                         <a href="{{route('employees')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                     </div>
+
                                     <hr>
+
+                                    <div style="display: inline-block;padding-top: 20px;">
+                                        <button id="select-all" style="margin-left: 10px;border-radius: 0;outline: none !important;border: 0;" class="btn btn-success">Select all</button>
+                                        <input type="hidden" value="0" id="current-select">
+                                    </div>
+
                                     <form class="form-horizontal" action="{{route('employee-permission-store')}}" method="POST" enctype="multipart/form-data">
                                         @include('includes.form-error')
                                         @include('includes.form-success')
@@ -34,84 +41,22 @@
 
                                         <input type="hidden" name="user_id" value="{{$user->id}}">
 
-
                                         <div class="service_box" style="margin-bottom: 20px;">
 
-                                            @if(count($user->permissions) > 0)
+                                            @foreach($permissions as $i => $key)
 
-                                                @foreach($user->permissions as $permission)
-
-                                                    <div class="form-group">
-
-                                                        <label class="control-label col-sm-4">Permission* </label>
-
-                                                        <div class="col-sm-6">
-
-                                                            <select class="form-control validate js-data-example-ajax" name="permissions[]">
-
-                                                                <option value="">Select Permission</option>
-
-                                                                @foreach($permissions as $key)
-
-                                                                    <option @if($permission->id == $key->id) selected @endif value="{{$key->id}}">{{$key->name}}</option>
-
-                                                                @endforeach
-
-                                                            </select>
-
-                                                        </div>
-
-                                                        <div class="col-xs-1 col-sm-1">
-                                                            <span class="ui-close remove-service" style="margin:0;right:70%;">X</span>
-                                                        </div>
-
-                                                    </div>
-
-                                                @endforeach
-
-                                            @else
-
-                                                <div class="form-group">
-
-                                                    <label class="control-label col-sm-4">Permission* </label>
-
-                                                    <div class="col-sm-6">
-
-                                                        <select class="form-control validate js-data-example-ajax" name="permissions[]">
-
-                                                            <option value="">Select Permission</option>
-
-                                                            @foreach($permissions as $key)
-
-                                                                <option value="{{$key->id}}">{{$key->name}}</option>
-
-                                                            @endforeach
-
-                                                        </select>
-
-                                                    </div>
-
-                                                    <div class="col-xs-1 col-sm-1">
-                                                        <span class="ui-close remove-service" style="margin:0;right:70%;">X</span>
-                                                    </div>
-
+                                                <div style="display:flex;align-items: center;margin: 10px 0;" class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                                    <input style="margin: 0;margin-right: 5px;width: 20px;height: 20px;" value="{{$key->id}}" type="checkbox" id="permission{{$i}}" name="permissions[]" @if($user->permissions->contains('id', $key->id)) checked @endif>
+                                                    <label style="margin: 0;" for="permission{{$i}}">{{$key->name}}</label>
                                                 </div>
 
-                                            @endif
+                                            @endforeach
 
-                                        </div>
-
-                                        <div class="form-group add-service">
-                                            <label class="control-label col-sm-3" for=""></label>
-
-                                            <div class="col-sm-12 text-center">
-                                                <button class="btn btn-default featured-btn" type="button" id="add-service-btn"><i class="fa fa-plus"></i> Add More Permissions</button>
-                                            </div>
                                         </div>
 
                                         <hr>
-                                        <div class="add-product-footer">
-                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">Submit</button>
+                                        <div style="display: inline-block;width: 100%;padding-top: 20px;" class="add-product-footer">
+                                            <button type="submit" class="btn add-product_btn">Submit</button>
                                         </div>
                                     </form>
                                 </div>
@@ -128,6 +73,20 @@
 @section('scripts')
 
     <script type="text/javascript">
+
+        $("#select-all").click(function(){
+
+            if($('#current-select').val() == 1)
+            {
+                $('input:checkbox').attr('checked', 0);
+                $('#current-select').val(0);
+            }
+            else
+            {
+                $('input:checkbox').attr('checked', 1);
+                $('#current-select').val(1);
+            }
+        });
 
         $(document).ready(function() {
 

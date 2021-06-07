@@ -6,13 +6,17 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <!-- Starting of Dashboard data-table area -->
-                    <div class="section-padding add-product-1">
+                    <div style="padding: 0;" class="section-padding add-product-1">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
                                         <h2>{{__('text.Items')}}</h2>
-                                        <a href="{{route('create-item')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Add New Item')}}</a>
+
+                                        @if(auth()->user()->can('create-item'))
+                                            <a href="{{route('create-item')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Add New Item')}}</a>
+                                        @endif
+
                                     </div>
                                     <hr>
                                     <div>
@@ -41,8 +45,13 @@
                                                             <td>{{number_format((float)$item->rate, 2, ',', '.')}}</td>
                                                             <td>{!!$item->description!!}</td>
                                                             <td>
-                                                                <a href="{{route('edit-item',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
-                                                                <a href="{{route('delete-item',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+                                                                @if(auth()->user()->can('edit-item'))
+                                                                    <a href="{{route('edit-item',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
+                                                                @endif
+
+                                                                    @if(auth()->user()->can('delete-item'))
+                                                                        <a href="{{route('delete-item',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+                                                                    @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach

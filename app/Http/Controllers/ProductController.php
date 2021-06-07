@@ -537,7 +537,14 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('admin-product-index');
+        if($request->cat_id)
+        {
+            return redirect()->route('admin-product-edit',$request->cat_id);
+        }
+        else
+        {
+            return redirect()->route('admin-product-index');
+        }
     }
 
     public function edit($id)

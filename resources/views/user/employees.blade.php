@@ -13,7 +13,13 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
                                         <h2>Employees</h2>
-                                        <a href="{{route('employee-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Create Employee</a>
+
+                                        @if(auth()->user()->can('employee-create'))
+
+                                            <a href="{{route('employee-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Create Employee</a>
+
+                                        @endif
+
                                     </div>
                                     <hr>
                                     <div>
@@ -68,9 +74,25 @@
                                                             </td>
 
                                                             <td>
-                                                                <a href="{{route('employee-permissions',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit Permissions</a>
-                                                                <a href="{{route('edit-employee',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
-                                                                <a href="{{route('delete-employee',$user->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+                                                                @if(auth()->user()->can('employee-permissions'))
+
+                                                                    <a href="{{route('employee-permissions',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit Permissions</a>
+
+                                                                @endif
+
+
+                                                                    @if(auth()->user()->can('edit-employee'))
+
+                                                                        <a href="{{route('edit-employee',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
+
+                                                                    @endif
+
+
+                                                                    @if(auth()->user()->can('delete-employee'))
+
+                                                                        <a href="{{route('delete-employee',$user->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+
+                                                                    @endif
                                                             </td>
                                                         </tr>
 
