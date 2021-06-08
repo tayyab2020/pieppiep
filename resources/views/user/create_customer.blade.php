@@ -11,7 +11,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header">
-                                        <h2>{{__('text.Create Customer')}}</h2>
+                                        <h2>{{isset($customer) ? __('text.Edit Customer') : __('text.Create Customer')}}</h2>
                                         <a href="{{route('customers')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
                                     <hr>
@@ -85,7 +85,7 @@
                                         </div>
 
                                         <div class="add-product-footer">
-                                            <button name="addProduct_btn" id="submit" type="submit" class="btn add-product_btn">{{__('text.Create Customer')}}</button>
+                                            <button name="addProduct_btn" id="submit" type="submit" class="btn add-product_btn">{{isset($customer) ? __('text.Edit Customer') : __('text.Create Customer')}}</button>
                                         </div>
                                     </form>
                                 </div>

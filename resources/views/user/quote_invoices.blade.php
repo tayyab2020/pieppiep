@@ -319,7 +319,7 @@
 
                                                                                     @else
 
-                                                                                        @if(auth()->user()->can('handyman-quote-request'))
+                                                                                        @if(auth()->user()->can('download-quote-invoice'))
 
                                                                                             <li><a href="{{ url('/aanbieder/download-quote-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 

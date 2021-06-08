@@ -270,5 +270,5 @@ return [
     'Our Services' => 'Diensten',
     'Select Service' => 'Selecteer dienst',
     'Select Installation Date' => 'Selecteer gewenste installatie datum',
-
+    'Edit Customer' => 'Wijzig klantgegevens',
 ];

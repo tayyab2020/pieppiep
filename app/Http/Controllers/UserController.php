@@ -221,7 +221,6 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
         $main_id = $user->main_id;
         $users = [];
 
@@ -259,12 +258,29 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
+
         if($user->can('quotations'))
         {
             if ($id) {
-                $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotation_invoices.handyman_id', $user_id)->where('quotation_invoices.quote_id', $id)->where('quotation_invoices.invoice', 0)->orderBy('quotation_invoices.id', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.delivery_date', 'quotation_invoices.id as invoice_id', 'quotation_invoices.invoice', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+                $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where(function ($query) use ($user_id,$main_id,$users) {
+                    $query->where('quotation_invoices.handyman_id', $user_id)
+                        ->orWhere('quotation_invoices.handyman_id', $main_id)
+                        ->orWhereIn('quotation_invoices.handyman_id', $users);
+                })->where('quotation_invoices.quote_id', $id)->where('quotation_invoices.invoice', 0)->orderBy('quotation_invoices.id', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.delivery_date', 'quotation_invoices.id as invoice_id', 'quotation_invoices.invoice', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'users.name', 'users.family_name')->get();
             } else {
-                $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotation_invoices.handyman_id', $user_id)->where('quotation_invoices.invoice', 0)->orderBy('quotation_invoices.id', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.delivery_date', 'quotation_invoices.id as invoice_id', 'quotation_invoices.invoice', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+                $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where(function ($query) use ($user_id,$main_id,$users) {
+                    $query->where('quotation_invoices.handyman_id', $user_id)
+                        ->orWhere('quotation_invoices.handyman_id', $main_id)
+                        ->orWhereIn('quotation_invoices.handyman_id', $users);
+                })->where('quotation_invoices.invoice', 0)->orderBy('quotation_invoices.id', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.delivery_date', 'quotation_invoices.id as invoice_id', 'quotation_invoices.invoice', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'users.name', 'users.family_name')->get();
             }
 
             return view('user.quote_invoices', compact('invoices'));
@@ -279,7 +295,12 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if($user->can('customer-quotations'))
         {
@@ -301,7 +322,12 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if($user->can('customer-invoices'))
         {
@@ -325,6 +351,14 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
         $check = 0;
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
         if(\Route::currentRouteName() == 'quotations-invoices'){
 
@@ -347,9 +381,17 @@ class UserController extends Controller
         if($check)
         {
             if ($id) {
-                $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotation_invoices.handyman_id', $user_id)->where('quotation_invoices.quote_id', $id)->where('quotation_invoices.invoice', 1)->orderBy('quotation_invoices.created_at', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.delivery_date', 'quotation_invoices.delivered', 'quotation_invoices.received', 'quotation_invoices.commission_percentage', 'quotation_invoices.commission', 'quotation_invoices.total_receive', 'quotation_invoices.id as invoice_id', 'quotation_invoices.invoice', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+                $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where(function ($query) use ($user_id,$main_id,$users) {
+                    $query->where('quotation_invoices.handyman_id', $user_id)
+                        ->orWhere('quotation_invoices.handyman_id', $main_id)
+                        ->orWhereIn('quotation_invoices.handyman_id', $users);
+                })->where('quotation_invoices.quote_id', $id)->where('quotation_invoices.invoice', 1)->orderBy('quotation_invoices.created_at', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.delivery_date', 'quotation_invoices.delivered', 'quotation_invoices.received', 'quotation_invoices.commission_percentage', 'quotation_invoices.commission', 'quotation_invoices.total_receive', 'quotation_invoices.id as invoice_id', 'quotation_invoices.invoice', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'users.name', 'users.family_name')->get();
             } else {
-                $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotation_invoices.handyman_id', $user_id)->where('quotation_invoices.invoice', 1)->orderBy('quotation_invoices.created_at', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.delivery_date', 'quotation_invoices.delivered', 'quotation_invoices.received', 'quotation_invoices.commission_percentage', 'quotation_invoices.commission', 'quotation_invoices.total_receive', 'quotation_invoices.id as invoice_id', 'quotation_invoices.invoice', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+                $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where(function ($query) use ($user_id,$main_id,$users) {
+                    $query->where('quotation_invoices.handyman_id', $user_id)
+                        ->orWhere('quotation_invoices.handyman_id', $main_id)
+                        ->orWhereIn('quotation_invoices.handyman_id', $users);
+                })->where('quotation_invoices.invoice', 1)->orderBy('quotation_invoices.created_at', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.delivery_date', 'quotation_invoices.delivered', 'quotation_invoices.received', 'quotation_invoices.commission_percentage', 'quotation_invoices.commission', 'quotation_invoices.total_receive', 'quotation_invoices.id as invoice_id', 'quotation_invoices.invoice', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'users.name', 'users.family_name')->get();
             }
 
             return view('user.quote_invoices', compact('invoices'));
@@ -475,9 +517,22 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
+
         if($user->can('download-quote-invoice'))
         {
-            $invoice = quotation_invoices::where('id', $id)->where('handyman_id', $user_id)->first();
+            $invoice = quotation_invoices::where('id', $id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_id', $user_id)
+                    ->orWhere('handyman_id', $main_id)
+                    ->orWhereIn('handyman_id', $users);
+            })->first();
 
             if (!$invoice) {
                 return redirect()->route('quotations');
@@ -506,11 +561,22 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
         if($user->can('download-commission-invoice'))
         {
-            $invoice = quotation_invoices::where('id', $id)->where('handyman_id', $user_id)->first();
+            $invoice = quotation_invoices::where('id', $id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_id', $user_id)
+                    ->orWhere('handyman_id', $main_id)
+                    ->orWhereIn('handyman_id', $users);
+            })->first();
 
             if (!$invoice) {
                 return redirect()->route('quotations');
@@ -532,7 +598,12 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if($user->can('download-custom-quotation'))
         {
@@ -954,7 +1025,14 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
         if($user->can('handyman-quote-request'))
         {
@@ -962,7 +1040,11 @@ class UserController extends Controller
 
             $q_a = requests_q_a::where('request_id', $id)->get();
 
-            $invoice = quotation_invoices::where('quote_id', $request->id)->where('handyman_id', $user_id)->first();
+            $invoice = quotation_invoices::where('quote_id', $request->id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_id', $user_id)
+                    ->orWhere('handyman_id', $main_id)
+                    ->orWhereIn('handyman_id', $users);
+            })->first();
 
             $products = Products::all();
 
@@ -980,6 +1062,12 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
         $check = 0;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if(\Route::currentRouteName() == 'create-custom-quotation')
         {
@@ -1027,10 +1115,22 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
         if($user->can('customers'))
         {
-            $customers = User::where('role_id',3)->where('parent_id',$user_id)->where('allowed',0)->get();
+            $customers = User::where('role_id',3)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('parent_id', $user_id)
+                    ->orWhere('parent_id', $main_id)
+                    ->orWhereIn('parent_id', $users);
+            })->where('allowed',0)->get();
 
             return view('user.customers',compact('customers'));
         }
@@ -1045,43 +1145,64 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $role_id = $user->role_id;
+        $main_id = $user->main_id;
 
-        if($role_id == 3)
+        if($main_id)
         {
-            return redirect()->route('user-dashboard');
+            $user_id = $main_id;
         }
-        else
-        {
-            if($user->can('employees'))
-            {
-                if($role_id == 2)
-                {
-                    $employees = User::with('permissions')->where('role_id',2)->where('main_id',$user_id)->get();
-                }
-                else
-                {
-                    $employees = User::with('permissions')->where('role_id',4)->where('main_id',$user_id)->get();
-                }
 
-                return view('user.employees',compact('employees'));
+        if($user->can('employees'))
+        {
+            if($role_id == 2)
+            {
+                $employees = User::with('permissions')->where('role_id',2)->where('main_id',$user_id)->where('id','!=',$user->id)->get();
             }
             else
             {
-                return redirect()->route('user-login');
+                $employees = User::with('permissions')->where('role_id',4)->where('main_id',$user_id)->where('id','!=',$user->id)->get();
             }
+
+            return view('user.employees',compact('employees'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
         }
     }
 
     public function EmployeePermissions($id)
     {
         $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
         if($user->can('employee-permissions'))
         {
-            $permissions = Permission::all();
-            $user = User::with('permissions')->find($id);
 
-            return view('user.employee_permission',compact('permissions','user'));
+            if(!$main_id)
+            {
+                $main_id = $user_id;
+            }
+
+            if($user_id != $id)
+            {
+                $permissions = Permission::all();
+                $user = User::with('permissions')->where('id',$id)->where('main_id',$main_id)->first();
+
+                if($user)
+                {
+                    return view('user.employee_permission',compact('permissions','user'));
+                }
+                else
+                {
+                    return redirect()->route('user-dashboard');
+                }
+            }
+            else
+            {
+                return redirect()->route('user-dashboard');
+            }
         }
         else
         {
@@ -1102,7 +1223,6 @@ class UserController extends Controller
     public function CreateCustomerForm()
     {
         $user = Auth::guard('user')->user();
-        $user_id = $user->id;
 
         if($user->can('handyman-user-create'))
         {
@@ -1132,12 +1252,33 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
 
         if($user->can('edit-customer'))
         {
-            $customer = User::where('id',$id)->where('parent_id',$user_id)->first();
 
-            return view('user.create_customer',compact('customer'));
+            if(!$main_id)
+            {
+                $main_id = $user_id;
+            }
+
+            if($user_id != $id)
+            {
+                $customer = User::where('id',$id)->where('parent_id', $main_id)->first();
+
+                if($customer)
+                {
+                    return view('user.create_customer',compact('customer'));
+                }
+                else
+                {
+                    return redirect()->route('user-dashboard');
+                }
+            }
+            else
+            {
+                return redirect()->route('user-dashboard');
+            }
         }
         else
         {
@@ -1149,12 +1290,32 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
 
         if($user->can('edit-employee'))
         {
-            $employee = User::where('id',$id)->where('main_id',$user_id)->first();
+            if(!$main_id)
+            {
+                $main_id = $user_id;
+            }
 
-            return view('user.create_employee',compact('employee'));
+            if($user_id != $id)
+            {
+                $employee = User::where('id',$id)->where('main_id',$main_id)->first();
+
+                if($employee)
+                {
+                    return view('user.create_employee',compact('employee'));
+                }
+                else
+                {
+                    return redirect()->route('user-dashboard');
+                }
+            }
+            else
+            {
+                return redirect()->route('user-dashboard');
+            }
         }
         else
         {
@@ -1166,13 +1327,33 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
 
         if($user->can('delete-customer'))
         {
-            User::where('id',$id)->where('parent_id',$user_id)->delete();
+            if(!$main_id)
+            {
+                $main_id = $user_id;
+            }
 
-            Session::flash('success', __('text.Customer deleted successfully'));
-            return redirect()->route('customers');
+            if($user_id != $id)
+            {
+                $delete = User::where('id',$id)->where('parent_id',$main_id)->delete();
+
+                if($delete)
+                {
+                    Session::flash('success', __('text.Customer deleted successfully'));
+                    return redirect()->route('customers');
+                }
+                else
+                {
+                    return redirect()->route('user-dashboard');
+                }
+            }
+            else
+            {
+                return redirect()->route('user-dashboard');
+            }
         }
         else
         {
@@ -1184,13 +1365,33 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
 
         if($user->can('delete-employee'))
         {
-            User::where('id',$id)->where('main_id',$user_id)->delete();
+            if(!$main_id)
+            {
+                $main_id = $user_id;
+            }
 
-            Session::flash('success', 'Employee deleted successfully');
-            return redirect()->route('employees');
+            if($user_id != $id)
+            {
+                $delete = User::where('id',$id)->where('main_id',$main_id)->delete();
+
+                if($delete)
+                {
+                    Session::flash('success', 'Employee deleted successfully');
+                    return redirect()->route('employees');
+                }
+                else
+                {
+                    return redirect()->route('user-dashboard');
+                }
+            }
+            else
+            {
+                return redirect()->route('user-dashboard');
+            }
         }
         else
         {
@@ -1202,6 +1403,12 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         $check = User::where('parent_id',$user_id)->where('email',$request->org_email)->where('allowed',0)->first();
 
@@ -1243,6 +1450,12 @@ class UserController extends Controller
         $user_id = $user->id;
         $role_id = $user->role_id;
         $company_name = $user->company_name;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if($request->emp_id)
         {
@@ -1464,6 +1677,12 @@ class UserController extends Controller
 
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         $check = User::where('email', $request->email)->where('parent_id',$user_id)->where('allowed',0)->first();
 
@@ -1471,16 +1690,16 @@ class UserController extends Controller
             $response = array('data' => $check, 'message' => __('text.User already created'));
             return $response;
         } else {
+
             $user = new User;
             $input = $request->all();
 
-            $user_name = $input['name'];
+            /*$user_name = $input['name'];
             $user_email = $request->email;
 
             $handyman = Auth::guard('user')->user();
-            $handyman_id = $handyman->id;
             $handyman_name = $handyman->name;
-            $company_name = $handyman->company_name;
+            $company_name = $handyman->company_name;*/
 
             $org_password = Str::random(8);
             $password = Hash::make($org_password);
@@ -1496,7 +1715,7 @@ class UserController extends Controller
             $user->phone = $request->phone;
             $user->email = $request->email;
             $user->password = $password;
-            $user->parent_id = $handyman_id;
+            $user->parent_id = $user_id;
             $user->allowed = 0;
             $user->save();
 
@@ -1720,8 +1939,13 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
         $check = 0;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if(\Route::currentRouteName() == 'view-custom-quotation')
         {
@@ -2218,9 +2442,16 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
 
         if($user->can('send-custom-quotation'))
         {
+            if($main_id)
+            {
+                $user = User::where('id',$main_id)->first();
+                $user_id = $user->id;
+            }
+
             $user_name = $user->name;
             $user_email = $user->email;
             $company_name = $user->company_name;
@@ -2272,6 +2503,14 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
         $user_name = $user->name;
         $user_email = $user->email;
         $company_name = $user->company_name;
@@ -4957,11 +5196,23 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+        $users = [];
+
+        if(!$main_id)
+        {
+            $users = User::where('main_id',$user_id)->pluck('id');
+            $main_id = 0;
+        }
 
         if($user->can('mark-delivered'))
         {
             $now = date('d-m-Y H:i:s');
-            $check = quotation_invoices::where('id',$id)->where('handyman_id',$user_id)->where('invoice',1)->update(['delivered' => 1,'delivered_date' => $now]);
+            $check = quotation_invoices::where('id',$id)->where(function ($query) use ($user_id,$main_id,$users) {
+                $query->where('handyman_id', $user_id)
+                    ->orWhere('handyman_id', $main_id)
+                    ->orWhereIn('handyman_id', $users);
+            })->where('invoice',1)->update(['delivered' => 1,'delivered_date' => $now]);
 
             iF($check)
             {

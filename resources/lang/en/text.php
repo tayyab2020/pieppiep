@@ -270,4 +270,5 @@ return [
     'Our Services' => 'Our Services',
     'Select Service' => 'Select Service',
     'Select Installation Date' => 'Select Installation Date',
+    'Edit Customer' => 'Edit Customer',
 ];
