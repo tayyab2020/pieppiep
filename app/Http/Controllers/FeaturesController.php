@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\feature_sub_products;
 use App\features;
 use App\User;
 use App\users;
@@ -24,30 +25,110 @@ class FeaturesController extends Controller
 
     public function index()
     {
-        $features = features::leftjoin('users','users.id','=','features.user_id')->orderBy('features.id','desc')->select('features.*','users.name','users.family_name')->get();
+        $features = features::orderBy('id','desc')->get();
 
         return view('admin.features.index',compact('features'));
     }
 
     public function create()
     {
-        $handymen = User::where('role_id',2)->where('active',1)->get();
-
-        return view('admin.features.create',compact('handymen'));
+        return view('admin.features.create');
     }
 
     public function store(Request $request)
     {
+        if($request->feature_id)
+        {
+            $removed = explode(',', $request->removed);
+            feature_sub_products::whereIn('id',$removed)->delete();
 
-        $features = new features;
-        $input = $request->all();
+            features::where('id',$request->feature_id)->update(['title' => $request->title]);
 
-        $features->title = $request->title;
-        $features->user_id = $request->handyman;
-        $features->save();
+            $sub = feature_sub_products::where('feature_id',$request->feature_id)->get();
 
+            if(count($sub) == 0)
+            {
+                foreach ($request->sub_codes as $i => $key)
+                {
+                    if($key && $request->sub_product_titles[$i] && $request->sub_product_size1[$i] && $request->sub_product_size2[$i])
+                    {
+                        $sub = new feature_sub_products;
+                        $sub->feature_id = $request->feature_id;
+                        $sub->unique_code = $key;
+                        $sub->title = $request->sub_product_titles[$i];
+                        $sub->size1_value = $request->sub_product_size1[$i];
+                        $sub->size2_value = $request->sub_product_size2[$i];
+                        $sub->save();
+                    }
+                }
+            }
+            else
+            {
+                if(count($request->sub_codes) > 0)
+                {
+                    foreach ($request->sub_codes as $s => $key)
+                    {
+                        $sub_check = feature_sub_products::where('feature_id',$request->feature_id)->skip($s)->first();
 
-        Session::flash('success', 'New Feature added successfully.');
+                        if($sub_check)
+                        {
+                            if($key && $request->sub_product_titles[$s] && $request->sub_product_size1[$s] && $request->sub_product_size2[$s])
+                            {
+                                $sub_check->unique_code = $key;
+                                $sub_check->title = $request->sub_product_titles[$s];
+                                $sub_check->size1_value = $request->sub_product_size1[$s];
+                                $sub_check->size2_value = $request->sub_product_size2[$s];
+                                $sub_check->save();
+                            }
+                        }
+                        else
+                        {
+                            if($key && $request->sub_product_titles[$s] && $request->sub_product_size1[$s] && $request->sub_product_size2[$s])
+                            {
+                                $sub = new feature_sub_products;
+                                $sub->feature_id = $request->feature_id;
+                                $sub->unique_code = $key;
+                                $sub->title = $request->sub_product_titles[$s];
+                                $sub->size1_value = $request->sub_product_size1[$s];
+                                $sub->size2_value = $request->sub_product_size2[$s];
+                                $sub->save();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    feature_sub_products::where('feature_id',$request->feature_id)->delete();
+                }
+            }
+
+            Session::flash('success', 'Feature updated successfully.');
+            return redirect()->route('admin-feature-index');
+        }
+        else
+        {
+            $features = new features;
+
+            $features->title = $request->title;
+            $features->save();
+
+            foreach ($request->sub_codes as $i => $key)
+            {
+                if($key && $request->sub_product_titles[$i] && $request->sub_product_size1[$i] && $request->sub_product_size2[$i])
+                {
+                    $sub = new feature_sub_products;
+                    $sub->feature_id = $features->id;
+                    $sub->unique_code = $key;
+                    $sub->title = $request->sub_product_titles[$i];
+                    $sub->size1_value = $request->sub_product_size1[$i];
+                    $sub->size2_value = $request->sub_product_size2[$i];
+                    $sub->save();
+                }
+            }
+
+            Session::flash('success', 'New Feature added successfully.');
+        }
+
         return redirect()->route('admin-feature-index');
     }
 
@@ -55,17 +136,9 @@ class FeaturesController extends Controller
     {
         $feature = features::findOrFail($id);
 
-        $handymen = User::where('role_id',2)->where('active',1)->get();
+        $sub_data = feature_sub_products::where('feature_id',$id)->get();
 
-        return view('admin.features.edit',compact('feature','handymen'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        features::where('id',$id)->update(['title' => $request->title, 'user_id' => $request->handyman]);
-
-        Session::flash('success', 'Feature updated successfully.');
-        return redirect()->route('admin-feature-index');
+        return view('admin.features.create',compact('feature','sub_data'));
     }
 
     public function destroy($id)
