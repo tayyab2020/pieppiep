@@ -145,6 +145,8 @@ class FeaturesController extends Controller
     {
         $feature = features::findOrFail($id);
         $feature->delete();
+
+        feature_sub_products::where('feature_id',$id)->delete();
         Session::flash('success', 'Feature deleted successfully.');
         return redirect()->route('admin-feature-index');
 
