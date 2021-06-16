@@ -1253,13 +1253,15 @@
                 var feature_select = current.val();
                 var id = current.parent().find('.f_id').val();
 
-                if(feature_select)
+                if(feature_select == 1)
                 {
                     $.ajax({
                         type: "GET",
                         data: "id=" + id,
                         url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
                         success: function (data) {
+
+                            $('#myModal').find('.modal-body').find('table tbody').children().remove();
 
                             $.each(data, function(index, value) {
 
