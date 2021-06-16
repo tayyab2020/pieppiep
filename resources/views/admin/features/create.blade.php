@@ -57,11 +57,11 @@
                                                         <h4>Title</h4>
                                                     </div>
 
-                                                    <div style="font-family: monospace;" class="col-sm-3">
+                                                    <div style="font-family: monospace;text-align: center;" class="col-sm-3">
                                                         <h4>Size 38mm</h4>
                                                     </div>
 
-                                                    <div style="font-family: monospace;" class="col-sm-3">
+                                                    <div style="font-family: monospace;text-align: center;" class="col-sm-3">
                                                         <h4>Size 25mm</h4>
                                                     </div>
 
@@ -91,15 +91,29 @@
 
                                                                 </div>
 
-                                                                <div class="col-sm-3">
+                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
 
-                                                                    <input value="{{$key->size1_value}}" class="form-control sub_product_size1" name="sub_product_size1[]" id="blood_group_slug" placeholder="" type="text">
+                                                                    <input type="hidden" name="size1_value[]" id="size1_value" value="{{$key->size1_value}}">
+
+                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                    <label style="margin: 0;" class="switch">
+                                                                        <input {{$key->size1_value ? 'checked' : null}} class="size1_value" type="checkbox">
+                                                                        <span class="slider round"></span>
+                                                                    </label>
+                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                 </div>
 
-                                                                <div class="col-sm-3">
+                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
 
-                                                                    <input value="{{$key->size2_value}}" class="form-control sub_product_size2" name="sub_product_size2[]" id="blood_group_slug" placeholder="" type="text">
+                                                                    <input type="hidden" name="size2_value[]" id="size2_value" value="{{$key->size2_value}}">
+
+                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                    <label style="margin: 0;" class="switch">
+                                                                        <input {{$key->size2_value ? 'checked' : null}} class="size2_value" type="checkbox">
+                                                                        <span class="slider round"></span>
+                                                                    </label>
+                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                 </div>
 
@@ -127,15 +141,29 @@
 
                                                             </div>
 
-                                                            <div class="col-sm-3">
+                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
 
-                                                                <input class="form-control sub_product_size1" name="sub_product_size1[]" id="blood_group_slug" placeholder="" type="text">
+                                                                <input type="hidden" name="size1_value[]" id="size1_value" value="0">
+
+                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                <label style="margin: 0;" class="switch">
+                                                                    <input class="size1_value" type="checkbox">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                             </div>
 
-                                                            <div class="col-sm-3">
+                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
 
-                                                                <input class="form-control sub_product_size2" name="sub_product_size2[]" id="blood_group_slug" placeholder="" type="text">
+                                                                <input type="hidden" name="size2_value[]" id="size2_value" value="0">
+
+                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                <label style="margin: 0;" class="switch">
+                                                                    <input class="size2_value" type="checkbox">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                             </div>
 
@@ -210,15 +238,29 @@
                     '\n' +
                     '                                                            </div>\n' +
                     '\n' +
-                    '                                                            <div class="col-sm-3">\n' +
+                    '                                                           <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">\n' +
                     '\n' +
-                    '                                                                <input class="form-control sub_product_size1" name="sub_product_size1[]" id="blood_group_slug" placeholder="" type="text">\n' +
+                    '                                                                <input type="hidden" name="size1_value[]" id="size1_value" value="0">\n' +
+                    '\n' +
+                    '                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                    <input class="size1_value" type="checkbox">\n' +
+                    '                                                                    <span class="slider round"></span>\n' +
+                    '                                                                </label>\n' +
+                    '                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                     '\n' +
                     '                                                            </div>\n' +
                     '\n' +
-                    '                                                            <div class="col-sm-3">\n' +
+                    '                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">\n' +
                     '\n' +
-                    '                                                                <input class="form-control sub_product_size2" name="sub_product_size2[]" id="blood_group_slug" placeholder="" type="text">\n' +
+                    '                                                                <input type="hidden" name="size2_value[]" id="size2_value" value="0">\n' +
+                    '\n' +
+                    '                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                    <input class="size2_value" type="checkbox">\n' +
+                    '                                                                    <span class="slider round"></span>\n' +
+                    '                                                                </label>\n' +
+                    '                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                     '\n' +
                     '                                                            </div>\n' +
                     '\n' +
@@ -262,15 +304,29 @@
                         '\n' +
                         '                                                            </div>\n' +
                         '\n' +
-                        '                                                            <div class="col-sm-3">\n' +
+                        '                                                           <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">\n' +
                         '\n' +
-                        '                                                                <input class="form-control sub_product_size1" name="sub_product_size1[]" id="blood_group_slug" placeholder="" type="text">\n' +
+                        '                                                                <input type="hidden" name="size1_value[]" id="size1_value" value="0">\n' +
+                        '\n' +
+                        '                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                        '                                                                <label style="margin: 0;" class="switch">\n' +
+                        '                                                                    <input class="size1_value" type="checkbox">\n' +
+                        '                                                                    <span class="slider round"></span>\n' +
+                        '                                                                </label>\n' +
+                        '                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                         '\n' +
                         '                                                            </div>\n' +
                         '\n' +
-                        '                                                            <div class="col-sm-3">\n' +
+                        '                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">\n' +
                         '\n' +
-                        '                                                                <input class="form-control sub_product_size2" name="sub_product_size2[]" id="blood_group_slug" placeholder="" type="text">\n' +
+                        '                                                                <input type="hidden" name="size2_value[]" id="size2_value" value="0">\n' +
+                        '\n' +
+                        '                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                        '                                                                <label style="margin: 0;" class="switch">\n' +
+                        '                                                                    <input class="size2_value" type="checkbox">\n' +
+                        '                                                                    <span class="slider round"></span>\n' +
+                        '                                                                </label>\n' +
+                        '                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                         '\n' +
                         '                                                            </div>\n' +
                         '\n' +
@@ -283,6 +339,32 @@
                 }
 
             });
+
+        });
+
+        $('body').on('change', '.size1_value', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#size1_value').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#size1_value').val(0);
+            }
+
+        });
+
+        $('body').on('change', '.size2_value', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#size2_value').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#size2_value').val(0);
+            }
 
         });
 

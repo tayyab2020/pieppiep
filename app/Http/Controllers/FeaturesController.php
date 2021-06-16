@@ -50,14 +50,14 @@ class FeaturesController extends Controller
             {
                 foreach ($request->sub_codes as $i => $key)
                 {
-                    if($key && $request->sub_product_titles[$i] && $request->sub_product_size1[$i] && $request->sub_product_size2[$i])
+                    if($key && $request->sub_product_titles[$i])
                     {
                         $sub = new feature_sub_products;
                         $sub->feature_id = $request->feature_id;
                         $sub->unique_code = $key;
                         $sub->title = $request->sub_product_titles[$i];
-                        $sub->size1_value = $request->sub_product_size1[$i];
-                        $sub->size2_value = $request->sub_product_size2[$i];
+                        $sub->size1_value = $request->size1_value[$i];
+                        $sub->size2_value = $request->size2_value[$i];
                         $sub->save();
                     }
                 }
@@ -72,25 +72,25 @@ class FeaturesController extends Controller
 
                         if($sub_check)
                         {
-                            if($key && $request->sub_product_titles[$s] && $request->sub_product_size1[$s] && $request->sub_product_size2[$s])
+                            if($key && $request->sub_product_titles[$s])
                             {
                                 $sub_check->unique_code = $key;
                                 $sub_check->title = $request->sub_product_titles[$s];
-                                $sub_check->size1_value = $request->sub_product_size1[$s];
-                                $sub_check->size2_value = $request->sub_product_size2[$s];
+                                $sub_check->size1_value = $request->size1_value[$s];
+                                $sub_check->size2_value = $request->size2_value[$s];
                                 $sub_check->save();
                             }
                         }
                         else
                         {
-                            if($key && $request->sub_product_titles[$s] && $request->sub_product_size1[$s] && $request->sub_product_size2[$s])
+                            if($key && $request->sub_product_titles[$s])
                             {
                                 $sub = new feature_sub_products;
                                 $sub->feature_id = $request->feature_id;
                                 $sub->unique_code = $key;
                                 $sub->title = $request->sub_product_titles[$s];
-                                $sub->size1_value = $request->sub_product_size1[$s];
-                                $sub->size2_value = $request->sub_product_size2[$s];
+                                $sub->size1_value = $request->size1_value[$s];
+                                $sub->size2_value = $request->size2_value[$s];
                                 $sub->save();
                             }
                         }
@@ -114,14 +114,14 @@ class FeaturesController extends Controller
 
             foreach ($request->sub_codes as $i => $key)
             {
-                if($key && $request->sub_product_titles[$i] && $request->sub_product_size1[$i] && $request->sub_product_size2[$i])
+                if($key && $request->sub_product_titles[$i])
                 {
                     $sub = new feature_sub_products;
                     $sub->feature_id = $features->id;
                     $sub->unique_code = $key;
                     $sub->title = $request->sub_product_titles[$i];
-                    $sub->size1_value = $request->sub_product_size1[$i];
-                    $sub->size2_value = $request->sub_product_size2[$i];
+                    $sub->size1_value = $request->size1_value[$i];
+                    $sub->size2_value = $request->size2_value[$i];
                     $sub->save();
                 }
             }

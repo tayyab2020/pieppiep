@@ -36,7 +36,7 @@
 
                                             <ul style="border: 0;" class="nav nav-tabs">
                                                 <li style="margin-bottom: 0;" class="active"><a data-toggle="tab" href="#menu1">General Information</a></li>
-                                                <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu2">General Options</a></li>
+                                                {{--<li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu2">General Options</a></li>--}}
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu3">Colors Options</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu4">Price Tables</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu5">Features</a></li>
@@ -207,7 +207,7 @@
 
                                                     </div>
 
-                                                    <div id="menu2" class="tab-pane fade">
+                                                    {{--<div id="menu2" class="tab-pane fade">
 
                                                         <input type="hidden" name="cat_id" value="{{isset($cats) ? $cats->id : null}}" />
 
@@ -239,7 +239,7 @@
                                                             </div>
                                                         </div>
 
-                                                    </div>
+                                                    </div>--}}
 
                                                     <div id="menu3" class="tab-pane fade">
 
