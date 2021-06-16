@@ -173,6 +173,41 @@
         </div>
     </div>
 
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Sub Products Sizes</h4>
+                </div>
+                <div class="modal-body">
+                    <table style="width: 100%;">
+
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Size 38mm</th>
+                            <th>Size 25mm</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <style>
 
         .feature-tab li a[aria-expanded="false"]::before, a[aria-expanded="true"]::before
@@ -302,6 +337,41 @@
         table {
             border-collapse:separate;
             border-spacing: 0 1em;
+        }
+
+
+        .modal-body table tr th
+        {
+            border: 1px solid #ebebeb;
+            padding-bottom: 15px;
+            color: gray;
+        }
+
+        .modal-body table tbody tr td
+        {
+            border-left: 1px solid #ebebeb;
+            border-right: 1px solid #ebebeb;
+            border-bottom: 1px solid #ebebeb;
+        }
+
+        .modal-body table tbody tr td:first-child
+        {
+            border-right: 0;
+        }
+
+        .modal-body table tbody tr td:last-child {
+            border-left: 0;
+        }
+
+        .modal-body table {
+            border-collapse:separate;
+            border-spacing: 0;
+            margin: 20px 0;
+        }
+
+        .modal-body table tbody tr td, .modal-body table thead tr th
+        {
+            padding: 5px 10px;
         }
 
     </style>
@@ -1134,13 +1204,16 @@
                                                 }
                                             }
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                            /*opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';*/
                                         });
+
+                                        opt = '<option value="0">No</option><option value="1">Yes</option>';
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="'+value.id+'" name="f_id" class="f_id" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -1178,7 +1251,56 @@
 
                 var current = $(this);
                 var feature_select = current.val();
-                var impact_value = current.next('input').val();
+                var id = current.parent().find('.f_id').val();
+
+                if(feature_select)
+                {
+                    $.ajax({
+                        type: "GET",
+                        data: "id=" + id,
+                        url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
+                        success: function (data) {
+
+                            $.each(data, function(index, value) {
+
+                                var size1 = value.size1_value;
+                                var size2 = value.size2_value;
+
+                                if(size1)
+                                {
+                                    size1 = 'Yes';
+                                }
+                                else
+                                {
+                                    size1 = 'No';
+                                }
+
+                                if(size2)
+                                {
+                                    size2 = 'Yes';
+                                }
+                                else
+                                {
+                                    size2 = 'No';
+                                }
+
+                                $('#myModal').find('.modal-body').find('table tbody').append(
+                                    '<tr>\n' +
+                                    '<td>'+value.unique_code+'</td>\n' +
+                                    '<td>'+value.title+'</td>\n' +
+                                    '<td>'+size1+'</td>\n' +
+                                    '<td>'+size2+'</td>\n' +
+                                    '</tr>'
+                                );
+
+                            });
+
+                            $('#myModal').modal('toggle');
+                        }
+                    });
+                }
+
+                /*var impact_value = current.next('input').val();
                 var row_id = current.parent().parent().parent().data('id');
                 var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
 
@@ -1206,7 +1328,7 @@
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
                     }
-                });
+                });*/
 
             });
 

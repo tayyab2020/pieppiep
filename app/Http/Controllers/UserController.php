@@ -7,6 +7,7 @@ use App\color;
 use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
+use App\feature_sub_products;
 use App\features;
 use App\handyman_quotes;
 use App\handyman_services;
@@ -167,6 +168,13 @@ class UserController extends Controller
     public function GetFeaturePrice(Request $request)
     {
         $data = product_features::where('id',$request->id)->first();
+
+        return $data;
+    }
+
+    public function GetSubProductsSizes(Request $request)
+    {
+        $data = feature_sub_products::where('feature_id',$request->id)->get();
 
         return $data;
     }

@@ -73,6 +73,7 @@
   Route::get('/get-colors', 'UserController@GetColors');
   Route::get('/get-price', 'UserController@GetPrice');
   Route::get('/get-feature-price', 'UserController@GetFeaturePrice');
+  Route::get('/get-sub-products-sizes', 'UserController@GetSubProductsSizes');
   Route::get('/klanten', 'UserController@Customers')->name('customers');
   Route::get('/klant-bewerken/{id}', 'UserController@EditCustomer')->name('edit-customer');
   Route::get('/klant-verwijderen/{id}', 'UserController@DeleteCustomer')->name('delete-customer');
