@@ -1268,22 +1268,22 @@
                                 var size1 = value.size1_value;
                                 var size2 = value.size2_value;
 
-                                if(size1)
+                                if(size1 == 1)
                                 {
-                                    size1 = 'Yes';
+                                    size1 = '<input type="checkbox">';
                                 }
                                 else
                                 {
-                                    size1 = 'No';
+                                    size1 = 'X';
                                 }
 
-                                if(size2)
+                                if(size2 == 1)
                                 {
-                                    size2 = 'Yes';
+                                    size2 = '<input type="checkbox">';
                                 }
                                 else
                                 {
-                                    size2 = 'No';
+                                    size2 = 'X';
                                 }
 
                                 $('#myModal').find('.modal-body').find('table tbody').append(
