@@ -12,7 +12,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products" style="display: block;">
-                                        @if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'customer-quotations')
+                                        @if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations')
                                             <h2 style="display: inline-block;">{{__('text.Quotations')}}</h2>
                                         @elseif(Route::currentRouteName() == 'commission-invoices')
                                             <h2 style="display: inline-block;">{{__('text.Commission Invoices')}}</h2>
@@ -36,6 +36,10 @@
 
                                                 @endif
 
+                                            @elseif(Route::currentRouteName() == 'new-quotations')
+
+                                                <a style="float: right;margin-right: 10px;" href="{{route('create-new-quotation')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Create New Quotation</a>
+
                                             @endif
                                     </div>
                                     <hr>
@@ -51,15 +55,15 @@
 
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">ID</th>
 
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">@if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'customer-quotations') {{__('text.Quotation Number')}} @else {{__('text.Invoice Number')}} @endif</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">@if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations') {{__('text.Quotation Number')}} @else {{__('text.Invoice Number')}} @endif</th>
 
-                                                        @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices')
+                                                        @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations')
 
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending" id="photo">{{__('text.Delivery Date')}}</th>
 
                                                         @endif
 
-                                                        @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices')
+                                                        @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations')
 
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending" id="serv">{{__('text.Subtotal')}}</th>
 
@@ -101,9 +105,9 @@
 
                                                             <td>{{$key->invoice_id}}</td>
 
-                                                            @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
+                                                            @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'new-quotations')
 
-                                                                <td><a href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}">QUO# {{$key->quotation_invoice_number}}</a></td>
+                                                                <td><a @if(Route::currentRouteName() == 'new-quotations') href="" @else href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}" @endif>QUO# {{$key->quotation_invoice_number}}</a></td>
 
                                                             @else
 
@@ -119,7 +123,7 @@
                                                             @endif
 
 
-                                                            @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices')
+                                                            @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations')
 
                                                                     <td>{{number_format((float)$key->subtotal, 2, ',', '.')}}</td>
                                                                     <td>{{number_format((float)$key->tax, 2, ',', '.')}}</td>
@@ -143,7 +147,7 @@
 
                                                                     <td>
 
-                                                                        @if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
+                                                                        @if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
 
                                                                             @if($key->status == 3)
 
@@ -295,6 +299,12 @@
 
                                                                             @else
 
+                                                                                @if(Route::currentRouteName() == 'new-quotations')
+
+                                                                                    <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                @else
+
                                                                                     @if(auth()->user()->can('view-handyman-quotation'))
 
                                                                                         <li><a href="{{ url('/aanbieder/bekijk-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
@@ -328,40 +338,41 @@
                                                                                     @endif
 
 
+                                                                                    @if($key->status == 2 && $key->accepted)
 
-                                                                                        @if($key->status == 2 && $key->accepted)
+                                                                                        @if(auth()->user()->can('create-handyman-invoice'))
 
-                                                                                            @if(auth()->user()->can('create-handyman-invoice'))
+                                                                                            <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
 
-                                                                                                <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
+                                                                                        @endif
 
-                                                                                            @endif
+                                                                                    @elseif($key->status == 1)
 
-                                                                                        @elseif($key->status == 1)
+                                                                                        @if($key->ask_customization)
 
-                                                                                            @if($key->ask_customization)
+                                                                                            <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
 
-                                                                                                <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
+                                                                                            @if(auth()->user()->can('edit-handyman-quotation'))
 
-                                                                                                @if(auth()->user()->can('edit-handyman-quotation'))
-
-                                                                                                    <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
-
-                                                                                                @endif
+                                                                                                <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
 
                                                                                             @endif
 
                                                                                         @endif
 
-                                                                                        @if($key->status == 3 && $key->delivered == 0)
+                                                                                    @endif
 
-                                                                                            @if(auth()->user()->can('mark-delivered'))
+                                                                                    @if($key->status == 3 && $key->delivered == 0)
 
-                                                                                                <li><a href="{{ url('/aanbieder/mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
+                                                                                        @if(auth()->user()->can('mark-delivered'))
 
-                                                                                            @endif
+                                                                                            <li><a href="{{ url('/aanbieder/mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
 
                                                                                         @endif
+
+                                                                                    @endif
+
+                                                                                @endif
 
                                                                             @endif
 

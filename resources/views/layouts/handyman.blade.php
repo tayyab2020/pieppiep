@@ -153,6 +153,10 @@
                         @if(auth()->user()->can('create-new-quotation'))
 
                             <li>
+                                <a href="{{route('new-quotations')}}"><i class="fa fa-fw fa-file-text"></i>New Quotations</a>
+                            </li>
+
+                            <li>
                                 <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i>Create Quotation (New)</a>
                             </li>
 

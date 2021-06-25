@@ -14,6 +14,10 @@ use App\handyman_services;
 use App\instruction_manual;
 use App\items;
 use App\Model1;
+use App\new_quotations;
+use App\new_quotations_data;
+use App\new_quotations_features;
+use App\new_quotations_sub_products;
 use App\product;
 use App\product_features;
 use App\Products;
@@ -115,8 +119,9 @@ class UserController extends Controller
         {
             $products = Products::all();
             $items = items::where('user_id',$user_id)->get();
+            $customers = User::where('parent_id', $user_id)->get();
 
-            return view('user.create_new_quotation', compact('products','items'));
+            return view('user.create_new_quotation', compact('products','items','customers'));
         }
         else
         {
@@ -1961,6 +1966,165 @@ class UserController extends Controller
         } else {
             return redirect('aanbieder/quotation-requests');
         }
+    }
+
+    public function NewQuotations($id = '')
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if ($id) {
+            $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.handyman_id', $user_id)->where('new_quotations.id', $id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+        } else {
+            $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.handyman_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+        }
+
+        return view('user.quote_invoices', compact('invoices'));
+    }
+
+    public function DownloadNewQuotation($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $invoice = new_quotations::where('id', $id)->where('handyman_id', $user_id)->first();
+
+        if (!$invoice) {
+            return redirect()->route('new-quotations');
+        }
+
+        $quotation_invoice_number = $invoice->quotation_invoice_number;
+
+        $filename = $quotation_invoice_number . '.pdf';
+
+        return response()->download(public_path("assets/newQuotations/{$filename}"));
+    }
+
+    public function StoreNewQuotation(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
+        $user_name = $user->name;
+        $counter = $user->counter;
+        $user_email = $user->email;
+        $company_name = $user->company_name;
+        $products = $request->products;
+
+        $client = User::where('id', $request->customer)->first();
+
+        $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
+
+        $invoice = new new_quotations();
+        $invoice->quotation_invoice_number = $quotation_invoice_number;
+        $invoice->handyman_id = $user_id;
+        $invoice->user_id = $request->customer;
+        $invoice->vat_percentage = 21;
+        $invoice->subtotal = $request->total_amount;
+        $invoice->grand_total = $request->total_amount;
+        $invoice->save();
+
+        foreach ($products as $i => $key) {
+
+            $row_id = $request->row_id[$i];
+            $product_titles[] = product::where('id',$key)->pluck('title')->first();
+            $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
+
+            $invoice_items = new new_quotations_data;
+            $invoice_items->quotation_id = $invoice->id;
+            $invoice_items->product_id = (int)$key;
+            $invoice_items->row_id = $row_id;
+            $invoice_items->item = $request->items[$i] ? $request->items[$i] : 0;
+            $invoice_items->color = $request->colors[$i];
+            $invoice_items->rate = $request->total[$i];
+            $invoice_items->qty = str_replace(",",".",$request->qty[$i]);
+            $invoice_items->amount = $request->total[$i];
+            $invoice_items->width = $request->width[$i];
+            $invoice_items->height = $request->height[$i];
+            $invoice_items->save();
+
+            $feature_row = 'features'.$row_id;
+            $features = $request->$feature_row;
+
+            foreach($features as $f => $key1)
+            {
+                $f_row = 'f_id'.$row_id;
+                $f_ids = $request->$f_row;
+
+                $feature_titles[$i][] = features::where('id',$f_ids[$f])->pluck('title')->first();
+
+                $post = new new_quotations_features;
+                $post->quotation_data_id = $invoice_items->id;
+                $post->feature_id = $f_ids[$f];
+                $post->value = $key1;
+                $post->save();
+
+                if($key1)
+                {
+                    $size1 = 'sizeA'.$row_id.'_'.$f_ids[$f];
+                    $size1_value = $request->$size1;
+
+                    $size2 = 'sizeB'.$row_id.'_'.$f_ids[$f];
+                    $size2_value = $request->$size2;
+
+                    $sub = 'sub_product_id'.$row_id.'_'.$f_ids[$f];
+                    $sub_value = $request->$sub;
+
+                    if(isset($sub_value))
+                    {
+                        foreach ($sub_value as $s => $key2)
+                        {
+                            $post1 = new new_quotations_sub_products;
+                            $post1->feature_row_id = $post->id;
+                            $post1->sub_product_id = $key2;
+                            $post1->size1_value = $size1_value[$s];
+                            $post1->size2_value = $size2_value[$s];
+                            $post1->save();
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        $counter = $counter + 1;
+
+        User::where('id',$user_id)->update(['counter' => $counter]);
+
+        $filename = $quotation_invoice_number . '.pdf';
+
+        ini_set('max_execution_time', 180);
+
+        $date = $invoice->created_at;
+
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+
+        $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
+
+
+        Session::flash('success', __('text.Quotation has been created successfully!'));
+        return redirect()->route('new-quotations');
     }
 
     public function StoreQuotation(Request $request)

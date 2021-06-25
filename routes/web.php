@@ -69,7 +69,10 @@
 
   Route::prefix('aanbieder')->group(function() {
 
+  Route::get('/new-quotations', 'UserController@NewQuotations')->name('new-quotations');
+  Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
   Route::get('/create-new-quotation', 'UserController@CreateNewQuotation')->name('create-new-quotation');
+  Route::post('/store-new-quotation', 'UserController@StoreNewQuotation')->name('store-new-quotation');
   Route::get('/get-colors', 'UserController@GetColors');
   Route::get('/get-price', 'UserController@GetPrice');
   Route::get('/get-feature-price', 'UserController@GetFeaturePrice');

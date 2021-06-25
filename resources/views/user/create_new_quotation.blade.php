@@ -2,157 +2,193 @@
 
 @section('content')
 
-    <div class="right-side">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <!-- Starting of Dashboard data-table area -->
-                    <div class="section-padding add-product-1" style="padding: 0;">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div style="box-shadow: none;" class="add-product-box">
-                                    <div class="add-product-header products">
-                                        <h2>{{__('text.Create Quotation')}}</h2>
+    <form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}" method="POST" enctype="multipart/form-data">
+        {{csrf_field()}}
 
-                                    </div>
-                                    <hr>
-                                    <div>
-                                        @include('includes.form-success')
+        <div class="right-side">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <!-- Starting of Dashboard data-table area -->
+                        <div class="section-padding add-product-1" style="padding: 0;">
 
-                                        <form style="padding: 0;" class="form-horizontal" action="{{route('store-quotation')}}" method="POST" enctype="multipart/form-data">
-                                            {{csrf_field()}}
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div style="box-shadow: none;" class="add-product-box">
+                                        <div class="add-product-header products">
 
-                                            <div style="margin: 0;background: #f5f5f5;" class="row">
+                                            <h2>{{__('text.Create Quotation')}}</h2>
 
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 first-row">
+                                            <div class="col-md-5">
+                                                <div class="form-group" style="margin: 0;">
+                                                    <div id="cus-box" style="display: flex;">
+                                                        <select class="customer-select form-control" name="customer" required>
 
-                                                    <div>
+                                                            <option value="">{{__('text.Select Customer')}}</option>
+
+                                                            @foreach($customers as $key)
+
+                                                                <option value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
+
+                                                            @endforeach
+
+                                                        </select>
+                                                        <button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <hr>
+                                        <div>
+
+                                            <div class="alert-box">
+
+                                            </div>
+
+                                            @include('includes.form-success')
+
+                                            <div class="form-horizontal">
+
+                                                <div style="margin: 0;background: #f5f5f5;" class="row">
+
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 first-row">
+
+                                                        <div>
                                                         <span class="tooltip1 add-row" style="margin-right: 10px;">
                                                             <i class="fa fa-fw fa-plus-circle"></i>
                                                             <span class="tooltiptext">Add</span>
                                                         </span>
 
-                                                        <span class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                            <span class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                             <i class="fa fa-fw fa-minus-circle"></i>
                                                             <span class="tooltiptext">Remove</span>
                                                         </span>
 
-                                                        <span class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;">
+                                                            <span class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;">
                                                             <i class="fa fa-fw fa-copy"></i>
                                                             <span class="tooltiptext">Copy</span>
                                                         </span>
-                                                    </div>
+                                                        </div>
 
-                                                    <div>
-                                                        <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                        <div>
+                                                        <span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                             <i class="fa fa-fw fa-save"></i>
                                                             <span class="tooltiptext">Save</span>
                                                         </span>
 
-                                                        <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                            <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                             <i class="fa fa-fw fa-close"></i>
                                                             <span class="tooltiptext">Close</span>
                                                         </span>
+                                                        </div>
+
                                                     </div>
 
-                                                </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="margin-bottom: 10px;padding-bottom: 15px;">
 
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="margin-bottom: 10px;">
+                                                        <table id="products_table" style="width: 100%;">
+                                                            <thead>
+                                                            <tr>
+                                                                <th style="padding: 5px;"></th>
+                                                                <th>Product</th>
+                                                                <th>Items</th>
+                                                                <th>Color</th>
+                                                                <th>Width</th>
+                                                                <th>Height</th>
+                                                                <th>Required</th>
+                                                                <th>€ Art.</th>
+                                                                <th>€ Arb.</th>
+                                                                <th>€ Total</th>
+                                                                <th></th>
+                                                            </tr>
+                                                            </thead>
 
-                                                    <table id="products_table" style="width: 100%;">
-                                                        <thead>
-                                                        <tr>
-                                                            <th style="padding: 5px;"></th>
-                                                            <th>Product</th>
-                                                            <th>Items</th>
-                                                            <th>Color</th>
-                                                            <th>Width</th>
-                                                            <th>Height</th>
-                                                            <th>Required</th>
-                                                            <th>€ Art.</th>
-                                                            <th>€ Arb.</th>
-                                                            <th>€ Total</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
+                                                            <tbody>
 
-                                                        <tbody>
+                                                            <tr class="active" data-id="1">
+                                                                <td>1</td>
+                                                                <input type="hidden" id="row_total" name="total[]">
+                                                                <input type="hidden" value="1" id="row_id" name="row_id[]">
+                                                                <td class="products">
+                                                                    <select name="products[]" class="js-data-example-ajax">
 
-                                                        <tr class="active" data-id="1">
-                                                            <td>1</td>
-                                                            <input type="hidden" id="row_total" name="total[]">
-                                                            <td class="products">
-                                                                <select class="js-data-example-ajax">
+                                                                        <option value=""></option>
 
-                                                                    <option value=""></option>
+                                                                        @foreach($products as $key)
 
-                                                                    @foreach($products as $key)
+                                                                            <option value="{{$key->id}}">{{$key->title}}</option>
 
-                                                                        <option value="{{$key->id}}">{{$key->title}}</option>
+                                                                        @endforeach
 
-                                                                    @endforeach
+                                                                    </select>
+                                                                </td>
+                                                                <td class="items">
+                                                                    <select name="items[]" class="js-data-example-ajax1">
 
-                                                                </select>
-                                                            </td>
-                                                            <td class="items">
-                                                                <select class="js-data-example-ajax1">
+                                                                        <option value=""></option>
 
-                                                                    <option value=""></option>
+                                                                        @foreach($items as $key)
 
-                                                                    @foreach($items as $key)
+                                                                            <option value="{{$key->id}}">{{$key->cat_name}}</option>
 
-                                                                        <option value="{{$key->id}}">{{$key->cat_name}}</option>
+                                                                        @endforeach
 
-                                                                    @endforeach
+                                                                    </select>
+                                                                </td>
+                                                                <td class="color">
+                                                                    <select name="colors[]" class="js-data-example-ajax2">
 
-                                                                </select>
-                                                            </td>
-                                                            <td class="color">
-                                                                <select class="js-data-example-ajax2">
+                                                                        <option value=""></option>
 
-                                                                    <option value=""></option>
-
-                                                                </select>
-                                                            </td>
-                                                            <td class="width" style="width: 80px;">
-                                                                <div class="m-box">
-                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-                                                                    <span class="measure-unit">cm</span>
-                                                                </div>
-                                                            </td>
-                                                            <td class="height" style="width: 80px;">
-                                                                <div class="m-box">
-                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
-                                                                    <span class="measure-unit">cm</span>
-                                                                </div>
-                                                            </td>
-                                                            <td>1 x 17</td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td class="price"></td>
-                                                            <td id="next-row-td" style="padding: 0;">
+                                                                    </select>
+                                                                </td>
+                                                                <td class="width" style="width: 80px;">
+                                                                    <div class="m-box">
+                                                                        <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+                                                                        <span class="measure-unit">cm</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="height" style="width: 80px;">
+                                                                    <div class="m-box">
+                                                                        <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+                                                                        <span class="measure-unit">cm</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td>1 x 17</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td class="price"></td>
+                                                                <td id="next-row-td" style="padding: 0;">
                                                                 <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
                                                                     <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
                                                                     <span style="top: 45px;" class="tooltiptext">Next</span>
                                                                 </span>
-                                                            </td>
-                                                        </tr>
+                                                                </td>
+                                                            </tr>
 
-                                                        </tbody>
+                                                            </tbody>
 
-                                                    </table>
+                                                        </table>
 
-                                                </div>
+                                                        <div style="display: flex;justify-content: flex-end;align-items: center;" id="total_box">
+                                                            <span style="font-size: 18px;font-weight: 500;margin-right: 5px;">Total: €</span>
+                                                            <input name="total_amount" id="total_amount" style="border: 0;font-size: 18px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="0">
+                                                        </div>
 
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: white;padding: 15px 0 0 0;">
+                                                    </div>
 
-                                                    <ul style="border: 0;" class="nav nav-tabs feature-tab">
-                                                        <li style="margin-bottom: 0;" class="active"><a style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
-                                                    </ul>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: white;padding: 15px 0 0 0;">
 
-                                                    <div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
+                                                        <ul style="border: 0;" class="nav nav-tabs feature-tab">
+                                                            <li style="margin-bottom: 0;" class="active"><a style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
+                                                        </ul>
 
-                                                        <div id="menu1" class="tab-pane fade active in">
+                                                        <div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
+
+                                                            <div id="menu1" class="tab-pane fade active in">
+
+                                                            </div>
 
                                                         </div>
 
@@ -161,54 +197,203 @@
                                                 </div>
 
                                             </div>
-                                        </form>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
+                    <!-- Ending of Dashboard data-table area -->
                 </div>
-                <!-- Ending of Dashboard data-table area -->
             </div>
         </div>
-    </div>
 
-    <div id="myModal" class="modal fade" role="dialog">
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Sub Products Sizes</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+    <div id="cover"></div>
+
+    <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Sub Products Sizes</h4>
+            <form id="quote_form" method="post" action="{{route('user.quote')}}">
+
+                <input type="hidden" name="_token" value="{{@csrf_token()}}">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
+                    </div>
+
+                    <div class="modal-body" id="myWizard" style="display: inline-block;">
+
+                        <input type="hidden" id="token" name="token" value="{{csrf_token()}}">
+                        <input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
+                        <input type="hidden" id="handyman_name" name="handyman_name" value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="family_name" name="family_name" class="form-control validation" placeholder="{{$lang->fn}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="address" name="address" class="form-control validation" placeholder="{{$lang->ad}}" type="text">
+                                <input type="hidden" id="check_address" value="0">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="postcode" name="postcode" class="form-control validation" readonly placeholder="{{$lang->pc}}" type="text">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="city" name="city" class="form-control validation" placeholder="{{$lang->ct}}" readonly type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="phone" name="phone" class="form-control validation" placeholder="{{$lang->pn}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-envelope"></i>
+                                </div>
+                                <input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}" type="email">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;" class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
+                    </div>
+
                 </div>
-                <div class="modal-body">
-                    <table style="width: 100%;">
 
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Size 38mm</th>
-                            <th>Size 25mm</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-
-                        </tbody>
-
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
+            </form>
         </div>
     </div>
 
     <style>
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered
+        {
+            line-height: 25px;
+        }
+
+        #cover {
+            background: url(<?php echo asset('assets/images/page-loader.gif'); ?>) no-repeat scroll center center #ffffff78;
+            position: fixed;
+            z-index: 100000;
+            height: 100%;
+            width: 100%;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-size: 8%;
+            display: none;
+        }
+
+        .pac-container
+        {
+            z-index: 1000000;
+        }
+
+        #cus-box .select2-container--default .select2-selection--single .select2-selection__rendered
+        {
+            line-height: 28px;
+        }
+
+        #cus-box .select2-container--default .select2-selection--single
+        {
+            border:1px solid #cacaca;
+        }
+
+        #cus-box .select2-selection
+        {
+            height: 40px !important;
+            padding-top: 5px !important;
+            outline: none;
+        }
+
+        #cus-box .select2-selection__arrow
+        {
+            top: 7.5px !important;
+        }
+
+        #cus-box .select2-selection__clear
+        {
+            display: none;
+        }
 
         .feature-tab li a[aria-expanded="false"]::before, a[aria-expanded="true"]::before
         {
@@ -229,6 +414,7 @@
             padding: 0;
             padding-right: 5px;
             text-align: right;
+            height: 30px !important;
         }
 
         .m-input:focus
@@ -380,11 +566,252 @@
 
 @section('scripts')
 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
     <script type="text/javascript">
 
+        function initMap() {
+
+            var input = document.getElementById('address');
+
+            var options = {
+                componentRestrictions: {country: "nl"}
+            };
+
+            var autocomplete = new google.maps.places.Autocomplete(input,options);
+
+            // Set the data fields to return when the user selects a place.
+            autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+
+            autocomplete.addListener('place_changed', function() {
+
+                var flag = 0;
+
+                var place = autocomplete.getPlace();
+
+                if (!place.geometry) {
+
+                    // User entered the name of a Place that was not suggested and
+                    // pressed the Enter key, or the Place Details request failed.
+                    window.alert("{{__('text.No details available for input: ')}}" + place.name);
+                    return;
+                }
+                else
+                {
+                    var string = $('#address').val().substring(0, $('#address').val().indexOf(',')); //first string before comma
+
+                    if(string)
+                    {
+                        var is_number = $('#address').val().match(/\d+/);
+
+                        if(is_number === null)
+                        {
+                            flag = 1;
+                        }
+                    }
+                }
+
+                var city = '';
+                var postal_code = '';
+
+                for(var i=0; i < place.address_components.length; i++)
+                {
+                    if(place.address_components[i].types[0] == 'postal_code')
+                    {
+                        postal_code = place.address_components[i].long_name;
+                    }
+
+                    if(place.address_components[i].types[0] == 'locality')
+                    {
+                        city = place.address_components[i].long_name;
+                    }
+                }
+
+                if(city == '')
+                {
+                    for(var i=0; i < place.address_components.length; i++)
+                    {
+                        if(place.address_components[i].types[0] == 'administrative_area_level_2')
+                        {
+                            city = place.address_components[i].long_name;
+
+                        }
+                    }
+                }
+
+                if(postal_code == '' || city == '')
+                {
+                    flag = 1;
+                }
+
+                if(!flag)
+                {
+                    $('#check_address').val(1);
+                    $("#address-error").remove();
+                    $('#postcode').val(postal_code);
+                    $("#city").val(city);
+                }
+                else
+                {
+                    $('#address').val('');
+                    $('#postcode').val('');
+                    $("#city").val('');
+
+                    $("#address-error").remove();
+                    $('#address').parent().parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;">{{__('text.Kindly write your full address with house/building number so system can detect postal code and city from it!')}}</small>');
+                }
+
+            });
+        }
+
+        $("#address").on('input',function(e){
+            $(this).next('input').val(0);
+        });
+
+        $("#address").focusout(function(){
+
+            var check = $(this).next('input').val();
+
+            if(check == 0)
+            {
+                $(this).val('');
+                $('#postcode').val('');
+                $("#city").val('');
+            }
+        });
+
         $(document).ready(function() {
+
+            $(".submit-customer").click(function(){
+
+                var name = $('#name').val();
+                var family_name = $('#family_name').val();
+                var business_name = $('#business_name').val();
+                var postcode = $('#postcode').val();
+                var address = $('#address').val();
+                var city = $('#city').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                var handyman_id = $('#handyman_id').val();
+                var handyman_name = $('#handyman_name').val();
+                var token = $('#token').val();
+
+                var validation = $('.modal-body').find('.validation');
+
+                var flag = 0;
+
+                $(validation).each(function(){
+
+                    if(!$(this).val())
+                    {
+                        $(this).css('border','1px solid red');
+                        flag = 1;
+                    }
+                    else
+                    {
+                        $(this).css('border','');
+                    }
+
+                });
+
+                if(!flag)
+                {
+                    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+                    if(!regex.test(email))
+                    {
+                        $('#email').css('border','1px solid red');
+
+                        $('.alert-box').html('<div class="alert alert-danger">\n' +
+                            '                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+                            '                                            <p class="text-left">Email address is not valid...</p>\n' +
+                            '                                        </div>');
+                        $('.alert-box').show();
+                        $('.alert-box').delay(5000).fadeOut(400);
+                    }
+                    else
+                    {
+                        $('#email').css('border','');
+
+                        $('#cover').show();
+
+                        $.ajax({
+
+                            type: "POST",
+                            data: "handyman_id=" + handyman_id + "&handyman_name=" + handyman_name + "&name=" + name + "&family_name=" + family_name + "&business_name=" + business_name + "&postcode=" + postcode + "&address=" + address + "&city=" + city + "&phone=" + phone + "&email=" + email + "&_token=" + token,
+                            url: "<?php echo url('/aanbieder/create-customer')?>",
+
+                            success: function(data) {
+
+                                $('#cover').hide();
+
+                                var newStateVal = data.data.id;
+                                var newName = data.data.name + " " + data.data.family_name;
+
+                                // Set the value, creating a new option if necessary
+                                if ($(".customer-select").find("option[value=" + newStateVal + "]").length) {
+                                    $(".customer-select").val(newStateVal).trigger("change");
+                                } else {
+                                    // Create the DOM option that is pre-selected by default
+                                    var newState = new Option(newName, newStateVal, true, true);
+                                    // Append it to the select
+                                    $(".customer-select").append(newState).trigger('change');
+                                }
+
+                                $('.alert-box').html('<div class="alert alert-success">\n' +
+                                    '                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+                                    '                                            <p class="text-left">'+data.message+'</p>\n' +
+                                    '                                        </div>');
+                                $('.alert-box').show();
+                                $('.alert-box').delay(5000).fadeOut(400);
+
+                                $('#myModal1').modal('toggle');
+                                window.scrollTo({top: 0, behavior: 'smooth'});
+                            },
+                            error: function(data) {
+
+                                $('#cover').hide();
+
+                                /*if (data.status == 422) {
+                                    $.each(data.responseJSON.errors, function (i, error) {
+                                        $('.alert-box').html('<div class="alert alert-danger">\n' +
+                                            '                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+                                            '                                            <p class="text-left">'+error[0]+'</p>\n' +
+                                            '                                        </div>');
+                                    });
+                                    $('.alert-box').show();
+                                    $('.alert-box').delay(5000).fadeOut(400);
+                                }*/
+
+                                $('.alert-box').html('<div class="alert alert-danger">\n' +
+                                    '                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+                                    '                                            <p class="text-left">Something went wrong!</p>\n' +
+                                    '                                        </div>');
+                                $('.alert-box').show();
+                                $('.alert-box').delay(5000).fadeOut(400);
+
+                                $('#myModal1').modal('toggle');
+                                window.scrollTo({top: 0, behavior: 'smooth'});
+                            }
+
+                        });
+                    }
+                }
+
+            });
+
+            $(".customer-select").select2({
+                width: '100%',
+                height: '200px',
+                placeholder: "{{__('text.Select Customer')}}",
+                allowClear: true,
+                "language": {
+                    "noResults": function(){
+                        return '{{__('text.No results found')}}';
+                    }
+                },
+            });
 
             var current_desc = '';
 
@@ -420,6 +847,26 @@
                     }
                 },
             });
+
+
+            function calculate_total()
+            {
+                var total = 0;
+
+                $("input[name='total[]']").each(function(i, obj) {
+
+                    if(!obj.value)
+                    {
+                        obj.value = 0;
+                    }
+
+                    total = total + parseInt(obj.value);
+
+                });
+
+                $('#total_amount').val(total);
+            }
+
 
             $(document).on('change', ".js-data-example-ajax", function(e){
 
@@ -467,6 +914,8 @@
                             current.parent().parent().find('.width').children('.m-box').children('.measure-unit').text('');
                             current.parent().parent().find('.height').children('.m-box').children('.measure-unit').text('');
                         }
+
+                        calculate_total();
 
                     }
                 });
@@ -531,6 +980,7 @@
                                     });
 
                                     current.parent().parent().find('.price').text('');
+                                    current.parent().parent().find('#row_total').val('');
                                 }
                                 else if(data[0].value === 'x_axis')
                                 {
@@ -541,6 +991,7 @@
                                     });
 
                                     current.parent().parent().find('.price').text('');
+                                    current.parent().parent().find('#row_total').val('');
                                 }
                                 else if(data[0].value === 'y_axis')
                                 {
@@ -552,6 +1003,7 @@
                                     });
 
                                     current.parent().parent().find('.price').text('');
+                                    current.parent().parent().find('#row_total').val('');
                                 }
                                 else
                                 {
@@ -580,13 +1032,16 @@
                                                 }
                                             }
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                            /*opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';*/
                                         });
+
+                                        opt = '<option value="0">No</option><option value="1">Yes</option>';
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
-                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="'+value.title+row_id+'">'+opt+'</select>\n' +
-                                            '<input value="'+f_value+'" name="f_price" id="f_price" type="hidden">'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
+                                            '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -602,19 +1057,21 @@
                                         '\n' +
                                         '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                         '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
-                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
                                         '</div>');
 
                                     current.parent().parent().find('.price').text('€ ' + price);
                                     current.parent().parent().find('#row_total').val(price);
-
                                 }
                             }
                             else
                             {
                                 current.parent().parent().find('.price').text('');
+                                current.parent().parent().find('#row_total').val('');
                             }
+
+                            calculate_total();
                         }
                     });
                 }
@@ -642,13 +1099,17 @@
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
 
+                var r_id = $('#products_table tbody tr:last').find('td:eq(0)').text();
+                r_id = parseInt(r_id) + 1;
+
                 if(!copy)
                 {
                     $("#products_table tbody").append('<tr data-id="'+rowCount+'">\n' +
-                        '                                                            <td>'+rowCount+'</td>\n' +
+                        '                                                            <td>'+r_id+'</td>\n' +
                         '                                                            <input type="hidden" id="row_total" name="total[]">\n' +
+                        '                                                            <input type="hidden" value="'+rowCount+'" id="row_id" name="row_id[]">\n' +
                         '                                                            <td class="products">\n' +
-                        '                                                                <select class="js-data-example-ajax">\n' +
+                        '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
                         '\n' +
                         '                                                                    <option value=""></option>\n' +
                         '\n' +
@@ -661,7 +1122,7 @@
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="items">\n' +
-                        '                                                                <select class="js-data-example-ajax1">\n' +
+                        '                                                                <select name="items[]" class="js-data-example-ajax1">\n' +
                         '\n' +
                         '                                                                    <option value=""></option>\n' +
                         '\n' +
@@ -674,7 +1135,7 @@
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="color">\n' +
-                        '                                                                <select class="js-data-example-ajax2">\n' +
+                        '                                                                <select name="colors[]" class="js-data-example-ajax2">\n' +
                         '\n' +
                         '                                                                    <option value=""></option>\n' +
                         '\n' +
@@ -748,24 +1209,25 @@
                 {
 
                     $("#products_table tbody").append('<tr data-id="'+rowCount+'">\n' +
-                        '                                                            <td>'+rowCount+'</td>\n' +
+                        '                                                            <td>'+r_id+'</td>\n' +
                         '                                                            <input value="'+price+'" type="hidden" id="row_total" name="total[]">\n' +
+                        '                                                            <input type="hidden" value="'+rowCount+'" id="row_id" name="row_id[]">\n' +
                         '                                                            <td class="products">\n' +
-                        '                                                                <select class="js-data-example-ajax">\n' +
+                        '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
                         '\n' +
                         products +
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="items">\n' +
-                        '                                                                <select class="js-data-example-ajax1">\n' +
+                        '                                                                <select name="items[]" class="js-data-example-ajax1">\n' +
                         '\n' +
                         items +
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="color">\n' +
-                        '                                                                <select class="js-data-example-ajax2">\n' +
+                        '                                                                <select name="colors[]" class="js-data-example-ajax2">\n' +
                         '\n' +
                         colors +
                         '\n' +
@@ -808,7 +1270,8 @@
                         $('#menu1').find(`[data-id='${rowCount}']`).find('input[name="qty[]"]').val(qty);
 
                         features_selects.each(function(index,select){
-                            $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
+                            /*$('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());*/
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val(0);
                         });
                     }
 
@@ -850,6 +1313,8 @@
                         },
                     });
                 }
+
+                calculate_total();
             }
 
             $(document).on('click', '#products_table tbody tr', function(e){
@@ -881,21 +1346,113 @@
 
             $(document).on('click', '.remove-row', function(){
 
+                var rowCount = $('#products_table tbody tr').length;
+
                 var current = $('#products_table tbody tr.active');
 
                 var id = current.data('id');
 
-                $('#menu1').find(`[data-id='${id}']`).remove();
+                if(rowCount != 1)
+                {
+                    $('#menu1').find(`[data-id='${id}']`).remove();
+                    $('#myModal').find('.modal-body').find(`[data-id='${id}']`).remove();
 
-                var next = current.next('tr');
+                    var next = current.next('tr');
 
-                focus_row(next);
+                    focus_row(next);
 
-                current.remove();
+                    current.remove();
 
-                numbering();
+                    numbering();
+                    calculate_total();
+                }
 
             });
+
+
+            $(document).on('click', '.save-data', function(){
+
+                var customer = $('.customer-select').val();
+                var flag = 0;
+
+                if(!customer)
+                {
+                    flag = 1;
+                    $('#cus-box .select2-container--default .select2-selection--single').css('border-color','red');
+                }
+                else
+                {
+                    $('#cus-box .select2-container--default .select2-selection--single').css('border-color','#cacaca');
+                }
+
+
+                $("[name='products[]']").each(function(i, obj) {
+
+                    if(!obj.value)
+                    {
+                        flag = 1;
+                        $(obj).next().find('.select2-selection').css('border','1px solid red');
+                    }
+                    else
+                    {
+                        $(obj).next().find('.select2-selection').css('border','0');
+                    }
+
+                });
+
+
+                $("[name='colors[]']").each(function(i, obj) {
+
+                    if(!obj.value)
+                    {
+                        flag = 1;
+                        $(obj).next().find('.select2-selection').css('border','1px solid red');
+                    }
+                    else
+                    {
+                        $(obj).next().find('.select2-selection').css('border','0');
+                    }
+
+                });
+
+
+                $("[name='width[]']").each(function(i, obj) {
+
+                    if(!obj.value)
+                    {
+                        flag = 1;
+                        $(obj).css('border','1px solid red');
+                    }
+                    else
+                    {
+                        $(obj).css('border','0');
+                    }
+
+                });
+
+
+                $("[name='height[]']").each(function(i, obj) {
+
+                    if(!obj.value)
+                    {
+                        flag = 1;
+                        $(obj).css('border','1px solid red');
+                    }
+                    else
+                    {
+                        $(obj).css('border','0');
+                    }
+
+                });
+
+
+                if(!flag)
+                {
+                    $('#form-quote').submit();
+                }
+
+            });
+
 
             $(document).on('click', '.copy-row', function(){
 
@@ -918,6 +1475,35 @@
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
 
                 add_row(true,price,products,product,items,item,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty);
+
+            });
+
+            $(document).on('keypress', "input[name='qty[]']", function(e){
+
+                e = e || window.event;
+                var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+                var val = String.fromCharCode(charCode);
+
+                if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+                {
+                    e.preventDefault();
+                    return false;
+                }
+
+                if(e.which == 44)
+                {
+                    if(this.value.indexOf(',') > -1)
+                    {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
+                var num = $(this).attr("maskedFormat").toString().split(',');
+                var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+                if (!regex.test(this.value)) {
+                    this.value = this.value.substring(0, this.value.length - 1);
+                }
 
             });
 
@@ -979,6 +1565,16 @@
 
             });
 
+            $(document).on('focusout', "input[name='qty[]']", function(e){
+
+                if($(this).val().slice($(this).val().length - 1) == ',')
+                {
+                    var val = $(this).val();
+                    val = val + '00';
+                    $(this).val(val);
+                }
+            });
+
             $(document).on('focusout', "input[name='width[]']", function(e){
 
                 if($(this).val().slice($(this).val().length - 1) == ',')
@@ -1031,6 +1627,7 @@
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
+                                    current.parent().parent().parent().find('#row_total').val('');
                                 }
                                 else if(data[0].value === 'x_axis')
                                 {
@@ -1041,6 +1638,7 @@
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
+                                    current.parent().parent().parent().find('#row_total').val('');
                                 }
                                 else if(data[0].value === 'y_axis')
                                 {
@@ -1052,6 +1650,7 @@
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
+                                    current.parent().parent().parent().find('#row_total').val('');
                                 }
                                 else
                                 {
@@ -1080,13 +1679,16 @@
                                                 }
                                             }
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                            /*opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';*/
                                         });
+
+                                        opt = '<option value="0">No</option><option value="1">Yes</option>';
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
-                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features[]">'+opt+'</select>\n' +
-                                            '<input value="'+f_value+'" name="f_price" id="f_price" type="hidden">'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
+                                            '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -1102,7 +1704,7 @@
                                         '\n' +
                                         '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                         '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
-                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
                                         '</div>');
 
@@ -1114,7 +1716,10 @@
                             else
                             {
                                 current.parent().parent().parent().find('.price').text('');
+                                current.parent().parent().parent().find('#row_total').val('');
                             }
+
+                            calculate_total();
                         }
                     });
                 }
@@ -1154,6 +1759,7 @@
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
+                                    current.parent().parent().parent().find('#row_total').val('');
                                 }
                                 else if(data[0].value === 'x_axis')
                                 {
@@ -1164,6 +1770,7 @@
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
+                                    current.parent().parent().parent().find('#row_total').val('');
                                 }
                                 else if(data[0].value === 'y_axis')
                                 {
@@ -1175,6 +1782,7 @@
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
+                                    current.parent().parent().parent().find('#row_total').val('');
                                 }
                                 else
                                 {
@@ -1189,6 +1797,7 @@
                                         var opt = '';
 
                                         $.each(value.features, function(index1, value1) {
+
                                             if(index1 == 0)
                                             {
                                                 if(value1.impact_type == 0)
@@ -1211,9 +1820,9 @@
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
-                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features[]">'+opt+'</select>\n' +
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
-                                            '<input value="'+value.id+'" name="f_id" class="f_id" type="hidden">'+
+                                            '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -1229,7 +1838,7 @@
                                         '\n' +
                                         '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                         '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
-                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
                                         '</div>');
 
@@ -1240,7 +1849,10 @@
                             else
                             {
                                 current.parent().parent().parent().find('.price').text('');
+                                current.parent().parent().parent().find('#row_total').val('');
                             }
+
+                            calculate_total();
                         }
                     });
                 }
@@ -1250,6 +1862,7 @@
             $(document).on('change', '.feature-select', function(){
 
                 var current = $(this);
+                var row_id = current.parent().parent().parent().data('id');
                 var feature_select = current.val();
                 var id = current.parent().find('.f_id').val();
 
@@ -1261,7 +1874,32 @@
                         url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
                         success: function (data) {
 
-                            $('#myModal').find('.modal-body').find('table tbody').children().remove();
+                            /*$('#myModal').find('.modal-body').find('table tbody').children().remove();*/
+
+                            $('#myModal').find('.modal-body').find('.sub-tables').hide();
+
+                            if($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).length > 0)
+                            {
+                                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).remove();
+                            }
+
+
+                            $('#myModal').find('.modal-body').append(
+                                '<div class="sub-tables" data-id="'+row_id+'">\n' +
+                                '<table data-id="'+id+'" style="width: 100%;">\n' +
+                                '<thead>\n' +
+                                '<tr>\n' +
+                                '<th>ID</th>\n' +
+                                '<th>Title</th>\n' +
+                                '<th>Size 38mm</th>\n' +
+                                '<th>Size 25mm</th>\n' +
+                                '</tr>\n' +
+                                '</thead>\n' +
+                                '<tbody>\n' +
+                                '</tbody>\n' +
+                                '</table>\n' +
+                                '</div>'
+                            );
 
                             $.each(data, function(index, value) {
 
@@ -1270,29 +1908,29 @@
 
                                 if(size1 == 1)
                                 {
-                                    size1 = '<input type="checkbox">';
+                                    size1 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id + '_' + id +'[]">';
                                 }
                                 else
                                 {
-                                    size1 = 'X';
+                                    size1 = 'X' + '<input name="sizeA'+ row_id + '_' + id +'[]" type="hidden" value="x">';
                                 }
 
                                 if(size2 == 1)
                                 {
-                                    size2 = '<input type="checkbox">';
+                                    size2 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id + '_' + id +'[]">';
                                 }
                                 else
                                 {
-                                    size2 = 'X';
+                                    size2 = 'X' + '<input name="sizeB'+ row_id + '_' + id +'[]" type="hidden" value="x">';
                                 }
 
-                                $('#myModal').find('.modal-body').find('table tbody').append(
+                                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).append(
                                     '<tr>\n' +
-                                    '<td>'+value.unique_code+'</td>\n' +
+                                    '<td><input type="hidden" name="sub_product_id'+ row_id + '_' + id +'[]" value="'+value.id+'">'+value.unique_code+'</td>\n' +
                                     '<td>'+value.title+'</td>\n' +
                                     '<td>'+size1+'</td>\n' +
                                     '<td>'+size2+'</td>\n' +
-                                    '</tr>'
+                                    '</tr>\n'
                                 );
 
                             });
@@ -1331,6 +1969,19 @@
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
                     }
                 });*/
+
+            });
+
+            $(document).on('change', '.cus_checkbox', function(){
+
+                if($(this).is(":checked"))
+                {
+                    $(this).next('input').val(1);
+                }
+                else
+                {
+                    $(this).next('input').val(0);
+                }
 
             });
 
