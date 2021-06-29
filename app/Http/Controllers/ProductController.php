@@ -13,7 +13,9 @@ use App\Model1;
 use App\price_tables;
 use App\product;
 use App\product_features;
+use App\product_sub_products;
 use App\Products;
+use App\sub_products;
 use App\vats;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -59,8 +61,9 @@ class ProductController extends Controller
         $brands = Brand::all();
         $tables = price_tables::where('connected',1)->get();
         $features_headings = features::all();
+        $sub_product_headings = sub_products::all();
 
-        return view('admin.product.create',compact('categories','brands','tables','features_headings'));
+        return view('admin.product.create',compact('categories','brands','tables','features_headings','sub_product_headings'));
     }
 
     public function pricesTables(Request $request)
@@ -118,6 +121,7 @@ class ProductController extends Controller
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
         $colors = $request->colors;
         $features = $request->feature_headings;
+        $sub_products = $request->sub_product_headings;
 
         if($prices)
         {
@@ -133,7 +137,9 @@ class ProductController extends Controller
         if($request->cat_id)
         {
             $removed = explode(',', $request->removed);
+            $removed_sub = explode(',', $request->removed_sub);
             product_features::whereIn('id',$removed)->delete();
+            product_sub_products::whereIn('id',$removed_sub)->delete();
 
             $removed_colors = explode(',', $request->removed_colors);
             colors::whereIn('id',$removed_colors)->delete();
@@ -208,6 +214,67 @@ class ProductController extends Controller
                 else
                 {
                     product_features::where('product_id',$request->cat_id)->delete();
+                }
+            }
+
+            $sub_pro = product_sub_products::where('product_id',$request->cat_id)->get();
+
+            if(count($sub_pro) == 0)
+            {
+                foreach ($sub_products as $s => $key)
+                {
+                    if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                    {
+                        $sub_pro = new product_sub_products;
+                        $sub_pro->title = $request->sub_titles[$s];
+                        $sub_pro->code = $request->sub_codes[$s];
+                        $sub_pro->product_id = $request->cat_id;
+                        $sub_pro->heading_id = $key;
+                        $sub_pro->size1_value = $request->size1_value[$s];
+                        $sub_pro->size2_value = $request->size2_value[$s];
+                        $sub_pro->save();
+                    }
+                }
+            }
+            else
+            {
+                if(count($sub_products) > 0)
+                {
+                    foreach ($sub_products as $s => $key)
+                    {
+                        $sub_check = product_sub_products::where('product_id',$request->cat_id)->skip($s)->first();
+
+                        if($sub_check)
+                        {
+                            if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                            {
+                                $sub_check->title = $request->sub_titles[$s];
+                                $sub_check->heading_id = $key;
+                                $sub_check->code = $request->sub_codes[$s];
+                                $sub_check->size1_value = $request->size1_value[$s];
+                                $sub_check->size2_value = $request->size2_value[$s];
+                                $sub_check->save();
+                            }
+                        }
+                        else
+                        {
+                            if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                            {
+                                $sub_pro = new product_sub_products;
+                                $sub_pro->title = $request->sub_titles[$s];
+                                $sub_pro->code = $request->sub_codes[$s];
+                                $sub_pro->product_id = $request->cat_id;
+                                $sub_pro->heading_id = $key;
+                                $sub_pro->size1_value = $request->size1_value[$s];
+                                $sub_pro->size2_value = $request->size2_value[$s];
+                                $sub_pro->save();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    product_sub_products::where('product_id',$request->cat_id)->delete();
                 }
             }
 
@@ -341,6 +408,21 @@ class ProductController extends Controller
                     }
                 }
 
+                foreach ($sub_products as $s => $key)
+                {
+                    if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                    {
+                        $sub_pro = new product_sub_products;
+                        $sub_pro->title = $request->sub_titles[$s];
+                        $sub_pro->code = $request->sub_codes[$s];
+                        $sub_pro->product_id = $cat->id;
+                        $sub_pro->heading_id = $key;
+                        $sub_pro->size1_value = $request->size1_value[$s];
+                        $sub_pro->size2_value = $request->size2_value[$s];
+                        $sub_pro->save();
+                    }
+                }
+
                 foreach ($colors as $c => $key)
                 {
                     if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
@@ -435,6 +517,67 @@ class ProductController extends Controller
                     else
                     {
                         product_features::where('product_id',$check->id)->delete();
+                    }
+                }
+
+                $sub_pro = product_sub_products::where('product_id',$check->id)->get();
+
+                if(count($sub_pro) == 0)
+                {
+                    foreach ($sub_products as $s => $key)
+                    {
+                        if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                        {
+                            $sub_pro = new product_sub_products;
+                            $sub_pro->title = $request->sub_titles[$s];
+                            $sub_pro->code = $request->sub_codes[$s];
+                            $sub_pro->product_id = $check->id;
+                            $sub_pro->heading_id = $key;
+                            $sub_pro->size1_value = $request->size1_value[$s];
+                            $sub_pro->size2_value = $request->size2_value[$s];
+                            $sub_pro->save();
+                        }
+                    }
+                }
+                else
+                {
+                    if(count($sub_products) > 0)
+                    {
+                        foreach ($sub_products as $s => $key)
+                        {
+                            $sub_check = product_sub_products::where('product_id',$check->id)->skip($s)->first();
+
+                            if($sub_check)
+                            {
+                                if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                                {
+                                    $sub_check->title = $request->sub_titles[$s];
+                                    $sub_check->heading_id = $key;
+                                    $sub_check->code = $request->sub_codes[$s];
+                                    $sub_check->size1_value = $request->size1_value[$s];
+                                    $sub_check->size2_value = $request->size2_value[$s];
+                                    $sub_check->save();
+                                }
+                            }
+                            else
+                            {
+                                if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                                {
+                                    $sub_pro = new product_sub_products;
+                                    $sub_pro->title = $request->sub_titles[$s];
+                                    $sub_pro->code = $request->sub_codes[$s];
+                                    $sub_pro->product_id = $check->id;
+                                    $sub_pro->heading_id = $key;
+                                    $sub_pro->size1_value = $request->size1_value[$s];
+                                    $sub_pro->size2_value = $request->size2_value[$s];
+                                    $sub_pro->save();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        product_sub_products::where('product_id',$check->id)->delete();
                     }
                 }
 
@@ -553,13 +696,15 @@ class ProductController extends Controller
 
         $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','price_tables.title as table')->get();
         $features_data = product_features::where('product_id',$id)->get();
+        $sub_products_data = product_sub_products::where('product_id',$id)->get();
         $categories = Category::all();
         $brands = Brand::all();
         $models = Model1::where('brand_id',$cats->brand_id)->get();
         $tables = price_tables::where('connected',1)->get();
         $features_headings = features::all();
+        $sub_product_headings = sub_products::all();
 
-        return view('admin.product.create',compact('cats','categories','brands','models','tables','colors_data','features_data','features_headings'));
+        return view('admin.product.create',compact('sub_products_data','sub_product_headings','cats','categories','brands','models','tables','colors_data','features_data','features_headings'));
     }
 
 
@@ -567,6 +712,7 @@ class ProductController extends Controller
     {
         $cat = Products::findOrFail($id);
         product_features::where('product_id',$id)->delete();
+        product_sub_products::where('product_id',$id)->delete();
         colors::where('product_id',$id)->delete();
         estimated_prices::where('product_id',$id)->delete();
 

@@ -112,6 +112,7 @@
                                         <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
                                         <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
                                         <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
+                                        <li><a href="{{route('admin-sub-products-index')}}"><i class="fa fa-angle-right"></i> Sub Products</a></li>
                                     </ul>
                                 </li>
 

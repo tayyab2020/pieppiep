@@ -370,6 +370,13 @@
   Route::post('/features/update/{id}', 'FeaturesController@update')->name('admin-feature-update');
   Route::get('/features/delete/{id}', 'FeaturesController@destroy')->name('admin-feature-delete');
 
+  Route::get('/sub-products', 'SubProductsController@index')->name('admin-sub-products-index');
+  Route::get('/sub-products/create', 'SubProductsController@create')->name('admin-sub-products-create');
+  Route::post('/sub-products/create', 'SubProductsController@store')->name('admin-sub-products-store');
+  Route::get('/sub-products/edit/{id}', 'SubProductsController@edit')->name('admin-sub-products-edit');
+  Route::post('/sub-products/update/{id}', 'SubProductsController@update')->name('admin-sub-products-update');
+  Route::get('/sub-products/delete/{id}', 'SubProductsController@destroy')->name('admin-sub-products-delete');
+
   Route::get('/faq', 'FaqController@index')->name('admin-fq-index');
   Route::get('/faq/create', 'FaqController@create')->name('admin-fq-create');
   Route::post('/faq/create', 'FaqController@store')->name('admin-fq-store');

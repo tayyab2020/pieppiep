@@ -20,12 +20,14 @@ use App\new_quotations_features;
 use App\new_quotations_sub_products;
 use App\product;
 use App\product_features;
+use App\product_sub_products;
 use App\Products;
 use App\quotation_invoices_data;
 use App\quotation_invoices;
 use App\quotes;
 use App\requests_q_a;
 use App\Service;
+use App\sub_products;
 use Illuminate\Http\Request;
 use App\User;
 use App\Category;
@@ -118,10 +120,10 @@ class UserController extends Controller
         if($user->can('create-new-quotation'))
         {
             $products = Products::all();
-            $items = items::where('user_id',$user_id)->get();
+            $sub_products = sub_products::all();
             $customers = User::where('parent_id', $user_id)->get();
 
-            return view('user.create_new_quotation', compact('products','items','customers'));
+            return view('user.create_new_quotation', compact('products','sub_products','customers'));
         }
         else
         {
@@ -146,11 +148,11 @@ class UserController extends Controller
         if($max_x_axis >= $request->width && $max_y_axis >= $request->height)
         {
             $price = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
-            $features = features::whereHas('features', function($query) use($request)
+            $features = features::whereHas('features')->with(['features' => function($query) use($request)
             {
-                $query->where('product_features.product_id',$request->product);
+                $query->where('product_features.product_id','=',$request->product);
 
-            })->with('features')->get();
+            }])->get();
 
             $data = array($price,$features);
         }
@@ -179,7 +181,7 @@ class UserController extends Controller
 
     public function GetSubProductsSizes(Request $request)
     {
-        $data = feature_sub_products::where('feature_id',$request->id)->get();
+        $data = product_sub_products::where('product_id',$request->product_id)->where('heading_id',$request->id)->get();
 
         return $data;
     }

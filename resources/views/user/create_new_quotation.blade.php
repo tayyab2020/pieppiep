@@ -92,7 +92,7 @@
                                                             <tr>
                                                                 <th style="padding: 5px;"></th>
                                                                 <th>Product</th>
-                                                                <th>Items</th>
+                                                                <th>Sub Products</th>
                                                                 <th>Color</th>
                                                                 <th>Width</th>
                                                                 <th>Height</th>
@@ -123,14 +123,14 @@
 
                                                                     </select>
                                                                 </td>
-                                                                <td class="items">
-                                                                    <select name="items[]" class="js-data-example-ajax1">
+                                                                <td class="sub_products">
+                                                                    <select name="sub_products[]" class="js-data-example-ajax1">
 
                                                                         <option value=""></option>
 
-                                                                        @foreach($items as $key)
+                                                                        @foreach($sub_products as $key)
 
-                                                                            <option value="{{$key->id}}">{{$key->cat_name}}</option>
+                                                                            <option value="{{$key->id}}">{{$key->title}}</option>
 
                                                                         @endforeach
 
@@ -860,7 +860,8 @@
                         obj.value = 0;
                     }
 
-                    total = total + parseInt(obj.value);
+                    total = parseFloat(total) + parseFloat(obj.value);
+                    total = total.toFixed(2);
 
                 });
 
@@ -901,10 +902,10 @@
                         current.parent().parent().find('.color').children('select').find('option')
                             .remove()
                             .end()
-                            .append('<option value="">Select Model</option>'+options);
+                            .append('<option value="">Select Color</option>'+options);
 
 
-                        if(data[0].measure)
+                        if((typeof(data[0]) != "undefined") && data[0].measure)
                         {
                             current.parent().parent().find('.width').children('.m-box').children('.measure-unit').text(data[0].measure);
                             current.parent().parent().find('.height').children('.m-box').children('.measure-unit').text(data[0].measure);
@@ -922,10 +923,104 @@
 
             });
 
+            $(document).on('change', ".js-data-example-ajax1", function(e){
+
+                var current = $(this);
+
+                var id = current.val();
+                var product_id = current.parent().parent().find('.products').find('.js-data-example-ajax').val();
+                var row_id = current.parent().parent().data('id');
+                var options = '';
+
+                if(!product_id)
+                {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{__('text.Oops...')}}',
+                        text: 'First select product!',
+                    });
+
+                    $(this).val('');
+                    $(this).trigger('change.select2');
+                }
+                else
+                {
+                    $.ajax({
+                        type: "GET",
+                        data: "id=" + id + "&product_id=" + product_id,
+                        url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
+                        success: function (data) {
+
+                            $('#myModal').find('.modal-body').find('.sub-tables').hide();
+
+                            if($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).length > 0)
+                            {
+                                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).remove();
+                            }
+
+
+                            $('#myModal').find('.modal-body').append(
+                                '<div class="sub-tables" data-id="'+row_id+'">\n' +
+                                '<table data-id="'+id+'" style="width: 100%;">\n' +
+                                '<thead>\n' +
+                                '<tr>\n' +
+                                '<th>ID</th>\n' +
+                                '<th>Title</th>\n' +
+                                '<th>Size 38mm</th>\n' +
+                                '<th>Size 25mm</th>\n' +
+                                '</tr>\n' +
+                                '</thead>\n' +
+                                '<tbody>\n' +
+                                '</tbody>\n' +
+                                '</table>\n' +
+                                '</div>'
+                            );
+
+                            $.each(data, function(index, value) {
+
+                                var size1 = value.size1_value;
+                                var size2 = value.size2_value;
+
+                                if(size1 == 1)
+                                {
+                                    size1 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id + '_' + id +'[]">';
+                                }
+                                else
+                                {
+                                    size1 = 'X' + '<input name="sizeA'+ row_id + '_' + id +'[]" type="hidden" value="x">';
+                                }
+
+                                if(size2 == 1)
+                                {
+                                    size2 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id + '_' + id +'[]">';
+                                }
+                                else
+                                {
+                                    size2 = 'X' + '<input name="sizeB'+ row_id + '_' + id +'[]" type="hidden" value="x">';
+                                }
+
+                                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).append(
+                                    '<tr>\n' +
+                                    '<td><input type="hidden" name="sub_product_id'+ row_id + '_' + id +'[]" value="'+value.id+'">'+value.code+'</td>\n' +
+                                    '<td>'+value.title+'</td>\n' +
+                                    '<td>'+size1+'</td>\n' +
+                                    '<td>'+size2+'</td>\n' +
+                                    '</tr>\n'
+                                );
+
+                            });
+
+                            $('#myModal').modal('toggle');
+                        }
+                    });
+                }
+
+            });
+
             $(".js-data-example-ajax1").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "",
+                placeholder: "Select Sub Product",
                 allowClear: true,
                 "language": {
                     "noResults": function(){
@@ -1007,8 +1102,8 @@
                                 }
                                 else
                                 {
-                                    var price = parseInt(data[0].value);
-                                    var org = parseInt(data[0].value);
+                                    var price = data[0].value;
+                                    var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;
 
@@ -1017,25 +1112,38 @@
                                         var opt = '';
 
                                         $.each(value.features, function(index1, value1) {
+
                                             if(index1 == 0)
                                             {
-                                                if(value1.impact_type == 0)
+                                                if(value1.price_impact == 1)
                                                 {
-                                                    f_value = value1.value;
-                                                    price = price + parseInt(f_value);
+                                                    if(value1.impact_type == 0)
+                                                    {
+                                                        f_value = value1.value;
+                                                        f_value = parseFloat(f_value).toFixed(2);
+                                                        price = parseFloat(price) + parseFloat(f_value);
+                                                        price = price.toFixed(2);
+                                                    }
+                                                    else
+                                                    {
+                                                        f_value = value1.value;
+                                                        var per = (f_value)/100;
+                                                        f_value = org * per;
+                                                        f_value = parseFloat(f_value).toFixed(2);
+                                                        price = parseFloat(price) + parseFloat(f_value);
+                                                        price = price.toFixed(2);
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    var per = (parseInt(f_value))/100;
-                                                    f_value = org * per;
-                                                    price = price + f_value;
+                                                    f_value = 0;
+                                                    price = parseFloat(price) + parseFloat(f_value);
+                                                    price = price.toFixed(2);
                                                 }
                                             }
 
-                                            /*opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';*/
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
                                         });
-
-                                        opt = '<option value="0">No</option><option value="1">Yes</option>';
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
@@ -1094,7 +1202,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,price = null,products = null,product = null,items = null,item = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null)
+            function add_row(copy = false,price = null,products = null,product = null,sub_products = null,sub_product = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1121,16 +1229,16 @@
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
-                        '                                                            <td class="items">\n' +
-                        '                                                                <select name="items[]" class="js-data-example-ajax1">\n' +
+                        '                                                            <td class="sub_products">\n' +
+                        '                                                                <select name="sub_products[]" class="js-data-example-ajax1">\n' +
                         '\n' +
                         '                                                                    <option value=""></option>\n' +
                         '\n' +
-                        '                                                                    @foreach($items as $key)\n' +
+                        '                                                                       @foreach($sub_products as $key)\n' +
                         '\n' +
-                        '                                                                        <option value="{{$key->id}}">{{$key->cat_name}}</option>\n' +
+                        '                                                                            <option value="{{$key->id}}">{{$key->title}}</option>\n' +
                         '\n' +
-                        '                                                                    @endforeach\n' +
+                        '                                                                        @endforeach\n' +
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
@@ -1184,7 +1292,7 @@
                     last_row.find(".js-data-example-ajax1").select2({
                         width: '100%',
                         height: '200px',
-                        placeholder: "",
+                        placeholder: "Select Sub Products",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -1219,10 +1327,10 @@
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
-                        '                                                            <td class="items">\n' +
-                        '                                                                <select name="items[]" class="js-data-example-ajax1">\n' +
+                        '                                                            <td class="sub_products">\n' +
+                        '                                                                <select name="sub_products[]" class="js-data-example-ajax1">\n' +
                         '\n' +
-                        items +
+                        sub_products +
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
@@ -1260,7 +1368,7 @@
                     var last_row = $('#products_table tbody tr:last');
 
                     last_row.find('.js-data-example-ajax').val(product);
-                    last_row.find('.js-data-example-ajax1').val(item);
+                    last_row.find('.js-data-example-ajax1').val(sub_product);
                     last_row.find('.js-data-example-ajax2').val(color);
 
                     if(features)
@@ -1270,8 +1378,7 @@
                         $('#menu1').find(`[data-id='${rowCount}']`).find('input[name="qty[]"]').val(qty);
 
                         features_selects.each(function(index,select){
-                            /*$('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());*/
-                            $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val(0);
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
                         });
                     }
 
@@ -1292,7 +1399,7 @@
                     last_row.find(".js-data-example-ajax1").select2({
                         width: '100%',
                         height: '200px',
-                        placeholder: "",
+                        placeholder: "Select Sub Products",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -1461,8 +1568,8 @@
                 var price = current.find('#row_total').val();
                 var products = current.find('.js-data-example-ajax').html();
                 var product = current.find('.js-data-example-ajax').val();
-                var items = current.find('.js-data-example-ajax1').html();
-                var item = current.find('.js-data-example-ajax1').val();
+                var sub_products = current.find('.js-data-example-ajax1').html();
+                var sub_product = current.find('.js-data-example-ajax1').val();
                 var colors = current.find('.js-data-example-ajax2').html();
                 var color = current.find('.js-data-example-ajax2').val();
                 var width = current.find('.width').find('.m-input').val();
@@ -1474,7 +1581,7 @@
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
 
-                add_row(true,price,products,product,items,item,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty);
+                add_row(true,price,products,product,sub_products,sub_product,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty);
 
             });
 
@@ -1654,8 +1761,8 @@
                                 }
                                 else
                                 {
-                                    var price = parseInt(data[0].value);
-                                    var org = parseInt(data[0].value);
+                                    var price = data[0].value;
+                                    var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;
 
@@ -1664,25 +1771,38 @@
                                         var opt = '';
 
                                         $.each(value.features, function(index1, value1) {
+
                                             if(index1 == 0)
                                             {
-                                                if(value1.impact_type == 0)
+                                                if(value1.price_impact == 1)
                                                 {
-                                                    f_value = value1.value;
-                                                    price = price + parseInt(f_value);
+                                                    if(value1.impact_type == 0)
+                                                    {
+                                                        f_value = value1.value;
+                                                        f_value = parseFloat(f_value).toFixed(2);
+                                                        price = parseFloat(price) + parseFloat(f_value);
+                                                        price = price.toFixed(2);
+                                                    }
+                                                    else
+                                                    {
+                                                        f_value = value1.value;
+                                                        var per = (f_value)/100;
+                                                        f_value = org * per;
+                                                        f_value = parseFloat(f_value).toFixed(2);
+                                                        price = parseFloat(price) + parseFloat(f_value);
+                                                        price = price.toFixed(2);
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    var per = (parseInt(f_value))/100;
-                                                    f_value = org * per;
-                                                    price = price + f_value;
+                                                    f_value = 0;
+                                                    price = parseFloat(price) + parseFloat(f_value);
+                                                    price = price.toFixed(2);
                                                 }
                                             }
 
-                                            /*opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';*/
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
                                         });
-
-                                        opt = '<option value="0">No</option><option value="1">Yes</option>';
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
@@ -1786,8 +1906,8 @@
                                 }
                                 else
                                 {
-                                    var price = parseInt(data[0].value);
-                                    var org = parseInt(data[0].value);
+                                    var price = data[0].value;
+                                    var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;
 
@@ -1800,23 +1920,35 @@
 
                                             if(index1 == 0)
                                             {
-                                                if(value1.impact_type == 0)
+                                                if(value1.price_impact == 1)
                                                 {
-                                                    f_value = value1.value;
-                                                    price = price + parseInt(f_value);
+                                                    if(value1.impact_type == 0)
+                                                    {
+                                                        f_value = value1.value;
+                                                        f_value = parseFloat(f_value).toFixed(2);
+                                                        price = parseFloat(price) + parseFloat(f_value);
+                                                        price = price.toFixed(2);
+                                                    }
+                                                    else
+                                                    {
+                                                        f_value = value1.value;
+                                                        var per = (f_value)/100;
+                                                        f_value = org * per;
+                                                        f_value = parseFloat(f_value).toFixed(2);
+                                                        price = parseFloat(price) + parseFloat(f_value);
+                                                        price = price.toFixed(2);
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    var per = (parseInt(f_value))/100;
-                                                    f_value = org * per;
-                                                    price = price + f_value;
+                                                    f_value = 0;
+                                                    price = parseFloat(price) + parseFloat(f_value);
+                                                    price = price.toFixed(2);
                                                 }
                                             }
 
-                                            /*opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';*/
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
                                         });
-
-                                        opt = '<option value="0">No</option><option value="1">Yes</option>';
 
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
@@ -1866,82 +1998,7 @@
                 var feature_select = current.val();
                 var id = current.parent().find('.f_id').val();
 
-                if(feature_select == 1)
-                {
-                    $.ajax({
-                        type: "GET",
-                        data: "id=" + id,
-                        url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
-                        success: function (data) {
-
-                            /*$('#myModal').find('.modal-body').find('table tbody').children().remove();*/
-
-                            $('#myModal').find('.modal-body').find('.sub-tables').hide();
-
-                            if($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).length > 0)
-                            {
-                                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).remove();
-                            }
-
-
-                            $('#myModal').find('.modal-body').append(
-                                '<div class="sub-tables" data-id="'+row_id+'">\n' +
-                                '<table data-id="'+id+'" style="width: 100%;">\n' +
-                                '<thead>\n' +
-                                '<tr>\n' +
-                                '<th>ID</th>\n' +
-                                '<th>Title</th>\n' +
-                                '<th>Size 38mm</th>\n' +
-                                '<th>Size 25mm</th>\n' +
-                                '</tr>\n' +
-                                '</thead>\n' +
-                                '<tbody>\n' +
-                                '</tbody>\n' +
-                                '</table>\n' +
-                                '</div>'
-                            );
-
-                            $.each(data, function(index, value) {
-
-                                var size1 = value.size1_value;
-                                var size2 = value.size2_value;
-
-                                if(size1 == 1)
-                                {
-                                    size1 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id + '_' + id +'[]">';
-                                }
-                                else
-                                {
-                                    size1 = 'X' + '<input name="sizeA'+ row_id + '_' + id +'[]" type="hidden" value="x">';
-                                }
-
-                                if(size2 == 1)
-                                {
-                                    size2 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id + '_' + id +'[]">';
-                                }
-                                else
-                                {
-                                    size2 = 'X' + '<input name="sizeB'+ row_id + '_' + id +'[]" type="hidden" value="x">';
-                                }
-
-                                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).append(
-                                    '<tr>\n' +
-                                    '<td><input type="hidden" name="sub_product_id'+ row_id + '_' + id +'[]" value="'+value.id+'">'+value.unique_code+'</td>\n' +
-                                    '<td>'+value.title+'</td>\n' +
-                                    '<td>'+size1+'</td>\n' +
-                                    '<td>'+size2+'</td>\n' +
-                                    '</tr>\n'
-                                );
-
-                            });
-
-                            $('#myModal').modal('toggle');
-                        }
-                    });
-                }
-
-                /*var impact_value = current.next('input').val();
-                var row_id = current.parent().parent().parent().data('id');
+                var impact_value = current.next('input').val();
                 var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
 
                 total = total - impact_value;
@@ -1952,21 +2009,107 @@
                     url: "<?php echo url('/aanbieder/get-feature-price')?>",
                     success: function (data) {
 
-                        if(data.impact_type == 0)
+                        if(data.price_impact == 1)
                         {
-                            impact_value = data.value;
-                            total = total + parseInt(impact_value);
+                            if(data.impact_type == 0)
+                            {
+                                impact_value = data.value;
+                                impact_value = parseFloat(impact_value).toFixed(2);
+                                total = parseFloat(total) + parseFloat(impact_value);
+                                total = total.toFixed(2);
+                            }
+                            else
+                            {
+                                impact_value = data.value;
+                                var per = (impact_value)/100;
+                                impact_value = total * per;
+                                impact_value = parseFloat(impact_value).toFixed(2);
+                                total = parseFloat(total) + parseFloat(impact_value);
+                                total = total.toFixed(2);
+                            }
                         }
                         else
                         {
-                            var per = (parseInt(data.value))/100;
-                            impact_value = total * per;
-                            total = total + (impact_value);
+                            impact_value = 0;
+                            total = parseFloat(total) + parseFloat(impact_value);
+                            total = total.toFixed(2);
                         }
 
                         current.next('input').val(impact_value);
+
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+
+                        calculate_total();
+                    }
+                });
+
+                /*$.ajax({
+                    type: "GET",
+                    data: "id=" + id,
+                    url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
+                    success: function (data) {
+
+                        $('#myModal').find('.modal-body').find('.sub-tables').hide();
+
+                        if($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).length > 0)
+                        {
+                            $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).remove();
+                        }
+
+
+                        $('#myModal').find('.modal-body').append(
+                            '<div class="sub-tables" data-id="'+row_id+'">\n' +
+                            '<table data-id="'+id+'" style="width: 100%;">\n' +
+                            '<thead>\n' +
+                            '<tr>\n' +
+                            '<th>ID</th>\n' +
+                            '<th>Title</th>\n' +
+                            '<th>Size 38mm</th>\n' +
+                            '<th>Size 25mm</th>\n' +
+                            '</tr>\n' +
+                            '</thead>\n' +
+                            '<tbody>\n' +
+                            '</tbody>\n' +
+                            '</table>\n' +
+                            '</div>'
+                        );
+
+                        $.each(data, function(index, value) {
+
+                            var size1 = value.size1_value;
+                            var size2 = value.size2_value;
+
+                            if(size1 == 1)
+                            {
+                                size1 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id + '_' + id +'[]">';
+                            }
+                            else
+                            {
+                                size1 = 'X' + '<input name="sizeA'+ row_id + '_' + id +'[]" type="hidden" value="x">';
+                            }
+
+                            if(size2 == 1)
+                            {
+                                size2 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id + '_' + id +'[]">';
+                            }
+                            else
+                            {
+                                size2 = 'X' + '<input name="sizeB'+ row_id + '_' + id +'[]" type="hidden" value="x">';
+                            }
+
+                            $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).append(
+                                '<tr>\n' +
+                                '<td><input type="hidden" name="sub_product_id'+ row_id + '_' + id +'[]" value="'+value.id+'">'+value.unique_code+'</td>\n' +
+                                '<td>'+value.title+'</td>\n' +
+                                '<td>'+size1+'</td>\n' +
+                                '<td>'+size2+'</td>\n' +
+                                '</tr>\n'
+                            );
+
+                        });
+
+                        $('#myModal').modal('toggle');
                     }
                 });*/
 
