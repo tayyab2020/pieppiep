@@ -43,7 +43,7 @@ class SubProductsController extends Controller
             $removed = explode(',', $request->removed);
             sub_products_sizes::whereIn('id',$removed)->delete();
 
-            sub_products::where('id',$request->sub_id)->update(['title' => $request->title]);
+            sub_products::where('id',$request->sub_id)->update(['max_size' => $request->max_size ? str_replace(",",".",$request->max_size) : NULL]);
 
             $sub = sub_products_sizes::where('sub_id',$request->sub_id)->get();
 
@@ -104,12 +104,21 @@ class SubProductsController extends Controller
             }
 
             Session::flash('success', 'Sub Product updated successfully.');
+            return redirect()->back();
         }
         else
         {
-            $sub_product = new sub_products;
+            $flag = 0;
+            $sub_product = sub_products::where('title',$request->title)->first();
+
+            if(!$sub_product)
+            {
+                $sub_product = new sub_products;
+                $flag = 1;
+            }
 
             $sub_product->title = $request->title;
+            $sub_product->max_size = $request->max_size ? str_replace(",",".",$request->max_size) : NULL;
             $sub_product->save();
 
             foreach ($request->sub_codes as $i => $key)
@@ -126,10 +135,17 @@ class SubProductsController extends Controller
                 }
             }
 
-            Session::flash('success', 'Sub Product added successfully.');
+            if($flag)
+            {
+                Session::flash('success', 'Sub Product added successfully.');
+                return redirect()->route('admin-sub-products-index');
+            }
+            else
+            {
+                Session::flash('success', 'Sub Product updated successfully.');
+                return redirect()->route('admin-sub-products-edit',$sub_product->id);
+            }
         }
-
-        return redirect()->back();
     }
 
     public function edit($id)

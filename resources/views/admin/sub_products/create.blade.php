@@ -35,9 +35,20 @@
                                         <input type="hidden" id="sub_id" name="sub_id" value="{{isset($sub_product) ? $sub_product->id : null}}">
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
+                                            <label class="control-label col-sm-4">Title* <span>(In Any Language)</span></label>
                                             <div class="col-sm-6">
-                                                <input value="{{isset($sub_product) ? $sub_product->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Item Title" required="" type="text">
+                                                <select {{isset($sub_product) ? 'disabled' : null}} name="title" required="" class="js-data-example-ajax">
+                                                    <option value="">Select Sub Product</option>
+                                                    <option {{isset($sub_product) ? ($sub_product->title == 'Ladderband' ? 'selected' : null) : null}} value="Ladderband">Ladderband</option>
+                                                    <option {{isset($sub_product) ? ($sub_product->title == 'Type Package' ? 'selected' : null) : null}} value="Type Package">Type Package</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Max Size</label>
+                                            <div class="col-sm-6">
+                                                <input value="{{isset($sub_product) ? $sub_product->max_size : null}}" maskedformat="9,1" class="form-control" name="max_size" placeholder="Enter Max Size" type="text">
                                             </div>
                                         </div>
 
@@ -216,6 +227,52 @@
 
         $(document).ready(function() {
 
+            $(document).on('keypress', "input[name='max_size']", function(e){
+
+                e = e || window.event;
+                var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+                var val = String.fromCharCode(charCode);
+
+                if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+                {
+                    e.preventDefault();
+                    return false;
+                }
+
+                if(e.which == 44)
+                {
+                    if(this.value.indexOf(',') > -1)
+                    {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
+                var num = $(this).attr("maskedFormat").toString().split(',');
+                var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+                if (!regex.test(this.value)) {
+                    this.value = this.value.substring(0, this.value.length - 1);
+                }
+
+            });
+
+            $(document).on('focusout', "input[name='max_size']", function(e){
+
+                if($(this).val().slice($(this).val().length - 1) == ',')
+                {
+                    var val = $(this).val();
+                    val = val + '00';
+                    $(this).val(val);
+                }
+            });
+
+            $(".js-data-example-ajax").select2({
+                width: '100%',
+                height: '200px',
+                placeholder: "Select Sub Product",
+                allowClear: true,
+            });
+
             var rem_arr = [];
 
             $("#add-feature-btn").on('click',function() {
@@ -388,6 +445,18 @@
     </script>
 
     <style type="text/css">
+
+        .select2-container--default .select2-selection--single
+        {
+            height: 45px;
+            display: flex;
+            align-items: center;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow
+        {
+            height: 100%;
+        }
 
         .swal2-show
         {
