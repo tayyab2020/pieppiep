@@ -158,7 +158,9 @@ class UserController extends Controller
 
             }])->get();
 
-            $data = array($price,$features);
+            $sub_product_features = product_sub_products::leftjoin('sub_products','sub_products.id','=','product_sub_products.heading_id')->where('product_sub_products.product_id',$request->product)->where('product_sub_products.heading_id',$request->sub_product)->select('product_sub_products.*','sub_products.title','sub_products.max_size')->first();
+
+            $data = array($price,$features,$sub_product_features);
         }
         else if($max_x_axis < $request->width && $max_y_axis < $request->height)
         {

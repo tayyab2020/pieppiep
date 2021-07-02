@@ -1953,12 +1953,13 @@
 
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
+                var sub_product = current.parent().parent().parent().find('.sub_products').find('select').val();
 
                 if(width && height && color && product)
                 {
                     $.ajax({
                         type:"GET",
-                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height,
+                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height + "&sub_product=" + sub_product,
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
@@ -2014,6 +2015,21 @@
 
                                             if(index1 == 0)
                                             {
+                                                if(value1.max_size)
+                                                {
+                                                    var sq = (width * height) / 1000;
+                                                    var max_size = value1.max_size;
+
+                                                    if(sq > max_size)
+                                                    {
+                                                        Swal.fire({
+                                                            icon: 'error',
+                                                            title: '{{__('text.Oops...')}}',
+                                                            text: 'Area is greater than max size: ' + max_size,
+                                                        });
+                                                    }
+                                                }
+
                                                 if(value1.price_impact == 1)
                                                 {
                                                     if(value1.impact_type == 0)
@@ -2091,6 +2107,8 @@
                 var row_id = current.parent().parent().parent().data('id');
                 var feature_select = current.val();
                 var id = current.parent().find('.f_id').val();
+                var width = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.width').find('input').val();
+                var height = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.height').find('input').val();
 
                 var impact_value = current.next('input').val();
                 var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
@@ -2102,6 +2120,21 @@
                     data: "id=" + feature_select,
                     url: "<?php echo url('/aanbieder/get-feature-price')?>",
                     success: function (data) {
+
+                        if(data.max_size)
+                        {
+                            var sq = (width * height) / 1000;
+                            var max_size = data.max_size;
+
+                            if(sq > max_size)
+                            {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: '{{__('text.Oops...')}}',
+                                    text: 'Area is greater than max size: ' + max_size,
+                                });
+                            }
+                        }
 
                         if(data.price_impact == 1)
                         {

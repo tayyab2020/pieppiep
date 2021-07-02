@@ -169,6 +169,7 @@ class ProductController extends Controller
                         $fea->value = $request->feature_values[$f];
                         $fea->product_id = $request->cat_id;
                         $fea->heading_id = $key;
+                        $fea->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
                         $fea->price_impact = $request->price_impact[$f];
                         $fea->impact_type = $request->impact_type[$f];
                         $fea->save();
@@ -190,6 +191,7 @@ class ProductController extends Controller
                                 $fea_check->title = $request->features[$f];
                                 $fea_check->heading_id = $key;
                                 $fea_check->value = $request->feature_values[$f];
+                                $fea_check->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
                                 $fea_check->price_impact = $request->price_impact[$f];
                                 $fea_check->impact_type = $request->impact_type[$f];
                                 $fea_check->save();
@@ -204,6 +206,7 @@ class ProductController extends Controller
                                 $fea->title = $request->features[$f];
                                 $fea->heading_id = $key;
                                 $fea->value = $request->feature_values[$f];
+                                $fea->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
                                 $fea->price_impact = $request->price_impact[$f];
                                 $fea->impact_type = $request->impact_type[$f];
                                 $fea->save();
@@ -399,6 +402,7 @@ class ProductController extends Controller
                         $feature->title = $request->features[$f];
                         $feature->heading_id = $key;
                         $feature->value = $request->feature_values[$f];
+                        $feature->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
                         $feature->price_impact = $request->price_impact[$f];
                         $feature->impact_type = $request->impact_type[$f];
                         $feature->save();
@@ -468,6 +472,7 @@ class ProductController extends Controller
                             $feature->title = $request->features[$f];
                             $feature->heading_id = $key;
                             $feature->value = $request->feature_values[$f];
+                            $feature->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
                             $feature->price_impact = $request->price_impact[$f];
                             $feature->impact_type = $request->impact_type[$f];
                             $feature->save();
@@ -489,6 +494,7 @@ class ProductController extends Controller
                                     $fea_check->title = $request->features[$f];
                                     $fea_check->heading_id = $key;
                                     $fea_check->value = $request->feature_values[$f];
+                                    $fea_check->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
                                     $fea_check->price_impact = $request->price_impact[$f];
                                     $fea_check->impact_type = $request->impact_type[$f];
                                     $fea_check->save();
@@ -502,6 +508,7 @@ class ProductController extends Controller
                                     $fea->title = $request->features[$f];
                                     $fea->heading_id = $key;
                                     $fea->value = $request->feature_values[$f];
+                                    $fea->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
                                     $fea->product_id = $check->id;
                                     $fea->price_impact = $request->price_impact[$f];
                                     $fea->impact_type = $request->impact_type[$f];

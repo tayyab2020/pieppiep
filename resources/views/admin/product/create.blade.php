@@ -428,8 +428,12 @@
                                                                     <h4>Feature</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-2">
+                                                                <div style="font-family: monospace;" class="col-sm-1">
                                                                     <h4>Value</h4>
+                                                                </div>
+
+                                                                <div style="font-family: monospace;" class="col-sm-1">
+                                                                    <h4>Max Size</h4>
                                                                 </div>
 
                                                                 <div style="text-align: center;font-family: monospace;" class="col-sm-2">
@@ -474,9 +478,15 @@
 
                                                                             </div>
 
-                                                                            <div class="col-sm-2">
+                                                                            <div class="col-sm-1">
 
                                                                                 <input class="form-control feature_value" value="{{$key->value}}" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+
+                                                                            </div>
+
+                                                                            <div class="col-sm-1">
+
+                                                                                <input class="form-control max_size" value="{{str_replace(".",",",$key->max_size)}}" maskedformat="9,1" name="max_size[]" id="blood_group_slug" placeholder="Max Size" type="text">
 
                                                                             </div>
 
@@ -541,9 +551,15 @@
 
                                                                         </div>
 
-                                                                        <div class="col-sm-2">
+                                                                        <div class="col-sm-1">
 
                                                                             <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+
+                                                                        </div>
+
+                                                                        <div class="col-sm-1">
+
+                                                                            <input class="form-control max_size" name="max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
 
                                                                         </div>
 
@@ -802,6 +818,45 @@
         var rem_sub_arr = [];
         var rem_col_arr = [];
 
+        $(document).on('keypress', ".max_size", function(e){
+
+            e = e || window.event;
+            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+            var val = String.fromCharCode(charCode);
+
+            if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+            {
+                e.preventDefault();
+                return false;
+            }
+
+            if(e.which == 44)
+            {
+                if(this.value.indexOf(',') > -1)
+                {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+
+            var num = $(this).attr("maskedFormat").toString().split(',');
+            var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+            if (!regex.test(this.value)) {
+                this.value = this.value.substring(0, this.value.length - 1);
+            }
+
+        });
+
+        $(document).on('focusout', ".max_size", function(e){
+
+            if($(this).val().slice($(this).val().length - 1) == ',')
+            {
+                var val = $(this).val();
+                val = val + '00';
+                $(this).val(val);
+            }
+        });
+
         $('body').on('change', '.js-data-example-ajax6', function() {
 
 
@@ -1038,9 +1093,15 @@
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
-                '                                                                    <div class="col-sm-2">\n' +
+                '                                                                    <div class="col-sm-1">\n' +
                 '\n' +
                 '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '                                                                    <div class="col-sm-1">\n' +
+                '\n' +
+                '                                                                        <input class="form-control max_size" name="max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
@@ -1367,6 +1428,12 @@
                     '                                                                    <div class="col-sm-3">\n' +
                     '\n' +
                     '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                                                                    <div class="col-sm-1">\n' +
+                    '\n' +
+                    '                                                                        <input class="form-control max_size" name="max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +

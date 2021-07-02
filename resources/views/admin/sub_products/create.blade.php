@@ -48,7 +48,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Max Size</label>
                                             <div class="col-sm-6">
-                                                <input value="{{isset($sub_product) ? $sub_product->max_size : null}}" maskedformat="9,1" class="form-control" name="max_size" placeholder="Enter Max Size" type="text">
+                                                <input value="{{isset($sub_product) ? str_replace(".",",",$sub_product->max_size) : null}}" maskedformat="9,1" class="form-control" name="max_size" placeholder="Enter Max Size" type="text">
                                             </div>
                                         </div>
 
