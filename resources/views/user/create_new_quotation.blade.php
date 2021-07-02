@@ -2017,7 +2017,7 @@
                                             {
                                                 if(value1.max_size)
                                                 {
-                                                    var sq = (width * height) / 1000;
+                                                    var sq = (width * height) / 10000;
                                                     var max_size = value1.max_size;
 
                                                     if(sq > max_size)
@@ -2123,7 +2123,7 @@
 
                         if(data.max_size)
                         {
-                            var sq = (width * height) / 1000;
+                            var sq = (width * height) / 10000;
                             var max_size = data.max_size;
 
                             if(sq > max_size)
