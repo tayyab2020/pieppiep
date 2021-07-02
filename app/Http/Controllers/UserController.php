@@ -185,8 +185,10 @@ class UserController extends Controller
 
     public function GetSubProductsSizes(Request $request)
     {
-        $data = product_sub_products::where('product_id',$request->product_id)->where('heading_id',$request->id)->get();
+        $sizes = sub_products_sizes::where('sub_id',$request->id)->get();
+        $sub = product_sub_products::leftjoin('sub_products','sub_products.id','=','product_sub_products.heading_id')->where('product_sub_products.product_id',$request->product_id)->where('product_sub_products.heading_id',$request->id)->select('product_sub_products.*','sub_products.title','sub_products.max_size')->first();
 
+        $data = array($sizes,$sub);
         return $data;
     }
 
