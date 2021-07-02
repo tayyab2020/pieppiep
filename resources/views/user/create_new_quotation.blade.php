@@ -1018,63 +1018,27 @@
 
                                 $('#myModal').modal('toggle');
 
-                                var width = current.parent().parent().find('.width').find('input').val();
-                                var height = current.parent().parent().find('.height').find('input').val();
-                                var flag = 0;
-                                var impact_flag = 0;
 
-                                if(width && height)
+                                if(data[1].price_impact == 1)
                                 {
-                                    if(data[1].title == 'Type Package')
+                                    if(data[1].impact_type == 0)
                                     {
-                                        var sq = (width * height) / 1000;
-                                        var max_size = data[1].max_size;
-
-                                        if(sq > max_size)
-                                        {
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: '{{__('text.Oops...')}}',
-                                                text: 'Area is greater than max size: ' + max_size,
-                                            });
-
-                                            flag = 1;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    flag = 1;
-                                }
-
-                                if(flag == 0)
-                                {
-                                    if(data[1].price_impact == 1)
-                                    {
-                                        if(data[1].impact_type == 0)
-                                        {
-                                            impact_value = data[1].value;
-                                            impact_value = parseFloat(impact_value).toFixed(2);
-                                            total = parseFloat(total) + parseFloat(impact_value);
-                                            total = total.toFixed(2);
-                                        }
-                                        else
-                                        {
-                                            impact_value = data[1].value;
-                                            var per = (impact_value)/100;
-                                            impact_value = total * per;
-                                            impact_value = parseFloat(impact_value).toFixed(2);
-                                            total = parseFloat(total) + parseFloat(impact_value);
-                                            total = total.toFixed(2);
-                                        }
+                                        impact_value = data[1].value;
+                                        impact_value = parseFloat(impact_value).toFixed(2);
+                                        total = parseFloat(total) + parseFloat(impact_value);
+                                        total = total.toFixed(2);
                                     }
                                     else
                                     {
-                                        impact_flag = 1;
+                                        impact_value = data[1].value;
+                                        var per = (impact_value)/100;
+                                        impact_value = total * per;
+                                        impact_value = parseFloat(impact_value).toFixed(2);
+                                        total = parseFloat(total) + parseFloat(impact_value);
+                                        total = total.toFixed(2);
                                     }
                                 }
-
-                                if(flag == 1 || impact_flag == 1)
+                                else
                                 {
                                     impact_value = 0;
                                     total = parseFloat(total) + parseFloat(impact_value);
