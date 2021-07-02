@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\product_features;
 use App\sub_products_sizes;
 use App\features;
 use App\sub_products;
@@ -69,6 +70,7 @@ class FeaturesController extends Controller
         $feature = features::findOrFail($id);
         $feature->delete();
 
+        product_features::where('heading_id',$id)->delete();
         Session::flash('success', 'Feature deleted successfully.');
         return redirect()->route('admin-feature-index');
 

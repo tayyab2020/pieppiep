@@ -223,15 +223,14 @@ class ProductController extends Controller
             {
                 foreach ($sub_products as $s => $key)
                 {
-                    if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                    if($key != NULL && $request->sub_value[$s] != NULL)
                     {
                         $sub_pro = new product_sub_products;
-                        $sub_pro->title = $request->sub_titles[$s];
-                        $sub_pro->code = $request->sub_codes[$s];
+                        $sub_pro->value = $request->sub_value[$s];
                         $sub_pro->product_id = $request->cat_id;
                         $sub_pro->heading_id = $key;
-                        $sub_pro->size1_value = $request->size1_value[$s];
-                        $sub_pro->size2_value = $request->size2_value[$s];
+                        $sub_pro->price_impact = $request->sub_price_impact[$s];
+                        $sub_pro->impact_type = $request->sub_impact_type[$s];
                         $sub_pro->save();
                     }
                 }
@@ -246,27 +245,25 @@ class ProductController extends Controller
 
                         if($sub_check)
                         {
-                            if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                            if($key != NULL && $request->sub_value[$s] != NULL)
                             {
-                                $sub_check->title = $request->sub_titles[$s];
+                                $sub_check->value = $request->sub_value[$s];
                                 $sub_check->heading_id = $key;
-                                $sub_check->code = $request->sub_codes[$s];
-                                $sub_check->size1_value = $request->size1_value[$s];
-                                $sub_check->size2_value = $request->size2_value[$s];
+                                $sub_check->price_impact = $request->sub_price_impact[$s];
+                                $sub_check->impact_type = $request->sub_impact_type[$s];
                                 $sub_check->save();
                             }
                         }
                         else
                         {
-                            if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                            if($key != NULL && $request->sub_value[$s] != NULL)
                             {
                                 $sub_pro = new product_sub_products;
-                                $sub_pro->title = $request->sub_titles[$s];
-                                $sub_pro->code = $request->sub_codes[$s];
+                                $sub_pro->value = $request->sub_value[$s];
                                 $sub_pro->product_id = $request->cat_id;
                                 $sub_pro->heading_id = $key;
-                                $sub_pro->size1_value = $request->size1_value[$s];
-                                $sub_pro->size2_value = $request->size2_value[$s];
+                                $sub_pro->price_impact = $request->sub_price_impact[$s];
+                                $sub_pro->impact_type = $request->sub_impact_type[$s];
                                 $sub_pro->save();
                             }
                         }
@@ -410,15 +407,14 @@ class ProductController extends Controller
 
                 foreach ($sub_products as $s => $key)
                 {
-                    if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                    if($key != NULL && $request->sub_value[$s] != NULL)
                     {
                         $sub_pro = new product_sub_products;
-                        $sub_pro->title = $request->sub_titles[$s];
-                        $sub_pro->code = $request->sub_codes[$s];
+                        $sub_pro->value = $request->sub_value[$s];
                         $sub_pro->product_id = $cat->id;
                         $sub_pro->heading_id = $key;
-                        $sub_pro->size1_value = $request->size1_value[$s];
-                        $sub_pro->size2_value = $request->size2_value[$s];
+                        $sub_pro->price_impact = $request->sub_price_impact[$s];
+                        $sub_pro->impact_type = $request->sub_impact_type[$s];
                         $sub_pro->save();
                     }
                 }
@@ -526,15 +522,14 @@ class ProductController extends Controller
                 {
                     foreach ($sub_products as $s => $key)
                     {
-                        if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                        if($key != NULL && $request->sub_value[$s] != NULL)
                         {
                             $sub_pro = new product_sub_products;
-                            $sub_pro->title = $request->sub_titles[$s];
-                            $sub_pro->code = $request->sub_codes[$s];
+                            $sub_pro->value = $request->sub_value[$s];
                             $sub_pro->product_id = $check->id;
                             $sub_pro->heading_id = $key;
-                            $sub_pro->size1_value = $request->size1_value[$s];
-                            $sub_pro->size2_value = $request->size2_value[$s];
+                            $sub_pro->price_impact = $request->sub_price_impact[$s];
+                            $sub_pro->impact_type = $request->sub_impact_type[$s];
                             $sub_pro->save();
                         }
                     }
@@ -549,27 +544,25 @@ class ProductController extends Controller
 
                             if($sub_check)
                             {
-                                if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                                if($key != NULL && $request->sub_value[$s] != NULL)
                                 {
-                                    $sub_check->title = $request->sub_titles[$s];
+                                    $sub_check->value = $request->sub_value[$s];
                                     $sub_check->heading_id = $key;
-                                    $sub_check->code = $request->sub_codes[$s];
-                                    $sub_check->size1_value = $request->size1_value[$s];
-                                    $sub_check->size2_value = $request->size2_value[$s];
+                                    $sub_check->price_impact = $request->sub_price_impact[$s];
+                                    $sub_check->impact_type = $request->sub_impact_type[$s];
                                     $sub_check->save();
                                 }
                             }
                             else
                             {
-                                if($key != NULL && $request->sub_titles[$s] != NULL && $request->sub_codes[$s] != NULL)
+                                if($key != NULL && $request->sub_value[$s] != NULL)
                                 {
                                     $sub_pro = new product_sub_products;
-                                    $sub_pro->title = $request->sub_titles[$s];
-                                    $sub_pro->code = $request->sub_codes[$s];
+                                    $sub_pro->value = $request->sub_value[$s];
                                     $sub_pro->product_id = $check->id;
                                     $sub_pro->heading_id = $key;
-                                    $sub_pro->size1_value = $request->size1_value[$s];
-                                    $sub_pro->size2_value = $request->size2_value[$s];
+                                    $sub_pro->price_impact = $request->sub_price_impact[$s];
+                                    $sub_pro->impact_type = $request->sub_impact_type[$s];
                                     $sub_pro->save();
                                 }
                             }

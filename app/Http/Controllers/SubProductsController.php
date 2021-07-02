@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\product_sub_products;
 use App\sub_products_sizes;
 use App\features;
 use App\sub_products;
@@ -163,6 +164,7 @@ class SubProductsController extends Controller
         $sub_product->delete();
 
         sub_products_sizes::where('sub_id',$id)->delete();
+        product_sub_products::where('heading_id',$id)->delete();
         Session::flash('success', 'Sub Product deleted successfully.');
         return redirect()->route('admin-sub-products-index');
 

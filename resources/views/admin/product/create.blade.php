@@ -602,24 +602,20 @@
 
                                                             <div class="row" style="margin: 0;">
 
-                                                                <div style="font-family: monospace;" class="col-sm-3">
+                                                                <div style="font-family: monospace;" class="col-sm-4">
                                                                     <h4>Sub Product</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Title</h4>
+                                                                <div style="font-family: monospace;" class="col-sm-3">
+                                                                    <h4>Value</h4>
                                                                 </div>
 
                                                                 <div style="font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Code</h4>
-                                                                </div>
-
-                                                                <div style="font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Size 38mm</h4>
+                                                                    <h4>Price Impact</h4>
                                                                 </div>
 
                                                                 <div style="text-align: center;font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Size 25mm</h4>
+                                                                    <h4>Impact Type</h4>
                                                                 </div>
 
                                                             </div>
@@ -634,11 +630,11 @@
 
                                                                         <div class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                            <div class="col-sm-3">
+                                                                            <div class="col-sm-4">
 
                                                                                 <select class="form-control validate js-data-example-ajax6" name="sub_product_headings[]">
 
-                                                                                    <option value="">Select Sub Product Heading</option>
+                                                                                    <option value="">Select Sub Product</option>
 
                                                                                     @foreach($sub_product_headings as $heading)
 
@@ -650,25 +646,19 @@
 
                                                                             </div>
 
-                                                                            <div class="col-sm-2">
+                                                                            <div class="col-sm-3">
 
-                                                                                <input class="form-control sub_title" value="{{$key->title}}" name="sub_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">
-
-                                                                            </div>
-
-                                                                            <div class="col-sm-2">
-
-                                                                                <input class="form-control sub_code" value="{{$key->code}}" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product Code" type="text">
+                                                                                <input class="form-control sub_value" value="{{$key->value}}" name="sub_value[]" id="blood_group_slug" placeholder="Value" type="text">
 
                                                                             </div>
 
                                                                             <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                                <input type="hidden" name="size1_value[]" id="size1_value" value="{{$key->size1_value}}">
+                                                                                <input type="hidden" name="sub_price_impact[]" id="sub_price_impact" value="{{$key->price_impact}}">
 
                                                                                 <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
                                                                                 <label style="margin: 0;" class="switch">
-                                                                                    <input class="size1_value" type="checkbox" {{$key->size1_value ? 'checked' : null}}>
+                                                                                    <input class="sub_price_impact" type="checkbox" {{$key->price_impact ? 'checked' : null}}>
                                                                                     <span class="slider round"></span>
                                                                                 </label>
                                                                                 <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
@@ -677,17 +667,16 @@
 
                                                                             <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                                <input type="hidden" name="size2_value[]" id="size2_value" value="{{$key->size2_value}}">
+                                                                                <input type="hidden" name="sub_impact_type[]" id="sub_impact_type" value="{{$key->impact_type}}">
 
-                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
                                                                                 <label style="margin: 0;" class="switch">
-                                                                                    <input class="size2_value" type="checkbox" {{$key->size2_value ? 'checked' : null}}>
+                                                                                    <input class="sub_impact_type" type="checkbox" {{$key->impact_type ? 'checked' : null}}>
                                                                                     <span class="slider round"></span>
                                                                                 </label>
-                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
 
                                                                             </div>
-
 
                                                                             <div class="col-xs-1 col-sm-1">
                                                                                 <span class="ui-close remove-sub" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
@@ -701,11 +690,11 @@
 
                                                                     <div class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                        <div class="col-sm-3">
+                                                                        <div class="col-sm-4">
 
                                                                             <select class="form-control validate js-data-example-ajax6" name="sub_product_headings[]">
 
-                                                                                <option value="">Select Sub Product Heading</option>
+                                                                                <option value="">Select Sub Product</option>
 
                                                                                 @foreach($sub_product_headings as $sub)
 
@@ -717,25 +706,19 @@
 
                                                                         </div>
 
-                                                                        <div class="col-sm-2">
+                                                                        <div class="col-sm-3">
 
-                                                                            <input class="form-control sub_title" name="sub_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">
-
-                                                                        </div>
-
-                                                                        <div class="col-sm-2">
-
-                                                                            <input class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product Code" type="text">
+                                                                            <input class="form-control sub_value" name="sub_value[]" id="blood_group_slug" placeholder="Value" type="text">
 
                                                                         </div>
 
                                                                         <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                            <input type="hidden" name="size1_value[]" id="size1_value" value="0">
+                                                                            <input type="hidden" name="sub_price_impact[]" id="sub_price_impact" value="0">
 
                                                                             <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
                                                                             <label style="margin: 0;" class="switch">
-                                                                                <input class="size1_value" type="checkbox">
+                                                                                <input class="sub_price_impact" type="checkbox">
                                                                                 <span class="slider round"></span>
                                                                             </label>
                                                                             <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
@@ -744,14 +727,14 @@
 
                                                                         <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                            <input type="hidden" name="size2_value[]" id="size2_value" value="0">
+                                                                            <input type="hidden" name="sub_impact_type[]" id="sub_impact_type" value="0">
 
-                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
                                                                             <label style="margin: 0;" class="switch">
-                                                                                <input class="size2_value" type="checkbox">
+                                                                                <input class="sub_impact_type" type="checkbox">
                                                                                 <span class="slider round"></span>
                                                                             </label>
-                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
 
                                                                         </div>
 
@@ -819,6 +802,33 @@
         var rem_sub_arr = [];
         var rem_col_arr = [];
 
+        $('body').on('change', '.js-data-example-ajax6', function() {
+
+
+            var id = this.value;
+            var selector = this;
+
+            if ($('.js-data-example-ajax6').find('option[value=' + id + ']:selected').length > 1) {
+
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Sub Product already selected!',
+
+                });
+
+                $(selector).val('');
+
+                $(selector).select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "Select Sub Product",
+                    allowClear: true,
+                });
+            }
+
+        });
+
         $('body').on('change', '.price_impact', function() {
 
             if($(this).is(":checked"))
@@ -845,28 +855,28 @@
 
         });
 
-        $('body').on('change', '.size1_value', function() {
+        $('body').on('change', '.sub_price_impact', function() {
 
             if($(this).is(":checked"))
             {
-                $(this).parent().parent().find('#size1_value').val(1);
+                $(this).parent().parent().find('#sub_price_impact').val(1);
             }
             else
             {
-                $(this).parent().parent().find('#size1_value').val(0);
+                $(this).parent().parent().find('#sub_price_impact').val(0);
             }
 
         });
 
-        $('body').on('change', '.size2_value', function() {
+        $('body').on('change', '.sub_impact_type', function() {
 
             if($(this).is(":checked"))
             {
-                $(this).parent().parent().find('#size2_value').val(1);
+                $(this).parent().parent().find('#sub_impact_type').val(1);
             }
             else
             {
-                $(this).parent().parent().find('#size2_value').val(0);
+                $(this).parent().parent().find('#sub_impact_type').val(0);
             }
 
         });
@@ -1084,11 +1094,11 @@
 
             $(".sub_product_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
                 '\n' +
-                '                                                                        <div class="col-sm-3">\n' +
+                '                                                                        <div class="col-sm-4">\n' +
                 '\n' +
                 '                                                                            <select class="form-control validate js-data-example-ajax6" name="sub_product_headings[]">\n' +
                 '\n' +
-                '                                                                                <option value="">Select Sub Product Heading</option>\n' +
+                '                                                                                <option value="">Select Sub Product</option>\n' +
                 '\n' +
                 '                                                                                @foreach($sub_product_headings as $sub)\n' +
                 '\n' +
@@ -1100,25 +1110,19 @@
                 '\n' +
                 '                                                                        </div>\n' +
                 '\n' +
-                '                                                                        <div class="col-sm-2">\n' +
+                '                                                                        <div class="col-sm-3">\n' +
                 '\n' +
-                '                                                                            <input class="form-control sub_title" name="sub_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">\n' +
-                '\n' +
-                '                                                                        </div>\n' +
-                '\n' +
-                '                                                                        <div class="col-sm-2">\n' +
-                '\n' +
-                '                                                                            <input class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product Code" type="text">\n' +
+                '                                                                            <input class="form-control sub_value" name="sub_value[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '\n' +
                 '                                                                        </div>\n' +
                 '\n' +
                 '                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                 '\n' +
-                '                                                                            <input type="hidden" name="size1_value[]" id="size1_value" value="0">\n' +
+                '                                                                            <input type="hidden" name="sub_price_impact[]" id="sub_price_impact" value="0">\n' +
                 '\n' +
                 '                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
                 '                                                                            <label style="margin: 0;" class="switch">\n' +
-                '                                                                                <input class="size1_value" type="checkbox">\n' +
+                '                                                                                <input class="sub_price_impact" type="checkbox">\n' +
                 '                                                                                <span class="slider round"></span>\n' +
                 '                                                                            </label>\n' +
                 '                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
@@ -1127,14 +1131,14 @@
                 '\n' +
                 '                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                 '\n' +
-                '                                                                            <input type="hidden" name="size2_value[]" id="size2_value" value="0">\n' +
+                '                                                                            <input type="hidden" name="sub_impact_type[]" id="sub_impact_type" value="0">\n' +
                 '\n' +
-                '                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
                 '                                                                            <label style="margin: 0;" class="switch">\n' +
-                '                                                                                <input class="size2_value" type="checkbox">\n' +
+                '                                                                                <input class="sub_impact_type" type="checkbox">\n' +
                 '                                                                                <span class="slider round"></span>\n' +
                 '                                                                            </label>\n' +
-                '                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
                 '\n' +
                 '                                                                        </div>\n' +
                 '\n' +
@@ -1149,7 +1153,7 @@
             $(".js-data-example-ajax6").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "Select Sub Product Heading",
+                placeholder: "Select Sub Product",
                 allowClear: true,
             });
 
@@ -1195,7 +1199,7 @@
         $(".js-data-example-ajax6").select2({
             width: '100%',
             height: '200px',
-            placeholder: "Select Sub Product Heading",
+            placeholder: "Select Sub Product",
             allowClear: true,
         });
 
@@ -1431,11 +1435,11 @@
             {
                 $(".sub_product_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
                     '\n' +
-                    '                                                                        <div class="col-sm-3">\n' +
+                    '                                                                        <div class="col-sm-4">\n' +
                     '\n' +
                     '                                                                            <select class="form-control validate js-data-example-ajax6" name="sub_product_headings[]">\n' +
                     '\n' +
-                    '                                                                                <option value="">Select Sub Product Heading</option>\n' +
+                    '                                                                                <option value="">Select Sub Product</option>\n' +
                     '\n' +
                     '                                                                                @foreach($sub_product_headings as $sub)\n' +
                     '\n' +
@@ -1447,25 +1451,19 @@
                     '\n' +
                     '                                                                        </div>\n' +
                     '\n' +
-                    '                                                                        <div class="col-sm-2">\n' +
+                    '                                                                        <div class="col-sm-3">\n' +
                     '\n' +
-                    '                                                                            <input class="form-control sub_title" name="sub_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">\n' +
-                    '\n' +
-                    '                                                                        </div>\n' +
-                    '\n' +
-                    '                                                                        <div class="col-sm-2">\n' +
-                    '\n' +
-                    '                                                                            <input class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product Code" type="text">\n' +
+                    '                                                                            <input class="form-control sub_value" name="sub_value[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '\n' +
                     '                                                                        </div>\n' +
                     '\n' +
                     '                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                            <input type="hidden" name="size1_value[]" id="size1_value" value="0">\n' +
+                    '                                                                            <input type="hidden" name="sub_price_impact[]" id="sub_price_impact" value="0">\n' +
                     '\n' +
                     '                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
                     '                                                                            <label style="margin: 0;" class="switch">\n' +
-                    '                                                                                <input class="size1_value" type="checkbox">\n' +
+                    '                                                                                <input class="sub_price_impact" type="checkbox">\n' +
                     '                                                                                <span class="slider round"></span>\n' +
                     '                                                                            </label>\n' +
                     '                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
@@ -1474,14 +1472,14 @@
                     '\n' +
                     '                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                            <input type="hidden" name="size2_value[]" id="size2_value" value="0">\n' +
+                    '                                                                            <input type="hidden" name="sub_impact_type[]" id="sub_impact_type" value="0">\n' +
                     '\n' +
-                    '                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
                     '                                                                            <label style="margin: 0;" class="switch">\n' +
-                    '                                                                                <input class="size2_value" type="checkbox">\n' +
+                    '                                                                                <input class="sub_impact_type" type="checkbox">\n' +
                     '                                                                                <span class="slider round"></span>\n' +
                     '                                                                            </label>\n' +
-                    '                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
                     '\n' +
                     '                                                                        </div>\n' +
                     '\n' +
@@ -1495,7 +1493,7 @@
                 $(".js-data-example-ajax6").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "Select Sub Product Heading",
+                    placeholder: "Select Sub Product",
                     allowClear: true,
                 });
 
