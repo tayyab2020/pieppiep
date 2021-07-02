@@ -7,7 +7,7 @@ use App\color;
 use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
-use App\feature_sub_products;
+use App\sub_products_sizes;
 use App\features;
 use App\handyman_quotes;
 use App\handyman_services;
