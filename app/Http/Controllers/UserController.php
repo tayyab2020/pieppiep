@@ -145,10 +145,9 @@ class UserController extends Controller
         $max_x_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id', function ($join) use($request) {
 
             $join->where('colors.id',$request->color)
-                ->where('colors.product_id',$request->product)
-                ->max('prices.x_axis');
-            
-        });
+                ->where('colors.product_id',$request->product);
+
+        })->max('prices.x_axis');
         $max_y_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.y_axis');
 
         var_dump($max_x_axis);
