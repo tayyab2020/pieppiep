@@ -40,7 +40,6 @@
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu3">Colors Options</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu4">Price Tables</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu5">Features</a></li>
-                                                <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu6">Sub Products</a></li>
                                             </ul>
 
                                             <form style="padding: 0;" class="form-horizontal" action="{{route('admin-product-store')}}" method="POST" enctype="multipart/form-data">
@@ -482,6 +481,152 @@
 
                                                                 </div>
 
+                                                                <div class="form-group" style="margin: 50px 0px 20px 0;display: flex;justify-content: center;">
+
+                                                                    <div style="border: 1px solid #e1e1e1;padding: 25px;" class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+
+                                                                        <h4 style="text-align: center;margin-bottom: 50px;">Ladderband Sub Product(s)</h4>
+
+                                                                        <div class="row" style="margin: 0;">
+
+                                                                            <div style="font-family: monospace;" class="col-sm-2">
+                                                                                <h4>ID</h4>
+                                                                            </div>
+
+                                                                            <div style="font-family: monospace;" class="col-sm-3">
+                                                                                <h4>Title</h4>
+                                                                            </div>
+
+                                                                            <div style="font-family: monospace;text-align: center;" class="col-sm-3">
+                                                                                <h4>Size 38mm</h4>
+                                                                            </div>
+
+                                                                            <div style="font-family: monospace;text-align: center;" class="col-sm-3">
+                                                                                <h4>Size 25mm</h4>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        <div class="row ladderband_products_box" style="margin: 15px 0;">
+
+                                                                            <input type="hidden" name="removed_ladderband" id="removed_ladderband_rows">
+
+                                                                            @if(isset($ladderband_data) && count($ladderband_data) > 0)
+
+                                                                                @foreach($ladderband_data as $f => $key)
+
+                                                                                    <div class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">
+
+                                                                                        <div class="col-sm-2">
+
+                                                                                            <input value="{{$key->code}}" class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product ID" type="text">
+
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-3">
+
+                                                                                            <input value="{{$key->title}}" class="form-control sub_product_title" name="sub_product_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">
+
+                                                                                        </div>
+
+                                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
+
+                                                                                            <input type="hidden" name="size1_value[]" id="size1_value" value="{{$key->size1_value}}">
+
+                                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                            <label style="margin: 0;" class="switch">
+                                                                                                <input {{$key->size1_value ? 'checked' : null}} class="size1_value" type="checkbox">
+                                                                                                <span class="slider round"></span>
+                                                                                            </label>
+                                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                        </div>
+
+                                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
+
+                                                                                            <input type="hidden" name="size2_value[]" id="size2_value" value="{{$key->size2_value}}">
+
+                                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                            <label style="margin: 0;" class="switch">
+                                                                                                <input {{$key->size2_value ? 'checked' : null}} class="size2_value" type="checkbox">
+                                                                                                <span class="slider round"></span>
+                                                                                            </label>
+                                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                        </div>
+
+                                                                                        <div class="col-xs-1 col-sm-1">
+                                                                                            <span class="ui-close remove-ladderband" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                @endforeach
+
+                                                                            @else
+
+                                                                                <div class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">
+
+                                                                                    <div class="col-sm-2">
+
+                                                                                        <input class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product ID" type="text">
+
+                                                                                    </div>
+
+                                                                                    <div class="col-sm-3">
+
+                                                                                        <input class="form-control sub_product_title" name="sub_product_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">
+
+                                                                                    </div>
+
+                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
+
+                                                                                        <input type="hidden" name="size1_value[]" id="size1_value" value="0">
+
+                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                        <label style="margin: 0;" class="switch">
+                                                                                            <input class="size1_value" type="checkbox">
+                                                                                            <span class="slider round"></span>
+                                                                                        </label>
+                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                    </div>
+
+                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
+
+                                                                                        <input type="hidden" name="size2_value[]" id="size2_value" value="0">
+
+                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                        <label style="margin: 0;" class="switch">
+                                                                                            <input class="size2_value" type="checkbox">
+                                                                                            <span class="slider round"></span>
+                                                                                        </label>
+                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                    </div>
+
+                                                                                    <div class="col-xs-1 col-sm-1">
+                                                                                        <span class="ui-close remove-ladderband" data-id="" style="margin:0;right:70%;">X</span>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            @endif
+
+                                                                        </div>
+
+                                                                        <div class="form-group add-color">
+                                                                            <label class="control-label col-sm-3" for=""></label>
+
+                                                                            <div class="col-sm-12 text-center">
+                                                                                <button class="btn btn-default featured-btn" type="button" id="add-ladderband-btn"><i class="fa fa-plus"></i> Add Ladderband Sub Products</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
                                                             </div>
 
                                                         </div>
@@ -682,171 +827,6 @@
 
                                                     </div>
 
-                                                    <div id="menu6" class="tab-pane fade">
-
-                                                        <div class="form-group" style="margin-bottom: 20px;">
-
-                                                            <div class="row" style="margin: 0;">
-
-                                                                <div style="font-family: monospace;" class="col-sm-4">
-                                                                    <h4>Sub Product</h4>
-                                                                </div>
-
-                                                                <div style="font-family: monospace;" class="col-sm-3">
-                                                                    <h4>Value</h4>
-                                                                </div>
-
-                                                                <div style="font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Price Impact</h4>
-                                                                </div>
-
-                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Impact Type</h4>
-                                                                </div>
-
-                                                            </div>
-
-                                                            <div class="row sub_product_box" style="margin: 15px 0;">
-
-                                                                <input type="hidden" name="removed_sub" id="removed_sub_rows">
-
-                                                                @if(isset($sub_products_data) && count($sub_products_data) > 0)
-
-                                                                    @foreach($sub_products_data as $s => $key)
-
-                                                                        <div class="form-group" style="margin: 0 0 20px 0;">
-
-                                                                            <div class="col-sm-4">
-
-                                                                                <select class="form-control validate js-data-example-ajax6" name="sub_product_headings[]">
-
-                                                                                    <option value="">Select Sub Product</option>
-
-                                                                                    @foreach($sub_product_headings as $heading)
-
-                                                                                        <option {{$heading->id == $key->heading_id ? 'selected' : null}} value="{{$heading->id}}">{{$heading->title}}</option>
-
-                                                                                    @endforeach
-
-                                                                                </select>
-
-                                                                            </div>
-
-                                                                            <div class="col-sm-3">
-
-                                                                                <input class="form-control sub_value" value="{{$key->value}}" name="sub_value[]" id="blood_group_slug" placeholder="Value" type="text">
-
-                                                                            </div>
-
-                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                                <input type="hidden" name="sub_price_impact[]" id="sub_price_impact" value="{{$key->price_impact}}">
-
-                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                <label style="margin: 0;" class="switch">
-                                                                                    <input class="sub_price_impact" type="checkbox" {{$key->price_impact ? 'checked' : null}}>
-                                                                                    <span class="slider round"></span>
-                                                                                </label>
-                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                            </div>
-
-                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                                <input type="hidden" name="sub_impact_type[]" id="sub_impact_type" value="{{$key->impact_type}}">
-
-                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
-                                                                                <label style="margin: 0;" class="switch">
-                                                                                    <input class="sub_impact_type" type="checkbox" {{$key->impact_type ? 'checked' : null}}>
-                                                                                    <span class="slider round"></span>
-                                                                                </label>
-                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                            </div>
-
-                                                                            <div class="col-xs-1 col-sm-1">
-                                                                                <span class="ui-close remove-sub" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
-                                                                            </div>
-
-                                                                        </div>
-
-                                                                    @endforeach
-
-                                                                @else
-
-                                                                    <div class="form-group" style="margin: 0 0 20px 0;">
-
-                                                                        <div class="col-sm-4">
-
-                                                                            <select class="form-control validate js-data-example-ajax6" name="sub_product_headings[]">
-
-                                                                                <option value="">Select Sub Product</option>
-
-                                                                                @foreach($sub_product_headings as $sub)
-
-                                                                                    <option value="{{$sub->id}}">{{$sub->title}}</option>
-
-                                                                                @endforeach
-
-                                                                            </select>
-
-                                                                        </div>
-
-                                                                        <div class="col-sm-3">
-
-                                                                            <input class="form-control sub_value" name="sub_value[]" id="blood_group_slug" placeholder="Value" type="text">
-
-                                                                        </div>
-
-                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                            <input type="hidden" name="sub_price_impact[]" id="sub_price_impact" value="0">
-
-                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                            <label style="margin: 0;" class="switch">
-                                                                                <input class="sub_price_impact" type="checkbox">
-                                                                                <span class="slider round"></span>
-                                                                            </label>
-                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                        </div>
-
-                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                            <input type="hidden" name="sub_impact_type[]" id="sub_impact_type" value="0">
-
-                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
-                                                                            <label style="margin: 0;" class="switch">
-                                                                                <input class="sub_impact_type" type="checkbox">
-                                                                                <span class="slider round"></span>
-                                                                            </label>
-                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                        </div>
-
-
-                                                                        <div class="col-xs-1 col-sm-1">
-                                                                            <span class="ui-close remove-sub" data-id="" style="margin:0;right:70%;">X</span>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                @endif
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="form-group add-color">
-                                                            <label class="control-label col-sm-3" for=""></label>
-
-                                                            <div class="col-sm-12 text-center">
-                                                                <button class="btn btn-default featured-btn" type="button" id="add-sub-btn"><i class="fa fa-plus"></i> Add More Sub Products</button>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
                                                     <hr style="margin: 30px 0;">
 
                                                     <div style="padding: 0;" class="add-product-footer">
@@ -885,8 +865,153 @@
         var row = 0;
         var rem_index = 0;
         var rem_arr = [];
-        var rem_sub_arr = [];
         var rem_col_arr = [];
+        var rem_lad_arr = [];
+
+        $("#add-ladderband-btn").on('click',function() {
+
+
+            $(".ladderband_products_box").append('<div class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+                '\n' +
+                '                                                            <div class="col-sm-2">\n' +
+                '\n' +
+                '                                                                <input class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product ID" type="text">\n' +
+                '\n' +
+                '                                                            </div>\n' +
+                '\n' +
+                '                                                            <div class="col-sm-3">\n' +
+                '\n' +
+                '                                                                <input class="form-control sub_product_title" name="sub_product_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">\n' +
+                '\n' +
+                '                                                            </div>\n' +
+                '\n' +
+                '                                                           <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">\n' +
+                '\n' +
+                '                                                                <input type="hidden" name="size1_value[]" id="size1_value" value="0">\n' +
+                '\n' +
+                '                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                    <input class="size1_value" type="checkbox">\n' +
+                '                                                                    <span class="slider round"></span>\n' +
+                '                                                                </label>\n' +
+                '                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '\n' +
+                '                                                            </div>\n' +
+                '\n' +
+                '                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">\n' +
+                '\n' +
+                '                                                                <input type="hidden" name="size2_value[]" id="size2_value" value="0">\n' +
+                '\n' +
+                '                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                    <input class="size2_value" type="checkbox">\n' +
+                '                                                                    <span class="slider round"></span>\n' +
+                '                                                                </label>\n' +
+                '                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '\n' +
+                '                                                            </div>\n' +
+                '\n' +
+                '                                                            <div class="col-xs-1 col-sm-1">\n' +
+                '                                                                <span class="ui-close remove-ladderband" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                '                                                            </div>\n' +
+                '\n' +
+                '                                                        </div>');
+
+
+        });
+
+        $('body').on('click', '.remove-ladderband' ,function() {
+
+            var id = $(this).data('id');
+
+            if(id)
+            {
+                rem_lad_arr.push(id);
+                $('#removed_ladderband_rows').val(rem_lad_arr);
+            }
+
+            var parent = this.parentNode.parentNode;
+
+            $(parent).hide();
+            $(parent).remove();
+
+            if($(".ladderband_products_box .form-group").length == 0)
+            {
+                $(".ladderband_products_box").append('<div class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+                    '\n' +
+                    '                                                            <div class="col-sm-2">\n' +
+                    '\n' +
+                    '                                                                <input class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product ID" type="text">\n' +
+                    '\n' +
+                    '                                                            </div>\n' +
+                    '\n' +
+                    '                                                            <div class="col-sm-3">\n' +
+                    '\n' +
+                    '                                                                <input class="form-control sub_product_title" name="sub_product_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">\n' +
+                    '\n' +
+                    '                                                            </div>\n' +
+                    '\n' +
+                    '                                                           <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">\n' +
+                    '\n' +
+                    '                                                                <input type="hidden" name="size1_value[]" id="size1_value" value="0">\n' +
+                    '\n' +
+                    '                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                    <input class="size1_value" type="checkbox">\n' +
+                    '                                                                    <span class="slider round"></span>\n' +
+                    '                                                                </label>\n' +
+                    '                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                            </div>\n' +
+                    '\n' +
+                    '                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">\n' +
+                    '\n' +
+                    '                                                                <input type="hidden" name="size2_value[]" id="size2_value" value="0">\n' +
+                    '\n' +
+                    '                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                    <input class="size2_value" type="checkbox">\n' +
+                    '                                                                    <span class="slider round"></span>\n' +
+                    '                                                                </label>\n' +
+                    '                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                            </div>\n' +
+                    '\n' +
+                    '                                                            <div class="col-xs-1 col-sm-1">\n' +
+                    '                                                                <span class="ui-close remove-ladderband" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                    '                                                            </div>\n' +
+                    '\n' +
+                    '                                                        </div>');
+
+            }
+
+        });
+
+        $('body').on('change', '.size1_value', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#size1_value').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#size1_value').val(0);
+            }
+
+        });
+
+        $('body').on('change', '.size2_value', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#size2_value').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#size2_value').val(0);
+            }
+
+        });
 
         $(document).on('keypress', ".max_size", function(e){
 
@@ -927,32 +1052,6 @@
             }
         });
 
-        $('body').on('change', '.js-data-example-ajax6', function() {
-
-
-            var id = this.value;
-            var selector = this;
-
-            if ($('.js-data-example-ajax6').find('option[value=' + id + ']:selected').length > 1) {
-
-                Swal.fire({
-                    type: 'error',
-                    title: 'Oops...',
-                    text: 'Sub Product already selected!',
-
-                });
-
-                $(selector).val('');
-
-                $(selector).select2({
-                    width: '100%',
-                    height: '200px',
-                    placeholder: "Select Sub Product",
-                    allowClear: true,
-                });
-            }
-
-        });
 
         $('body').on('change', '.ladderband', function() {
 
@@ -1017,32 +1116,6 @@
             else
             {
                 $(this).parent().parent().find('#impact_type').val(0);
-            }
-
-        });
-
-        $('body').on('change', '.sub_price_impact', function() {
-
-            if($(this).is(":checked"))
-            {
-                $(this).parent().parent().find('#sub_price_impact').val(1);
-            }
-            else
-            {
-                $(this).parent().parent().find('#sub_price_impact').val(0);
-            }
-
-        });
-
-        $('body').on('change', '.sub_impact_type', function() {
-
-            if($(this).is(":checked"))
-            {
-                $(this).parent().parent().find('#sub_impact_type').val(1);
-            }
-            else
-            {
-                $(this).parent().parent().find('#sub_impact_type').val(0);
             }
 
         });
@@ -1261,77 +1334,6 @@
 
         });
 
-        $("#add-sub-btn").on('click',function() {
-
-
-            $(".sub_product_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
-                '\n' +
-                '                                                                        <div class="col-sm-4">\n' +
-                '\n' +
-                '                                                                            <select class="form-control validate js-data-example-ajax6" name="sub_product_headings[]">\n' +
-                '\n' +
-                '                                                                                <option value="">Select Sub Product</option>\n' +
-                '\n' +
-                '                                                                                @foreach($sub_product_headings as $sub)\n' +
-                '\n' +
-                '                                                                                    <option value="{{$sub->id}}">{{$sub->title}}</option>\n' +
-                '\n' +
-                '                                                                                @endforeach\n' +
-                '\n' +
-                '                                                                            </select>\n' +
-                '\n' +
-                '                                                                        </div>\n' +
-                '\n' +
-                '                                                                        <div class="col-sm-3">\n' +
-                '\n' +
-                '                                                                            <input class="form-control sub_value" name="sub_value[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                '\n' +
-                '                                                                        </div>\n' +
-                '\n' +
-                '                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                '\n' +
-                '                                                                            <input type="hidden" name="sub_price_impact[]" id="sub_price_impact" value="0">\n' +
-                '\n' +
-                '                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
-                '                                                                            <label style="margin: 0;" class="switch">\n' +
-                '                                                                                <input class="sub_price_impact" type="checkbox">\n' +
-                '                                                                                <span class="slider round"></span>\n' +
-                '                                                                            </label>\n' +
-                '                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
-                '\n' +
-                '                                                                        </div>\n' +
-                '\n' +
-                '                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                '\n' +
-                '                                                                            <input type="hidden" name="sub_impact_type[]" id="sub_impact_type" value="0">\n' +
-                '\n' +
-                '                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
-                '                                                                            <label style="margin: 0;" class="switch">\n' +
-                '                                                                                <input class="sub_impact_type" type="checkbox">\n' +
-                '                                                                                <span class="slider round"></span>\n' +
-                '                                                                            </label>\n' +
-                '                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
-                '\n' +
-                '                                                                        </div>\n' +
-                '\n' +
-                '                                                                    <div class="col-xs-1 col-sm-1">\n' +
-                '                                                                        <span class="ui-close remove-sub" data-id="" style="margin:0;right:70%;">X</span>\n' +
-                '                                                                    </div>\n'+
-                '\n' +
-                '                </div>');
-
-
-
-            $(".js-data-example-ajax6").select2({
-                width: '100%',
-                height: '200px',
-                placeholder: "Select Sub Product",
-                allowClear: true,
-            });
-
-
-        });
-
         $(".js-data-example-ajax").select2({
             width: '100%',
             height: '200px',
@@ -1365,13 +1367,6 @@
             width: '100%',
             height: '200px',
             placeholder: "Select Feature Heading",
-            allowClear: true,
-        });
-
-        $(".js-data-example-ajax6").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "Select Sub Product",
             allowClear: true,
         });
 
@@ -1586,92 +1581,6 @@
                     width: '100%',
                     height: '200px',
                     placeholder: "Select Feature Heading",
-                    allowClear: true,
-                });
-
-
-            }
-
-        });
-
-        $('body').on('click', '.remove-sub' ,function() {
-
-            var id = $(this).data('id');
-
-            if(id)
-            {
-                rem_sub_arr.push(id);
-                $('#removed_sub_rows').val(rem_sub_arr);
-            }
-
-            var parent = this.parentNode.parentNode;
-
-            $(parent).hide();
-            $(parent).remove();
-
-            if($(".sub_product_box .form-group").length == 0)
-            {
-                $(".sub_product_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
-                    '\n' +
-                    '                                                                        <div class="col-sm-4">\n' +
-                    '\n' +
-                    '                                                                            <select class="form-control validate js-data-example-ajax6" name="sub_product_headings[]">\n' +
-                    '\n' +
-                    '                                                                                <option value="">Select Sub Product</option>\n' +
-                    '\n' +
-                    '                                                                                @foreach($sub_product_headings as $sub)\n' +
-                    '\n' +
-                    '                                                                                    <option value="{{$sub->id}}">{{$sub->title}}</option>\n' +
-                    '\n' +
-                    '                                                                                @endforeach\n' +
-                    '\n' +
-                    '                                                                            </select>\n' +
-                    '\n' +
-                    '                                                                        </div>\n' +
-                    '\n' +
-                    '                                                                        <div class="col-sm-3">\n' +
-                    '\n' +
-                    '                                                                            <input class="form-control sub_value" name="sub_value[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                    '\n' +
-                    '                                                                        </div>\n' +
-                    '\n' +
-                    '                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                    '\n' +
-                    '                                                                            <input type="hidden" name="sub_price_impact[]" id="sub_price_impact" value="0">\n' +
-                    '\n' +
-                    '                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
-                    '                                                                            <label style="margin: 0;" class="switch">\n' +
-                    '                                                                                <input class="sub_price_impact" type="checkbox">\n' +
-                    '                                                                                <span class="slider round"></span>\n' +
-                    '                                                                            </label>\n' +
-                    '                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
-                    '\n' +
-                    '                                                                        </div>\n' +
-                    '\n' +
-                    '                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                    '\n' +
-                    '                                                                            <input type="hidden" name="sub_impact_type[]" id="sub_impact_type" value="0">\n' +
-                    '\n' +
-                    '                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
-                    '                                                                            <label style="margin: 0;" class="switch">\n' +
-                    '                                                                                <input class="sub_impact_type" type="checkbox">\n' +
-                    '                                                                                <span class="slider round"></span>\n' +
-                    '                                                                            </label>\n' +
-                    '                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
-                    '\n' +
-                    '                                                                        </div>\n' +
-                    '\n' +
-                    '                                                                    <div class="col-xs-1 col-sm-1">\n' +
-                    '                                                                        <span class="ui-close remove-sub" data-id="" style="margin:0;right:70%;">X</span>\n' +
-                    '                                                                    </div>\n'+
-                    '\n' +
-                    '                </div>');
-
-
-                $(".js-data-example-ajax6").select2({
-                    width: '100%',
-                    height: '200px',
-                    placeholder: "Select Sub Product",
                     allowClear: true,
                 });
 
