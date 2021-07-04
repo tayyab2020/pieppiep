@@ -134,6 +134,15 @@ class ProductController extends Controller
 
         $input = $request->all();
 
+        if($input['ladderband'])
+        {
+            if(!$input['ladderband_value'])
+            {
+                $input['ladderband_value'] = 0;
+            }
+        }
+
+
         if($request->cat_id)
         {
             $removed = explode(',', $request->removed);

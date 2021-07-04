@@ -110,6 +110,7 @@
                                                                 <td>1</td>
                                                                 <input type="hidden" id="row_total" name="total[]">
                                                                 <input type="hidden" value="1" id="row_id" name="row_id[]">
+                                                                <input type="hidden" value="0" id="ladderband" name="ladderband[]">
                                                                 <td class="products">
                                                                     <select name="products[]" class="js-data-example-ajax">
 
@@ -886,6 +887,7 @@
 
                         $('#menu1').find(`[data-id='${row_id}']`).remove();
 
+                        current.parent().parent().find('#ladderband').val(data[0].ladderband);
                         current.parent().parent().find('.price').text('');
                         current.parent().parent().find('#row_total').val('');
 
@@ -1258,7 +1260,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,price = null,products = null,product = null,sub_products = null,sub_product = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null)
+            function add_row(copy = false,price = null,products = null,product = null,sub_products = null,sub_product = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1272,6 +1274,7 @@
                         '                                                            <td>'+r_id+'</td>\n' +
                         '                                                            <input type="hidden" id="row_total" name="total[]">\n' +
                         '                                                            <input type="hidden" value="'+rowCount+'" id="row_id" name="row_id[]">\n' +
+                        '                                                            <input type="hidden" value="0" id="ladderband" name="ladderband[]">\n' +
                         '                                                            <td class="products">\n' +
                         '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
                         '\n' +
@@ -1377,6 +1380,7 @@
                         '                                                            <td>'+r_id+'</td>\n' +
                         '                                                            <input value="'+price+'" type="hidden" id="row_total" name="total[]">\n' +
                         '                                                            <input type="hidden" value="'+rowCount+'" id="row_id" name="row_id[]">\n' +
+                        '                                                            <input type="hidden" value="'+ladderband+'" id="ladderband" name="ladderband[]">\n' +
                         '                                                            <td class="products">\n' +
                         '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
                         '\n' +
@@ -1623,6 +1627,7 @@
 
                 var current = $('#products_table tbody tr.active');
                 var id = current.data('id');
+                var ladderband = current.find('#ladderband').val();
                 var price = current.find('#row_total').val();
                 var products = current.find('.js-data-example-ajax').html();
                 var product = current.find('.js-data-example-ajax').val();
@@ -1639,7 +1644,7 @@
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
 
-                add_row(true,price,products,product,sub_products,sub_product,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty);
+                add_row(true,price,products,product,sub_products,sub_product,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband);
 
             });
 
@@ -1918,6 +1923,7 @@
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
                 var sub_product = current.parent().parent().parent().find('.sub_products').find('select').val();
+                var ladderband = current.parent().parent().parent().find('#ladderband').val();
 
                 if(width && height && color && product)
                 {
@@ -1970,6 +1976,21 @@
                                     var features = '';
                                     var f_value = 0;
 
+                                    if(ladderband == 1)
+                                    {
+
+                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
+                                            '<option value="0">No</option>\n' +
+                                            '<option value="1">Yes</option>\n' +
+                                            '</select>\n' +
+                                            '<input value="0" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '</div></div>\n';
+
+                                        features = features + content;
+                                    }
 
                                     $.each(data[1], function(index, value) {
 
@@ -2079,61 +2100,68 @@
 
                 total = total - impact_value;
 
-                $.ajax({
-                    type: "GET",
-                    data: "id=" + feature_select,
-                    url: "<?php echo url('/aanbieder/get-feature-price')?>",
-                    success: function (data) {
+                if(id == 0)
+                {
 
-                        if(data.max_size)
-                        {
-                            var sq = (width * height) / 10000;
-                            var max_size = data.max_size;
+                }
+                else
+                {
+                    $.ajax({
+                        type: "GET",
+                        data: "id=" + feature_select,
+                        url: "<?php echo url('/aanbieder/get-feature-price')?>",
+                        success: function (data) {
 
-                            if(sq > max_size)
+                            if(data.max_size)
                             {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: '{{__('text.Oops...')}}',
-                                    text: 'Area is greater than max size: ' + max_size,
-                                });
+                                var sq = (width * height) / 10000;
+                                var max_size = data.max_size;
+
+                                if(sq > max_size)
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        text: 'Area is greater than max size: ' + max_size,
+                                    });
+                                }
                             }
-                        }
 
-                        if(data.price_impact == 1)
-                        {
-                            if(data.impact_type == 0)
+                            if(data.price_impact == 1)
                             {
-                                impact_value = data.value;
-                                impact_value = parseFloat(impact_value).toFixed(2);
-                                total = parseFloat(total) + parseFloat(impact_value);
-                                total = total.toFixed(2);
+                                if(data.impact_type == 0)
+                                {
+                                    impact_value = data.value;
+                                    impact_value = parseFloat(impact_value).toFixed(2);
+                                    total = parseFloat(total) + parseFloat(impact_value);
+                                    total = total.toFixed(2);
+                                }
+                                else
+                                {
+                                    impact_value = data.value;
+                                    var per = (impact_value)/100;
+                                    impact_value = total * per;
+                                    impact_value = parseFloat(impact_value).toFixed(2);
+                                    total = parseFloat(total) + parseFloat(impact_value);
+                                    total = total.toFixed(2);
+                                }
                             }
                             else
                             {
-                                impact_value = data.value;
-                                var per = (impact_value)/100;
-                                impact_value = total * per;
-                                impact_value = parseFloat(impact_value).toFixed(2);
+                                impact_value = 0;
                                 total = parseFloat(total) + parseFloat(impact_value);
                                 total = total.toFixed(2);
                             }
+
+                            current.next('input').val(impact_value);
+
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+
+                            calculate_total();
                         }
-                        else
-                        {
-                            impact_value = 0;
-                            total = parseFloat(total) + parseFloat(impact_value);
-                            total = total.toFixed(2);
-                        }
-
-                        current.next('input').val(impact_value);
-
-                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
-                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-                        calculate_total();
-                    }
-                });
+                    });
+                }
 
                 /*$.ajax({
                     type: "GET",

@@ -133,7 +133,7 @@ class UserController extends Controller
 
     public function GetColors(Request $request)
     {
-        $data = Products::leftjoin('colors','colors.product_id','=','products.id')->where('products.id',$request->id)->select('products.measure','colors.id','colors.title')->get();
+        $data = Products::leftjoin('colors','colors.product_id','=','products.id')->where('products.id',$request->id)->select('products.ladderband','products.measure','colors.id','colors.title')->get();
 
         return $data;
     }
@@ -145,6 +145,9 @@ class UserController extends Controller
         $max_x_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.x_axis');
         $max_y_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.y_axis');
 
+        var_dump($max_x_axis);
+        var_dump($max_y_axis);
+        
         if($max_x_axis >= $request->width && $max_y_axis >= $request->height)
         {
             $price = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
@@ -158,9 +161,9 @@ class UserController extends Controller
 
             }])->get();
 
-            $sub_product_features = product_sub_products::leftjoin('sub_products','sub_products.id','=','product_sub_products.heading_id')->where('product_sub_products.product_id',$request->product)->where('product_sub_products.heading_id',$request->sub_product)->select('product_sub_products.*','sub_products.title','sub_products.max_size')->first();
+            /*$sub_product_features = product_sub_products::leftjoin('sub_products','sub_products.id','=','product_sub_products.heading_id')->where('product_sub_products.product_id',$request->product)->where('product_sub_products.heading_id',$request->sub_product)->select('product_sub_products.*','sub_products.title','sub_products.max_size')->first();*/
 
-            $data = array($price,$features,$sub_product_features);
+            $data = array($price,$features);
         }
         else if($max_x_axis < $request->width && $max_y_axis < $request->height)
         {

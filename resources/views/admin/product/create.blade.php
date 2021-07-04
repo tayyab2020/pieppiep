@@ -416,6 +416,76 @@
 
                                                     <div id="menu5" class="tab-pane fade">
 
+                                                        <div class="row" style="margin: 0;margin-bottom: 35px;">
+
+                                                            <div class="form-group">
+
+                                                                <div class="row" style="margin: 0;">
+
+                                                                    <div style="display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Ladderband:</label>
+
+                                                                        <input type="hidden" name="ladderband" id="ladderband" value="{{isset($cats) ? $cats->ladderband : null}}">
+
+                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                        <label style="margin: 0;" class="switch">
+                                                                            <input class="ladderband" type="checkbox" {{isset($cats) ? ($cats->ladderband ? 'checked' : null) : null}}>
+                                                                            <span class="slider round"></span>
+                                                                        </label>
+                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div @if(isset($cats)) @if(!$cats->ladderband) style='display: none;' @endif @else style='display: none;' @endif id="ladderband_box" class="form-group">
+
+                                                                <div class="row" style="margin: 0;">
+
+                                                                    <div style="margin: 15px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;" class="control-label">Ladderband Value:</label>
+                                                                        <input style="width: auto;border-radius: 10px;" class="form-control ladderband_value" value="{{isset($cats) ? $cats->ladderband_value : null}}" name="ladderband_value" id="blood_group_slug" placeholder="Ladderband Value" type="text">
+                                                                    </div>
+
+                                                                    <div style="margin: 15px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;" class="control-label">Ladderband Price Impact:</label>
+
+                                                                        <input type="hidden" name="ladderband_price_impact" id="ladderband_price_impact" value="{{isset($cats) ? $cats->ladderband_price_impact : 0}}">
+
+                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                        <label style="margin: 0;" class="switch">
+                                                                            <input class="ladderband_price_impact" type="checkbox" {{isset($cats) ? ($cats->ladderband_price_impact ? 'checked' : null) : null}}>
+                                                                            <span class="slider round"></span>
+                                                                        </label>
+                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                    </div>
+
+                                                                    <div style="margin: 15px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;" class="control-label">Ladderband Impact Type:</label>
+
+                                                                        <input type="hidden" name="ladderband_impact_type" id="ladderband_impact_type" value="{{isset($cats) ? $cats->ladderband_impact_type : 0}}">
+
+                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                        <label style="margin: 0;" class="switch">
+                                                                            <input class="ladderband_impact_type" type="checkbox" {{isset($cats) ? ($cats->ladderband_impact_type ? 'checked' : null) : null}}>
+                                                                            <span class="slider round"></span>
+                                                                        </label>
+                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
                                                         <div class="form-group" style="margin-bottom: 20px;">
 
                                                             <div class="row" style="margin: 0;">
@@ -880,6 +950,47 @@
                     placeholder: "Select Sub Product",
                     allowClear: true,
                 });
+            }
+
+        });
+
+        $('body').on('change', '.ladderband', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#ladderband').val(1);
+                $('#ladderband_box').show();
+            }
+            else
+            {
+                $(this).parent().parent().find('#ladderband').val(0);
+                $('#ladderband_box').hide();
+            }
+
+        });
+
+        $('body').on('change', '.ladderband_price_impact', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#ladderband_price_impact').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#ladderband_price_impact').val(0);
+            }
+
+        });
+
+        $('body').on('change', '.ladderband_impact_type', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#ladderband_impact_type').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#ladderband_impact_type').val(0);
             }
 
         });
