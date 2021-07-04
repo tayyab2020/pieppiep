@@ -147,6 +147,10 @@ class UserController extends Controller
 
         $e = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->get();
 
+        $s = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->select('prices.*')->orderBy('x_axis', 'desc')->first();
+
+        var_dump($s);
+
         foreach ($e as $key)
         {
             echo '<br>' . $key . '<br>';
