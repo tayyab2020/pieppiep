@@ -14,9 +14,7 @@ use App\price_tables;
 use App\product;
 use App\product_features;
 use App\product_ladderbands;
-use App\product_sub_products;
 use App\Products;
-use App\sub_products;
 use App\vats;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -540,7 +538,7 @@ class ProductController extends Controller
                     {
                         if($key != NULL && $request->sub_product_titles[$s] != NULL)
                         {
-                            $sub_pro = new product_sub_products;
+                            $sub_pro = new product_ladderbands;
                             $sub_pro->title = $request->sub_product_titles[$s];
                             $sub_pro->product_id = $check->id;
                             $sub_pro->code = $key;

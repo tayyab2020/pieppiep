@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\product_features;
-use App\sub_products_sizes;
 use App\features;
-use App\sub_products;
 use App\User;
 use App\users;
 use Illuminate\Http\Request;

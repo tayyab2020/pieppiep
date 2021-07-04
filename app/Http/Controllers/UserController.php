@@ -8,7 +8,6 @@ use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
 use App\product_ladderbands;
-use App\sub_products_sizes;
 use App\features;
 use App\handyman_quotes;
 use App\handyman_services;
@@ -21,14 +20,12 @@ use App\new_quotations_features;
 use App\new_quotations_sub_products;
 use App\product;
 use App\product_features;
-use App\product_sub_products;
 use App\Products;
 use App\quotation_invoices_data;
 use App\quotation_invoices;
 use App\quotes;
 use App\requests_q_a;
 use App\Service;
-use App\sub_products;
 use Illuminate\Http\Request;
 use App\User;
 use App\Category;
@@ -157,8 +154,6 @@ class UserController extends Controller
                 $query->where('product_features.product_id','=',$request->product);
 
             }])->get();
-
-            /*$sub_product_features = product_sub_products::leftjoin('sub_products','sub_products.id','=','product_sub_products.heading_id')->where('product_sub_products.product_id',$request->product)->where('product_sub_products.heading_id',$request->sub_product)->select('product_sub_products.*','sub_products.title','sub_products.max_size')->first();*/
 
             $data = array($price,$features);
         }
