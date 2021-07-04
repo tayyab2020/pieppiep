@@ -92,7 +92,7 @@
                                                             <tr>
                                                                 <th style="padding: 5px;"></th>
                                                                 <th>Product</th>
-                                                                <th>Sub Products</th>
+                                                                <th>Supplier</th>
                                                                 <th>Color</th>
                                                                 <th>Width</th>
                                                                 <th>Height</th>
@@ -111,6 +111,9 @@
                                                                 <input type="hidden" id="row_total" name="total[]">
                                                                 <input type="hidden" value="1" id="row_id" name="row_id[]">
                                                                 <input type="hidden" value="0" id="ladderband" name="ladderband[]">
+                                                                <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
+                                                                <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
+                                                                <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
                                                                 <td class="products">
                                                                     <select name="products[]" class="js-data-example-ajax">
 
@@ -124,19 +127,12 @@
 
                                                                     </select>
                                                                 </td>
-                                                                <td class="sub_products">
-                                                                    <select name="sub_products[]" class="js-data-example-ajax1">
+                                                                <td class="suppliers">
+                                                                    <select name="suppliers[]" class="js-data-example-ajax1">
 
                                                                         <option value=""></option>
 
-                                                                        @foreach($sub_products as $key)
-
-                                                                            <option value="{{$key->id}}">{{$key->title}}</option>
-
-                                                                        @endforeach
-
                                                                     </select>
-                                                                    <input type="hidden" name="sub_impact_value" id="sub_impact_value" value="0">
                                                                 </td>
                                                                 <td class="color">
                                                                     <select name="colors[]" class="js-data-example-ajax2">
@@ -888,6 +884,9 @@
                         $('#menu1').find(`[data-id='${row_id}']`).remove();
 
                         current.parent().parent().find('#ladderband').val(data[0].ladderband);
+                        current.parent().parent().find('#ladderband_value').val(data[0].ladderband_value);
+                        current.parent().parent().find('#ladderband_price_impact').val(data[0].ladderband_price_impact);
+                        current.parent().parent().find('#ladderband_impact_type').val(data[0].ladderband_impact_type);
                         current.parent().parent().find('.price').text('');
                         current.parent().parent().find('#row_total').val('');
 
@@ -926,159 +925,11 @@
 
             });
 
-            $(document).on('change', ".js-data-example-ajax1", function(e){
-
-                var current = $(this);
-                var id = current.val();
-                var product_id = current.parent().parent().find('.products').find('.js-data-example-ajax').val();
-                var row_id = current.parent().parent().data('id');
-                var options = '';
-                var impact_value = current.parent().find('input').val();
-                var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
-
-                total = total - impact_value;
-
-                if(!product_id)
-                {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '{{__('text.Oops...')}}',
-                        text: 'First select product!',
-                    });
-
-                    $(this).val('');
-                    $(this).trigger('change.select2');
-                }
-                else
-                {
-                    if(id)
-                    {
-                        $.ajax({
-                            type: "GET",
-                            data: "id=" + id + "&product_id=" + product_id,
-                            url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
-                            success: function (data) {
-
-                                $('#myModal').find('.modal-body').find('.sub-tables').hide();
-
-                                if($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).length > 0)
-                                {
-                                    $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-                                }
-
-
-                                $('#myModal').find('.modal-body').append(
-                                    '<div class="sub-tables" data-id="'+row_id+'">\n' +
-                                    '<table style="width: 100%;">\n' +
-                                    '<thead>\n' +
-                                    '<tr>\n' +
-                                    '<th>ID</th>\n' +
-                                    '<th>Title</th>\n' +
-                                    '<th>Size 38mm</th>\n' +
-                                    '<th>Size 25mm</th>\n' +
-                                    '</tr>\n' +
-                                    '</thead>\n' +
-                                    '<tbody>\n' +
-                                    '</tbody>\n' +
-                                    '</table>\n' +
-                                    '</div>'
-                                );
-
-                                $.each(data[0], function(index, value) {
-
-                                    var size1 = value.size1_value;
-                                    var size2 = value.size2_value;
-
-                                    if(size1 == 1)
-                                    {
-                                        size1 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id + '_' + id +'[]">';
-                                    }
-                                    else
-                                    {
-                                        size1 = 'X' + '<input name="sizeA'+ row_id + '_' + id +'[]" type="hidden" value="x">';
-                                    }
-
-                                    if(size2 == 1)
-                                    {
-                                        size2 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id + '_' + id +'[]">';
-                                    }
-                                    else
-                                    {
-                                        size2 = 'X' + '<input name="sizeB'+ row_id + '_' + id +'[]" type="hidden" value="x">';
-                                    }
-
-                                    $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`table`).append(
-                                        '<tr>\n' +
-                                        '<td><input type="hidden" name="sub_product_id'+ row_id + '_' + id +'[]" value="'+value.id+'">'+value.unique_code+'</td>\n' +
-                                        '<td>'+value.title+'</td>\n' +
-                                        '<td>'+size1+'</td>\n' +
-                                        '<td>'+size2+'</td>\n' +
-                                        '</tr>\n'
-                                    );
-
-                                });
-
-                                $('#myModal').modal('toggle');
-
-
-                                if(data[1].price_impact == 1)
-                                {
-                                    if(data[1].impact_type == 0)
-                                    {
-                                        impact_value = data[1].value;
-                                        impact_value = parseFloat(impact_value).toFixed(2);
-                                        total = parseFloat(total) + parseFloat(impact_value);
-                                        total = total.toFixed(2);
-                                    }
-                                    else
-                                    {
-                                        impact_value = data[1].value;
-                                        var per = (impact_value)/100;
-                                        impact_value = total * per;
-                                        impact_value = parseFloat(impact_value).toFixed(2);
-                                        total = parseFloat(total) + parseFloat(impact_value);
-                                        total = total.toFixed(2);
-                                    }
-                                }
-                                else
-                                {
-                                    impact_value = 0;
-                                    total = parseFloat(total) + parseFloat(impact_value);
-                                    total = total.toFixed(2);
-                                }
-
-                                current.parent().find('input').val(impact_value);
-
-                                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
-                                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-                                calculate_total();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-
-                        impact_value = 0;
-                        total = parseFloat(total) + parseFloat(impact_value);
-                        total = total.toFixed(2);
-
-                        current.parent().find('input').val(impact_value);
-
-                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
-                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-                        calculate_total();
-                    }
-                }
-
-            });
 
             $(".js-data-example-ajax1").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "Select Sub Product",
+                placeholder: "Select Supplier",
                 allowClear: true,
                 "language": {
                     "noResults": function(){
@@ -1260,7 +1111,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,price = null,products = null,product = null,sub_products = null,sub_product = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0)
+            function add_row(copy = false,price = null,products = null,product = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1288,19 +1139,12 @@
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
-                        '                                                            <td class="sub_products">\n' +
-                        '                                                                <select name="sub_products[]" class="js-data-example-ajax1">\n' +
+                        '                                                            <td class="suppliers">\n' +
+                        '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
                         '\n' +
                         '                                                                    <option value=""></option>\n' +
                         '\n' +
-                        '                                                                       @foreach($sub_products as $key)\n' +
-                        '\n' +
-                        '                                                                            <option value="{{$key->id}}">{{$key->title}}</option>\n' +
-                        '\n' +
-                        '                                                                        @endforeach\n' +
-                        '\n' +
                         '                                                                </select>\n' +
-                        '                                                            <input type="hidden" name="sub_impact_value" id="sub_impact_value" value="0">\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="color">\n' +
                         '                                                                <select name="colors[]" class="js-data-example-ajax2">\n' +
@@ -1352,7 +1196,7 @@
                     last_row.find(".js-data-example-ajax1").select2({
                         width: '100%',
                         height: '200px',
-                        placeholder: "Select Sub Products",
+                        placeholder: "Select Supplier",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -1388,11 +1232,9 @@
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
-                        '                                                            <td class="sub_products">\n' +
-                        '                                                                <select name="sub_products[]" class="js-data-example-ajax1">\n' +
-                        '\n' +
-                        sub_products +
-                        '\n' +
+                        '                                                            <td class="suppliers">\n' +
+                        '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
+                        '                                                                <option value=""></option>' +
                         '                                                                </select>\n' +
                         '                                                            <input type="hidden" name="sub_impact_value" id="sub_impact_value" value="0">\n' +
                         '                                                            </td>\n' +
@@ -1430,7 +1272,6 @@
                     var last_row = $('#products_table tbody tr:last');
 
                     last_row.find('.js-data-example-ajax').val(product);
-                    last_row.find('.js-data-example-ajax1').val(sub_product);
                     last_row.find('.js-data-example-ajax2').val(color);
 
                     if(features)
@@ -1461,7 +1302,7 @@
                     last_row.find(".js-data-example-ajax1").select2({
                         width: '100%',
                         height: '200px',
-                        placeholder: "Select Sub Products",
+                        placeholder: "Select Supplier",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -1631,8 +1472,6 @@
                 var price = current.find('#row_total').val();
                 var products = current.find('.js-data-example-ajax').html();
                 var product = current.find('.js-data-example-ajax').val();
-                var sub_products = current.find('.js-data-example-ajax1').html();
-                var sub_product = current.find('.js-data-example-ajax1').val();
                 var colors = current.find('.js-data-example-ajax2').html();
                 var color = current.find('.js-data-example-ajax2').val();
                 var width = current.find('.width').find('.m-input').val();
@@ -1644,7 +1483,7 @@
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
 
-                add_row(true,price,products,product,sub_products,sub_product,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband);
+                add_row(true,price,products,product,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband);
 
             });
 
@@ -2093,6 +1932,10 @@
                 var id = current.parent().find('.f_id').val();
                 var width = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.width').find('input').val();
                 var height = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.height').find('input').val();
+                var product_id = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+                var ladderband_value = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#ladderband_value').val();
+                var ladderband_price_impact = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val();
+                var ladderband_impact_type = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val();
 
                 var impact_value = current.next('input').val();
                 var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
@@ -2101,7 +1944,123 @@
 
                 if(id == 0)
                 {
+                    if(feature_select == 1)
+                    {
+                        if(ladderband_price_impact == 1)
+                        {
+                            if(ladderband_impact_type == 0)
+                            {
+                                impact_value = ladderband_value;
+                                impact_value = parseFloat(impact_value).toFixed(2);
+                                total = parseFloat(total) + parseFloat(impact_value);
+                                total = total.toFixed(2);
+                            }
+                            else
+                            {
+                                impact_value = ladderband_value;
+                                var per = (impact_value)/100;
+                                impact_value = total * per;
+                                impact_value = parseFloat(impact_value).toFixed(2);
+                                total = parseFloat(total) + parseFloat(impact_value);
+                                total = total.toFixed(2);
+                            }
+                        }
+                        else
+                        {
+                            impact_value = 0;
+                            total = parseFloat(total) + parseFloat(impact_value);
+                            total = total.toFixed(2);
+                        }
 
+                        current.next('input').val(impact_value);
+
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+
+                        calculate_total();
+
+                        $.ajax({
+                            type: "GET",
+                            data: "product_id=" + product_id,
+                            url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
+                            success: function (data) {
+
+                                $('#myModal').find('.modal-body').find('.sub-tables').hide();
+
+                                if($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).length > 0)
+                                {
+                                    $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+                                }
+
+
+                                $('#myModal').find('.modal-body').append(
+                                    '<div class="sub-tables" data-id="'+row_id+'">\n' +
+                                    '<table style="width: 100%;">\n' +
+                                    '<thead>\n' +
+                                    '<tr>\n' +
+                                    '<th>ID</th>\n' +
+                                    '<th>Title</th>\n' +
+                                    '<th>Size 38mm</th>\n' +
+                                    '<th>Size 25mm</th>\n' +
+                                    '</tr>\n' +
+                                    '</thead>\n' +
+                                    '<tbody>\n' +
+                                    '</tbody>\n' +
+                                    '</table>\n' +
+                                    '</div>'
+                                );
+
+                                $.each(data, function(index, value) {
+
+                                    var size1 = value.size1_value;
+                                    var size2 = value.size2_value;
+
+                                    if(size1 == 1)
+                                    {
+                                        size1 = '<input class="cus_checkbox" name="cus_checkbox'+ row_id +'[]" type="radio"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id +'[]">';
+                                    }
+                                    else
+                                    {
+                                        size1 = 'X' + '<input name="sizeA'+ row_id +'[]" type="hidden" value="x">';
+                                    }
+
+                                    if(size2 == 1)
+                                    {
+                                        size2 = '<input class="cus_checkbox" name="cus_checkbox'+ row_id +'[]" type="radio"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id +'[]">';
+                                    }
+                                    else
+                                    {
+                                        size2 = 'X' + '<input name="sizeB'+ row_id +'[]" type="hidden" value="x">';
+                                    }
+
+                                    $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('table').append(
+                                        '<tr>\n' +
+                                        '<td><input type="hidden" name="sub_product_id'+ row_id + '[]" value="'+value.id+'">'+value.code+'</td>\n' +
+                                        '<td>'+value.title+'</td>\n' +
+                                        '<td>'+size1+'</td>\n' +
+                                        '<td>'+size2+'</td>\n' +
+                                        '</tr>\n'
+                                    );
+
+                                });
+
+                                $('#myModal').modal('toggle');
+                            }
+                        });
+                    }
+                    else
+                    {
+                        impact_value = 0;
+                        total = parseFloat(total) + parseFloat(impact_value);
+                        total = total.toFixed(2);
+
+                        current.next('input').val(impact_value);
+
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+
+                        calculate_total();
+                    }
                 }
                 else
                 {
@@ -2161,75 +2120,6 @@
                         }
                     });
                 }
-
-                /*$.ajax({
-                    type: "GET",
-                    data: "id=" + id,
-                    url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
-                    success: function (data) {
-
-                        $('#myModal').find('.modal-body').find('.sub-tables').hide();
-
-                        if($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).length > 0)
-                        {
-                            $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).remove();
-                        }
-
-
-                        $('#myModal').find('.modal-body').append(
-                            '<div class="sub-tables" data-id="'+row_id+'">\n' +
-                            '<table data-id="'+id+'" style="width: 100%;">\n' +
-                            '<thead>\n' +
-                            '<tr>\n' +
-                            '<th>ID</th>\n' +
-                            '<th>Title</th>\n' +
-                            '<th>Size 38mm</th>\n' +
-                            '<th>Size 25mm</th>\n' +
-                            '</tr>\n' +
-                            '</thead>\n' +
-                            '<tbody>\n' +
-                            '</tbody>\n' +
-                            '</table>\n' +
-                            '</div>'
-                        );
-
-                        $.each(data, function(index, value) {
-
-                            var size1 = value.size1_value;
-                            var size2 = value.size2_value;
-
-                            if(size1 == 1)
-                            {
-                                size1 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id + '_' + id +'[]">';
-                            }
-                            else
-                            {
-                                size1 = 'X' + '<input name="sizeA'+ row_id + '_' + id +'[]" type="hidden" value="x">';
-                            }
-
-                            if(size2 == 1)
-                            {
-                                size2 = '<input class="cus_checkbox" type="checkbox"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id + '_' + id +'[]">';
-                            }
-                            else
-                            {
-                                size2 = 'X' + '<input name="sizeB'+ row_id + '_' + id +'[]" type="hidden" value="x">';
-                            }
-
-                            $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${id}']`).append(
-                                '<tr>\n' +
-                                '<td><input type="hidden" name="sub_product_id'+ row_id + '_' + id +'[]" value="'+value.id+'">'+value.unique_code+'</td>\n' +
-                                '<td>'+value.title+'</td>\n' +
-                                '<td>'+size1+'</td>\n' +
-                                '<td>'+size2+'</td>\n' +
-                                '</tr>\n'
-                            );
-
-                        });
-
-                        $('#myModal').modal('toggle');
-                    }
-                });*/
 
             });
 

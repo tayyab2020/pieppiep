@@ -7,6 +7,7 @@ use App\color;
 use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
+use App\product_ladderbands;
 use App\sub_products_sizes;
 use App\features;
 use App\handyman_quotes;
@@ -120,10 +121,9 @@ class UserController extends Controller
         if($user->can('create-new-quotation'))
         {
             $products = Products::all();
-            $sub_products = sub_products::all();
             $customers = User::where('parent_id', $user_id)->get();
 
-            return view('user.create_new_quotation', compact('products','sub_products','customers'));
+            return view('user.create_new_quotation', compact('products','customers'));
         }
         else
         {
@@ -133,7 +133,7 @@ class UserController extends Controller
 
     public function GetColors(Request $request)
     {
-        $data = Products::leftjoin('colors','colors.product_id','=','products.id')->where('products.id',$request->id)->select('products.ladderband','products.measure','colors.id','colors.title')->get();
+        $data = Products::leftjoin('colors','colors.product_id','=','products.id')->where('products.id',$request->id)->select('products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type','products.measure','colors.id','colors.title')->get();
 
         return $data;
     }
@@ -187,10 +187,8 @@ class UserController extends Controller
 
     public function GetSubProductsSizes(Request $request)
     {
-        $sizes = sub_products_sizes::where('sub_id',$request->id)->get();
-        $sub = product_sub_products::leftjoin('sub_products','sub_products.id','=','product_sub_products.heading_id')->where('product_sub_products.product_id',$request->product_id)->where('product_sub_products.heading_id',$request->id)->select('product_sub_products.*','sub_products.title','sub_products.max_size')->first();
+        $data = product_ladderbands::where('product_id',$request->product_id)->get();
 
-        $data = array($sizes,$sub);
         return $data;
     }
 
