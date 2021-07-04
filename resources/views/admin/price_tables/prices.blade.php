@@ -12,8 +12,7 @@
                                 <div class="add-product-box">
                                     <div style="justify-content: flex-end;" class="add-product-header products">
                                         <h2 style="width: 100%;">Prices for Table {{$data->title}}</h2>
-                                        <a style="background-color: #cf2525 !important;border-color: #cf2525 !important;" href="{{route('admin-prices-delete',$data->id)}}" class="btn add-newProduct-btn">
-                                            <i style="font-size: 12px;" class="fa fa-minus"></i> Remove</a>
+                                        <a href="{{route('admin-price-tables')}}" class="btn add-newProduct-btn">Back</a>
                                     </div>
                                     <hr>
                                     <div>
