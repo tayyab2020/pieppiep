@@ -1922,14 +1922,13 @@
 
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
-                var sub_product = current.parent().parent().parent().find('.sub_products').find('select').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
 
                 if(width && height && color && product)
                 {
                     $.ajax({
                         type:"GET",
-                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height + "&sub_product=" + sub_product,
+                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height,
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
