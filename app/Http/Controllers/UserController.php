@@ -145,20 +145,6 @@ class UserController extends Controller
         $max_x_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.x_axis');
         $max_y_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.y_axis');
 
-        $e = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->get();
-
-        $s = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->select('prices.*')->orderBy('x_axis', 'desc')->first();
-
-        var_dump($s);
-
-        foreach ($e as $key)
-        {
-            echo '<br>' . $key . '<br>';
-        }
-
-        var_dump($max_x_axis);
-        var_dump($max_y_axis);
-
         if($max_x_axis >= $request->width && $max_y_axis >= $request->height)
         {
             $price = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('prices.value')->first();
