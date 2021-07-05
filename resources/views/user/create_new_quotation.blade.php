@@ -979,6 +979,8 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
+                                var color_max_height = data[0].max_height;
+
                                 if(data[0].value === 'both')
                                 {
                                     Swal.fire({

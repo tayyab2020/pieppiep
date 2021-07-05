@@ -32,7 +32,7 @@
                                                     <tr role="row">
                                                         <th class="sorting_asc" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
-                                                            colspan="1" style="width: 344px;" aria-sort="ascending"
+                                                            colspan="1" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
                                                             ID
                                                         </th>
@@ -47,6 +47,12 @@
                                                             colspan="1" style="width: 144px;" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
                                                             Color Code
+                                                        </th>
+                                                        <th class="sorting_asc" tabindex="0"
+                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                            Max Height
                                                         </th>
                                                         <th class="sorting_asc" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
@@ -75,6 +81,7 @@
                                                             <td>{{$color->id}}</td>
                                                             <td>{{$color->title}}</td>
                                                             <td>{{$color->color_code}}</td>
+                                                            <td>{{$color->max_height}}</td>
                                                             <td>{{$color->product}}</td>
                                                             <td>{{$color->table}}</td>
                                                             <td>

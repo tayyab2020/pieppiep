@@ -296,6 +296,7 @@ class ProductController extends Controller
                         $col = new colors;
                         $col->title = $key;
                         $col->color_code = $request->color_codes[$c];
+                        $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                         $col->product_id = $request->cat_id;
                         $col->table_id = $request->price_tables[$c];
                         $col->save();
@@ -316,6 +317,7 @@ class ProductController extends Controller
                             {
                                 $col_check->title = $key;
                                 $col_check->color_code = $request->color_codes[$c];
+                                $col_check->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                                 $col_check->table_id = $request->price_tables[$c];
                                 $col_check->save();
                             }
@@ -327,6 +329,7 @@ class ProductController extends Controller
                                 $col = new colors;
                                 $col->title = $key;
                                 $col->color_code = $request->color_codes[$c];
+                                $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                                 $col->product_id = $request->cat_id;
                                 $col->table_id = $request->price_tables[$c];
                                 $col->save();
@@ -437,6 +440,7 @@ class ProductController extends Controller
                         $col = new colors;
                         $col->title = $key;
                         $col->color_code = $request->color_codes[$c];
+                        $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                         $col->product_id = $cat->id;
                         $col->table_id = $request->price_tables[$c];
                         $col->save();
@@ -599,6 +603,7 @@ class ProductController extends Controller
                             $col = new colors;
                             $col->title = $key;
                             $col->color_code = $request->color_codes[$c];
+                            $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                             $col->product_id = $check->id;
                             $col->table_id = $request->price_tables[$c];
                             $col->save();
@@ -619,6 +624,7 @@ class ProductController extends Controller
                                 {
                                     $col_check->title = $key;
                                     $col_check->color_code = $request->color_codes[$c];
+                                    $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                                     $col_check->table_id = $request->price_tables[$c];
                                     $col_check->save();
                                 }
@@ -630,6 +636,7 @@ class ProductController extends Controller
                                     $col = new colors;
                                     $col->title = $key;
                                     $col->color_code = $request->color_codes[$c];
+                                    $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                                     $col->product_id = $check->id;
                                     $col->table_id = $request->price_tables[$c];
                                     $col->save();
@@ -701,7 +708,7 @@ class ProductController extends Controller
     {
         $cats = Products::where('id','=',$id)->first();
 
-        $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','price_tables.title as table')->get();
+        $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','colors.max_height','price_tables.title as table')->get();
         $features_data = product_features::where('product_id',$id)->get();
         $ladderband_data = product_ladderbands::where('product_id',$id)->get();
         $categories = Category::all();

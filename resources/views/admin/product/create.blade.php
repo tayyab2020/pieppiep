@@ -253,7 +253,7 @@
 
                                                                     <div class="form-group" data-id="{{$i}}">
 
-                                                                        <div class="col-sm-4">
+                                                                        <div class="col-sm-3">
 
                                                                             <input value="{{$key->color}}" class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">
 
@@ -265,7 +265,13 @@
 
                                                                         </div>
 
-                                                                        <div class="col-sm-4">
+                                                                        <div class="col-sm-2">
+
+                                                                            <input class="form-control color_max_height" value="{{str_replace(".",",",$key->max_height)}}" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="Max Height" type="text">
+
+                                                                        </div>
+
+                                                                        <div class="col-sm-3">
                                                                             <select class="form-control validate js-data-example-ajax4" name="price_tables[]">
 
                                                                                 <option value="">Select Price Table</option>
@@ -291,7 +297,7 @@
 
                                                                 <div class="form-group" data-id="">
 
-                                                                    <div class="col-sm-4">
+                                                                    <div class="col-sm-3">
 
                                                                         <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">
 
@@ -303,7 +309,13 @@
 
                                                                     </div>
 
-                                                                    <div class="col-sm-4">
+                                                                    <div class="col-sm-2">
+
+                                                                        <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="Max Height" type="text">
+
+                                                                    </div>
+
+                                                                    <div class="col-sm-3">
                                                                         <select class="form-control validate js-data-example-ajax4" name="price_tables[]">
 
                                                                             <option value="">Select Price Table</option>
@@ -1052,6 +1064,45 @@
             }
         });
 
+        $(document).on('keypress', ".color_max_height", function(e){
+
+            e = e || window.event;
+            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+            var val = String.fromCharCode(charCode);
+
+            if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+            {
+                e.preventDefault();
+                return false;
+            }
+
+            if(e.which == 44)
+            {
+                if(this.value.indexOf(',') > -1)
+                {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+
+            var num = $(this).attr("maskedFormat").toString().split(',');
+            var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+            if (!regex.test(this.value)) {
+                this.value = this.value.substring(0, this.value.length - 1);
+            }
+
+        });
+
+        $(document).on('focusout', ".color_max_height", function(e){
+
+            if($(this).val().slice($(this).val().length - 1) == ',')
+            {
+                var val = $(this).val();
+                val = val + '00';
+                $(this).val(val);
+            }
+        });
+
 
         $('body').on('change', '.ladderband', function() {
 
@@ -1206,7 +1257,7 @@
 
             $(".color_box").append('<div class="form-group" data-id="">\n' +
                 '\n' +
-                '<div class="col-sm-4">\n' +
+                '                                                                <div class="col-sm-3">\n' +
                 '\n' +
                 '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
                 '\n' +
@@ -1218,7 +1269,13 @@
                 '\n' +
                 '                                                                </div>\n' +
                 '\n' +
-                '                                                                <div class="col-sm-4">\n' +
+                '                                                                <div class="col-sm-2">\n' +
+                '\n' +
+                '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
+                '\n' +
+                '                                                                </div>\n' +
+                '\n' +
+                '                                                                <div class="col-sm-3">\n' +
                 '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
                 '\n' +
                 '                                                                        <option value="">Select Price Table</option>\n' +
@@ -1445,7 +1502,7 @@
             {
                 $(".color_box").append('<div class="form-group" data-id="">\n' +
                     '\n' +
-                    '<div class="col-sm-4">\n' +
+                    '                                                                <div class="col-sm-3">\n' +
                     '\n' +
                     '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
                     '\n' +
@@ -1457,7 +1514,13 @@
                     '\n' +
                     '                                                                </div>\n' +
                     '\n' +
-                    '                                                                <div class="col-sm-4">\n' +
+                    '                                                                <div class="col-sm-2">\n' +
+                    '\n' +
+                    '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
+                    '\n' +
+                    '                                                                </div>\n' +
+                    '\n' +
+                    '                                                                <div class="col-sm-3">\n' +
                     '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
                     '\n' +
                     '                                                                        <option value="">Select Price Table</option>\n' +
