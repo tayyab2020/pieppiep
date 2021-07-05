@@ -2057,7 +2057,6 @@ class UserController extends Controller
             $invoice_items->quotation_id = $invoice->id;
             $invoice_items->product_id = (int)$key;
             $invoice_items->row_id = $row_id;
-            $invoice_items->item = $request->items[$i] ? $request->items[$i] : 0;
             $invoice_items->color = $request->colors[$i];
             $invoice_items->rate = $request->total[$i];
             $invoice_items->qty = str_replace(",",".",$request->qty[$i]);
@@ -2074,27 +2073,26 @@ class UserController extends Controller
                 $f_row = 'f_id'.$row_id;
                 $f_ids = $request->$f_row;
 
-                $feature_titles[$i][] = features::where('id',$f_ids[$f])->pluck('title')->first();
-
-                $post = new new_quotations_features;
-                $post->quotation_data_id = $invoice_items->id;
-                $post->feature_id = $f_ids[$f];
-                $post->value = $key1;
-                $post->save();
-
-                if($key1)
+                if($f_ids[$f] == 0)
                 {
-                    $size1 = 'sizeA'.$row_id.'_'.$f_ids[$f];
-                    $size1_value = $request->$size1;
+                    $post = new new_quotations_features;
+                    $post->quotation_data_id = $invoice_items->id;
+                    $post->feature_id = $f_ids[$f];
+                    $post->feature_sub_id = 0;
+                    $post->ladderband = $key1;
+                    $post->save();
 
-                    $size2 = 'sizeB'.$row_id.'_'.$f_ids[$f];
-                    $size2_value = $request->$size2;
-
-                    $sub = 'sub_product_id'.$row_id.'_'.$f_ids[$f];
-                    $sub_value = $request->$sub;
-
-                    if(isset($sub_value))
+                    if($key1)
                     {
+                        $size1 = 'sizeA'.$row_id[$f];
+                        $size1_value = $request->$size1;
+
+                        $size2 = 'sizeB'.$row_id[$f];
+                        $size2_value = $request->$size2;
+
+                        $sub = 'sub_product_id'.$row_id[$f];
+                        $sub_value = $request->$sub;
+
                         foreach ($sub_value as $s => $key2)
                         {
                             $post1 = new new_quotations_sub_products;
@@ -2106,6 +2104,16 @@ class UserController extends Controller
                         }
                     }
                 }
+                else
+                {
+                    $post = new new_quotations_features;
+                    $post->quotation_data_id = $invoice_items->id;
+                    $post->feature_id = $f_ids[$f];
+                    $post->feature_sub_id = $key1;
+                    $post->save();
+                }
+
+                $feature_titles[$i][] = features::where('id',$f_ids[$f])->pluck('title')->first();
 
             }
 

@@ -71,7 +71,7 @@
                                             <td></td>
                                             <td>{{$request->width[$i]}}</td>
                                             <td>{{$request->height[$i]}}</td>
-                                            <td>{{$product_titles[$i]}} <br> {{$color_titles[$i]}} @foreach($feature_titles[$i] as $feature) <br> {{$feature}} @endforeach</td>
+                                            <td>{{$product_titles[$i]}} <br> {{$color_titles[$i]}} @foreach($feature_titles[$i] as $feature) <br> {{$feature ? $feature : 'Ladderband'}} @endforeach</td>
                                             <td>{{$request->total[$i]}}</td>
                                         </tr>
 

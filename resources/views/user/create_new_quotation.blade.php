@@ -1043,7 +1043,7 @@
 
                                     $.each(data[1], function(index, value) {
 
-                                        var opt = '<option value="">Select Feature</option>';
+                                        var opt = '<option value="0">Select Feature</option>';
 
                                         $.each(value.features, function(index1, value1) {
 
@@ -1504,7 +1504,7 @@
 
                 if(!flag)
                 {
-                    /*$('#form-quote').submit();*/
+                    $('#form-quote').submit();
                 }
 
             });
@@ -1743,7 +1743,7 @@
 
                                     $.each(data[1], function(index, value) {
 
-                                        var opt = '<option value="">Select Feature</option>';
+                                        var opt = '<option value="0">Select Feature</option>';
 
                                         $.each(value.features, function(index1, value1) {
 
@@ -1884,7 +1884,7 @@
 
                                     $.each(data[1], function(index, value) {
 
-                                        var opt = '<option value="">Select Feature</option>';
+                                        var opt = '<option value="0">Select Feature</option>';
 
                                         $.each(value.features, function(index1, value1) {
 
@@ -2027,7 +2027,7 @@
 
                                     if(size1 == 1)
                                     {
-                                        size1 = '<input class="cus_checkbox" name="cus_checkbox'+ row_id +'[]" type="radio"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id +'[]">';
+                                        size1 = '<input class="cus_radio" name="cus_radio'+ row_id +'[]" type="radio"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id +'[]">';
                                     }
                                     else
                                     {
@@ -2036,7 +2036,7 @@
 
                                     if(size2 == 1)
                                     {
-                                        size2 = '<input class="cus_checkbox" name="cus_checkbox'+ row_id +'[]" type="radio"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id +'[]">';
+                                        size2 = '<input class="cus_radio" name="cus_radio'+ row_id +'[]" type="radio"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id +'[]">';
                                     }
                                     else
                                     {
@@ -2139,16 +2139,10 @@
 
             });
 
-            $(document).on('change', '.cus_checkbox', function(){
+            $(document).on('change', '.cus_radio', function(){
 
-                if($(this).is(":checked"))
-                {
-                    $(this).next('input').val(1);
-                }
-                else
-                {
-                    $(this).next('input').val(0);
-                }
+                $('.cus_radio').next('input').val(0);
+                $(this).next('input').val(1);
 
             });
 
