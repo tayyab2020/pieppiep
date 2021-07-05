@@ -114,6 +114,7 @@
                                                                 <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
                                                                 <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
                                                                 <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
+                                                                <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
                                                                 <td class="products">
                                                                     <select name="products[]" class="js-data-example-ajax">
 
@@ -874,6 +875,7 @@
                 var id = current.val();
                 var row_id = current.parent().parent().data('id');
                 var options = '';
+                current.parent().parent().find('#area_conflict').val(0);
 
                 $.ajax({
                     type:"GET",
@@ -965,6 +967,7 @@
 
                 var product = current.parent().parent().find('.products').find('select').val();
                 var ladderband = current.parent().parent().find('#ladderband').val();
+                current.parent().parent().find('#area_conflict').val(0);
 
                 if(width && height && color && product)
                 {
@@ -986,6 +989,7 @@
 
                                     current.parent().parent().find('.price').text('');
                                     current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#area_conflict').val(3);
                                 }
                                 else if(data[0].value === 'x_axis')
                                 {
@@ -997,6 +1001,7 @@
 
                                     current.parent().parent().find('.price').text('');
                                     current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#area_conflict').val(1);
                                 }
                                 else if(data[0].value === 'y_axis')
                                 {
@@ -1009,6 +1014,7 @@
 
                                     current.parent().parent().find('.price').text('');
                                     current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#area_conflict').val(2);
                                 }
                                 else
                                 {
@@ -1029,6 +1035,7 @@
                                             '</select>\n' +
                                             '<input value="0" name="f_price" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -1049,6 +1056,7 @@
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -1101,7 +1109,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,price = null,products = null,product = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0)
+            function add_row(copy = false,price = null,products = null,product = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1119,6 +1127,7 @@
                         '                                                            <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">\n' +
                         '                                                            <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
                         '                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
+                        '                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
                         '                                                            <td class="products">\n' +
                         '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
                         '\n' +
@@ -1221,6 +1230,7 @@
                         '                                                            <input type="hidden" value="'+ladderband_value+'" id="ladderband_value" name="ladderband_value[]">\n' +
                         '                                                            <input type="hidden" value="'+ladderband_price_impact+'" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
                         '                                                            <input type="hidden" value="'+ladderband_impact_type+'" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
+                        '                                                            <input type="hidden" value="'+area_conflict+'" id="area_conflict" name="area_conflict[]">\n' +
                         '                                                            <td class="products">\n' +
                         '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
                         '\n' +
@@ -1422,35 +1432,75 @@
                 });
 
 
-                $("[name='width[]']").each(function(i, obj) {
+                $("[name='row_id[]']").each(function () {
 
-                    if(!obj.value)
+                    var id = $(this).val();
+                    var conflict_flag = 0;
+
+                    $("[name='f_area" + id + "[]']").each(function() {
+
+                        var conflict = $(this).val();
+
+                        if(conflict == 1)
+                        {
+                            conflict_flag = 1;
+                        }
+
+                    });
+
+                    if(conflict_flag == 1)
                     {
                         flag = 1;
-                        $(obj).css('border','1px solid red');
+                        $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','1px solid red');
+                        $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','1px solid red');
                     }
                     else
                     {
-                        $(obj).css('border','0');
+                        var area_conflict = $('#products_table tbody').find(`[data-id='${id}']`).find('#area_conflict').val();
+
+                        if(area_conflict == 3)
+                        {
+                            flag = 1;
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','1px solid red');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','1px solid red');
+                        }
+                        else if(area_conflict == 2)
+                        {
+                            flag = 1;
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','0');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','1px solid red');
+                        }
+                        else if(area_conflict == 1)
+                        {
+                            flag = 1;
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','1px solid red');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','0');
+                        }
+                        else
+                        {
+                            if(!$('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').val())
+                            {
+                                flag = 1;
+                                $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','1px solid red');
+                            }
+                            else
+                            {
+                                $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','0');
+                            }
+
+                            if(!$('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').val())
+                            {
+                                flag = 1;
+                                $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','1px solid red');
+                            }
+                            else
+                            {
+                                $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','0');
+                            }
+                        }
                     }
 
                 });
-
-
-                $("[name='height[]']").each(function(i, obj) {
-
-                    if(!obj.value)
-                    {
-                        flag = 1;
-                        $(obj).css('border','1px solid red');
-                    }
-                    else
-                    {
-                        $(obj).css('border','0');
-                    }
-
-                });
-
 
                 if(!flag)
                 {
@@ -1468,6 +1518,7 @@
                 var ladderband_value = current.find('#ladderband_value').val();
                 var ladderband_price_impact = current.find('#ladderband_price_impact').val();
                 var ladderband_impact_type = current.find('#ladderband_impact_type').val();
+                var area_conflict = current.find('#area_conflict').val();
                 var price = current.find('#row_total').val();
                 var products = current.find('.js-data-example-ajax').html();
                 var product = current.find('.js-data-example-ajax').val();
@@ -1482,7 +1533,7 @@
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
 
-                add_row(true,price,products,product,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type);
+                add_row(true,price,products,product,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict);
 
             });
 
@@ -1616,6 +1667,7 @@
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
+                current.parent().parent().parent().find('#area_conflict').val(0);
 
                 if(width && height && color && product)
                 {
@@ -1637,6 +1689,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#area_conflict').val(3);
                                 }
                                 else if(data[0].value === 'x_axis')
                                 {
@@ -1648,6 +1701,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#area_conflict').val(1);
                                 }
                                 else if(data[0].value === 'y_axis')
                                 {
@@ -1660,6 +1714,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#area_conflict').val(2);
                                 }
                                 else
                                 {
@@ -1680,6 +1735,7 @@
                                             '</select>\n' +
                                             '<input value="0" name="f_price" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -1700,6 +1756,7 @@
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -1751,6 +1808,7 @@
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
+                current.parent().parent().parent().find('#area_conflict').val(0);
 
                 if(width && height && color && product)
                 {
@@ -1772,6 +1830,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#area_conflict').val(3);
                                 }
                                 else if(data[0].value === 'x_axis')
                                 {
@@ -1783,6 +1842,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#area_conflict').val(1);
                                 }
                                 else if(data[0].value === 'y_axis')
                                 {
@@ -1795,6 +1855,7 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#area_conflict').val(2);
                                 }
                                 else
                                 {
@@ -1815,6 +1876,7 @@
                                             '</select>\n' +
                                             '<input value="0" name="f_price" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -1835,6 +1897,7 @@
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
 
                                         features = features + content;
@@ -2030,6 +2093,12 @@
                                         text: 'Area is greater than max size: ' + max_size,
                                     });
                                 }
+
+                                current.parent().find('.f_area').val(1);
+                            }
+                            else
+                            {
+                                current.parent().find('.f_area').val(0);
                             }
 
                             if(data.price_impact == 1)
