@@ -1291,6 +1291,14 @@
                         features_selects.each(function(index,select){
                             $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
                         });
+
+                        $('#menu1').find(`[data-id='${rowCount}']`).each(function(i, obj) {
+
+                            $(obj).find('.feature-select').attr('name', 'features' + rowCount + '[]');
+                            $(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
+                            $(obj).find('.f_area').attr('name', 'f_area' + rowCount + '[]');
+
+                        });
                     }
 
                     focus_row(last_row);
@@ -1377,6 +1385,11 @@
 
                     var next = current.next('tr');
 
+                    if(next.length < 1)
+                    {
+                        var next = current.prev('tr');
+                    }
+
                     focus_row(next);
 
                     current.remove();
@@ -1433,11 +1446,29 @@
 
                 });
 
+                var conflict_feature = 0;
 
                 $("[name='row_id[]']").each(function () {
 
                     var id = $(this).val();
                     var conflict_flag = 0;
+
+                    $("[name='features" + id + "[]']").each(function(i,obj) {
+
+                        var selected_feature = $(this).val();
+
+                        if(selected_feature == 0)
+                        {
+                            flag = 1;
+                            conflict_feature = 1;
+                            $(this).css('border-bottom','1px solid red');
+                        }
+                        else
+                        {
+                            $(this).css('border-bottom','1px solid lightgrey');
+                        }
+
+                    });
 
                     $("[name='f_area" + id + "[]']").each(function() {
 
@@ -1449,6 +1480,7 @@
                         }
 
                     });
+
 
                     if(conflict_flag == 1)
                     {
@@ -1503,6 +1535,15 @@
                     }
 
                 });
+
+                if(conflict_feature)
+                {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{__('text.Oops...')}}',
+                        text: 'Feature should not be empty!',
+                    });
+                }
 
                 if(!flag)
                 {
