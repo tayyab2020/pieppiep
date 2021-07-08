@@ -77,14 +77,10 @@
 
                                                         <div>
 
-                                                            @if(!isset($invoice))
-
-                                                                <span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
-                                                                    <i class="fa fa-fw fa-save"></i>
-                                                                    <span class="tooltiptext">Save</span>
-                                                                </span>
-
-                                                            @endif
+                                                            <span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                                <i class="fa fa-fw fa-save"></i>
+                                                                <span class="tooltiptext">Save</span>
+                                                            </span>
 
                                                             <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                                 <i class="fa fa-fw fa-close"></i>
@@ -368,7 +364,66 @@
                         <h4 class="modal-title">Sub Products Sizes</h4>
                     </div>
                     <div class="modal-body">
+                        @if(isset($invoice))
 
+                            @foreach($invoice as $x => $key1)
+
+                                @if(isset($sub_products[$x]))
+
+                                    <div class="sub-tables" data-id="{{$x+1}}">
+                                        <table style="width: 100%;">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Title</th>
+                                                <th>Size 38mm</th>
+                                                <th>Size 25mm</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                    @foreach($sub_products[$x] as $sub_product)
+
+                                        <tr>
+                                            <td><input type="hidden" name="sub_product_id{{$x+1}}[]" value="{{$sub_product->sub_product_id}}">{{$sub_product->code}}</td>
+                                            <td>{{$sub_product->title}}</td>
+                                            <td>
+                                                @if($sub_product->size1_value == 'x')
+
+                                                    X<input name="sizeA{{$x+1}}[]" type="hidden" value="x">
+
+                                                @else
+
+                                                    <input {{$sub_product->size1_value ? 'checked' : null}} class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
+                                                    <input class="cus_value" type="hidden" value="{{$sub_product->size1_value ? 1 : 0}}" name="sizeA{{$x+1}}[]">
+
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($sub_product->size2_value == 'x')
+
+                                                    X<input name="sizeB{{$x+1}}[]" type="hidden" value="x">
+
+                                                @else
+
+                                                    <input {{$sub_product->size2_value ? 'checked' : null}} class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
+                                                    <input class="cus_value" type="hidden" value="{{$sub_product->size2_value ? 1 : 0}}" name="sizeB{{$x+1}}[]">
+
+                                                @endif
+                                            </td>
+                                        </tr>
+
+                                    @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                @endif
+
+                            @endforeach
+
+                        @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

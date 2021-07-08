@@ -2016,7 +2016,8 @@ class UserController extends Controller
 
         $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.handyman_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.height','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
         {
-            $query->leftjoin('features','features.id','=','new_quotations_features.feature_id');
+            $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
+            ->select('new_quotations_features.*','features.title');
 
         }])->get();
 
@@ -2041,7 +2042,7 @@ class UserController extends Controller
 
                 if($feature->ladderband)
                 {
-                    $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->get();
+                    $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->select('new_quotations_sub_products.*','product_ladderbands.title','product_ladderbands.code')->get();
                 }
 
                 $f = $f + 1;
@@ -2096,16 +2097,33 @@ class UserController extends Controller
 
         $client = User::where('id', $request->customer)->first();
 
-        $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
+        if($request->quotation_id)
+        {
+            new_quotations::where('id',$request->quotation_id)->update(['subtotal' => $request->total_amount, 'grand_total' => $request->total_amount]);
 
-        $invoice = new new_quotations();
-        $invoice->quotation_invoice_number = $quotation_invoice_number;
-        $invoice->handyman_id = $user_id;
-        $invoice->user_id = $request->customer;
-        $invoice->vat_percentage = 21;
-        $invoice->subtotal = $request->total_amount;
-        $invoice->grand_total = $request->total_amount;
-        $invoice->save();
+            $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
+            $feature_ids = new_quotations_features::whereIn('quotation_data_id',$data_ids)->pluck('id');
+
+            new_quotations_data::where('quotation_id',$request->quotation_id)->delete();
+            new_quotations_features::whereIn('quotation_data_id',$data_ids)->delete();
+            new_quotations_sub_products::whereIn('feature_row_id',$feature_ids)->delete();
+
+            $invoice = new_quotations::where('id',$request->quotation_id)->first();
+            $quotation_invoice_number = $invoice->quotation_invoice_number;
+        }
+        else
+        {
+            $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
+
+            $invoice = new new_quotations();
+            $invoice->quotation_invoice_number = $quotation_invoice_number;
+            $invoice->handyman_id = $user_id;
+            $invoice->user_id = $request->customer;
+            $invoice->vat_percentage = 21;
+            $invoice->subtotal = $request->total_amount;
+            $invoice->grand_total = $request->total_amount;
+            $invoice->save();
+        }
 
         foreach ($products as $i => $key) {
 
@@ -2184,11 +2202,23 @@ class UserController extends Controller
 
         }
 
-        $counter = $counter + 1;
-
-        User::where('id',$user_id)->update(['counter' => $counter]);
 
         $filename = $quotation_invoice_number . '.pdf';
+
+        if($request->quotation_id)
+        {
+            \File::delete(public_path() .'/assets/newQuotations/'.$filename);
+
+            Session::flash('success','Quotation has been updated successfully!');
+        }
+        else
+        {
+            $counter = $counter + 1;
+
+            User::where('id',$user_id)->update(['counter' => $counter]);
+
+            Session::flash('success', __('text.Quotation has been created successfully!'));
+        }
 
         ini_set('max_execution_time', 180);
 
@@ -2197,9 +2227,7 @@ class UserController extends Controller
         $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
 
         $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
-
-
-        Session::flash('success', __('text.Quotation has been created successfully!'));
+        
         return redirect()->route('new-quotations');
     }
 
