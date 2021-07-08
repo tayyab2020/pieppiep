@@ -17,7 +17,7 @@
                                     <div style="box-shadow: none;" class="add-product-box">
                                         <div class="add-product-header products">
 
-                                            <h2>{{__('text.Create Quotation')}}</h2>
+                                            <h2>{{isset($invoice) ? __('text.Edit Quotation') : __('text.Create Quotation')}}</h2>
 
                                             <div class="col-md-5">
                                                 <div class="form-group" style="margin: 0;">
@@ -28,7 +28,7 @@
 
                                                             @foreach($customers as $key)
 
-                                                                <option value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
+                                                                <option {{isset($invoice) ? ($invoice[0]->user_id == $key->id ? 'selected' : null) : null}} value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
 
                                                             @endforeach
 
@@ -55,32 +55,40 @@
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 first-row">
 
                                                         <div>
-                                                        <span class="tooltip1 add-row" style="margin-right: 10px;">
-                                                            <i class="fa fa-fw fa-plus-circle"></i>
-                                                            <span class="tooltiptext">Add</span>
-                                                        </span>
+
+                                                            <span class="tooltip1 add-row" style="margin-right: 10px;">
+                                                                <i class="fa fa-fw fa-plus-circle"></i>
+                                                                <span class="tooltiptext">Add</span>
+                                                            </span>
 
                                                             <span class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
-                                                            <i class="fa fa-fw fa-minus-circle"></i>
-                                                            <span class="tooltiptext">Remove</span>
-                                                        </span>
+                                                                <i class="fa fa-fw fa-minus-circle"></i>
+                                                                <span class="tooltiptext">Remove</span>
+                                                            </span>
 
                                                             <span class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;">
-                                                            <i class="fa fa-fw fa-copy"></i>
-                                                            <span class="tooltiptext">Copy</span>
-                                                        </span>
+                                                                <i class="fa fa-fw fa-copy"></i>
+                                                                <span class="tooltiptext">Copy</span>
+                                                            </span>
+
                                                         </div>
 
                                                         <div>
-                                                        <span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
-                                                            <i class="fa fa-fw fa-save"></i>
-                                                            <span class="tooltiptext">Save</span>
-                                                        </span>
+
+                                                            @if(!isset($invoice))
+
+                                                                <span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                                    <i class="fa fa-fw fa-save"></i>
+                                                                    <span class="tooltiptext">Save</span>
+                                                                </span>
+
+                                                            @endif
 
                                                             <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
-                                                            <i class="fa fa-fw fa-close"></i>
-                                                            <span class="tooltiptext">Close</span>
-                                                        </span>
+                                                                <i class="fa fa-fw fa-close"></i>
+                                                                <span class="tooltiptext">Close</span>
+                                                            </span>
+
                                                         </div>
 
                                                     </div>
@@ -106,65 +114,141 @@
 
                                                             <tbody>
 
-                                                            <tr class="active" data-id="1">
-                                                                <td>1</td>
-                                                                <input type="hidden" id="row_total" name="total[]">
-                                                                <input type="hidden" value="1" id="row_id" name="row_id[]">
-                                                                <input type="hidden" value="0" id="ladderband" name="ladderband[]">
-                                                                <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
-                                                                <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
-                                                                <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
-                                                                <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
-                                                                <td class="products">
-                                                                    <select name="products[]" class="js-data-example-ajax">
+                                                            @if(isset($invoice))
 
-                                                                        <option value=""></option>
+                                                                @foreach($invoice as $i => $item)
 
-                                                                        @foreach($products as $key)
+                                                                    <tr @if($i == 0) class="active" @endif data-id="{{$i+1}}">
+                                                                        <td>{{$i+1}}</td>
+                                                                        <input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
+                                                                        <input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
+                                                                        <input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
+                                                                        <input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
+                                                                        <input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
+                                                                        <input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
+                                                                        <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+                                                                        <td class="products">
+                                                                            <select name="products[]" class="js-data-example-ajax">
 
-                                                                            <option value="{{$key->id}}">{{$key->title}}</option>
+                                                                                <option value=""></option>
 
-                                                                        @endforeach
+                                                                                @foreach($products as $key)
 
-                                                                    </select>
-                                                                </td>
-                                                                <td class="suppliers">
-                                                                    <select name="suppliers[]" class="js-data-example-ajax1">
+                                                                                    <option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
 
-                                                                        <option value=""></option>
+                                                                                @endforeach
 
-                                                                    </select>
-                                                                </td>
-                                                                <td class="color">
-                                                                    <select name="colors[]" class="js-data-example-ajax2">
+                                                                            </select>
+                                                                        </td>
+                                                                        <td class="suppliers">
+                                                                            <select name="suppliers[]" class="js-data-example-ajax1">
 
-                                                                        <option value=""></option>
+                                                                                <option value=""></option>
 
-                                                                    </select>
-                                                                </td>
-                                                                <td class="width" style="width: 80px;">
-                                                                    <div class="m-box">
-                                                                        <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-                                                                        <span class="measure-unit">cm</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="height" style="width: 80px;">
-                                                                    <div class="m-box">
-                                                                        <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
-                                                                        <span class="measure-unit">cm</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td>1 x 17</td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td class="price"></td>
-                                                                <td id="next-row-td" style="padding: 0;">
-                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-                                                                    <span style="top: 45px;" class="tooltiptext">Next</span>
-                                                                </span>
-                                                                </td>
-                                                            </tr>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td class="color">
+                                                                            <select name="colors[]" class="js-data-example-ajax2">
+
+                                                                                <option value=""></option>
+
+                                                                                @foreach($colors[$i] as $color)
+
+                                                                                    <option {{$color->id == $item->color ? 'selected' : null}} value="{{$color->id}}">{{$color->title}}</option>
+
+                                                                                @endforeach
+
+                                                                            </select>
+                                                                        </td>
+                                                                        <td class="width" style="width: 80px;">
+                                                                            <div class="m-box">
+                                                                                <input value="{{$item->width}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+                                                                                <span class="measure-unit">cm</span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="height" style="width: 80px;">
+                                                                            <div class="m-box">
+                                                                                <input value="{{$item->height}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+                                                                                <span class="measure-unit">cm</span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>1 x 17</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td class="price">€ {{$item->amount}}</td>
+                                                                        <td id="next-row-td" style="padding: 0;">
+                                                                            <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+                                                                                <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+                                                                                <span style="top: 45px;" class="tooltiptext">Next</span>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                @endforeach
+
+                                                            @else
+
+                                                                <tr class="active" data-id="1">
+                                                                    <td>1</td>
+                                                                    <input type="hidden" id="row_total" name="total[]">
+                                                                    <input type="hidden" value="1" id="row_id" name="row_id[]">
+                                                                    <input type="hidden" value="0" id="ladderband" name="ladderband[]">
+                                                                    <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
+                                                                    <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
+                                                                    <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
+                                                                    <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+                                                                    <td class="products">
+                                                                        <select name="products[]" class="js-data-example-ajax">
+
+                                                                            <option value=""></option>
+
+                                                                            @foreach($products as $key)
+
+                                                                                <option value="{{$key->id}}">{{$key->title}}</option>
+
+                                                                            @endforeach
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td class="suppliers">
+                                                                        <select name="suppliers[]" class="js-data-example-ajax1">
+
+                                                                            <option value=""></option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td class="color">
+                                                                        <select name="colors[]" class="js-data-example-ajax2">
+
+                                                                            <option value=""></option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td class="width" style="width: 80px;">
+                                                                        <div class="m-box">
+                                                                            <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+                                                                            <span class="measure-unit">cm</span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="height" style="width: 80px;">
+                                                                        <div class="m-box">
+                                                                            <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+                                                                            <span class="measure-unit">cm</span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>1 x 17</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td class="price"></td>
+                                                                    <td id="next-row-td" style="padding: 0;">
+                                                                        <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+                                                                            <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+                                                                            <span style="top: 45px;" class="tooltiptext">Next</span>
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+
+                                                            @endif
 
                                                             </tbody>
 
@@ -172,7 +256,7 @@
 
                                                         <div style="display: flex;justify-content: flex-end;align-items: center;" id="total_box">
                                                             <span style="font-size: 18px;font-weight: 500;margin-right: 5px;">Total: €</span>
-                                                            <input name="total_amount" id="total_amount" style="border: 0;font-size: 18px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="0">
+                                                            <input name="total_amount" id="total_amount" style="border: 0;font-size: 18px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->grand_total : 0}}">
                                                         </div>
 
                                                     </div>
@@ -186,6 +270,69 @@
                                                         <div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
 
                                                             <div id="menu1" class="tab-pane fade active in">
+
+                                                                @if(isset($invoice))
+
+                                                                    <?php $f = 0; ?>
+
+                                                                    @foreach($invoice as $x => $key1)
+
+                                                                        <div data-id="{{$x + 1}}" @if($x == 0) style="margin: 0;" @else style="margin: 0;display: none;" @endif class="form-group">
+
+                                                                            <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                    <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>
+                                                                                    <input value="{{$key1->qty}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            @foreach($key1->features as $feature)
+
+                                                                                @if($feature->feature_id == 0 && $feature->feature_sub_id == 0)
+
+                                                                                    <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>
+                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
+                                                                                                <option {{$feature->ladderband == 0 ? 'selected' : null}} value="0">No</option>
+                                                                                                <option {{$feature->ladderband == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                                                            </select>
+                                                                                            <input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
+                                                                                            <input value="0" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
+                                                                                            <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                @else
+
+                                                                                    <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">{{$feature->title}}</label>
+                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
+
+                                                                                                <option value="0">Select Feature</option>
+
+                                                                                                @foreach($features[$f] as $temp)
+
+                                                                                                    <option {{$temp->id == $feature->feature_sub_id ? 'selected' : null}} value="{{$temp->id}}">{{$temp->title}}</option>
+
+                                                                                                @endforeach
+
+                                                                                            </select>
+                                                                                            <input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
+                                                                                            <input value="{{$feature->feature_id}}" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
+                                                                                            <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                @endif
+
+                                                                                <?php $f = $f + 1; ?>
+
+                                                                            @endforeach
+
+                                                                        </div>
+
+                                                                    @endforeach
+
+                                                                @endif
 
                                                             </div>
 
@@ -1035,7 +1182,7 @@
                                             '<option value="0">No</option>\n' +
                                             '<option value="1">Yes</option>\n' +
                                             '</select>\n' +
-                                            '<input value="0" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
@@ -1056,7 +1203,7 @@
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
-                                            '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
@@ -1776,7 +1923,7 @@
                                             '<option value="0">No</option>\n' +
                                             '<option value="1">Yes</option>\n' +
                                             '</select>\n' +
-                                            '<input value="0" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
@@ -1797,7 +1944,7 @@
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
-                                            '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
@@ -1917,7 +2064,7 @@
                                             '<option value="0">No</option>\n' +
                                             '<option value="1">Yes</option>\n' +
                                             '</select>\n' +
-                                            '<input value="0" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';
@@ -1938,7 +2085,7 @@
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
-                                            '<input value="'+f_value+'" name="f_price" class="f_price" type="hidden">'+
+                                            '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
                                             '</div></div>\n';

@@ -70,6 +70,7 @@
   Route::prefix('aanbieder')->group(function() {
 
   Route::get('/new-quotations', 'UserController@NewQuotations')->name('new-quotations');
+  Route::get('/edit-new-quotation/{id}', 'UserController@EditNewQuotation');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
   Route::get('/create-new-quotation', 'UserController@CreateNewQuotation')->name('create-new-quotation');
   Route::post('/store-new-quotation', 'UserController@StoreNewQuotation')->name('store-new-quotation');

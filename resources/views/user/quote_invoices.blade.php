@@ -301,6 +301,7 @@
 
                                                                                 @if(Route::currentRouteName() == 'new-quotations')
 
+                                                                                    <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
                                                                                     <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
                                                                                 @else

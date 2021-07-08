@@ -1999,6 +1999,58 @@ class UserController extends Controller
         return view('user.quote_invoices', compact('invoices'));
     }
 
+    public function EditNewQuotation($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $products = Products::all();
+        $customers = User::where('parent_id', $user_id)->get();
+
+        $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.handyman_id', $user_id)->select('new_quotations.*','new_quotations_data.id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.height','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
+        {
+            $query->leftjoin('features','features.id','=','new_quotations_features.feature_id');
+
+        }])->get();
+
+        if (!$invoice) {
+            return redirect()->route('new-quotations');
+        }
+
+
+        $sub_products = array();
+        $colors = array();
+        $features = array();
+
+        $f = 0;
+
+        foreach ($invoice as $i => $item)
+        {
+            $colors[$i] = colors::where('product_id',$item->product_id)->get();
+
+            foreach ($item->features as $feature)
+            {
+                $features[$f] = product_features::where('product_id',$item->product_id)->where('heading_id',$feature->feature_id)->get();
+
+                if($feature->ladderband)
+                {
+                    $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->get();
+                }
+
+                $f = $f + 1;
+            }
+        }
+
+        return view('user.create_new_quotation', compact('products','colors','features','customers','invoice','sub_products'));
+    }
+
     public function DownloadNewQuotation($id)
     {
         $user = Auth::guard('user')->user();
@@ -2081,10 +2133,14 @@ class UserController extends Controller
                 $f_row = 'f_id'.$row_id;
                 $f_ids = $request->$f_row;
 
+                $f_row1 = 'f_price'.$row_id;
+                $f_prices = $request->$f_row1;
+
                 if($f_ids[$f] == 0)
                 {
                     $post = new new_quotations_features;
                     $post->quotation_data_id = $invoice_items->id;
+                    $post->price = $f_prices[$f];
                     $post->feature_id = $f_ids[$f];
                     $post->feature_sub_id = 0;
                     $post->ladderband = $key1;
@@ -2116,6 +2172,7 @@ class UserController extends Controller
                 {
                     $post = new new_quotations_features;
                     $post->quotation_data_id = $invoice_items->id;
+                    $post->price = $f_prices[$f];
                     $post->feature_id = $f_ids[$f];
                     $post->feature_sub_id = $key1;
                     $post->save();
