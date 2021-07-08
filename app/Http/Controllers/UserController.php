@@ -2227,7 +2227,7 @@ class UserController extends Controller
         $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
 
         $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
-        
+
         return redirect()->route('new-quotations');
     }
 
