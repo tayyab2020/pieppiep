@@ -281,7 +281,7 @@
 
                                                                             <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                                                     <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>
-                                                                                    <input value="{{$key1->qty}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
+                                                                                    <input value="{{str_replace('.', ',', $key1->qty)}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
                                                                                 </div>
                                                                             </div>
 
