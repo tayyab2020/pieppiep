@@ -2284,9 +2284,9 @@
                                         title: '{{__('text.Oops...')}}',
                                         text: 'Area is greater than max size: ' + max_size,
                                     });
-                                }
 
-                                current.parent().find('.f_area').val(1);
+                                    current.parent().find('.f_area').val(1);
+                                }
                             }
                             else
                             {
