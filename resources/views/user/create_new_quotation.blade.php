@@ -5,6 +5,8 @@
     <form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}" method="POST" enctype="multipart/form-data">
         {{csrf_field()}}
 
+        <input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
+
         <div class="right-side">
             <div class="container-fluid">
                 <div class="row">
