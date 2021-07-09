@@ -1660,16 +1660,20 @@
                     $("[name='features" + id + "[]']").each(function(i,obj) {
 
                         var selected_feature = $(this).val();
+                        var feature_id = $(this).parent().find('.f_id').val();
 
-                        if(selected_feature == 0)
+                        if(feature_id != 0)
                         {
-                            flag = 1;
-                            conflict_feature = 1;
-                            $(this).css('border-bottom','1px solid red');
-                        }
-                        else
-                        {
-                            $(this).css('border-bottom','1px solid lightgrey');
+                            if(selected_feature == 0)
+                            {
+                                flag = 1;
+                                conflict_feature = 1;
+                                $(this).css('border-bottom','1px solid red');
+                            }
+                            else
+                            {
+                                $(this).css('border-bottom','1px solid lightgrey');
+                            }
                         }
 
                     });
