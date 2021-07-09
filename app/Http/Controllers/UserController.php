@@ -2139,8 +2139,8 @@ class UserController extends Controller
             $invoice_items->rate = $request->total[$i];
             $invoice_items->qty = str_replace(",",".",$request->qty[$i]);
             $invoice_items->amount = $request->total[$i];
-            $invoice_items->width = $request->width[$i];
-            $invoice_items->height = $request->height[$i];
+            $invoice_items->width = str_replace(',', '.',$request->width[$i]);
+            $invoice_items->height = str_replace(',', '.',$request->height[$i]);
             $invoice_items->save();
 
             $feature_row = 'features'.$row_id;
