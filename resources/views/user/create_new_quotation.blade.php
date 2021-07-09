@@ -160,13 +160,13 @@
                                                                         </td>
                                                                         <td class="width" style="width: 80px;">
                                                                             <div class="m-box">
-                                                                                <input value="{{str_replace('.', ',', $item->width)}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+                                                                                <input value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
                                                                                 <span class="measure-unit">cm</span>
                                                                             </div>
                                                                         </td>
                                                                         <td class="height" style="width: 80px;">
                                                                             <div class="m-box">
-                                                                                <input value="{{str_replace('.', ',', $item->height)}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+                                                                                <input value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
                                                                                 <span class="measure-unit">cm</span>
                                                                             </div>
                                                                         </td>
