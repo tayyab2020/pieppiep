@@ -2224,7 +2224,7 @@ class UserController extends Controller
 
         $date = $invoice->created_at;
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_titles','feature_sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_titles','feature_sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 140]);
 
         $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
 
