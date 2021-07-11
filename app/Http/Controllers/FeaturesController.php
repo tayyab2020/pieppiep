@@ -39,8 +39,7 @@ class FeaturesController extends Controller
     {
         if($request->heading_id)
         {
-            features::where('id',$request->heading_id)->update(['title' => $request->title]);
-
+            features::where('id',$request->heading_id)->update(['title' => $request->title, 'order_no' => $request->order_no]);
             Session::flash('success', 'Feature updated successfully.');
         }
         else
@@ -48,6 +47,7 @@ class FeaturesController extends Controller
             $feature = new features;
 
             $feature->title = $request->title;
+            $feature->order_no = $request->order_no;
             $feature->save();
 
             Session::flash('success', 'New Feature added successfully.');

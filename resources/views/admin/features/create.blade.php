@@ -41,6 +41,23 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">PDF Order</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" name="order_no" id="blood_group_display_name" required="">
+
+                                                    <option {{isset($feature) ? ($feature->order_no == 0 ? 'selected' : null) : null}} value="0">1</option>
+                                                    <option {{isset($feature) ? ($feature->order_no == 1 ? 'selected' : null) : null}} value="1">2</option>
+                                                    <option {{isset($feature) ? ($feature->order_no == 2 ? 'selected' : null) : null}} value="2">3</option>
+                                                    <option {{isset($feature) ? ($feature->order_no == 3 ? 'selected' : null) : null}} value="3">4</option>
+                                                    <option {{isset($feature) ? ($feature->order_no == 4 ? 'selected' : null) : null}} value="4">5</option>
+                                                    <option {{isset($feature) ? ($feature->order_no == 5 ? 'selected' : null) : null}} value="5">6</option>
+                                                    <option {{isset($feature) ? ($feature->order_no == 6 ? 'selected' : null) : null}} value="6">7</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <hr>
                                         <div style="padding-top: 20px;" class="add-product-footer">
                                             <button type="submit" class="btn add-product_btn">{{isset($feature) ? 'Edit Feature' : 'Add Feature'}}</button>

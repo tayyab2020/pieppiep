@@ -2196,8 +2196,8 @@ class UserController extends Controller
                     $post->save();
                 }
 
-                $feature_titles[$i][] = features::where('id',$f_ids[$f])->pluck('title')->first();
-
+                $feature_titles[$i][] = features::where('id',$f_ids[$f])->first();
+                $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.heading_id',$f_ids[$f])->select('product_features.*','features.title as main_title','features.order_no')->first();
             }
 
         }
@@ -2224,7 +2224,7 @@ class UserController extends Controller
 
         $date = $invoice->created_at;
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_titles','feature_sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
 
         $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
 

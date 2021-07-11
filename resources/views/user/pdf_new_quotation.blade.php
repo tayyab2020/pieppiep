@@ -55,10 +55,17 @@
                                     <thead>
                                     <tr>
                                         <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Qty')}}</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Ruimte</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Product</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Kleur - nummer</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Breedte</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Hoogte</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Description')}}</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Montage hoogte</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Type/uitvoering</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Bediening-zijde</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">kleur ladderband</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Pakket zijde</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Montage idd/odd</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Kleur systeem</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Amount')}}</th>
                                     </tr>
                                     </thead>
@@ -68,10 +75,17 @@
 
                                         <tr>
                                             <td>{{$request->qty[$i]}}</td>
-                                            <td></td>
+                                            <td>{{$product_titles[$i]}}</td>
+                                            <td>{{$color_titles[$i]}}</td>
                                             <td>{{$request->width[$i]}}</td>
                                             <td>{{$request->height[$i]}}</td>
-                                            <td>{{$product_titles[$i]}} <br> {{$color_titles[$i]}} @foreach($feature_titles[$i] as $feature) <br> {{$feature ? $feature : 'Ladderband'}} @endforeach</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 0){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 1){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 2){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 3){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if(!$feature){ $string = 'Ladderband'; } } ?> {{$string}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 5){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 6){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td>{{$request->total[$i]}}</td>
                                         </tr>
 
