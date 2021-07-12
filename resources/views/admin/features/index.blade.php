@@ -36,7 +36,7 @@
                                                         <tr role="row" class="odd">
                                                             <td>{{$item->id}}</td>
                                                             <td>{{$item->title}}</td>
-                                                            <td>{{$item->order_no}}</td>
+                                                            <td>{{$item->order_no + 1}}</td>
                                                             <td>
                                                                 <a href="{{route('admin-feature-edit',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
                                                                 <a href="{{route('admin-feature-delete',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>

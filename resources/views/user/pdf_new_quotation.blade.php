@@ -79,13 +79,13 @@
                                             <td>{{$color_titles[$i]}}</td>
                                             <td>{{$request->width[$i]}}</td>
                                             <td>{{$request->height[$i]}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 0){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 1){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 2){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 3){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if(!$feature){ $string = 'Ladderband'; } } ?> {{$string}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 5){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature){ if($feature->order_no == 6){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 3){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if(!$feature){ $string = $sub_titles[$i]->code; } } ?> {{$string}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td>{{$request->total[$i]}}</td>
                                         </tr>
 

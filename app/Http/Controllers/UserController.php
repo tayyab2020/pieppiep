@@ -2127,6 +2127,9 @@ class UserController extends Controller
 
         foreach ($products as $i => $key) {
 
+            /*$feature_titles[$i][] = 'empty';*/
+            $feature_sub_titles[$i][] = 'empty';
+            $sub_titles[$i] = '';
             $row_id = $request->row_id[$i];
             $product_titles[] = product::where('id',$key)->pluck('title')->first();
             $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
@@ -2183,6 +2186,11 @@ class UserController extends Controller
                             $post1->size1_value = $size1_value[$s];
                             $post1->size2_value = $size2_value[$s];
                             $post1->save();
+
+                            if($size1_value[$s] == 1 || $size2_value[$s] == 1)
+                            {
+                                $sub_titles[$i] = product_ladderbands::where('product_id',$key)->where('id',$key2)->first();
+                            }
                         }
                     }
                 }
@@ -2196,7 +2204,7 @@ class UserController extends Controller
                     $post->save();
                 }
 
-                $feature_titles[$i][] = features::where('id',$f_ids[$f])->first();
+                /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
                 $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.heading_id',$f_ids[$f])->select('product_features.*','features.title as main_title','features.order_no')->first();
             }
 
@@ -2224,7 +2232,7 @@ class UserController extends Controller
 
         $date = $invoice->created_at;
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_titles','feature_sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 140]);
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 140]);
 
         $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
 
