@@ -21,36 +21,40 @@
                             $date = date('d-m-Y',strtotime($date));
                             ?>
 
-                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
 
-                                <img class="img-fluid" src="{{ $user->photo ? public_path('assets/images/'.$user->photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:30%; height:100%;margin-bottom: 30px;">
-                                <p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>
-                                <p style="margin: 0">{{$user->company_name}}</p>
-                                <p style="margin: 0">{{$address}}</p>
-                                <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
-                                <p style="margin: 0">TEL: {{$user->phone}}</p>
-                                <p style="margin: 0">{{$user->email}}</p>
-                                <br>
-                                <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> {{__('text.Quotation')}} {{$quotation_invoice_number}}</p>
-                                <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
+                                    <p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>
+                                    <p style="margin: 0">{{$user->company_name}}</p>
+                                    <p style="margin: 0">{{$address}}</p>
+                                    <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
+                                    <p style="margin: 0">TEL: {{$user->phone}}</p>
+                                    <p style="margin: 0">{{$user->email}}</p>
+                                    <br>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> {{__('text.Quotation')}} {{$quotation_invoice_number}}</p>
+                                    <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 
-                            </div>
+                                </div>
 
+                                <div style="text-align: center;" class="col-md-4 col-sm-4 col-xs-12">
 
-                            <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;margin-top: 50px;">
+                                    <img class="img-fluid" src="{{ $user->photo ? public_path('assets/images/'.$user->photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:20%;height:100%;margin-bottom: 30px;">
 
-                                <p class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
-                                <p class="mb-1 m-rest">{{$client_address}}</p>
-                                <p class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
-                                <p class="mb-1 m-rest">{{$client->email}}</p>
+                                </div>
 
-                            </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12 text-right inv-rigth" style="float: right;">
+
+                                    <p class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
+                                    <p class="mb-1 m-rest">{{$client_address}}</p>
+                                    <p class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
+                                    <p class="mb-1 m-rest">{{$client->email}}</p>
+
+                                </div>
                         </div>
 
-                        <hr class="my-5">
+                        {{--<hr class="my-5">--}}
 
                         <div class="row p-5" style="font-size: 15px;padding: 2rem !important;">
-                            <div class="col-md-12" style="padding: 0px !important;padding-top: 0px;">
+                            <div class="col-md-12" style="padding: 0 !important;">
                                 <table class="table" style="border: 1px solid #e5e5e5;">
                                     <thead>
                                     <tr>
@@ -82,8 +86,8 @@
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 3){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if(!$feature){ $string = $sub_titles[$i]->code; } } ?> {{$string}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td>{{$request->total[$i]}}</td>
@@ -140,11 +144,6 @@
     <style type="text/css">
 
         @media (max-width: 768px) {
-
-            .inv-rigth{
-
-                margin-top: 45px;
-            }
 
             .img-fluid{
 

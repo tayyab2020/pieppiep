@@ -2190,6 +2190,15 @@ class UserController extends Controller
                             if($size1_value[$s] == 1 || $size2_value[$s] == 1)
                             {
                                 $sub_titles[$i] = product_ladderbands::where('product_id',$key)->where('id',$key2)->first();
+
+                                if($size1_value[$s] == 1)
+                                {
+                                    $sub_titles[$i]->size = '38mm';
+                                }
+                                else
+                                {
+                                    $sub_titles[$i]->size = '25mm';
+                                }
                             }
                         }
                     }
@@ -2232,7 +2241,7 @@ class UserController extends Controller
 
         $date = $invoice->created_at;
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 140]);
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
         $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
 
