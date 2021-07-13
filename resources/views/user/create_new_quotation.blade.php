@@ -1253,7 +1253,7 @@
 
                                         $.each(value.features, function(index1, value1) {
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title.replace(/ *\([^)]*\) */g, "")+'</option>';
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
 
                                         });
 
@@ -1998,7 +1998,7 @@
 
                                         $.each(value.features, function(index1, value1) {
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title.replace(/ *\([^)]*\) */g, "")+'</option>';
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
 
                                         });
 
@@ -2139,7 +2139,7 @@
 
                                         $.each(value.features, function(index1, value1) {
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title.replace(/ *\([^)]*\) */g, "")+'</option>';
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
 
                                         });
 
