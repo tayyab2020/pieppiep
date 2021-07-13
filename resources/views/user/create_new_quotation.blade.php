@@ -161,13 +161,13 @@
                                                                         <td class="width" style="width: 80px;">
                                                                             <div class="m-box">
                                                                                 <input value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-                                                                                <span class="measure-unit">cm</span>
+                                                                                <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="{{$item->width_unit}}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="height" style="width: 80px;">
                                                                             <div class="m-box">
                                                                                 <input value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
-                                                                                <span class="measure-unit">cm</span>
+                                                                                <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
                                                                             </div>
                                                                         </td>
                                                                         <td>1 x 17</td>
@@ -225,13 +225,13 @@
                                                                     <td class="width" style="width: 80px;">
                                                                         <div class="m-box">
                                                                             <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-                                                                            <span class="measure-unit">cm</span>
+                                                                            <input style="border: 0;outline: none;" readonly type="text" name="weight_unit[]" class="measure-unit" value="cm">
                                                                         </div>
                                                                     </td>
                                                                     <td class="height" style="width: 80px;">
                                                                         <div class="m-box">
                                                                             <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
-                                                                            <span class="measure-unit">cm</span>
+                                                                            <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">
                                                                         </div>
                                                                     </td>
                                                                     <td>1 x 17</td>
@@ -627,7 +627,7 @@
 
         .measure-unit
         {
-            width: 30%;
+            width: 50%;
         }
 
         .select2-container--default .select2-selection--single
@@ -1115,13 +1115,13 @@
 
                         if((typeof(data[0]) != "undefined") && data[0].measure)
                         {
-                            current.parent().parent().find('.width').children('.m-box').children('.measure-unit').text(data[0].measure);
-                            current.parent().parent().find('.height').children('.m-box').children('.measure-unit').text(data[0].measure);
+                            current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val(data[0].measure);
+                            current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val(data[0].measure);
                         }
                         else
                         {
-                            current.parent().parent().find('.width').children('.m-box').children('.measure-unit').text('');
-                            current.parent().parent().find('.height').children('.m-box').children('.measure-unit').text('');
+                            current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val('');
+                            current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val('');
                         }
 
                         calculate_total();
@@ -1253,7 +1253,7 @@
 
                                         $.each(value.features, function(index1, value1) {
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title.replace(/ *\([^)]*\) */g, "")+'</option>';
 
                                         });
 
@@ -1364,13 +1364,13 @@
                         '                                                            <td class="width" style="width: 80px;">\n' +
                         '                                                                <div class="m-box">\n' +
                         '                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
-                        '                                                                    <span class="measure-unit">cm</span>\n' +
+                        '                                                                    <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">\n' +
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="height" style="width: 80px;">\n' +
                         '                                                                <div class="m-box">\n' +
                         '                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
-                        '                                                                    <span class="measure-unit">cm</span>\n' +
+                        '                                                                    <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">\n' +
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td>1 x 17</td>\n' +
@@ -1460,13 +1460,13 @@
                         '                                                            <td class="width" style="width: 80px;">\n' +
                         '                                                                <div class="m-box">\n' +
                         '                                                                    <input value="'+width+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
-                        '                                                                    <span class="measure-unit">'+width_unit+'</span>\n' +
+                        '                                                                    <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="'+width_unit+'">\n' +
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="height" style="width: 80px;">\n' +
                         '                                                                <div class="m-box">\n' +
                         '                                                                    <input value="'+height+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
-                        '                                                                    <span class="measure-unit">'+height_unit+'</span>\n' +
+                        '                                                                    <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="'+height_unit+'">\n' +
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td>1 x 17</td>\n' +
@@ -1776,9 +1776,9 @@
                 var colors = current.find('.js-data-example-ajax2').html();
                 var color = current.find('.js-data-example-ajax2').val();
                 var width = current.find('.width').find('.m-input').val();
-                var width_unit = current.find('.width').find('.measure-unit').text();
+                var width_unit = current.find('.width').find('.measure-unit').val();
                 var height = current.find('.height').find('.m-input').val();
-                var height_unit = current.find('.height').find('.measure-unit').text();
+                var height_unit = current.find('.height').find('.measure-unit').val();
                 var price_text = current.find('.price').text();
                 var features = $('#menu1').find(`[data-id='${id}']`).html();
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
@@ -1998,7 +1998,7 @@
 
                                         $.each(value.features, function(index1, value1) {
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title.replace(/ *\([^)]*\) */g, "")+'</option>';
 
                                         });
 
@@ -2139,7 +2139,7 @@
 
                                         $.each(value.features, function(index1, value1) {
 
-                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title.replace(/ *\([^)]*\) */g, "")+'</option>';
 
                                         });
 

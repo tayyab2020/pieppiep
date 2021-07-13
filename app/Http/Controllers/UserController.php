@@ -2014,7 +2014,7 @@ class UserController extends Controller
         $products = Products::all();
         $customers = User::where('parent_id', $user_id)->get();
 
-        $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.handyman_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.height','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
+        $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.handyman_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
         {
             $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
             ->select('new_quotations_features.*','features.title');
@@ -2143,7 +2143,9 @@ class UserController extends Controller
             $invoice_items->qty = str_replace(",",".",$request->qty[$i]);
             $invoice_items->amount = $request->total[$i];
             $invoice_items->width = str_replace(',', '.',$request->width[$i]);
+            $invoice_items->width_unit = $request->width_unit[$i];
             $invoice_items->height = str_replace(',', '.',$request->height[$i]);
+            $invoice_items->height_unit = $request->height_unit[$i];
             $invoice_items->save();
 
             $feature_row = 'features'.$row_id;
