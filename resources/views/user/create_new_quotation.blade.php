@@ -2,128 +2,201 @@
 
 @section('content')
 
-    <form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}" method="POST" enctype="multipart/form-data">
-        {{csrf_field()}}
+    <div class="right-side">
 
-        <input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
+        <div class="container-fluid">
+            <div class="row">
 
-        <div class="right-side">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <!-- Starting of Dashboard data-table area -->
-                        <div class="section-padding add-product-1" style="padding: 0;">
+                <form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}" method="POST" enctype="multipart/form-data">
+                    {{csrf_field()}}
 
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div style="box-shadow: none;" class="add-product-box">
-                                        <div class="add-product-header products">
+                    <input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
 
-                                            <h2>{{isset($invoice) ? __('text.Edit Quotation') : __('text.Create Quotation')}}</h2>
+                    <div style="margin: 0;" class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <!-- Starting of Dashboard data-table area -->
+                            <div class="section-padding add-product-1" style="padding: 0;">
 
-                                            <div class="col-md-5">
-                                                <div class="form-group" style="margin: 0;">
-                                                    <div id="cus-box" style="display: flex;">
-                                                        <select class="customer-select form-control" name="customer" required>
+                                <div style="margin: 0;" class="row">
+                                    <div style="padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div style="box-shadow: none;" class="add-product-box">
+                                            <div class="add-product-header products">
 
-                                                            <option value="">{{__('text.Select Customer')}}</option>
+                                                <h2>{{isset($invoice) ? __('text.Edit Quotation') : __('text.Create Quotation')}}</h2>
 
-                                                            @foreach($customers as $key)
+                                                <div class="col-md-5">
+                                                    <div class="form-group" style="margin: 0;">
+                                                        <div id="cus-box" style="display: flex;">
+                                                            <select class="customer-select form-control" name="customer" required>
 
-                                                                <option {{isset($invoice) ? ($invoice[0]->user_id == $key->id ? 'selected' : null) : null}} value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
+                                                                <option value="">{{__('text.Select Customer')}}</option>
 
-                                                            @endforeach
+                                                                @foreach($customers as $key)
 
-                                                        </select>
-                                                        <button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+                                                                    <option {{isset($invoice) ? ($invoice[0]->user_id == $key->id ? 'selected' : null) : null}} value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
+
+                                                                @endforeach
+
+                                                            </select>
+                                                            <button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                        </div>
-                                        <hr>
-                                        <div>
-
-                                            <div class="alert-box">
 
                                             </div>
+                                            <hr>
+                                            <div>
 
-                                            @include('includes.form-success')
+                                                <div class="alert-box">
 
-                                            <div class="form-horizontal">
+                                                </div>
 
-                                                <div style="margin: 0;background: #f5f5f5;" class="row">
+                                                @include('includes.form-success')
 
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 first-row">
+                                                <div class="form-horizontal">
 
-                                                        <div>
+                                                    <div style="margin: 0;background: #f5f5f5;" class="row">
+
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 first-row">
+
+                                                            <div>
 
                                                             <span class="tooltip1 add-row" style="margin-right: 10px;">
                                                                 <i class="fa fa-fw fa-plus-circle"></i>
                                                                 <span class="tooltiptext">Add</span>
                                                             </span>
 
-                                                            <span class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                                <span class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                                 <i class="fa fa-fw fa-minus-circle"></i>
                                                                 <span class="tooltiptext">Remove</span>
                                                             </span>
 
-                                                            <span class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;">
+                                                                <span class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;">
                                                                 <i class="fa fa-fw fa-copy"></i>
                                                                 <span class="tooltiptext">Copy</span>
                                                             </span>
 
-                                                        </div>
+                                                            </div>
 
-                                                        <div>
+                                                            <div>
 
                                                             <span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                                 <i class="fa fa-fw fa-save"></i>
                                                                 <span class="tooltiptext">Save</span>
                                                             </span>
 
-                                                            <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                                <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                                 <i class="fa fa-fw fa-close"></i>
                                                                 <span class="tooltiptext">Close</span>
                                                             </span>
 
+                                                            </div>
+
                                                         </div>
 
-                                                    </div>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="margin-bottom: 10px;padding-bottom: 15px;">
 
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="margin-bottom: 10px;padding-bottom: 15px;">
+                                                            <table id="products_table" style="width: 100%;">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th style="padding: 5px;"></th>
+                                                                    <th>Product</th>
+                                                                    <th>Supplier</th>
+                                                                    <th>Color</th>
+                                                                    <th>Width</th>
+                                                                    <th>Height</th>
+                                                                    <th>Required</th>
+                                                                    <th>€ Art.</th>
+                                                                    <th>€ Arb.</th>
+                                                                    <th>€ Total</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                </thead>
 
-                                                        <table id="products_table" style="width: 100%;">
-                                                            <thead>
-                                                            <tr>
-                                                                <th style="padding: 5px;"></th>
-                                                                <th>Product</th>
-                                                                <th>Supplier</th>
-                                                                <th>Color</th>
-                                                                <th>Width</th>
-                                                                <th>Height</th>
-                                                                <th>Required</th>
-                                                                <th>€ Art.</th>
-                                                                <th>€ Arb.</th>
-                                                                <th>€ Total</th>
-                                                                <th></th>
-                                                            </tr>
-                                                            </thead>
+                                                                <tbody>
 
-                                                            <tbody>
+                                                                @if(isset($invoice))
 
-                                                            @if(isset($invoice))
+                                                                    @foreach($invoice as $i => $item)
 
-                                                                @foreach($invoice as $i => $item)
+                                                                        <tr @if($i == 0) class="active" @endif data-id="{{$i+1}}">
+                                                                            <td>{{$i+1}}</td>
+                                                                            <input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
+                                                                            <input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
+                                                                            <input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
+                                                                            <input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
+                                                                            <input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
+                                                                            <input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
+                                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+                                                                            <td class="products">
+                                                                                <select name="products[]" class="js-data-example-ajax">
 
-                                                                    <tr @if($i == 0) class="active" @endif data-id="{{$i+1}}">
-                                                                        <td>{{$i+1}}</td>
-                                                                        <input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
-                                                                        <input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
-                                                                        <input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
-                                                                        <input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
-                                                                        <input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
-                                                                        <input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
+                                                                                    <option value=""></option>
+
+                                                                                    @foreach($products as $key)
+
+                                                                                        <option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+
+                                                                                    @endforeach
+
+                                                                                </select>
+                                                                            </td>
+                                                                            <td class="suppliers">
+                                                                                <select name="suppliers[]" class="js-data-example-ajax1">
+
+                                                                                    <option value=""></option>
+
+                                                                                </select>
+                                                                            </td>
+                                                                            <td class="color">
+                                                                                <select name="colors[]" class="js-data-example-ajax2">
+
+                                                                                    <option value=""></option>
+
+                                                                                    @foreach($colors[$i] as $color)
+
+                                                                                        <option {{$color->id == $item->color ? 'selected' : null}} value="{{$color->id}}">{{$color->title}}</option>
+
+                                                                                    @endforeach
+
+                                                                                </select>
+                                                                            </td>
+                                                                            <td class="width" style="width: 80px;">
+                                                                                <div class="m-box">
+                                                                                    <input value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+                                                                                    <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="{{$item->width_unit}}">
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="height" style="width: 80px;">
+                                                                                <div class="m-box">
+                                                                                    <input value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+                                                                                    <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>1 x 17</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td class="price">€ {{$item->amount}}</td>
+                                                                            <td id="next-row-td" style="padding: 0;">
+                                                                            <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+                                                                                <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+                                                                                <span style="top: 45px;" class="tooltiptext">Next</span>
+                                                                            </span>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                    @endforeach
+
+                                                                @else
+
+                                                                    <tr class="active" data-id="1">
+                                                                        <td>1</td>
+                                                                        <input type="hidden" id="row_total" name="total[]">
+                                                                        <input type="hidden" value="1" id="row_id" name="row_id[]">
+                                                                        <input type="hidden" value="0" id="ladderband" name="ladderband[]">
+                                                                        <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
+                                                                        <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
+                                                                        <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
                                                                         <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
                                                                         <td class="products">
                                                                             <select name="products[]" class="js-data-example-ajax">
@@ -132,7 +205,7 @@
 
                                                                                 @foreach($products as $key)
 
-                                                                                    <option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+                                                                                    <option value="{{$key->id}}">{{$key->title}}</option>
 
                                                                                 @endforeach
 
@@ -150,187 +223,119 @@
 
                                                                                 <option value=""></option>
 
-                                                                                @foreach($colors[$i] as $color)
-
-                                                                                    <option {{$color->id == $item->color ? 'selected' : null}} value="{{$color->id}}">{{$color->title}}</option>
-
-                                                                                @endforeach
-
                                                                             </select>
                                                                         </td>
                                                                         <td class="width" style="width: 80px;">
                                                                             <div class="m-box">
-                                                                                <input value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-                                                                                <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="{{$item->width_unit}}">
+                                                                                <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+                                                                                <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">
                                                                             </div>
                                                                         </td>
                                                                         <td class="height" style="width: 80px;">
                                                                             <div class="m-box">
-                                                                                <input value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
-                                                                                <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
+                                                                                <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+                                                                                <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">
                                                                             </div>
                                                                         </td>
                                                                         <td>1 x 17</td>
                                                                         <td></td>
                                                                         <td></td>
-                                                                        <td class="price">€ {{$item->amount}}</td>
+                                                                        <td class="price"></td>
                                                                         <td id="next-row-td" style="padding: 0;">
-                                                                            <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-                                                                                <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-                                                                                <span style="top: 45px;" class="tooltiptext">Next</span>
-                                                                            </span>
-                                                                        </td>
-                                                                    </tr>
-
-                                                                @endforeach
-
-                                                            @else
-
-                                                                <tr class="active" data-id="1">
-                                                                    <td>1</td>
-                                                                    <input type="hidden" id="row_total" name="total[]">
-                                                                    <input type="hidden" value="1" id="row_id" name="row_id[]">
-                                                                    <input type="hidden" value="0" id="ladderband" name="ladderband[]">
-                                                                    <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
-                                                                    <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
-                                                                    <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
-                                                                    <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
-                                                                    <td class="products">
-                                                                        <select name="products[]" class="js-data-example-ajax">
-
-                                                                            <option value=""></option>
-
-                                                                            @foreach($products as $key)
-
-                                                                                <option value="{{$key->id}}">{{$key->title}}</option>
-
-                                                                            @endforeach
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td class="suppliers">
-                                                                        <select name="suppliers[]" class="js-data-example-ajax1">
-
-                                                                            <option value=""></option>
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td class="color">
-                                                                        <select name="colors[]" class="js-data-example-ajax2">
-
-                                                                            <option value=""></option>
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td class="width" style="width: 80px;">
-                                                                        <div class="m-box">
-                                                                            <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-                                                                            <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="height" style="width: 80px;">
-                                                                        <div class="m-box">
-                                                                            <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
-                                                                            <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>1 x 17</td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td class="price"></td>
-                                                                    <td id="next-row-td" style="padding: 0;">
                                                                         <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
                                                                             <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
                                                                             <span style="top: 45px;" class="tooltiptext">Next</span>
                                                                         </span>
-                                                                    </td>
-                                                                </tr>
-
-                                                            @endif
-
-                                                            </tbody>
-
-                                                        </table>
-
-                                                        <div style="display: flex;justify-content: flex-end;align-items: center;" id="total_box">
-                                                            <span style="font-size: 18px;font-weight: 500;margin-right: 5px;">Total: €</span>
-                                                            <input name="total_amount" id="total_amount" style="border: 0;font-size: 18px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->grand_total : 0}}">
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: white;padding: 15px 0 0 0;">
-
-                                                        <ul style="border: 0;" class="nav nav-tabs feature-tab">
-                                                            <li style="margin-bottom: 0;" class="active"><a style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
-                                                        </ul>
-
-                                                        <div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
-
-                                                            <div id="menu1" class="tab-pane fade active in">
-
-                                                                @if(isset($invoice))
-
-                                                                    <?php $f = 0; ?>
-
-                                                                    @foreach($invoice as $x => $key1)
-
-                                                                        <div data-id="{{$x + 1}}" @if($x == 0) style="margin: 0;" @else style="margin: 0;display: none;" @endif class="form-group">
-
-                                                                            <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                    <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>
-                                                                                    <input value="{{str_replace('.', ',', $key1->qty)}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            @foreach($key1->features as $feature)
-
-                                                                                @if($feature->feature_id == 0 && $feature->feature_sub_id == 0)
-
-                                                                                    <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>
-                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
-                                                                                                <option {{$feature->ladderband == 0 ? 'selected' : null}} value="0">No</option>
-                                                                                                <option {{$feature->ladderband == 1 ? 'selected' : null}} value="1">Yes</option>
-                                                                                            </select>
-                                                                                            <input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
-                                                                                            <input value="0" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
-                                                                                            <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                @else
-
-                                                                                    <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">{{$feature->title}}</label>
-                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
-
-                                                                                                <option value="0">Select Feature</option>
-
-                                                                                                @foreach($features[$f] as $temp)
-
-                                                                                                    <option {{$temp->id == $feature->feature_sub_id ? 'selected' : null}} value="{{$temp->id}}">{{$temp->title}}</option>
-
-                                                                                                @endforeach
-
-                                                                                            </select>
-                                                                                            <input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
-                                                                                            <input value="{{$feature->feature_id}}" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
-                                                                                            <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                @endif
-
-                                                                                <?php $f = $f + 1; ?>
-
-                                                                            @endforeach
-
-                                                                        </div>
-
-                                                                    @endforeach
+                                                                        </td>
+                                                                    </tr>
 
                                                                 @endif
+
+                                                                </tbody>
+
+                                                            </table>
+
+                                                            <div style="display: flex;justify-content: flex-end;align-items: center;" id="total_box">
+                                                                <span style="font-size: 18px;font-weight: 500;margin-right: 5px;">Total: €</span>
+                                                                <input name="total_amount" id="total_amount" style="border: 0;font-size: 18px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->grand_total : 0}}">
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: white;padding: 15px 0 0 0;">
+
+                                                            <ul style="border: 0;" class="nav nav-tabs feature-tab">
+                                                                <li style="margin-bottom: 0;" class="active"><a style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
+                                                            </ul>
+
+                                                            <div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
+
+                                                                <div id="menu1" class="tab-pane fade active in">
+
+                                                                    @if(isset($invoice))
+
+                                                                        <?php $f = 0; ?>
+
+                                                                        @foreach($invoice as $x => $key1)
+
+                                                                            <div data-id="{{$x + 1}}" @if($x == 0) style="margin: 0;" @else style="margin: 0;display: none;" @endif class="form-group">
+
+                                                                                <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                        <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>
+                                                                                        <input value="{{str_replace('.', ',', $key1->qty)}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                @foreach($key1->features as $feature)
+
+                                                                                    @if($feature->feature_id == 0 && $feature->feature_sub_id == 0)
+
+                                                                                        <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                                <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>
+                                                                                                <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
+                                                                                                    <option {{$feature->ladderband == 0 ? 'selected' : null}} value="0">No</option>
+                                                                                                    <option {{$feature->ladderband == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                                                                </select>
+                                                                                                <input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
+                                                                                                <input value="0" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
+                                                                                                <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    @else
+
+                                                                                        <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                                <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">{{$feature->title}}</label>
+                                                                                                <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
+
+                                                                                                    <option value="0">Select Feature</option>
+
+                                                                                                    @foreach($features[$f] as $temp)
+
+                                                                                                        <option {{$temp->id == $feature->feature_sub_id ? 'selected' : null}} value="{{$temp->id}}">{{$temp->title}}</option>
+
+                                                                                                    @endforeach
+
+                                                                                                </select>
+                                                                                                <input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
+                                                                                                <input value="{{$feature->feature_id}}" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
+                                                                                                <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    @endif
+
+                                                                                    <?php $f = $f + 1; ?>
+
+                                                                                @endforeach
+
+                                                                            </div>
+
+                                                                        @endforeach
+
+                                                                    @endif
+
+                                                                </div>
 
                                                             </div>
 
@@ -341,207 +346,209 @@
                                                 </div>
 
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
+
+                            </div>
+                        </div>
+                        <!-- Ending of Dashboard data-table area -->
+                    </div>
+
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Sub Products Sizes</h4>
+                                </div>
+                                <div class="modal-body">
+                                    @if(isset($invoice))
+
+                                        @foreach($invoice as $x => $key1)
+
+                                            @if(isset($sub_products[$x]))
+
+                                                <div class="sub-tables" data-id="{{$x+1}}">
+                                                    <table style="width: 100%;">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Title</th>
+                                                            <th>Size 38mm</th>
+                                                            <th>Size 25mm</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        @foreach($sub_products[$x] as $sub_product)
+
+                                                            <tr>
+                                                                <td><input type="hidden" name="sub_product_id{{$x+1}}[]" value="{{$sub_product->sub_product_id}}">{{$sub_product->code}}</td>
+                                                                <td>{{$sub_product->title}}</td>
+                                                                <td>
+                                                                    @if($sub_product->size1_value == 'x')
+
+                                                                        X<input name="sizeA{{$x+1}}[]" type="hidden" value="x">
+
+                                                                    @else
+
+                                                                        <input {{$sub_product->size1_value ? 'checked' : null}} class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
+                                                                        <input class="cus_value" type="hidden" value="{{$sub_product->size1_value ? 1 : 0}}" name="sizeA{{$x+1}}[]">
+
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if($sub_product->size2_value == 'x')
+
+                                                                        X<input name="sizeB{{$x+1}}[]" type="hidden" value="x">
+
+                                                                    @else
+
+                                                                        <input {{$sub_product->size2_value ? 'checked' : null}} class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
+                                                                        <input class="cus_value" type="hidden" value="{{$sub_product->size2_value ? 1 : 0}}" name="sizeB{{$x+1}}[]">
+
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+
+                                                        @endforeach
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            @endif
+
+                                        @endforeach
+
+                                    @endif
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
 
                         </div>
                     </div>
-                    <!-- Ending of Dashboard data-table area -->
-                </div>
-            </div>
-        </div>
 
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
+                </form>
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Sub Products Sizes</h4>
-                    </div>
-                    <div class="modal-body">
-                        @if(isset($invoice))
+                <div id="cover"></div>
 
-                            @foreach($invoice as $x => $key1)
+                <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
 
-                                @if(isset($sub_products[$x]))
+                        <form id="quote_form" method="post" action="{{route('user.quote')}}">
 
-                                    <div class="sub-tables" data-id="{{$x+1}}">
-                                        <table style="width: 100%;">
-                                            <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Title</th>
-                                                <th>Size 38mm</th>
-                                                <th>Size 25mm</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+                            <input type="hidden" name="_token" value="{{@csrf_token()}}">
 
-                                    @foreach($sub_products[$x] as $sub_product)
+                            <div class="modal-content">
 
-                                        <tr>
-                                            <td><input type="hidden" name="sub_product_id{{$x+1}}[]" value="{{$sub_product->sub_product_id}}">{{$sub_product->code}}</td>
-                                            <td>{{$sub_product->title}}</td>
-                                            <td>
-                                                @if($sub_product->size1_value == 'x')
+                                <div class="modal-header">
+                                    <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
+                                </div>
 
-                                                    X<input name="sizeA{{$x+1}}[]" type="hidden" value="x">
+                                <div class="modal-body" id="myWizard" style="display: inline-block;">
 
-                                                @else
+                                    <input type="hidden" id="token" name="token" value="{{csrf_token()}}">
+                                    <input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
+                                    <input type="hidden" id="handyman_name" name="handyman_name" value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
 
-                                                    <input {{$sub_product->size1_value ? 'checked' : null}} class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
-                                                    <input class="cus_value" type="hidden" value="{{$sub_product->size1_value ? 1 : 0}}" name="sizeA{{$x+1}}[]">
-
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($sub_product->size2_value == 'x')
-
-                                                    X<input name="sizeB{{$x+1}}[]" type="hidden" value="x">
-
-                                                @else
-
-                                                    <input {{$sub_product->size2_value ? 'checked' : null}} class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
-                                                    <input class="cus_value" type="hidden" value="{{$sub_product->size2_value ? 1 : 0}}" name="sizeB{{$x+1}}[]">
-
-                                                @endif
-                                            </td>
-                                        </tr>
-
-                                    @endforeach
-
-                                            </tbody>
-                                        </table>
+                                    <div class="form-group col-sm-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}" type="text">
+                                        </div>
                                     </div>
 
-                                @endif
+                                    <div class="form-group col-sm-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <input id="family_name" name="family_name" class="form-control validation" placeholder="{{$lang->fn}}" type="text">
+                                        </div>
+                                    </div>
 
-                            @endforeach
+                                    <div class="form-group col-sm-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}" type="text">
+                                        </div>
+                                    </div>
 
-                        @endif
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <div class="form-group col-sm-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <input id="address" name="address" class="form-control validation" placeholder="{{$lang->ad}}" type="text">
+                                            <input type="hidden" id="check_address" value="0">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-sm-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <input id="postcode" name="postcode" class="form-control validation" readonly placeholder="{{$lang->pc}}" type="text">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-sm-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <input id="city" name="city" class="form-control validation" placeholder="{{$lang->ct}}" readonly type="text">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-sm-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <input id="phone" name="phone" class="form-control validation" placeholder="{{$lang->pn}}" type="text">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-sm-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-envelope"></i>
+                                            </div>
+                                            <input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}" type="email">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;" class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
+                                </div>
+
+                            </div>
+
+                        </form>
                     </div>
                 </div>
 
             </div>
+
         </div>
 
-    </form>
-
-    <div id="cover"></div>
-
-    <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-
-            <form id="quote_form" method="post" action="{{route('user.quote')}}">
-
-                <input type="hidden" name="_token" value="{{@csrf_token()}}">
-
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
-                    </div>
-
-                    <div class="modal-body" id="myWizard" style="display: inline-block;">
-
-                        <input type="hidden" id="token" name="token" value="{{csrf_token()}}">
-                        <input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
-                        <input type="hidden" id="handyman_name" name="handyman_name" value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="family_name" name="family_name" class="form-control validation" placeholder="{{$lang->fn}}" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="address" name="address" class="form-control validation" placeholder="{{$lang->ad}}" type="text">
-                                <input type="hidden" id="check_address" value="0">
-                            </div>
-                        </div>
-
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="postcode" name="postcode" class="form-control validation" readonly placeholder="{{$lang->pc}}" type="text">
-                            </div>
-                        </div>
-
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="city" name="city" class="form-control validation" placeholder="{{$lang->ct}}" readonly type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="phone" name="phone" class="form-control validation" placeholder="{{$lang->pn}}" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-envelope"></i>
-                                </div>
-                                <input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}" type="email">
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;" class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
-                    </div>
-
-                </div>
-
-            </form>
-        </div>
     </div>
 
     <style>
