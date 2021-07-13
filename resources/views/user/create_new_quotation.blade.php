@@ -225,7 +225,7 @@
                                                                     <td class="width" style="width: 80px;">
                                                                         <div class="m-box">
                                                                             <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-                                                                            <input style="border: 0;outline: none;" readonly type="text" name="weight_unit[]" class="measure-unit" value="cm">
+                                                                            <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">
                                                                         </div>
                                                                     </td>
                                                                     <td class="height" style="width: 80px;">

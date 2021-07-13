@@ -83,13 +83,13 @@
                                             <td>{{$color_titles[$i]}}</td>
                                             <td>{{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
                                             <td>{{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title); } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title); } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title); } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $string .= ",$feature->title"; } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title); } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title); } } } ?> {{$string = substr($string, 1)}}</td>
+                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title); } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td>{{$request->total[$i]}}</td>
                                         </tr>
 
