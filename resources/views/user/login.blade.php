@@ -52,7 +52,7 @@
                                 <div class="form-group text-center">
                                     <a href="{{route('user-forgot')}}">{{$lang->fpw}}</a>
                                     <br>
-                                    <a href="{{route('user-register')}}">{{$lang->cn}}</a>
+                                    <a href="{{route('handyman-register')}}">{{$lang->cn}}</a>
                                 </div>
                             </form>
                         </div>
