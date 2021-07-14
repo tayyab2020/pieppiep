@@ -261,7 +261,7 @@ class UserRegisterController extends Controller
 
         $user->givePermissionTo('show-dashboard');
 
-        Auth::guard('user')->login($user);
+        /*Auth::guard('user')->login($user);*/
 
         $link = url('/').'/aanbieder/complete-profile';
 
@@ -280,7 +280,7 @@ class UserRegisterController extends Controller
         $msg = "Beste ".$user_name.",<br><br>Welkom bij vloerofferte.nl<br><br>Je profiel is succesvol aangemaakt, bedankt! Je kan pas offerte aanvragen ontvangen, nadat je je profiel hebt geactiveerd. Klik dus snel op deze <a href='".$link."'>link</a> om je profiel te activeren.<br><br>Veel succes met jouw aanvraag!<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte<br><br>Voor de beste prijs.";
         mail($user_email,$subject,$msg,$headers);
 
-          return redirect()->route('user-complete-profile');
+        return redirect()->route('user-login');
 
         }
 
