@@ -61,7 +61,7 @@
 
 <div class="wrapper">
     <!-- Sidebar  -->
-    <nav id="sidebar">
+    <nav id="sidebar" class="active">
 
         <div class="sidebar-header">
 
@@ -413,7 +413,7 @@
     <!-- Page Content  -->
     <div id="content">
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        {{--<nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
 
                 <button type="button" id="sidebarCollapse1" class="btn btn-info">
@@ -421,7 +421,7 @@
                 </button>
 
             </div>
-        </nav>
+        </nav>--}}
 
         @yield('content')
 
@@ -441,7 +441,12 @@
     }
 
     $(document).ready(function () {
-        $('#sidebarCollapse1').on('click', function () {
+
+        /*$('#sidebarCollapse1').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });*/
+
+        $('#sidebar').hover(function () {
             $('#sidebar').toggleClass('active');
         });
     });
@@ -518,7 +523,7 @@
         max-width: 250px;
         background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors.'c9'}};
         color: #fff;
-        transition: all 1s;
+        transition: all 1.5s;
     }
 
     #sidebar.active {

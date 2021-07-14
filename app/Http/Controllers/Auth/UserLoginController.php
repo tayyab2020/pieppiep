@@ -32,19 +32,26 @@ class UserLoginController extends Controller
       // Attempt to log the user in
       if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password, 'allowed' => 1])) {
 
-
         if(Auth::guard('user')->user()->role_id == 2 || Auth::guard('user')->user()->role_id == 4)
         {
-
-          // if successful, then redirect to their intended location
-        return redirect()->intended(route('user-dashboard'));
+            if(Auth::guard('user')->user()->active == 1)
+            {
+                // if successful, then redirect to their intended location
+                return redirect()->intended(route('user-dashboard'));
+            }
+            else
+            {
+                Auth::guard('user')->logout();
+                Session::flash('unsuccess',"You account is not verified by admin!");
+                return redirect()->back()->withInput($request->only('email'));
+            }
 
         }
         else
         {
 
-          // if successful, then redirect to their intended location
-        return redirect()->intended(route('client-quotation-requests'));
+            // if successful, then redirect to their intended location
+            return redirect()->intended(route('client-quotation-requests'));
 
         }
 
