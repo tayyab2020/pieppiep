@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('content')
     <div class="right-side">
@@ -12,7 +12,13 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
                                         <h2>Items</h2>
-                                        <a href="{{route('admin-item-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add New Item</a>
+
+                                        @if(auth()->user()->can('create-item'))
+
+                                            <a href="{{route('admin-item-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add New Item</a>
+
+                                        @endif
+
                                     </div>
                                     <hr>
                                     <div>
@@ -40,8 +46,18 @@
                                                             <td>{{$item->name}} {{$item->family_name}}</td>
                                                             <td>{!!$item->description!!}</td>
                                                             <td>
-                                                                <a href="{{route('admin-item-edit',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
-                                                                <a href="{{route('admin-item-delete',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
+                                                                @if(auth()->user()->can('edit-item'))
+
+                                                                    <a href="{{route('admin-item-edit',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
+
+                                                                @endif
+
+                                                                @if(auth()->user()->can('delete-item'))
+
+                                                                        <a href="{{route('admin-item-delete',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
+
+                                                                @endif
+
                                                             </td>
                                                         </tr>
                                                     @endforeach

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('content')
     <div class="right-side">
@@ -12,8 +12,14 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
                                         <h2>Categories</h2>
-                                        <a href="{{route('admin-cat-create')}}" class="btn add-newProduct-btn"><i
-                                                class="fa fa-plus"></i> Add New Category</a>
+
+                                        @if(auth()->user()->can('category-create'))
+
+                                            <a href="{{route('admin-cat-create')}}" class="btn add-newProduct-btn"><i
+                                                    class="fa fa-plus"></i> Add New Category</a>
+
+                                        @endif
+
                                     </div>
                                     <hr>
                                     <div>
@@ -74,12 +80,22 @@
                                                             <td>{!!$cat->description!!}</td>
                                                             <td>{{$cat->cat_slug}}</td>
                                                             <td>
-                                                                <a href="{{route('admin-cat-edit',$cat->id)}}"
-                                                                   class="btn btn-primary product-btn"><i
-                                                                        class="fa fa-edit"></i> Edit</a>
-                                                                <a href="{{route('admin-cat-delete',$cat->id)}}"
-                                                                   class="btn btn-danger product-btn"><i
-                                                                        class="fa fa-trash"></i> Remove</a>
+                                                                @if(auth()->user()->can('category-edit'))
+
+                                                                    <a href="{{route('admin-cat-edit',$cat->id)}}"
+                                                                       class="btn btn-primary product-btn"><i
+                                                                            class="fa fa-edit"></i> Edit</a>
+
+                                                                @endif
+
+                                                                @if(auth()->user()->can('category-delete'))
+
+                                                                        <a href="{{route('admin-cat-delete',$cat->id)}}"
+                                                                           class="btn btn-danger product-btn"><i
+                                                                                class="fa fa-trash"></i> Remove</a>
+
+                                                                @endif
+
                                                             </td>
                                                         </tr>
                                                     @endforeach

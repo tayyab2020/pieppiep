@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('styles')
 
@@ -411,7 +411,7 @@
                                                                                 <td>{{$key->table}}</td>
                                                                                 <td>{{$key->color}}</td>
                                                                                 <td>{{$key->color_code}}</td>
-                                                                                <td><a href="/logstof/price-tables/prices/view/{{$key->table_id}}">View</a></td>
+                                                                                <td><a href="/aanbieder/price-tables/prices/view/{{$key->table_id}}">View</a></td>
                                                                             </tr>
 
                                                                         @endforeach
@@ -1206,7 +1206,7 @@
             $.ajax({
                 type:"GET",
                 data: "id=" + id ,
-                url: "<?php echo url('/logstof/product/get-prices-tables')?>",
+                url: "<?php echo url('/aanbieder/product/get-prices-tables')?>",
                 success: function(data) {
 
                     $.each(data, function(index, value) {
@@ -1234,14 +1234,14 @@
                                 }
                                 else if(index == 4)
                                 {
-                                    $(this).html('<a href="/logstof/price-tables/prices/view/'+value.id+'">View</a>');
+                                    $(this).html('<a href="/aanbieder/price-tables/prices/view/'+value.id+'">View</a>');
                                 }
 
                             })
                         }
                         else
                         {
-                            $("#example1").append('<tr data-id="'+row+'"><td>'+value.id+'</td><td>'+value.title+'</td><td class="color_col">'+color+'</td><td class="code_col">'+code+'</td><td><a href="/logstof/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
+                            $("#example1").append('<tr data-id="'+row+'"><td>'+value.id+'</td><td>'+value.title+'</td><td class="color_col">'+color+'</td><td class="code_col">'+code+'</td><td><a href="/aanbieder/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
                             $(selector).parent().parent().attr('data-id',row);
                             row++;
                         }
@@ -1436,7 +1436,7 @@
             $.ajax({
                 type:"GET",
                 data: "id=" + brand_id ,
-                url: "<?php echo url('/logstof/product/products-models-by-brands')?>",
+                url: "<?php echo url('/aanbieder/product/products-models-by-brands')?>",
                 success: function(data) {
 
                     $.each(data, function(index, value) {

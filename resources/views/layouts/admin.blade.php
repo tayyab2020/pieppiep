@@ -100,7 +100,7 @@
 
                                 <li><a href="{{route('admin-assign-permissions')}}"><i class="fa fa-fw fa-file-code-o"></i> Assign Permissions</a></li>
 
-                                <li>
+                                {{--<li>
                                     <a href="#products" data-toggle="collapse" @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> Products</a>
                                     <ul class="collapse list-unstyled submenu" id="products">
                                         <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> Products</a></li>
@@ -113,7 +113,7 @@
                                         <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
                                         <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
                                     </ul>
-                                </li>
+                                </li>--}}
 
 
                                 <li>

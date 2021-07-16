@@ -229,7 +229,7 @@
             @endif
 
 
-            @if(auth()->user()->hasAnyPermission(['user-products', 'product-create', 'user-items']))
+            {{--@if(auth()->user()->hasAnyPermission(['user-products', 'product-create', 'user-items']))
 
                 <li>
                     <a class="dropdown-toggle" href="#services" data-toggle="collapse" @if(Route::currentRouteName() == 'user-products' || Route::currentRouteName() == 'product-create' || Route::currentRouteName() == 'user-items') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>{{__('text.My Products')}}</span></a>
@@ -256,10 +256,75 @@
                     </ul>
                 </li>
 
+            @endif--}}
+
+            @if(auth()->user()->hasAnyPermission(['user-products', 'user-colors', 'user-price-tables', 'my-services', 'user-categories', 'user-brands', 'user-models', 'user-items', 'user-features']))
+
+                <li>
+                    <a href="#products" data-toggle="collapse" @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>Products</span></a>
+                    <ul class="collapse list-unstyled submenu" id="products">
+
+                            @if(auth()->user()->can('user-products'))
+
+                                <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> Products</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-colors'))
+
+                                <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> Colors</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-price-tables'))
+
+                                 <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> Price Tables</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('my-services'))
+
+                                 <li><a href="{{route('admin-service-index')}}"><i class="fa fa-angle-right"></i> Services</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-categories'))
+
+                                 <li><a href="{{route('admin-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-brands'))
+
+                                 <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-models'))
+
+                                 <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-items'))
+
+                                 <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-features'))
+
+                                 <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
+
+                            @endif
+
+                    </ul>
+                </li>
+
             @endif
 
 
-            @if(auth()->user()->hasAnyPermission(['my-services', 'service-create']))
+            {{--@if(auth()->user()->hasAnyPermission(['my-services', 'service-create']))
 
                 <li>
                     <a class="dropdown-toggle" href="#services1" data-toggle="collapse" @if(Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'service-create') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>My Services</span></a>
@@ -280,7 +345,7 @@
                     </ul>
                 </li>
 
-            @endif
+            @endif--}}
 
 
             {{--<li>
@@ -440,15 +505,18 @@
 
     }
 
-    $(document).ready(function () {
-
-        /*$('#sidebarCollapse1').on('click', function () {
-            $('#sidebar').toggleClass('active');
-        });*/
+    var mouse_already_there = false;
+    var event_set = false;
+    $(document).ready(function() {
 
         $('#sidebar').hover(function () {
-            $('#sidebar').toggleClass('active');
+
+            $('#sidebar').removeClass('active');
+
+        }, function(){
+            $('#sidebar').addClass('active');
         });
+
     });
 
 </script>
@@ -459,6 +527,10 @@
     /*
     DEMO STYLE
 */
+    .section-padding
+    {
+        padding: 0;
+    }
 
     @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
     body {
@@ -504,10 +576,11 @@
         margin: 40px 0;
     }
 
-    i,
+
+    /*i,
     span {
         display: inline-block;
-    }
+    }*/
 
     /* ---------------------------------------------------
         SIDEBAR STYLE
@@ -669,6 +742,7 @@
         padding: 20px;
         min-height: 100vh;
         transition: all 0.3s;
+        overflow-x: hidden;
     }
 
     /* ---------------------------------------------------

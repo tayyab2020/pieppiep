@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('content')
     <div class="right-side">
@@ -12,10 +12,21 @@
                                 <div class="add-product-box">
                                     <div style="justify-content: flex-end;" class="add-product-header products">
                                         <h2 style="width: 100%;">Price Tables</h2>
-                                        <a style="margin-right: 10px;" href="{{route('admin-price-tables-create')}}" class="btn add-newProduct-btn">
-                                            <i style="font-size: 12px;" class="fa fa-plus"></i> Add New Table</a>
-                                        <a style="margin-right: 10px;background-color: #5cb85c !important;border-color: #5cb85c !important;" href="{{route('admin-price-tables-import')}}" class="btn add-newProduct-btn">
-                                            <i style="font-size: 12px;" class="fa fa-plus"></i> Import Prices</a>
+
+                                        @if(auth()->user()->can('create-price-table'))
+
+                                            <a style="margin-right: 10px;" href="{{route('admin-price-tables-create')}}" class="btn add-newProduct-btn">
+                                                <i style="font-size: 12px;" class="fa fa-plus"></i> Add New Table</a>
+
+                                        @endif
+
+                                        @if(auth()->user()->can('import-price-table'))
+
+                                            <a style="margin-right: 10px;background-color: #5cb85c !important;border-color: #5cb85c !important;" href="{{route('admin-price-tables-import')}}" class="btn add-newProduct-btn">
+                                                <i style="font-size: 12px;" class="fa fa-plus"></i> Import Prices</a>
+
+                                        @endif
+
                                         {{--<a style="background-color: #5bc0de !important;border-color: #5bc0de !important;" href="{{route('admin-price-tables-export')}}" class="btn add-newProduct-btn">
                                             <i style="font-size: 12px;" class="fa fa-plus"></i> Export Prices</a>--}}
                                     </div>
@@ -68,18 +79,38 @@
                                                             <td>{{$cat->title}}</td>
                                                             <td>{{$cat->connected ? 'Yes' : 'No'}}</td>
                                                             <td>
-                                                                <a href="{{route('admin-price-tables-edit',$cat->id)}}"
-                                                                   class="btn btn-primary product-btn"><i
-                                                                        class="fa fa-edit"></i> Edit Table</a>
-                                                                <a href="{{route('admin-prices-view',$cat->id)}}"
-                                                                   class="btn btn-primary product-btn"><i
-                                                                        class="fa fa-edit"></i> View Prices</a>
-                                                                <a href="{{route('admin-price-tables-delete',$cat->id)}}"
-                                                                   class="btn btn-danger product-btn"><i
-                                                                        class="fa fa-trash"></i> Remove</a>
-                                                                <a href="{{route('admin-prices-delete',$cat->id)}}"
-                                                                   class="btn btn-danger product-btn"><i
-                                                                        class="fa fa-trash"></i> Remove Prices</a>
+                                                                @if(auth()->user()->can('edit-price-table'))
+
+                                                                    <a href="{{route('admin-price-tables-edit',$cat->id)}}"
+                                                                       class="btn btn-primary product-btn"><i
+                                                                            class="fa fa-edit"></i> Edit Table</a>
+
+                                                                @endif
+
+                                                                @if(auth()->user()->can('view-price-table'))
+
+                                                                        <a href="{{route('admin-prices-view',$cat->id)}}"
+                                                                           class="btn btn-primary product-btn"><i
+                                                                                class="fa fa-edit"></i> View Prices</a>
+
+                                                                @endif
+
+                                                                @if(auth()->user()->can('delete-price-table'))
+
+                                                                        <a href="{{route('admin-price-tables-delete',$cat->id)}}"
+                                                                           class="btn btn-danger product-btn"><i
+                                                                                class="fa fa-trash"></i> Remove</a>
+
+                                                                @endif
+
+                                                                @if(auth()->user()->can('delete-prices'))
+
+                                                                        <a href="{{route('admin-prices-delete',$cat->id)}}"
+                                                                           class="btn btn-danger product-btn"><i
+                                                                                class="fa fa-trash"></i> Remove Prices</a>
+
+                                                                @endif
+
                                                             </td>
                                                         </tr>
                                                     @endforeach

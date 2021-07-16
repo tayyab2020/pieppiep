@@ -212,6 +212,77 @@
 
   Route::get('/custom-mark-delivered/{id}', 'UserController@CustomMarkDelivered');
   Route::get('/custom-mark-received/{id}', 'UserController@CustomMarkReceived');
+
+  Route::get('/products', 'ProductController@index')->name('admin-product-index');
+  Route::get('/product/create', 'ProductController@create')->name('admin-product-create');
+  Route::get('/product/import', 'ProductController@import')->name('admin-product-import');
+  Route::post('/product/upload', 'ProductController@PostImport')->name('admin-product-upload');
+  Route::get('/product/export', 'ProductController@PostExport')->name('admin-product-export');
+  Route::post('/product/create', 'ProductController@store')->name('admin-product-store');
+  Route::get('/product/edit/{id}', 'ProductController@edit')->name('admin-product-edit');
+  Route::post('/product/update/{id}', 'ProductController@update')->name('admin-product-update');
+  Route::get('/product/delete/{id}', 'ProductController@destroy')->name('admin-product-delete');
+  Route::get('/product/products-models-by-brands', 'ProductController@productsModelsByBrands');
+  Route::get('/product/get-prices-tables', 'ProductController@pricesTables');
+
+  Route::get('/price-tables', 'PriceTablesController@index')->name('admin-price-tables');
+  Route::get('/price-tables/create', 'PriceTablesController@create')->name('admin-price-tables-create');
+  Route::get('/price-tables/import', 'PriceTablesController@import')->name('admin-price-tables-import');
+  Route::post('/price-tables/upload', 'PriceTablesController@PostImport')->name('admin-price-tables-upload');
+  Route::get('/price-tables/export', 'PriceTablesController@PostExport')->name('admin-price-tables-export');
+  Route::post('/price-tables/create', 'PriceTablesController@store')->name('admin-price-tables-store');
+  Route::get('/price-tables/edit/{id}', 'PriceTablesController@edit')->name('admin-price-tables-edit');
+  Route::get('/price-tables/prices/view/{id}', 'PriceTablesController@viewPrices')->name('admin-prices-view');
+  Route::post('/price-tables/update/{id}', 'PriceTablesController@update')->name('admin-price-tables-update');
+  Route::get('/price-tables/delete/{id}', 'PriceTablesController@destroy')->name('admin-price-tables-delete');
+  Route::get('/price-tables/prices/delete/{id}', 'PriceTablesController@destroyPrices')->name('admin-prices-delete');
+
+  Route::get('/colors', 'ColorController@index')->name('admin-color-index');
+  Route::get('/color/create', 'ColorController@create')->name('admin-color-create');
+  Route::post('/color/create', 'ColorController@store')->name('admin-color-store');
+  Route::get('/color/edit/{id}', 'ColorController@edit')->name('admin-color-edit');
+  Route::get('/color/delete/{id}', 'ColorController@destroy')->name('admin-color-delete');
+
+  Route::get('/services', 'ServiceController@index')->name('admin-service-index');
+  Route::get('/service/create', 'ServiceController@create')->name('admin-service-create');
+  Route::post('/service/create', 'ServiceController@store')->name('admin-service-store');
+  Route::get('/service/edit/{id}', 'ServiceController@edit')->name('admin-service-edit');
+  Route::get('/service/delete/{id}', 'ServiceController@destroy')->name('admin-service-delete');
+
+  Route::get('/categories', 'CategoryController@index')->name('admin-cat-index');
+  Route::get('/category/create', 'CategoryController@create')->name('admin-cat-create');
+  Route::post('/category/create', 'CategoryController@store')->name('admin-cat-store');
+  Route::get('/category/edit/{id}', 'CategoryController@edit')->name('admin-cat-edit');
+  /*Route::post('/category/update/{id}', 'CategoryController@update')->name('admin-cat-update');*/
+  Route::get('/category/delete/{id}', 'CategoryController@destroy')->name('admin-cat-delete');
+
+  Route::get('/brands', 'BrandController@index')->name('admin-brand-index');
+  Route::get('/brand/create', 'BrandController@create')->name('admin-brand-create');
+  Route::post('/brand/create', 'BrandController@store')->name('admin-brand-store');
+  Route::get('/brand/edit/{id}', 'BrandController@edit')->name('admin-brand-edit');
+  Route::post('/brand/update/{id}', 'BrandController@update')->name('admin-brand-update');
+  Route::get('/brand/delete/{id}', 'BrandController@destroy')->name('admin-brand-delete');
+
+  Route::get('/models', 'ModelController@index')->name('admin-model-index');
+  Route::get('/model/create', 'ModelController@create')->name('admin-model-create');
+  Route::post('/model/create', 'ModelController@store')->name('admin-model-store');
+  Route::get('/model/edit/{id}', 'ModelController@edit')->name('admin-model-edit');
+  Route::post('/model/update/{id}', 'ModelController@update')->name('admin-model-update');
+  Route::get('/model/delete/{id}', 'ModelController@destroy')->name('admin-model-delete');
+
+  Route::get('/items', 'ItemController@index')->name('admin-item-index');
+  Route::get('/item/create', 'ItemController@create')->name('admin-item-create');
+  Route::post('/item/create', 'ItemController@store')->name('admin-item-store');
+  Route::get('/item/edit/{id}', 'ItemController@edit')->name('admin-item-edit');
+  Route::post('/item/update/{id}', 'ItemController@update')->name('admin-item-update');
+  Route::get('/item/delete/{id}', 'ItemController@destroy')->name('admin-item-delete');
+
+  Route::get('/features', 'FeaturesController@index')->name('admin-feature-index');
+  Route::get('/features/create', 'FeaturesController@create')->name('admin-feature-create');
+  Route::post('/features/create', 'FeaturesController@store')->name('admin-feature-store');
+  Route::get('/features/edit/{id}', 'FeaturesController@edit')->name('admin-feature-edit');
+  Route::post('/features/update/{id}', 'FeaturesController@update')->name('admin-feature-update');
+  Route::get('/features/delete/{id}', 'FeaturesController@destroy')->name('admin-feature-delete');
   });
 
   Route::get('finalize', 'FrontendController@finalize');
@@ -300,20 +371,20 @@
 
   Route::get('/handymans/status/{id1}/{id2}', 'AdminUserController@status')->name('admin-user-st');
 
-  Route::get('/categories', 'CategoryController@index')->name('admin-cat-index');
+  /*Route::get('/categories', 'CategoryController@index')->name('admin-cat-index');
   Route::get('/category/create', 'CategoryController@create')->name('admin-cat-create');
   Route::post('/category/create', 'CategoryController@store')->name('admin-cat-store');
   Route::get('/category/edit/{id}', 'CategoryController@edit')->name('admin-cat-edit');
-  /*Route::post('/category/update/{id}', 'CategoryController@update')->name('admin-cat-update');*/
-  Route::get('/category/delete/{id}', 'CategoryController@destroy')->name('admin-cat-delete');
+  //Route::post('/category/update/{id}', 'CategoryController@update')->name('admin-cat-update');//
+  Route::get('/category/delete/{id}', 'CategoryController@destroy')->name('admin-cat-delete');*/
 
-  Route::get('/services', 'ServiceController@index')->name('admin-service-index');
+  /*Route::get('/services', 'ServiceController@index')->name('admin-service-index');
   Route::get('/service/create', 'ServiceController@create')->name('admin-service-create');
   Route::post('/service/create', 'ServiceController@store')->name('admin-service-store');
   Route::get('/service/edit/{id}', 'ServiceController@edit')->name('admin-service-edit');
-  Route::get('/service/delete/{id}', 'ServiceController@destroy')->name('admin-service-delete');
+  Route::get('/service/delete/{id}', 'ServiceController@destroy')->name('admin-service-delete');*/
 
-  Route::get('/products', 'ProductController@index')->name('admin-product-index');
+  /*Route::get('/products', 'ProductController@index')->name('admin-product-index');
   Route::get('/product/create', 'ProductController@create')->name('admin-product-create');
   Route::get('/product/import', 'ProductController@import')->name('admin-product-import');
   Route::post('/product/upload', 'ProductController@PostImport')->name('admin-product-upload');
@@ -323,53 +394,53 @@
   Route::post('/product/update/{id}', 'ProductController@update')->name('admin-product-update');
   Route::get('/product/delete/{id}', 'ProductController@destroy')->name('admin-product-delete');
   Route::get('/product/products-models-by-brands', 'ProductController@productsModelsByBrands');
-  Route::get('/product/get-prices-tables', 'ProductController@pricesTables');
+  Route::get('/product/get-prices-tables', 'ProductController@pricesTables');*/
 
- Route::get('/price-tables', 'PriceTablesController@index')->name('admin-price-tables');
- Route::get('/price-tables/create', 'PriceTablesController@create')->name('admin-price-tables-create');
- Route::get('/price-tables/import', 'PriceTablesController@import')->name('admin-price-tables-import');
- Route::post('/price-tables/upload', 'PriceTablesController@PostImport')->name('admin-price-tables-upload');
- Route::get('/price-tables/export', 'PriceTablesController@PostExport')->name('admin-price-tables-export');
- Route::post('/price-tables/create', 'PriceTablesController@store')->name('admin-price-tables-store');
- Route::get('/price-tables/edit/{id}', 'PriceTablesController@edit')->name('admin-price-tables-edit');
- Route::get('/price-tables/prices/view/{id}', 'PriceTablesController@viewPrices')->name('admin-prices-view');
- Route::post('/price-tables/update/{id}', 'PriceTablesController@update')->name('admin-price-tables-update');
- Route::get('/price-tables/delete/{id}', 'PriceTablesController@destroy')->name('admin-price-tables-delete');
- Route::get('/price-tables/prices/delete/{id}', 'PriceTablesController@destroyPrices')->name('admin-prices-delete');
+  /*Route::get('/price-tables', 'PriceTablesController@index')->name('admin-price-tables');
+  Route::get('/price-tables/create', 'PriceTablesController@create')->name('admin-price-tables-create');
+  Route::get('/price-tables/import', 'PriceTablesController@import')->name('admin-price-tables-import');
+  Route::post('/price-tables/upload', 'PriceTablesController@PostImport')->name('admin-price-tables-upload');
+  Route::get('/price-tables/export', 'PriceTablesController@PostExport')->name('admin-price-tables-export');
+  Route::post('/price-tables/create', 'PriceTablesController@store')->name('admin-price-tables-store');
+  Route::get('/price-tables/edit/{id}', 'PriceTablesController@edit')->name('admin-price-tables-edit');
+  Route::get('/price-tables/prices/view/{id}', 'PriceTablesController@viewPrices')->name('admin-prices-view');
+  Route::post('/price-tables/update/{id}', 'PriceTablesController@update')->name('admin-price-tables-update');
+  Route::get('/price-tables/delete/{id}', 'PriceTablesController@destroy')->name('admin-price-tables-delete');
+  Route::get('/price-tables/prices/delete/{id}', 'PriceTablesController@destroyPrices')->name('admin-prices-delete');*/
 
-  Route::get('/colors', 'ColorController@index')->name('admin-color-index');
+  /*Route::get('/colors', 'ColorController@index')->name('admin-color-index');
   Route::get('/color/create', 'ColorController@create')->name('admin-color-create');
   Route::post('/color/create', 'ColorController@store')->name('admin-color-store');
   Route::get('/color/edit/{id}', 'ColorController@edit')->name('admin-color-edit');
-  Route::get('/color/delete/{id}', 'ColorController@destroy')->name('admin-color-delete');
+  Route::get('/color/delete/{id}', 'ColorController@destroy')->name('admin-color-delete');*/
 
-  Route::get('/brands', 'BrandController@index')->name('admin-brand-index');
+  /*Route::get('/brands', 'BrandController@index')->name('admin-brand-index');
   Route::get('/brand/create', 'BrandController@create')->name('admin-brand-create');
   Route::post('/brand/create', 'BrandController@store')->name('admin-brand-store');
   Route::get('/brand/edit/{id}', 'BrandController@edit')->name('admin-brand-edit');
   Route::post('/brand/update/{id}', 'BrandController@update')->name('admin-brand-update');
-  Route::get('/brand/delete/{id}', 'BrandController@destroy')->name('admin-brand-delete');
+  Route::get('/brand/delete/{id}', 'BrandController@destroy')->name('admin-brand-delete');*/
 
-  Route::get('/models', 'ModelController@index')->name('admin-model-index');
+  /*Route::get('/models', 'ModelController@index')->name('admin-model-index');
   Route::get('/model/create', 'ModelController@create')->name('admin-model-create');
   Route::post('/model/create', 'ModelController@store')->name('admin-model-store');
   Route::get('/model/edit/{id}', 'ModelController@edit')->name('admin-model-edit');
   Route::post('/model/update/{id}', 'ModelController@update')->name('admin-model-update');
-  Route::get('/model/delete/{id}', 'ModelController@destroy')->name('admin-model-delete');
+  Route::get('/model/delete/{id}', 'ModelController@destroy')->name('admin-model-delete');*/
 
-  Route::get('/items', 'ItemController@index')->name('admin-item-index');
+  /*Route::get('/items', 'ItemController@index')->name('admin-item-index');
   Route::get('/item/create', 'ItemController@create')->name('admin-item-create');
   Route::post('/item/create', 'ItemController@store')->name('admin-item-store');
   Route::get('/item/edit/{id}', 'ItemController@edit')->name('admin-item-edit');
   Route::post('/item/update/{id}', 'ItemController@update')->name('admin-item-update');
-  Route::get('/item/delete/{id}', 'ItemController@destroy')->name('admin-item-delete');
+  Route::get('/item/delete/{id}', 'ItemController@destroy')->name('admin-item-delete');*/
 
-  Route::get('/features', 'FeaturesController@index')->name('admin-feature-index');
+  /*Route::get('/features', 'FeaturesController@index')->name('admin-feature-index');
   Route::get('/features/create', 'FeaturesController@create')->name('admin-feature-create');
   Route::post('/features/create', 'FeaturesController@store')->name('admin-feature-store');
   Route::get('/features/edit/{id}', 'FeaturesController@edit')->name('admin-feature-edit');
   Route::post('/features/update/{id}', 'FeaturesController@update')->name('admin-feature-update');
-  Route::get('/features/delete/{id}', 'FeaturesController@destroy')->name('admin-feature-delete');
+  Route::get('/features/delete/{id}', 'FeaturesController@destroy')->name('admin-feature-delete');*/
 
   Route::get('/faq', 'FaqController@index')->name('admin-fq-index');
   Route::get('/faq/create', 'FaqController@create')->name('admin-fq-create');

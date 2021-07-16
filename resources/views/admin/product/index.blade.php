@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('content')
     <div class="right-side">
@@ -12,12 +12,28 @@
                                 <div class="add-product-box">
                                     <div style="justify-content: flex-end;" class="add-product-header products">
                                         <h2 style="width: 100%;">Products</h2>
-                                        <a style="margin-right: 10px;" href="{{route('admin-product-create')}}" class="btn add-newProduct-btn">
-                                            <i style="font-size: 12px;" class="fa fa-plus"></i> Add New Product</a>
-                                        <a style="margin-right: 10px;background-color: #5cb85c !important;border-color: #5cb85c !important;" href="{{route('admin-product-import')}}" class="btn add-newProduct-btn">
-                                            <i style="font-size: 12px;" class="fa fa-plus"></i> Import Products</a>
-                                        <a style="background-color: #5bc0de !important;border-color: #5bc0de !important;" href="{{route('admin-product-export')}}" class="btn add-newProduct-btn">
-                                            <i style="font-size: 12px;" class="fa fa-plus"></i> Export Products</a>
+
+                                        @if(auth()->user()->can('product-create'))
+
+                                            <a style="margin-right: 10px;" href="{{route('admin-product-create')}}" class="btn add-newProduct-btn">
+                                                <i style="font-size: 12px;" class="fa fa-plus"></i> Add New Product</a>
+
+                                        @endif
+
+                                        @if(auth()->user()->can('product-import'))
+
+                                            <a style="margin-right: 10px;background-color: #5cb85c !important;border-color: #5cb85c !important;" href="{{route('admin-product-import')}}" class="btn add-newProduct-btn">
+                                                <i style="font-size: 12px;" class="fa fa-plus"></i> Import Products</a>
+
+                                        @endif
+
+                                        @if(auth()->user()->can('product-export'))
+
+                                            <a style="background-color: #5bc0de !important;border-color: #5bc0de !important;" href="{{route('admin-product-export')}}" class="btn add-newProduct-btn">
+                                                <i style="font-size: 12px;" class="fa fa-plus"></i> Export Products</a>
+
+                                        @endif
+
                                     </div>
                                     <hr>
                                     <div>
@@ -99,12 +115,22 @@
                                                             <td>{{$cat->brand}}</td>
                                                             <td>{{$cat->model}}</td>
                                                             <td>
-                                                                <a href="{{route('admin-product-edit',$cat->id)}}"
-                                                                   class="btn btn-primary product-btn"><i
-                                                                        class="fa fa-edit"></i> Edit</a>
-                                                                <a href="{{route('admin-product-delete',$cat->id)}}"
-                                                                   class="btn btn-danger product-btn"><i
-                                                                        class="fa fa-trash"></i> Remove</a>
+                                                                @if(auth()->user()->can('product-edit'))
+
+                                                                    <a href="{{route('admin-product-edit',$cat->id)}}"
+                                                                       class="btn btn-primary product-btn"><i
+                                                                            class="fa fa-edit"></i> Edit</a>
+
+                                                                @endif
+
+                                                                @if(auth()->user()->can('product-delete'))
+
+                                                                        <a href="{{route('admin-product-delete',$cat->id)}}"
+                                                                           class="btn btn-danger product-btn"><i
+                                                                                class="fa fa-trash"></i> Remove</a>
+
+                                                                @endif
+
                                                             </td>
                                                         </tr>
                                                     @endforeach

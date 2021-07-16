@@ -23,23 +23,57 @@ class BrandController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:user');
     }
 
     public function index()
     {
-        $cats = Brand::orderBy('id','desc')->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.brand.index',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('user-brands'))
+        {
+            $cats = Brand::where('user_id',$user_id)->orderBy('id','desc')->get();
+
+            return view('admin.brand.index',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function create()
     {
-        return view('admin.brand.create');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('brand-create'))
+        {
+            return view('admin.brand.create');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function store(StoreValidationRequest1 $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
         if($request->cat_id)
         {
             $cat = Brand::where('id',$request->cat_id)->first();
@@ -52,7 +86,7 @@ class BrandController extends Controller
         }
 
         $input = $request->all();
-
+        $input['user_id'] = $user_id;
 
         if ($file = $request->file('photo'))
         {
@@ -68,9 +102,30 @@ class BrandController extends Controller
 
     public function edit($id)
     {
-        $cats = Brand::where('id','=',$id)->first();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.brand.create',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('brand-edit'))
+        {
+            $cats = Brand::where('id','=',$id)->where('user_id',$user_id)->first();
+
+            if(!$cats)
+            {
+                return redirect()->back();
+            }
+
+            return view('admin.brand.create',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function update(UpdateValidationRequest $request, $id)
@@ -142,17 +197,38 @@ class BrandController extends Controller
 
     public function destroy($id)
     {
-        $cat = Brand::findOrFail($id);
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        if($cat->photo == null){
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('brand-delete'))
+        {
+            $cat = Brand::where('id',$id)->where('user_id',$user_id);
+
+            if(!$cat)
+            {
+                return redirect()->back();
+            }
+
+            if($cat->photo == null){
+                $cat->delete();
+                Session::flash('success', 'Brand deleted successfully.');
+                return redirect()->route('admin-brand-index');
+            }
+
+            \File::delete(public_path() .'/assets/images/'.$cat->photo);
             $cat->delete();
             Session::flash('success', 'Brand deleted successfully.');
             return redirect()->route('admin-brand-index');
         }
-
-        \File::delete(public_path() .'/assets/images/'.$cat->photo);
-        $cat->delete();
-        Session::flash('success', 'Brand deleted successfully.');
-        return redirect()->route('admin-brand-index');
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 }

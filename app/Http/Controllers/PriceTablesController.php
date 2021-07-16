@@ -35,26 +35,67 @@ class PriceTablesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:user');
     }
 
     public function index()
     {
-        $cats = price_tables::orderBy('id','desc')->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.price_tables.index',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('user-price-tables'))
+        {
+            $cats = price_tables::where('user_id',$user_id)->orderBy('id','desc')->get();
+
+            return view('admin.price_tables.index',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function create()
     {
-        return view('admin.price_tables.create');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('create-price-table'))
+        {
+            return view('admin.price_tables.create');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function import()
     {
-        $tables = price_tables::where('connected',0)->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.price_tables.import',compact('tables'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('import-price-table'))
+        {
+            $tables = price_tables::where('connected',0)->where('user_id',$user_id)->get();
+
+            return view('admin.price_tables.import',compact('tables'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function PostImport(Request $request)
@@ -87,6 +128,14 @@ class PriceTablesController extends Controller
 
     public function store(StoreValidationRequest6 $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if($request->id)
         {
@@ -97,6 +146,7 @@ class PriceTablesController extends Controller
         {
             $post = new price_tables;
             $post->title = $request->title;
+            $post->user_id = $user_id;
             $post->save();
 
             Session::flash('success', 'New Table added successfully.');
@@ -107,60 +157,148 @@ class PriceTablesController extends Controller
 
     public function edit($id)
     {
-        $cats = price_tables::where('id',$id)->first();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.price_tables.create',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('edit-price-table'))
+        {
+            $cats = price_tables::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$cats)
+            {
+                return redirect()->back();
+            }
+
+            return view('admin.price_tables.create',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function viewPrices($id)
     {
-        $data = price_tables::where('id',$id)->first();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        $widths = price_tables::leftjoin('prices','prices.table_id','=','price_tables.id')->where('price_tables.id',$id)->pluck('prices.x_axis')->toArray();
-        $widths = array_unique($widths);
-
-        if(!$widths[0])
+        if($main_id)
         {
-            $widths = [];
+            $user_id = $main_id;
         }
 
-        $heights = price_tables::leftjoin('prices','prices.table_id','=','price_tables.id')->where('price_tables.id',$id)->pluck('prices.y_axis')->toArray();
-        $heights = array_unique($heights);
-
-        if(!$heights[0])
+        if($user->can('view-price-table'))
         {
-            $heights = [];
+            $data = price_tables::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$data)
+            {
+                return redirect()->back();
+            }
+
+            $widths = price_tables::leftjoin('prices','prices.table_id','=','price_tables.id')->where('price_tables.id',$id)->where('price_tables.user_id',$user_id)->pluck('prices.x_axis')->toArray();
+            $widths = array_unique($widths);
+
+            if(!$widths[0])
+            {
+                $widths = [];
+            }
+
+            $heights = price_tables::leftjoin('prices','prices.table_id','=','price_tables.id')->where('price_tables.id',$id)->where('price_tables.user_id',$user_id)->pluck('prices.y_axis')->toArray();
+            $heights = array_unique($heights);
+
+            if(!$heights[0])
+            {
+                $heights = [];
+            }
+
+            $org_heights = [];
+
+            $prices = [];
+
+            foreach ($heights as $height)
+            {
+                $prices[$height] = price_tables::leftjoin('prices','prices.table_id','=','price_tables.id')->where('price_tables.id',$id)->where('price_tables.user_id',$user_id)->where('prices.y_axis',$height)->select('prices.*','price_tables.id','price_tables.title')->get()->toArray();
+
+                $org_heights[] = $height;
+            }
+
+            return view('admin.price_tables.prices', compact('widths','org_heights','prices','data'));
         }
-
-        $org_heights = [];
-
-        $prices = [];
-
-        foreach ($heights as $height)
+        else
         {
-            $prices[$height] = price_tables::leftjoin('prices','prices.table_id','=','price_tables.id')->where('price_tables.id',$id)->where('prices.y_axis',$height)->select('prices.*','price_tables.id','price_tables.title')->get()->toArray();
-
-            $org_heights[] = $height;
+            return redirect()->route('user-login');
         }
-
-        return view('admin.price_tables.prices', compact('widths','org_heights','prices','data'));
     }
 
     public function destroy($id)
     {
-        prices::where('table_id',$id)->delete();
-        price_tables::where('id',$id)->delete();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        Session::flash('success', 'Price table and prices are deleted successfully.');
-        return redirect()->route('admin-price-tables');
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('delete-price-table'))
+        {
+            $data = price_tables::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$data)
+            {
+                return redirect()->back();
+            }
+
+            prices::where('table_id',$id)->delete();
+            price_tables::where('id',$id)->where('user_id',$user_id)->delete();
+
+            Session::flash('success', 'Price table and prices are deleted successfully.');
+            return redirect()->route('admin-price-tables');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function destroyPrices($id)
     {
-        prices::where('table_id',$id)->delete();
-        price_tables::where('id',$id)->update(['connected' => 0]);
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        Session::flash('success', 'Prices are deleted successfully.');
-        return redirect()->route('admin-price-tables');
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('delete-prices'))
+        {
+            $data = price_tables::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$data)
+            {
+                return redirect()->back();
+            }
+
+            prices::where('table_id',$id)->delete();
+            price_tables::where('id',$id)->where('user_id',$user_id)->update(['connected' => 0]);
+
+            Session::flash('success', 'Prices are deleted successfully.');
+            return redirect()->route('admin-price-tables');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 }

@@ -37,7 +37,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:user');
     }
 
     public function productsModelsByBrands(Request $request)
@@ -49,19 +49,51 @@ class ProductController extends Controller
 
     public function index()
     {
-        $cats = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->orderBy('products.id','desc')->select('products.*','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.product.index',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('user-products'))
+        {
+            $cats = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('products.user_id',$user_id)->orderBy('products.id','desc')->select('products.*','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
+
+            return view('admin.product.index',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function create()
     {
-        $categories = Category::all();
-        $brands = Brand::all();
-        $tables = price_tables::where('connected',1)->get();
-        $features_headings = features::all();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.product.create',compact('categories','brands','tables','features_headings'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('product-create'))
+        {
+            $categories = Category::where('user_id',$user_id)->get();
+            $brands = Brand::where('user_id',$user_id)->get();
+            $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
+            $features_headings = features::where('user_id',$user_id)->get();
+
+            return view('admin.product.create',compact('categories','brands','tables','features_headings'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function pricesTables(Request $request)
@@ -73,7 +105,16 @@ class ProductController extends Controller
 
     public function import()
     {
-        return view('admin.product.import');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('product-import'))
+        {
+            return view('admin.product.import');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function PostImport(Request $request)
@@ -110,8 +151,17 @@ class ProductController extends Controller
 
     public function PostExport(Request $request)
     {
-        ini_set('memory_limit', '-1');
-        return Excel::download(new ProductsExport(),'products.xlsx');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('product-export'))
+        {
+            ini_set('memory_limit', '-1');
+            return Excel::download(new ProductsExport(),'products.xlsx');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function store(StoreValidationRequest3 $request)
@@ -387,7 +437,17 @@ class ProductController extends Controller
         }
         else
         {
-            $check = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('products.title', 'LIKE', '%'.$request->title.'%')->where('products.model_number',$request->model_number)->where('categories.id',$request->category_id)->where('brands.id',$request->brand_id)->where('models.id',$request->model_id)->select('products.*')->first();
+            $user = Auth::guard('user')->user();
+            $user_id = $user->id;
+            $main_id = $user->main_id;
+
+            if($main_id)
+            {
+                $user_id = $main_id;
+            }
+            $input['user_id'] = $user_id;
+
+            $check = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('user_id',$user_id)->where('products.title', 'LIKE', '%'.$request->title.'%')->where('products.model_number',$request->model_number)->where('categories.id',$request->category_id)->where('brands.id',$request->brand_id)->where('models.id',$request->model_id)->select('products.*')->first();
 
             if(!$check)
             {
@@ -459,7 +519,6 @@ class ProductController extends Controller
             }
             else
             {
-
                 if($file = $request->file('photo'))
                 {
                     \File::delete(public_path() .'/assets/images/'.$check->photo);
@@ -706,39 +765,81 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $cats = Products::where('id','=',$id)->first();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','colors.max_height','price_tables.title as table')->get();
-        $features_data = product_features::where('product_id',$id)->get();
-        $ladderband_data = product_ladderbands::where('product_id',$id)->get();
-        $categories = Category::all();
-        $brands = Brand::all();
-        $models = Model1::where('brand_id',$cats->brand_id)->get();
-        $tables = price_tables::where('connected',1)->get();
-        $features_headings = features::all();
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
-        return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','features_headings'));
+        if($user->can('product-edit'))
+        {
+            $cats = Products::where('id','=',$id)->where('user_id',$user_id)->first();
+
+            if(!$cats)
+            {
+                return redirect()->back();
+            }
+
+            $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','colors.max_height','price_tables.title as table')->get();
+            $features_data = product_features::where('product_id',$id)->get();
+            $ladderband_data = product_ladderbands::where('product_id',$id)->get();
+            $categories = Category::where('user_id',$user_id)->get();
+            $brands = Brand::where('user_id',$user_id)->get();
+            $models = Model1::where('brand_id',$cats->brand_id)->get();
+            $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
+            $features_headings = features::where('user_id',$user_id)->get();
+
+            return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','features_headings'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
 
     public function destroy($id)
     {
-        $cat = Products::findOrFail($id);
-        product_features::where('product_id',$id)->delete();
-        product_ladderbands::where('product_id',$id)->delete();
-        colors::where('product_id',$id)->delete();
-        estimated_prices::where('product_id',$id)->delete();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        if($cat->photo == null){
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('product-delete'))
+        {
+            $cat = Products::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$cat)
+            {
+                return redirect()->back();
+            }
+
+            product_features::where('product_id',$id)->delete();
+            product_ladderbands::where('product_id',$id)->delete();
+            colors::where('product_id',$id)->delete();
+            estimated_prices::where('product_id',$id)->delete();
+
+            if($cat->photo == null){
+                $cat->delete();
+                Session::flash('success', 'Product deleted successfully.');
+                return redirect()->route('admin-product-index');
+            }
+
+            \File::delete(public_path() .'/assets/images/'.$cat->photo);
             $cat->delete();
             Session::flash('success', 'Product deleted successfully.');
             return redirect()->route('admin-product-index');
         }
-
-        \File::delete(public_path() .'/assets/images/'.$cat->photo);
-        handyman_products::where('product_id',$id)->delete();
-        $cat->delete();
-        Session::flash('success', 'Product deleted successfully.');
-        return redirect()->route('admin-product-index');
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 }

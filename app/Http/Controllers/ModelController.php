@@ -24,25 +24,66 @@ class ModelController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:user');
     }
 
     public function index()
     {
-        $cats = Model1::leftjoin('brands','brands.id','=','models.brand_id')->orderBy('models.id','desc')->select('models.*','brands.cat_name as brand')->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.model.index',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('user-models'))
+        {
+            $cats = Model1::leftjoin('brands','brands.id','=','models.brand_id')->where('models.user_id',$user_id)->orderBy('models.id','desc')->select('models.*','brands.cat_name as brand')->get();
+
+            return view('admin.model.index',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function create()
     {
-        $brands = Brand::all();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.model.create',compact('brands'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('model-create'))
+        {
+            $brands = Brand::where('user_id',$user_id)->get();
+
+            return view('admin.model.create',compact('brands'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function store(StoreValidationRequest2 $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
         if($request->cat_id)
         {
             $cat = Model1::where('id',$request->cat_id)->first();
@@ -55,7 +96,7 @@ class ModelController extends Controller
         }
 
         $input = $request->all();
-
+        $input['user_id'] = $user_id;
 
         if($file = $request->file('photo'))
         {
@@ -71,10 +112,32 @@ class ModelController extends Controller
 
     public function edit($id)
     {
-        $cats = Model1::where('id','=',$id)->first();
-        $brands = Brand::all();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.model.create',compact('cats','brands'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('model-edit'))
+        {
+            $cats = Model1::where('id','=',$id)->where('user_id',$user_id)->first();
+
+            if(!$cats)
+            {
+                return redirect()->back();
+            }
+
+            $brands = Brand::where('user_id',$user_id)->get();
+
+            return view('admin.model.create',compact('cats','brands'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function update(UpdateValidationRequest $request, $id)
@@ -146,17 +209,38 @@ class ModelController extends Controller
 
     public function destroy($id)
     {
-        $cat = Model1::findOrFail($id);
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        if($cat->photo == null){
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('model-delete'))
+        {
+            $cat = Model1::where('id','=',$id)->where('user_id',$user_id)->first();
+
+            if(!$cat)
+            {
+                return redirect()->back();
+            }
+
+            if($cat->photo == null){
+                $cat->delete();
+                Session::flash('success', 'Model deleted successfully.');
+                return redirect()->route('admin-model-index');
+            }
+
+            \File::delete(public_path() .'/assets/images/'.$cat->photo);
             $cat->delete();
             Session::flash('success', 'Model deleted successfully.');
             return redirect()->route('admin-model-index');
         }
-
-        \File::delete(public_path() .'/assets/images/'.$cat->photo);
-        $cat->delete();
-        Session::flash('success', 'Model deleted successfully.');
-        return redirect()->route('admin-model-index');
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 }

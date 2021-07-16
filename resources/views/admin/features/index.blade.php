@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('content')
     <div class="right-side">
@@ -12,7 +12,13 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
                                         <h2>Features</h2>
-                                        <a href="{{route('admin-feature-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add New Feature</a>
+
+                                        @if(auth()->user()->can('create-feature'))
+
+                                            <a href="{{route('admin-feature-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add New Feature</a>
+
+                                        @endif
+
                                     </div>
                                     <hr>
                                     <div>
@@ -38,8 +44,18 @@
                                                             <td>{{$item->title}}</td>
                                                             <td>{{$item->order_no + 1}}</td>
                                                             <td>
-                                                                <a href="{{route('admin-feature-edit',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
-                                                                <a href="{{route('admin-feature-delete',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
+                                                                @if(auth()->user()->can('edit-feature'))
+
+                                                                    <a href="{{route('admin-feature-edit',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
+
+                                                                @endif
+
+                                                                @if(auth()->user()->can('delete-feature'))
+
+                                                                        <a href="{{route('admin-feature-delete',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
+
+                                                                @endif
+
                                                             </td>
                                                         </tr>
                                                     @endforeach

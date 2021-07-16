@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\colors;
 use App\Service;
 use App\vats;
 use Illuminate\Http\Request;
@@ -22,23 +23,56 @@ class ServiceController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:user');
     }
 
     public function index()
     {
-        $services = Service::orderBy('id','desc')->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.service.index',compact('services'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('my-services'))
+        {
+            $services = Service::orderBy('id','desc')->where('user_id',$user_id)->get();
+
+            return view('admin.service.index',compact('services'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function create()
     {
-        return view('admin.service.create');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('service-create'))
+        {
+            return view('admin.service.create');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function store(StoreValidationRequest4 $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if($request->service_id)
         {
@@ -52,6 +86,7 @@ class ServiceController extends Controller
         }
 
         $input = $request->all();
+        $input['user_id'] = $user_id;
 
         if ($file = $request->file('photo'))
         {
@@ -67,26 +102,67 @@ class ServiceController extends Controller
 
     public function edit($id)
     {
-        $cats = Service::where('id','=',$id)->first();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.service.create',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('service-edit'))
+        {
+            $cats = Service::where('id','=',$id)->where('user_id',$user_id)->first();
+
+            if(!$cats)
+            {
+                return redirect()->back();
+            }
+
+            return view('admin.service.create',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
 
     public function destroy($id)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        $service = Service::findOrFail($id);
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
-        if($service->photo == null){
+        if($user->can('service-delete'))
+        {
+            $service = Service::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$service)
+            {
+                return redirect()->back();
+            }
+
+            if($service->photo == null){
+                $service->delete();
+                Session::flash('success', 'Service deleted successfully.');
+                return redirect()->route('admin-service-index');
+            }
+
+            \File::delete(public_path() .'/assets/images/'.$service->photo);
             $service->delete();
             Session::flash('success', 'Service deleted successfully.');
             return redirect()->route('admin-service-index');
         }
-
-        \File::delete(public_path() .'/assets/images/'.$service->photo);
-        $service->delete();
-        Session::flash('success', 'Service deleted successfully.');
-        return redirect()->route('admin-service-index');
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 }

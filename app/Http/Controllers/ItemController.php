@@ -23,26 +23,57 @@ class ItemController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:user');
     }
 
 
     public function index()
     {
-        $items = items::leftjoin('users','users.id','=','items.user_id')->orderBy('items.id','desc')->select('items.*','users.name','users.family_name')->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.item.index',compact('items'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('user-items'))
+        {
+            $items = items::leftjoin('users','users.id','=','items.user_id')->where('items.user_id',$user_id)->orderBy('items.id','desc')->select('items.*','users.name','users.family_name')->get();
+
+            return view('admin.item.index',compact('items'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function create()
     {
-        $handymen = User::where('role_id',2)->where('active',1)->get();
+        $user = Auth::guard('user')->user();
 
-        return view('admin.item.create',compact('handymen'));
+        if($user->can('create-item'))
+        {
+            return view('admin.item.create');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function store(StoreValidationRequest $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         $item = new items;
         $input = $request->all();
@@ -56,7 +87,7 @@ class ItemController extends Controller
         }
 
         $item->cat_name = $request->title;
-        $item->user_id = $request->handyman;
+        $item->user_id = $user_id;
         $item->photo = $photo;
         $item->description = $request->description;
         $item->rate = $request->rate;
@@ -69,11 +100,30 @@ class ItemController extends Controller
 
     public function edit($id)
     {
-        $item = items::findOrFail($id);
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        $handymen = User::where('role_id',2)->where('active',1)->get();
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
-        return view('admin.item.edit',compact('item','handymen'));
+        if($user->can('edit-item'))
+        {
+            $item = items::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$item)
+            {
+                return redirect()->back();
+            }
+
+            return view('admin.item.edit',compact('item'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function update(UpdateValidationRequest $request, $id)
@@ -110,18 +160,39 @@ class ItemController extends Controller
 
     public function destroy($id)
     {
-        $item = items::findOrFail($id);
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        if($item->photo == null){
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('delete-item'))
+        {
+            $item = items::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$item)
+            {
+                return redirect()->back();
+            }
+
+            if($item->photo == null){
+                $item->delete();
+                Session::flash('success', 'Item deleted successfully.');
+                return redirect()->route('admin-item-index');
+            }
+
+            unlink(public_path().'/assets/item_images/'.$item->photo);
             $item->delete();
             Session::flash('success', 'Item deleted successfully.');
             return redirect()->route('admin-item-index');
         }
-
-        unlink(public_path().'/assets/item_images/'.$item->photo);
-        $item->delete();
-        Session::flash('success', 'Item deleted successfully.');
-        return redirect()->route('admin-item-index');
+        else
+        {
+            return redirect()->route('user-login');
+        }
 
     }
 }

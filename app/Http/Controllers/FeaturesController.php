@@ -19,24 +19,58 @@ class FeaturesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:user');
     }
 
 
     public function index()
     {
-        $features = features::orderBy('id','desc')->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.features.index',compact('features'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('user-features'))
+        {
+            $features = features::where('user_id',$user_id)->orderBy('id','desc')->get();
+
+            return view('admin.features.index',compact('features'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function create()
     {
-        return view('admin.features.create');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('create-feature'))
+        {
+            return view('admin.features.create');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function store(Request $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
         if($request->heading_id)
         {
             features::where('id',$request->heading_id)->update(['title' => $request->title, 'order_no' => $request->order_no]);
@@ -45,7 +79,7 @@ class FeaturesController extends Controller
         else
         {
             $feature = new features;
-
+            $feature->user_id = $user_id;
             $feature->title = $request->title;
             $feature->order_no = $request->order_no;
             $feature->save();
@@ -58,19 +92,60 @@ class FeaturesController extends Controller
 
     public function edit($id)
     {
-        $feature = features::findOrFail($id);
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.features.create',compact('feature'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('edit-feature'))
+        {
+            $feature = features::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$feature)
+            {
+                return redirect()->back();
+            }
+
+            return view('admin.features.create',compact('feature'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function destroy($id)
     {
-        $feature = features::findOrFail($id);
-        $feature->delete();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        product_features::where('heading_id',$id)->delete();
-        Session::flash('success', 'Feature deleted successfully.');
-        return redirect()->route('admin-feature-index');
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('delete-feature'))
+        {
+            $feature = features::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$feature)
+            {
+                return redirect()->back();
+            }
+
+            $feature->delete();
+            Session::flash('success', 'Feature deleted successfully.');
+            return redirect()->route('admin-feature-index');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
 
     }
 }

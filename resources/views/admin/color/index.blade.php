@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('content')
     <div class="right-side">
@@ -85,12 +85,22 @@
                                                             <td>{{$color->product}}</td>
                                                             <td>{{$color->table}}</td>
                                                             <td>
-                                                                <a href="{{route('admin-color-edit',$color->id)}}"
-                                                                   class="btn btn-primary product-btn"><i
-                                                                        class="fa fa-edit"></i> View</a>
-                                                                <a href="{{route('admin-color-delete',$color->id)}}"
-                                                                   class="btn btn-danger product-btn"><i
-                                                                        class="fa fa-trash"></i> Remove</a>
+                                                                @if(auth()->user()->can('color-edit'))
+
+                                                                    <a href="{{route('admin-color-edit',$color->id)}}"
+                                                                       class="btn btn-primary product-btn"><i
+                                                                            class="fa fa-edit"></i> View</a>
+
+                                                                @endif
+
+                                                                @if(auth()->user()->can('color-delete'))
+
+                                                                        <a href="{{route('admin-color-delete',$color->id)}}"
+                                                                           class="btn btn-danger product-btn"><i
+                                                                                class="fa fa-trash"></i> Remove</a>
+
+                                                                @endif
+
                                                             </td>
                                                         </tr>
                                                     @endforeach

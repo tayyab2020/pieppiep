@@ -21,7 +21,7 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:user');
     }
 
     public function preparePayment()
@@ -48,18 +48,51 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $cats = Category::orderBy('id','desc')->get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.category.index',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('user-categories'))
+        {
+            $cats = Category::where('user_id',$user_id)->orderBy('id','desc')->get();
+
+            return view('admin.category.index',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function create()
     {
-        return view('admin.category.create');
+        $user = Auth::guard('user')->user();
+
+        if($user->can('category-create'))
+        {
+            return view('admin.category.create');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function store(StoreValidationRequest $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         $request['main_service'] = 1;
 
@@ -75,6 +108,7 @@ class CategoryController extends Controller
         }
 
         $input = $request->all();
+        $input['user_id'] = $user_id;
 
 
         if ($file = $request->file('photo'))
@@ -91,9 +125,30 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $cats = Category::where('id','=',$id)->first();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        return view('admin.category.create',compact('cats'));
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('category-edit'))
+        {
+            $cats = Category::where('id','=',$id)->where('user_id',$user_id)->first();
+
+            if(!$cats)
+            {
+                return redirect()->back();
+            }
+
+            return view('admin.category.create',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function update(UpdateValidationRequest $request, $id)
@@ -165,18 +220,38 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
 
-        $cat = Category::findOrFail($id);
-
-        if($cat->photo == null){
-         $cat->delete();
-         Session::flash('success', 'Category deleted successfully.');
-         return redirect()->route('admin-cat-index');
+        if($main_id)
+        {
+            $user_id = $main_id;
         }
 
-        \File::delete(public_path() .'/assets/images/'.$cat->photo);
-        $cat->delete();
-        Session::flash('success', 'Category deleted successfully.');
-        return redirect()->route('admin-cat-index');
+        if($user->can('category-delete'))
+        {
+            $cat = Category::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$cat)
+            {
+                return redirect()->back();
+            }
+
+            if($cat->photo == null){
+                $cat->delete();
+                Session::flash('success', 'Category deleted successfully.');
+                return redirect()->route('admin-cat-index');
+            }
+
+            \File::delete(public_path() .'/assets/images/'.$cat->photo);
+            $cat->delete();
+            Session::flash('success', 'Category deleted successfully.');
+            return redirect()->route('admin-cat-index');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 }

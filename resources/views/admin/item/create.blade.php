@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.handyman')
 
 @section('styles')
 
@@ -43,17 +43,6 @@
                                             <label class="control-label col-sm-4" for="blood_group_slug">Rate*</label>
                                             <div class="col-sm-6">
                                                 <input class="form-control" name="rate" id="blood_group_slug" placeholder="Enter Rate" required="" type="number">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_slug">Handyman*</label>
-                                            <div class="col-sm-6">
-                                                <select class="form-control" name="handyman" id="blood_group_slug" required="">
-                                                    @foreach($handymen as $key)
-                                                        <option value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
-                                                    @endforeach
-                                                </select>
                                             </div>
                                         </div>
 
