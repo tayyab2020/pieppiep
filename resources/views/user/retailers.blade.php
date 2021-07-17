@@ -12,7 +12,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
-                                        <h2>Suppliers</h2>
+                                        <h2>Retailers</h2>
                                     </div>
                                     <hr>
                                     <div>

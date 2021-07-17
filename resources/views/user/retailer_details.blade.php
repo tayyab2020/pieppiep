@@ -17,7 +17,7 @@
                             <span style="background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors}}"></span>
                         </div>
 
-                        <div class="login-title text-center" style="background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors}}">Supplier Details</div>
+                        <div class="login-title text-center" style="background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors}}">Retailer Details</div>
 
                         <div class="form-group" style="margin-top: 50px;display: inline-block;width: 100%;">
 
