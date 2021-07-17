@@ -285,15 +285,8 @@ class AdminUserController extends Controller
     public function index()
     {
         $users = User::where('role_id','=',2)->orderBy('created_at','desc')->get();
-        $products = array();
 
-        foreach ($users as $key) {
-
-            $products[] = handyman_products::leftjoin('products','products.id','=','handyman_products.product_id')->where('handyman_products.handyman_id',$key->id)->select('products.title')->get();
-
-        }
-
-        return view('admin.user.index',compact('users','products'));
+        return view('admin.user.index',compact('users'));
     }
 
     public function Suppliers()
@@ -303,7 +296,7 @@ class AdminUserController extends Controller
 
         foreach ($users as $key) {
 
-            $products[] = handyman_products::leftjoin('products','products.id','=','handyman_products.product_id')->where('handyman_products.handyman_id',$key->id)->select('products.title')->get();
+            $products[] = Products::leftjoin('users','users.id','=','products.user_id')->where('products.user_id',$key->id)->select('products.title')->get();
 
         }
 

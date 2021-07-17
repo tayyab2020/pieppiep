@@ -138,6 +138,30 @@
                 <a href="{{route('handyman-bookings')}}"><i class="fa fa-fw fa-book"></i> <span>{{$lang->mbt}}</span></a>
             </li>--}}
 
+            @if(auth()->user()->role_id == 2)
+
+                @if(auth()->user()->can('retailer-suppliers'))
+
+                    <li>
+                        <a href="{{route('suppliers')}}"><i class="fa fa-fw fa-file-text"></i> <span>Suppliers</span></a>
+                    </li>
+
+                @endif
+
+            @endif
+
+            @if(auth()->user()->role_id == 4)
+
+                @if(auth()->user()->can('supplier-retailers'))
+
+                    <li>
+                        <a href="{{route('retailers')}}"><i class="fa fa-fw fa-file-text"></i> <span>Retailers</span></a>
+                    </li>
+
+                @endif
+
+            @endif
+
             @if(auth()->user()->can('create-new-quotation'))
 
                 <li>

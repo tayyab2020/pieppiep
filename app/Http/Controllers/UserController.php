@@ -25,6 +25,7 @@ use App\quotation_invoices_data;
 use App\quotation_invoices;
 use App\quotes;
 use App\requests_q_a;
+use App\retailers_requests;
 use App\Service;
 use Illuminate\Http\Request;
 use App\User;
@@ -268,6 +269,197 @@ class UserController extends Controller
         {
             return redirect()->route('user-login');
         }
+    }
+
+    public function Retailers()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('supplier-retailers'))
+        {
+            $users = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.role_id','=',2)->where('retailers_requests.supplier_id','=',$user_id)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status')->get();
+
+            return view('user.retailers',compact('users'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function DetailsRetailer($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('retailer-details'))
+        {
+            $user = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.role_id','=',2)->where('users.id',$id)->where('retailers_requests.supplier_id','=',$user_id)->first();
+
+            if(!$user)
+            {
+                return redirect()->back();
+            }
+
+            return view('user.retailer_details',compact('user'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function AcceptRetailerRequest(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $supplier = User::where('id',$user_id)->first();
+        $supplier_name = $supplier->name;
+        $retailer = User::where('id',$request->retailer_id)->first();
+        $retailer_email = $retailer->email;
+
+        retailers_requests::where('retailer_id',$request->retailer_id)->where('supplier_id',$user_id)->update(['status' => 1]);
+
+        /*\Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
+            $message->to($retailer_email)
+                ->from('info@vloerofferte.nl')
+                ->subject('Request Accepted!')
+                ->setBody("Supplier Mr/Mrs " . $supplier_name . " has accepted your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+        });*/
+
+        Session::flash('success', 'Request accepted successfully!');
+
+        return redirect()->back();
+    }
+
+    public function Suppliers()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('retailer-suppliers'))
+        {
+            $users = User::leftjoin('retailers_requests', function($join) use($user_id){
+                $join->on('users.id', '=', 'retailers_requests.supplier_id');
+                $join->where('retailers_requests.retailer_id',$user_id);
+            })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status')->get();
+
+            $products = array();
+
+            foreach ($users as $key) {
+
+                if($key->status)
+                {
+                    $products[] = Products::leftjoin('users','users.id','=','products.user_id')->where('products.user_id',$key->id)->select('products.title')->get();
+                }
+                else
+                {
+                    $products[] = array();
+                }
+
+            }
+
+            return view('user.suppliers',compact('users','products'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function DetailsSupplier($id)
+    {
+        $user = Auth::guard('user')->user();
+
+        if($user->can('supplier-details'))
+        {
+            $user = User::where('id',$id)->where('role_id','=',4)->first();
+
+            if(!$user)
+            {
+                return redirect()->back();
+            }
+
+            return view('user.supplier_details',compact('user'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function SendRequestSupplier(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $retailer = User::where('id',$user_id)->first();
+        $retailer_name = $retailer->name;
+        $supplier = User::where('id',$request->supplier_id)->first();
+        $supplier_email = $supplier->email;
+
+        $check = retailers_requests::where('retailer_id',$user_id)->where('supplier_id',$request->supplier_id)->first();
+
+        if($check)
+        {
+            \Mail::send(array(), array(), function ($message) use ($supplier_email, $retailer_name) {
+                $message->to($supplier_email)
+                    ->from('info@vloerofferte.nl')
+                    ->subject('Retailer Request!')
+                    ->setBody("Retailer Mr/Mrs " . $retailer_name . " request for the client role is pending for your further action. Visit your dashboard panel to view details.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+            });
+        }
+        else
+        {
+            $post = new retailers_requests;
+            $post->retailer_id = $user_id;
+            $post->supplier_id = $request->supplier_id;
+            $post->status = 0;
+            $post->save();
+
+            \Mail::send(array(), array(), function ($message) use ($supplier_email, $retailer_name) {
+                $message->to($supplier_email)
+                    ->from('info@vloerofferte.nl')
+                    ->subject('Retailer Request!')
+                    ->setBody("A retailer Mr/Mrs " . $retailer_name . " submitted request to become your client. Visit your dashboard panel to view details.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+            });
+        }
+
+        Session::flash('success', 'Request submitted successfully!');
+
+        return redirect()->back();
     }
 
     public function HandymanQuotations($id = '')

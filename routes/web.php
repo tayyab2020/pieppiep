@@ -283,6 +283,14 @@
   Route::get('/features/edit/{id}', 'FeaturesController@edit')->name('admin-feature-edit');
   Route::post('/features/update/{id}', 'FeaturesController@update')->name('admin-feature-update');
   Route::get('/features/delete/{id}', 'FeaturesController@destroy')->name('admin-feature-delete');
+
+  Route::get('/suppliers', 'UserController@Suppliers')->name('suppliers');
+  Route::post('/send-request-supplier', 'UserController@SendRequestSupplier')->name('send-request-supplier');
+  Route::get('/suppliers/details/{id}', 'UserController@DetailsSupplier')->name('supplier-details');
+
+  Route::get('/retailers', 'UserController@Retailers')->name('retailers');
+  Route::get('/retailers/details/{id}', 'UserController@DetailsRetailer')->name('retailer-details');
+  Route::post('/accept-retailer-request', 'UserController@AcceptRetailerRequest')->name('accept-retailer-request');
   });
 
   Route::get('finalize', 'FrontendController@finalize');
