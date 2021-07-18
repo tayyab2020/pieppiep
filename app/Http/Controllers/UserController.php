@@ -284,7 +284,7 @@ class UserController extends Controller
 
         if($user->can('supplier-retailers'))
         {
-            $users = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.role_id','=',2)->where('retailers_requests.supplier_id','=',$user_id)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status')->get();
+            $users = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.role_id','=',2)->where('retailers_requests.supplier_id','=',$user_id)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
 
             return view('user.retailers',compact('users'));
         }
@@ -338,16 +338,92 @@ class UserController extends Controller
         $retailer = User::where('id',$request->retailer_id)->first();
         $retailer_email = $retailer->email;
 
-        retailers_requests::where('retailer_id',$request->retailer_id)->where('supplier_id',$user_id)->update(['status' => 1]);
+        retailers_requests::where('retailer_id',$request->retailer_id)->where('supplier_id',$user_id)->update(['status' => 1, 'active' => 1]);
 
-        /*\Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
+        \Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
             $message->to($retailer_email)
                 ->from('info@vloerofferte.nl')
                 ->subject('Request Accepted!')
                 ->setBody("Supplier Mr/Mrs " . $supplier_name . " has accepted your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
-        });*/
+        });
 
         Session::flash('success', 'Request accepted successfully!');
+
+        return redirect()->back();
+    }
+
+    public function SuspendRetailerRequest(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $supplier = User::where('id',$user_id)->first();
+        $supplier_name = $supplier->name;
+        $retailer = User::where('id',$request->retailer_id)->first();
+        $retailer_email = $retailer->email;
+
+        if($request->active)
+        {
+            retailers_requests::where('retailer_id',$request->retailer_id)->where('supplier_id',$user_id)->update(['status' => 1, 'active' => 1]);
+
+            \Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
+                $message->to($retailer_email)
+                    ->from('info@vloerofferte.nl')
+                    ->subject('Request Accepted!')
+                    ->setBody("Supplier Mr/Mrs " . $supplier_name . " has reactivated your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+            });
+
+            Session::flash('success', 'Request activated successfully!');
+        }
+        else
+        {
+            retailers_requests::where('retailer_id',$request->retailer_id)->where('supplier_id',$user_id)->update(['status' => 1, 'active' => 0]);
+
+            \Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
+                $message->to($retailer_email)
+                    ->from('info@vloerofferte.nl')
+                    ->subject('Request Accepted!')
+                    ->setBody("Supplier Mr/Mrs " . $supplier_name . " has suspended your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+            });
+
+            Session::flash('success', 'Request suspended successfully!');
+        }
+
+        return redirect()->back();
+    }
+
+    public function DeleteRetailerRequest(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $supplier = User::where('id',$user_id)->first();
+        $supplier_name = $supplier->name;
+        $retailer = User::where('id',$request->retailer_id)->first();
+        $retailer_email = $retailer->email;
+
+        retailers_requests::where('retailer_id',$request->retailer_id)->where('supplier_id',$user_id)->delete();
+
+        \Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
+            $message->to($retailer_email)
+                ->from('info@vloerofferte.nl')
+                ->subject('Request Accepted!')
+                ->setBody("Supplier Mr/Mrs " . $supplier_name . " has deleted your request. You can no longer see details of this supplier.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+        });
+
+        Session::flash('success', 'Request deleted successfully!');
 
         return redirect()->back();
     }
@@ -368,13 +444,13 @@ class UserController extends Controller
             $users = User::leftjoin('retailers_requests', function($join) use($user_id){
                 $join->on('users.id', '=', 'retailers_requests.supplier_id');
                 $join->where('retailers_requests.retailer_id',$user_id);
-            })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status')->get();
+            })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
 
             $products = array();
 
             foreach ($users as $key) {
 
-                if($key->status)
+                if($key->status && $key->active)
                 {
                     $products[] = Products::leftjoin('users','users.id','=','products.user_id')->where('products.user_id',$key->id)->select('products.title')->get();
                 }

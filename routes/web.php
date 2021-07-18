@@ -291,6 +291,8 @@
   Route::get('/retailers', 'UserController@Retailers')->name('retailers');
   Route::get('/retailers/details/{id}', 'UserController@DetailsRetailer')->name('retailer-details');
   Route::post('/accept-retailer-request', 'UserController@AcceptRetailerRequest')->name('accept-retailer-request');
+  Route::post('/suspend-retailer-request', 'UserController@SuspendRetailerRequest')->name('suspend-retailer-request');
+  Route::post('/delete-retailer-request', 'UserController@DeleteRetailerRequest')->name('delete-retailer-request');
   });
 
   Route::get('finalize', 'FrontendController@finalize');

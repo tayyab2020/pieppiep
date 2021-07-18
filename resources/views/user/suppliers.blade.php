@@ -27,6 +27,7 @@
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">Supplier's Photo</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Supplier's Company Name</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Email</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Status</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Products</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">Actions</th>
 
@@ -45,6 +46,28 @@
                                                             <td>{{$user->company_name}}</td>
 
                                                             <td>{{$user->email}}</td>
+
+                                                            <td>
+
+                                                                @if($user->status != 1)
+
+                                                                    <button class="btn btn-info">Not Requested</button>
+
+                                                                @else
+
+                                                                    @if($user->active != 1)
+
+                                                                        <button class="btn btn-warning">Suspended</button>
+
+                                                                    @else
+
+                                                                        <button class="btn btn-success">Active</button>
+
+                                                                    @endif
+
+                                                                @endif
+
+                                                            </td>
 
                                                             <td>
 
@@ -76,7 +99,11 @@
 
                                                                 @if(auth()->user()->can('supplier-details'))
 
-                                                                    <a href="{{route('supplier-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;"><i class="fa fa-user" ></i> Details</a>
+                                                                        @if($user->active)
+
+                                                                            <a href="{{route('supplier-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;"><i class="fa fa-user" ></i> Details</a>
+
+                                                                        @endif
 
                                                                 @endif
 
@@ -182,6 +209,7 @@
             "aoColumns": [
                 { "sWidth": "" }, // 1st column width
                 { "sWidth": "200px" }, // 2nd column width
+                { "sWidth": "" },
                 { "sWidth": "" },
                 { "sWidth": "" },
                 { "sWidth": "100px" },
