@@ -136,7 +136,7 @@
 
                                                                                     @foreach($suppliers as $key)
 
-                                                                                        <option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
+                                                                                        <option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
 
                                                                                     @endforeach
 
@@ -213,7 +213,7 @@
 
                                                                                 @foreach($suppliers as $key)
 
-                                                                                    <option value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
+                                                                                    <option value="{{$key->id}}">{{$key->company_name}}</option>
 
                                                                                 @endforeach
 
@@ -1418,7 +1418,7 @@
                         '\n' +
                         '                                                                    @foreach($suppliers as $key)\n' +
                         '\n' +
-                        '                                                                        <option value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>\n' +
+                        '                                                                        <option value="{{$key->id}}">{{$key->company_name}}</option>\n' +
                         '\n' +
                         '                                                                     @endforeach\n' +
                         '\n' +
