@@ -85,10 +85,10 @@
                                                                 <span class="tooltiptext">Save</span>
                                                             </span>
 
-                                                                <span class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
+                                                                <a href="{{Request::url()}}" class="tooltip1" style="cursor: pointer;font-size: 20px;margin-right: 10px;">
                                                                 <i class="fa fa-fw fa-close"></i>
                                                                 <span class="tooltiptext">Close</span>
-                                                            </span>
+                                                            </a>
 
                                                             </div>
 
@@ -100,8 +100,8 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th style="padding: 5px;"></th>
+                                                                    <th @if(auth()->user()->role_id == 4) style="display: none;" @endif>Supplier</th>
                                                                     <th>Product</th>
-                                                                    <th>Supplier</th>
                                                                     <th>Color</th>
                                                                     <th>Width</th>
                                                                     <th>Height</th>
@@ -128,23 +128,31 @@
                                                                             <input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
                                                                             <input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
                                                                             <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
-                                                                            <td class="products">
-                                                                                <select name="products[]" class="js-data-example-ajax">
+
+                                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>
+                                                                                <select name="suppliers[]" class="js-data-example-ajax1">
 
                                                                                     <option value=""></option>
 
-                                                                                    @foreach($products as $key)
+                                                                                    @foreach($suppliers as $key)
 
-                                                                                        <option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+                                                                                        <option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
 
                                                                                     @endforeach
 
                                                                                 </select>
                                                                             </td>
-                                                                            <td class="suppliers">
-                                                                                <select name="suppliers[]" class="js-data-example-ajax1">
+
+                                                                            <td class="products">
+                                                                                <select name="products[]" class="js-data-example-ajax">
 
                                                                                     <option value=""></option>
+
+                                                                                    @foreach($supplier_products[$i] as $key)
+
+                                                                                        <option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+
+                                                                                    @endforeach
 
                                                                                 </select>
                                                                             </td>
@@ -198,6 +206,19 @@
                                                                         <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
                                                                         <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
                                                                         <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+                                                                        <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>
+                                                                            <select name="suppliers[]" class="js-data-example-ajax1">
+
+                                                                                <option value=""></option>
+
+                                                                                @foreach($suppliers as $key)
+
+                                                                                    <option value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
+
+                                                                                @endforeach
+
+                                                                            </select>
+                                                                        </td>
                                                                         <td class="products">
                                                                             <select name="products[]" class="js-data-example-ajax">
 
@@ -208,13 +229,6 @@
                                                                                     <option value="{{$key->id}}">{{$key->title}}</option>
 
                                                                                 @endforeach
-
-                                                                            </select>
-                                                                        </td>
-                                                                        <td class="suppliers">
-                                                                            <select name="suppliers[]" class="js-data-example-ajax1">
-
-                                                                                <option value=""></option>
 
                                                                             </select>
                                                                         </td>
@@ -436,119 +450,119 @@
 
                 </form>
 
-                <div id="cover"></div>
-
-                <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-
-                        <form id="quote_form" method="post" action="{{route('user.quote')}}">
-
-                            <input type="hidden" name="_token" value="{{@csrf_token()}}">
-
-                            <div class="modal-content">
-
-                                <div class="modal-header">
-                                    <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
-                                </div>
-
-                                <div class="modal-body" id="myWizard" style="display: inline-block;">
-
-                                    <input type="hidden" id="token" name="token" value="{{csrf_token()}}">
-                                    <input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
-                                    <input type="hidden" id="handyman_name" name="handyman_name" value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
-
-                                    <div class="form-group col-sm-6">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}" type="text">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-sm-6">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <input id="family_name" name="family_name" class="form-control validation" placeholder="{{$lang->fn}}" type="text">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-sm-6">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}" type="text">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-sm-6">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <input id="address" name="address" class="form-control validation" placeholder="{{$lang->ad}}" type="text">
-                                            <input type="hidden" id="check_address" value="0">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group col-sm-6">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <input id="postcode" name="postcode" class="form-control validation" readonly placeholder="{{$lang->pc}}" type="text">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group col-sm-6">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <input id="city" name="city" class="form-control validation" placeholder="{{$lang->ct}}" readonly type="text">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-sm-6">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <input id="phone" name="phone" class="form-control validation" placeholder="{{$lang->pn}}" type="text">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-sm-6">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-envelope"></i>
-                                            </div>
-                                            <input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}" type="email">
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;" class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
-                                </div>
-
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-
             </div>
 
         </div>
 
+    </div>
+
+    <div id="cover"></div>
+
+    <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+
+            <form id="quote_form" method="post" action="{{route('user.quote')}}">
+
+                <input type="hidden" name="_token" value="{{@csrf_token()}}">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
+                    </div>
+
+                    <div class="modal-body" id="myWizard" style="display: inline-block;">
+
+                        <input type="hidden" id="token" name="token" value="{{csrf_token()}}">
+                        <input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
+                        <input type="hidden" id="handyman_name" name="handyman_name" value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="family_name" name="family_name" class="form-control validation" placeholder="{{$lang->fn}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="address" name="address" class="form-control validation" placeholder="{{$lang->ad}}" type="text">
+                                <input type="hidden" id="check_address" value="0">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="postcode" name="postcode" class="form-control validation" readonly placeholder="{{$lang->pc}}" type="text">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="city" name="city" class="form-control validation" placeholder="{{$lang->ct}}" readonly type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input id="phone" name="phone" class="form-control validation" placeholder="{{$lang->pn}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-envelope"></i>
+                                </div>
+                                <input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}" type="email">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;" class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
     </div>
 
     <style>
@@ -1049,7 +1063,7 @@
             $(".js-data-example-ajax").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "{{__('text.Select Products')}}",
+                placeholder: "{{__('text.Select Product')}}",
                 allowClear: true,
                 "language": {
                     "noResults": function(){
@@ -1077,6 +1091,62 @@
 
                 $('#total_amount').val(total);
             }
+
+
+            $(document).on('change', ".js-data-example-ajax1", function(e){
+
+                var current = $(this);
+
+                var id = current.val();
+                var row_id = current.parent().parent().data('id');
+                var options = '';
+                current.parent().parent().find('#area_conflict').val(0);
+
+                $.ajax({
+                    type:"GET",
+                    data: "id=" + id,
+                    url: "<?php echo url('/aanbieder/get-supplier-products')?>",
+                    success: function(data) {
+
+                        $('#menu1').find(`[data-id='${row_id}']`).remove();
+
+                        current.parent().parent().find('#ladderband').val(0);
+                        current.parent().parent().find('#ladderband_value').val(0);
+                        current.parent().parent().find('#ladderband_price_impact').val(0);
+                        current.parent().parent().find('#ladderband_impact_type').val(0);
+                        current.parent().parent().find('.price').text('');
+                        current.parent().parent().find('#row_total').val('');
+
+                        $.each(data, function(index, value) {
+
+                            if(value.title)
+                            {
+                                var opt = '<option value="'+value.id+'" >'+value.title+'</option>';
+
+                                options = options + opt;
+                            }
+
+                        });
+
+                        current.parent().parent().find('.products').children('select').find('option')
+                            .remove()
+                            .end()
+                            .append('<option value="">Select Product</option>'+options);
+
+
+                        current.parent().parent().find('.color').children('select').find('option')
+                            .remove()
+                            .end()
+                            .append('<option value="">Select Color</option>');
+                        current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val('');
+                        current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val('');
+
+                        calculate_total();
+
+                    }
+                });
+
+            });
 
 
             $(document).on('change', ".js-data-example-ajax", function(e){
@@ -1154,7 +1224,7 @@
             $(".js-data-example-ajax2").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "",
+                placeholder: "Select Color",
                 allowClear: true,
                 "language": {
                     "noResults": function(){
@@ -1170,10 +1240,10 @@
 
                 var color = current.val();
 
-                var width = current.parent().parent().find('.width').find('input').val();
+                var width = current.parent().parent().find('.width').find('.m-input').val();
                 width = width.replace(/\,/g, '.');
 
-                var height = current.parent().parent().find('.height').find('input').val();
+                var height = current.parent().parent().find('.height').find('.m-input').val();
                 height = height.replace(/\,/g, '.');
 
                 var product = current.parent().parent().find('.products').find('select').val();
@@ -1322,7 +1392,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,price = null,products = null,product = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0)
+            function add_row(copy = false,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1341,6 +1411,19 @@
                         '                                                            <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
                         '                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
                         '                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
+                        '                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>\n' +
+                        '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
+                        '\n' +
+                        '                                                                    <option value=""></option>\n' +
+                        '\n' +
+                        '                                                                    @foreach($suppliers as $key)\n' +
+                        '\n' +
+                        '                                                                        <option value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>\n' +
+                        '\n' +
+                        '                                                                     @endforeach\n' +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </td>\n' +
                         '                                                            <td class="products">\n' +
                         '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
                         '\n' +
@@ -1351,13 +1434,6 @@
                         '                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
                         '\n' +
                         '                                                                    @endforeach\n' +
-                        '\n' +
-                        '                                                                </select>\n' +
-                        '                                                            </td>\n' +
-                        '                                                            <td class="suppliers">\n' +
-                        '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
-                        '\n' +
-                        '                                                                    <option value=""></option>\n' +
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
@@ -1399,7 +1475,7 @@
                     last_row.find(".js-data-example-ajax").select2({
                         width: '100%',
                         height: '200px',
-                        placeholder: "{{__('text.Select Products')}}",
+                        placeholder: "{{__('text.Select Product')}}",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -1423,7 +1499,7 @@
                     last_row.find(".js-data-example-ajax2").select2({
                         width: '100%',
                         height: '200px',
-                        placeholder: "",
+                        placeholder: "Select Color",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -1444,18 +1520,20 @@
                         '                                                            <input type="hidden" value="'+ladderband_price_impact+'" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
                         '                                                            <input type="hidden" value="'+ladderband_impact_type+'" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
                         '                                                            <input type="hidden" value="'+area_conflict+'" id="area_conflict" name="area_conflict[]">\n' +
+                        '                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>\n' +
+                        '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
+                        '\n' +
+                        suppliers +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            <input type="hidden" name="sub_impact_value" id="sub_impact_value" value="0">\n' +
+                        '                                                            </td>\n' +
                         '                                                            <td class="products">\n' +
                         '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
                         '\n' +
                         products +
                         '\n' +
                         '                                                                </select>\n' +
-                        '                                                            </td>\n' +
-                        '                                                            <td class="suppliers">\n' +
-                        '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
-                        '                                                                <option value=""></option>' +
-                        '                                                                </select>\n' +
-                        '                                                            <input type="hidden" name="sub_impact_value" id="sub_impact_value" value="0">\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="color">\n' +
                         '                                                                <select name="colors[]" class="js-data-example-ajax2">\n' +
@@ -1491,6 +1569,7 @@
                     var last_row = $('#products_table tbody tr:last');
 
                     last_row.find('.js-data-example-ajax').val(product);
+                    last_row.find('.js-data-example-ajax1').val(supplier);
                     last_row.find('.js-data-example-ajax2').val(color);
 
                     if(features)
@@ -1517,7 +1596,7 @@
                     last_row.find(".js-data-example-ajax").select2({
                         width: '100%',
                         height: '200px',
-                        placeholder: "{{__('text.Select Products')}}",
+                        placeholder: "{{__('text.Select Product')}}",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -1541,7 +1620,7 @@
                     last_row.find(".js-data-example-ajax2").select2({
                         width: '100%',
                         height: '200px',
-                        placeholder: "",
+                        placeholder: "Select Color",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -1628,6 +1707,23 @@
                 }
 
 
+                $("[name='suppliers[]']").each(function(i, obj) {
+
+                    if(!$(this).parent().hasClass('hide'))
+                    {
+                        if(!obj.value)
+                        {
+                            flag = 1;
+                            $(obj).next().find('.select2-selection').css('border','1px solid red');
+                        }
+                        else
+                        {
+                            $(obj).next().find('.select2-selection').css('border','0');
+                        }
+                    }
+
+                });
+
                 $("[name='products[]']").each(function(i, obj) {
 
                     if(!obj.value)
@@ -1700,8 +1796,8 @@
                     if(conflict_flag == 1)
                     {
                         flag = 1;
-                        $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','1px solid red');
-                        $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','1px solid red');
+                        $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border','1px solid red');
+                        $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border','1px solid red');
                     }
                     else
                     {
@@ -1710,41 +1806,41 @@
                         if(area_conflict == 3)
                         {
                             flag = 1;
-                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','1px solid red');
-                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','1px solid red');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border','1px solid red');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border','1px solid red');
                         }
                         else if(area_conflict == 2)
                         {
                             flag = 1;
-                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','0');
-                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','1px solid red');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border','0');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border','1px solid red');
                         }
                         else if(area_conflict == 1)
                         {
                             flag = 1;
-                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','1px solid red');
-                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','0');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border','1px solid red');
+                            $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border','0');
                         }
                         else
                         {
-                            if(!$('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').val())
+                            if(!$('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('.m-input').val())
                             {
                                 flag = 1;
-                                $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','1px solid red');
+                                $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border','1px solid red');
                             }
                             else
                             {
-                                $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('input').css('border','0');
+                                $('#products_table tbody').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border','0');
                             }
 
-                            if(!$('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').val())
+                            if(!$('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('.m-input').val())
                             {
                                 flag = 1;
-                                $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','1px solid red');
+                                $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border','1px solid red');
                             }
                             else
                             {
-                                $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('input').css('border','0');
+                                $('#products_table tbody').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border','0');
                             }
                         }
                     }
@@ -1780,6 +1876,8 @@
                 var price = current.find('#row_total').val();
                 var products = current.find('.js-data-example-ajax').html();
                 var product = current.find('.js-data-example-ajax').val();
+                var suppliers = current.find('.js-data-example-ajax1').html();
+                var supplier = current.find('.js-data-example-ajax1').val();
                 var colors = current.find('.js-data-example-ajax2').html();
                 var color = current.find('.js-data-example-ajax2').val();
                 var width = current.find('.width').find('.m-input').val();
@@ -1791,7 +1889,7 @@
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
 
-                add_row(true,price,products,product,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict);
+                add_row(true,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict);
 
             });
 
@@ -1919,7 +2017,7 @@
                 var width = current.val();
                 width = width.replace(/\,/g, '.');
 
-                var height = current.parent().parent().next('.height').find('input').val();
+                var height = current.parent().parent().next('.height').find('.m-input').val();
                 height = height.replace(/\,/g, '.');
 
                 var color = current.parent().parent().parent().find('.color').find('select').val();
@@ -2060,7 +2158,7 @@
                 var height = current.val();
                 height = height.replace(/\,/g, '.');
 
-                var width = current.parent().parent().prev('.width').find('input').val();
+                var width = current.parent().parent().prev('.width').find('.m-input').val();
                 width = width.replace(/\,/g, '.');
 
                 var color = current.parent().parent().parent().find('.color').find('select').val();
@@ -2198,8 +2296,8 @@
                 var row_id = current.parent().parent().parent().data('id');
                 var feature_select = current.val();
                 var id = current.parent().find('.f_id').val();
-                var width = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.width').find('input').val();
-                var height = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.height').find('input').val();
+                var width = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
+                var height = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
                 var product_id = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.products').find('select').val();
                 var ladderband_value = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#ladderband_value').val();
                 var ladderband_price_impact = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val();
@@ -2313,6 +2411,7 @@
                                 });
 
                                 $('#myModal').modal('toggle');
+                                $('.modal-backdrop').hide();
                             }
                         });
                     }

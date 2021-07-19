@@ -94,7 +94,7 @@
                                                                     @if(auth()->user()->can('retailer-details'))
 
                                                                         <a href="{{route('retailer-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;margin: 5px !important;"><i class="fa fa-user" ></i> Details</a>
-                                                                        
+
                                                                     @endif
 
                                                             </td>

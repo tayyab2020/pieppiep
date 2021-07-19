@@ -115,18 +115,42 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if($user->can('create-new-quotation'))
         {
-            $products = Products::all();
             $customers = User::where('parent_id', $user_id)->get();
 
-            return view('user.create_new_quotation', compact('products','customers'));
+            if($user->role_id == 2)
+            {
+                $products = array();
+                $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+                $suppliers = User::whereIn('id',$suppliers)->get();
+            }
+            else
+            {
+                $products = Products::where('user_id',$user_id)->get();
+                $suppliers = array();
+            }
+
+            return view('user.create_new_quotation', compact('products','customers','suppliers'));
         }
         else
         {
             return redirect()->route('user-login');
         }
+    }
+
+    public function GetSupplierProducts(Request $request)
+    {
+        $data = Products::where('user_id',$request->id)->get();
+
+        return $data;
     }
 
     public function GetColors(Request $request)
@@ -2259,9 +2283,9 @@ class UserController extends Controller
         }
 
         if ($id) {
-            $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.handyman_id', $user_id)->where('new_quotations.id', $id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+            $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.id', $id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
         } else {
-            $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.handyman_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+            $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
         }
 
         return view('user.quote_invoices', compact('invoices'));
@@ -2279,10 +2303,21 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        $products = Products::all();
         $customers = User::where('parent_id', $user_id)->get();
 
-        $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.handyman_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
+        if($user_role == 2)
+        {
+            $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+            $suppliers = User::whereIn('id',$suppliers)->get();
+            $products = array();
+        }
+        else
+        {
+            $products = Products::where('user_id',$user_id)->get();
+            $suppliers = array();
+        }
+
+        $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
         {
             $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
             ->select('new_quotations_features.*','features.title');
@@ -2294,6 +2329,7 @@ class UserController extends Controller
         }
 
 
+        $supplier_products = array();
         $sub_products = array();
         $colors = array();
         $features = array();
@@ -2302,6 +2338,7 @@ class UserController extends Controller
 
         foreach ($invoice as $i => $item)
         {
+            $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->get();
             $colors[$i] = colors::where('product_id',$item->product_id)->get();
 
             foreach ($item->features as $feature)
@@ -2317,7 +2354,7 @@ class UserController extends Controller
             }
         }
 
-        return view('user.create_new_quotation', compact('products','colors','features','customers','invoice','sub_products'));
+        return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','features','customers','invoice','sub_products'));
     }
 
     public function DownloadNewQuotation($id)
@@ -2385,7 +2422,7 @@ class UserController extends Controller
 
             $invoice = new new_quotations();
             $invoice->quotation_invoice_number = $quotation_invoice_number;
-            $invoice->handyman_id = $user_id;
+            $invoice->creator_id = $user_id;
             $invoice->user_id = $request->customer;
             $invoice->vat_percentage = 21;
             $invoice->subtotal = $request->total_amount;
@@ -2404,6 +2441,7 @@ class UserController extends Controller
 
             $invoice_items = new new_quotations_data;
             $invoice_items->quotation_id = $invoice->id;
+            $invoice_items->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
             $invoice_items->product_id = (int)$key;
             $invoice_items->row_id = $row_id;
             $invoice_items->color = $request->colors[$i];
