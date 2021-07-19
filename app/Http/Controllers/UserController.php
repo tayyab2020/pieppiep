@@ -2369,7 +2369,7 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        $invoice = new_quotations::where('id', $id)->where('handyman_id', $user_id)->first();
+        $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
 
         if (!$invoice) {
             return redirect()->route('new-quotations');
