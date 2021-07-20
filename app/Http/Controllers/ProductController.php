@@ -15,6 +15,8 @@ use App\product;
 use App\product_features;
 use App\product_ladderbands;
 use App\Products;
+use App\retailer_margins;
+use App\retailers_requests;
 use App\vats;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -60,14 +62,63 @@ class ProductController extends Controller
 
         if($user->can('user-products'))
         {
-            $cats = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('products.user_id',$user_id)->orderBy('products.id','desc')->select('products.*','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
+            if($user->role_id == 4)
+            {
+                $cats = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('products.user_id',$user_id)->orderBy('products.id','desc')->select('products.*','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
 
-            return view('admin.product.index',compact('cats'));
+                return view('admin.product.index',compact('cats'));
+            }
+            else
+            {
+                $cats = Products::leftjoin('retailers_requests','retailers_requests.supplier_id','=','products.user_id')->leftjoin('users','users.id','=','products.user_id')->leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('retailers_requests.retailer_id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->orderBy('products.id','desc')->select('products.*','users.company_name','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
+                $margins = array();
+
+                foreach ($cats as $cat)
+                {
+                    $margins[] = retailer_margins::where('retailer_id',$user_id)->where('product_id',$cat->id)->first();
+                }
+
+                return view('admin.product.index',compact('cats','margins'));
+            }
         }
         else
         {
             return redirect()->route('user-login');
         }
+    }
+
+    public function storeRetailerMargins(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+        $products = $request->product_ids;
+
+        foreach($products as $i => $key)
+        {
+            $check = retailer_margins::where('product_id',$key)->where('retailer_id',$user_id);
+
+            if($check->first())
+            {
+                $check->update(['margin' => $request->margin[$i] ? str_replace(',', '.', $request->margin[$i]) : 0]);
+            }
+            else
+            {
+                $post = new retailer_margins;
+                $post->product_id = $key;
+                $post->retailer_id = $user_id;
+                $post->margin = $request->margin[$i] ? str_replace(',', '.', $request->margin[$i]) : 0;
+                $post->save();
+            }
+        }
+
+        Session::flash('success', 'Task completed successfully.');
+        return redirect()->route('admin-product-index');
     }
 
     public function create()

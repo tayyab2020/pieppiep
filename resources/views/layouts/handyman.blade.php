@@ -288,57 +288,61 @@
                     <a href="#products" data-toggle="collapse" @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>Products</span></a>
                     <ul class="collapse list-unstyled submenu" id="products">
 
-                            @if(auth()->user()->can('user-products'))
+                        @if(auth()->user()->can('user-products'))
 
-                                <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> Products</a></li>
+                            <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 4) My Products @else Supplier Products @endif</a></li>
 
-                            @endif
+                        @endif
 
-                            @if(auth()->user()->can('user-colors'))
+                            @if(auth()->user()->role_id == 4)
 
-                                <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> Colors</a></li>
+                                @if(auth()->user()->can('user-colors'))
 
-                            @endif
+                                    <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> Colors</a></li>
 
-                            @if(auth()->user()->can('user-price-tables'))
+                                @endif
 
-                                 <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> Price Tables</a></li>
+                                @if(auth()->user()->can('user-price-tables'))
 
-                            @endif
+                                    <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> Price Tables</a></li>
 
-                            @if(auth()->user()->can('my-services'))
+                                @endif
 
-                                 <li><a href="{{route('admin-service-index')}}"><i class="fa fa-angle-right"></i> Services</a></li>
+                                @if(auth()->user()->can('my-services'))
 
-                            @endif
+                                    <li><a href="{{route('admin-service-index')}}"><i class="fa fa-angle-right"></i> Services</a></li>
 
-                            @if(auth()->user()->can('user-categories'))
+                                @endif
 
-                                 <li><a href="{{route('admin-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
+                                @if(auth()->user()->can('user-categories'))
 
-                            @endif
+                                    <li><a href="{{route('admin-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
 
-                            @if(auth()->user()->can('user-brands'))
+                                @endif
 
-                                 <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
+                                @if(auth()->user()->can('user-brands'))
 
-                            @endif
+                                    <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
 
-                            @if(auth()->user()->can('user-models'))
+                                @endif
 
-                                 <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
+                                @if(auth()->user()->can('user-models'))
 
-                            @endif
+                                    <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
 
-                            @if(auth()->user()->can('user-items'))
+                                @endif
 
-                                 <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
+                                @if(auth()->user()->can('user-items'))
 
-                            @endif
+                                    <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
 
-                            @if(auth()->user()->can('user-features'))
+                                @endif
 
-                                 <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
+                                @if(auth()->user()->can('user-features'))
+
+                                    <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
+
+                                @endif
 
                             @endif
 
