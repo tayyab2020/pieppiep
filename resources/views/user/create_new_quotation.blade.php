@@ -1252,9 +1252,18 @@
 
                 if(width && height && color && product)
                 {
+                    if($(this).parent().parent().find('.suppliers').hasClass('hide'))
+                    {
+                        var margin = 0;
+                    }
+                    else
+                    {
+                        var margin = 1;
+                    }
+
                     $.ajax({
                         type:"GET",
-                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height,
+                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height + "&margin=" + margin,
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
@@ -1302,6 +1311,17 @@
                                 else
                                 {
                                     var price = data[0].value;
+
+                                    if(margin == 1)
+                                    {
+                                        price = parseFloat(price);
+                                        var supplier_margin = data[2].margin;
+                                        var retailer_margin = data[2].retailer_margin;
+
+                                        price = (price / supplier_margin) * retailer_margin;
+                                        price = price.toFixed(2);
+                                    }
+
                                     var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;
@@ -2027,9 +2047,18 @@
 
                 if(width && height && color && product)
                 {
+                    if($(this).parent().parent().parent().find('.suppliers').hasClass('hide'))
+                    {
+                        var margin = 0;
+                    }
+                    else
+                    {
+                        var margin = 1;
+                    }
+
                     $.ajax({
                         type:"GET",
-                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height,
+                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height + "&margin=" + margin,
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
@@ -2077,6 +2106,17 @@
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
                                     var price = data[0].value;
+
+                                    if(margin == 1)
+                                    {
+                                        price = parseFloat(price);
+                                        var supplier_margin = data[2].margin;
+                                        var retailer_margin = data[2].retailer_margin;
+
+                                        price = (price / supplier_margin) * retailer_margin;
+                                        price = price.toFixed(2);
+                                    }
+
                                     var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;
@@ -2168,9 +2208,18 @@
 
                 if(width && height && color && product)
                 {
+                    if($(this).parent().parent().parent().find('.suppliers').hasClass('hide'))
+                    {
+                        var margin = 0;
+                    }
+                    else
+                    {
+                        var margin = 1;
+                    }
+
                     $.ajax({
                         type:"GET",
-                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height,
+                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height + "&margin=" + margin,
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
@@ -2218,6 +2267,17 @@
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
                                     var price = data[0].value;
+
+                                    if(margin == 1)
+                                    {
+                                        price = parseFloat(price);
+                                        var supplier_margin = data[2].margin;
+                                        var retailer_margin = data[2].retailer_margin;
+
+                                        price = (price / supplier_margin) * retailer_margin;
+                                        price = price.toFixed(2);
+                                    }
+
                                     var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;

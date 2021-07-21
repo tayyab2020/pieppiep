@@ -70,15 +70,12 @@ class ProductController extends Controller
             }
             else
             {
-                $cats = Products::leftjoin('retailers_requests','retailers_requests.supplier_id','=','products.user_id')->leftjoin('users','users.id','=','products.user_id')->leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('retailers_requests.retailer_id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->orderBy('products.id','desc')->select('products.*','users.company_name','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
-                $margins = array();
+                $cats = Products::leftJoin('retailer_margins', function($join) use($user_id){
+                    $join->on('products.id', '=', 'retailer_margins.product_id')
+                        ->where('retailer_margins.retailer_id', '=', $user_id);
+                })->leftjoin('retailers_requests','retailers_requests.supplier_id','=','products.user_id')->leftjoin('users','users.id','=','products.user_id')->leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('retailers_requests.retailer_id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->orderBy('products.id','desc')->select('products.*','retailer_margins.margin as retailer_margin','users.company_name','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
 
-                foreach ($cats as $cat)
-                {
-                    $margins[] = retailer_margins::where('retailer_id',$user_id)->where('product_id',$cat->id)->first();
-                }
-
-                return view('admin.product.index',compact('cats','margins'));
+                return view('admin.product.index',compact('cats'));
             }
         }
         else
@@ -109,11 +106,14 @@ class ProductController extends Controller
             }
             else
             {
-                $post = new retailer_margins;
-                $post->product_id = $key;
-                $post->retailer_id = $user_id;
-                $post->margin = $request->margin[$i] ? str_replace(',', '.', $request->margin[$i]) : 0;
-                $post->save();
+                if(is_numeric($request->margin[$i]))
+                {
+                    $post = new retailer_margins;
+                    $post->product_id = $key;
+                    $post->retailer_id = $user_id;
+                    $post->margin = str_replace(',', '.', $request->margin[$i]);
+                    $post->save();
+                }
             }
         }
 
@@ -241,6 +241,7 @@ class ProductController extends Controller
             }
         }
 
+        $input['margin'] = is_numeric($input['margin']) ? str_replace(',', '.',$input['margin']) : NULL;
 
         if($request->cat_id)
         {

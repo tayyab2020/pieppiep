@@ -162,6 +162,14 @@ class UserController extends Controller
 
     public function GetPrice(Request $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
         $request->width = (int)$request->width;
         $request->height = (int)$request->height;
         $max_x_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.x_axis');
@@ -187,7 +195,16 @@ class UserController extends Controller
 
                 }])->get();
 
-                $data = array($price,$features);
+                if($request->margin)
+                {
+                    $margin = Products::leftJoin('retailer_margins','retailer_margins.product_id','=','products.id')->where('products.id',$request->product)->where('retailer_margins.retailer_id', '=', $user_id)->select('products.margin','retailer_margins.margin as retailer_margin')->first();
+                }
+                else
+                {
+                    $margin = '';
+                }
+
+                $data = array($price,$features,$margin);
             }
         }
         else if($max_x_axis < $request->width && $max_y_axis < $request->height)

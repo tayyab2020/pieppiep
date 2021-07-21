@@ -74,6 +74,13 @@
                                                                     Title
                                                                 </th>
 
+                                                                <th class="sorting_asc" tabindex="0"
+                                                                    aria-controls="product-table_wrapper" rowspan="1"
+                                                                    colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                                    aria-label="Blood Group Name: activate to sort column descending">
+                                                                    Margin (%)
+                                                                </th>
+
                                                                 @if(auth()->user()->role_id == 4)
 
                                                                     <th class="sorting_asc" tabindex="0"
@@ -81,12 +88,6 @@
                                                                         colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                         aria-label="Blood Group Name: activate to sort column descending">
                                                                         Description
-                                                                    </th>
-                                                                    <th class="sorting_asc" tabindex="0"
-                                                                        aria-controls="product-table_wrapper" rowspan="1"
-                                                                        colspan="1" style="width: 144px;" aria-sort="ascending"
-                                                                        aria-label="Blood Group Name: activate to sort column descending">
-                                                                        Slug
                                                                     </th>
 
                                                                 @else
@@ -134,7 +135,7 @@
                                                                         aria-controls="product-table_wrapper" rowspan="1"
                                                                         colspan="1" style="width: 314px;"
                                                                         aria-label="Actions: activate to sort column ascending">
-                                                                        Margin
+                                                                        Retailer Margin (%)
                                                                     </th>
 
                                                                 @endif
@@ -149,11 +150,11 @@
                                                                             alt="Category's Photo" style="max-height: 100px;">
                                                                     </td>
                                                                     <td>{{$cat->title}}</td>
+                                                                    <td style="text-align: center;">{{$cat->margin}}</td>
 
                                                                     @if(auth()->user()->role_id == 4)
 
                                                                         <td>{!!$cat->description!!}</td>
-                                                                        <td>{{$cat->slug}}</td>
 
                                                                     @else
 
@@ -190,7 +191,7 @@
 
                                                                         <td>
                                                                             <input type="hidden" name="product_ids[]" value="{{$cat->id}}">
-                                                                            <input value="{{isset($margins[$i]) ? $margins[$i]->margin : ''}}" type="text" maskedformat="9,1" name="margin[]" class="form-control">
+                                                                            <input value="{{is_numeric($cat->retailer_margin) ? str_replace('.', ',',$cat->retailer_margin) : ''}}" type="text" maskedformat="9,1" name="margin[]" class="form-control">
                                                                         </td>
 
                                                                     @endif
