@@ -74,13 +74,6 @@
                                                                     Title
                                                                 </th>
 
-                                                                <th class="sorting_asc" tabindex="0"
-                                                                    aria-controls="product-table_wrapper" rowspan="1"
-                                                                    colspan="1" style="width: 144px;" aria-sort="ascending"
-                                                                    aria-label="Blood Group Name: activate to sort column descending">
-                                                                    Margin (%)
-                                                                </th>
-
                                                                 @if(auth()->user()->role_id == 4)
 
                                                                     <th class="sorting_asc" tabindex="0"
@@ -88,6 +81,13 @@
                                                                         colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                         aria-label="Blood Group Name: activate to sort column descending">
                                                                         Description
+                                                                    </th>
+
+                                                                    <th class="sorting_asc" tabindex="0"
+                                                                        aria-controls="product-table_wrapper" rowspan="1"
+                                                                        colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                                        aria-label="Blood Group Name: activate to sort column descending">
+                                                                        Margin (%)
                                                                     </th>
 
                                                                 @else
@@ -150,11 +150,11 @@
                                                                             alt="Category's Photo" style="max-height: 100px;">
                                                                     </td>
                                                                     <td>{{$cat->title}}</td>
-                                                                    <td style="text-align: center;">{{$cat->margin}}</td>
 
                                                                     @if(auth()->user()->role_id == 4)
 
                                                                         <td>{!!$cat->description!!}</td>
+                                                                        <td>{{$cat->margin}}</td>
 
                                                                     @else
 
@@ -191,7 +191,7 @@
 
                                                                         <td>
                                                                             <input type="hidden" name="product_ids[]" value="{{$cat->id}}">
-                                                                            <input value="{{is_numeric($cat->retailer_margin) ? str_replace('.', ',',$cat->retailer_margin) : ''}}" type="text" maskedformat="9,1" name="margin[]" class="form-control">
+                                                                            <input value="{{$cat->retailer_margin ? $cat->retailer_margin : $cat->margin}}" type="number" step="1" name="margin[]" class="form-control">
                                                                         </td>
 
                                                                     @endif
@@ -239,44 +239,6 @@
 
         $('#example').DataTable();
 
-        $(document).on('keypress', "input[name='margin[]']", function(e){
-
-            e = e || window.event;
-            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-            var val = String.fromCharCode(charCode);
-
-            if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-            {
-                e.preventDefault();
-                return false;
-            }
-
-            if(e.which == 44)
-            {
-                if(this.value.indexOf(',') > -1)
-                {
-                    e.preventDefault();
-                    return false;
-                }
-            }
-
-            var num = $(this).attr("maskedFormat").toString().split(',');
-            var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-            if (!regex.test(this.value)) {
-                this.value = this.value.substring(0, this.value.length - 1);
-            }
-
-        });
-
-        $(document).on('focusout', "input[name='margin[]']", function(e){
-
-            if($(this).val().slice($(this).val().length - 1) == ',')
-            {
-                var val = $(this).val();
-                val = val + '00';
-                $(this).val(val);
-            }
-        });
     </script>
 
 @endsection

@@ -102,7 +102,7 @@ class ProductController extends Controller
 
             if($check->first())
             {
-                $check->update(['margin' => $request->margin[$i] ? str_replace(',', '.', $request->margin[$i]) : 0]);
+                $check->update(['margin' => $request->margin[$i] ? $request->margin[$i] : 0]);
             }
             else
             {
@@ -111,7 +111,7 @@ class ProductController extends Controller
                     $post = new retailer_margins;
                     $post->product_id = $key;
                     $post->retailer_id = $user_id;
-                    $post->margin = str_replace(',', '.', $request->margin[$i]);
+                    $post->margin = $request->margin[$i] ? $request->margin[$i] : 0;
                     $post->save();
                 }
             }
@@ -241,7 +241,7 @@ class ProductController extends Controller
             }
         }
 
-        $input['margin'] = is_numeric($input['margin']) ? str_replace(',', '.',$input['margin']) : NULL;
+        $input['margin'] = is_numeric($input['margin']) ? $input['margin'] : NULL;
 
         if($request->cat_id)
         {

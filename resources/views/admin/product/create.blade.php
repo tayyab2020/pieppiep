@@ -56,7 +56,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_display_name">Margin (%)</label>
                                                             <div class="col-sm-6">
-                                                                <input value="{{isset($cats) ? str_replace('.', ',',$cats->margin) : null}}" class="form-control" name="margin" id="blood_group_display_name" placeholder="Enter Product margin" maskedformat="9,1" type="text">
+                                                                <input value="{{isset($cats) ? $cats->margin : null}}" class="form-control" name="margin" id="blood_group_display_name" placeholder="Enter Product margin" step="1" type="number">
                                                             </div>
                                                         </div>
 
@@ -939,45 +939,6 @@
                 '                                                        </div>');
 
 
-        });
-
-        $(document).on('keypress', "input[name='margin']", function(e){
-
-            e = e || window.event;
-            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-            var val = String.fromCharCode(charCode);
-
-            if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-            {
-                e.preventDefault();
-                return false;
-            }
-
-            if(e.which == 44)
-            {
-                if(this.value.indexOf(',') > -1)
-                {
-                    e.preventDefault();
-                    return false;
-                }
-            }
-
-            var num = $(this).attr("maskedFormat").toString().split(',');
-            var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-            if (!regex.test(this.value)) {
-                this.value = this.value.substring(0, this.value.length - 1);
-            }
-
-        });
-
-        $(document).on('focusout', "input[name='margin']", function(e){
-
-            if($(this).val().slice($(this).val().length - 1) == ',')
-            {
-                var val = $(this).val();
-                val = val + '00';
-                $(this).val(val);
-            }
         });
 
         $('body').on('click', '.remove-ladderband' ,function() {
