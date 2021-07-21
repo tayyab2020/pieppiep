@@ -1318,8 +1318,11 @@
                                         var supplier_margin = data[2].margin;
                                         var retailer_margin = data[2].retailer_margin;
 
-                                        price = (price / supplier_margin) * retailer_margin;
-                                        price = price.toFixed(2);
+                                        if(supplier_margin && retailer_margin)
+                                        {
+                                            price = (price / supplier_margin) * retailer_margin;
+                                            price = price.toFixed(2);
+                                        }
                                     }
 
                                     var org = data[0].value;
@@ -2113,8 +2116,11 @@
                                         var supplier_margin = data[2].margin;
                                         var retailer_margin = data[2].retailer_margin;
 
-                                        price = (price / supplier_margin) * retailer_margin;
-                                        price = price.toFixed(2);
+                                        if(supplier_margin && retailer_margin)
+                                        {
+                                            price = (price / supplier_margin) * retailer_margin;
+                                            price = price.toFixed(2);
+                                        }
                                     }
 
                                     var org = data[0].value;
@@ -2274,8 +2280,11 @@
                                         var supplier_margin = data[2].margin;
                                         var retailer_margin = data[2].retailer_margin;
 
-                                        price = (price / supplier_margin) * retailer_margin;
-                                        price = price.toFixed(2);
+                                        if(supplier_margin && retailer_margin)
+                                        {
+                                            price = (price / supplier_margin) * retailer_margin;
+                                            price = price.toFixed(2);
+                                        }
                                     }
 
                                     var org = data[0].value;
