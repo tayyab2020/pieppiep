@@ -506,7 +506,7 @@
     <!-- Page Content  -->
     <div id="content">
 
-        {{--<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
 
                 <button type="button" id="sidebarCollapse1" class="btn btn-info">
@@ -514,7 +514,7 @@
                 </button>
 
             </div>
-        </nav>--}}
+        </nav>
 
         @yield('content')
 
@@ -537,12 +537,16 @@
     var event_set = false;
     $(document).ready(function() {
 
-        $('#sidebar').hover(function () {
+        /*$('#sidebar').hover(function () {
 
             $('#sidebar').removeClass('active');
 
         }, function(){
             $('#sidebar').addClass('active');
+        });*/
+
+        $('#sidebarCollapse1').on('click', function () {
+            $('#sidebar').toggleClass('active');
         });
 
     });
@@ -628,9 +632,10 @@
     }
 
     #sidebar.active {
-        min-width: 80px;
+        /*min-width: 80px;
         max-width: 80px;
-        text-align: center;
+        text-align: center;*/
+        margin-left: -250px;
     }
 
     #sidebar:not(.active) h3
