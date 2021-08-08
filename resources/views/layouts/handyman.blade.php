@@ -678,6 +678,7 @@
         align-items: stretch;
         height: 100%;
         position: absolute;
+        width: 100%;
     }
 
     #sidebar {
