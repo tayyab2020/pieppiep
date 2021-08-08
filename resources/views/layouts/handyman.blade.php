@@ -57,13 +57,56 @@
     </script>
 
 </head>
-<body>
+<body style="overflow: hidden;">
+
+<div style="padding: 20px 0;border-bottom: 2px solid #0090e3c9;" class="container-fluid">
+
+    <div style="display: flex;flex-direction: row;align-items: center;">
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+
+            <button style="outline: none !important;background: #5bc0de !important;border-color: #46b8da !important;" type="button" id="sidebarCollapse1" class="btn btn-info">
+                <i class="fa fa-align-left"></i>
+            </button>
+
+        </div>
+
+        <div style="text-align: right;" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+
+            <a class="dropdown-toggle" href="#homeSubmenu" data-toggle="collapse"
+               aria-expanded="false">
+
+                <img style="width: 45px;height: 45px;border-radius: 100%;border: 1px solid #dddddd;margin-right: 10px;"
+                     src="{{ Auth::guard('user')->user()->photo ? asset('assets/images/'.Auth::guard('user')->user()->photo):"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG"}}"
+                     alt="profile image">
+
+                <span class="user-info">
+                    {{ Auth::guard('user')->user()->name}} {{Auth::guard('user')->user()->family_name}}
+                    <span>{{$lang->hmt}}</span>
+                </span>
+
+            </a>
+
+            <ul style="position: absolute;right: 20px;border: 1px solid rgb(190, 190, 190);text-align: left;margin: 0;z-index: 1000;background: white;border-radius: 5px;" class="collapse list-unstyled profile-submenu" id="homeSubmenu">
+
+                <li style="padding: 15px;"><a href=" {{ route('user-reset') }} "><i
+                            class="fa fa-fw fa-cog"></i> {{$lang->chnp}}</a></li>
+                <li style="padding: 0 15px 15px 15px;"><a href="{{ route('user-logout') }}"><i
+                            class="fa fa-fw fa-power-off"></i> {{$lang->logout}}</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
 
 <div class="wrapper">
+
     <!-- Sidebar  -->
     <nav id="sidebar" class="active">
 
-        <div class="sidebar-header">
+        {{--<div class="sidebar-header">
 
             <a href="{{route('front.index')}}">
                 <h3 style="color: white;">{{$gs->title[0]}}</h3>
@@ -71,9 +114,9 @@
                 <img src="{{asset('assets/images/'.$gs->logo)}}" alt="Sidebar header logo" class="sidebar-header-logo" style="height: 55px;width: 100%;">
             </a>
 
-        </div>
+        </div>--}}
 
-        <ul class="list-unstyled profile">
+        {{--<ul class="list-unstyled profile">
             <li style="padding-bottom: 0;" class="active">
                 <div class="row" style="margin-left: 0px;margin-right: 0px;">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
@@ -95,7 +138,7 @@
                                 class="fa fa-fw fa-power-off"></i> {{$lang->logout}}</a></li>
                 </ul>
             </li>
-        </ul>
+        </ul>--}}
 
         <ul class="list-unstyled components">
 
@@ -432,7 +475,7 @@
                         @if($lang->lang == 'eng')
 
                             <button type="button" class="btn dropdown-toggle selectpicker btn-default"
-                                    data-toggle="dropdown" title="English" style="color: black !important;">
+                                    data-toggle="dropdown" title="English" style="color: black !important;outline: none !important;">
 
                                             <span class="filter-option pull-left"><span
                                                     class="flag-icon flag-icon-nl"></span> English</span>&nbsp;<span
@@ -464,7 +507,7 @@
 
                             <button type="button" class="btn dropdown-toggle selectpicker btn-default"
                                     data-toggle="dropdown" title="Nederlands"
-                                    style="color: black !important;">
+                                    style="color: black !important;outline: none !important;">
 
                                             <span class="filter-option pull-left"><span
                                                     class="flag-icon flag-icon-nl"></span> Nederlands</span>&nbsp;<span
@@ -504,9 +547,9 @@
     </nav>
 
     <!-- Page Content  -->
-    <div id="content">
+    <div class="transform-it" id="content">
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        {{--<nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
 
                 <button type="button" id="sidebarCollapse1" class="btn btn-info">
@@ -514,7 +557,7 @@
                 </button>
 
             </div>
-        </nav>
+        </nav>--}}
 
         @yield('content')
 
@@ -546,7 +589,19 @@
         });*/
 
         $('#sidebarCollapse1').on('click', function () {
+
             $('#sidebar').toggleClass('active');
+
+            if($('#sidebar').hasClass('active'))
+            {
+                $('#content').removeClass('transform-it2');
+                $('#content').addClass('transform-it');
+            }
+            else
+            {
+                $('#content').removeClass('transform-it');
+                $('#content').addClass('transform-it2');
+            }
         });
 
     });
@@ -621,9 +676,14 @@
     .wrapper {
         display: flex;
         align-items: stretch;
+        height: 100%;
+        position: absolute;
     }
 
     #sidebar {
+        position: fixed;
+        z-index: 1000;
+        height: 100%;
         min-width: 250px;
         max-width: 250px;
         background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors.'c9'}};
@@ -632,10 +692,23 @@
     }
 
     #sidebar.active {
-        /*min-width: 80px;
+        min-width: 80px;
         max-width: 80px;
-        text-align: center;*/
-        margin-left: -250px;
+        text-align: center;
+        /*margin-left: -250px;*/
+    }
+
+    .transform-it
+    {
+        -webkit-transform: translateX(80px);
+        transform: translateX(80px);
+        width: 94.7% !important;
+    }
+
+    .transform-it2
+    {
+        -webkit-transform: translateX(250px);
+        transform: translateX(250px);
     }
 
     #sidebar:not(.active) h3
@@ -708,7 +781,9 @@
     }
 
     #sidebar ul.components {
-        padding: 20px 0;
+        padding: 10px 0 100px 0;
+        overflow-y: auto;
+        height: 100%;
     }
 
     #sidebar ul li a {
@@ -774,7 +849,7 @@
         width: 100%;
         padding: 20px;
         min-height: 100vh;
-        transition: all 0.3s;
+        transition: all 1.5s;
         overflow-x: hidden;
     }
 
@@ -783,23 +858,44 @@
     ----------------------------------------------------- */
 
     @media (max-width: 768px) {
-        #sidebar {
+
+        .user-info, a[aria-expanded="false"]::before, a[aria-expanded="true"]::before
+        {
+            display: none;
+        }
+
+        /*#sidebar {
             min-width: 80px;
             max-width: 80px;
             text-align: center;
             margin-left: -80px !important;
-        }
-        #sidebar .dropdown-toggle::before {
+        }*/
+        /*#sidebar .dropdown-toggle::before {
             top: auto !important;
             bottom: 10px !important;
             right: 50% !important;
             -webkit-transform: translateX(50%) !important;
             -ms-transform: translateX(50%) !important;
             transform: translateX(50%) !important;
+        }*/
+
+        .transform-it
+        {
+            -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+            width: 100% !important;
         }
+
+        .transform-it2
+        {
+            -webkit-transform: translateX(250px);
+            transform: translateX(250px);
+        }
+
         #sidebar.active {
-            margin-left: 0 !important;
+            margin-left: -80px !important;
         }
+
         #sidebar .sidebar-header .sidebar-header-logo,
         #sidebar .CTAs {
             display: none;
@@ -813,10 +909,10 @@
         #sidebar ul li a span {
             font-size: 0.85em;
         }
-        #sidebar ul li a i {
+        /*#sidebar ul li a i {
             margin-right: 0;
             display: block;
-        }
+        }*/
         #sidebar ul ul a {
             padding: 10px !important;
         }
