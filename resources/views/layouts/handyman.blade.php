@@ -328,7 +328,7 @@
             @if(auth()->user()->hasAnyPermission(['user-products', 'user-colors', 'user-price-tables', 'my-services', 'user-categories', 'user-brands', 'user-models', 'user-items', 'user-features']))
 
                 <li>
-                    <a href="#products" data-toggle="collapse" @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>Products</span></a>
+                    <a class="dropdown-toggle" href="#products" data-toggle="collapse" @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>Products</span></a>
                     <ul class="collapse list-unstyled submenu" id="products">
 
                         @if(auth()->user()->can('user-products'))
@@ -692,17 +692,17 @@
     }
 
     #sidebar.active {
-        min-width: 80px;
-        max-width: 80px;
+        min-width: 120px;
+        max-width: 120px;
         text-align: center;
         /*margin-left: -250px;*/
     }
 
     .transform-it
     {
-        -webkit-transform: translateX(80px);
-        transform: translateX(80px);
-        width: 94.7% !important;
+        -webkit-transform: translateX(120px);
+        transform: translateX(120px);
+        width: 92.2% !important;
     }
 
     .transform-it2
@@ -893,7 +893,7 @@
         }
 
         #sidebar.active {
-            margin-left: -80px !important;
+            margin-left: -120px !important;
         }
 
         #sidebar .sidebar-header .sidebar-header-logo,
@@ -919,9 +919,9 @@
         #sidebar ul li a i {
             font-size: 1.3em;
         }
-        #sidebar {
+        /*#sidebar {
             margin-left: 0;
-        }
+        }*/
         #sidebarCollapse span {
             display: none;
         }
