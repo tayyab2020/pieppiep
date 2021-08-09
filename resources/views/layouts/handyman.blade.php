@@ -567,6 +567,7 @@
     </div>
 </div>
 
+<div id="cover">LOADING...</div>
 
 <script type="text/javascript">
 
@@ -621,10 +622,24 @@
 
     });
 
+    $(window).on('load', function() {
+        $("#cover").fadeOut(1000);
+    });
+
+    function newW()
+    {
+        $(window).load();
+    }
+    setTimeout(newW, 1000);
+
 </script>
 
 
 <style type="text/css">
+
+    #cover {position: fixed; height: 100%; width: 100%; top:0; left: 0; background: #000; z-index:9999;
+        font-size: 60px; text-align: center; padding-top: 200px; color: #fff;
+    }
 
     #sidebar ul
     {
