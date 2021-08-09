@@ -550,7 +550,7 @@
     </nav>
 
     <!-- Page Content  -->
-    <div class="transform-it" id="content">
+    <div id="content">
 
         {{--<nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -600,7 +600,7 @@
 
             $('#sidebar').toggleClass('active');
 
-            if($('#sidebar').hasClass('active'))
+            /*if($('#sidebar').hasClass('active'))
             {
                 $('#content').removeClass('transform-it2');
                 $('#content').addClass('transform-it');
@@ -609,7 +609,7 @@
             {
                 $('#content').removeClass('transform-it');
                 $('#content').addClass('transform-it2');
-            }
+            }*/
         });
 
         $('#sidebar ul li a').on('click', function () {
@@ -677,11 +677,11 @@
 
     #sidebar ul li > ul {
 
-        position: fixed;
+        position: absolute;
 
         background-color: #35A7E8;
 
-        top: 11.6%;
+        top: 0;
 
         width: 250px;
 
@@ -795,7 +795,7 @@
     }
 
     #sidebar {
-        position: absolute;
+        position: static;
         z-index: 1000;
         height: 100%;
         min-width: 250px;
@@ -1027,6 +1027,11 @@
         {
             -webkit-transform: translateX(250px);
             transform: translateX(250px);
+        }
+
+        #sidebar
+        {
+            position: absolute;
         }
 
         #sidebar.active .sub-show {
