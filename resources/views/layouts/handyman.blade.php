@@ -140,12 +140,11 @@
             </li>
         </ul>--}}
 
-        <ul class="list-unstyled components">
+        <ul class="parent-menu list-unstyled components">
 
-            <li>
-                <a class="dropdown-toggle" href="#dashboard1" data-toggle="collapse" @if(Route::currentRouteName() == 'user-dashboard' || Route::currentRouteName() == 'user-profile' || Route::currentRouteName() == 'radius-management' || Route::currentRouteName() == 'user-complete-profile') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>{{$lang->dashboard}}</span></a>
+            <li><a @if(Route::currentRouteName() == 'user-dashboard' || Route::currentRouteName() == 'user-profile' || Route::currentRouteName() == 'radius-management' || Route::currentRouteName() == 'user-complete-profile') class="active1" @endif href="javascript:"><i class="fa fa-fw fa-file-code-o"></i> <span>{{$lang->dashboard}}</span></a>
 
-                <ul class="collapse list-unstyled submenu" id="dashboard1">
+                <ul class="hide">
 
                     @if(auth()->user()->can('show-dashboard'))
 
@@ -175,6 +174,7 @@
                     @endif
 
                 </ul>
+
             </li>
 
             {{--<li>
@@ -274,9 +274,9 @@
 
             @if(auth()->user()->hasAnyPermission(['customer-quotations', 'customer-invoices']))
 
-                <li>
-                    <a class="dropdown-toggle" href="#sales" data-toggle="collapse" @if(Route::currentRouteName() == 'user-products' || Route::currentRouteName() == 'product-create') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>{{__('text.Sales')}}</span></a>
-                    <ul class="collapse list-unstyled submenu" id="sales">
+                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices') class="active1" @endif href="javascript:"><i class="fa fa-fw fa-file-code-o"></i> <span>{{__('text.Sales')}}</span></a>
+
+                    <ul class="hide">
 
                         @if(auth()->user()->can('customer-quotations'))
 
@@ -291,45 +291,46 @@
                         @endif
 
                     </ul>
+
                 </li>
 
             @endif
 
-
             {{--@if(auth()->user()->hasAnyPermission(['user-products', 'product-create', 'user-items']))
 
-                <li>
-                    <a class="dropdown-toggle" href="#services" data-toggle="collapse" @if(Route::currentRouteName() == 'user-products' || Route::currentRouteName() == 'product-create' || Route::currentRouteName() == 'user-items') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>{{__('text.My Products')}}</span></a>
-                    <ul class="collapse list-unstyled submenu" id="services">
+                <li><a @if(Route::currentRouteName() == 'user-products' || Route::currentRouteName() == 'product-create' || Route::currentRouteName() == 'user-items') class="active1" @endif href="javascript:"><i class="fa fa-fw fa-file-code-o"></i> <span>{{__('text.My Products')}}</span></a>
 
-                        @if(auth()->user()->can('user-products'))
+                <ul class="hide">
 
-                            <li><a href="{{route('user-products')}}"><i class="fa fa-angle-right"></i> {{__('text.Products Overview')}}</a></li>
+                    @if(auth()->user()->can('user-products'))
 
-                        @endif
+                        <li><a href="{{route('user-products')}}"><i class="fa fa-angle-right"></i> {{__('text.Products Overview')}}</a></li>
 
-                        @if(auth()->user()->can('product-create'))
+                    @endif
 
-                            <li><a href="{{route('product-create')}}"><i class="fa fa-angle-right"></i> {{__('text.Add Products')}}</a></li>
+                    @if(auth()->user()->can('product-create'))
 
-                        @endif
+                        <li><a href="{{route('product-create')}}"><i class="fa fa-angle-right"></i> {{__('text.Add Products')}}</a></li>
 
-                        @if(auth()->user()->can('user-items'))
+                    @endif
 
-                            <li><a href="{{route('user-items')}}"><i class="fa fa-angle-right"></i> {{__('text.My Items')}}</a></li>
+                    @if(auth()->user()->can('user-items'))
 
-                        @endif
+                        <li><a href="{{route('user-items')}}"><i class="fa fa-angle-right"></i> {{__('text.My Items')}}</a></li>
 
-                    </ul>
-                </li>
+                    @endif
+
+                </ul>
+
+            </li>
 
             @endif--}}
 
             @if(auth()->user()->hasAnyPermission(['user-products', 'user-colors', 'user-price-tables', 'my-services', 'user-categories', 'user-brands', 'user-models', 'user-items', 'user-features']))
 
-                <li>
-                    <a class="dropdown-toggle" href="#products" data-toggle="collapse" @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>Products</span></a>
-                    <ul class="collapse list-unstyled submenu" id="products">
+                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index') class="active1" @endif href="javascript:"><i class="fa fa-fw fa-file-code-o"></i> <span>Products</span></a>
+
+                    <ul class="hide">
 
                         @if(auth()->user()->can('user-products'))
 
@@ -337,59 +338,60 @@
 
                         @endif
 
-                            @if(auth()->user()->role_id == 4)
+                        @if(auth()->user()->role_id == 4)
 
-                                @if(auth()->user()->can('user-colors'))
+                            @if(auth()->user()->can('user-colors'))
 
-                                    <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> Colors</a></li>
-
-                                @endif
-
-                                @if(auth()->user()->can('user-price-tables'))
-
-                                    <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> Price Tables</a></li>
-
-                                @endif
-
-                                @if(auth()->user()->can('my-services'))
-
-                                    <li><a href="{{route('admin-service-index')}}"><i class="fa fa-angle-right"></i> Services</a></li>
-
-                                @endif
-
-                                @if(auth()->user()->can('user-categories'))
-
-                                    <li><a href="{{route('admin-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
-
-                                @endif
-
-                                @if(auth()->user()->can('user-brands'))
-
-                                    <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
-
-                                @endif
-
-                                @if(auth()->user()->can('user-models'))
-
-                                    <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
-
-                                @endif
-
-                                @if(auth()->user()->can('user-items'))
-
-                                    <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
-
-                                @endif
-
-                                @if(auth()->user()->can('user-features'))
-
-                                    <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
-
-                                @endif
+                                <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> Colors</a></li>
 
                             @endif
 
+                            @if(auth()->user()->can('user-price-tables'))
+
+                                <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> Price Tables</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('my-services'))
+
+                                <li><a href="{{route('admin-service-index')}}"><i class="fa fa-angle-right"></i> Services</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-categories'))
+
+                                <li><a href="{{route('admin-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-brands'))
+
+                                <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-models'))
+
+                                <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-items'))
+
+                                <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('user-features'))
+
+                                <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
+
+                            @endif
+
+                        @endif
+
                     </ul>
+
                 </li>
 
             @endif
@@ -397,24 +399,25 @@
 
             {{--@if(auth()->user()->hasAnyPermission(['my-services', 'service-create']))
 
-                <li>
-                    <a class="dropdown-toggle" href="#services1" data-toggle="collapse" @if(Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'service-create') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> <span>My Services</span></a>
-                    <ul class="collapse list-unstyled submenu" id="services1">
+                <li><a @if(Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'service-create') class="active1" @endif href="javascript:"><i class="fa fa-fw fa-file-code-o"></i> <span>My Services</span></a>
 
-                        @if(auth()->user()->can('my-services'))
+                <ul class="hide">
 
-                            <li><a href="{{route('my-services')}}"><i class="fa fa-angle-right"></i> Services Overview</a></li>
+                    @if(auth()->user()->can('my-services'))
 
-                        @endif
+                        <li><a href="{{route('my-services')}}"><i class="fa fa-angle-right"></i> Services Overview</a></li>
 
-                        @if(auth()->user()->can('service-create'))
+                    @endif
 
-                            <li><a href="{{route('service-create')}}"><i class="fa fa-angle-right"></i> Add Services</a></li>
+                    @if(auth()->user()->can('service-create'))
 
-                        @endif
+                        <li><a href="{{route('service-create')}}"><i class="fa fa-angle-right"></i> Add Services</a></li>
 
-                    </ul>
-                </li>
+                    @endif
+
+                </ul>
+
+            </li>
 
             @endif--}}
 
@@ -576,9 +579,9 @@
 
     }
 
-    var mouse_already_there = false;
-    var event_set = false;
     $(document).ready(function() {
+
+        $('#sidebar ul li ul').removeClass('hide');
 
         /*$('#sidebar').hover(function () {
 
@@ -589,6 +592,11 @@
         });*/
 
         $('#sidebarCollapse1').on('click', function () {
+
+            if($(window).innerWidth() <= 768)
+            {
+                $('#sidebar ul li ul').removeClass('sub-show');
+            }
 
             $('#sidebar').toggleClass('active');
 
@@ -604,12 +612,117 @@
             }
         });
 
+        $('#sidebar ul li a').on('click', function () {
+
+            $('#sidebar ul li ul').not($(this).next('ul')).removeClass('sub-show');
+            $(this).next('ul').toggleClass('sub-show');
+
+        });
+
     });
 
 </script>
 
 
 <style type="text/css">
+
+    #sidebar ul
+    {
+        list-style-type:none;
+    }
+
+
+    #sidebar ul li a
+    {
+        text-decoration:none;
+        text-align: left !important;
+    }
+
+    #sidebar ul li a::before
+    {
+        display: none;
+    }
+
+    #sidebar.active .sub-show {
+
+        -webkit-transform: translateX(118px) !important;
+
+        transform: translateX(118px) !important;
+
+        -webkit-transition: transform 0.5s ease-in-out !important;
+
+        -moz-transition: transform 0.5s ease-in-out !important;
+
+        -ms-transition: transform 0.5s ease-in-out !important;
+
+        transition: transform 0.5s ease-in-out !important;
+
+    }
+
+    #sidebar .sub-show {
+
+        -webkit-transform: translateX(248px) !important;
+
+        transform: translateX(248px) !important;
+
+        -webkit-transition: transform 1s ease-in !important;
+
+        -moz-transition: transform 1s ease-in !important;
+
+        -ms-transition: transform 1s ease-in !important;
+
+        transition: transform 1s ease-in !important;
+
+    }
+
+    #sidebar ul li > ul {
+
+        position: fixed;
+
+        background-color: #35A7E8;
+
+        top: 11.6%;
+
+        width: 250px;
+
+        z-index: 1000;
+
+        height: 100%;
+
+        -webkit-transform: translateX(-250px);
+
+        transform: translateX(-250px);
+
+        -webkit-transition: transform 0.8s ease-in;
+
+        -moz-transition: transform 0.8s ease-in;
+
+        -ms-transition: transform 0.8s ease-in;
+
+        transition: transform 0.8s ease-in;
+
+        padding: 0;
+
+        border-left: 1px solid #3f99e6;
+
+    }
+
+    .parent-menu:hover > .parent-menu::-webkit-scrollbar
+    {
+        display: block;
+    }
+
+    .parent-menu::-webkit-scrollbar-thumb
+    {
+        background-color: #1c97dd;
+        border-radius: 10px;
+    }
+
+    .parent-menu::-webkit-scrollbar
+    {
+        background-color: transparent;
+        width: 5px;
+    }
 
     /*
     DEMO STYLE
@@ -682,14 +795,15 @@
     }
 
     #sidebar {
-        position: fixed;
+        position: absolute;
         z-index: 1000;
         height: 100%;
         min-width: 250px;
         max-width: 250px;
         background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors.'c9'}};
         color: #fff;
-        transition: all 1.5s;
+        transition: all 1s;
+        overflow: hidden;
     }
 
     #sidebar.active {
@@ -742,6 +856,12 @@
         background: {{$gs->colors == null ? 'rgba(207, 55, 58, 0.70)':$gs->colors.'c2'}};
     }
 
+    #sidebar ul li a.active1
+    {
+        background-color: #fff;
+        color: {{$gs->colors == null ? 'rgba(207, 55, 58, 0.70)':$gs->colors.'c2'}};
+    }
+
     #sidebar.active ul li a {
         padding: 20px 10px;
         text-align: center;
@@ -759,8 +879,17 @@
         font-size: 1.3em;
     }
 
+    #sidebar.active ul li ul li a i {
+        margin: auto 10px 5px auto;
+        display: inline-block;
+    }
+
     #sidebar.active ul ul a {
-        padding: 10px !important;
+        padding: 19px !important;
+    }
+
+    #sidebar ul ul a {
+        padding: 1em !important;
     }
 
     #sidebar.active .dropdown-toggle::before {
@@ -782,9 +911,16 @@
     }
 
     #sidebar ul.components {
-        padding: 10px 0 100px 0;
+        padding: 0 0 100px 0;
         overflow-y: auto;
         height: 100%;
+        visibility: hidden;
+    }
+
+    #sidebar ul.components li, #sidebar ul.components:hover,
+    #sidebar ul.components:focus
+    {
+        visibility: visible !important;
     }
 
     #sidebar ul li a {
@@ -850,7 +986,7 @@
         width: 100%;
         padding: 20px;
         min-height: 100vh;
-        transition: all 1.5s;
+        transition: all 1s;
         overflow-x: hidden;
     }
 
@@ -891,6 +1027,38 @@
         {
             -webkit-transform: translateX(250px);
             transform: translateX(250px);
+        }
+
+        #sidebar.active .sub-show {
+
+            -webkit-transform: translateX(-250px) !important;
+
+            transform: translateX(-250px) !important;
+
+            -webkit-transition: transform 0.5s ease-in-out !important;
+
+            -moz-transition: transform 0.5s ease-in-out !important;
+
+            -ms-transition: transform 0.5s ease-in-out !important;
+
+            transition: transform 0.5s ease-in-out !important;
+
+        }
+
+        #sidebar .sub-show {
+
+            -webkit-transform: translateX(0px) !important;
+
+            transform: translateX(0px) !important;
+
+            -webkit-transition: transform 1s ease-in !important;
+
+            -moz-transition: transform 1s ease-in !important;
+
+            -ms-transition: transform 1s ease-in !important;
+
+            transition: transform 1s ease-in !important;
+
         }
 
         #sidebar.active {
