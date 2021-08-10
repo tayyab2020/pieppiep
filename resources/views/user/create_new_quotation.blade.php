@@ -1314,14 +1314,17 @@
 
                                     if(margin == 1)
                                     {
-                                        price = parseFloat(price);
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if(supplier_margin && retailer_margin)
+                                        if(data[2])
                                         {
-                                            price = (price / supplier_margin) * retailer_margin;
-                                            price = price.toFixed(2);
+                                            price = parseFloat(price);
+                                            var supplier_margin = data[2].margin;
+                                            var retailer_margin = data[2].retailer_margin;
+
+                                            if(supplier_margin && retailer_margin)
+                                            {
+                                                price = (price / supplier_margin) * retailer_margin;
+                                                price = price.toFixed(2);
+                                            }
                                         }
                                     }
 
@@ -2112,14 +2115,17 @@
 
                                     if(margin == 1)
                                     {
-                                        price = parseFloat(price);
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if(supplier_margin && retailer_margin)
+                                        if(data[2])
                                         {
-                                            price = (price / supplier_margin) * retailer_margin;
-                                            price = price.toFixed(2);
+                                            price = parseFloat(price);
+                                            var supplier_margin = data[2].margin;
+                                            var retailer_margin = data[2].retailer_margin;
+
+                                            if(supplier_margin && retailer_margin)
+                                            {
+                                                price = (price / supplier_margin) * retailer_margin;
+                                                price = price.toFixed(2);
+                                            }
                                         }
                                     }
 
@@ -2276,14 +2282,17 @@
 
                                     if(margin == 1)
                                     {
-                                        price = parseFloat(price);
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if(supplier_margin && retailer_margin)
+                                        if(data[2])
                                         {
-                                            price = (price / supplier_margin) * retailer_margin;
-                                            price = price.toFixed(2);
+                                            price = parseFloat(price);
+                                            var supplier_margin = data[2].margin;
+                                            var retailer_margin = data[2].retailer_margin;
+
+                                            if(supplier_margin && retailer_margin)
+                                            {
+                                                price = (price / supplier_margin) * retailer_margin;
+                                                price = price.toFixed(2);
+                                            }
                                         }
                                     }
 
