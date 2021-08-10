@@ -56,7 +56,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_display_name">Margin (%)</label>
                                                             <div class="col-sm-6">
-                                                                <input value="{{isset($cats) ? $cats->margin : null}}" class="form-control" name="margin" id="blood_group_display_name" placeholder="Enter Product margin" step="1" type="number">
+                                                                <input min="100" value="{{isset($cats) ? $cats->margin : null}}" class="form-control" name="margin" id="blood_group_display_name" placeholder="Enter Product margin" step="1" type="number">
                                                             </div>
                                                         </div>
 

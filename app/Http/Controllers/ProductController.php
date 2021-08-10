@@ -102,7 +102,7 @@ class ProductController extends Controller
 
             if($check->first())
             {
-                $check->update(['margin' => $request->margin[$i] ? $request->margin[$i] : 0]);
+                $check->update(['margin' => $request->margin[$i] ? $request->margin[$i] : 100]);
             }
             else
             {
@@ -111,7 +111,7 @@ class ProductController extends Controller
                     $post = new retailer_margins;
                     $post->product_id = $key;
                     $post->retailer_id = $user_id;
-                    $post->margin = $request->margin[$i] ? $request->margin[$i] : 0;
+                    $post->margin = $request->margin[$i] ? $request->margin[$i] : 100;
                     $post->save();
                 }
             }
@@ -120,6 +120,25 @@ class ProductController extends Controller
         Session::flash('success', 'Task completed successfully.');
         return redirect()->route('admin-product-index');
     }
+
+
+    public function resetSupplierMargins()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        retailer_margins::where('retailer_id',$user_id)->delete();
+
+        Session::flash('success', 'Task completed successfully.');
+        return redirect()->route('admin-product-index');
+    }
+
 
     public function create()
     {

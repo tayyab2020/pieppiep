@@ -42,7 +42,7 @@
                 <div class="dashboard-sidebar-area">
                     <img src="{{asset('assets/images/'.$gs->bimg)}}" alt="">
                     <div class="sidebar-menu-body">
-                        <nav id="sidebar-menu">
+                        <nav style="width: 100%;" id="sidebar-menu">
                             <div class="sidebar-header">
                                 <a href="{{route('front.index')}}" > <img src="{{asset('assets/images/'.$gs->logo)}}" alt="Sidebar header logo" class="sidebar-header-logo" style="height: 55px;width: 100%;"></a>
                             </div>

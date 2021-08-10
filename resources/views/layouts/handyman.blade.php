@@ -82,7 +82,7 @@
 
                 <span class="user-info">
                     {{ Auth::guard('user')->user()->name}} {{Auth::guard('user')->user()->family_name}}
-                    <span>{{$lang->hmt}}</span>
+                    {{--<span>{{$lang->hmt}}</span>--}}
                 </span>
 
             </a>

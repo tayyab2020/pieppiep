@@ -13,6 +13,12 @@
                                     <div style="justify-content: flex-end;" class="add-product-header products">
                                         <h2 style="width: 100%;">{{auth()->user()->role_id == 4 ? 'My Products' : 'Supplier Products'}}</h2>
 
+                                        @if(auth()->user()->role_id == 2)
+
+                                            <a href="{{route('reset-supplier-margins')}}" style="margin: auto;" class="btn btn-success"><i style="margin-right: 5px;" class="fa fa-refresh"></i> Reset Margins</a>
+
+                                        @endif
+
                                         @if(auth()->user()->role_id == 4)
 
                                             @if(auth()->user()->can('product-create'))
@@ -191,7 +197,7 @@
 
                                                                         <td>
                                                                             <input type="hidden" name="product_ids[]" value="{{$cat->id}}">
-                                                                            <input value="{{$cat->retailer_margin ? $cat->retailer_margin : $cat->margin}}" type="number" step="1" name="margin[]" class="form-control">
+                                                                            <input min="100" value="{{$cat->retailer_margin ? $cat->retailer_margin : $cat->margin}}" type="number" step="1" name="margin[]" class="form-control">
                                                                         </td>
 
                                                                     @endif
