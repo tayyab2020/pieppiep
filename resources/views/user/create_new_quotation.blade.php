@@ -1707,11 +1707,20 @@
                         $('#menu1').find(`[data-id='${rowCount}']`).find('input[name="qty[]"]').val(qty);
 
                         features_selects.each(function(index,select){
-                            $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
+
+                            if($(this).parent().find('.f_id').val() != 0)
+                            {
+                                $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
+                            }
+                            else
+                            {
+                                $('#menu1').find(`[data-id='${rowCount}']`).find('.ladderband-btn').addClass('hide');
+                            }
                         });
 
                         $('#menu1').find(`[data-id='${rowCount}']`).each(function(i, obj) {
 
+                            $(obj).find('.ladderband-btn').attr('data-id', rowCount);
                             $(obj).find('.feature-select').attr('name', 'features' + rowCount + '[]');
                             $(obj).find('.f_price').attr('name', 'f_price' + rowCount + '[]');
                             $(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
