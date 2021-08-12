@@ -2337,7 +2337,7 @@ class UserController extends Controller
         $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
         {
             $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
-            ->select('new_quotations_features.*','features.title');
+            ->select('new_quotations_features.*','features.title','features.comment_box');
 
         }])->get();
 
@@ -2482,6 +2482,9 @@ class UserController extends Controller
                 $f_row1 = 'f_price'.$row_id;
                 $f_prices = $request->$f_row1;
 
+                $comment = 'comment-'.$row_id.'-'.$f_ids[$f];
+                $comment = $request->$comment;
+
                 if($f_ids[$f] == 0)
                 {
                     $post = new new_quotations_features;
@@ -2535,11 +2538,12 @@ class UserController extends Controller
                     $post->price = $f_prices[$f];
                     $post->feature_id = $f_ids[$f];
                     $post->feature_sub_id = $key1;
+                    $post->comment = $comment;
                     $post->save();
                 }
 
                 /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
-                $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.heading_id',$f_ids[$f])->select('product_features.*','features.title as main_title','features.order_no')->first();
+                $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.heading_id',$f_ids[$f])->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
             }
 
         }

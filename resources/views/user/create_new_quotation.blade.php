@@ -53,7 +53,7 @@
 
                                                 @include('includes.form-success')
 
-                                                <div class="form-horizontal">
+                                                <div style="padding-bottom: 0;" class="form-horizontal">
 
                                                     <div style="margin: 0;background: #f5f5f5;" class="row">
 
@@ -294,7 +294,7 @@
 
                                                                             <div data-id="{{$x + 1}}" @if($x == 0) style="margin: 0;" @else style="margin: 0;display: none;" @endif class="form-group">
 
-                                                                                <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                <div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                                                         <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>
                                                                                         <input value="{{str_replace('.', ',', $key1->qty)}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
                                                                                     </div>
@@ -304,7 +304,9 @@
 
                                                                                     @if($feature->feature_id == 0 && $feature->feature_sub_id == 0)
 
-                                                                                        <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                        <div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+
+                                                                                            <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                                                                 <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>
                                                                                                 <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
                                                                                                     <option {{$feature->ladderband == 0 ? 'selected' : null}} value="0">No</option>
@@ -314,11 +316,20 @@
                                                                                                 <input value="0" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
                                                                                                 <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
                                                                                             </div>
+
+                                                                                            @if($feature->ladderband)
+
+                                                                                                <a data-id="{{$x + 1}}" class="info ladderband-btn">Info</a>
+
+                                                                                            @endif
+
                                                                                         </div>
 
                                                                                     @else
 
-                                                                                        <div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                        <div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+
+                                                                                            <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                                                                 <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">{{$feature->title}}</label>
                                                                                                 <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
 
@@ -335,6 +346,13 @@
                                                                                                 <input value="{{$feature->feature_id}}" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
                                                                                                 <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
                                                                                             </div>
+
+                                                                                            @if($feature->comment_box)
+
+                                                                                                <a data-feature="{{$feature->feature_id}}" class="info comment-btn">Info</a>
+
+                                                                                            @endif
+
                                                                                         </div>
 
                                                                                     @endif
@@ -457,6 +475,26 @@
                                     <h4 class="modal-title">Feature Comment</h4>
                                 </div>
                                 <div class="modal-body">
+
+                                    @if(isset($invoice))
+
+                                        @foreach($invoice as $x => $key1)
+
+                                            @foreach($key1->features as $feature)
+
+                                                @if($feature->comment)
+
+                                                    <div class="comment-boxes" data-id="{{$x + 1}}">
+                                                        <textarea style="resize: vertical;width: 100%;border: 1px solid #c9c9c9;border-radius: 5px;outline: none;" data-id="{{$feature->feature_id}}" rows="5" name="comment-{{$x + 1}}-{{$feature->feature_id}}">{{$feature->comment}}</textarea>
+                                                    </div>
+
+                                                @endif
+
+                                            @endforeach
+
+                                        @endforeach
+
+                                    @endif
 
                                 </div>
                                 <div class="modal-footer">
@@ -586,20 +624,6 @@
 
     <style>
 
-        /*.info {
-            font-size: 20px;
-            padding: 12px;
-            width: 20px;
-            height: 20px;
-            border-radius: 15px;
-            float: left;
-            border: 1px solid #bcbcbc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 5px;
-        }*/
-
         a.info {
             vertical-align: bottom;
             position:relative; /* Anything but static */
@@ -613,7 +637,7 @@
             line-height:1em;
             background-color:#628cb6;
             cursor: pointer;
-            margin-left: .25em;
+            margin-top: 7px;
             -webkit-border-radius:.75em;
             -moz-border-radius:.75em;
             border-radius:.75em;
@@ -629,6 +653,11 @@
             width:1.5em;
             text-align:center;
             font-family: monospace;
+        }
+
+        .ladderband-btn
+        {
+            background-color: #494949 !important;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered
@@ -1400,7 +1429,7 @@
 
                                     if(ladderband == 1)
                                     {
-                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
                                             '<option value="0">No</option>\n' +
@@ -1409,7 +1438,7 @@
                                             '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
-                                            '</div></div>\n';
+                                            '</div><a data-id="'+ row_id +'" class="info ladderband-btn hide">Info</a></div>\n';
 
                                         features = features + content;
                                     }
@@ -1433,7 +1462,7 @@
                                             var icon = '';
                                         }
 
-                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
@@ -1452,7 +1481,7 @@
 
                                     $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
                                         '\n' +
-                                        '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                         '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
                                         '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
@@ -1684,6 +1713,7 @@
                         $('#menu1').find(`[data-id='${rowCount}']`).each(function(i, obj) {
 
                             $(obj).find('.feature-select').attr('name', 'features' + rowCount + '[]');
+                            $(obj).find('.f_price').attr('name', 'f_price' + rowCount + '[]');
                             $(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
                             $(obj).find('.f_area').attr('name', 'f_area' + rowCount + '[]');
 
@@ -2208,7 +2238,7 @@
 
                                     if(ladderband == 1)
                                     {
-                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
                                             '<option value="0">No</option>\n' +
@@ -2217,7 +2247,7 @@
                                             '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
-                                            '</div></div>\n';
+                                            '</div><a data-id="'+ row_id +'" class="info ladderband-btn hide">Info</a></div>\n';
 
                                         features = features + content;
                                     }
@@ -2241,7 +2271,7 @@
                                             var icon = '';
                                         }
 
-                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
@@ -2260,7 +2290,7 @@
 
                                     $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
                                         '\n' +
-                                        '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                         '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
                                         '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
@@ -2384,7 +2414,7 @@
 
                                     if(ladderband == 1)
                                     {
-                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
                                             '<option value="0">No</option>\n' +
@@ -2393,7 +2423,7 @@
                                             '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
-                                            '</div></div>\n';
+                                            '</div><a data-id="'+ row_id +'" class="info ladderband-btn hide">Info</a></div>\n';
 
                                         features = features + content;
                                     }
@@ -2417,7 +2447,7 @@
                                             var icon = '';
                                         }
 
-                                        var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
@@ -2436,7 +2466,7 @@
 
                                     $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
                                         '\n' +
-                                        '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                         '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
                                         '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
@@ -2579,6 +2609,8 @@
 
                                 });
 
+                                $('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').removeClass('hide');
+                                $('.top-bar').css('z-index','1');
                                 $('#myModal').modal('toggle');
                                 $('.modal-backdrop').hide();
                             }
@@ -2586,6 +2618,8 @@
                     }
                     else
                     {
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').addClass('hide');
+
                         impact_value = 0;
                         total = parseFloat(total) + parseFloat(impact_value);
                         total = total.toFixed(2);
@@ -2665,6 +2699,10 @@
 
             });
 
+            $('#myModal, #myModal2').on('hidden.bs.modal', function () {
+                $('.top-bar').css('z-index','1000');
+            })
+
             $(document).on('click', '.comment-btn', function(){
 
                 var current = $(this);
@@ -2687,7 +2725,22 @@
                     );
                 }
 
+                $('.top-bar').css('z-index','1');
                 $('#myModal2').modal('toggle');
+                $('.modal-backdrop').hide();
+
+            });
+
+            $(document).on('click', '.ladderband-btn', function(){
+
+                var current = $(this);
+                var row_id = current.data('id');
+
+                $('#myModal').find('.modal-body').find('.sub-tables').hide();
+                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).show();
+
+                $('.top-bar').css('z-index','1');
+                $('#myModal').modal('toggle');
                 $('.modal-backdrop').hide();
 
             });

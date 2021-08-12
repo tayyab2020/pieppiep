@@ -59,7 +59,7 @@
 
 <body style="overflow: hidden;height: 100%;">
 
-<div style="padding: 20px 0;border-bottom: 2px solid #0090e3c9;position: fixed;width: 100%;z-index: 1000;" class="container-fluid">
+<div style="padding: 20px 0;border-bottom: 2px solid #0090e3c9;position: fixed;width: 100%;z-index: 1000;" class="container-fluid top-bar">
 
     <div style="display: flex;flex-direction: row;align-items: center;">
 
