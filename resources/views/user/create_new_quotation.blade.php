@@ -418,29 +418,29 @@
                                                         @foreach($sub_products[$x] as $sub_product)
 
                                                             <tr>
-                                                                <td><input type="hidden" name="sub_product_id{{$x+1}}[]" value="{{$sub_product->sub_product_id}}">{{$sub_product->code}}</td>
+                                                                <td><input type="hidden" class="sub_product_id" name="sub_product_id{{$x+1}}[]" value="{{$sub_product->sub_product_id}}">{{$sub_product->code}}</td>
                                                                 <td>{{$sub_product->title}}</td>
                                                                 <td>
                                                                     @if($sub_product->size1_value == 'x')
 
-                                                                        X<input name="sizeA{{$x+1}}[]" type="hidden" value="x">
+                                                                        X<input class="sizeA" name="sizeA{{$x+1}}[]" type="hidden" value="x">
 
                                                                     @else
 
-                                                                        <input {{$sub_product->size1_value ? 'checked' : null}} class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
-                                                                        <input class="cus_value" type="hidden" value="{{$sub_product->size1_value ? 1 : 0}}" name="sizeA{{$x+1}}[]">
+                                                                        <input {{$sub_product->size1_value ? 'checked' : null}} data-id="{{$x + 1}}" class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
+                                                                        <input class="cus_value sizeA" type="hidden" value="{{$sub_product->size1_value ? 1 : 0}}" name="sizeA{{$x+1}}[]">
 
                                                                     @endif
                                                                 </td>
                                                                 <td>
                                                                     @if($sub_product->size2_value == 'x')
 
-                                                                        X<input name="sizeB{{$x+1}}[]" type="hidden" value="x">
+                                                                        X<input class="sizeB" name="sizeB{{$x+1}}[]" type="hidden" value="x">
 
                                                                     @else
 
-                                                                        <input {{$sub_product->size2_value ? 'checked' : null}} class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
-                                                                        <input class="cus_value" type="hidden" value="{{$sub_product->size2_value ? 1 : 0}}" name="sizeB{{$x+1}}[]">
+                                                                        <input {{$sub_product->size2_value ? 'checked' : null}} data-id="{{$x + 1}}" class="cus_radio" name="cus_radio{{$x+1}}[]" type="radio">
+                                                                        <input class="cus_value sizeB" type="hidden" value="{{$sub_product->size2_value ? 1 : 0}}" name="sizeB{{$x+1}}[]">
 
                                                                     @endif
                                                                 </td>
@@ -1520,7 +1520,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0)
+            function add_row(copy = false,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1708,14 +1708,13 @@
 
                         features_selects.each(function(index,select){
 
-                            if($(this).parent().find('.f_id').val() != 0)
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
+
+                            if($(this).parent().find('.f_id').val() == 0)
                             {
-                                $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
+                                $('#myModal').find('.modal-body').append('<div class="sub-tables" data-id="'+rowCount+'">\n' + subs + '</div>');
                             }
-                            else
-                            {
-                                $('#menu1').find(`[data-id='${rowCount}']`).find('.ladderband-btn').addClass('hide');
-                            }
+
                         });
 
                         $('#menu1').find(`[data-id='${rowCount}']`).each(function(i, obj) {
@@ -1725,6 +1724,34 @@
                             $(obj).find('.f_price').attr('name', 'f_price' + rowCount + '[]');
                             $(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
                             $(obj).find('.f_area').attr('name', 'f_area' + rowCount + '[]');
+
+                        });
+
+                        $('#myModal').find('.modal-body').find(`[data-id='${rowCount}']`).each(function(i, obj) {
+
+                            $(obj).find('.sizeA').each(function(b, obj1) {
+
+                                if($(this).val() == 1)
+                                {
+                                    $(this).prev('input').prop("checked", true);
+                                }
+
+                            });
+
+                            $(obj).find('.sizeB').each(function(c, obj2) {
+
+                                if($(this).val() == 1)
+                                {
+                                    $(this).prev('input').prop("checked", true);
+                                }
+
+                            });
+
+                            $(obj).find('.sub_product_id').attr('name', 'sub_product_id' + rowCount + '[]');
+                            $(obj).find('.sizeA').attr('name', 'sizeA' + rowCount + '[]');
+                            $(obj).find('.sizeB').attr('name', 'sizeB' + rowCount + '[]');
+                            $(obj).find('.cus_radio').attr('name', 'cus_radio' + rowCount + '[]');
+                            $(obj).find('.cus_radio').attr('data-id', rowCount);
 
                         });
                     }
@@ -1810,6 +1837,7 @@
                 {
                     $('#menu1').find(`[data-id='${id}']`).remove();
                     $('#myModal').find('.modal-body').find(`[data-id='${id}']`).remove();
+                    $('#myModal2').find('.modal-body').find(`[data-id='${id}']`).remove();
 
                     var next = current.next('tr');
 
@@ -2026,8 +2054,9 @@
                 var features = $('#menu1').find(`[data-id='${id}']`).html();
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
+                var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
 
-                add_row(true,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict);
+                add_row(true,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs);
 
             });
 
@@ -2591,25 +2620,25 @@
 
                                     if(size1 == 1)
                                     {
-                                        size1 = '<input class="cus_radio" name="cus_radio'+ row_id +'[]" type="radio"><input class="cus_value" type="hidden" value="0" name="sizeA'+ row_id +'[]">';
+                                        size1 = '<input data-id="'+ row_id +'" class="cus_radio" name="cus_radio'+ row_id +'[]" type="radio"><input class="cus_value sizeA" type="hidden" value="0" name="sizeA'+ row_id +'[]">';
                                     }
                                     else
                                     {
-                                        size1 = 'X' + '<input name="sizeA'+ row_id +'[]" type="hidden" value="x">';
+                                        size1 = 'X' + '<input class="sizeA" name="sizeA'+ row_id +'[]" type="hidden" value="x">';
                                     }
 
                                     if(size2 == 1)
                                     {
-                                        size2 = '<input class="cus_radio" name="cus_radio'+ row_id +'[]" type="radio"><input class="cus_value" type="hidden" value="0" name="sizeB'+ row_id +'[]">';
+                                        size2 = '<input data-id="'+ row_id +'" class="cus_radio" name="cus_radio'+ row_id +'[]" type="radio"><input class="cus_value sizeB" type="hidden" value="0" name="sizeB'+ row_id +'[]">';
                                     }
                                     else
                                     {
-                                        size2 = 'X' + '<input name="sizeB'+ row_id +'[]" type="hidden" value="x">';
+                                        size2 = 'X' + '<input class="sizeB" name="sizeB'+ row_id +'[]" type="hidden" value="x">';
                                     }
 
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('table').append(
                                         '<tr>\n' +
-                                        '<td><input type="hidden" name="sub_product_id'+ row_id + '[]" value="'+value.id+'">'+value.code+'</td>\n' +
+                                        '<td><input class="sub_product_id" type="hidden" name="sub_product_id'+ row_id + '[]" value="'+value.id+'">'+value.code+'</td>\n' +
                                         '<td>'+value.title+'</td>\n' +
                                         '<td>'+size1+'</td>\n' +
                                         '<td>'+size2+'</td>\n' +
@@ -2628,6 +2657,7 @@
                     else
                     {
                         $('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').addClass('hide');
+                        $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
                         impact_value = 0;
                         total = parseFloat(total) + parseFloat(impact_value);
@@ -2756,7 +2786,9 @@
 
             $(document).on('change', '.cus_radio', function(){
 
-                $('.cus_radio').next('input').val(0);
+                var row_id = $(this).data('id');
+
+                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('.cus_radio').next('input').val(0);
                 $(this).next('input').val(1);
 
             });
