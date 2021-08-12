@@ -953,7 +953,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                         @if(auth()->user()->can('user-products'))
 
-                            <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 4) My Products @else Supplier Products @endif</a></li>
+                            <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 4) My Products @else Suppliers Products @endif</a></li>
 
                         @endif
 

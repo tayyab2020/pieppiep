@@ -41,6 +41,19 @@
                                             </div>
                                         </div>
 
+                                        <div style="margin: 20px 0;display: flex;align-items: center;justify-content: flex-start;" class="form-group">
+
+                                            <label style="padding-top: 0;" class="control-label col-sm-4">Comment Box:</label>
+
+                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;margin-left: 20px;">No</span>
+                                            <label style="margin: 0;" class="switch">
+                                                <input {{isset($feature) ? ($feature->comment_box ? 'checked' : null) : null}} class="comment_box" name="comment_box" type="checkbox">
+                                                <span class="slider round"></span>
+                                            </label>
+                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: monospace;">Yes</span>
+
+                                        </div>
+
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_display_name">PDF Order</label>
                                             <div class="col-sm-6">

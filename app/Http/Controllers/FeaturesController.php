@@ -62,6 +62,15 @@ class FeaturesController extends Controller
 
     public function store(Request $request)
     {
+        if($request->comment_box)
+        {
+            $comment_box = 1;
+        }
+        else
+        {
+            $comment_box = 0;
+        }
+
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
@@ -73,7 +82,7 @@ class FeaturesController extends Controller
 
         if($request->heading_id)
         {
-            features::where('id',$request->heading_id)->update(['title' => $request->title, 'order_no' => $request->order_no]);
+            features::where('id',$request->heading_id)->update(['title' => $request->title, 'comment_box' => $comment_box, 'order_no' => $request->order_no]);
             Session::flash('success', 'Feature updated successfully.');
         }
         else
@@ -81,6 +90,7 @@ class FeaturesController extends Controller
             $feature = new features;
             $feature->user_id = $user_id;
             $feature->title = $request->title;
+            $feature->comment_box = $comment_box;
             $feature->order_no = $request->order_no;
             $feature->save();
 

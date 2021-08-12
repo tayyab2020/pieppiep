@@ -447,6 +447,25 @@
 
                         </div>
                     </div>
+                    <div id="myModal2" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Feature Comment</h4>
+                                </div>
+                                <div class="modal-body">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
                 </form>
 
@@ -566,6 +585,51 @@
     </div>
 
     <style>
+
+        /*.info {
+            font-size: 20px;
+            padding: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 15px;
+            float: left;
+            border: 1px solid #bcbcbc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px;
+        }*/
+
+        a.info {
+            vertical-align: bottom;
+            position:relative; /* Anything but static */
+            width: 1.5em;
+            height: 1.5em;
+            text-indent: -9999em;
+            display: inline-block;
+            color: white;
+            font-weight:bold;
+            font-size:1em;
+            line-height:1em;
+            background-color:#628cb6;
+            cursor: pointer;
+            margin-left: .25em;
+            -webkit-border-radius:.75em;
+            -moz-border-radius:.75em;
+            border-radius:.75em;
+        }
+
+        a.info:before {
+            content:"i";
+            position: absolute;
+            top: .25em;
+            left:0;
+            text-indent: 0;
+            display:block;
+            width:1.5em;
+            text-align:center;
+            font-family: monospace;
+        }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered
         {
@@ -1360,13 +1424,22 @@
 
                                         });
 
+                                        if(value.comment_box == 1)
+                                        {
+                                            var icon = '<a data-feature="'+value.id+'" class="info comment-btn">Info</a>';
+                                        }
+                                        else
+                                        {
+                                            var icon = '';
+                                        }
+
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
-                                            '</div></div>\n';
+                                            '</div>' + icon + '</div>\n';
 
                                         features = features + content;
 
@@ -2159,13 +2232,22 @@
 
                                         });
 
+                                        if(value.comment_box == 1)
+                                        {
+                                            var icon = '<a data-feature="'+value.id+'" class="info comment-btn">Info</a>';
+                                        }
+                                        else
+                                        {
+                                            var icon = '';
+                                        }
+
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
-                                            '</div></div>\n';
+                                            '</div>' + icon + '</div>\n';
 
                                         features = features + content;
 
@@ -2326,13 +2408,22 @@
 
                                         });
 
+                                        if(value.comment_box == 1)
+                                        {
+                                            var icon = '<a data-feature="'+value.id+'" class="info comment-btn">Info</a>';
+                                        }
+                                        else
+                                        {
+                                            var icon = '';
+                                        }
+
                                         var content = '<div class="row" style="margin: 10px 0;display: inline-block;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
                                             '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
-                                            '</div></div>\n';
+                                            '</div>' + icon + '</div>\n';
 
                                         features = features + content;
 
@@ -2571,6 +2662,33 @@
                         }
                     });
                 }
+
+            });
+
+            $(document).on('click', '.comment-btn', function(){
+
+                var current = $(this);
+                var row_id = current.parent().parent().data('id');
+                var feature_id = current.data('feature');
+
+                $('#myModal2').find('.modal-body').find('.comment-boxes').hide();
+
+                if($('#myModal2').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${feature_id}']`).length > 0)
+                {
+                    var box = $('#myModal2').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${feature_id}']`);
+                    box.parent().show();
+                }
+                else
+                {
+                    $('#myModal2').find('.modal-body').append(
+                        '<div class="comment-boxes" data-id="'+row_id+'">\n' +
+                        '<textarea style="resize: vertical;width: 100%;border: 1px solid #c9c9c9;border-radius: 5px;outline: none;" data-id="'+ feature_id +'" rows="5" name="comment-'+ row_id + '-' + feature_id +'"></textarea>\n' +
+                        '</div>'
+                    );
+                }
+
+                $('#myModal2').modal('toggle');
+                $('.modal-backdrop').hide();
 
             });
 
