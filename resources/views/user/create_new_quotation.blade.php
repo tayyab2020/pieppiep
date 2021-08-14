@@ -94,7 +94,7 @@
 
                                                         </div>
 
-                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="margin-bottom: 10px;padding-bottom: 15px;">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="padding-bottom: 15px;">
 
                                                             <table id="products_table" style="width: 100%;">
                                                                 <thead>
@@ -798,7 +798,8 @@
             display: flex;
             flex-direction: column;
             background: #fff;
-            overflow: hidden;
+            overflow-y: hidden;
+            overflow-x: auto;
         }
 
         table tr th

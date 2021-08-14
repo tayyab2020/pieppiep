@@ -462,10 +462,8 @@
 
     #content {
         width: 100%;
-        padding: 20px;
         transition: all 1s;
-        overflow-x: hidden;
-        height: 100%;
+        overflow: hidden;
     }
 
     /* ---------------------------------------------------
@@ -633,8 +631,11 @@
     .right-side {
         width: 100% !important;
         margin: 0 !important;
-        height: auto !important;
+        height: 100% !important;
         background: transparent !important;
+        padding: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .right-side .container-fluid
@@ -1170,16 +1171,6 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
     <!-- Page Content  -->
     <div id="content">
-
-        {{--<nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-
-                <button type="button" id="sidebarCollapse1" class="btn btn-info">
-                    <i class="fa fa-align-left"></i>
-                </button>
-
-            </div>
-        </nav>--}}
 
         @yield('content')
 
