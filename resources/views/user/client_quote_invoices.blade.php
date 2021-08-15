@@ -13,7 +13,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
-                                        @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-custom-quotations')
+                                        @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations' || Route::currentRouteName() == 'client-custom-quotations')
                                             <h2>{{__('text.Quotations')}}</h2>
                                         @else
                                             <h2>{{__('text.Quotation Invoices')}}</h2>
@@ -31,9 +31,9 @@
 
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">ID</th>
 
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">@if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-custom-quotations') {{__('text.Quotation Number')}} @else {{__('text.Invoice Number')}} @endif</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">@if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations' || Route::currentRouteName() == 'client-custom-quotations') {{__('text.Quotation Number')}} @else {{__('text.Invoice Number')}} @endif</th>
 
-                                                        @if(Route::currentRouteName() != 'client-custom-quotations')
+                                                        @if(Route::currentRouteName() != 'client-custom-quotations' && Route::currentRouteName() != 'client-new-quotations')
 
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending" id="photo">{{__('text.Request Number')}}</th>
 
@@ -49,9 +49,13 @@
 
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Current Stage')}}</th>
 
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Accepted Date')}}</th>
+                                                        @if(Route::currentRouteName() != 'client-new-quotations')
 
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Delivery Date')}}</th>
+                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Accepted Date')}}</th>
+
+                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Delivery Date')}}</th>
+
+                                                        @endif
 
                                                         @if(Route::currentRouteName() == 'client-quotations')
 
@@ -73,7 +77,7 @@
 
                                                             <td>{{$key->invoice_id}}</td>
 
-                                                            @if(Route::currentRouteName() == 'client-custom-quotations')
+                                                            @if(Route::currentRouteName() == 'client-custom-quotations' || Route::currentRouteName() == 'client-new-quotations')
 
                                                                 <td><a href="{{ url('/aanbieder/aangepaste-offerte/'.$key->invoice_id) }}">QUO# {{$key->quotation_invoice_number}}</a></td>
 
@@ -134,7 +138,7 @@
 
                                                             <td class="current-stage">
 
-                                                                @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-custom-quotations')
+                                                                @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations' || Route::currentRouteName() == 'client-custom-quotations')
 
                                                                     @if($key->status == 3)
 
@@ -156,7 +160,7 @@
 
                                                                         @if($key->accepted)
 
-                                                                            @if(Route::currentRouteName() == 'client-custom-quotations')
+                                                                            @if(Route::currentRouteName() == 'client-custom-quotations' || Route::currentRouteName() == 'client-new-quotations')
 
                                                                                 <span class="btn btn-success">{{__('text.Quotation Accepted')}}</span>
 
@@ -183,6 +187,10 @@
                                                                             @if(Route::currentRouteName() == 'client-custom-quotations')
 
                                                                                 <a class="btn btn-primary1" href="{{ url('/aanbieder/eigen-offerte/accepteren-offerte/'.$key->invoice_id) }}">{{__('text.Accept')}}</a>
+
+                                                                            @elseif(Route::currentRouteName() == 'client-new-quotations')
+
+                                                                                <a class="btn btn-primary1" href="{{ url('/aanbieder/accept-new-quotation/'.$key->invoice_id) }}">{{__('text.Accept')}}</a>
 
                                                                             @else
 
@@ -214,15 +222,19 @@
 
                                                              </td>
 
-                                                            <td class="accept_date">
-                                                                <input type="hidden" id="accept_date" value="{{$cal_accept_date}}">
-                                                                {{$accept_date}}
-                                                            </td>
+                                                            @if(Route::currentRouteName() != 'client-new-quotations')
 
-                                                            <td class="delivery_date">
-                                                                <input type="hidden" id="delivery_date" value="{{$cal_delivery_date}}">
-                                                                {{$delivery_date}}
-                                                            </td>
+                                                                <td class="accept_date">
+                                                                    <input type="hidden" id="accept_date" value="{{$cal_accept_date}}">
+                                                                    {{$accept_date}}
+                                                                </td>
+
+                                                                <td class="delivery_date">
+                                                                    <input type="hidden" id="delivery_date" value="{{$cal_delivery_date}}">
+                                                                    {{$delivery_date}}
+                                                                </td>
+
+                                                            @endif
 
                                                             @if(Route::currentRouteName() == 'client-quotations')
 
@@ -257,27 +269,36 @@
 
                                                                         @else
 
-                                                                            <li><a href="{{ url('/aanbieder/offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
-                                                                            <li><a href="{{ url('/aanbieder/bekijk-offerte-aanvraag/'.$key->id) }}">{{__('text.View Request')}}</a></li>
-                                                                            <li><a href="{{ url('/aanbieder/download-client-quote-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+                                                                            @if(Route::currentRouteName() == 'client-new-quotations')
 
-                                                                            @if($key->status != 0 && $key->status != 2 && $key->status != 3)
+                                                                                {{--<li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>--}}
+                                                                                <li><a href="{{ url('/aanbieder/download-client-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
-                                                                                <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
+                                                                            @else
 
-                                                                                <li><a onclick="accept(this)" data-date="{{$delivery_date != '-' ? $delivery_date : null}}" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Accept')}}</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/bekijk-offerte-aanvraag/'.$key->id) }}">{{__('text.View Request')}}</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/download-client-quote-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
-                                                                            @endif
+                                                                                @if($key->status != 0 && $key->status != 2 && $key->status != 3)
 
-                                                                            @if($key->status == 2)
+                                                                                    <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
 
-                                                                                <li><a class="pay_now" onclick="PayNow(this)" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Pay Now')}}</a></li>
+                                                                                    <li><a onclick="accept(this)" data-date="{{$delivery_date != '-' ? $delivery_date : null}}" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Accept')}}</a></li>
 
-                                                                            @endif
+                                                                                @endif
 
-                                                                            @if($key->delivered == 1 && $key->received == 0)
+                                                                                @if($key->status == 2)
 
-                                                                                <li><a href="{{ url('/aanbieder/mark-received/'.$key->invoice_id) }}">{{__('text.Mark as received')}}</a></li>
+                                                                                    <li><a class="pay_now" onclick="PayNow(this)" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Pay Now')}}</a></li>
+
+                                                                                @endif
+
+                                                                                @if($key->delivered == 1 && $key->received == 0)
+
+                                                                                    <li><a href="{{ url('/aanbieder/mark-received/'.$key->invoice_id) }}">{{__('text.Mark as received')}}</a></li>
+
+                                                                                @endif
 
                                                                             @endif
 

@@ -184,7 +184,15 @@
 
                                                                                 @elseif($key->approved)
 
-                                                                                    <span class="btn btn-success">{{__('text.Quotation Approved')}}</span>
+                                                                                    @if(Route::currentRouteName() == 'new-quotations')
+
+                                                                                        <span class="btn btn-success">Quotation Sent</span>
+
+                                                                                    @else
+
+                                                                                        <span class="btn btn-success">{{__('text.Quotation Approved')}}</span>
+
+                                                                                    @endif
 
                                                                                 @else
 
@@ -301,8 +309,19 @@
 
                                                                                 @if(Route::currentRouteName() == 'new-quotations')
 
-                                                                                    <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+                                                                                    @if(!$key->approved)
+
+                                                                                        <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+
+                                                                                    @endif
+
                                                                                     <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                    @if(!$key->approved)
+
+                                                                                        <li><a href="{{ url('/aanbieder/send-new-quotation/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
+
+                                                                                    @endif
 
                                                                                 @else
 

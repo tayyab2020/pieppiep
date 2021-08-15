@@ -721,6 +721,17 @@ class UserController extends Controller
         return view('user.client_quote_invoices', compact('invoices'));
     }
 
+    public function ClientNewQuotations()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+
+        $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.user_id', $user_id)->where('new_quotations.approved', 1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+
+        return view('user.client_quote_invoices', compact('invoices'));
+    }
+
     public function CustomQuotations($id = '')
     {
         $user = Auth::guard('user')->user();
@@ -1278,7 +1289,7 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
-        $invoice = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.handyman_id')->where('custom_quotations.id', $id)->where('custom_quotations.user_id', $user_id)->first();
+        $invoice = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.handyman_id')->where('custom_quotations.id', $id)->where('custom_quotations.user_id', $user_id)->where('custom_quotations.status',1)->first();
 
         if (!$invoice) {
             return redirect()->back();
@@ -1295,6 +1306,46 @@ class UserController extends Controller
                 ->from('info@vloerofferte.nl')
                 ->subject(__('text.Quotation Accepted!'))
                 ->setBody("Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+        });
+
+
+        /*$admin_email = $this->sl->admin_email;
+
+        \Mail::send(array(), array(), function ($message) use($admin_email,$user_name,$invoice,$user) {
+            $message->to($admin_email)
+                ->from('info@vloerofferte.nl')
+                ->subject('Quotation Accepted!')
+                ->setBody("A quotation QUO# ".$invoice->quotation_invoice_number." has been accepted by Mr/Mrs ".$user->name.' '.$user->family_name."<br>Handyman: ".$user_name."<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+        });*/
+
+        Session::flash('success', __('text.Quotation accepted successfully!'));
+
+        return redirect()->back();
+    }
+
+    public function AcceptNewQuotation($id)
+    {
+
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+
+        $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.id', $id)->where('new_quotations.user_id', $user_id)->where('new_quotations.status',1)->first();
+
+        if (!$invoice) {
+            return redirect()->back();
+        }
+
+        new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1]);
+
+        $creator_email = $invoice->email;
+        $creator_name = $invoice->name;
+
+        \Mail::send(array(), array(), function ($message) use ($creator_email, $creator_name, $invoice, $user) {
+            $message->to($creator_email)
+                ->from('info@vloerofferte.nl')
+                ->subject(__('text.Quotation Accepted!'))
+                ->setBody("Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
 
 
@@ -2320,58 +2371,67 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        $customers = User::where('parent_id', $user_id)->get();
+        $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
 
-        if($user_role == 2)
+        if($check && $check->status == 0)
         {
-            $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
-            $suppliers = User::whereIn('id',$suppliers)->get();
-            $products = array();
+            $customers = User::where('parent_id', $user_id)->get();
+
+            if($user_role == 2)
+            {
+                $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+                $suppliers = User::whereIn('id',$suppliers)->get();
+                $products = array();
+            }
+            else
+            {
+                $products = Products::where('user_id',$user_id)->get();
+                $suppliers = array();
+            }
+
+            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
+            {
+                $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
+                    ->select('new_quotations_features.*','features.title','features.comment_box');
+
+            }])->get();
+
+            if (!$invoice) {
+                return redirect()->route('new-quotations');
+            }
+
+
+            $supplier_products = array();
+            $sub_products = array();
+            $colors = array();
+            $features = array();
+
+            $f = 0;
+
+            foreach ($invoice as $i => $item)
+            {
+                $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->get();
+                $colors[$i] = colors::where('product_id',$item->product_id)->get();
+
+                foreach ($item->features as $feature)
+                {
+                    $features[$f] = product_features::where('product_id',$item->product_id)->where('heading_id',$feature->feature_id)->get();
+
+                    if($feature->ladderband)
+                    {
+                        $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->select('new_quotations_sub_products.*','product_ladderbands.title','product_ladderbands.code')->get();
+                    }
+
+                    $f = $f + 1;
+                }
+            }
+
+            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','features','customers','invoice','sub_products'));
         }
         else
         {
-            $products = Products::where('user_id',$user_id)->get();
-            $suppliers = array();
-        }
-
-        $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
-        {
-            $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
-            ->select('new_quotations_features.*','features.title','features.comment_box');
-
-        }])->get();
-
-        if (!$invoice) {
             return redirect()->route('new-quotations');
         }
-
-
-        $supplier_products = array();
-        $sub_products = array();
-        $colors = array();
-        $features = array();
-
-        $f = 0;
-
-        foreach ($invoice as $i => $item)
-        {
-            $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->get();
-            $colors[$i] = colors::where('product_id',$item->product_id)->get();
-
-            foreach ($item->features as $feature)
-            {
-                $features[$f] = product_features::where('product_id',$item->product_id)->where('heading_id',$feature->feature_id)->get();
-
-                if($feature->ladderband)
-                {
-                    $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->select('new_quotations_sub_products.*','product_ladderbands.title','product_ladderbands.code')->get();
-                }
-
-                $f = $f + 1;
-            }
-        }
-
-        return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','features','customers','invoice','sub_products'));
     }
 
     public function DownloadNewQuotation($id)
@@ -2390,6 +2450,25 @@ class UserController extends Controller
 
         if (!$invoice) {
             return redirect()->route('new-quotations');
+        }
+
+        $quotation_invoice_number = $invoice->quotation_invoice_number;
+
+        $filename = $quotation_invoice_number . '.pdf';
+
+        return response()->download(public_path("assets/newQuotations/{$filename}"));
+    }
+
+    public function DownloadClientNewQuotation($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+
+        $invoice = new_quotations::where('id', $id)->where('user_id', $user_id)->first();
+
+        if (!$invoice) {
+            return redirect()->route('client-new-quotations');
         }
 
         $quotation_invoice_number = $invoice->quotation_invoice_number;
@@ -3010,6 +3089,69 @@ class UserController extends Controller
 
             Session::flash('success', __('text.Quotation has been sent to customer'));
             return redirect()->route('customer-quotations');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function SendNewQuotation($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
+        $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
+
+        if($check)
+        {
+            $user_name = $user->name;
+            $user_email = $user->email;
+            $company_name = $user->company_name;
+            $result = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.id', $id)->select('users.company_name', 'users.id', 'users.name', 'users.family_name', 'users.email', 'new_quotations.*')->first();
+            $result->approved = 1;
+            $result->status = 1;
+            $result->save();
+
+            $quotation_invoice_number = $result->quotation_invoice_number;
+
+            $filename = $quotation_invoice_number . '.pdf';
+
+            $file = public_path() . '/assets/newQuotations/' . $filename;
+
+            $type = 'new';
+
+            $client_email = $result->email;
+            $client_name = $result->name;
+
+            \Mail::send('user.custom_quotation_mail',
+                array(
+                    'username' => $user_name,
+                    'client' => $client_name,
+                    'company_name' => $company_name,
+                    'quotation_invoice_number' => $quotation_invoice_number,
+                    'type' => $type
+                ), function ($message) use ($file, $client_email, $user_email, $user_name, $filename) {
+                    $message->from('info@vloerofferte.nl');
+                    $message->to($client_email)->subject(__('text.Quotation Created!'));
+
+                    $message->attach($file, [
+                        'as' => $filename,
+                        'mime' => 'application/pdf',
+                    ]);
+
+                });
+
+
+            Session::flash('success', __('text.Quotation has been sent to customer'));
+            return redirect()->route('new-quotations');
         }
         else
         {

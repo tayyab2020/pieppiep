@@ -184,7 +184,7 @@
                                                                             <td>1 x 17</td>
                                                                             <td></td>
                                                                             <td></td>
-                                                                            <td class="price">€ {{$item->amount}}</td>
+                                                                            <td class="price">€ {{round($item->amount)}}</td>
                                                                             <td id="next-row-td" style="padding: 0;">
                                                                             <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
                                                                                 <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
@@ -1180,6 +1180,7 @@
 
                     total = parseFloat(total) + parseFloat(obj.value);
                     total = total.toFixed(2);
+                    total = Math.round(total);
 
                 });
 
@@ -1488,7 +1489,7 @@
                                         '</div></div>' + features +
                                         '</div>');
 
-                                    current.parent().parent().find('.price').text('€ ' + price);
+                                    current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
                                 }
                             }
@@ -2335,7 +2336,7 @@
                                         '</div></div>' + features +
                                         '</div>');
 
-                                    current.parent().parent().parent().find('.price').text('€ ' + price);
+                                    current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
 
                                 }
@@ -2511,7 +2512,7 @@
                                         '</div></div>' + features +
                                         '</div>');
 
-                                    current.parent().parent().parent().find('.price').text('€ ' + price);
+                                    current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                 }
                             }
@@ -2578,7 +2579,7 @@
 
                         current.next('input').val(impact_value);
 
-                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
                         calculate_total();
@@ -2666,7 +2667,7 @@
 
                         current.next('input').val(impact_value);
 
-                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
                         calculate_total();
@@ -2729,7 +2730,7 @@
 
                             current.next('input').val(impact_value);
 
-                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
                             $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
                             calculate_total();

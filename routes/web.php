@@ -105,6 +105,8 @@
   Route::get('/aanbieder-verkoopfacturen/{id?}', 'UserController@HandymanQuotationsInvoices')->name('quotations-invoices');
   Route::get('/aanbieder-commissiefacturen/{id?}', 'UserController@HandymanQuotationsInvoices')->name('commission-invoices');
   Route::get('/offertes/{id?}', 'UserController@Quotations')->name('client-quotations');
+  Route::get('/client-new-quotations', 'UserController@ClientNewQuotations')->name('client-new-quotations');
+  Route::get('/download-client-new-quotation/{id}', 'UserController@DownloadClientNewQuotation');
   Route::get('/Offerte-op-maat/{id?}', 'UserController@CustomQuotations')->name('client-custom-quotations');
   Route::get('/Offerte-verkoopfactuur/{id?}', 'UserController@QuotationsInvoices')->name('client-quotations-invoices');
   Route::get('/bekijk-offerte-aanvraag/{id}', 'UserController@QuoteRequest');
@@ -119,8 +121,10 @@
   Route::post('/pay-quotation', 'UserController@PayQuotation');
   Route::get('/quotation-payment-redirect-page/{id}', 'FrontendController@QuotationPaymentRedirectPage');
   Route::get('/versturen-eigen-offerte/{id}', 'UserController@SendCustomQuotation');
+  Route::get('/send-new-quotation/{id}', 'UserController@SendNewQuotation');
   Route::post('/aangepaste-offerte/ask-customization', 'UserController@CustomQuotationAskCustomization');
   Route::get('/eigen-offerte/accepteren-offerte/{id}', 'UserController@CustomQuotationAcceptQuotation');
+  Route::get('/accept-new-quotation/{id}', 'UserController@AcceptNewQuotation');
   Route::get('/bekijk-offerteaanvraag-aanbieder/{id}', 'UserController@HandymanQuoteRequest');
   Route::get('/download-handyman-quote-request/{id}', 'UserController@DownloadHandymanQuoteRequest');
   Route::get('/opstellen-offerte/{id}', 'UserController@CreateQuotation');

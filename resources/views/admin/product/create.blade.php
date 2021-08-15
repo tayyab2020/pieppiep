@@ -42,7 +42,7 @@
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu5">Features</a></li>
                                             </ul>
 
-                                            <form style="padding: 0;" class="form-horizontal" action="{{route('admin-product-store')}}" method="POST" enctype="multipart/form-data">
+                                            <form id="product_form" style="padding: 0;" class="form-horizontal" action="{{route('admin-product-store')}}" method="POST" enctype="multipart/form-data">
 
                                                 {{csrf_field()}}
 
@@ -54,7 +54,7 @@
 
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Margin (%)</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Margin (%)*</label>
                                                             <div class="col-sm-6">
                                                                 <input min="100" value="{{isset($cats) ? $cats->margin : null}}" class="form-control" name="margin" id="blood_group_display_name" placeholder="Enter Product margin" required step="1" type="number">
                                                             </div>
@@ -62,21 +62,21 @@
 
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
+                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Title*</label>
                                                             <div class="col-sm-6">
                                                                 <input value="{{isset($cats) ? $cats->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Product title" required="" type="text">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Slug* <span>(In English)</span></label>
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Slug*</label>
                                                             <div class="col-sm-6">
                                                                 <input value="{{isset($cats) ? $cats->slug : null}}" class="form-control" name="slug" id="blood_group_slug" placeholder="Enter Product Slug" required="" type="text">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Model Number <span>(In English)</span></label>
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Model Number</label>
                                                             <div class="col-sm-6">
                                                                 <input value="{{isset($cats) ? $cats->model_number : null}}" class="form-control" name="model_number" id="blood_group_slug" placeholder="Enter Model Number" type="text">
                                                             </div>
@@ -851,7 +851,7 @@
                                                     <hr style="margin: 30px 0;">
 
                                                     <div style="padding: 0;" class="add-product-footer">
-                                                        <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($cats) ? 'Edit Product' : 'Add Product'}}</button>
+                                                        <button name="addProduct_btn" type="button" class="btn add-product_btn">{{isset($cats) ? 'Edit Product' : 'Add Product'}}</button>
                                                     </div>
 
                                                 </div>
@@ -882,6 +882,90 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+
+        $(".add-product_btn").click(function () {
+
+            var flag = 0;
+
+            if(!$("input[name='margin']").val())
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Margin should not be empty!',
+                });
+            }
+            else if($("input[name='margin']").val() < 100)
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Margin should not be smaller than 100!',
+                });
+            }
+            else if(!$("input[name='title']").val())
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Title should not be empty!',
+                });
+            }
+            else if(!$("input[name='slug']").val())
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Slug should not be empty!',
+                });
+            }
+            else if(!$(".js-data-example-ajax").val())
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Category should not be empty!',
+                });
+            }
+            else if(!$(".js-data-example-ajax1").val())
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Brand should not be empty!',
+                });
+            }
+            else if(!$(".js-data-example-ajax2").val())
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Model should not be empty!',
+                });
+            }
+            else if(!$("input[name='description']").val())
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Description should not be empty!',
+                });
+            }
+
+            if(!flag)
+            {
+                $('#product_form').submit();
+            }
+
+        });
 
         var row = 0;
         var rem_index = 0;

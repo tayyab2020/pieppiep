@@ -90,7 +90,7 @@
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
                                             <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td>{{$request->total[$i]}}</td>
+                                            <td>{{round($request->total[$i])}}</td>
                                         </tr>
 
                                     @endforeach
