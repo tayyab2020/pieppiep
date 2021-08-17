@@ -20,7 +20,7 @@
                                         @include('includes.form-success')
                                         {{csrf_field()}}
 
-                                        <input type="hidden" name="org_email" value="{{isset($customer->email) ? $customer->email : null}}">
+                                        <input type="hidden" name="org_id" value="{{isset($customer->id) ? $customer->id : null}}">
 
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="">{{__('text.Name')}}*</label>
@@ -80,7 +80,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="email">{{__('text.Email')}}*</label>
                                             <div class="col-sm-6">
-                                                <input class="form-control" value="{{isset($customer->email) ? $customer->email : null}}" name="email" id="email" placeholder="" required="" type="email">
+                                                <input class="form-control" value="{{isset($customer->email) ? $customer->email : null}}" {{isset($customer) ? 'readonly' : null}} name="email" id="email" placeholder="" required="" type="email">
                                             </div>
                                         </div>
 

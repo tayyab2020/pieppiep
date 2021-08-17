@@ -255,7 +255,7 @@
 
                                                                             @if($key->status != 2 && $key->status != 3)
 
-                                                                                <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/aangepaste-offerte/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
+                                                                                <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-type="2" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/aangepaste-offerte/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
 
                                                                                 <li><a href="{{ url('/aanbieder/eigen-offerte/accepteren-offerte/'.$key->invoice_id) }}">{{__('text.Accept')}}</a></li>
 
@@ -273,6 +273,13 @@
 
                                                                                 {{--<li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>--}}
                                                                                 <li><a href="{{ url('/aanbieder/download-client-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+                                                                                @if($key->status != 0 && $key->status != 2 && $key->status != 3)
+
+                                                                                    <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-type="3" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
+
+                                                                                    <li><a href="{{ url('/aanbieder/accept-new-quotation/'.$key->invoice_id) }}">{{__('text.Accept')}}</a></li>
+
+                                                                                @endif
 
                                                                             @else
 
@@ -282,7 +289,7 @@
 
                                                                                 @if($key->status != 0 && $key->status != 2 && $key->status != 3)
 
-                                                                                    <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
+                                                                                    <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-type="1" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
 
                                                                                     <li><a onclick="accept(this)" data-date="{{$delivery_date != '-' ? $delivery_date : null}}" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Accept')}}</a></li>
 
@@ -434,6 +441,7 @@
             <form id="ask-form" method="post" action="">
 
                 <input type="hidden" name="_token" value="{{@csrf_token()}}">
+                <input type="hidden" name="type" id="form_type">
 
                 <div class="modal-content">
 
@@ -1781,10 +1789,12 @@
             var invoice_id = $(e).data('id');
             var url = $(e).data('url');
             var text = $(e).data('text');
+            var type = $(e).data('type');
 
             $('#invoice_id1').val(invoice_id);
             $('#ask-form').attr('action', url);
             $('#review_text').val(text);
+            $('#form_type').val(type);
 
             $('#myModal1').modal('toggle');
         }

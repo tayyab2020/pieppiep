@@ -7,6 +7,7 @@ use App\color;
 use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
+use App\customers_details;
 use App\product_ladderbands;
 use App\features;
 use App\handyman_quotes;
@@ -124,7 +125,7 @@ class UserController extends Controller
 
         if($user->can('create-new-quotation'))
         {
-            $customers = User::where('parent_id', $user_id)->get();
+            $customers = customers_details::where('retailer_id', $user_id)->get();
 
             if($user->role_id == 2)
             {
@@ -974,32 +975,45 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
-        $invoice = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotation_invoices.id', $id)->where('quotes.user_id', $user_id)->first();
+        if($request->type == 1)
+        {
+            $invoice = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotation_invoices.id', $id)->where('quotes.user_id', $user_id)->first();
 
-        if (!$invoice) {
-            return redirect()->back();
+            if (!$invoice) {
+                return redirect()->back();
+            }
+
+            quotation_invoices::where('id', $id)->update(['ask_customization' => 1, 'review_text' => $review_text]);
+        }
+        else
+        {
+            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.id', $id)->where('new_quotations.user_id', $user_id)->first();
+
+            if (!$invoice) {
+                return redirect()->back();
+            }
+
+            new_quotations::where('id', $id)->update(['ask_customization' => 1, 'review_text' => $review_text]);
         }
 
-        quotation_invoices::where('id', $id)->update(['ask_customization' => 1, 'review_text' => $review_text]);
+        $creator_email = $invoice->email;
+        $creator_name = $invoice->name;
 
-        $handyman_email = $invoice->email;
-        $user_name = $invoice->name;
-
-        \Mail::send(array(), array(), function ($message) use ($handyman_email, $user_name, $invoice, $user) {
-            $message->to($handyman_email)
+        \Mail::send(array(), array(), function ($message) use ($creator_email, $creator_name, $invoice, $user) {
+            $message->to($creator_email)
                 ->from('info@vloerofferte.nl')
                 ->subject(__('text.Quotation Review Request!'))
-                ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " submitted review request against your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("Dear Mr/Mrs " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " submitted review request against your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
 
 
         $admin_email = $this->sl->admin_email;
 
-        \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice, $user) {
+        \Mail::send(array(), array(), function ($message) use ($admin_email, $creator_name, $invoice, $user) {
             $message->to($admin_email)
                 ->from('info@vloerofferte.nl')
                 ->subject('Quotation Review Request!')
-                ->setBody("A quotation review request has been submitted by Mr/Mrs " . $user->name . " against quotation QUO# " . $invoice->quotation_invoice_number . "<br>Handyman: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("A quotation review request has been submitted by Mr/Mrs " . $user->name . " against quotation QUO# " . $invoice->quotation_invoice_number . "<br>Retailer: " . $creator_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
 
 
@@ -1460,7 +1474,7 @@ class UserController extends Controller
 
         if($user->can('customers'))
         {
-            $customers = User::where('role_id',3)->where('parent_id', $user_id)->where('allowed',0)->get();
+            $customers = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.retailer_id',$user_id)->select('customers_details.*','users.email')->get();
 
             return view('user.customers',compact('customers'));
         }
@@ -1587,23 +1601,16 @@ class UserController extends Controller
         if($user->can('edit-customer'))
         {
 
-            if(!$main_id)
+            if($main_id)
             {
-                $main_id = $user_id;
+                $user_id = $main_id;
             }
 
-            if($user_id != $id)
-            {
-                $customer = User::where('id',$id)->where('parent_id', $main_id)->first();
+            $customer = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.user_id',$id)->where('customers_details.retailer_id', $user_id)->select('customers_details.*','users.email')->first();
 
-                if($customer)
-                {
-                    return view('user.create_customer',compact('customer'));
-                }
-                else
-                {
-                    return redirect()->route('user-dashboard');
-                }
+            if($customer)
+            {
+                return view('user.create_customer',compact('customer'));
             }
             else
             {
@@ -1661,24 +1668,17 @@ class UserController extends Controller
 
         if($user->can('delete-customer'))
         {
-            if(!$main_id)
+            if($main_id)
             {
-                $main_id = $user_id;
+                $user_id = $main_id;
             }
 
-            if($user_id != $id)
-            {
-                $delete = User::where('id',$id)->where('parent_id',$main_id)->delete();
+            $delete = customers_details::where('user_id',$id)->where('retailer_id',$user_id)->delete();
 
-                if($delete)
-                {
-                    Session::flash('success', __('text.Customer deleted successfully'));
-                    return redirect()->route('customers');
-                }
-                else
-                {
-                    return redirect()->route('user-dashboard');
-                }
+            if($delete)
+            {
+                Session::flash('success', __('text.Customer deleted successfully'));
+                return redirect()->route('customers');
             }
             else
             {
@@ -1740,25 +1740,63 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        $check = User::where('parent_id',$user_id)->where('email',$request->email)->where('allowed',0)->first();
-
-        if($check)
+        if($request->org_id)
         {
-            Session::flash('unsuccess', __('text.User already created'));
+            customers_details::where('id',$request->org_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone, 'email' => $request->email]);
+
+            Session::flash('success', 'Customer details updated successfully');
             return redirect()->route('customers');
         }
         else
         {
-            $check = User::where('parent_id',$user_id)->where('email',$request->org_email)->where('allowed',0)->first();
+            $check = User::where('email',$request->email)->first();
 
             if($check)
             {
-                User::where('parent_id',$user_id)->where('email',$request->org_email)->where('allowed',0)->update(['name' => $request->name, 'family_name' => $request->family_name, 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone, 'email' => $request->email]);
-                Session::flash('success', __('text.Customer updated successfully'));
-                return redirect()->route('customers');
+
+                if($check->parent_id == $user_id)
+                {
+                    Session::flash('unsuccess', __('text.User already created'));
+                    return redirect()->route('customers');
+                }
+                else
+                {
+                    $check1 = customers_details::where('user_id',$check->id)->where('retailer_id',$user_id)->first();
+
+                    if($check1)
+                    {
+                        Session::flash('unsuccess', 'This email is already linked with your customer account. Kindly update that specific account from customers page.');
+                        return redirect()->route('customers');
+                    }
+                    else
+                    {
+                        $details = new customers_details();
+
+                        $details->user_id = $check->id;
+                        $details->retailer_id = $user_id;
+                        $details->name = $request->name;
+                        $details->family_name = $request->family_name;
+                        $details->business_name = $request->business_name;
+                        $details->postcode = $request->postcode;
+                        $details->address = $request->address;
+                        $details->city = $request->city;
+                        $details->phone = $request->phone;
+                        $details->save();
+
+                        Session::flash('success', 'Customer account created successfully');
+                        return redirect()->route('customers');
+                    }
+                }
             }
             else
             {
+                $user_name = $request->name;
+                $user_email = $request->email;
+
+                $retailer = User::where('id',$user_id)->first();
+                $retailer_name = $retailer->name;
+                $company_name = $retailer->company_name;
+
                 $org_password = Str::random(8);
                 $password = Hash::make($org_password);
 
@@ -1778,7 +1816,41 @@ class UserController extends Controller
                 $user->allowed = 0;
                 $user->save();
 
-                Session::flash('success', __('text.Customer created successfully'));
+                $details = new customers_details();
+                $input = $request->all();
+
+                $details->user_id = $user->id;
+                $details->retailer_id = $user_id;
+                $details->name = $request->name;
+                $details->family_name = $request->family_name;
+                $details->business_name = $request->business_name;
+                $details->postcode = $request->postcode;
+                $details->address = $request->address;
+                $details->city = $request->city;
+                $details->phone = $request->phone;
+                $details->save();
+
+                $input['id'] = $user->id;
+
+                $link = url('/') . '/aanbieder/client-new-quotations';
+
+                if($this->lang->lang == 'du')
+                {
+                    $msg = "Beste $user_name,<br><br>Er is een account voor je gecreëerd door " . $retailer_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br>$company_name";
+                }
+                else
+                {
+                    $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
+                }
+
+                \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password) {
+                    $message->to($user_email)
+                        ->from('info@vloerofferte.nl')
+                        ->subject(__('text.Account Created!'))
+                        ->setBody($msg, 'text/html');
+                });
+
+                Session::flash('success', 'Customer account created successfully');
                 return redirect()->route('customers');
             }
         }
@@ -2024,22 +2096,41 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        $check = User::where('email', $request->email)->where('parent_id',$user_id)->where('allowed',0)->first();
+        $flag = 0;
+        $flag1 = 0;
+        $check = User::where('email', $request->email)->first();
 
         if ($check) {
-            $response = array('data' => $check, 'message' => __('text.User already created'));
-            return $response;
-        } else {
 
+            $check1 = customers_details::where('user_id',$check->id)->where('retailer_id',$user_id)->first();
+
+            if($check1)
+            {
+                $response = array('data' => $check, 'message' => __('text.User already created'));
+                return $response;
+            }
+            else
+            {
+                $flag1 = 1;
+            }
+
+        }
+        else
+        {
+            $flag = 1;
+        }
+
+        if($flag)
+        {
             $user = new User;
             $input = $request->all();
 
-            /*$user_name = $input['name'];
+            $user_name = $request->name;
             $user_email = $request->email;
 
-            $handyman = Auth::guard('user')->user();
-            $handyman_name = $handyman->name;
-            $company_name = $handyman->company_name;*/
+            $retailer = User::where('id',$user_id)->first();
+            $retailer_name = $retailer->name;
+            $company_name = $retailer->company_name;
 
             $org_password = Str::random(8);
             $password = Hash::make($org_password);
@@ -2059,29 +2150,62 @@ class UserController extends Controller
             $user->allowed = 0;
             $user->save();
 
+            $details = new customers_details();
+            $input = $request->all();
+
+            $details->user_id = $user->id;
+            $details->retailer_id = $user_id;
+            $details->name = $request->name;
+            $details->family_name = $request->family_name;
+            $details->business_name = $request->business_name;
+            $details->postcode = $request->postcode;
+            $details->address = $request->address;
+            $details->city = $request->city;
+            $details->phone = $request->phone;
+            $details->save();
+
             $input['id'] = $user->id;
 
-            /*$link = url('/') . '/aanbieder/quotation-requests';
+            $link = url('/') . '/aanbieder/client-new-quotations';
 
             if($this->lang->lang == 'du')
             {
-                $msg = "Beste $user_name,<br><br>Er is een account voor je gecreëerd door " . $handyman_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br>$company_name";
+                $msg = "Beste $user_name,<br><br>Er is een account voor je gecreëerd door " . $retailer_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br>$company_name";
             }
             else
             {
-                $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by handyman " . $handyman_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
+                $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
             }
 
-            \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $handyman_name, $link, $org_password) {
+            \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password) {
                 $message->to($user_email)
                     ->from('info@vloerofferte.nl')
                     ->subject(__('text.Account Created!'))
                     ->setBody($msg, 'text/html');
-            });*/
-
-            $response = array('data' => $input, 'message' => __('text.New customer created successfully'));
-            return $response;
+            });
         }
+
+        if($flag1)
+        {
+            $details = new customers_details();
+            $input = $request->all();
+
+            $details->user_id = $check->id;
+            $details->retailer_id = $user_id;
+            $details->name = $request->name;
+            $details->family_name = $request->family_name;
+            $details->business_name = $request->business_name;
+            $details->postcode = $request->postcode;
+            $details->address = $request->address;
+            $details->city = $request->city;
+            $details->phone = $request->phone;
+            $details->save();
+
+            $input['id'] = $check->id;
+        }
+
+        $response = array('data' => $input, 'message' => __('text.New customer created successfully'));
+        return $response;
 
     }
 
@@ -2351,9 +2475,9 @@ class UserController extends Controller
         }
 
         if ($id) {
-            $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.id', $id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+            $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.user_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.id', $id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->get();
         } else {
-            $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+            $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.user_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->get();
         }
 
         return view('user.quote_invoices', compact('invoices'));
@@ -2373,9 +2497,9 @@ class UserController extends Controller
 
         $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
 
-        if($check && $check->status == 0)
+        if($check && ($check->status == 0 || $check->ask_customization))
         {
-            $customers = User::where('parent_id', $user_id)->get();
+            $customers = customers_details::where('retailer_id', $user_id)->get();
 
             if($user_role == 2)
             {
@@ -2496,11 +2620,13 @@ class UserController extends Controller
         $company_name = $user->company_name;
         $products = $request->products;
 
-        $client = User::where('id', $request->customer)->first();
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email')->first();
 
         if($request->quotation_id)
         {
-            new_quotations::where('id',$request->quotation_id)->update(['subtotal' => $request->total_amount, 'grand_total' => $request->total_amount]);
+            $ask = new_quotations::where('id',$request->quotation_id)->pluck('ask_customization')->first();
+
+            new_quotations::where('id',$request->quotation_id)->update(['user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => $request->total_amount, 'grand_total' => $request->total_amount]);
 
             $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
             $feature_ids = new_quotations_features::whereIn('quotation_data_id',$data_ids)->pluck('id');
@@ -2519,7 +2645,7 @@ class UserController extends Controller
             $invoice = new new_quotations();
             $invoice->quotation_invoice_number = $quotation_invoice_number;
             $invoice->creator_id = $user_id;
-            $invoice->user_id = $request->customer;
+            $invoice->user_id = $client->user_id;
             $invoice->vat_percentage = 21;
             $invoice->subtotal = $request->total_amount;
             $invoice->grand_total = $request->total_amount;
@@ -2632,6 +2758,16 @@ class UserController extends Controller
 
         if($request->quotation_id)
         {
+            if($ask)
+            {
+                \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number) {
+                    $message->to($client->email)
+                        ->from('info@vloerofferte.nl')
+                        ->subject('Quotation updated!')
+                        ->setBody("Quotation QUO# <b>" . $quotation_invoice_number . "</b> have been updated by retailer on your review request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                });
+            }
+
             \File::delete(public_path() .'/assets/newQuotations/'.$filename);
 
             Session::flash('success','Quotation has been updated successfully!');

@@ -29,7 +29,7 @@
                                                 <table id="example" class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline" role="grid" aria-describedby="product-table_wrapper_info" style="width: 100%;" width="100%" cellspacing="0">
                                                     <thead>
                                                     <tr role="row">
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">ID</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Sr. No</th>
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">{{__('text.Name')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Family Name')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Email')}}</th>
@@ -41,12 +41,12 @@
                                                     </thead>
 
                                                     <tbody>
-                                                    <?php $x = 0; ?>
+                                                    <?php $x = 1; ?>
 
                                                     @foreach($customers as $user)
                                                         <tr role="row" class="odd">
 
-                                                            <td>{{$user->id}}</td>
+                                                            <td>{{$x}}</td>
 
                                                             <td>{{$user->name}}</td>
 
@@ -63,13 +63,13 @@
                                                             <td>
                                                                     @if(auth()->user()->can('edit-customer'))
 
-                                                                        <a href="{{route('edit-customer',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
+                                                                        <a href="{{route('edit-customer',$user->user_id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
 
                                                                     @endif
 
                                                                     @if(auth()->user()->can('delete-customer'))
 
-                                                                        <a href="{{route('delete-customer',$user->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+                                                                        <a href="{{route('delete-customer',$user->user_id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
 
                                                                     @endif
                                                             </td>

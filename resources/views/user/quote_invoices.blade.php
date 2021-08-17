@@ -309,9 +309,19 @@
 
                                                                                 @if(Route::currentRouteName() == 'new-quotations')
 
-                                                                                    @if(!$key->approved)
+                                                                                    @if($key->status != 2 && $key->status != 3)
 
-                                                                                        <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+                                                                                        @if($key->ask_customization)
+
+                                                                                            <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                        @if($key->status == 0 || $key->ask_customization)
+
+                                                                                            <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+
+                                                                                        @endif
 
                                                                                     @endif
 

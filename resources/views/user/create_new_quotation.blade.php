@@ -33,7 +33,7 @@
 
                                                                 @foreach($customers as $key)
 
-                                                                    <option {{isset($invoice) ? ($invoice[0]->user_id == $key->id ? 'selected' : null) : null}} value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
+                                                                    <option {{isset($invoice) ? ($invoice[0]->user_id == $key->user_id ? 'selected' : null) : null}} value="{{$key->id}}">{{$key->name}} {{$key->family_name}}</option>
 
                                                                 @endforeach
 
@@ -518,107 +518,102 @@
     <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
 
-            <form id="quote_form" method="post" action="{{route('user.quote')}}">
+            <div class="modal-content">
 
-                <input type="hidden" name="_token" value="{{@csrf_token()}}">
+                <div class="modal-header">
+                    <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
+                </div>
 
-                <div class="modal-content">
+                <div class="modal-body" id="myWizard" style="display: inline-block;">
 
-                    <div class="modal-header">
-                        <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
+                    <input type="hidden" id="token" name="token" value="{{csrf_token()}}">
+                    <input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
+                    <input type="hidden" id="handyman_name" name="handyman_name" value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
+
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}" type="text">
+                        </div>
                     </div>
 
-                    <div class="modal-body" id="myWizard" style="display: inline-block;">
-
-                        <input type="hidden" id="token" name="token" value="{{csrf_token()}}">
-                        <input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
-                        <input type="hidden" id="handyman_name" name="handyman_name" value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}" type="text">
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-user"></i>
                             </div>
+                            <input id="family_name" name="family_name" class="form-control validation" placeholder="{{$lang->fn}}" type="text">
                         </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="family_name" name="family_name" class="form-control validation" placeholder="{{$lang->fn}}" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="address" name="address" class="form-control validation" placeholder="{{$lang->ad}}" type="text">
-                                <input type="hidden" id="check_address" value="0">
-                            </div>
-                        </div>
-
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="postcode" name="postcode" class="form-control validation" readonly placeholder="{{$lang->pc}}" type="text">
-                            </div>
-                        </div>
-
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="city" name="city" class="form-control validation" placeholder="{{$lang->ct}}" readonly type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <input id="phone" name="phone" class="form-control validation" placeholder="{{$lang->pn}}" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-envelope"></i>
-                                </div>
-                                <input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}" type="email">
-                            </div>
-                        </div>
-
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;" class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <input id="address" name="address" class="form-control validation" placeholder="{{$lang->ad}}" type="text">
+                            <input type="hidden" id="check_address" value="0">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <input id="postcode" name="postcode" class="form-control validation" readonly placeholder="{{$lang->pc}}" type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <input id="city" name="city" class="form-control validation" placeholder="{{$lang->ct}}" readonly type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <input id="phone" name="phone" class="form-control validation" placeholder="{{$lang->pn}}" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </div>
+                            <input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}" type="email">
+                        </div>
                     </div>
 
                 </div>
 
-            </form>
+                <div class="modal-footer">
+                    <button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;" class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
+                </div>
+
+            </div>
+
         </div>
     </div>
 
