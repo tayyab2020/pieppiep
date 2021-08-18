@@ -182,7 +182,7 @@ class UserController extends Controller
 
             if($price->max_height && ($request->height >= $price->max_height))
             {
-                $data[0] = ['value' => 'y_axis'];
+                $data[0] = ['value' => 'y_axis', 'max_height' => $price->max_height];
             }
             else
             {
@@ -210,15 +210,15 @@ class UserController extends Controller
         }
         else if($max_x_axis < $request->width && $max_y_axis < $request->height)
         {
-            $data[0] = ['value' => 'both'];
+            $data[0] = ['value' => 'both', 'max_width' => $max_x_axis, 'max_height' => $max_y_axis];
         }
         else if($max_x_axis < $request->width)
         {
-            $data[0] = ['value' => 'x_axis'];
+            $data[0] = ['value' => 'x_axis', 'max_width' => $max_x_axis];
         }
         else
         {
-            $data[0] = ['value' => 'y_axis'];
+            $data[0] = ['value' => 'y_axis', 'max_height' => $max_y_axis];
         }
 
         return $data;

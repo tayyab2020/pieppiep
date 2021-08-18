@@ -101,7 +101,7 @@
                                                                 <tr>
                                                                     <th style="padding: 5px;"></th>
                                                                     <th @if(auth()->user()->role_id == 4) style="display: none;" @endif>Supplier</th>
-                                                                    <th>Product</th>
+                                                                    <th style="width: 250px;">Product</th>
                                                                     <th>Color</th>
                                                                     <th>Width</th>
                                                                     <th>Height</th>
@@ -618,6 +618,11 @@
     </div>
 
     <style>
+
+        .swal2-html-container
+        {
+            line-height: 2;
+        }
 
         a.info {
             vertical-align: bottom;
@@ -1150,7 +1155,7 @@
             });
 
             $(".js-data-example-ajax").select2({
-                width: '100%',
+                width: '250px',
                 height: '200px',
                 placeholder: "{{__('text.Select Product')}}",
                 allowClear: true,
@@ -1366,7 +1371,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Width & Height are greater than max values',
+                                        html: 'Width & Height are greater than max values <br> Max Width: '+data[0].max_width+'<br> Max Height: '+data[0].max_height,
                                     });
 
                                     current.parent().parent().find('.price').text('');
@@ -1378,7 +1383,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Width is greater than max value',
+                                        html: 'Width is greater than max value <br> Max Width: '+data[0].max_width,
                                     });
 
                                     current.parent().parent().find('.price').text('');
@@ -1391,7 +1396,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Height is greater than max value',
+                                        html: 'Height is greater than max value <br> Max Height: '+data[0].max_height,
                                     });
 
                                     current.parent().parent().find('.price').text('');
@@ -1598,7 +1603,7 @@
                     focus_row(last_row);
 
                     last_row.find(".js-data-example-ajax").select2({
-                        width: '100%',
+                        width: '250px',
                         height: '200px',
                         placeholder: "{{__('text.Select Product')}}",
                         allowClear: true,
@@ -1756,7 +1761,7 @@
                     focus_row(last_row);
 
                     last_row.find(".js-data-example-ajax").select2({
-                        width: '100%',
+                        width: '250px',
                         height: '200px',
                         placeholder: "{{__('text.Select Product')}}",
                         allowClear: true,
@@ -2213,7 +2218,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Width & Height are greater than max values',
+                                        html: 'Width & Height are greater than max values <br> Max Width: '+data[0].max_width+'<br> Max Height: '+data[0].max_height,
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
@@ -2225,7 +2230,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Width is greater than max value',
+                                        html: 'Width is greater than max value <br> Max Width: '+data[0].max_width,
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
@@ -2238,7 +2243,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Height is greater than max value',
+                                        html: 'Height is greater than max value <br> Max Height: '+data[0].max_height,
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
@@ -2389,7 +2394,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Width & Height are greater than max values',
+                                        html: 'Width & Height are greater than max values <br> Max Width: '+data[0].max_width+'<br> Max Height: '+data[0].max_height,
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
@@ -2401,7 +2406,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Width is greater than max value',
+                                        html: 'Width is greater than max value <br> Max Width: '+data[0].max_width,
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');
@@ -2414,7 +2419,7 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: '{{__('text.Oops...')}}',
-                                        text: 'Height is greater than max value',
+                                        html: 'Height is greater than max value <br> Max Height: '+data[0].max_height,
                                     });
 
                                     current.parent().parent().parent().find('.price').text('');

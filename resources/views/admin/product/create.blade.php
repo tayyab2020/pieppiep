@@ -950,7 +950,7 @@
                     text: 'Model should not be empty!',
                 });
             }
-            else if(!$("input[name='description']").val())
+            else if(!$("#service_description").val())
             {
                 flag = 1;
                 Swal.fire({
