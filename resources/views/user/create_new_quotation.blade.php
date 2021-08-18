@@ -563,7 +563,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <input id="address" name="address" class="form-control validation" placeholder="{{$lang->ad}}" type="text">
+                            <input id="address" name="address" class="form-control" placeholder="{{$lang->ad}}" type="text">
                             <input type="hidden" id="check_address" value="0">
                         </div>
                     </div>
@@ -574,7 +574,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <input id="postcode" name="postcode" class="form-control validation" readonly placeholder="{{$lang->pc}}" type="text">
+                            <input id="postcode" name="postcode" class="form-control" readonly placeholder="{{$lang->pc}}" type="text">
                         </div>
                     </div>
 
@@ -584,7 +584,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <input id="city" name="city" class="form-control validation" placeholder="{{$lang->ct}}" readonly type="text">
+                            <input id="city" name="city" class="form-control" placeholder="{{$lang->ct}}" readonly type="text">
                         </div>
                     </div>
 
@@ -593,7 +593,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <input id="phone" name="phone" class="form-control validation" placeholder="{{$lang->pn}}" type="text">
+                            <input id="phone" name="phone" class="form-control" placeholder="{{$lang->pn}}" type="text">
                         </div>
                     </div>
 

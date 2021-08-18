@@ -2151,7 +2151,6 @@ class UserController extends Controller
             $user->save();
 
             $details = new customers_details();
-            $input = $request->all();
 
             $details->user_id = $user->id;
             $details->retailer_id = $user_id;
@@ -2164,7 +2163,7 @@ class UserController extends Controller
             $details->phone = $request->phone;
             $details->save();
 
-            $input['id'] = $user->id;
+            $input['id'] = $details->id;
 
             $link = url('/') . '/aanbieder/client-new-quotations';
 
@@ -2200,7 +2199,7 @@ class UserController extends Controller
             $details->phone = $request->phone;
             $details->save();
 
-            $input['id'] = $check->id;
+            $input['id'] = $details->id;
         }
 
         $response = array('data' => $input, 'message' => __('text.New customer created successfully'));
