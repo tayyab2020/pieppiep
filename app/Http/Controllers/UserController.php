@@ -2090,6 +2090,7 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
+        $input = $request->all();
 
         if($main_id)
         {
@@ -2123,7 +2124,6 @@ class UserController extends Controller
         if($flag)
         {
             $user = new User;
-            $input = $request->all();
 
             $user_name = $request->name;
             $user_email = $request->email;
@@ -2188,7 +2188,6 @@ class UserController extends Controller
         if($flag1)
         {
             $details = new customers_details();
-            $input = $request->all();
 
             $details->user_id = $check->id;
             $details->retailer_id = $user_id;
