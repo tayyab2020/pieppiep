@@ -121,6 +121,8 @@
 
                                                                         <tr @if($i == 0) class="active" @endif data-id="{{$i+1}}">
                                                                             <td>{{$i+1}}</td>
+                                                                            <input type="hidden" value="{{$item->basic_price}}" id="basic_price" name="basic_price[]">
+                                                                            <input type="hidden" value="{{$item->rate}}" id="rate" name="rate[]">
                                                                             <input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
                                                                             <input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
                                                                             <input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
@@ -184,7 +186,7 @@
                                                                             <td>1 x 17</td>
                                                                             <td></td>
                                                                             <td></td>
-                                                                            <td class="price">€ {{round($item->amount)}}</td>
+                                                                            <td class="price">€ {{round($item->rate)}}</td>
                                                                             <td id="next-row-td" style="padding: 0;">
                                                                             <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
                                                                                 <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
@@ -199,6 +201,8 @@
 
                                                                     <tr class="active" data-id="1">
                                                                         <td>1</td>
+                                                                        <input type="hidden" id="basic_price" name="basic_price[]">
+                                                                        <input type="hidden" id="rate" name="rate[]">
                                                                         <input type="hidden" id="row_total" name="total[]">
                                                                         <input type="hidden" value="1" id="row_id" name="row_id[]">
                                                                         <input type="hidden" value="0" id="ladderband" name="ladderband[]">
@@ -296,7 +300,7 @@
 
                                                                                 <div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                                                         <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>
-                                                                                        <input value="{{str_replace('.', ',', $key1->qty)}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
+                                                                                        <input value="{{$key1->qty}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
                                                                                     </div>
                                                                                 </div>
 
@@ -1173,14 +1177,31 @@
 
                 $("input[name='total[]']").each(function(i, obj) {
 
-                    if(!obj.value)
+                    var rate = 0;
+                    var row_id = $(this).parent().data('id');
+                    var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+
+                    if(!qty)
                     {
-                        obj.value = 0;
+                        qty = 0;
                     }
 
-                    total = parseFloat(total) + parseFloat(obj.value);
+                    if(!obj.value)
+                    {
+                        rate = 0;
+                    }
+                    else
+                    {
+                        rate = obj.value;
+                    }
+
+                    rate = rate * qty;
+                    total = parseFloat(total) + parseFloat(rate);
                     total = total.toFixed(2);
                     total = Math.round(total);
+
+                    $(this).parent().find('#rate').val(rate);
+                    $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(rate));
 
                 });
 
@@ -1211,6 +1232,8 @@
                         current.parent().parent().find('#ladderband_impact_type').val(0);
                         current.parent().parent().find('.price').text('');
                         current.parent().parent().find('#row_total').val('');
+                        current.parent().parent().find('#rate').val('');
+                        current.parent().parent().find('#basic_price').val('');
 
                         $.each(data, function(index, value) {
 
@@ -1267,6 +1290,8 @@
                         current.parent().parent().find('#ladderband_impact_type').val(data[0].ladderband_impact_type);
                         current.parent().parent().find('.price').text('');
                         current.parent().parent().find('#row_total').val('');
+                        current.parent().parent().find('#rate').val('');
+                        current.parent().parent().find('#basic_price').val('');
 
                         $.each(data, function(index, value) {
 
@@ -1376,6 +1401,8 @@
 
                                     current.parent().parent().find('.price').text('');
                                     current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#rate').val('');
+                                    current.parent().parent().find('#basic_price').val('');
                                     current.parent().parent().find('#area_conflict').val(3);
                                 }
                                 else if(data[0].value === 'x_axis')
@@ -1388,6 +1415,8 @@
 
                                     current.parent().parent().find('.price').text('');
                                     current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#rate').val('');
+                                    current.parent().parent().find('#basic_price').val('');
                                     current.parent().parent().find('#area_conflict').val(1);
                                 }
                                 else if(data[0].value === 'y_axis')
@@ -1401,6 +1430,8 @@
 
                                     current.parent().parent().find('.price').text('');
                                     current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#rate').val('');
+                                    current.parent().parent().find('#basic_price').val('');
                                     current.parent().parent().find('#area_conflict').val(2);
                                 }
                                 else
@@ -1491,12 +1522,16 @@
 
                                     current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
+                                    current.parent().parent().find('#rate').val(price);
+                                    current.parent().parent().find('#basic_price').val(price);
                                 }
                             }
                             else
                             {
                                 current.parent().parent().find('.price').text('');
                                 current.parent().parent().find('#row_total').val('');
+                                current.parent().parent().find('#rate').val('');
+                                current.parent().parent().find('#basic_price').val('');
                             }
 
                             calculate_total();
@@ -1522,7 +1557,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null)
+            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1534,6 +1569,8 @@
                 {
                     $("#products_table tbody").append('<tr data-id="'+rowCount+'">\n' +
                         '                                                            <td>'+r_id+'</td>\n' +
+                        '                                                            <input type="hidden" id="basic_price" name="basic_price[]">\n' +
+                        '                                                            <input type="hidden" id="rate" name="rate[]">\n' +
                         '                                                            <input type="hidden" id="row_total" name="total[]">\n' +
                         '                                                            <input type="hidden" value="'+rowCount+'" id="row_id" name="row_id[]">\n' +
                         '                                                            <input type="hidden" value="0" id="ladderband" name="ladderband[]">\n' +
@@ -1643,6 +1680,8 @@
 
                     $("#products_table tbody").append('<tr data-id="'+rowCount+'">\n' +
                         '                                                            <td>'+r_id+'</td>\n' +
+                        '                                                            <input value="'+basic_price+'" type="hidden" id="basic_price" name="basic_price[]">\n' +
+                        '                                                            <input value="'+rate+'" type="hidden" id="rate" name="rate[]">\n' +
                         '                                                            <input value="'+price+'" type="hidden" id="row_total" name="total[]">\n' +
                         '                                                            <input type="hidden" value="'+rowCount+'" id="row_id" name="row_id[]">\n' +
                         '                                                            <input type="hidden" value="'+ladderband+'" id="ladderband" name="ladderband[]">\n' +
@@ -2041,6 +2080,8 @@
                 var ladderband_price_impact = current.find('#ladderband_price_impact').val();
                 var ladderband_impact_type = current.find('#ladderband_impact_type').val();
                 var area_conflict = current.find('#area_conflict').val();
+                var rate = current.find('#rate').val();
+                var basic_price = current.find('#basic_price').val();
                 var price = current.find('#row_total').val();
                 var products = current.find('.js-data-example-ajax').html();
                 var product = current.find('.js-data-example-ajax').val();
@@ -2058,7 +2099,7 @@
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
                 var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
 
-                add_row(true,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs);
+                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs);
 
             });
 
@@ -2076,11 +2117,8 @@
 
                 if(e.which == 44)
                 {
-                    if(this.value.indexOf(',') > -1)
-                    {
-                        e.preventDefault();
-                        return false;
-                    }
+                    e.preventDefault();
+                    return false;
                 }
 
                 var num = $(this).attr("maskedFormat").toString().split(',');
@@ -2088,6 +2126,12 @@
                 if (!regex.test(this.value)) {
                     this.value = this.value.substring(0, this.value.length - 1);
                 }
+
+            });
+
+            $(document).on('input', "input[name='qty[]']", function(e) {
+
+                calculate_total();
 
             });
 
@@ -2150,6 +2194,11 @@
             });
 
             $(document).on('focusout', "input[name='qty[]']", function(e){
+
+                if(!$(this).val())
+                {
+                    $(this).val(0);
+                }
 
                 if($(this).val().slice($(this).val().length - 1) == ',')
                 {
@@ -2223,6 +2272,8 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#rate').val('');
+                                    current.parent().parent().parent().find('#basic_price').val('');
                                     current.parent().parent().parent().find('#area_conflict').val(3);
                                 }
                                 else if(data[0].value === 'x_axis')
@@ -2235,6 +2286,8 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#rate').val('');
+                                    current.parent().parent().parent().find('#basic_price').val('');
                                     current.parent().parent().parent().find('#area_conflict').val(1);
                                 }
                                 else if(data[0].value === 'y_axis')
@@ -2248,6 +2301,8 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#rate').val('');
+                                    current.parent().parent().parent().find('#basic_price').val('');
                                     current.parent().parent().parent().find('#area_conflict').val(2);
                                 }
                                 else
@@ -2338,6 +2393,8 @@
 
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
+                                    current.parent().parent().parent().find('#rate').val(price);
+                                    current.parent().parent().parent().find('#basic_price').val(price);
 
                                 }
                             }
@@ -2345,6 +2402,8 @@
                             {
                                 current.parent().parent().parent().find('.price').text('');
                                 current.parent().parent().parent().find('#row_total').val('');
+                                current.parent().parent().parent().find('#rate').val('');
+                                current.parent().parent().parent().find('#basic_price').val('');
                             }
 
                             calculate_total();
@@ -2399,6 +2458,8 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#rate').val('');
+                                    current.parent().parent().parent().find('#basic_price').val('');
                                     current.parent().parent().parent().find('#area_conflict').val(3);
                                 }
                                 else if(data[0].value === 'x_axis')
@@ -2411,6 +2472,8 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#rate').val('');
+                                    current.parent().parent().parent().find('#basic_price').val('');
                                     current.parent().parent().parent().find('#area_conflict').val(1);
                                 }
                                 else if(data[0].value === 'y_axis')
@@ -2424,6 +2487,8 @@
 
                                     current.parent().parent().parent().find('.price').text('');
                                     current.parent().parent().parent().find('#row_total').val('');
+                                    current.parent().parent().parent().find('#rate').val('');
+                                    current.parent().parent().parent().find('#basic_price').val('');
                                     current.parent().parent().parent().find('#area_conflict').val(2);
                                 }
                                 else
@@ -2514,12 +2579,16 @@
 
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
+                                    current.parent().parent().parent().find('#rate').val(price);
+                                    current.parent().parent().parent().find('#basic_price').val(price);
                                 }
                             }
                             else
                             {
                                 current.parent().parent().parent().find('.price').text('');
                                 current.parent().parent().parent().find('#row_total').val('');
+                                current.parent().parent().parent().find('#rate').val('');
+                                current.parent().parent().parent().find('#basic_price').val('');
                             }
 
                             calculate_total();
@@ -2544,6 +2613,7 @@
 
                 var impact_value = current.next('input').val();
                 var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
+                var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
 
                 total = total - impact_value;
 
@@ -2564,7 +2634,7 @@
                             {
                                 impact_value = ladderband_value;
                                 var per = (impact_value)/100;
-                                impact_value = total * per;
+                                impact_value = basic_price * per;
                                 impact_value = parseFloat(impact_value).toFixed(2);
                                 total = parseFloat(total) + parseFloat(impact_value);
                                 total = total.toFixed(2);
@@ -2715,7 +2785,7 @@
                                 {
                                     impact_value = data.value;
                                     var per = (impact_value)/100;
-                                    impact_value = total * per;
+                                    impact_value = basic_price * per;
                                     impact_value = parseFloat(impact_value).toFixed(2);
                                     total = parseFloat(total) + parseFloat(impact_value);
                                     total = total.toFixed(2);
