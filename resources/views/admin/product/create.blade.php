@@ -139,9 +139,40 @@
                                                         </div>
 
                                                         <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Delivery Time (In Days)*</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="js-data-example-ajax6 form-control" style="height: 40px;" name="delivery_days" id="blood_grp" required>
+
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 1) selected @endif @endif value="1">1</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 2) selected @endif @endif value="2">2</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 3) selected @endif @endif value="3">3</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 4) selected @endif @endif value="4">4</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 5) selected @endif @endif value="5">5</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 6) selected @endif @endif value="6">6</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 7) selected @endif @endif value="7">7</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 8) selected @endif @endif value="8">8</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 9) selected @endif @endif value="9">9</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 10) selected @endif @endif value="10">10</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 11) selected @endif @endif value="11">11</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 12) selected @endif @endif value="12">12</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 13) selected @endif @endif value="13">13</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 14) selected @endif @endif value="14">14</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 15) selected @endif @endif value="15">15</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 16) selected @endif @endif value="16">16</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 17) selected @endif @endif value="17">17</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 18) selected @endif @endif value="18">18</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 19) selected @endif @endif value="19">19</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 20) selected @endif @endif value="20">20</option>
+                                                                    <option @if(isset($cats)) @if($cats->delivery_days == 21) selected @endif @endif value="21">21</option>
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Category*</label>
                                                             <div class="col-sm-6">
-                                                                <select class="js-data-example-ajax form-control quote_validation" style="height: 40px;" name="category_id" id="blood_grp" required>
+                                                                <select class="js-data-example-ajax form-control" style="height: 40px;" name="category_id" id="blood_grp" required>
 
                                                                     <option value="">Select Category</option>
 
@@ -156,7 +187,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Brand*</label>
                                                             <div class="col-sm-6">
-                                                                <select class="js-data-example-ajax1 form-control quote_validation" style="height: 40px;" name="brand_id" id="blood_grp" required>
+                                                                <select class="js-data-example-ajax1 form-control" style="height: 40px;" name="brand_id" id="blood_grp" required>
 
                                                                     <option value="">Select Brand</option>
 
@@ -171,7 +202,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Model*</label>
                                                             <div class="col-sm-6">
-                                                                <select class="js-data-example-ajax2 form-control quote_validation" style="height: 40px;" name="model_id" id="blood_grp" required>
+                                                                <select class="js-data-example-ajax2 form-control" style="height: 40px;" name="model_id" id="blood_grp" required>
 
                                                                     <option value="">Select Model</option>
 

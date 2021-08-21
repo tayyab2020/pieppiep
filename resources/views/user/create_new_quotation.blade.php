@@ -130,6 +130,7 @@
                                                                             <input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
                                                                             <input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
                                                                             <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+                                                                            <input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
 
                                                                             <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>
                                                                                 <select name="suppliers[]" class="js-data-example-ajax1">
@@ -210,6 +211,8 @@
                                                                         <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
                                                                         <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
                                                                         <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+                                                                        <input type="hidden" id="delivery_days" name="delivery_days[]">
+
                                                                         <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>
                                                                             <select name="suppliers[]" class="js-data-example-ajax1">
 
@@ -1284,6 +1287,7 @@
 
                         $('#menu1').find(`[data-id='${row_id}']`).remove();
 
+                        current.parent().parent().find('#delivery_days').val(data[0].delivery_days);
                         current.parent().parent().find('#ladderband').val(data[0].ladderband);
                         current.parent().parent().find('#ladderband_value').val(data[0].ladderband_value);
                         current.parent().parent().find('#ladderband_price_impact').val(data[0].ladderband_price_impact);
@@ -1557,7 +1561,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null)
+            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,delivery_days = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1578,6 +1582,7 @@
                         '                                                            <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
                         '                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
                         '                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
+                        '                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
                         '                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>\n' +
                         '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
                         '\n' +
@@ -1689,6 +1694,7 @@
                         '                                                            <input type="hidden" value="'+ladderband_price_impact+'" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
                         '                                                            <input type="hidden" value="'+ladderband_impact_type+'" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
                         '                                                            <input type="hidden" value="'+area_conflict+'" id="area_conflict" name="area_conflict[]">\n' +
+                        '                                                            <input type="hidden" value="'+delivery_days+'" id="delivery_days" name="delivery_days[]">\n' +
                         '                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>\n' +
                         '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
                         '\n' +
@@ -2080,6 +2086,7 @@
                 var ladderband_price_impact = current.find('#ladderband_price_impact').val();
                 var ladderband_impact_type = current.find('#ladderband_impact_type').val();
                 var area_conflict = current.find('#area_conflict').val();
+                var delivery_days = current.find('#delivery_days').val();
                 var rate = current.find('#rate').val();
                 var basic_price = current.find('#basic_price').val();
                 var price = current.find('#row_total').val();
@@ -2099,7 +2106,7 @@
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
                 var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
 
-                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs);
+                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,delivery_days);
 
             });
 

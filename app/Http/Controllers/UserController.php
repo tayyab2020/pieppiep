@@ -156,7 +156,7 @@ class UserController extends Controller
 
     public function GetColors(Request $request)
     {
-        $data = Products::leftjoin('colors','colors.product_id','=','products.id')->where('products.id',$request->id)->select('products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type','products.measure','colors.id','colors.title')->get();
+        $data = Products::leftjoin('colors','colors.product_id','=','products.id')->where('products.id',$request->id)->select('products.*','colors.id','colors.title')->get();
 
         return $data;
     }
@@ -2511,7 +2511,7 @@ class UserController extends Controller
                 $suppliers = array();
             }
 
-            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
+            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
             {
                 $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
                     ->select('new_quotations_features.*','features.title','features.comment_box');
@@ -2659,6 +2659,16 @@ class UserController extends Controller
             $product_titles[] = product::where('id',$key)->pluck('title')->first();
             $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
 
+            date_default_timezone_set('Europe/Amsterdam');
+            $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
+            $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+
+            while($is_weekend)
+            {
+                $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 days'));
+                $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+            }
+
             $invoice_items = new new_quotations_data;
             $invoice_items->quotation_id = $invoice->id;
             $invoice_items->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
@@ -2673,6 +2683,8 @@ class UserController extends Controller
             $invoice_items->width_unit = $request->width_unit[$i];
             $invoice_items->height = str_replace(',', '.',$request->height[$i]);
             $invoice_items->height_unit = $request->height_unit[$i];
+            $invoice_items->delivery_days = $request->delivery_days[$i];
+            $invoice_items->delivery_date = $delivery_date;
             $invoice_items->save();
 
             $feature_row = 'features'.$row_id;
