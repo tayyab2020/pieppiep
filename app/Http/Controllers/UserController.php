@@ -3371,7 +3371,6 @@ class UserController extends Controller
                 foreach ($request->products as $x => $temp)
                 {
                     $feature_sub_titles[$x][] = 'empty';
-                    $sub_titles[$x] = '';
                     $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
                     $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
                     $qty[] = $temp->qty;
@@ -3389,16 +3388,23 @@ class UserController extends Controller
                         {
                             if($feature->ladderband)
                             {
-                                $sub_product = new_quotations_sub_products::where('feature_row_id',$feature->id)->first();
-                                $sub_titles[$x] = product_ladderbands::where('product_id',$temp->product_id)->where('id',$sub_product->sub_product_id)->first();
+                                $sub_product = new_quotations_sub_products::where('feature_row_id',$feature->id)->get();
 
-                                if($sub_product->size1_value == 1)
+                                foreach ($sub_product as $sub)
                                 {
-                                    $sub_titles[$x]->size = '38mm';
-                                }
-                                else
-                                {
-                                    $sub_titles[$x]->size = '25mm';
+                                    if($sub->size1_value == 1 || $sub->size2_value == 1)
+                                    {
+                                        $sub_titles[$x] = product_ladderbands::where('product_id',$temp->product_id)->where('id',$sub->sub_product_id)->first();
+
+                                        if($sub->size1_value == 1)
+                                        {
+                                            $sub_titles[$x]->size = '38mm';
+                                        }
+                                        else
+                                        {
+                                            $sub_titles[$x]->size = '25mm';
+                                        }
+                                    }
                                 }
                             }
                         }
