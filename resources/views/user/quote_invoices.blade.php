@@ -325,13 +325,19 @@
 
                                                                                     @endif
 
-                                                                                    <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+                                                                                        @if($key->accepted)
 
-                                                                                    @if(!$key->approved)
+                                                                                            <li><a href="{{ url('/aanbieder/send-order/'.$key->invoice_id) }}">Send Order</a></li>
 
-                                                                                        <li><a href="{{ url('/aanbieder/send-new-quotation/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
+                                                                                        @endif
 
-                                                                                    @endif
+                                                                                        <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                        @if(!$key->approved)
+
+                                                                                            <li><a href="{{ url('/aanbieder/send-new-quotation/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
+
+                                                                                        @endif
 
                                                                                 @else
 

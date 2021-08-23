@@ -30,7 +30,7 @@
                                     <p style="margin: 0">TEL: {{$user->phone}}</p>
                                     <p style="margin: 0">{{$user->email}}</p>
                                     <br>
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> {{__('text.Quotation')}} {{$quotation_invoice_number}}</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') {{__('text.Quotation')}} @else Order No: @endif {{$quotation_invoice_number}}</p>
                                     <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 
                                 </div>
@@ -70,7 +70,17 @@
                                         <th class="border-0 text-uppercase small font-weight-bold">Pakket zijde</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Montage idd/odd</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Kleur systeem</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Amount')}}</th>
+
+                                        @if($role == 'retailer')
+
+                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Amount')}}</th>
+
+                                        @else
+
+                                            <th class="border-0 text-uppercase small font-weight-bold">Delivery Date</th>
+
+                                        @endif
+
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -83,14 +93,31 @@
                                             <td>{{$color_titles[$i]}}</td>
                                             <td>{{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
                                             <td>{{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
-                                            <td>{{round($request->rate[$i])}}</td>
+
+                                            @if($role == 'retailer')
+
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td>{{round($request->rate[$i])}}</td>
+
+                                            @else
+
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
+                                                <td>{{$request->delivery_date[$i]}}</td>
+
+                                            @endif
+
                                         </tr>
 
                                     @endforeach
@@ -109,31 +136,35 @@
 
                         </style>
 
+                        @if($role == 'retailer')
 
-                        <div class="d-flex flex-row-reverse bg-dark text-white p-4" style="background-color: #343a40 !important;display: block !important;margin: 0 !important;">
+                            <div class="d-flex flex-row-reverse bg-dark text-white p-4" style="background-color: #343a40 !important;display: block !important;margin: 0 !important;">
 
-                            <table class="table">
-                                <thead>
+                                <table class="table">
+                                    <thead>
 
-                                <tr>
-                                    <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Subtotal')}}</th>
-                                    <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Grand Total')}}</th>
-                                </tr>
+                                    <tr>
+                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Subtotal')}}</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Grand Total')}}</th>
+                                    </tr>
 
-                                </thead>
+                                    </thead>
 
-                                <tbody>
+                                    <tbody>
 
-                                <tr>
-                                    <td>{{$request->total_amount}}</td>
-                                    <td>{{$request->total_amount}}</td>
-                                </tr>
+                                    <tr>
+                                        <td>{{$request->total_amount}}</td>
+                                        <td>{{$request->total_amount}}</td>
+                                    </tr>
 
-                                </tbody>
+                                    </tbody>
 
-                            </table>
+                                </table>
 
-                        </div>
+                            </div>
+
+                        @endif
+
                     </div>
                 </div>
             </div>

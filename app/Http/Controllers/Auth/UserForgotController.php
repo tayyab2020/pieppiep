@@ -77,7 +77,7 @@ $language = user_languages::where('ip','=',$ip_address)->first();
     	$input =  $request->all();
         if (User::where('email', '=', $request->email)->count() > 0) {
             // user found
-            $user = User::where('email', '=', $request->email)->where('allowed',1)->firstOrFail();
+            $user = User::where('email', '=', $request->email)->firstOrFail();
             $autopass = str_random(8);
             $input['password'] = Hash::make($autopass);
 

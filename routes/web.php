@@ -122,6 +122,7 @@
   Route::get('/quotation-payment-redirect-page/{id}', 'FrontendController@QuotationPaymentRedirectPage');
   Route::get('/versturen-eigen-offerte/{id}', 'UserController@SendCustomQuotation');
   Route::get('/send-new-quotation/{id}', 'UserController@SendNewQuotation');
+  Route::get('/send-order/{id}', 'UserController@SendOrder');
   Route::post('/aangepaste-offerte/ask-customization', 'UserController@CustomQuotationAskCustomization');
   Route::get('/eigen-offerte/accepteren-offerte/{id}', 'UserController@CustomQuotationAcceptQuotation');
   Route::get('/accept-new-quotation/{id}', 'UserController@AcceptNewQuotation');

@@ -1169,7 +1169,7 @@ class FrontendController extends Controller
                     'quote_familyname.regex' => 'Family Name format is invalid.',
                 ]);
 
-            $check = User::where('email', $request->quote_email)->where('allowed',1)->first();
+            $check = User::where('email', $request->quote_email)->first();
 
             $user_name = $request->quote_name;
             $user_email = $request->quote_email;

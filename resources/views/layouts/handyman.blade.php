@@ -831,9 +831,13 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                     <a href="{{route('new-quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span>New Quotations</span></a>
                 </li>
 
-                <li>
-                    <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i> <span>Create Quotation (New)</span></a>
-                </li>
+                @if(auth()->user()->role_id == 2)
+
+                    <li>
+                        <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i> <span>Create Quotation (New)</span></a>
+                    </li>
+
+                @endif
 
             @endif
 
