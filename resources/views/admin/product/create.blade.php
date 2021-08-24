@@ -981,7 +981,7 @@
                     text: 'Model should not be empty!',
                 });
             }
-            else if(!$("#service_description").val())
+            else if(!$('.nicEdit-main').text())
             {
                 flag = 1;
                 Swal.fire({

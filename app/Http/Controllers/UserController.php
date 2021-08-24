@@ -8,6 +8,7 @@ use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
 use App\customers_details;
+use App\Jobs\SendOrder;
 use App\product_ladderbands;
 use App\features;
 use App\handyman_quotes;
@@ -33,6 +34,7 @@ use App\User;
 use App\Category;
 use App\service_types;
 use Auth;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use App\Language;
@@ -61,6 +63,7 @@ use Illuminate\Validation\Rule;
 use PDF;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Symfony\Component\Process\Process;
 
 class UserController extends Controller
 {
@@ -3333,6 +3336,28 @@ class UserController extends Controller
 
     public function SendOrder($id)
     {
+        /*SendOrder::dispatch($id);*/
+
+        /*event(new \App\Events\SendOrder($id));
+
+        Artisan::queue("queue:work");*/
+
+        /*$process = new Process('php ' . base_path('artisan') . ' queue:work &');
+        $process->setTimeout(0);
+        $process->disableOutput();
+        $process->start();
+        $processes[] = $process;
+
+        while (count($processes)) {
+            foreach ($processes as $i => $runningProcess) {
+                // specific process is finished, so we remove it
+                if (! $runningProcess->isRunning()) {
+                    unset($processes[$i]);
+                }
+                sleep(1);
+            }
+        }*/
+
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
