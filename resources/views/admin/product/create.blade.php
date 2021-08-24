@@ -221,7 +221,7 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="service_description">Product Description*</label>
+                                                            <label class="control-label col-sm-4" for="service_description">Product Description</label>
                                                             <div class="col-sm-6">
                                                                 <textarea class="form-control" name="description" id="service_description" rows="5" style="resize: vertical;" placeholder="Enter Product Description">{{isset($cats) ? $cats->description : null}}</textarea>
                                                             </div>
@@ -903,13 +903,6 @@
 
 @section('scripts')
 
-    <script type="text/javascript" src="{{asset('assets/admin/js/nicEdit.js')}}"></script>
-    <script type="text/javascript">
-        //<![CDATA[
-        bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-        //]]>
-    </script>
-
 <script type="text/javascript">
 
     $(document).ready(function() {
@@ -979,15 +972,6 @@
                     type: 'error',
                     title: 'Oops...',
                     text: 'Model should not be empty!',
-                });
-            }
-            else if(!$('.nicEdit-main').text())
-            {
-                flag = 1;
-                Swal.fire({
-                    type: 'error',
-                    title: 'Oops...',
-                    text: 'Description should not be empty!',
                 });
             }
 
