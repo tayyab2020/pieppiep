@@ -723,7 +723,6 @@ class AdminUserController extends Controller
         return redirect()->route('admin-user-requests');
     }
 
-
   public function status($id1,$id2)
     {
 
