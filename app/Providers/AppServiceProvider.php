@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
             //whether ip is from remote address
             else
                 {
-                    $ip_address = $_SERVER['REMOTE_ADDR'];
+                    $ip_address = $_SERVER["REMOTE_ADDR"] ?? '127.0.0.1';
                 }
 
             $language = user_languages::where('ip','=',$ip_address)->first();

@@ -42,6 +42,12 @@
         Beste {{$client}},<br><br>Je hebt een nieuwe factuur ontvangen <b>(INV# {{$quotation_invoice_number}})</b>. Zie bijlage voor de offerte.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> {{$company_name}}
     </p>
 
+@elseif($type == 'new-quotation')
+
+    <p>
+        Hi {{$supplier}},<br><br>Recent activity: A new order <b>({{$quotation_invoice_number}})</b> has been received by Mr./Mrs. <b>{{$company_name}}</b>. PDF file is attached below.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep
+    </p>
+
 @endif
 
 </body>

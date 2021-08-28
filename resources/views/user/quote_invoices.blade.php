@@ -166,13 +166,41 @@
 
                                                                             @elseif($key->status == 2)
 
-                                                                                @if($key->accepted)
+                                                                                @if(Route::currentRouteName() == 'new-quotations')
 
-                                                                                    <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
+                                                                                    @if($key->accepted)
+
+                                                                                        @if($key->processing)
+
+                                                                                            <span class="btn btn-success">Order Processing</span>
+
+                                                                                        @elseif($key->finished)
+
+                                                                                            <span class="btn btn-success">Order Sent</span>
+
+                                                                                        @else
+
+                                                                                            <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
+
+                                                                                        @endif
+
+                                                                                    @else
+
+                                                                                        <span class="btn btn-success">{{__('text.Closed')}}</span>
+
+                                                                                    @endif
 
                                                                                 @else
 
-                                                                                    <span class="btn btn-success">{{__('text.Closed')}}</span>
+                                                                                    @if($key->accepted)
+
+                                                                                        <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
+
+                                                                                    @else
+
+                                                                                        <span class="btn btn-success">{{__('text.Closed')}}</span>
+
+                                                                                    @endif
 
                                                                                 @endif
 
@@ -325,7 +353,7 @@
 
                                                                                     @endif
 
-                                                                                        @if($key->accepted)
+                                                                                        @if($key->accepted && !$key->processing && !$key->finished)
 
                                                                                             <li><a href="{{ url('/aanbieder/send-order/'.$key->invoice_id) }}">Send Order</a></li>
 
