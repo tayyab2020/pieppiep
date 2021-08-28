@@ -3340,6 +3340,7 @@ class UserController extends Controller
 
         exit();
 
+        
         /*event(new \App\Events\SendOrder($id));*/
 
         /*Artisan::queue("queue:work");*/
