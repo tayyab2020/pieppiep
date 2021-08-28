@@ -62,7 +62,7 @@ class SendOrder implements ShouldQueue
                 ->setBody($msg, 'text/html');
         });*/
 
-        /*$user = $this->user;
+        $user = $this->user;
         $user_id = $user->id;
         $main_id = $user->main_id;
 
@@ -188,6 +188,6 @@ class SendOrder implements ShouldQueue
                 });
         }
 
-        new_quotations::where('id',$id)->update(['processing' => 0, 'finished' => 1]);*/
+        new_quotations::where('id',$id)->update(['processing' => 0, 'finished' => 1]);
     }
 }
