@@ -3336,11 +3336,13 @@ class UserController extends Controller
 
     public function SendOrder($id)
     {
-        /*SendOrder::dispatch($id);*/
+        SendOrder::dispatch($id);
 
-        /*event(new \App\Events\SendOrder($id));
+        exit();
 
-        Artisan::queue("queue:work");*/
+        /*event(new \App\Events\SendOrder($id));*/
+
+        /*Artisan::queue("queue:work");*/
 
         /*$process = new Process('php ' . base_path('artisan') . ' queue:work &');
         $process->setTimeout(0);
