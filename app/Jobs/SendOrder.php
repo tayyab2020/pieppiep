@@ -51,16 +51,16 @@ class SendOrder implements ShouldQueue
 
             new_quotations::where('id',$id)->update(['processing' => 0, 'failed' => 1]);
 
+            $msg = 'Job: ' . $this->job->getJobId() . ' failed to execute';
+
+            \Mail::send(array(), array(), function ($message) use ($msg) {
+                $message->to('tayyabkhurram62@gmail.com')
+                    ->from('info@pieppiep.com')
+                    ->subject(__('text.Job Failed'))
+                    ->setBody($msg, 'text/html');
+            });
+
         }
-
-        /*$msg = 'Hi' . $this->id;
-
-        \Mail::send(array(), array(), function ($message) use ($msg) {
-            $message->to('tayyabkhurram62@gmail.com')
-                ->from('info@vloerofferte.nl')
-                ->subject(__('text.Invoice Status Changed'))
-                ->setBody($msg, 'text/html');
-        });*/
 
         $user = $this->user;
         $user_id = $user->id;
