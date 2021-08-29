@@ -47,11 +47,11 @@ class SendOrder implements ShouldQueue
     {
         $id = $this->id;
 
-        if ($this->attempts() > 254) {
+        if ($this->attempts() > 10) {
 
             new_quotations::where('id',$id)->update(['processing' => 0, 'failed' => 1]);
 
-            $msg = 'Job: ' . $this->job->getJobId() . ' failed to execute';
+            $msg = 'Job: ' . $this->job->getJobId() . ' failed to execute <br> Quotation ID: ' . $id;
 
             \Mail::send(array(), array(), function ($message) use ($msg) {
                 $message->to('tayyabkhurram62@gmail.com')
