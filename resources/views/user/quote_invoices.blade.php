@@ -38,7 +38,11 @@
 
                                             @elseif(Route::currentRouteName() == 'new-quotations')
 
-                                                <a style="float: right;margin-right: 10px;" href="{{route('create-new-quotation')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Create New Quotation</a>
+                                                @if(Auth::guard('user')->user()->role_id == 2)
+
+                                                    <a style="float: right;margin-right: 10px;" href="{{route('create-new-quotation')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Create New Quotation</a>
+
+                                                @endif
 
                                             @endif
                                     </div>
@@ -75,7 +79,19 @@
 
                                                         @endif
 
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Grand Total')}}</th>
+                                                        @if(Route::currentRouteName() == 'new-quotations')
+
+                                                            @if(Auth::guard('user')->user()->role_id == 2)
+
+                                                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Grand Total')}}</th>
+
+                                                            @endif
+
+                                                        @else
+
+                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Grand Total')}}</th>
+
+                                                        @endif
 
                                                         @if(Route::currentRouteName() == 'commission-invoices')
 
@@ -135,7 +151,20 @@
                                                             @endif
 
 
+                                                            @if(Route::currentRouteName() == 'new-quotations')
+
+                                                                @if(Auth::guard('user')->user()->role_id == 2)
+
+                                                                    <td>{{number_format((float)$key->grand_total, 2, ',', '.')}}</td>
+
+                                                                @endif
+
+                                                            @else
+
                                                                 <td>{{number_format((float)$key->grand_total, 2, ',', '.')}}</td>
+
+                                                            @endif
+
 
                                                                 @if(Route::currentRouteName() == 'commission-invoices')
 
@@ -176,7 +205,15 @@
 
                                                                                         @elseif($key->finished)
 
-                                                                                            <span class="btn btn-success">Order Sent</span>
+                                                                                            @if(Auth::guard('user')->user()->role_id == 2)
+
+                                                                                                <span class="btn btn-success">Order Sent</span>
+
+                                                                                            @else
+
+                                                                                                <span class="btn btn-warning">Pending</span>
+
+                                                                                            @endif
 
                                                                                         @else
 

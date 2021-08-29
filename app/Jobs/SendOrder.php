@@ -79,7 +79,7 @@ class SendOrder implements ShouldQueue
 
         $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
 
-        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.user_id', $check->user_id)->where('customers_details.retailer_id',$user_id)->select('customers_details.*','users.email')->first();
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
         $suppliers = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations.id',$id)->where('new_quotations.creator_id',$user_id)->pluck('new_quotations_data.supplier_id');
         $suppliers = $suppliers->unique();
 

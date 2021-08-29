@@ -2481,11 +2481,12 @@ class UserController extends Controller
         }
     }
 
-    public function NewQuotations($id = '')
+    public function NewQuotations()
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
+        $user_role = $user->role_id;
 
         if($main_id)
         {
@@ -2494,10 +2495,14 @@ class UserController extends Controller
 
         if($user->can('create-new-quotation'))
         {
-            if ($id) {
-                $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.user_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.id', $id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->get();
-            } else {
-                $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.user_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->get();
+            if($user_role == 2)
+            {
+                $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->get();
+            }
+            else
+            {
+                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->get();
+                $invoices = $invoices->unique('invoice_id');
             }
 
             return view('user.quote_invoices', compact('invoices'));
@@ -2595,17 +2600,33 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
+        if($user_role == 2)
+        {
+            $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
+        }
+        else
+        {
+            $invoice = new_quotations::leftjoin('new_quotations_data','new_quotations_data.quotation_id','=','new_quotations.id')->where('new_quotations.id', $id)->where('new_quotations_data.supplier_id', $user_id)->first();
+        }
 
         if (!$invoice) {
             return redirect()->route('new-quotations');
         }
 
-        $quotation_invoice_number = $invoice->quotation_invoice_number;
+        if($user_role == 2)
+        {
+            $quotation_invoice_number = $invoice->quotation_invoice_number;
+            $filename = $quotation_invoice_number . '.pdf';
 
-        $filename = $quotation_invoice_number . '.pdf';
+            return response()->download(public_path("assets/newQuotations/{$filename}"));
+        }
+        else
+        {
+            $quotation_invoice_number = $invoice->quotation_invoice_number . '-' . $user_id;
+            $filename = $quotation_invoice_number . '.pdf';
 
-        return response()->download(public_path("assets/newQuotations/{$filename}"));
+            return response()->download(public_path("assets/supplierQuotations/{$filename}"));
+        }
     }
 
     public function DownloadClientNewQuotation($id)
@@ -2651,7 +2672,7 @@ class UserController extends Controller
         {
             $ask = new_quotations::where('id',$request->quotation_id)->pluck('ask_customization')->first();
 
-            new_quotations::where('id',$request->quotation_id)->update(['user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => $request->total_amount, 'grand_total' => $request->total_amount]);
+            new_quotations::where('id',$request->quotation_id)->update(['customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => $request->total_amount, 'grand_total' => $request->total_amount]);
 
             $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
             $feature_ids = new_quotations_features::whereIn('quotation_data_id',$data_ids)->pluck('id');
@@ -2671,6 +2692,7 @@ class UserController extends Controller
             $invoice->quotation_invoice_number = $quotation_invoice_number;
             $invoice->creator_id = $user_id;
             $invoice->user_id = $client->user_id;
+            $invoice->customer_details = $request->customer;
             $invoice->vat_percentage = 21;
             $invoice->subtotal = $request->total_amount;
             $invoice->grand_total = $request->total_amount;
