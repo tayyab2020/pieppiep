@@ -45,7 +45,7 @@
 @elseif($type == 'new-quotation')
 
     <p>
-        Hi {{$supplier}},<br><br>Recent activity: A new order <b>({{$quotation_invoice_number}})</b> has been received by Mr./Mrs. <b>{{$company_name}}</b>. PDF file is attached below.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep
+        Hi {{$supplier}},<br><br>Recent activity: A new order <b>({{$quotation_invoice_number}})</b> has been received by <b>{{$company_name}}</b>. PDF file is attached below.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep
     </p>
 
 @endif

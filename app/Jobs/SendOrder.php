@@ -56,7 +56,7 @@ class SendOrder implements ShouldQueue
             \Mail::send(array(), array(), function ($message) use ($msg) {
                 $message->to('tayyabkhurram62@gmail.com')
                     ->from('info@pieppiep.com')
-                    ->subject(__('text.Job Failed'))
+                    ->subject('Job Failed')
                     ->setBody($msg, 'text/html');
             });
 
@@ -65,6 +65,7 @@ class SendOrder implements ShouldQueue
         $user = $this->user;
         $user_id = $user->id;
         $main_id = $user->main_id;
+        $sup_mail = array();
 
         if($main_id)
         {
@@ -169,19 +170,24 @@ class SendOrder implements ShouldQueue
 
             $pdf->save($file);
 
+            $sup_mail[] = array('email' => $supplier_email,'name' => $supplier_name,'file' => $file,'file_name' => $filename,'quotation_invoice_number' => $quotation_invoice_number);
+        }
+
+        foreach ($sup_mail as $sup)
+        {
             \Mail::send('user.custom_quotation_mail',
                 array(
-                    'supplier' => $supplier_name,
+                    'supplier' => $sup['name'],
                     'retailer' => $retailer_name,
                     'company_name' => $retailer_company,
-                    'quotation_invoice_number' => $quotation_invoice_number,
+                    'quotation_invoice_number' => $sup['quotation_invoice_number'],
                     'type' => 'new-quotation'
-                ), function ($message) use ($file, $supplier_email, $filename) {
+                ), function ($message) use ($sup) {
                     $message->from('info@pieppiep.com');
-                    $message->to($supplier_email)->subject(__('text.New order received!'));
+                    $message->to($sup['email'])->subject('New order received!');
 
-                    $message->attach($file, [
-                        'as' => $filename,
+                    $message->attach($sup['file'], [
+                        'as' => $sup['file_name'],
                         'mime' => 'application/pdf',
                     ]);
 
