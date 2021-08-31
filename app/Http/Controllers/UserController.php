@@ -2502,7 +2502,7 @@ class UserController extends Controller
             }
             else
             {
-                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.processing as data_processing','new_quotations_data.delivered', 'customers_details.name', 'customers_details.family_name')->get();
+                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered', 'customers_details.name', 'customers_details.family_name')->get();
                 $invoices = $invoices->unique('invoice_id');
             }
 

@@ -225,6 +225,10 @@
 
                                                                                                     <span class="btn btn-warning">Processing</span>
 
+                                                                                                @elseif($key->data_approved)
+
+                                                                                                    <span class="btn btn-success">Order Approved</span>
+
                                                                                                 @else
 
                                                                                                     <span class="btn btn-warning">Pending</span>

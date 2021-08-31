@@ -25,6 +25,7 @@ class UpdateDates implements ShouldQueue
 
     private $request = null;
     private $user = null;
+    public $timeout = 0;
 
     /**
      * Create a new job instance.

@@ -25,6 +25,7 @@ class SendOrder implements ShouldQueue
 
     private $id = null;
     private $user = null;
+    public $timeout = 0;
 
     /**
      * Create a new job instance.
