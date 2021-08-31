@@ -17,7 +17,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade as PDF;
 
 class SendOrder implements ShouldQueue
@@ -47,21 +46,6 @@ class SendOrder implements ShouldQueue
     {
         $id = $this->id;
 
-        if ($this->attempts() > 10) {
-
-            new_quotations::where('id',$id)->update(['processing' => 0, 'failed' => 1]);
-
-            $msg = 'Job: ' . $this->job->getJobId() . ' failed to execute <br> Quotation ID: ' . $id;
-
-            \Mail::send(array(), array(), function ($message) use ($msg) {
-                $message->to('tayyabkhurram62@gmail.com')
-                    ->from('info@pieppiep.com')
-                    ->subject('Job Failed')
-                    ->setBody($msg, 'text/html');
-            });
-
-        }
-
         $user = $this->user;
         $user_id = $user->id;
         $main_id = $user->main_id;
@@ -90,7 +74,7 @@ class SendOrder implements ShouldQueue
             $supplier_email = $supplier_data->email;
 
             $request = new_quotations::where('id',$id)->first();
-            $request->products = new_quotations_data::leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations_data.quotation_id',$id)->where('new_quotations_data.supplier_id',$key)->select('new_quotations_data.*')->get();
+            $request->products = new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->get();
 
             $product_titles = array();
             $color_titles = array();
@@ -195,5 +179,20 @@ class SendOrder implements ShouldQueue
         }
 
         new_quotations::where('id',$id)->update(['processing' => 0, 'finished' => 1]);
+    }
+
+    public function failed()
+    {
+        $id = $this->id;
+        new_quotations::where('id',$id)->update(['processing' => 0, 'failed' => 1]);
+
+        $msg = 'Job failed for sending order to supplier(s) <br> Quotation ID: ' . $id;
+
+        \Mail::send(array(), array(), function ($message) use ($msg) {
+            $message->to('tayyabkhurram62@gmail.com')
+                ->from('info@pieppiep.com')
+                ->subject('Job Failed')
+                ->setBody($msg, 'text/html');
+        });
     }
 }

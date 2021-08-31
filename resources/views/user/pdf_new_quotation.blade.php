@@ -2,12 +2,6 @@
 
 @section('content')
 
-    {{--<section class="jumbotron text-center">
-        <div class="container">
-            <h1 class="jumbotron-heading">@if($type == 'invoice') {{__('text.Quotation Invoice')}} @elseif($type == 'direct-invoice') {{__('text.Direct Invoice')}} @else {{__('text.Quotation')}} @endif</h1>
-        </div>
-    </section>--}}
-
     <div class="container" style="width: 100%;">
         <div class="row">
             <div class="col-12">
@@ -30,7 +24,7 @@
                                     <p style="margin: 0">TEL: {{$user->phone}}</p>
                                     <p style="margin: 0">{{$user->email}}</p>
                                     <br>
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') {{__('text.Quotation')}} @else Order No: @endif {{$quotation_invoice_number}}</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') {{__('text.Quotation')}} @elseif($role == 'retailer1') Order Confirmation: @else Order No: @endif {{$quotation_invoice_number}}</p>
                                     <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 
                                 </div>
@@ -55,7 +49,7 @@
 
                         <div class="row p-5" style="font-size: 15px;padding: 2rem !important;">
                             <div class="col-md-12" style="padding: 0 !important;">
-                                <table class="table" style="border: 1px solid #e5e5e5;">
+                                <table class="table table1" style="border: 1px solid #e5e5e5;">
                                     <thead>
                                     <tr>
                                         <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Qty')}}</th>
@@ -71,11 +65,13 @@
                                         <th class="border-0 text-uppercase small font-weight-bold">Montage idd/odd</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Kleur systeem</th>
 
-                                        @if($role == 'retailer')
+                                        @if($role == 'retailer' || $role == 'retailer1')
 
                                             <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Amount')}}</th>
 
-                                        @else
+                                        @endif
+
+                                        @if($request->products->contains('approved', 1))
 
                                             <th class="border-0 text-uppercase small font-weight-bold">Delivery Date</th>
 
@@ -114,7 +110,22 @@
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= ",".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {{$string = substr($string, 1)}}</td>
-                                                <td>{{$request->delivery_date[$i]}}</td>
+
+                                                @if($role == 'retailer1')
+
+                                                    <td>{{round($request->rate[$i])}}</td>
+
+                                                @endif
+
+                                                @if($key->approved)
+
+                                                    <td>{{$request->delivery_date[$i]}}</td>
+
+                                                @elseif($request->products->contains('approved', 1))
+
+                                                    <td></td>
+
+                                                @endif
 
                                             @endif
 
@@ -136,7 +147,7 @@
 
                         </style>
 
-                        @if($role == 'retailer')
+                        @if($role == 'retailer' || $role == 'retailer1')
 
                             <div class="d-flex flex-row-reverse bg-dark text-white p-4" style="background-color: #343a40 !important;display: block !important;margin: 0 !important;">
 
@@ -315,6 +326,16 @@
         .border-0{
 
             border: 0 !important;
+        }
+
+        .table1 tbody tr:first-child td
+        {
+            border-top: 0 !important;
+        }
+
+        .table1 th
+        {
+            border-bottom: 1px solid #dee2e6 !important;
         }
 
         .table td, .table th{

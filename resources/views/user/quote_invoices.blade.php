@@ -13,7 +13,17 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header products" style="display: block;">
                                         @if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations')
-                                            <h2 style="display: inline-block;">{{__('text.Quotations')}}</h2>
+
+                                            @if(Auth::guard('user')->user()->role_id == 4)
+
+                                                <h2 style="display: inline-block;">Orders</h2>
+
+                                            @else
+
+                                                <h2 style="display: inline-block;">{{__('text.Quotations')}}</h2>
+
+                                            @endif
+
                                         @elseif(Route::currentRouteName() == 'commission-invoices')
                                             <h2 style="display: inline-block;">{{__('text.Commission Invoices')}}</h2>
                                         @else
@@ -211,7 +221,15 @@
 
                                                                                             @else
 
-                                                                                                <span class="btn btn-warning">Pending</span>
+                                                                                                @if($key->data_processing)
+
+                                                                                                    <span class="btn btn-warning">Processing</span>
+
+                                                                                                @else
+
+                                                                                                    <span class="btn btn-warning">Pending</span>
+
+                                                                                                @endif
 
                                                                                             @endif
 
@@ -393,6 +411,16 @@
                                                                                         @if($key->accepted && !$key->processing && !$key->finished)
 
                                                                                             <li><a href="{{ url('/aanbieder/send-order/'.$key->invoice_id) }}">Send Order</a></li>
+
+                                                                                        @endif
+
+                                                                                        @if(Auth::guard('user')->user()->role_id == 4)
+
+                                                                                            @if(!$key->delivered && !$key->data_processing)
+
+                                                                                                <li><a href="{{ url('/aanbieder/change-delivery-dates/'.$key->invoice_id) }}">Edit Delivery Dates</a></li>
+
+                                                                                            @endif
 
                                                                                         @endif
 

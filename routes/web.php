@@ -123,6 +123,8 @@
   Route::get('/versturen-eigen-offerte/{id}', 'UserController@SendCustomQuotation');
   Route::get('/send-new-quotation/{id}', 'UserController@SendNewQuotation');
   Route::get('/send-order/{id}', 'UserController@SendOrder');
+  Route::get('/change-delivery-dates/{id}', 'UserController@ChangeDeliveryDates');
+  Route::post('/change-delivery-dates', 'UserController@UpdateDeliveryDates')->name('change-delivery-date');
   Route::post('/aangepaste-offerte/ask-customization', 'UserController@CustomQuotationAskCustomization');
   Route::get('/eigen-offerte/accepteren-offerte/{id}', 'UserController@CustomQuotationAcceptQuotation');
   Route::get('/accept-new-quotation/{id}', 'UserController@AcceptNewQuotation');

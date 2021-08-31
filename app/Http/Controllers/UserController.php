@@ -9,6 +9,7 @@ use App\custom_quotations;
 use App\custom_quotations_data;
 use App\customers_details;
 use App\Jobs\SendOrder;
+use App\Jobs\UpdateDates;
 use App\product_ladderbands;
 use App\features;
 use App\handyman_quotes;
@@ -2501,7 +2502,7 @@ class UserController extends Controller
             }
             else
             {
-                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->get();
+                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.processing as data_processing','new_quotations_data.delivered', 'customers_details.name', 'customers_details.family_name')->get();
                 $invoices = $invoices->unique('invoice_id');
             }
 
@@ -3386,6 +3387,45 @@ class UserController extends Controller
         }
 
         /*event(new \App\Events\SendOrder($id));*/
+    }
+
+    public function ChangeDeliveryDates($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
+        $data = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations_data.delivered','!=',1)->first();
+
+        if($data)
+        {
+            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->leftjoin('colors','colors.id','=','new_quotations_data.color')->where('new_quotations.id', $id)->where('new_quotations_data.supplier_id', $user_id)->select('colors.title as color_title','new_quotations.*','new_quotations.id as invoice_id', 'new_quotations_data.approved','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.title as product_title')->get();
+
+            return view('user.change_delivery_date',compact('data','invoice'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function UpdateDeliveryDates(Request $request)
+    {
+        $rows = $request->data_id;
+        $user = Auth::guard('user')->user();
+
+        new_quotations_data::whereIn('id',$rows)->update(['processing' => 1]);
+
+        UpdateDates::dispatch($request->all(),$user);
+
+        Session::flash('success', 'Processing...');
+        return redirect()->route('new-quotations');
     }
 
     public function StoreCustomQuotation(Request $request)
