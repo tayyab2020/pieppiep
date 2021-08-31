@@ -217,7 +217,19 @@
 
                                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                                                <span class="btn btn-success">Order Sent</span>
+                                                                                                <?php $filteredData = $key->data->reject(function ($value, $key) {
+                                                                                                    return $value['approved'] !== 1;
+                                                                                                }); ?>
+
+                                                                                                @if($filteredData->count() === $key->data->count())
+
+                                                                                                    <span class="btn btn-success">Processing</span>
+
+                                                                                                @else
+
+                                                                                                    <span class="btn btn-success">Order Sent</span>
+
+                                                                                                @endif
 
                                                                                             @else
 
