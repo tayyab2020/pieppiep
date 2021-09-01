@@ -624,6 +624,16 @@
             color: white !important;
         }
 
+        @media (min-width: 768px)
+        {
+            .dropdown-menu
+            {
+                width: 235px;
+                overflow: auto;
+            }
+
+        }
+
         .dropdown-menu
         {
             left: -65px;
