@@ -133,7 +133,7 @@
 
                                                             @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'new-quotations')
 
-                                                                <td><a @if(Route::currentRouteName() == 'new-quotations') href="" @else href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}" @endif>QUO# {{$key->quotation_invoice_number}}</a></td>
+                                                                <td><a @if(Route::currentRouteName() == 'new-quotations') href="" @else href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}" @endif>@if(Auth::guard('user')->user()->role_id == 4) OR# {{$key->order_number}} @else OF# {{$key->quotation_invoice_number}} @endif</a></td>
 
                                                             @else
 
@@ -217,19 +217,23 @@
 
                                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                                                <?php $filteredData = $key->data->reject(function ($value, $key) {
+                                                                                                <?php $data = $key->data->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
                                                                                                     return $value['approved'] !== 1;
                                                                                                 }); ?>
 
-                                                                                                @if($filteredData->count() === $key->data->count())
+                                                                                                    @if($filteredData->count() === $data->count())
 
-                                                                                                    <span class="btn btn-success">Processing</span>
+                                                                                                    <span class="btn btn-success">Approved by supplier(s)</span>
 
-                                                                                                @else
+                                                                                                    @elseif($filteredData->count() == 0)
 
-                                                                                                    <span class="btn btn-success">Order Sent</span>
+                                                                                                        <span class="btn btn-success">Order Sent</span>
 
-                                                                                                @endif
+                                                                                                    @else
+
+                                                                                                    <span class="btn btn-success">{{$filteredData->count()}}/{{$data->count()}} Approved</span>
+
+                                                                                                    @endif
 
                                                                                             @else
 
@@ -438,9 +442,53 @@
 
                                                                                             @endif
 
+                                                                                        @else
+
+                                                                                            @if($key->status == 2)
+
+                                                                                                @if($key->finished)
+
+                                                                                                    <?php $data = $key->data->unique('supplier_id'); ?>
+
+                                                                                                    @foreach($data as $d => $data1)
+
+                                                                                                        <li><a href="{{ url('/aanbieder/download-order-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order PDF</a></li>
+
+                                                                                                    @endforeach
+
+                                                                                                @endif
+
+                                                                                                    @if($key->data->contains('approved',1))
+
+                                                                                                        <?php $data = $key->data->unique('supplier_id'); ?>
+
+                                                                                                        @foreach($data as $d => $data1)
+
+                                                                                                            <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order Confirmation PDF</a></li>
+
+                                                                                                        @endforeach
+
+                                                                                                    @endif
+
+                                                                                            @endif
+
                                                                                         @endif
 
-                                                                                        <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+                                                                                        @if(Auth::guard('user')->user()->role_id == 4)
+
+                                                                                            @if($key->data_approved)
+
+                                                                                                <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$key->data_id) }}">Download Order Confirmation PDF</a></li>
+
+                                                                                            @endif
+
+                                                                                                <li><a href="{{ url('/aanbieder/download-order-pdf/'.$key->data_id) }}">Download Order PDF</a></li>
+
+                                                                                        @else
+
+                                                                                            <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                        @endif
 
                                                                                         @if(!$key->approved)
 

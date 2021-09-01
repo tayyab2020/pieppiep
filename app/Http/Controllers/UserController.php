@@ -2502,7 +2502,7 @@ class UserController extends Controller
             }
             else
             {
-                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered', 'customers_details.name', 'customers_details.family_name')->get();
+                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered', 'customers_details.name', 'customers_details.family_name')->get();
                 $invoices = $invoices->unique('invoice_id');
             }
 
@@ -2601,33 +2601,78 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        if($user_role == 2)
-        {
-            $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
-        }
-        else
-        {
-            $invoice = new_quotations::leftjoin('new_quotations_data','new_quotations_data.quotation_id','=','new_quotations.id')->where('new_quotations.id', $id)->where('new_quotations_data.supplier_id', $user_id)->first();
-        }
+        $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
 
         if (!$invoice) {
             return redirect()->route('new-quotations');
         }
 
+        $quotation_invoice_number = $invoice->quotation_invoice_number;
+        $filename = $quotation_invoice_number . '.pdf';
+
+        return response()->download(public_path("assets/newQuotations/{$filename}"));
+    }
+
+    public function DownloadOrderPDF($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
         if($user_role == 2)
         {
-            $quotation_invoice_number = $invoice->quotation_invoice_number;
-            $filename = $quotation_invoice_number . '.pdf';
-
-            return response()->download(public_path("assets/newQuotations/{$filename}"));
+            $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->first();
         }
         else
         {
-            $quotation_invoice_number = $invoice->quotation_invoice_number . '-' . $user_id;
-            $filename = $quotation_invoice_number . '.pdf';
-
-            return response()->download(public_path("assets/supplierQuotations/{$filename}"));
+            $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations_data.supplier_id',$user_id)->where('new_quotations.finished',1)->first();
         }
+
+        if (!$check) {
+            return redirect()->route('new-quotations');
+        }
+
+        $order_number = $check->order_number;
+        $filename = $order_number . '.pdf';
+
+        return response()->download(public_path("assets/supplierQuotations/{$filename}"));
+    }
+
+    public function DownloadOrderConfirmationPDF($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user_role == 2)
+        {
+            $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->first();
+        }
+        else
+        {
+            $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations_data.supplier_id',$user_id)->where('new_quotations_data.approved',1)->first();
+        }
+
+        if (!$check) {
+            return redirect()->route('new-quotations');
+        }
+
+        $order_number = $check->order_number;
+        $filename = $order_number . '.pdf';
+
+        return response()->download(public_path("assets/supplierApproved/{$filename}"));
     }
 
     public function DownloadClientNewQuotation($id)
@@ -2829,7 +2874,7 @@ class UserController extends Controller
                 });
             }
 
-            \File::delete(public_path() .'/assets/newQuotations/'.$filename);
+            /*\File::delete(public_path() .'/assets/newQuotations/'.$filename);*/
 
             Session::flash('success','Quotation has been updated successfully!');
         }

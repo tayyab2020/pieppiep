@@ -72,6 +72,8 @@
   Route::get('/new-quotations', 'UserController@NewQuotations')->name('new-quotations');
   Route::get('/edit-new-quotation/{id}', 'UserController@EditNewQuotation');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
+  Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');
+  Route::get('/download-order-confirmation-pdf/{id}', 'UserController@DownloadOrderConfirmationPDF');
   Route::get('/create-new-quotation', 'UserController@CreateNewQuotation')->name('create-new-quotation');
   Route::post('/store-new-quotation', 'UserController@StoreNewQuotation')->name('store-new-quotation');
   Route::get('/get-supplier-products', 'UserController@GetSupplierProducts');

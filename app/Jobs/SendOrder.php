@@ -59,7 +59,6 @@ class SendOrder implements ShouldQueue
         }
 
         $retailer_name = $user->name . ' ' . $user->family_name;
-        $retailer_email = $user->email;
         $retailer_company = $user->company_name;
 
         $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
@@ -73,6 +72,7 @@ class SendOrder implements ShouldQueue
             $supplier_data = User::where('id',$key)->first();
             $supplier_name = $supplier_data->name . ' ' . $supplier_data->family_name;
             $supplier_email = $supplier_data->email;
+            $counter = $supplier_data->counter_order;
 
             $request = new_quotations::where('id',$id)->first();
             $request->products = new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->get();
@@ -143,19 +143,28 @@ class SendOrder implements ShouldQueue
             $request->delivery_date = $delivery;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
-            $filename = $quotation_invoice_number . '-' . $key . '.pdf';
+            $o_i_number = date("Y") . "-" . sprintf('%04u', $key) . '-' . sprintf('%04u', $counter);
+            $filename = $o_i_number . '.pdf';
             $file = public_path() . '/assets/supplierQuotations/' . $filename;
+
+            new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_number' => $o_i_number]);
 
             ini_set('max_execution_time', 180);
 
             $date = $request->created_at;
-            $role = 'supplier';
+            $role = 'supplier1';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','o_i_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
             $pdf->save($file);
 
-            $sup_mail[] = array('email' => $supplier_email,'name' => $supplier_name,'file' => $file,'file_name' => $filename,'quotation_invoice_number' => $quotation_invoice_number);
+            if($this->attempts() == 1)
+            {
+                $supplier_data->counter_order = $counter + 1;
+                $supplier_data->save();
+            }
+
+            $sup_mail[] = array('email' => $supplier_email,'name' => $supplier_name,'file' => $file,'file_name' => $filename,'order_number' => $o_i_number);
         }
 
         foreach ($sup_mail as $sup)
@@ -165,7 +174,7 @@ class SendOrder implements ShouldQueue
                     'supplier' => $sup['name'],
                     'retailer' => $retailer_name,
                     'company_name' => $retailer_company,
-                    'quotation_invoice_number' => $sup['quotation_invoice_number'],
+                    'order_number' => $sup['order_number'],
                     'type' => 'new-quotation'
                 ), function ($message) use ($sup) {
                     $message->from('info@pieppiep.com');

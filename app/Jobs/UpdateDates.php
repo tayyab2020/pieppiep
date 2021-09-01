@@ -77,6 +77,7 @@ class UpdateDates implements ShouldQueue
 
         $request = new_quotations::where('id',$invoice_id)->first();
         $request->products = new_quotations_data::where('quotation_id',$invoice_id)->where('supplier_id',$supplier_id)->get();
+        $order_number = $request->products[0]->order_number;
 
         $product_titles = array();
         $color_titles = array();
@@ -144,19 +145,20 @@ class UpdateDates implements ShouldQueue
         $request->delivery_date = $delivery;
 
         $quotation_invoice_number = $request->quotation_invoice_number;
-        $filename = $quotation_invoice_number . '-' . $supplier_id . '.pdf';
-        $file = public_path() . '/assets/supplierQuotations/' . $filename;
+        $o_i_number = $order_number;
+        $filename = $o_i_number . '.pdf';
+        $file = public_path() . '/assets/supplierApproved/' . $filename;
 
         ini_set('max_execution_time', 180);
 
         $date = $request->created_at;
         $role = 'supplier';
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number', 'o_i_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
         $pdf->save($file);
 
-        $request = new_quotations::where('id',$invoice_id)->first();
+        /*$request = new_quotations::where('id',$invoice_id)->first();
         $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
 
         $product_titles = array();
@@ -239,7 +241,7 @@ class UpdateDates implements ShouldQueue
 
         $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
-        $pdf->save($file);
+        $pdf->save($file);*/
 
         if($is_approved)
         {
