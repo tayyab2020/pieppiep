@@ -462,11 +462,11 @@
 
                                                                                                         <?php $data = $key->data->unique('supplier_id'); ?>
 
-                                                                                                        @foreach($data as $d => $data1)
+                                                                                                            @foreach($data as $d => $data1)
 
-                                                                                                            <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order Confirmation PDF</a></li>
+                                                                                                                <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order Confirmation PDF</a></li>
 
-                                                                                                        @endforeach
+                                                                                                            @endforeach
 
                                                                                                     @endif
 
