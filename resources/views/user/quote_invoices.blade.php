@@ -626,9 +626,14 @@
 
         @media (min-width: 768px)
         {
+            .open>.dropdown-menu
+            {
+                display: grid;
+            }
+
             .dropdown-menu
             {
-                width: 235px;
+                width: 215px;
                 overflow: auto;
             }
 
