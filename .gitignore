@@ -21,5 +21,6 @@ yarn-error.log
 /public/assets/temporary_images
 /public/assets/newQuotations
 /public/assets/supplierQuotations
+/public/assets/supplierApproved
 /config/app.php
 /resources/views/layouts/front.blade.php
