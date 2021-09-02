@@ -847,9 +847,9 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                     <a href="{{route('new-orders')}}"><i class="fa fa-fw fa-file-text"></i> <span>New Orders</span></a>
                 </li>
 
-                {{--<li>
-                    <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i> <span>New Invoices</span></a>
-                </li>--}}
+                <li>
+                    <a href="{{route('new-invoices')}}"><i class="fa fa-fw fa-file-text"></i> <span>New Invoices</span></a>
+                </li>
 
             @endif
 

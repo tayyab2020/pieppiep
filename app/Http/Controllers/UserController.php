@@ -2507,6 +2507,31 @@ class UserController extends Controller
 
     }
 
+    public function NewInvoices()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+        $user_role = $user->role_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user_role == 2)
+        {
+            $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.invoice',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+
+            return view('user.quote_invoices', compact('invoices'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+
+    }
+
     public function NewQuotations()
     {
         $user = Auth::guard('user')->user();
@@ -2636,6 +2661,30 @@ class UserController extends Controller
         $filename = $quotation_invoice_number . '.pdf';
 
         return response()->download(public_path("assets/newQuotations/{$filename}"));
+    }
+
+    public function DownloadInvoicePDF($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
+
+        if (!$invoice) {
+            return redirect()->route('new-invoices');
+        }
+
+        $invoice_number = $invoice->invoice_number;
+        $filename = $invoice_number . '.pdf';
+
+        return response()->download(public_path("assets/newInvoices/{$filename}"));
     }
 
     public function DownloadOrderPDF($id)
@@ -3567,13 +3616,13 @@ class UserController extends Controller
         $user_id = $user->id;
         $retailer_company = $user->company_name;
 
-        $data = new_quotations::where('id',$id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.delivered',1)->first();
+        $data = new_quotations::where('id',$id)->where('creator_id', $user_id)->where('delivered',1)->first();
 
         if($data)
         {
             new_quotations::where('id', $id)->where('new_quotations.creator_id', $user_id)->update(['new_quotations.retailer_delivered' => 1]);
 
-            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('users.id',$data->user_id)->where('customers_details.retailer_id',$user_id)->select('users.email','customers_details.*')->first();
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email')->first();
             $client_name = $client->name . ' ' . $client->family_name;
             $client_email = $client->email;
             $order_number = $data->quotation_invoice_number;
@@ -3586,6 +3635,150 @@ class UserController extends Controller
             });
 
             Session::flash('success', 'Quotation marked as delivered.');
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function CreateNewInvoice($id)
+    {
+        $invoice_id = $id;
+        $user = Auth::guard('user')->user();
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+        }
+
+        $user_id = $user->id;
+        $counter_invoice = $user->counter_invoice;
+
+        $data = new_quotations::where('id',$invoice_id)->where('creator_id', $user_id)->where('invoice','!=',1)->first();
+
+        if($data)
+        {
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email')->first();
+            $request = new_quotations::where('id',$invoice_id)->first();
+            $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
+
+            $product_titles = array();
+            $color_titles = array();
+            $sub_titles = array();
+            $qty = array();
+            $width = array();
+            $width_unit = array();
+            $height = array();
+            $height_unit = array();
+            $comments = array();
+            $delivery = array();
+            $feature_sub_titles = array();
+            $rates = array();
+
+            foreach ($request->products as $x => $temp)
+            {
+                $feature_sub_titles[$x][] = 'empty';
+                $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
+                $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
+                $qty[] = $temp->qty;
+                $width[] = $temp->width;
+                $width_unit[] = $temp->width_unit;
+                $height[] = $temp->height;
+                $height_unit[] = $temp->height_unit;
+                $delivery[] = $temp->delivery_date;
+                $rates[] = $temp->rate;
+
+                $features = new_quotations_features::where('quotation_data_id',$temp->id)->get();
+
+                foreach ($features as $f => $feature)
+                {
+                    if($feature->feature_id == 0)
+                    {
+                        if($feature->ladderband)
+                        {
+                            $sub_product = new_quotations_sub_products::where('feature_row_id',$feature->id)->get();
+
+                            foreach ($sub_product as $sub)
+                            {
+                                if($sub->size1_value == 1 || $sub->size2_value == 1)
+                                {
+                                    $sub_titles[$x] = product_ladderbands::where('product_id',$temp->product_id)->where('id',$sub->sub_product_id)->first();
+
+                                    if($sub->size1_value == 1)
+                                    {
+                                        $sub_titles[$x]->size = '38mm';
+                                    }
+                                    else
+                                    {
+                                        $sub_titles[$x]->size = '25mm';
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $feature_sub_titles[$x][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$temp->product_id)->where('product_features.heading_id',$feature->feature_id)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                    $comments[$x][] = $feature->comment;
+                }
+            }
+
+            $request->qty = $qty;
+            $request->width = $width;
+            $request->width_unit = $width_unit;
+            $request->height = $height;
+            $request->height_unit = $height_unit;
+            $request->delivery_date = $delivery;
+            $request->rate = $rates;
+            $request->total_amount = $request->grand_total;
+
+            $quotation_invoice_number = $request->quotation_invoice_number;
+            $o_i_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter_invoice);
+            $filename = $o_i_number . '.pdf';
+            $file = public_path() . '/assets/newInvoices/' . $filename;
+
+            ini_set('max_execution_time', 180);
+
+            $date = date("Y-m-d");
+            $role = 'invoice';
+
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','o_i_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+
+            $pdf->save($file);
+
+            $counter_invoice = $counter_invoice + 1;
+            $user->counter_invoice = $counter_invoice;
+            $user->save();
+            $data->invoice_number = $o_i_number;
+            $data->invoice_date = $date;
+            $data->invoice = 1;
+            $data->save();
+
+            $client_name = $client->name . ' ' . $client->family_name;
+            $client_email = $client->email;
+            $retailer_company = $user->company_name;
+
+            \Mail::send('user.custom_quotation_mail',
+                array(
+                    'client' => $client_name,
+                    'company_name' => $retailer_company,
+                    'order_number' => $o_i_number,
+                    'quotation_number' => $quotation_invoice_number,
+                    'type' => 'new-invoice'
+                ), function ($message) use ($client_email,$file,$filename) {
+                    $message->from('info@pieppiep.com');
+                    $message->to($client_email)->subject('Invoice Generated!');
+
+                    $message->attach($file, [
+                        'as' => $filename,
+                        'mime' => 'application/pdf',
+                    ]);
+
+                });
+
+            Session::flash('success', 'Invoice created successfully!');
             return redirect()->back();
         }
         else

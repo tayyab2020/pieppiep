@@ -18,6 +18,10 @@
 
                                                 <h2 style="display: inline-block;">Orders</h2>
 
+                                            @elseif(Route::currentRouteName() == 'new-invoices')
+
+                                                <h2 style="display: inline-block;">Invoices</h2>
+
                                             @else
 
                                                 <h2 style="display: inline-block;">{{__('text.Quotations')}}</h2>
@@ -89,15 +93,21 @@
 
                                                             <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">ID</th>
 
-                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">@if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations') {{__('text.Quotation Number')}} @else {{__('text.Invoice Number')}} @endif</th>
+                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">@if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-invoices' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations') {{__('text.Quotation Number')}} @else {{__('text.Invoice Number')}} @endif</th>
 
-                                                            @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations')
+                                                            @if(Route::currentRouteName() == 'new-invoices')
+
+                                                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">{{__('text.Invoice Number')}}</th>
+
+                                                            @endif
+
+                                                            @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations' && Route::currentRouteName() != 'new-invoices')
 
                                                                 <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending" id="photo">{{__('text.Delivery Date')}}</th>
 
                                                             @endif
 
-                                                            @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations')
+                                                            @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations' && Route::currentRouteName() != 'new-invoices')
 
                                                                 <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending" id="serv">{{__('text.Subtotal')}}</th>
 
@@ -131,7 +141,11 @@
 
                                                             @else
 
-                                                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Current Stage')}}</th>
+                                                                @if(Route::currentRouteName() != 'new-invoices')
+
+                                                                    <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Current Stage')}}</th>
+
+                                                                @endif
 
                                                             @endif
 
@@ -219,9 +233,9 @@
 
                                                                 <td>{{$key->invoice_id}}</td>
 
-                                                                @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'new-quotations')
+                                                                @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'new-invoices')
 
-                                                                    <td><a @if(Route::currentRouteName() == 'new-orders') href="" @else href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}" @endif>@if(Auth::guard('user')->user()->role_id == 4) OR# {{$key->order_number}} @else OF# {{$key->quotation_invoice_number}} @endif</a></td>
+                                                                    <td><a @if(Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'new-invoices') href="" @else href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}" @endif>@if(Auth::guard('user')->user()->role_id == 4) OR# {{$key->order_number}} @else OF# {{$key->quotation_invoice_number}} @endif</a></td>
 
                                                                 @else
 
@@ -236,7 +250,13 @@
 
                                                                 @endif
 
-                                                                @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations')
+                                                                @if(Route::currentRouteName() == 'new-invoices')
+
+                                                                    <td>{{$key->invoice_number}}</td>
+
+                                                                @endif
+
+                                                                @if(Route::currentRouteName() != 'customer-quotations' && Route::currentRouteName() != 'customer-invoices' && Route::currentRouteName() != 'new-quotations' && Route::currentRouteName() != 'new-invoices')
 
                                                                     <td>{{number_format((float)$key->subtotal, 2, ',', '.')}}</td>
                                                                     <td>{{number_format((float)$key->tax, 2, ',', '.')}}</td>
@@ -271,11 +291,166 @@
 
                                                                 @else
 
-                                                                    <td>
+                                                                    @if(Route::currentRouteName() != 'new-invoices')
 
-                                                                        @if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
+                                                                        <td>
 
-                                                                            @if($key->status == 3)
+                                                                            @if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
+
+                                                                                @if($key->status == 3)
+
+                                                                                    @if($key->received)
+
+                                                                                        <span class="btn btn-success">{{__('text.Goods Received')}}</span>
+
+                                                                                    @elseif($key->delivered)
+
+                                                                                        <span class="btn btn-success">{{__('text.Goods Delivered')}}</span>
+                                                                                    @else
+
+                                                                                        <span class="btn btn-success">{{__('text.Invoice Generated')}}</span>
+
+                                                                                    @endif
+
+                                                                                @elseif($key->status == 2)
+
+                                                                                    @if(Route::currentRouteName() == 'new-quotations')
+
+                                                                                        @if($key->accepted)
+
+                                                                                            @if($key->processing)
+
+                                                                                                <span class="btn btn-success">Order Processing</span>
+
+                                                                                            @elseif($key->finished)
+
+                                                                                                @if(Auth::guard('user')->user()->role_id == 2)
+
+                                                                                                    @if($key->retailer_delivered)
+
+                                                                                                        <span class="btn btn-success">Delivered</span>
+
+                                                                                                    @else
+
+                                                                                                        <?php $data = $key->data->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
+                                                                                                            return $value['approved'] !== 1;
+                                                                                                        }); ?>
+
+                                                                                                        @if($filteredData->count() === $data->count())
+
+                                                                                                            @if($data->contains('delivered',1))
+
+                                                                                                                <?php $filteredData2 = $data->reject(function ($value, $key) {
+                                                                                                                    return $value['delivered'] !== 1;
+                                                                                                                }); ?>
+
+                                                                                                                @if($filteredData2->count() === $data->count())
+
+                                                                                                                    <span class="btn btn-success">Delivered by supplier(s)</span>
+
+                                                                                                                @elseif($filteredData2->count() == 0)
+
+                                                                                                                    <span class="btn btn-success">Confirmed by supplier(s)</span>
+
+                                                                                                                @else
+
+                                                                                                                    <span class="btn btn-success">{{$filteredData2->count()}}/{{$data->count()}} Delivered Order</span>
+
+                                                                                                                @endif
+
+                                                                                                            @else
+
+                                                                                                                <span class="btn btn-success">Confirmed by supplier(s)</span>
+
+                                                                                                            @endif
+
+                                                                                                        @elseif($filteredData->count() == 0)
+
+                                                                                                            <span class="btn btn-warning">Confirmation Pending</span>
+
+                                                                                                        @else
+
+                                                                                                            <span class="btn btn-success">{{$filteredData->count()}}/{{$data->count()}} Confirmed</span>
+
+                                                                                                        @endif
+
+                                                                                                    @endif
+
+                                                                                                @else
+
+                                                                                                    @if($key->data_processing)
+
+                                                                                                        <span class="btn btn-warning">Processing</span>
+
+                                                                                                    @elseif($key->data_delivered)
+
+                                                                                                        <span class="btn btn-success">Order Delivered</span>
+
+                                                                                                    @elseif($key->data_approved)
+
+                                                                                                        <span class="btn btn-success">Order Confirmed</span>
+
+                                                                                                    @else
+
+                                                                                                        <span class="btn btn-warning">Confirmation Pending</span>
+
+                                                                                                    @endif
+
+                                                                                                @endif
+
+                                                                                            @else
+
+                                                                                                <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
+
+                                                                                            @endif
+
+                                                                                        @else
+
+                                                                                            <span class="btn btn-success">{{__('text.Closed')}}</span>
+
+                                                                                        @endif
+
+                                                                                    @else
+
+                                                                                        @if($key->accepted)
+
+                                                                                            <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
+
+                                                                                        @else
+
+                                                                                            <span class="btn btn-success">{{__('text.Closed')}}</span>
+
+                                                                                        @endif
+
+                                                                                    @endif
+
+                                                                                @else
+
+                                                                                    @if($key->ask_customization)
+
+                                                                                        <span class="btn btn-info">{{__('text.Asking for Review')}}</span>
+
+                                                                                    @elseif($key->approved)
+
+                                                                                        @if(Route::currentRouteName() == 'new-quotations')
+
+                                                                                            <span class="btn btn-success">Quotation Sent</span>
+
+                                                                                        @else
+
+                                                                                            <span class="btn btn-success">{{__('text.Quotation Approved')}}</span>
+
+                                                                                        @endif
+
+                                                                                    @else
+
+                                                                                        <span class="btn btn-warning">{{__('text.Pending')}}</span>
+
+                                                                                    @endif
+
+                                                                                @endif
+
+                                                                            @else
 
                                                                                 @if($key->received)
 
@@ -284,169 +459,18 @@
                                                                                 @elseif($key->delivered)
 
                                                                                     <span class="btn btn-success">{{__('text.Goods Delivered')}}</span>
+
                                                                                 @else
 
                                                                                     <span class="btn btn-success">{{__('text.Invoice Generated')}}</span>
 
                                                                                 @endif
 
-                                                                            @elseif($key->status == 2)
-
-                                                                                @if(Route::currentRouteName() == 'new-quotations')
-
-                                                                                    @if($key->accepted)
-
-                                                                                        @if($key->processing)
-
-                                                                                            <span class="btn btn-success">Order Processing</span>
-
-                                                                                        @elseif($key->finished)
-
-                                                                                            @if(Auth::guard('user')->user()->role_id == 2)
-
-                                                                                                @if($key->retailer_delivered)
-
-                                                                                                    <span class="btn btn-success">Delivered</span>
-
-                                                                                                @else
-
-                                                                                                    <?php $data = $key->data->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
-                                                                                                        return $value['approved'] !== 1;
-                                                                                                    }); ?>
-
-                                                                                                    @if($filteredData->count() === $data->count())
-
-                                                                                                        @if($data->contains('delivered',1))
-
-                                                                                                            <?php $filteredData2 = $data->reject(function ($value, $key) {
-                                                                                                                return $value['delivered'] !== 1;
-                                                                                                            }); ?>
-
-                                                                                                            @if($filteredData2->count() === $data->count())
-
-                                                                                                                <span class="btn btn-success">Delivered by supplier(s)</span>
-
-                                                                                                            @elseif($filteredData2->count() == 0)
-
-                                                                                                                <span class="btn btn-success">Confirmed by supplier(s)</span>
-
-                                                                                                            @else
-
-                                                                                                                <span class="btn btn-success">{{$filteredData2->count()}}/{{$data->count()}} Delivered Order</span>
-
-                                                                                                            @endif
-
-                                                                                                        @else
-
-                                                                                                            <span class="btn btn-success">Confirmed by supplier(s)</span>
-
-                                                                                                        @endif
-
-                                                                                                    @elseif($filteredData->count() == 0)
-
-                                                                                                        <span class="btn btn-warning">Confirmation Pending</span>
-
-                                                                                                    @else
-
-                                                                                                        <span class="btn btn-success">{{$filteredData->count()}}/{{$data->count()}} Confirmed</span>
-
-                                                                                                    @endif
-
-                                                                                                @endif
-
-                                                                                            @else
-
-                                                                                                @if($key->data_processing)
-
-                                                                                                    <span class="btn btn-warning">Processing</span>
-
-                                                                                                @elseif($key->data_delivered)
-
-                                                                                                    <span class="btn btn-success">Order Delivered</span>
-
-                                                                                                @elseif($key->data_approved)
-
-                                                                                                    <span class="btn btn-success">Order Confirmed</span>
-
-                                                                                                @else
-
-                                                                                                    <span class="btn btn-warning">Confirmation Pending</span>
-
-                                                                                                @endif
-
-                                                                                            @endif
-
-                                                                                        @else
-
-                                                                                            <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
-
-                                                                                        @endif
-
-                                                                                    @else
-
-                                                                                        <span class="btn btn-success">{{__('text.Closed')}}</span>
-
-                                                                                    @endif
-
-                                                                                @else
-
-                                                                                    @if($key->accepted)
-
-                                                                                        <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
-
-                                                                                    @else
-
-                                                                                        <span class="btn btn-success">{{__('text.Closed')}}</span>
-
-                                                                                    @endif
-
-                                                                                @endif
-
-                                                                            @else
-
-                                                                                @if($key->ask_customization)
-
-                                                                                    <span class="btn btn-info">{{__('text.Asking for Review')}}</span>
-
-                                                                                @elseif($key->approved)
-
-                                                                                    @if(Route::currentRouteName() == 'new-quotations')
-
-                                                                                        <span class="btn btn-success">Quotation Sent</span>
-
-                                                                                    @else
-
-                                                                                        <span class="btn btn-success">{{__('text.Quotation Approved')}}</span>
-
-                                                                                    @endif
-
-                                                                                @else
-
-                                                                                    <span class="btn btn-warning">{{__('text.Pending')}}</span>
-
-                                                                                @endif
-
                                                                             @endif
 
-                                                                        @else
+                                                                        </td>
 
-                                                                            @if($key->received)
-
-                                                                                <span class="btn btn-success">{{__('text.Goods Received')}}</span>
-
-                                                                            @elseif($key->delivered)
-
-                                                                                <span class="btn btn-success">{{__('text.Goods Delivered')}}</span>
-
-                                                                            @else
-
-                                                                                <span class="btn btn-success">{{__('text.Invoice Generated')}}</span>
-
-                                                                            @endif
-
-                                                                        @endif
-
-                                                                    </td>
+                                                                    @endif
 
                                                                 @endif
 
@@ -463,77 +487,50 @@
                                                                             <span class="caret"></span></button>
                                                                         <ul class="dropdown-menu">
 
-                                                                            @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
+                                                                            @if(Route::currentRouteName() == 'new-invoices')
 
-
-                                                                                @if(auth()->user()->can('view-custom-quotation'))
-
-                                                                                    <li><a href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
-
-                                                                                @endif
-
-
-                                                                                @if(auth()->user()->can('download-custom-quotation'))
-
-                                                                                    <li><a href="{{ url('/aanbieder/download-custom-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
-
-                                                                                @endif
-
-
-
-                                                                                @if(!$key->approved)
-
-                                                                                    @if(auth()->user()->can('send-custom-quotation'))
-
-                                                                                        <li><a href="{{ url('/aanbieder/versturen-eigen-offerte/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
-
-                                                                                    @endif
-
-                                                                                @endif
-
-
-                                                                                @if($key->status == 2 && $key->accepted)
-
-                                                                                    @if(auth()->user()->can('create-custom-invoice'))
-
-                                                                                        <li><a href="{{ url('/aanbieder/opstellen-eigen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
-
-                                                                                    @endif
-
-                                                                                @endif
-
-
-                                                                                @if($key->status != 2 && $key->status != 3)
-
-                                                                                    @if($key->ask_customization)
-
-                                                                                        <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
-
-                                                                                    @endif
-
-
-                                                                                    @if(auth()->user()->can('edit-custom-quotation'))
-
-                                                                                        <li><a href="{{ url('/aanbieder/bewerk-eigen-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
-
-                                                                                    @endif
-
-                                                                                @endif
-
-
-                                                                                @if($key->status == 3 && $key->delivered == 0)
-
-                                                                                    @if(auth()->user()->can('custom-mark-delivered'))
-
-                                                                                        <li><a href="{{ url('/aanbieder/custom-mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
-
-                                                                                    @endif
-
-                                                                                @endif
+                                                                                <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
 
                                                                             @else
 
-                                                                                @if(Route::currentRouteName() == 'new-quotations')
+                                                                                @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
+
+
+                                                                                    @if(auth()->user()->can('view-custom-quotation'))
+
+                                                                                        <li><a href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
+
+                                                                                    @endif
+
+
+                                                                                    @if(auth()->user()->can('download-custom-quotation'))
+
+                                                                                        <li><a href="{{ url('/aanbieder/download-custom-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                    @endif
+
+
+                                                                                    @if(!$key->approved)
+
+                                                                                        @if(auth()->user()->can('send-custom-quotation'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/versturen-eigen-offerte/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @endif
+
+
+                                                                                    @if($key->status == 2 && $key->accepted)
+
+                                                                                        @if(auth()->user()->can('create-custom-invoice'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/opstellen-eigen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @endif
+
 
                                                                                     @if($key->status != 2 && $key->status != 3)
 
@@ -543,158 +540,198 @@
 
                                                                                         @endif
 
-                                                                                        @if($key->status == 0 || $key->ask_customization)
 
-                                                                                            <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+                                                                                        @if(auth()->user()->can('edit-custom-quotation'))
 
-                                                                                        @endif
-
-                                                                                    @endif
-
-                                                                                    @if($key->accepted && !$key->processing && !$key->finished)
-
-                                                                                        <li><a href="{{ url('/aanbieder/send-order/'.$key->invoice_id) }}">Send Order</a></li>
-
-                                                                                    @endif
-
-                                                                                    @if(Auth::guard('user')->user()->role_id == 4)
-
-                                                                                        @if(!$key->data_delivered && !$key->data_processing)
-
-                                                                                            <li><a href="{{ url('/aanbieder/change-delivery-dates/'.$key->invoice_id) }}">Edit Delivery Dates</a></li>
-
-                                                                                        @endif
-
-                                                                                        @if(!$key->data_delivered)
-
-                                                                                            <li><a href="{{ url('/aanbieder/supplier-order-delivered/'.$key->invoice_id) }}">Mark as delivered</a></li>
-
-                                                                                        @endif
-
-                                                                                    @else
-
-                                                                                        @if($key->delivered && !$key->retailer_delivered)
-
-                                                                                            <li><a href="{{ url('/aanbieder/retailer-mark-delivered/'.$key->invoice_id) }}">Mark as delivered</a></li>
-
-                                                                                        @endif
-
-                                                                                        @if($key->status == 2)
-
-                                                                                            @if($key->finished)
-
-                                                                                                <?php $data = $key->data->unique('supplier_id'); ?>
-
-                                                                                                @foreach($data as $d => $data1)
-
-                                                                                                    <li><a href="{{ url('/aanbieder/download-order-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order PDF</a></li>
-
-                                                                                                @endforeach
-
-                                                                                            @endif
-
-                                                                                            <?php $data = $key->data->unique('supplier_id'); ?>
-
-                                                                                            @foreach($data as $d => $data1)
-
-                                                                                                @if($data1->approved)
-
-                                                                                                    <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order Confirmation PDF</a></li>
-
-                                                                                                @endif
-
-                                                                                            @endforeach
+                                                                                            <li><a href="{{ url('/aanbieder/bewerk-eigen-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
 
                                                                                         @endif
 
                                                                                     @endif
 
-                                                                                    @if(Auth::guard('user')->user()->role_id == 4)
 
-                                                                                        @if($key->data_approved)
+                                                                                    @if($key->status == 3 && $key->delivered == 0)
 
-                                                                                            <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$key->data_id) }}">Download Order Confirmation PDF</a></li>
+                                                                                        @if(auth()->user()->can('custom-mark-delivered'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/custom-mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
 
                                                                                         @endif
-
-                                                                                        <li><a href="{{ url('/aanbieder/download-order-pdf/'.$key->data_id) }}">Download Order PDF</a></li>
-
-                                                                                    @else
-
-                                                                                        <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
-
-                                                                                    @endif
-
-                                                                                    @if(!$key->approved)
-
-                                                                                        <li><a href="{{ url('/aanbieder/send-new-quotation/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
 
                                                                                     @endif
 
                                                                                 @else
 
-                                                                                    @if(auth()->user()->can('view-handyman-quotation'))
+                                                                                    @if(Route::currentRouteName() == 'new-quotations')
 
-                                                                                        <li><a href="{{ url('/aanbieder/bekijk-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
+                                                                                        @if(!$key->invoice)
 
-                                                                                    @endif
-
-
-                                                                                    @if(auth()->user()->can('handyman-quote-request'))
-
-                                                                                        <li><a href="{{ url('/aanbieder/bekijk-offerteaanvraag-aanbieder/'.$key->id) }}">{{__('text.View Request')}}</a></li>
-
-                                                                                    @endif
-
-
-                                                                                    @if(Route::currentRouteName() == 'commission-invoices')
-
-                                                                                        @if(auth()->user()->can('download-commission-invoice'))
-
-                                                                                            <li><a href="{{ url('/aanbieder/download-commission-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+                                                                                            <li><a href="{{ url('/aanbieder/create-new-invoice/'.$key->invoice_id) }}">Create Invoice</a></li>
 
                                                                                         @endif
 
-                                                                                    @else
+                                                                                        @if($key->status != 2 && $key->status != 3)
 
-                                                                                        @if(auth()->user()->can('download-quote-invoice'))
+                                                                                            @if($key->ask_customization)
 
-                                                                                            <li><a href="{{ url('/aanbieder/download-quote-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+                                                                                                <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
 
-                                                                                        @endif
+                                                                                            @endif
 
-                                                                                    @endif
+                                                                                            @if($key->status == 0 || $key->ask_customization)
 
-
-                                                                                    @if($key->status == 2 && $key->accepted)
-
-                                                                                        @if(auth()->user()->can('create-handyman-invoice'))
-
-                                                                                            <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
-
-                                                                                        @endif
-
-                                                                                    @elseif($key->status == 1)
-
-                                                                                        @if($key->ask_customization)
-
-                                                                                            <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
-
-                                                                                            @if(auth()->user()->can('edit-handyman-quotation'))
-
-                                                                                                <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+                                                                                                <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
 
                                                                                             @endif
 
                                                                                         @endif
 
-                                                                                    @endif
+                                                                                        @if($key->accepted && !$key->processing && !$key->finished)
 
-                                                                                    @if($key->status == 3 && $key->delivered == 0)
+                                                                                            <li><a href="{{ url('/aanbieder/send-order/'.$key->invoice_id) }}">Send Order</a></li>
 
-                                                                                        @if(auth()->user()->can('mark-delivered'))
+                                                                                        @endif
 
-                                                                                            <li><a href="{{ url('/aanbieder/mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
+                                                                                        @if(Auth::guard('user')->user()->role_id == 4)
+
+                                                                                            @if(!$key->data_delivered && !$key->data_processing)
+
+                                                                                                <li><a href="{{ url('/aanbieder/change-delivery-dates/'.$key->invoice_id) }}">Edit Delivery Dates</a></li>
+
+                                                                                            @endif
+
+                                                                                            @if(!$key->data_delivered)
+
+                                                                                                <li><a href="{{ url('/aanbieder/supplier-order-delivered/'.$key->invoice_id) }}">Mark as delivered</a></li>
+
+                                                                                            @endif
+
+                                                                                        @else
+
+                                                                                            @if($key->delivered && !$key->retailer_delivered)
+
+                                                                                                <li><a href="{{ url('/aanbieder/retailer-mark-delivered/'.$key->invoice_id) }}">Mark as delivered</a></li>
+
+                                                                                            @endif
+
+                                                                                            @if($key->status == 2)
+
+                                                                                                @if($key->finished)
+
+                                                                                                    <?php $data = $key->data->unique('supplier_id'); ?>
+
+                                                                                                    @foreach($data as $d => $data1)
+
+                                                                                                        <li><a href="{{ url('/aanbieder/download-order-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order PDF</a></li>
+
+                                                                                                    @endforeach
+
+                                                                                                @endif
+
+                                                                                                <?php $data = $key->data->unique('supplier_id'); ?>
+
+                                                                                                @foreach($data as $d => $data1)
+
+                                                                                                    @if($data1->approved)
+
+                                                                                                        <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order Confirmation PDF</a></li>
+
+                                                                                                    @endif
+
+                                                                                                @endforeach
+
+                                                                                            @endif
+
+                                                                                        @endif
+
+                                                                                        @if(Auth::guard('user')->user()->role_id == 4)
+
+                                                                                            @if($key->data_approved)
+
+                                                                                                <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$key->data_id) }}">Download Order Confirmation PDF</a></li>
+
+                                                                                            @endif
+
+                                                                                            <li><a href="{{ url('/aanbieder/download-order-pdf/'.$key->data_id) }}">Download Order PDF</a></li>
+
+                                                                                        @else
+
+                                                                                            <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                        @if(!$key->approved)
+
+                                                                                            <li><a href="{{ url('/aanbieder/send-new-quotation/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
+
+                                                                                        @endif
+
+                                                                                    @else
+
+                                                                                        @if(auth()->user()->can('view-handyman-quotation'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/bekijk-offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
+
+                                                                                        @endif
+
+
+                                                                                        @if(auth()->user()->can('handyman-quote-request'))
+
+                                                                                            <li><a href="{{ url('/aanbieder/bekijk-offerteaanvraag-aanbieder/'.$key->id) }}">{{__('text.View Request')}}</a></li>
+
+                                                                                        @endif
+
+
+                                                                                        @if(Route::currentRouteName() == 'commission-invoices')
+
+                                                                                            @if(auth()->user()->can('download-commission-invoice'))
+
+                                                                                                <li><a href="{{ url('/aanbieder/download-commission-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                            @endif
+
+                                                                                        @else
+
+                                                                                            @if(auth()->user()->can('download-quote-invoice'))
+
+                                                                                                <li><a href="{{ url('/aanbieder/download-quote-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+
+                                                                                            @endif
+
+                                                                                        @endif
+
+
+                                                                                        @if($key->status == 2 && $key->accepted)
+
+                                                                                            @if(auth()->user()->can('create-handyman-invoice'))
+
+                                                                                                <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$key->invoice_id) }}">{{__('text.Create Invoice')}}</a></li>
+
+                                                                                            @endif
+
+                                                                                        @elseif($key->status == 1)
+
+                                                                                            @if($key->ask_customization)
+
+                                                                                                <li><a onclick="ask(this)" data-text="{{$key->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
+
+                                                                                                @if(auth()->user()->can('edit-handyman-quotation'))
+
+                                                                                                    <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+
+                                                                                                @endif
+
+                                                                                            @endif
+
+                                                                                        @endif
+
+                                                                                        @if($key->status == 3 && $key->delivered == 0)
+
+                                                                                            @if(auth()->user()->can('mark-delivered'))
+
+                                                                                                <li><a href="{{ url('/aanbieder/mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
+
+                                                                                            @endif
 
                                                                                         @endif
 
@@ -703,7 +740,6 @@
                                                                                 @endif
 
                                                                             @endif
-
 
                                                                         </ul>
                                                                     </div>

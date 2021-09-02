@@ -25,7 +25,7 @@
                                     <p style="margin: 0">{{$user->email}}</p>
                                     <br>
                                     @if($role != 'retailer') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$o_i_number}} @else OR: {{$o_i_number}}@endif</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$o_i_number}} @elseif($role == 'invoice') FA: {{$o_i_number}} @else OR: {{$o_i_number}}@endif</p>
                                     <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 
                                 </div>
@@ -72,6 +72,12 @@
 
                                         @elseif($request->products->contains('approved', 1))
 
+                                            @if($role == 'invoice')
+
+                                                <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Amount')}}</th>
+
+                                            @endif
+
                                             <th class="border-0 text-uppercase small font-weight-bold">Delivery Date</th>
 
                                         @endif
@@ -110,6 +116,12 @@
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
 
+                                                @if($role == 'invoice')
+
+                                                    <td>{{round($request->rate[$i])}}</td>
+
+                                                @endif
+
                                                 @if($key->approved)
 
                                                     <td>{{$request->delivery_date[$i]}}</td>
@@ -140,7 +152,7 @@
 
                         </style>
 
-                        @if($role == 'retailer')
+                        @if($role == 'retailer' || $role == 'invoice')
 
                             <div class="d-flex flex-row-reverse bg-dark text-white p-4" style="background-color: #343a40 !important;display: block !important;margin: 0 !important;">
 
