@@ -48,6 +48,7 @@ class UpdateDates implements ShouldQueue
         $request = $this->request;
         $supplier = $this->user;
         $rows = $request['data_id'];
+        $delivery_dates = $request['delivery_dates'];
 
         $is_approved = new_quotations_data::where('id',$rows[0])->pluck('approved')->first();
 
@@ -259,7 +260,23 @@ class UpdateDates implements ShouldQueue
 
         foreach ($rows as $i => $key)
         {
-            new_quotations_data::where('id',$key)->update(['approved' => 1, 'delivery_date' => $request['delivery_dates'][$i], 'processing' => 0, 'finished' => 1]);
+            new_quotations_data::where('id',$key)->update(['approved' => 1, 'delivery_date' => $delivery_dates[$i], 'processing' => 0, 'finished' => 1]);
+        }
+
+        $approved = new_quotations_data::where('quotation_id',$invoice_id)->get();
+        $flag = 0;
+
+        foreach ($approved as $key)
+        {
+            if(!$key->approved)
+            {
+                $flag = 1;
+            }
+        }
+
+        if($flag == 0)
+        {
+            new_quotations::where('id',$invoice_id)->update(['received' => 1]);
         }
     }
 

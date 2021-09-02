@@ -458,17 +458,17 @@
 
                                                                                                 @endif
 
-                                                                                                    @if($key->data->contains('approved',1))
+                                                                                                    <?php $data = $key->data->unique('supplier_id'); ?>
 
-                                                                                                        <?php $data = $key->data->unique('supplier_id'); ?>
+                                                                                                    @foreach($data as $d => $data1)
 
-                                                                                                            @foreach($data as $d => $data1)
+                                                                                                        @if($data1->approved)
 
-                                                                                                                <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order Confirmation PDF</a></li>
+                                                                                                            <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">Download Supplier {{$d+1}} Order Confirmation PDF</a></li>
 
-                                                                                                            @endforeach
+                                                                                                        @endif
 
-                                                                                                    @endif
+                                                                                                    @endforeach
 
                                                                                             @endif
 

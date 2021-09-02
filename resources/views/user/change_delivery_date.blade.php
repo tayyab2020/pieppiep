@@ -85,8 +85,8 @@
                                                                             </div>
                                                                         </td>
                                                                         <td>{{$item->qty}}</td>
-                                                                        <td>
-                                                                            <input style="border: 0;outline: none;" value="{{$item->delivery_date}}" type="text" class="delivery_date" name="delivery_dates[]">
+                                                                        <td style="padding: 0;">
+                                                                            <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->delivery_date}}" type="text" class="delivery_date" name="delivery_dates[]">
                                                                         </td>
                                                                     </tr>
 
@@ -128,28 +128,6 @@
 
     <style>
 
-        #sidebar
-        {
-            height: auto !important;
-        }
-
-        body
-        {
-            overflow: auto !important;
-        }
-
-        .top-bar
-        {
-            z-index: 10000 !important;
-            background-color: white;
-        }
-
-        .wrapper
-        {
-            height: auto !important;
-            position: static !important;
-        }
-
         .datepicker {
             padding: 4px;
             -webkit-border-radius: 4px;
@@ -168,8 +146,10 @@
         }
         .datepicker-dropdown {
             top: 0;
-
-            min-width: 19.3% !important;
+            min-width: 60% !important;
+            height: 45%;
+            overflow-y: auto;
+            z-index: 10000 !important;
         }
 
         .table-condensed{
