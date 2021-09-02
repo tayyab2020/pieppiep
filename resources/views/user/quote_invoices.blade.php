@@ -304,11 +304,17 @@
 
                                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                                                <?php $data = $key->data->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
-                                                                                                    return $value['approved'] !== 1;
-                                                                                                }); ?>
+                                                                                                @if($key->retailer_delivered)
 
-                                                                                                @if($filteredData->count() === $data->count())
+                                                                                                    <span class="btn btn-success">Delivered</span>
+
+                                                                                                @else
+
+                                                                                                    <?php $data = $key->data->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
+                                                                                                        return $value['approved'] !== 1;
+                                                                                                    }); ?>
+
+                                                                                                    @if($filteredData->count() === $data->count())
 
                                                                                                         @if($data->contains('delivered',1))
 
@@ -316,33 +322,35 @@
                                                                                                                 return $value['delivered'] !== 1;
                                                                                                             }); ?>
 
-                                                                                                                @if($filteredData2->count() === $data->count())
+                                                                                                            @if($filteredData2->count() === $data->count())
 
-                                                                                                                    <span class="btn btn-success">Delivered by supplier(s)</span
+                                                                                                                <span class="btn btn-success">Delivered by supplier(s)</span>
 
-                                                                                                                @elseif($filteredData2->count() == 0)
+                                                                                                            @elseif($filteredData2->count() == 0)
 
-                                                                                                                    <span class="btn btn-success">Confirmed by supplier(s)</span
+                                                                                                                <span class="btn btn-success">Confirmed by supplier(s)</span>
 
-                                                                                                                @else
+                                                                                                            @else
 
-                                                                                                                    <span class="btn btn-success">{{$filteredData2->count()}}/{{$data->count()}} Delivered Order</span>
+                                                                                                                <span class="btn btn-success">{{$filteredData2->count()}}/{{$data->count()}} Delivered Order</span>
 
-                                                                                                                @endif
+                                                                                                            @endif
 
                                                                                                         @else
 
-                                                                                                            <span class="btn btn-success">Confirmed by supplier(s)</span
+                                                                                                            <span class="btn btn-success">Confirmed by supplier(s)</span>
 
                                                                                                         @endif
 
-                                                                                                @elseif($filteredData->count() == 0)
+                                                                                                    @elseif($filteredData->count() == 0)
 
-                                                                                                    <span class="btn btn-warning">Confirmation Pending</span>
+                                                                                                        <span class="btn btn-warning">Confirmation Pending</span>
 
-                                                                                                @else
+                                                                                                    @else
 
-                                                                                                    <span class="btn btn-success">{{$filteredData->count()}}/{{$data->count()}} Confirmed</span>
+                                                                                                        <span class="btn btn-success">{{$filteredData->count()}}/{{$data->count()}} Confirmed</span>
+
+                                                                                                    @endif
 
                                                                                                 @endif
 
@@ -564,6 +572,12 @@
                                                                                         @endif
 
                                                                                     @else
+
+                                                                                        @if($key->delivered && !$key->retailer_delivered)
+
+                                                                                            <li><a href="{{ url('/aanbieder/retailer-mark-delivered/'.$key->invoice_id) }}">Mark as delivered</a></li>
+
+                                                                                        @endif
 
                                                                                         @if($key->status == 2)
 

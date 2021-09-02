@@ -3554,6 +3554,46 @@ class UserController extends Controller
         }
     }
 
+    public function RetailerMarkDelivered($id)
+    {
+        $user = Auth::guard('user')->user();
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+        }
+
+        $user_id = $user->id;
+        $retailer_company = $user->company_name;
+
+        $data = new_quotations::where('id',$id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.delivered',1)->first();
+
+        if($data)
+        {
+            new_quotations::where('id', $id)->where('new_quotations.creator_id', $user_id)->update(['new_quotations.retailer_delivered' => 1]);
+
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('users.id',$data->user_id)->where('customers_details.retailer_id',$user_id)->select('users.email','customers_details.*')->first();
+            $client_name = $client->name . ' ' . $client->family_name;
+            $client_email = $client->email;
+            $order_number = $data->quotation_invoice_number;
+
+            \Mail::send(array(), array(), function ($message) use ($client_email, $retailer_company, $client_name, $order_number) {
+                $message->to($client_email)
+                    ->from('info@pieppiep.com')
+                    ->subject('Quotation marked as delivered by retailer!')
+                    ->setBody("Recent activity: Hi ".$client_name.", quotation has been delivered by retailer <b>".$retailer_company."</b><br> Quotation No: <b>" . $order_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+            });
+
+            Session::flash('success', 'Quotation marked as delivered.');
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
     public function StoreCustomQuotation(Request $request)
     {
         $user = Auth::guard('user')->user();
