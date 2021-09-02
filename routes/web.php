@@ -70,6 +70,7 @@
   Route::prefix('aanbieder')->group(function() {
 
   Route::get('/new-quotations', 'UserController@NewQuotations')->name('new-quotations');
+  Route::get('/new-orders', 'UserController@NewOrders')->name('new-orders');
   Route::get('/edit-new-quotation/{id}', 'UserController@EditNewQuotation');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
   Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');
@@ -126,6 +127,7 @@
   Route::get('/send-new-quotation/{id}', 'UserController@SendNewQuotation');
   Route::get('/send-order/{id}', 'UserController@SendOrder');
   Route::get('/change-delivery-dates/{id}', 'UserController@ChangeDeliveryDates');
+  Route::get('/supplier-order-delivered/{id}', 'UserController@SupplierOrderDelivered');
   Route::post('/change-delivery-dates', 'UserController@UpdateDeliveryDates')->name('change-delivery-date');
   Route::post('/aangepaste-offerte/ask-customization', 'UserController@CustomQuotationAskCustomization');
   Route::get('/eigen-offerte/accepteren-offerte/{id}', 'UserController@CustomQuotationAcceptQuotation');

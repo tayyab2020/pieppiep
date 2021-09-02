@@ -2482,6 +2482,31 @@ class UserController extends Controller
         }
     }
 
+    public function NewOrders()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+        $user_role = $user->role_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user_role == 2)
+        {
+            $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+
+            return view('user.quote_invoices', compact('invoices'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+
+    }
+
     public function NewQuotations()
     {
         $user = Auth::guard('user')->user();
@@ -2502,7 +2527,7 @@ class UserController extends Controller
             }
             else
             {
-                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered', 'customers_details.name', 'customers_details.family_name')->get();
+                $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
                 $invoices = $invoices->unique('invoice_id');
             }
 
@@ -3446,7 +3471,7 @@ class UserController extends Controller
             $user_id = $user->id;
         }
 
-        $data = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations_data.delivered','!=',1)->first();
+        $data = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations_data.processing','!=',1)->where('new_quotations_data.delivered','!=',1)->first();
 
         if($data)
         {
@@ -3471,6 +3496,62 @@ class UserController extends Controller
 
         Session::flash('success', 'Processing...');
         return redirect()->route('new-quotations');
+    }
+
+    public function SupplierOrderDelivered($id)
+    {
+        $user = Auth::guard('user')->user();
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+        }
+
+        $user_id = $user->id;
+        $supplier_name = $user->name . ' ' . $user->family_name;
+
+        $data = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations_data.processing','!=',1)->where('new_quotations_data.approved',1)->where('new_quotations_data.delivered','!=',1)->select('new_quotations.*','new_quotations_data.order_number')->first();
+
+        if($data)
+        {
+            new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations.id', $id)->where('new_quotations_data.supplier_id', $user_id)->update(['new_quotations_data.delivered' => 1]);
+
+            $delivered = new_quotations_data::where('quotation_id',$id)->get();
+            $flag = 0;
+
+            foreach ($delivered as $key)
+            {
+                if(!$key->delivered)
+                {
+                    $flag = 1;
+                }
+            }
+
+            if($flag == 0)
+            {
+                new_quotations::where('id',$id)->update(['delivered' => 1]);
+            }
+
+            $retailer = User::where('id',$data->creator_id)->first();
+            $retailer_company = $retailer->company_name;
+            $retailer_email = $retailer->email;
+            $order_number = $data->order_number;
+
+            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $order_number) {
+                $message->to($retailer_email)
+                    ->from('info@pieppiep.com')
+                    ->subject('Order marked as delivered by supplier!')
+                    ->setBody("Recent activity: Hi ".$retailer_company.", order has been delivered by supplier <b>".$supplier_name."</b><br> Order No: <b>" . $order_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+            });
+
+            Session::flash('success', 'Order marked as delivered.');
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function StoreCustomQuotation(Request $request)
