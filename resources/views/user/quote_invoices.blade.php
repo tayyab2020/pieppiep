@@ -568,6 +568,10 @@
 
                                                                                             <li><a href="{{ url('/aanbieder/create-new-invoice/'.$key->invoice_id) }}">Create Invoice</a></li>
 
+                                                                                        @else
+
+                                                                                            <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+                                                                                            
                                                                                         @endif
 
                                                                                         @if($key->status != 2 && $key->status != 3)
