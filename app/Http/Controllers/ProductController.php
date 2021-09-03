@@ -264,12 +264,35 @@ class ProductController extends Controller
 
         if($request->cat_id)
         {
-            $removed = explode(',', $request->removed);
-            $removed_ladderband = explode(',', $request->removed_ladderband);
+            if($request->removed)
+            {
+                $removed = explode(',', $request->removed);
+            }
+            else
+            {
+                $removed = [];
+            }
+
+            if($request->removed_ladderband)
+            {
+                $removed_ladderband = explode(',', $request->removed_ladderband);
+            }
+            else
+            {
+                $removed_ladderband = [];
+            }
+
+            if($request->removed_colors)
+            {
+                $removed_colors = explode(',', $request->removed_colors);
+            }
+            else
+            {
+                $removed_colors = [];
+            }
+
             product_features::whereIn('id',$removed)->delete();
             product_ladderbands::whereIn('id',$removed_ladderband)->delete();
-
-            $removed_colors = explode(',', $request->removed_colors);
             colors::whereIn('id',$removed_colors)->delete();
 
             $cat = Products::where('id',$request->cat_id)->first();

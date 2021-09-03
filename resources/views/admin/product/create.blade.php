@@ -1696,13 +1696,13 @@
                     '\n' +
                     '                                                                        </div>\n'+
                     '\n' +
-                    '<div class="col-sm-4">\n' +
+                    '<div class="col-sm-2">\n' +
                     '\n' +
                     '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
-                    '                                                                    <div class="col-sm-3">\n' +
+                    '                                                                    <div class="col-sm-1">\n' +
                     '\n' +
                     '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '\n' +
