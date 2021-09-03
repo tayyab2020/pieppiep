@@ -575,7 +575,7 @@
                                                                                                 <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
 
                                                                                             @endif
-                                                                                            
+
                                                                                         @endif
 
                                                                                         @if($key->status != 2 && $key->status != 3)
