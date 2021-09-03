@@ -70,7 +70,7 @@
 
                                             <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Amount')}}</th>
 
-                                        @elseif($request->products->contains('approved', 1))
+                                        @elseif($role == 'supplier' || $role == 'invoice')
 
                                             @if($role == 'invoice')
 
@@ -122,13 +122,9 @@
 
                                                 @endif
 
-                                                @if($key->approved)
+                                                @if($role == 'supplier' || $role == 'invoice')
 
                                                     <td>{{$request->delivery_date[$i]}}</td>
-
-                                                @elseif($request->products->contains('approved', 1))
-
-                                                    <td></td>
 
                                                 @endif
 
