@@ -571,7 +571,7 @@
                                                                                         @else
 
                                                                                             <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
-                                                                                            
+
                                                                                         @endif
 
                                                                                         @if($key->status != 2 && $key->status != 3)
@@ -604,7 +604,7 @@
 
                                                                                             @endif
 
-                                                                                            @if(!$key->data_delivered)
+                                                                                            @if($key->data_approved && !$key->data_delivered)
 
                                                                                                 <li><a href="{{ url('/aanbieder/supplier-order-delivered/'.$key->invoice_id) }}">Mark as delivered</a></li>
 
