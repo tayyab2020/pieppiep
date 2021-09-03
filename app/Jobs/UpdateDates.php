@@ -140,11 +140,6 @@ class UpdateDates implements ShouldQueue
         $request->height_unit = $height_unit;
         $request->delivery_date = $delivery;
 
-        foreach ($rows as $i => $key)
-        {
-            new_quotations_data::where('id',$key)->update(['approved' => 1, 'delivery_date' => $delivery_dates[$i], 'processing' => 0, 'finished' => 1]);
-        }
-        
         $quotation_invoice_number = $request->quotation_invoice_number;
         $o_i_number = $order_number;
         $filename = $o_i_number . '.pdf';
@@ -261,6 +256,11 @@ class UpdateDates implements ShouldQueue
                     ->subject('Order Approved!')
                     ->setBody("Recent activity: Hi ".$retailer_company.", order has been approved by supplier <b>".$supplier_name."</b> for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
+        }
+
+        foreach ($rows as $i => $key)
+        {
+            new_quotations_data::where('id',$key)->update(['approved' => 1, 'delivery_date' => $delivery_dates[$i], 'processing' => 0, 'finished' => 1]);
         }
 
         $approved = new_quotations_data::where('quotation_id',$invoice_id)->get();
