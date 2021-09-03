@@ -1362,9 +1362,9 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($creator_email, $creator_name, $invoice, $user) {
             $message->to($creator_email)
-                ->from('info@vloerofferte.nl')
+                ->from('info@pieppiep.com')
                 ->subject(__('text.Quotation Accepted!'))
-                ->setBody("Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
 
@@ -1372,10 +1372,45 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use($admin_email,$user_name,$invoice,$user) {
             $message->to($admin_email)
-                ->from('info@vloerofferte.nl')
+                ->from('info@pieppiep.nl')
                 ->subject('Quotation Accepted!')
-                ->setBody("A quotation QUO# ".$invoice->quotation_invoice_number." has been accepted by Mr/Mrs ".$user->name.' '.$user->family_name."<br>Handyman: ".$user_name."<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("A quotation QUO# ".$invoice->quotation_invoice_number." has been accepted by Mr/Mrs ".$user->name.' '.$user->family_name."<br>Handyman: ".$user_name."<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });*/
+
+        Session::flash('success', __('text.Quotation accepted successfully!'));
+
+        return redirect()->back();
+    }
+
+    public function AcceptNewQuotationByRetailer($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
+        $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->leftjoin('customer_details', 'customer_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('users.email','customer_details.name','customer_details.family_name')->first();
+
+        if (!$invoice) {
+            return redirect()->back();
+        }
+
+        new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1]);
+
+        $client_email = $invoice->email;
+        $client_name = $invoice->name . ' ' . $invoice->family_name;
+
+        \Mail::send(array(), array(), function ($message) use ($client_email, $client_name, $invoice, $user) {
+            $message->to($client_email)
+                ->from('info@pieppiep.com')
+                ->subject(__('text.Quotation Accepted!'))
+                ->setBody("Hi " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+        });
 
         Session::flash('success', __('text.Quotation accepted successfully!'));
 

@@ -136,6 +136,7 @@
   Route::post('/aangepaste-offerte/ask-customization', 'UserController@CustomQuotationAskCustomization');
   Route::get('/eigen-offerte/accepteren-offerte/{id}', 'UserController@CustomQuotationAcceptQuotation');
   Route::get('/accept-new-quotation/{id}', 'UserController@AcceptNewQuotation');
+  Route::get('/accept-new-quotation-by-retailer/{id}', 'UserController@AcceptNewQuotationByRetailer');
   Route::get('/bekijk-offerteaanvraag-aanbieder/{id}', 'UserController@HandymanQuoteRequest');
   Route::get('/download-handyman-quote-request/{id}', 'UserController@DownloadHandymanQuoteRequest');
   Route::get('/opstellen-offerte/{id}', 'UserController@CreateQuotation');
