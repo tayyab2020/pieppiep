@@ -1394,7 +1394,7 @@ class UserController extends Controller
             $user_id = $user->id;
         }
 
-        $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->leftjoin('customer_details', 'customer_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('users.email','customer_details.name','customer_details.family_name')->first();
+        $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('users.email','customers_details.name','customers_details.family_name')->first();
 
         if (!$invoice) {
             return redirect()->back();
