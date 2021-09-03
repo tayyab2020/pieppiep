@@ -586,7 +586,11 @@
 
                                                                                             @endif
 
-                                                                                                <li><a href="{{ url('/aanbieder/accept-new-quotation-by-retailer/'.$key->invoice_id) }}">{{__('text.Accept')}}</a></li>
+                                                                                            @if($key->status == 1)
+
+                                                                                                <li><a href="{{ url('/aanbieder/accept-new-quotation/'.$key->invoice_id) }}">{{__('text.Accept')}}</a></li>
+
+                                                                                            @endif
 
                                                                                             @if($key->status == 0 || $key->ask_customization)
 
