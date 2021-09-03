@@ -564,14 +564,18 @@
 
                                                                                     @if(Route::currentRouteName() == 'new-quotations')
 
-                                                                                        @if(!$key->invoice)
+                                                                                        @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                                            <li><a href="{{ url('/aanbieder/create-new-invoice/'.$key->invoice_id) }}">Create Invoice</a></li>
+                                                                                            @if(!$key->invoice)
 
-                                                                                        @else
+                                                                                                <li><a href="{{ url('/aanbieder/create-new-invoice/'.$key->invoice_id) }}">Create Invoice</a></li>
 
-                                                                                            <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+                                                                                            @else
 
+                                                                                                <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+
+                                                                                            @endif
+                                                                                            
                                                                                         @endif
 
                                                                                         @if($key->status != 2 && $key->status != 3)
