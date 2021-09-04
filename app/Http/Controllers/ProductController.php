@@ -234,6 +234,97 @@ class ProductController extends Controller
         }
     }
 
+    public function copy($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('product-copy'))
+        {
+            $product = Products::where('id','=',$id)->where('user_id',$user_id)->first();
+
+            if(!$product)
+            {
+                return redirect()->back();
+            }
+
+            $product_title = $product->title;
+            $count = 1;
+
+            while (Products::where('title',$product_title)->exists()) {
+
+                $temp = substr($product_title, 0, strrpos($product_title, ' copy'));
+                $product_title = "{$temp} copy " . $count++;
+            }
+
+            $product->title = $product_title;
+
+            $product_slug = $product->slug;
+            $count = 1;
+
+            while (Products::where('slug',$product_slug)->exists()) {
+
+                $temp = substr($product_slug, 0, strrpos($product_slug, ' copy'));
+                $product_slug = "{$temp}-copy-" . $count++;
+            }
+
+            $product->slug = $product_slug;
+
+            $newPost = $product->replicate();
+            $newPost->save();
+            $product_id = $newPost->id;
+
+            $colors_data = colors::where('product_id','=',$id)->get();
+
+            foreach ($colors_data as $color)
+            {
+                $color->product_id = $product_id;
+                $newPost = $color->replicate();
+                $newPost->save();
+            }
+
+            $features_data = product_features::where('product_id','=',$id)->get();
+
+            foreach ($features_data as $feature)
+            {
+                $feature->product_id = $product_id;
+                $newPost = $feature->replicate();
+                $newPost->save();
+            }
+
+            $ladderband_data = product_ladderbands::where('product_id','=',$id)->get();
+
+            foreach ($ladderband_data as $ladderband)
+            {
+                $ladderband->product_id = $product_id;
+                $newPost = $ladderband->replicate();
+                $newPost->save();
+            }
+
+            $estimated_prices_data = estimated_prices::where('product_id','=',$id)->get();
+
+            foreach ($estimated_prices_data as $estimated_price)
+            {
+                $estimated_price->product_id = $product_id;
+                $newPost = $estimated_price->replicate();
+                $newPost->save();
+            }
+
+            Session::flash('success', 'Product copied successfully!');
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
     public function store(StoreValidationRequest3 $request)
     {
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
@@ -429,7 +520,7 @@ class ProductController extends Controller
                 }
             }
 
-            $col = color::where('product_id',$request->cat_id)->get();
+            $col = colors::where('product_id',$request->cat_id)->get();
 
             if(count($col) == 0)
             {
@@ -745,7 +836,7 @@ class ProductController extends Controller
                     }
                 }
 
-                $col = color::where('product_id',$check->id)->get();
+                $col = colors::where('product_id',$check->id)->get();
 
                 if(count($col) == 0)
                 {
@@ -893,7 +984,6 @@ class ProductController extends Controller
             return redirect()->route('user-login');
         }
     }
-
 
     public function destroy($id)
     {

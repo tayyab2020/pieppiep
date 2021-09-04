@@ -191,6 +191,14 @@
 
                                                                             @endif
 
+                                                                            @if(auth()->user()->can('product-copy'))
+
+                                                                                    <a href="{{route('admin-product-copy',$cat->id)}}"
+                                                                                       class="btn btn-success product-btn"><i
+                                                                                            class="fa fa-copy"></i> Copy</a>
+
+                                                                            @endif
+
                                                                         </td>
 
                                                                     @else

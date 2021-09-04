@@ -237,6 +237,7 @@
   Route::get('/product/export', 'ProductController@PostExport')->name('admin-product-export');
   Route::post('/product/create', 'ProductController@store')->name('admin-product-store');
   Route::get('/product/edit/{id}', 'ProductController@edit')->name('admin-product-edit');
+  Route::get('/product/copy/{id}', 'ProductController@copy')->name('admin-product-copy');
   Route::post('/product/update/{id}', 'ProductController@update')->name('admin-product-update');
   Route::get('/product/delete/{id}', 'ProductController@destroy')->name('admin-product-delete');
   Route::get('/product/products-models-by-brands', 'ProductController@productsModelsByBrands');
