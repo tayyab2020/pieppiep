@@ -260,6 +260,12 @@ class ProductController extends Controller
             while (Products::where('title',$product_title)->exists()) {
 
                 $temp = substr($product_title, 0, strrpos($product_title, ' copy'));
+
+                if(!$temp)
+                {
+                    $temp = $product_title;
+                }
+
                 $product_title = "{$temp} copy " . $count++;
             }
 
@@ -270,7 +276,13 @@ class ProductController extends Controller
 
             while (Products::where('slug',$product_slug)->exists()) {
 
-                $temp = substr($product_slug, 0, strrpos($product_slug, ' copy'));
+                $temp = substr($product_slug, 0, strrpos($product_slug, '-copy'));
+
+                if(!$temp)
+                {
+                    $temp = $product_slug;
+                }
+
                 $product_slug = "{$temp}-copy-" . $count++;
             }
 
