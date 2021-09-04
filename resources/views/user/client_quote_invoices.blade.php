@@ -274,6 +274,12 @@
                                                                                 {{--<li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>--}}
                                                                                 <li><a href="{{ url('/aanbieder/download-client-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
+                                                                                @if($key->invoice_sent)
+
+                                                                                    <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+
+                                                                                @endif
+
                                                                                 @if($key->status != 0 && $key->status != 2 && $key->status != 3)
 
                                                                                     <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-type="3" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>

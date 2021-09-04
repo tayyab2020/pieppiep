@@ -1358,7 +1358,7 @@ class UserController extends Controller
                 $user_id = $user->id;
             }
 
-            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('users.email','customers_details.name','customers_details.family_name')->first();
+            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('users.email','customers_details.name','customers_details.family_name')->first();
 
             if (!$invoice) {
                 return redirect()->back();
@@ -2700,12 +2700,19 @@ class UserController extends Controller
         $user_role = $user->role_id;
         $main_id = $user->main_id;
 
-        if($main_id)
+        if($user_role == 2)
         {
-            $user_id = $main_id;
-        }
+            if($main_id)
+            {
+                $user_id = $main_id;
+            }
 
-        $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
+            $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
+        }
+        else
+        {
+            $invoice = new_quotations::where('id', $id)->where('user_id', $user_id)->first();
+        }
 
         if (!$invoice) {
             return redirect()->route('new-invoices');
@@ -3673,6 +3680,57 @@ class UserController extends Controller
         }
     }
 
+    public function SendInvoice($id)
+    {
+        $user = Auth::guard('user')->user();
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+        }
+
+        $user_id = $user->id;
+        $check = new_quotations::where('new_quotations.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.invoice',1)->where('new_quotations.invoice_sent',0)->first();
+
+        if (!$check) {
+            return redirect()->route('new-quotations');
+        }
+
+        $check->invoice_sent = 1;
+        $check->save();
+
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
+        $client_name = $client->name . ' ' . $client->family_name;
+        $client_email = $client->email;
+        $retailer_company = $user->company_name;
+        $o_i_number = $check->invoice_number;
+        $filename = $o_i_number . '.pdf';
+        $file = public_path() . '/assets/newInvoices/' . $filename;
+        $quotation_invoice_number = $check->quotation_invoice_number;
+
+        \Mail::send('user.custom_quotation_mail',
+            array(
+                'client' => $client_name,
+                'company_name' => $retailer_company,
+                'order_number' => $o_i_number,
+                'quotation_number' => $quotation_invoice_number,
+                'type' => 'new-invoice'
+            ), function ($message) use ($client_email,$file,$filename) {
+                $message->from('info@pieppiep.com');
+                $message->to($client_email)->subject('Invoice Generated!');
+
+                $message->attach($file, [
+                    'as' => $filename,
+                    'mime' => 'application/pdf',
+                ]);
+
+            });
+
+        Session::flash('success', 'Invoice sent to customer successfully!');
+        return redirect()->back();
+    }
+
     public function CreateNewInvoice($id)
     {
         $invoice_id = $id;
@@ -3691,7 +3749,6 @@ class UserController extends Controller
 
         if($data)
         {
-            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email')->first();
             $request = new_quotations::where('id',$invoice_id)->first();
             $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
 
@@ -3785,28 +3842,6 @@ class UserController extends Controller
             $data->invoice_date = $date;
             $data->invoice = 1;
             $data->save();
-
-            $client_name = $client->name . ' ' . $client->family_name;
-            $client_email = $client->email;
-            $retailer_company = $user->company_name;
-
-            \Mail::send('user.custom_quotation_mail',
-                array(
-                    'client' => $client_name,
-                    'company_name' => $retailer_company,
-                    'order_number' => $o_i_number,
-                    'quotation_number' => $quotation_invoice_number,
-                    'type' => 'new-invoice'
-                ), function ($message) use ($client_email,$file,$filename) {
-                    $message->from('info@pieppiep.com');
-                    $message->to($client_email)->subject('Invoice Generated!');
-
-                    $message->attach($file, [
-                        'as' => $filename,
-                        'mime' => 'application/pdf',
-                    ]);
-
-                });
 
             Session::flash('success', 'Invoice created successfully!');
             return redirect()->back();

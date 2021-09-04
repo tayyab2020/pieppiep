@@ -491,6 +491,12 @@
 
                                                                                 <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
 
+                                                                                @if(!$key->invoice_sent)
+
+                                                                                    <li><a href="{{ url('/aanbieder/send-invoice/'.$key->invoice_id) }}">Send Invoice</a></li>
+
+                                                                                @endif
+
                                                                             @else
 
                                                                                 @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices')
@@ -573,6 +579,12 @@
                                                                                             @else
 
                                                                                                 <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+
+                                                                                                @if(!$key->invoice_sent)
+
+                                                                                                    <li><a href="{{ url('/aanbieder/send-invoice/'.$key->invoice_id) }}">Send Invoice</a></li>
+
+                                                                                                @endif
 
                                                                                             @endif
 
