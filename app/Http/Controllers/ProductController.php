@@ -287,6 +287,7 @@ class ProductController extends Controller
             }
 
             $product->slug = $product_slug;
+            $product->photo = NULL;
 
             $newPost = $product->replicate();
             $newPost->save();
