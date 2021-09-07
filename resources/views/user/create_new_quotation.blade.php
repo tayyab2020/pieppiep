@@ -131,6 +131,8 @@
                                                                             <input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
                                                                             <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
                                                                             <input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
+                                                                            <input type="hidden" value="{{$item->price_based_option}}" id="price_based_option" name="price_based_option[]">
+                                                                            <input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
 
                                                                             <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>
                                                                                 <select name="suppliers[]" class="js-data-example-ajax1">
@@ -174,13 +176,13 @@
                                                                             </td>
                                                                             <td class="width" style="width: 80px;">
                                                                                 <div class="m-box">
-                                                                                    <input value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+                                                                                    <input {{$item->price_based_option == 3 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
                                                                                     <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="{{$item->width_unit}}">
                                                                                 </div>
                                                                             </td>
                                                                             <td class="height" style="width: 80px;">
                                                                                 <div class="m-box">
-                                                                                    <input value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+                                                                                    <input {{$item->price_based_option == 2 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
                                                                                     <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
                                                                                 </div>
                                                                             </td>
@@ -212,6 +214,8 @@
                                                                         <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
                                                                         <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
                                                                         <input type="hidden" id="delivery_days" name="delivery_days[]">
+                                                                        <input type="hidden" id="price_based_option" name="price_based_option[]">
+                                                                        <input type="hidden" id="base_price" name="base_price[]">
 
                                                                         <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>
                                                                             <select name="suppliers[]" class="js-data-example-ajax1">
@@ -1292,10 +1296,32 @@
                         current.parent().parent().find('#ladderband_value').val(data[0].ladderband_value);
                         current.parent().parent().find('#ladderband_price_impact').val(data[0].ladderband_price_impact);
                         current.parent().parent().find('#ladderband_impact_type').val(data[0].ladderband_impact_type);
+                        current.parent().parent().find('#price_based_option').val(data[0].price_based_option);
+                        current.parent().parent().find('#base_price').val(data[0].base_price);
                         current.parent().parent().find('.price').text('');
                         current.parent().parent().find('#row_total').val('');
                         current.parent().parent().find('#rate').val('');
                         current.parent().parent().find('#basic_price').val('');
+
+                        var price_based_option = data[0].price_based_option;
+
+                        if(price_based_option == 1)
+                        {
+                            current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',false);
+                            current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',false);
+                        }
+                        else if(price_based_option == 2)
+                        {
+                            current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',false);
+                            current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',true);
+                            current.parent().parent().find('.height').children('.m-box').children('.m-input').val(0);
+                        }
+                        else
+                        {
+                            current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',true);
+                            current.parent().parent().find('.width').children('.m-box').children('.m-input').val(0);
+                            current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',false);
+                        }
 
                         $.each(data, function(index, value) {
 
@@ -1363,6 +1389,9 @@
                 var row_id = current.parent().parent().data('id');
 
                 var color = current.val();
+
+                var price_based_option = current.parent().parent().find('#price_based_option').val();
+                var base_price = current.parent().parent().find('#base_price').val();
 
                 var width = current.parent().parent().find('.width').find('.m-input').val();
                 width = width.replace(/\,/g, '.');
@@ -1440,7 +1469,16 @@
                                 }
                                 else
                                 {
-                                    var price = data[0].value;
+                                    if(price_based_option == 1)
+                                    {
+                                        var price = data[0].value;
+                                        var org = data[0].value;
+                                    }
+                                    else
+                                    {
+                                        var price = base_price;
+                                        var org = base_price;
+                                    }
 
                                     if(margin == 1)
                                     {
@@ -1458,7 +1496,6 @@
                                         }
                                     }
 
-                                    var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;
 
@@ -1561,7 +1598,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,delivery_days = null)
+            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1583,6 +1620,8 @@
                         '                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
                         '                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
                         '                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
+                        '                                                            <input type="hidden" id="price_based_option" name="price_based_option[]">\n' +
+                        '                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
                         '                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>\n' +
                         '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
                         '\n' +
@@ -1695,6 +1734,8 @@
                         '                                                            <input type="hidden" value="'+ladderband_impact_type+'" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
                         '                                                            <input type="hidden" value="'+area_conflict+'" id="area_conflict" name="area_conflict[]">\n' +
                         '                                                            <input type="hidden" value="'+delivery_days+'" id="delivery_days" name="delivery_days[]">\n' +
+                        '                                                            <input type="hidden" value="'+price_based_option+'" id="price_based_option" name="price_based_option[]">\n' +
+                        '                                                            <input type="hidden" value="'+base_price+'" id="base_price" name="base_price[]">\n' +
                         '                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>\n' +
                         '                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
                         '\n' +
@@ -1719,13 +1760,13 @@
                         '                                                            </td>\n' +
                         '                                                            <td class="width" style="width: 80px;">\n' +
                         '                                                                <div class="m-box">\n' +
-                        '                                                                    <input value="'+width+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
+                        '                                                                    <input '+width_readonly+' value="'+width+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
                         '                                                                    <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="'+width_unit+'">\n' +
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="height" style="width: 80px;">\n' +
                         '                                                                <div class="m-box">\n' +
-                        '                                                                    <input value="'+height+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
+                        '                                                                    <input '+height_readonly+' value="'+height+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
                         '                                                                    <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="'+height_unit+'">\n' +
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
@@ -2105,8 +2146,22 @@
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
                 var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
+                var price_based_option = current.find('#price_based_option').val();
+                var base_price = current.find('#base_price').val();
 
-                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,delivery_days);
+                var width_readonly = '';
+                var height_readonly = '';
+
+                if(price_based_option == 2)
+                {
+                    height_readonly = 'readonly';
+                }
+                else if(price_based_option == 3)
+                {
+                    width_readonly = 'readonly';
+                }
+
+                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,delivery_days,price_based_option,base_price,width_readonly,height_readonly);
 
             });
 
@@ -2239,6 +2294,9 @@
                 var current = $(this);
                 var row_id = current.parent().parent().parent().data('id');
 
+                var price_based_option = current.parent().parent().parent().find('#price_based_option').val();
+                var base_price = current.parent().parent().parent().find('#base_price').val();
+
                 var width = current.val();
                 width = width.replace(/\,/g, '.');
 
@@ -2316,7 +2374,16 @@
                                 {
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
-                                    var price = data[0].value;
+                                    if(price_based_option == 1)
+                                    {
+                                        var price = data[0].value;
+                                        var org = data[0].value;
+                                    }
+                                    else
+                                    {
+                                        var price = base_price;
+                                        var org = base_price;
+                                    }
 
                                     if(margin == 1)
                                     {
@@ -2334,7 +2401,6 @@
                                         }
                                     }
 
-                                    var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;
 
@@ -2425,6 +2491,9 @@
                 var current = $(this);
                 var row_id = current.parent().parent().parent().data('id');
 
+                var price_based_option = current.parent().parent().parent().find('#price_based_option').val();
+                var base_price = current.parent().parent().parent().find('#base_price').val();
+
                 var height = current.val();
                 height = height.replace(/\,/g, '.');
 
@@ -2502,7 +2571,16 @@
                                 {
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
-                                    var price = data[0].value;
+                                    if(price_based_option == 1)
+                                    {
+                                        var price = data[0].value;
+                                        var org = data[0].value;
+                                    }
+                                    else
+                                    {
+                                        var price = base_price;
+                                        var org = base_price;
+                                    }
 
                                     if(margin == 1)
                                     {
@@ -2520,7 +2598,6 @@
                                         }
                                     }
 
-                                    var org = data[0].value;
                                     var features = '';
                                     var f_value = 0;
 

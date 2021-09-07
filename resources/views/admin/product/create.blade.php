@@ -40,6 +40,7 @@
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu3">Colors Options</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu4">Price Tables</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu5">Features</a></li>
+                                                <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu6">Price Control</a></li>
                                             </ul>
 
                                             <form id="product_form" style="padding: 0;" class="form-horizontal" action="{{route('admin-product-store')}}" method="POST" enctype="multipart/form-data">
@@ -879,6 +880,50 @@
 
                                                     </div>
 
+                                                    <div id="menu6" class="tab-pane fade">
+
+                                                        <div class="row" style="margin: 0;">
+
+                                                            <div class="form-group">
+
+                                                                <div class="row" style="margin: 0;">
+
+                                                                    <div style="margin: 10px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                        <label class="container1">Price based on price table
+                                                                            <input type="radio" name="price_based_option" value="1" {{isset($cats) ? ($cats->price_based_option == 1 ? 'checked' : null) : 'checked'}}>
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                    </div>
+
+                                                                    <div style="margin: 10px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                        <label class="container1">Price based on width
+                                                                            <input type="radio" name="price_based_option" value="2" {{isset($cats) ? ($cats->price_based_option == 2 ? 'checked' : null) : null}}>
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                    </div>
+
+                                                                    <div style="margin: 10px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                        <label class="container1">Price based on height
+                                                                            <input type="radio" name="price_based_option" value="3" {{isset($cats) ? ($cats->price_based_option == 3 ? 'checked' : null) : null}}>
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                    </div>
+
+                                                                    <div style="margin: 10px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;" class="control-label">Base Price:</label>
+                                                                        <input style="width: auto;border-radius: 10px;" class="form-control base_price" value="{{isset($cats) ? $cats->base_price : 0}}" name="base_price" id="blood_group_slug" placeholder="Base Price" type="number">
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
                                                     <hr style="margin: 30px 0;">
 
                                                     <div style="padding: 0;" class="add-product-footer">
@@ -972,6 +1017,15 @@
                     type: 'error',
                     title: 'Oops...',
                     text: 'Model should not be empty!',
+                });
+            }
+            else if(!$(".base_price").val())
+            {
+                flag = 1;
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Base price should not be empty!',
                 });
             }
 
@@ -1211,6 +1265,34 @@
             }
         });
 
+        $(document).on('keypress', ".base_price", function(e){
+
+            e = e || window.event;
+            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+            var val = String.fromCharCode(charCode);
+
+            if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+            {
+                e.preventDefault();
+                return false;
+            }
+
+            if(e.which == 44)
+            {
+                e.preventDefault();
+                return false;
+            }
+
+        });
+
+        $(document).on('focusout', ".base_price", function(e){
+
+            if(!$(this).val())
+            {
+                $(this).val(0);
+            }
+
+        });
 
         $('body').on('change', '.ladderband', function() {
 
@@ -1765,6 +1847,73 @@
 </script>
 
 <style type="text/css">
+
+    .container1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 0;
+        cursor: pointer;
+        font-size: 17px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default radio button */
+    .container1 input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom radio button */
+    .checkmark {
+        position: absolute;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        background-color: #eee;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container1:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the radio button is checked, add a blue background */
+    .container1 input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: relative;
+        display: none;
+    }
+
+    /* Show the indicator (dot/circle) when checked */
+    .container1 input:checked ~ .checkmark:after {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Style the indicator (dot/circle) */
+    .container1 .checkmark:after {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: white;
+    }
 
     .table.products > tbody > tr td
     {
