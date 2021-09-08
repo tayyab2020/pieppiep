@@ -2897,76 +2897,79 @@ class UserController extends Controller
             $feature_row = 'features'.$row_id;
             $features = $request->$feature_row;
 
-            foreach($features as $f => $key1)
+            if($features)
             {
-                $f_row = 'f_id'.$row_id;
-                $f_ids = $request->$f_row;
-
-                $f_row1 = 'f_price'.$row_id;
-                $f_prices = $request->$f_row1;
-
-                $comment = 'comment-'.$row_id.'-'.$f_ids[$f];
-                $comment = $request->$comment;
-
-                if($f_ids[$f] == 0)
+                foreach($features as $f => $key1)
                 {
-                    $post = new new_quotations_features;
-                    $post->quotation_data_id = $invoice_items->id;
-                    $post->price = $f_prices[$f];
-                    $post->feature_id = $f_ids[$f];
-                    $post->feature_sub_id = 0;
-                    $post->ladderband = $key1;
-                    $post->save();
+                    $f_row = 'f_id'.$row_id;
+                    $f_ids = $request->$f_row;
 
-                    if($key1)
+                    $f_row1 = 'f_price'.$row_id;
+                    $f_prices = $request->$f_row1;
+
+                    $comment = 'comment-'.$row_id.'-'.$f_ids[$f];
+                    $comment = $request->$comment;
+
+                    if($f_ids[$f] == 0)
                     {
-                        $size1 = 'sizeA'.$row_id[$f];
-                        $size1_value = $request->$size1;
+                        $post = new new_quotations_features;
+                        $post->quotation_data_id = $invoice_items->id;
+                        $post->price = $f_prices[$f];
+                        $post->feature_id = $f_ids[$f];
+                        $post->feature_sub_id = 0;
+                        $post->ladderband = $key1;
+                        $post->save();
 
-                        $size2 = 'sizeB'.$row_id[$f];
-                        $size2_value = $request->$size2;
-
-                        $sub = 'sub_product_id'.$row_id[$f];
-                        $sub_value = $request->$sub;
-
-                        foreach ($sub_value as $s => $key2)
+                        if($key1)
                         {
-                            $post1 = new new_quotations_sub_products;
-                            $post1->feature_row_id = $post->id;
-                            $post1->sub_product_id = $key2;
-                            $post1->size1_value = $size1_value[$s];
-                            $post1->size2_value = $size2_value[$s];
-                            $post1->save();
+                            $size1 = 'sizeA'.$row_id[$f];
+                            $size1_value = $request->$size1;
 
-                            if($size1_value[$s] == 1 || $size2_value[$s] == 1)
+                            $size2 = 'sizeB'.$row_id[$f];
+                            $size2_value = $request->$size2;
+
+                            $sub = 'sub_product_id'.$row_id[$f];
+                            $sub_value = $request->$sub;
+
+                            foreach ($sub_value as $s => $key2)
                             {
-                                $sub_titles[$i] = product_ladderbands::where('product_id',$key)->where('id',$key2)->first();
+                                $post1 = new new_quotations_sub_products;
+                                $post1->feature_row_id = $post->id;
+                                $post1->sub_product_id = $key2;
+                                $post1->size1_value = $size1_value[$s];
+                                $post1->size2_value = $size2_value[$s];
+                                $post1->save();
 
-                                if($size1_value[$s] == 1)
+                                if($size1_value[$s] == 1 || $size2_value[$s] == 1)
                                 {
-                                    $sub_titles[$i]->size = '38mm';
-                                }
-                                else
-                                {
-                                    $sub_titles[$i]->size = '25mm';
+                                    $sub_titles[$i] = product_ladderbands::where('product_id',$key)->where('id',$key2)->first();
+
+                                    if($size1_value[$s] == 1)
+                                    {
+                                        $sub_titles[$i]->size = '38mm';
+                                    }
+                                    else
+                                    {
+                                        $sub_titles[$i]->size = '25mm';
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                else
-                {
-                    $post = new new_quotations_features;
-                    $post->quotation_data_id = $invoice_items->id;
-                    $post->price = $f_prices[$f];
-                    $post->feature_id = $f_ids[$f];
-                    $post->feature_sub_id = $key1;
-                    $post->comment = $comment;
-                    $post->save();
-                }
+                    else
+                    {
+                        $post = new new_quotations_features;
+                        $post->quotation_data_id = $invoice_items->id;
+                        $post->price = $f_prices[$f];
+                        $post->feature_id = $f_ids[$f];
+                        $post->feature_sub_id = $key1;
+                        $post->comment = $comment;
+                        $post->save();
+                    }
 
-                /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
-                $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.heading_id',$f_ids[$f])->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                    /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
+                    $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.heading_id',$f_ids[$f])->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                }
             }
 
         }
