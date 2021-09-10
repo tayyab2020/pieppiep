@@ -41,6 +41,7 @@
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu4">Price Tables</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu5">Features</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu6">Price Control</a></li>
+                                                <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu7">Models</a></li>
                                             </ul>
 
                                             <form id="product_form" style="padding: 0;" class="form-horizontal" action="{{route('admin-product-store')}}" method="POST" enctype="multipart/form-data">
@@ -200,7 +201,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group">
+                                                        {{--<div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Model*</label>
                                                             <div class="col-sm-6">
                                                                 <select class="js-data-example-ajax2 form-control" style="height: 40px;" name="model_id" id="blood_grp" required>
@@ -219,7 +220,7 @@
 
                                                                 </select>
                                                             </div>
-                                                        </div>
+                                                        </div>--}}
 
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="service_description">Product Description</label>
@@ -292,7 +293,7 @@
 
                                                                 @foreach($colors_data as $i => $key)
 
-                                                                    <div class="form-group" data-id="{{$i}}">
+                                                                    <div class="form-group" data-id="{{$i+1}}">
 
                                                                         <div class="col-sm-3">
 
@@ -336,7 +337,7 @@
 
                                                             @else
 
-                                                                <div class="form-group" data-id="">
+                                                                <div class="form-group" data-id="1">
 
                                                                     <div class="col-sm-3">
 
@@ -447,7 +448,7 @@
 
                                                                         @foreach($colors_data as $i => $key)
 
-                                                                            <tr data-id="{{$i}}">
+                                                                            <tr data-id="{{$i+1}}">
                                                                                 <td>{{$key->table_id}}</td>
                                                                                 <td>{{$key->table}}</td>
                                                                                 <td>{{$key->color}}</td>
@@ -722,7 +723,7 @@
 
                                                                     @foreach($features_data as $f => $key)
 
-                                                                        <div class="form-group" style="margin: 0 0 20px 0;">
+                                                                        <div data-id="{{$f+1}}" class="form-group feature-row" style="margin: 0 0 20px 0;">
 
                                                                             <div class="col-sm-3">
 
@@ -742,13 +743,13 @@
 
                                                                             <div class="col-sm-2">
 
-                                                                                <input class="form-control feature_title" value="{{$key->title}}" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                <input data-type="title" class="form-control feature_title" value="{{$key->title}}" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
 
                                                                             </div>
 
                                                                             <div class="col-sm-1">
 
-                                                                                <input class="form-control feature_value" value="{{$key->value}}" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                <input data-type="value" class="form-control feature_value" value="{{$key->value}}" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
                                                                             </div>
 
@@ -786,7 +787,7 @@
 
 
                                                                             <div class="col-xs-1 col-sm-1">
-                                                                                <span class="ui-close remove-feature" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
+                                                                                <span class="ui-close remove-feature" data-id="{{$f+1}}" style="margin:0;right:70%;">X</span>
                                                                             </div>
 
                                                                         </div>
@@ -795,7 +796,7 @@
 
                                                                 @else
 
-                                                                    <div class="form-group" style="margin: 0 0 20px 0;">
+                                                                    <div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;">
 
                                                                         <div class="col-sm-3">
 
@@ -815,13 +816,13 @@
 
                                                                         <div class="col-sm-2">
 
-                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                            <input data-type="title" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
 
                                                                         </div>
 
                                                                         <div class="col-sm-1">
 
-                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                            <input data-type="value" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
                                                                         </div>
 
@@ -859,7 +860,7 @@
 
 
                                                                         <div class="col-xs-1 col-sm-1">
-                                                                            <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>
+                                                                            <span class="ui-close remove-feature" data-id="1" style="margin:0;right:70%;">X</span>
                                                                         </div>
 
                                                                     </div>
@@ -924,12 +925,110 @@
 
                                                     </div>
 
+                                                    <div id="menu7" class="tab-pane fade">
+
+                                                        <div class="form-group" style="margin-bottom: 20px;">
+
+                                                            <div class="row" style="margin: 0;display: flex;justify-content: center;">
+
+                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-5">
+                                                                    <h4>Model</h4>
+                                                                </div>
+
+                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-5">
+                                                                    <h4>Action</h4>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="row model_box" style="margin: 15px 0;">
+
+                                                                <input type="hidden" name="removed1" id="removed_rows1">
+
+                                                                <div data-id="1" class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">
+
+                                                                    <div style="display: flex;justify-content: center;" class="col-sm-5">
+
+                                                                        <select class="form-control validate js-data-example-ajax2" name="models[]">
+
+                                                                            <option value="">Select Model</option>
+
+                                                                            @foreach($models as $model)
+
+                                                                                <option value="{{$model->id}}">{{$model->cat_name}}</option>
+
+                                                                            @endforeach
+
+                                                                        </select>
+
+                                                                    </div>
+
+                                                                    <div style="display: flex;justify-content: center;" class="col-sm-5">
+
+                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
+                                                                        <span class="ui-close remove-model" data-id="1" style="margin:0;position: relative;right:0;">X</span>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-3" for=""></label>
+
+                                                            <div class="col-sm-12 text-center">
+                                                                <button class="btn btn-default featured-btn" type="button" id="add-model-btn"><i class="fa fa-plus"></i> Add More Models</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
                                                     <hr style="margin: 30px 0;">
 
                                                     <div style="padding: 0;" class="add-product-footer">
                                                         <button name="addProduct_btn" type="button" class="btn add-product_btn">{{isset($cats) ? 'Edit Product' : 'Add Product'}}</button>
                                                     </div>
 
+                                                </div>
+
+                                                <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+
+                                                        <div class="modal-content">
+
+                                                            <div class="modal-header">
+                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                <h3 id="myModalLabel">Model Features</h3>
+                                                            </div>
+
+                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
+
+                                                                <div id="models-features-tables">
+
+                                                                    <table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th>Feature</th>
+                                                                            <th>Value</th>
+                                                                        </tr>
+                                                                        </thead>
+
+                                                                        <tbody>
+
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
                                                 </div>
 
                                             </form>
@@ -951,6 +1050,221 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+
+        $('body').on('click', '.select-feature-btn' ,function(){
+
+            var id = $(this).data('id');
+            $('#models-features-tables').children().not("[data-id='" + id + "']").hide();
+            $('#models-features-tables').find("[data-id='" + id + "']").show();
+
+            $('#myModal').modal('toggle');
+            $('.modal-backdrop').hide();
+
+        });
+
+
+        $('body').on('click', '#add-model-btn' ,function(){
+
+            var model_row = $('.model_box').find('.form-group').last().data('id');
+            model_row = model_row + 1;
+
+            $(".model_box").append('<div data-id="'+model_row+'" class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+                '\n' +
+                '                <div style="display: flex;justify-content: center;" class="col-sm-5">\n' +
+                '\n' +
+                '                <select class="form-control validate js-data-example-ajax2" name="models[]">\n' +
+                '\n' +
+                '                <option value="">Select Model</option>\n' +
+                '\n' +
+                '                @foreach($models as $model) \n' +
+                '\n' +
+                '               <option value="{{$model->id}}">{{$model->cat_name}}</option> \n' +
+                '\n' +
+                '               @endforeach \n' +
+                '        </select>\n' +
+                '\n' +
+                '        </div>\n' +
+                '\n' +
+                '        <div style="display: flex;justify-content: center;" class="col-sm-5">\n' +
+                '\n' +
+                '        <button data-id="'+model_row+'" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
+                '        <span class="ui-close remove-model" data-id="'+model_row+'" style="margin:0;position: relative;right:0;">X</span>\n' +
+                '\n' +
+                '        </div>\n' +
+                '\n' +
+                '        </div>');
+
+            var rows = '';
+
+            $('.feature_box').find('.feature-row', this).each(function (index) {
+
+                var id = $(this).data('id');
+                var title = $(this).find('.feature_title').val();
+                var value = $(this).find('.feature_value').val();
+
+                if(title)
+                {
+                    rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+title+'</td><td>'+value+'</td></tr>';
+                }
+
+            });
+
+            $('#models-features-tables').append('<table data-id="'+model_row+'" style="margin: auto;width: 70%;border-collapse: separate;">\n' +
+                '                <thead>\n' +
+                '                <tr>\n' +
+                '                <th></th>\n' +
+                '            <th>Feature</th>\n' +
+                '            <th>Value</th>\n' +
+                '        </tr>\n' +
+                '        </thead>\n' +
+                '\n' +
+                '        <tbody>\n' +
+                '\n' +
+                rows +
+                '        </tbody>\n' +
+                '        </table>');
+
+
+
+            $(".js-data-example-ajax2").select2({
+                width: '80%',
+                height: '200px',
+                placeholder: "Select Model",
+                allowClear: true,
+            });
+
+
+        });
+
+        $('body').on('click', '.remove-model' ,function()
+        {
+
+            var model_row = $(this).data('id');
+            $('#models-features-tables').find("[data-id='" + model_row + "']").remove();
+            $('.model_box').find("[data-id='" + model_row + "']").remove();
+
+            if($(".model_box .form-group").length == 0)
+            {
+
+                $(".model_box").append('<div data-id="1" class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+                    '\n' +
+                    '                <div style="display: flex;justify-content: center;" class="col-sm-5">\n' +
+                    '\n' +
+                    '                <select class="form-control validate js-data-example-ajax2" name="models[]">\n' +
+                    '\n' +
+                    '                <option value="">Select Model</option>\n' +
+                    '\n' +
+                    '                @foreach($models as $model) \n' +
+                    '\n' +
+                    '               <option value="{{$model->id}}">{{$model->cat_name}}</option> \n' +
+                    '\n' +
+                    '               @endforeach \n' +
+                    '        </select>\n' +
+                    '\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <div style="display: flex;justify-content: center;" class="col-sm-5">\n' +
+                    '\n' +
+                    '        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
+                    '        <span class="ui-close remove-model" data-id="1" style="margin:0;position: relative;right:0;">X</span>\n' +
+                    '\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        </div>');
+
+                var rows = '';
+
+                $('.feature_box').find('.feature-row', this).each(function (index) {
+
+                    var id = $(this).data('id');
+                    var title = $(this).find('.feature_title').val();
+                    var value = $(this).find('.feature_value').val();
+
+                    if(title)
+                    {
+                        rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+title+'</td><td>'+value+'</td></tr>';
+                    }
+
+                });
+
+                $('#models-features-tables').append('<table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">\n' +
+                    '                <thead>\n' +
+                    '                <tr>\n' +
+                    '                <th></th>\n' +
+                    '            <th>Feature</th>\n' +
+                    '            <th>Value</th>\n' +
+                    '        </tr>\n' +
+                    '        </thead>\n' +
+                    '\n' +
+                    '        <tbody>\n' +
+                    '\n' +
+                    rows +
+                    '        </tbody>\n' +
+                    '        </table>');
+
+
+
+                $(".js-data-example-ajax2").select2({
+                    width: '80%',
+                    height: '200px',
+                    placeholder: "Select Model",
+                    allowClear: true,
+                });
+            }
+
+        });
+
+        $('body').on('input', '.feature_title, .feature_value', function() {
+
+            var id = $(this).parent().parent().attr("data-id");
+            var type = $(this).attr("data-type");
+
+            if(type == 'title')
+            {
+                var title = $(this).val();
+                var value = $(this).parent().parent().find('.feature_value').val();
+            }
+            else
+            {
+                var value = $(this).val();
+                var title = $(this).parent().parent().find('.feature_title').val();
+            }
+
+            $('#models-features-tables').find('table', this).each(function (index) {
+
+                if($(this).find('tbody').find("[data-id='" + id + "']").length > 0)
+                {
+                    if(!title)
+                    {
+                        $(this).find('tbody').find("[data-id='" + id + "']").remove();
+                    }
+                    else
+                    {
+                        $(this).find('tbody').find("[data-id='" + id + "']").find('td', this).each(function (index) {
+
+                            if(index == 1)
+                            {
+                                $(this).text(title);
+                            }
+                            else if(index == 2)
+                            {
+                                $(this).text(value);
+                            }
+
+                        })
+                    }
+                }
+                else
+                {
+                    if(title)
+                    {
+                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature[]" /></td><td>'+title+'</td><td>'+value+'</td></tr>');
+                    }
+                }
+
+            });
+
+        });
 
         $(".add-product_btn").click(function () {
 
@@ -1010,7 +1324,7 @@
                     text: 'Brand should not be empty!',
                 });
             }
-            else if(!$(".js-data-example-ajax2").val())
+            /*else if(!$(".js-data-example-ajax2").val())
             {
                 flag = 1;
                 Swal.fire({
@@ -1018,7 +1332,7 @@
                     title: 'Oops...',
                     text: 'Model should not be empty!',
                 });
-            }
+            }*/
             else if(!$(".base_price").val())
             {
                 flag = 1;
@@ -1036,7 +1350,6 @@
 
         });
 
-        var row = 0;
         var rem_index = 0;
         var rem_arr = [];
         var rem_col_arr = [];
@@ -1431,9 +1744,9 @@
                         }
                         else
                         {
-                            $("#example1").append('<tr data-id="'+row+'"><td>'+value.id+'</td><td>'+value.title+'</td><td class="color_col">'+color+'</td><td class="code_col">'+code+'</td><td><a href="/aanbieder/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
-                            $(selector).parent().parent().attr('data-id',row);
-                            row++;
+                            $("#example1").append('<tr data-id="'+row_id+'"><td>'+value.id+'</td><td>'+value.title+'</td><td class="color_col">'+color+'</td><td class="code_col">'+code+'</td><td><a href="/aanbieder/price-tables/prices/view/'+value.id+'">View</a></td></tr>');
+                            /*$(selector).parent().parent().attr('data-id',row);
+                            row++;*/
                         }
 
                     });
@@ -1444,8 +1757,10 @@
 
         $("#add-color-btn").on('click',function() {
 
+            var color_row = $('.color_box').find('.form-group').last().data('id');
+            color_row = color_row + 1;
 
-            $(".color_box").append('<div class="form-group" data-id="">\n' +
+            $(".color_box").append('<div class="form-group" data-id="'+color_row+'">\n' +
                 '\n' +
                 '                                                                <div class="col-sm-3">\n' +
                 '\n' +
@@ -1499,8 +1814,10 @@
 
         $("#add-feature-btn").on('click',function() {
 
+            var feature_row = $('.feature_box').find('.feature-row').last().data('id');
+            feature_row = feature_row + 1;
 
-            $(".feature_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
+            $(".feature_box").append('<div data-id="'+feature_row+'" class="form-group feature-row" style="margin: 0 0 20px 0;">\n' +
                 '\n' +
                 '<div class="col-sm-3">\n' +
                 '\n' +
@@ -1520,13 +1837,13 @@
                 '\n' +
                 '<div class="col-sm-2">\n' +
                 '\n' +
-                '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '                                                                        <input data-type="title" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
                 '                                                                    <div class="col-sm-1">\n' +
                 '\n' +
-                '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                        <input data-type="value" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
@@ -1564,7 +1881,7 @@
                 '\n' +
                 '\n' +
                 '                                                                    <div class="col-xs-1 col-sm-1">\n' +
-                '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                '                                                                        <span class="ui-close remove-feature" data-id="'+feature_row+'" style="margin:0;right:70%;">X</span>\n' +
                 '                                                                    </div>\n'+
                 '\n' +
                 '                </div>');
@@ -1596,7 +1913,7 @@
         });
 
         $(".js-data-example-ajax2").select2({
-            width: '100%',
+            width: '80%',
             height: '200px',
             placeholder: "Select Model",
             allowClear: true,
@@ -1614,6 +1931,13 @@
             width: '100%',
             height: '200px',
             placeholder: "Select Feature Heading",
+            allowClear: true,
+        });
+
+        $(".js-data-example-ajax7").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Feature",
             allowClear: true,
         });
 
@@ -1637,10 +1961,10 @@
 
                     });
 
-                    $('.js-data-example-ajax2').find('option')
+                    /*$('.js-data-example-ajax2').find('option')
                         .remove()
                         .end()
-                        .append('<option value="">Select Model</option>'+options);
+                        .append('<option value="">Select Model</option>'+options);*/
 
                 }
             });
@@ -1690,7 +2014,7 @@
 
             if($(".color_box .form-group").length == 0)
             {
-                $(".color_box").append('<div class="form-group" data-id="">\n' +
+                $(".color_box").append('<div class="form-group" data-id="1">\n' +
                     '\n' +
                     '                                                                <div class="col-sm-3">\n' +
                     '\n' +
@@ -1751,6 +2075,7 @@
             {
                 rem_arr.push(id);
                 $('#removed_rows').val(rem_arr);
+                $('#models-features-tables table tbody').find("[data-id='" + id + "']").remove();
             }
 
             var parent = this.parentNode.parentNode;
@@ -1760,7 +2085,7 @@
 
             if($(".feature_box .form-group").length == 0)
             {
-                $(".feature_box").append('<div class="form-group" style="margin: 0 0 20px 0;">\n' +
+                $(".feature_box").append('<div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;">\n' +
                     '\n' +
                     '<div class="col-sm-3">\n' +
                     '\n' +
@@ -1778,15 +2103,15 @@
                     '\n' +
                     '                                                                        </div>\n'+
                     '\n' +
-                    '<div class="col-sm-2">\n' +
+                    '                                                                    <div class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '                                                                        <input data-type="title" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
                     '                                                                    <div class="col-sm-1">\n' +
                     '\n' +
-                    '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                        <input data-type="value" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
@@ -1824,7 +2149,7 @@
                     '\n' +
                     '\n' +
                     '                                                                    <div class="col-xs-1 col-sm-1">\n' +
-                    '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                    '                                                                        <span class="ui-close remove-feature" data-id="1" style="margin:0;right:70%;">X</span>\n' +
                     '                                                                    </div>\n'+
                     '\n' +
                     '                </div>');
@@ -1847,6 +2172,31 @@
 </script>
 
 <style type="text/css">
+
+    th:first-child,td:first-child
+    {
+        border-left: 1px solid #c5c5c5;
+    }
+
+    th
+    {
+        border-top: 1px solid #c5c5c5;
+        border-bottom: 1px solid #c5c5c5;
+    }
+
+    td
+    {
+        border-bottom: 1px solid #c5c5c5;
+    }
+
+    th,td
+    {
+        padding: 10px;
+        font-family: monospace;
+        color: #4f4f4f;
+        text-align: center;
+        border-right: 1px solid #c5c5c5;
+    }
 
     .container1 {
         display: flex;

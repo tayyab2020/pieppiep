@@ -155,10 +155,11 @@ class ProductController extends Controller
         {
             $categories = Category::where('user_id',$user_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();
+            $models = Model1::get();
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
 
-            return view('admin.product.create',compact('categories','brands','tables','features_headings'));
+            return view('admin.product.create',compact('categories','brands','models','tables','features_headings'));
         }
         else
         {
@@ -986,7 +987,7 @@ class ProductController extends Controller
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::where('user_id',$user_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();
-            $models = Model1::where('brand_id',$cats->brand_id)->get();
+            $models = Model1::get();
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
 
