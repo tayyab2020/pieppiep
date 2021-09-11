@@ -75,13 +75,6 @@ class UpdateDates implements ShouldQueue
         $request->products = new_quotations_data::where('quotation_id',$invoice_id)->where('supplier_id',$supplier_id)->get();
         $order_number = $request->products[0]->order_number;
 
-        \Mail::send(array(), array(), function ($message) use ($order_number) {
-            $message->to('tayyabkhurram62@gmail.com')
-                ->from('info@pieppiep.com')
-                ->subject('Testing')
-                ->setBody($order_number, 'text/html');
-        });
-
         $product_titles = array();
         $color_titles = array();
         $sub_titles = array();
@@ -156,12 +149,7 @@ class UpdateDates implements ShouldQueue
         $date = $request->created_at;
         $role = 'supplier';
 
-        \Mail::send(array(), array(), function ($message) use ($order_number) {
-            $message->to('tayyabkhurram62@gmail.com')
-                ->from('info@pieppiep.com')
-                ->subject('Order Approved!')
-                ->setBody($order_number, 'text/html');
-        });
+        $order_number = 'ew';
 
         $pdf = PDF::loadView('user.pdf_new_quotation', compact('order_number','role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
