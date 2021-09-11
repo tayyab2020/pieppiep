@@ -32,6 +32,9 @@ class UserLoginController extends Controller
       // Attempt to log the user in
       if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])) {
 
+          var_dump('hi');
+          exit();
+
         if(Auth::guard('user')->user()->role_id == 2 || Auth::guard('user')->user()->role_id == 4)
         {
             if(Auth::guard('user')->user()->active == 1)
