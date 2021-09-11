@@ -184,18 +184,18 @@
 
     }
 
-    .parent-menu:hover > .parent-menu::-webkit-scrollbar
+    #sidebar:hover > #sidebar::-webkit-scrollbar
     {
         display: block;
     }
 
-    .parent-menu::-webkit-scrollbar-thumb
+    #sidebar::-webkit-scrollbar-thumb
     {
         background-color: #1c97dd;
         border-radius: 10px;
     }
 
-    .parent-menu::-webkit-scrollbar
+    #sidebar::-webkit-scrollbar
     {
         background-color: transparent;
         width: 5px;
@@ -281,7 +281,9 @@
         background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors.'c9'}};
         color: #fff;
         transition: all 1s;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding-bottom: 100px;
     }
 
     #sidebar.active {
@@ -389,11 +391,13 @@
     }
 
     #sidebar ul.components {
-        padding: 0 0 100px 0;
+        /*padding: 0 0 100px 0;*/
         /*overflow-y: auto;*/
         height: 100%;
         visibility: hidden;
-        -webkit-overflow-scrolling: touch;
+        /*-webkit-overflow-scrolling: touch;*/
+        display: inline-block;
+        width: 100%;
     }
 
     #sidebar ul.components li, #sidebar ul.components:hover,
@@ -514,7 +518,6 @@
         #sidebar
         {
             position: absolute;
-            overflow-y: auto;
         }
 
         #sidebar.active .sub-show {
