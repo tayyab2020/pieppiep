@@ -75,7 +75,10 @@ $language = user_languages::where('ip','=',$ip_address)->first();
     public function forgot(Request $request)
     {
     	$input =  $request->all();
+    	var_dump('hi');
         if (User::where('email', '=', $request->email)->count() > 0) {
+            var_dump(User::where('email', '=', $request->email)->count());
+            exit();
             // user found
             $user = User::where('email', '=', $request->email)->firstOrFail();
             $autopass = str_random(8);
