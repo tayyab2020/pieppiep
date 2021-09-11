@@ -21,6 +21,7 @@ class UserLoginController extends Controller
 
     public function login(Request $request)
     {
+        exit();
 
       // Validate the form data
 
