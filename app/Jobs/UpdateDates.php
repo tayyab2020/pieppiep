@@ -150,7 +150,7 @@ class UpdateDates implements ShouldQueue
         $date = $request->created_at;
         $role = 'supplier';
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number', 'o_i_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('o_i_number','role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
         $pdf->save($file);
 
