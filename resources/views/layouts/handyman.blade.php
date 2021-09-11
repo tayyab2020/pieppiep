@@ -393,6 +393,7 @@
         overflow-y: auto;
         height: 100%;
         visibility: hidden;
+        -webkit-overflow-scrolling: touch;
     }
 
     #sidebar ul.components li, #sidebar ul.components:hover,
