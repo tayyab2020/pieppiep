@@ -149,6 +149,13 @@ class UpdateDates implements ShouldQueue
         $date = $request->created_at;
         $role = 'supplier';
 
+        \Mail::send(array(), array(), function ($message) use ($order_number) {
+            $message->to('tayyabkhurram62@gmail.com')
+                ->from('info@pieppiep.com')
+                ->subject('Order Approved!')
+                ->setBody($order_number, 'text/html');
+        });
+
         $pdf = PDF::loadView('user.pdf_new_quotation', compact('order_number','role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
         $pdf->save($file);
