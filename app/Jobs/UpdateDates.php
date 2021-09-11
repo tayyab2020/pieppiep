@@ -141,8 +141,7 @@ class UpdateDates implements ShouldQueue
         $request->delivery_date = $delivery;
 
         $quotation_invoice_number = $request->quotation_invoice_number;
-        $o_i_number = $order_number;
-        $filename = $o_i_number . '.pdf';
+        $filename = $order_number . '.pdf';
         $file = public_path() . '/assets/supplierApproved/' . $filename;
 
         ini_set('max_execution_time', 180);
@@ -150,7 +149,7 @@ class UpdateDates implements ShouldQueue
         $date = $request->created_at;
         $role = 'supplier';
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('o_i_number','role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('order_number','role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
         $pdf->save($file);
 

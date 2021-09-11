@@ -3708,8 +3708,8 @@ class UserController extends Controller
         $client_name = $client->name . ' ' . $client->family_name;
         $client_email = $client->email;
         $retailer_company = $user->company_name;
-        $o_i_number = $check->invoice_number;
-        $filename = $o_i_number . '.pdf';
+        $order_number = $check->invoice_number;
+        $filename = $order_number . '.pdf';
         $file = public_path() . '/assets/newInvoices/' . $filename;
         $quotation_invoice_number = $check->quotation_invoice_number;
 
@@ -3717,7 +3717,7 @@ class UserController extends Controller
             array(
                 'client' => $client_name,
                 'company_name' => $retailer_company,
-                'order_number' => $o_i_number,
+                'order_number' => $order_number,
                 'quotation_number' => $quotation_invoice_number,
                 'type' => 'new-invoice'
             ), function ($message) use ($client_email,$file,$filename) {
@@ -3826,8 +3826,8 @@ class UserController extends Controller
             $request->total_amount = $request->grand_total;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
-            $o_i_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter_invoice);
-            $filename = $o_i_number . '.pdf';
+            $order_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter_invoice);
+            $filename = $order_number . '.pdf';
             $file = public_path() . '/assets/newInvoices/' . $filename;
 
             ini_set('max_execution_time', 180);
@@ -3835,14 +3835,14 @@ class UserController extends Controller
             $date = date("Y-m-d");
             $role = 'invoice';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','o_i_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
             $pdf->save($file);
 
             $counter_invoice = $counter_invoice + 1;
             $user->counter_invoice = $counter_invoice;
             $user->save();
-            $data->invoice_number = $o_i_number;
+            $data->invoice_number = $order_number;
             $data->invoice_date = $date;
             $data->invoice = 1;
             $data->save();

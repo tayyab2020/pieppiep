@@ -143,18 +143,18 @@ class SendOrder implements ShouldQueue
             $request->delivery_date = $delivery;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
-            $o_i_number = date("Y") . "-" . sprintf('%04u', $key) . '-' . sprintf('%04u', $counter);
-            $filename = $o_i_number . '.pdf';
+            $order_number = date("Y") . "-" . sprintf('%04u', $key) . '-' . sprintf('%04u', $counter);
+            $filename = $order_number . '.pdf';
             $file = public_path() . '/assets/supplierQuotations/' . $filename;
 
-            new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_number' => $o_i_number]);
+            new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_number' => $order_number]);
 
             ini_set('max_execution_time', 180);
 
             $date = $request->created_at;
             $role = 'supplier1';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','o_i_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
 
             $pdf->save($file);
 
@@ -164,7 +164,7 @@ class SendOrder implements ShouldQueue
                 $supplier_data->save();
             }
 
-            $sup_mail[] = array('email' => $supplier_email,'name' => $supplier_name,'file' => $file,'file_name' => $filename,'order_number' => $o_i_number);
+            $sup_mail[] = array('email' => $supplier_email,'name' => $supplier_name,'file' => $file,'file_name' => $filename,'order_number' => $order_number);
         }
 
         foreach ($sup_mail as $sup)
