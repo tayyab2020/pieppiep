@@ -242,7 +242,7 @@ class UpdateDates implements ShouldQueue
         if($is_approved)
         {
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number) {
-                $message->to($retailer_email)
+                $message->to('tayyabkhurram62@gmail.com')
                     ->from('info@pieppiep.com')
                     ->subject('Order Approved!')
                     ->setBody("Recent activity: Hi ".$retailer_company.", delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
@@ -251,7 +251,7 @@ class UpdateDates implements ShouldQueue
         else
         {
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number) {
-                $message->to($retailer_email)
+                $message->to('tayyabkhurram62@gmail.com')
                     ->from('info@pieppiep.com')
                     ->subject('Order Approved!')
                     ->setBody("Recent activity: Hi ".$retailer_company.", order has been approved by supplier <b>".$supplier_name."</b> for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
