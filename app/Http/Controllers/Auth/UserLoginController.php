@@ -21,8 +21,7 @@ class UserLoginController extends Controller
 
     public function login(Request $request)
     {
-        var_dump($request->email);
-        var_dump($request->password);
+        var_dump(Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password]));
         exit();
 
       // Validate the form data
