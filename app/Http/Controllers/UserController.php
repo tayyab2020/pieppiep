@@ -614,7 +614,6 @@ class UserController extends Controller
 
     public function CustomerQuotations($id = '')
     {
-        $awe = $rst->id;
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
