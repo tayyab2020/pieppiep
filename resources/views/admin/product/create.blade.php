@@ -743,13 +743,13 @@
 
                                                                             <div class="col-sm-2">
 
-                                                                                <input data-type="title" class="form-control feature_title" value="{{$key->title}}" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                <input class="form-control feature_title" value="{{$key->title}}" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
 
                                                                             </div>
 
                                                                             <div class="col-sm-1">
 
-                                                                                <input data-type="value" class="form-control feature_value" value="{{$key->value}}" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                <input class="form-control feature_value" value="{{$key->value}}" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
                                                                             </div>
 
@@ -816,13 +816,13 @@
 
                                                                         <div class="col-sm-2">
 
-                                                                            <input data-type="title" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
 
                                                                         </div>
 
                                                                         <div class="col-sm-1">
 
-                                                                            <input data-type="value" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
                                                                         </div>
 
@@ -1012,8 +1012,8 @@
                                                                         <thead>
                                                                         <tr>
                                                                             <th></th>
+                                                                            <th>Heading</th>
                                                                             <th>Feature</th>
-                                                                            <th>Value</th>
                                                                         </tr>
                                                                         </thead>
 
@@ -1054,8 +1054,8 @@
         $('body').on('click', '.select-feature-btn' ,function(){
 
             var id = $(this).data('id');
-            $('#models-features-tables').children().not("[data-id='" + id + "']").hide();
-            $('#models-features-tables').find("[data-id='" + id + "']").show();
+            $('#models-features-tables').children().not("table[data-id='" + id + "']").hide();
+            $('#models-features-tables').find("table[data-id='" + id + "']").show();
 
             $('#myModal').modal('toggle');
             $('.modal-backdrop').hide();
@@ -1099,12 +1099,20 @@
             $('.feature_box').find('.feature-row', this).each(function (index) {
 
                 var id = $(this).data('id');
+                var heading = $(this).find('.js-data-example-ajax5 option:selected').text();
+                var heading_id = $(this).find('.js-data-example-ajax5').val();
+
+                if(!heading_id)
+                {
+                    heading = '';
+                }
+
                 var title = $(this).find('.feature_title').val();
                 var value = $(this).find('.feature_value').val();
 
-                if(title)
+                if(title && heading && value)
                 {
-                    rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+title+'</td><td>'+value+'</td></tr>';
+                    rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
                 }
 
             });
@@ -1113,8 +1121,8 @@
                 '                <thead>\n' +
                 '                <tr>\n' +
                 '                <th></th>\n' +
+                '            <th>Heading</th>\n' +
                 '            <th>Feature</th>\n' +
-                '            <th>Value</th>\n' +
                 '        </tr>\n' +
                 '        </thead>\n' +
                 '\n' +
@@ -1140,7 +1148,7 @@
         {
 
             var model_row = $(this).data('id');
-            $('#models-features-tables').find("[data-id='" + model_row + "']").remove();
+            $('#models-features-tables').find("table[data-id='" + model_row + "']").remove();
             $('.model_box').find("[data-id='" + model_row + "']").remove();
 
             if($(".model_box .form-group").length == 0)
@@ -1177,12 +1185,20 @@
                 $('.feature_box').find('.feature-row', this).each(function (index) {
 
                     var id = $(this).data('id');
+                    var heading = $(this).find('.js-data-example-ajax5 option:selected').text();
+                    var heading_id = $(this).find('.js-data-example-ajax5').val();
+
+                    if(!heading_id)
+                    {
+                        heading = '';
+                    }
+
                     var title = $(this).find('.feature_title').val();
                     var value = $(this).find('.feature_value').val();
 
                     if(title)
                     {
-                        rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+title+'</td><td>'+value+'</td></tr>';
+                        rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
                     }
 
                 });
@@ -1191,8 +1207,8 @@
                     '                <thead>\n' +
                     '                <tr>\n' +
                     '                <th></th>\n' +
+                    '            <th>Heading</th>\n' +
                     '            <th>Feature</th>\n' +
-                    '            <th>Value</th>\n' +
                     '        </tr>\n' +
                     '        </thead>\n' +
                     '\n' +
@@ -1214,27 +1230,25 @@
 
         });
 
-        $('body').on('input', '.feature_title, .feature_value', function() {
-
+        $('body').on('change', '.js-data-example-ajax5', function()
+        {
             var id = $(this).parent().parent().attr("data-id");
-            var type = $(this).attr("data-type");
+            var heading = $(this).find("option:selected").text();
+            var heading_id = $(this).val();
 
-            if(type == 'title')
+            if(!heading_id)
             {
-                var title = $(this).val();
-                var value = $(this).parent().parent().find('.feature_value').val();
+                heading = '';
             }
-            else
-            {
-                var value = $(this).val();
-                var title = $(this).parent().parent().find('.feature_title').val();
-            }
+
+            var title = $(this).parent().parent().find('.feature_title').val();
+            var value = $(this).parent().parent().find('.feature_value').val();
 
             $('#models-features-tables').find('table', this).each(function (index) {
 
                 if($(this).find('tbody').find("[data-id='" + id + "']").length > 0)
                 {
-                    if(!title)
+                    if(!title || !heading || !value)
                     {
                         $(this).find('tbody').find("[data-id='" + id + "']").remove();
                     }
@@ -1244,11 +1258,12 @@
 
                             if(index == 1)
                             {
-                                $(this).text(title);
+                                $(this).text(heading);
                             }
-                            else if(index == 2)
+
+                            if(index == 2)
                             {
-                                $(this).text(value);
+                                $(this).text(title);
                             }
 
                         })
@@ -1256,9 +1271,94 @@
                 }
                 else
                 {
-                    if(title)
+                    if(title && heading && value)
                     {
-                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature[]" /></td><td>'+title+'</td><td>'+value+'</td></tr>');
+                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
+                    }
+                }
+
+            });
+        });
+
+        $('body').on('input', '.feature_title', function() {
+
+            var id = $(this).parent().parent().attr("data-id");
+            var title = $(this).val();
+            var heading = $(this).parent().parent().find('.js-data-example-ajax5 option:selected').text();
+            var heading_id = $(this).parent().parent().find('.js-data-example-ajax5').val();
+
+            if(!heading_id)
+            {
+                heading = '';
+            }
+
+            var value = $(this).parent().parent().find('.feature_value').val();
+
+            $('#models-features-tables').find('table', this).each(function (index) {
+
+                if($(this).find('tbody').find("[data-id='" + id + "']").length > 0)
+                {
+                    if(!title || !heading || !value)
+                    {
+                        $(this).find('tbody').find("[data-id='" + id + "']").remove();
+                    }
+                    else
+                    {
+                        $(this).find('tbody').find("[data-id='" + id + "']").find('td', this).each(function (index) {
+
+                            if(index == 1)
+                            {
+                                $(this).text(heading);
+                            }
+
+                            if(index == 2)
+                            {
+                                $(this).text(title);
+                            }
+
+                        })
+                    }
+                }
+                else
+                {
+                    if(title && heading && value)
+                    {
+                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
+                    }
+                }
+
+            });
+
+        });
+
+        $('body').on('input', '.feature_value', function() {
+
+            var id = $(this).parent().parent().attr("data-id");
+            var value = $(this).val();
+            var heading = $(this).parent().parent().find('.js-data-example-ajax5 option:selected').text();
+            var heading_id = $(this).parent().parent().find('.js-data-example-ajax5').val();
+
+            if(!heading_id)
+            {
+                heading = '';
+            }
+
+            var title = $(this).parent().parent().find('.feature_title').val();
+
+            $('#models-features-tables').find('table', this).each(function (index) {
+
+                if($(this).find('tbody').find("[data-id='" + id + "']").length > 0)
+                {
+                    if(!title || !heading || !value)
+                    {
+                        $(this).find('tbody').find("[data-id='" + id + "']").remove();
+                    }
+                }
+                else
+                {
+                    if(title && heading && value)
+                    {
+                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
                     }
                 }
 
@@ -1837,13 +1937,13 @@
                 '\n' +
                 '<div class="col-sm-2">\n' +
                 '\n' +
-                '                                                                        <input data-type="title" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
                 '                                                                    <div class="col-sm-1">\n' +
                 '\n' +
-                '                                                                        <input data-type="value" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
@@ -2105,13 +2205,13 @@
                     '\n' +
                     '                                                                    <div class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                        <input data-type="title" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
                     '                                                                    <div class="col-sm-1">\n' +
                     '\n' +
-                    '                                                                        <input data-type="value" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
