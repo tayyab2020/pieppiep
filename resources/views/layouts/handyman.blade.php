@@ -390,7 +390,7 @@
 
     #sidebar ul.components {
         padding: 0 0 100px 0;
-        overflow-y: auto;
+        /*overflow-y: auto;*/
         height: 100%;
         visibility: hidden;
         -webkit-overflow-scrolling: touch;
@@ -514,6 +514,7 @@
         #sidebar
         {
             position: absolute;
+            overflow-y: auto;
         }
 
         #sidebar.active .sub-show {
