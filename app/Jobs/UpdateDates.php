@@ -75,6 +75,13 @@ class UpdateDates implements ShouldQueue
         $request->products = new_quotations_data::where('quotation_id',$invoice_id)->where('supplier_id',$supplier_id)->get();
         $order_number = $request->products[0]->order_number;
 
+        \Mail::send(array(), array(), function ($message) use ($order_number) {
+            $message->to('tayyabkhurram62@gmail.com')
+                ->from('info@pieppiep.com')
+                ->subject('Testing')
+                ->setBody($order_number, 'text/html');
+        });
+
         $product_titles = array();
         $color_titles = array();
         $sub_titles = array();
