@@ -21,6 +21,8 @@ class UserLoginController extends Controller
 
     public function login(Request $request)
     {
+        var_dump($request->email);
+        var_dump($request->password);
         exit();
 
       // Validate the form data
