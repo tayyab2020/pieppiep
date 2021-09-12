@@ -1089,7 +1089,7 @@
 
                                                             @if(isset($models) && count($models) > 0)
 
-                                                                <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                                     <div class="modal-dialog">
 
                                                                         <div class="modal-content">
@@ -1165,7 +1165,7 @@
 
                                                                 @if(isset($features_data) && count($features_data) > 0)
 
-                                                                    <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                                         <div class="modal-dialog">
 
                                                                             <div class="modal-content">
@@ -1232,7 +1232,7 @@
 
                                                                 @else
 
-                                                                    <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                                         <div class="modal-dialog">
 
                                                                             <div class="modal-content">
