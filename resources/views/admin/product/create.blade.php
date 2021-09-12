@@ -1163,42 +1163,117 @@
 
                                                             @else
 
-                                                                <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                                    <div class="modal-dialog">
+                                                                @if(isset($features_data) && count($features_data) > 0)
 
-                                                                        <div class="modal-content">
+                                                                    <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                        <div class="modal-dialog">
 
-                                                                            <div class="modal-header">
-                                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                                                <h3 id="myModalLabel">Model Features</h3>
-                                                                            </div>
+                                                                            <div class="modal-content">
 
-                                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
+                                                                                <div class="modal-header">
+                                                                                    <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                    <h3 id="myModalLabel">Model Features</h3>
+                                                                                </div>
 
-                                                                                <div id="models-features-tables">
+                                                                                <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
 
-                                                                                    <table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">
-                                                                                        <thead>
-                                                                                        <tr>
-                                                                                            <th></th>
-                                                                                            <th>Heading</th>
-                                                                                            <th>Feature</th>
-                                                                                        </tr>
-                                                                                        </thead>
+                                                                                    <div id="models-features-tables">
 
-                                                                                        <tbody>
+                                                                                        <table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">
+                                                                                            <thead>
+                                                                                            <tr>
+                                                                                                <th></th>
+                                                                                                <th>Heading</th>
+                                                                                                <th>Feature</th>
+                                                                                            </tr>
+                                                                                            </thead>
 
-                                                                                        </tbody>
-                                                                                    </table>
+                                                                                            <tbody>
+
+                                                                                            @foreach($features_data as $x => $feature)
+
+                                                                                                <tr data-id="{{$x+1}}">
+                                                                                                    <td>
+                                                                                                        <div style="display: flex;justify-content: center;align-items: center;">
+                                                                                                            <input type="hidden" name="selected_model_feature{{$x+1}}[]" id="price_impact" value="0">
+                                                                                                            <label style="margin: 0;" class="switch">
+                                                                                                                <input class="price_impact" type="checkbox">
+                                                                                                                <span class="slider round"></span>
+                                                                                                            </label>
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        @foreach($features_headings as $heading)
+
+                                                                                                            @if($heading->id == $feature->heading_id)
+
+                                                                                                                {{$heading->title}}
+
+                                                                                                            @endif
+
+                                                                                                        @endforeach
+                                                                                                    </td>
+                                                                                                    <td>{{$feature->title}}</td>
+                                                                                                </tr>
+
+                                                                                            @endforeach
+
+                                                                                            </tbody>
+                                                                                        </table>
+
+                                                                                    </div>
 
                                                                                 </div>
 
                                                                             </div>
 
                                                                         </div>
-
                                                                     </div>
-                                                                </div>
+
+                                                                    @foreach($features_data as $f => $key)
+
+                                                                    @endforeach
+
+                                                                @else
+
+                                                                    <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                        <div class="modal-dialog">
+
+                                                                            <div class="modal-content">
+
+                                                                                <div class="modal-header">
+                                                                                    <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                    <h3 id="myModalLabel">Model Features</h3>
+                                                                                </div>
+
+                                                                                <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
+
+                                                                                    <div id="models-features-tables">
+
+                                                                                        <table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">
+                                                                                            <thead>
+                                                                                            <tr>
+                                                                                                <th></th>
+                                                                                                <th>Heading</th>
+                                                                                                <th>Feature</th>
+                                                                                            </tr>
+                                                                                            </thead>
+
+                                                                                            <tbody>
+
+                                                                                            </tbody>
+                                                                                        </table>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                @endif
 
                                                             @endif
 
