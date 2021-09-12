@@ -965,62 +965,242 @@
 
                                                                 <input type="hidden" name="removed1" id="removed_rows1">
 
-                                                                <div data-id="1" class="form-group" style="margin: 0 0 20px 0;">
+                                                                @if(isset($models) && count($models) > 0)
 
-                                                                    <div class="col-sm-2">
+                                                                    @foreach($models as $m => $key)
 
-                                                                        <input type="text" placeholder="Model" name="models[]" class="form-control validate models">
+                                                                        <div data-id="{{$m+1}}" class="form-group" style="margin: 0 0 20px 0;">
+
+                                                                            <div class="col-sm-2">
+
+                                                                                <input type="text" value="{{$key->model}}" placeholder="Model" name="models[]" class="form-control validate models">
+
+                                                                            </div>
+
+                                                                            <div class="col-sm-2">
+
+                                                                                <input value="{{$key->value}}" class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
+
+                                                                            </div>
+
+                                                                            <div class="col-sm-2">
+
+                                                                                <input value="{{str_replace(".",",",$key->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
+
+                                                                            </div>
+
+                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                                <input type="hidden" name="model_price_impact[]" id="price_impact" value="{{$key->price_impact}}">
+
+                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                <label style="margin: 0;" class="switch">
+                                                                                    <input class="price_impact" type="checkbox" {{$key->price_impact ? 'checked' : null}}>
+                                                                                    <span class="slider round"></span>
+                                                                                </label>
+                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                            </div>
+
+                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                                <input type="hidden" name="model_impact_type[]" id="impact_type" value="{{$key->impact_type}}">
+
+                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                <label style="margin: 0;" class="switch">
+                                                                                    <input class="impact_type" type="checkbox" {{$key->impact_type ? 'checked' : null}}>
+                                                                                    <span class="slider round"></span>
+                                                                                </label>
+                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                            </div>
+
+                                                                            <div style="display: flex;justify-content: center;" class="col-sm-2">
+
+                                                                                <button data-id="{{$m+1}}" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
+                                                                                <span class="ui-close remove-model" data-id="{{$key->id}}" style="margin:0;position: relative;right:0;top: 0;">X</span>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    @endforeach
+
+                                                                @else
+
+                                                                    <div data-id="1" class="form-group" style="margin: 0 0 20px 0;">
+
+                                                                        <div class="col-sm-2">
+
+                                                                            <input type="text" placeholder="Model" name="models[]" class="form-control validate models">
+
+                                                                        </div>
+
+                                                                        <div class="col-sm-2">
+
+                                                                            <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
+
+                                                                        </div>
+
+                                                                        <div class="col-sm-2">
+
+                                                                            <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
+
+                                                                        </div>
+
+                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                            <input type="hidden" name="model_price_impact[]" id="price_impact" value="0">
+
+                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                            <label style="margin: 0;" class="switch">
+                                                                                <input class="price_impact" type="checkbox">
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                        </div>
+
+                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                            <input type="hidden" name="model_impact_type[]" id="impact_type" value="0">
+
+                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                            <label style="margin: 0;" class="switch">
+                                                                                <input class="impact_type" type="checkbox">
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                        </div>
+
+                                                                        <div style="display: flex;justify-content: center;" class="col-sm-2">
+
+                                                                            <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
+                                                                            <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>
+
+                                                                        </div>
 
                                                                     </div>
 
-                                                                    <div class="col-sm-2">
-
-                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
-
-                                                                    </div>
-
-                                                                    <div class="col-sm-2">
-
-                                                                        <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
-
-                                                                    </div>
-
-                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                        <input type="hidden" name="model_price_impact[]" id="price_impact" value="0">
-
-                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                        <label style="margin: 0;" class="switch">
-                                                                            <input class="price_impact" type="checkbox">
-                                                                            <span class="slider round"></span>
-                                                                        </label>
-                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                    </div>
-
-                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                        <input type="hidden" name="model_impact_type[]" id="impact_type" value="0">
-
-                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
-                                                                        <label style="margin: 0;" class="switch">
-                                                                            <input class="impact_type" type="checkbox">
-                                                                            <span class="slider round"></span>
-                                                                        </label>
-                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                    </div>
-
-                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">
-
-                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
-                                                                        <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>
-
-                                                                    </div>
-
-                                                                </div>
+                                                                @endif
 
                                                             </div>
+
+                                                            @if(isset($models) && count($models) > 0)
+
+                                                                <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog">
+
+                                                                        <div class="modal-content">
+
+                                                                            <div class="modal-header">
+                                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                <h3 id="myModalLabel">Model Features</h3>
+                                                                            </div>
+
+                                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
+
+                                                                                <div id="models-features-tables">
+
+                                                                                    @foreach($models as $s => $mod)
+
+                                                                                        <table data-id="{{$s+1}}" style="margin: auto;width: 70%;border-collapse: separate;">
+                                                                                            <thead>
+                                                                                            <tr>
+                                                                                                <th></th>
+                                                                                                <th>Heading</th>
+                                                                                                <th>Feature</th>
+                                                                                            </tr>
+                                                                                            </thead>
+
+                                                                                            <tbody>
+
+                                                                                            @foreach($mod->features as $x => $feature)
+
+                                                                                                @if($features_data[$x]->id == $feature->product_feature_id)
+
+                                                                                                    <tr data-id="{{$x+1}}">
+                                                                                                        <td>
+                                                                                                            <div style="display: flex;justify-content: center;align-items: center;">
+                                                                                                                <input type="hidden" name="selected_model_feature{{$x+1}}[]" id="price_impact" value="{{$feature->linked}}">
+                                                                                                                <label style="margin: 0;" class="switch">
+                                                                                                                    <input class="price_impact" type="checkbox" {{$feature->linked ? 'checked' : null}}>
+                                                                                                                    <span class="slider round"></span>
+                                                                                                                </label>
+                                                                                                            </div>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            @foreach($features_headings as $heading)
+
+                                                                                                                @if($heading->id == $features_data[$x]->heading_id)
+
+                                                                                                                    {{$heading->title}}
+
+                                                                                                                @endif
+
+                                                                                                            @endforeach
+                                                                                                        </td>
+                                                                                                        <td>{{$features_data[$x]->title}}</td>
+                                                                                                    </tr>
+                                                                                                @endif
+
+                                                                                            @endforeach
+
+                                                                                            </tbody>
+                                                                                        </table>
+
+                                                                                    @endforeach
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            @else
+
+                                                                <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog">
+
+                                                                        <div class="modal-content">
+
+                                                                            <div class="modal-header">
+                                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                <h3 id="myModalLabel">Model Features</h3>
+                                                                            </div>
+
+                                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
+
+                                                                                <div id="models-features-tables">
+
+                                                                                    <table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">
+                                                                                        <thead>
+                                                                                        <tr>
+                                                                                            <th></th>
+                                                                                            <th>Heading</th>
+                                                                                            <th>Feature</th>
+                                                                                        </tr>
+                                                                                        </thead>
+
+                                                                                        <tbody>
+
+                                                                                        </tbody>
+                                                                                    </table>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            @endif
 
                                                         </div>
 
@@ -1040,43 +1220,6 @@
                                                         <button name="addProduct_btn" type="button" class="btn add-product_btn">{{isset($cats) ? 'Edit Product' : 'Add Product'}}</button>
                                                     </div>
 
-                                                </div>
-
-                                                <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-
-                                                        <div class="modal-content">
-
-                                                            <div class="modal-header">
-                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                                <h3 id="myModalLabel">Model Features</h3>
-                                                            </div>
-
-                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
-
-                                                                <div id="models-features-tables">
-
-                                                                    <table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th></th>
-                                                                            <th>Heading</th>
-                                                                            <th>Feature</th>
-                                                                        </tr>
-                                                                        </thead>
-
-                                                                        <tbody>
-
-                                                                        </tbody>
-                                                                    </table>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
                                                 </div>
 
                                             </form>
@@ -1186,11 +1329,20 @@
                 }
 
                 var title = $(this).find('.feature_title').val();
-                var value = $(this).find('.feature_value').val();
 
-                if(title && heading && value)
+                if(title && heading)
                 {
-                    rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature'+row+'[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
+                    rows += '<tr data-id="'+id+'">' +
+                        '                                                                                 <td>\n' +
+                        '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
+                        '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
+                        '                                                                                <label style="margin: 0;" class="switch">\n' +
+                        '                                                                                    <input class="price_impact" type="checkbox">\n' +
+                        '                                                                                    <span class="slider round"></span>\n' +
+                        '                                                                                </label>\n' +
+                        '                                                                                </div>\n' +
+                        '                                                                                </td>' +
+                        '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>';
                 }
 
             });
@@ -1213,10 +1365,19 @@
 
         });
 
+        /*var rem_mod = [];*/
+
         $('body').on('click', '.remove-model' ,function()
         {
+            /*var id = $(this).data('id');*/
+            var model_row = $(this).parent().parent().data('id');
 
-            var model_row = $(this).data('id');
+            /*if(id)
+            {
+                rem_mod.push(id);
+                $('#removed_rows1').val(rem_mod);
+            }*/
+
             $('#models-features-tables').find("table[data-id='" + model_row + "']").remove();
             $('.model_box').find("[data-id='" + model_row + "']").remove();
 
@@ -1293,11 +1454,21 @@
                     }
 
                     var title = $(this).find('.feature_title').val();
-                    var value = $(this).find('.feature_value').val();
 
-                    if(title && heading && value)
+                    if(title && heading)
                     {
-                        rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature'+row+'[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
+                        rows += '<tr data-id="'+id+'">' +
+                            '                                                                                 <td>\n' +
+                            '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
+                            '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
+                            '                                                                                <label style="margin: 0;" class="switch">\n' +
+                            '                                                                                    <input class="price_impact" type="checkbox">\n' +
+                            '                                                                                    <span class="slider round"></span>\n' +
+                            '                                                                                </label>\n' +
+                            '                                                                                </div>\n' +
+                            '                                                                                </td>' +
+                            '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>';
+
                     }
 
                 });
@@ -1333,13 +1504,12 @@
             }
 
             var title = $(this).parent().parent().find('.feature_title').val();
-            var value = $(this).parent().parent().find('.feature_value').val();
 
             $('#models-features-tables').find('table', this).each(function (index) {
 
                 if($(this).find('tbody').find("[data-id='" + id + "']").length > 0)
                 {
-                    if(!title || !heading || !value)
+                    if(!title || !heading)
                     {
                         $(this).find('tbody').find("[data-id='" + id + "']").hide();
                     }
@@ -1364,9 +1534,25 @@
                 }
                 else
                 {
-                    if(title && heading && value)
+                    if(title && heading)
                     {
-                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature'+row+'[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
+                        $(this).find('tbody').append('<tr data-id="'+id+'">' +
+                            '                                                                                 <td>\n' +
+                            '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
+                            '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
+                            '                                                                                <label style="margin: 0;" class="switch">\n' +
+                            '                                                                                    <input class="price_impact" type="checkbox">\n' +
+                            '                                                                                    <span class="slider round"></span>\n' +
+                            '                                                                                </label>\n' +
+                            '                                                                                </div>\n' +
+                            '                                                                                </td>' +
+                            '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>');
+
+                        var $wrapper = $(this).find('tbody');
+
+                        $wrapper.find('tr').sort(function(a, b) {
+                            return +$(a).data('id') - +$(b).data('id');
+                        }).appendTo($wrapper);
                     }
                 }
 
@@ -1386,13 +1572,11 @@
                 heading = '';
             }
 
-            var value = $(this).parent().parent().find('.feature_value').val();
-
             $('#models-features-tables').find('table', this).each(function (index) {
 
                 if($(this).find('tbody').find("[data-id='" + id + "']").length > 0)
                 {
-                    if(!title || !heading || !value)
+                    if(!title || !heading)
                     {
                         $(this).find('tbody').find("[data-id='" + id + "']").hide();
                     }
@@ -1417,49 +1601,26 @@
                 }
                 else
                 {
-                    if(title && heading && value)
+                    if(title && heading)
                     {
-                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature'+row+'[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
-                    }
-                }
+                        $(this).find('tbody').append('<tr data-id="'+id+'">' +
+                            '                                                                                 <td>\n' +
+                            '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
+                            '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
+                            '                                                                                <label style="margin: 0;" class="switch">\n' +
+                            '                                                                                    <input class="price_impact" type="checkbox">\n' +
+                            '                                                                                    <span class="slider round"></span>\n' +
+                            '                                                                                </label>\n' +
+                            '                                                                                </div>\n' +
+                            '                                                                                </td>' +
+                            '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>');
 
-            });
+                        var $wrapper = $(this).find('tbody');
 
-        });
+                        $wrapper.find('tr').sort(function(a, b) {
+                            return +$(a).data('id') - +$(b).data('id');
+                        }).appendTo($wrapper);
 
-        $('body').on('input', '.feature_value', function() {
-
-            var id = $(this).parent().parent().attr("data-id");
-            var value = $(this).val();
-            var heading = $(this).parent().parent().find('.js-data-example-ajax5 option:selected').text();
-            var heading_id = $(this).parent().parent().find('.js-data-example-ajax5').val();
-            var row = $(this).parent().parent().find('.f_row').val();
-
-            if(!heading_id)
-            {
-                heading = '';
-            }
-
-            var title = $(this).parent().parent().find('.feature_title').val();
-
-            $('#models-features-tables').find('table', this).each(function (index) {
-
-                if($(this).find('tbody').find("[data-id='" + id + "']").length > 0)
-                {
-                    if(!title || !heading || !value)
-                    {
-                        $(this).find('tbody').find("[data-id='" + id + "']").hide();
-                    }
-                    else
-                    {
-                        $(this).find('tbody').find("[data-id='" + id + "']").show();
-                    }
-                }
-                else
-                {
-                    if(title && heading && value)
-                    {
-                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature'+row+'[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
                     }
                 }
 

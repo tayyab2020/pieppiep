@@ -119,12 +119,12 @@
                                                                     aria-label="Blood Group Name: activate to sort column descending">
                                                                     Brand
                                                                 </th>
-                                                                <th class="sorting_asc" tabindex="0"
+                                                                {{--<th class="sorting_asc" tabindex="0"
                                                                     aria-controls="product-table_wrapper" rowspan="1"
                                                                     colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                     aria-label="Blood Group Name: activate to sort column descending">
                                                                     Model
-                                                                </th>
+                                                                </th>--}}
 
                                                                 @if(auth()->user()->role_id == 4)
 
@@ -170,7 +170,7 @@
 
                                                                     <td>{{$cat->category}}</td>
                                                                     <td>{{$cat->brand}}</td>
-                                                                    <td>{{$cat->model}}</td>
+                                                                    {{--<td>{{$cat->model}}</td>--}}
 
                                                                     @if(auth()->user()->role_id == 4)
 

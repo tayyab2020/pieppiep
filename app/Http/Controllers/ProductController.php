@@ -10,10 +10,12 @@ use App\Exports\ProductsExport;
 use App\features;
 use App\Imports\ProductsImport;
 use App\Model1;
+use App\model_features;
 use App\price_tables;
 use App\product;
 use App\product_features;
 use App\product_ladderbands;
+use App\product_models;
 use App\Products;
 use App\retailer_margins;
 use App\retailers_requests;
@@ -155,11 +157,11 @@ class ProductController extends Controller
         {
             $categories = Category::where('user_id',$user_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();
-            $models = Model1::get();
+            /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
 
-            return view('admin.product.create',compact('categories','brands','models','tables','features_headings'));
+            return view('admin.product.create',compact('categories','brands','tables','features_headings'));
         }
         else
         {
@@ -344,7 +346,10 @@ class ProductController extends Controller
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
         $colors = $request->colors;
         $features = $request->feature_headings;
+        $models = $request->models;
         $sub_products = $request->sub_codes;
+        $feature_row = array();
+        $feature_id = array();
 
         if($prices)
         {
@@ -369,6 +374,15 @@ class ProductController extends Controller
 
         if($request->cat_id)
         {
+            if($request->removed1)
+            {
+                $removed1 = explode(',', $request->removed1);
+            }
+            else
+            {
+                $removed1 = [];
+            }
+
             if($request->removed)
             {
                 $removed = explode(',', $request->removed);
@@ -399,6 +413,7 @@ class ProductController extends Controller
             product_features::whereIn('id',$removed)->delete();
             product_ladderbands::whereIn('id',$removed_ladderband)->delete();
             colors::whereIn('id',$removed_colors)->delete();
+            product_models::whereIn('id',$removed1)->delete();
 
             $cat = Products::where('id',$request->cat_id)->first();
 
@@ -429,6 +444,9 @@ class ProductController extends Controller
                         $fea->price_impact = $request->price_impact[$f];
                         $fea->impact_type = $request->impact_type[$f];
                         $fea->save();
+
+                        $feature_row[] = $request->f_rows[$f];
+                        $feature_id[] = $fea->id;
                     }
                 }
             }
@@ -451,6 +469,9 @@ class ProductController extends Controller
                                 $fea_check->price_impact = $request->price_impact[$f];
                                 $fea_check->impact_type = $request->impact_type[$f];
                                 $fea_check->save();
+
+                                $feature_row[] = $request->f_rows[$f];
+                                $feature_id[] = $fea_check->id;
                             }
                         }
                         else
@@ -466,6 +487,9 @@ class ProductController extends Controller
                                 $fea->price_impact = $request->price_impact[$f];
                                 $fea->impact_type = $request->impact_type[$f];
                                 $fea->save();
+
+                                $feature_row[] = $request->f_rows[$f];
+                                $feature_id[] = $fea->id;
                             }
                         }
                     }
@@ -473,6 +497,36 @@ class ProductController extends Controller
                 else
                 {
                     product_features::where('product_id',$request->cat_id)->delete();
+                }
+            }
+
+            $model_ids = product_models::where('product_id',$request->cat_id)->pluck('id');
+            product_models::where('product_id',$request->cat_id)->delete();
+            model_features::whereIn('model_id',$model_ids)->delete();
+
+            foreach ($models as $m => $temp)
+            {
+                if($temp != NULL && $request->model_values[$m] != NULL) {
+                    $model = new product_models;
+                    $model->product_id = $request->cat_id;
+                    $model->model = $temp;
+                    $model->value = $request->model_values[$m];
+                    $model->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                    $model->price_impact = $request->model_price_impact[$m];
+                    $model->impact_type = $request->model_impact_type[$m];
+                    $model->save();
+
+                    foreach ($feature_row as $a => $abc)
+                    {
+                        $selected_feature = 'selected_model_feature' . $abc;
+                        $link = $request->$selected_feature[$m];
+
+                        $model_feature = new model_features;
+                        $model_feature->model_id = $model->id;
+                        $model_feature->product_feature_id = $feature_id[$a];
+                        $model_feature->linked = $link;
+                        $model_feature->save();
+                    }
                 }
             }
 
@@ -675,6 +729,35 @@ class ProductController extends Controller
                         $feature->price_impact = $request->price_impact[$f];
                         $feature->impact_type = $request->impact_type[$f];
                         $feature->save();
+
+                        $feature_row[] = $request->f_rows[$f];
+                        $feature_id[] = $feature->id;
+                    }
+                }
+
+                foreach ($models as $m => $temp)
+                {
+                    if($temp != NULL && $request->model_values[$m] != NULL) {
+                        $model = new product_models;
+                        $model->product_id = $cat->id;
+                        $model->model = $temp;
+                        $model->value = $request->model_values[$m];
+                        $model->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model->price_impact = $request->model_price_impact[$m];
+                        $model->impact_type = $request->model_impact_type[$m];
+                        $model->save();
+
+                        foreach ($feature_row as $a => $abc)
+                        {
+                            $selected_feature = 'selected_model_feature' . $abc;
+                            $link = $request->$selected_feature[$m];
+
+                            $model_feature = new model_features;
+                            $model_feature->model_id = $model->id;
+                            $model_feature->product_feature_id = $feature_id[$a];
+                            $model_feature->linked = $link;
+                            $model_feature->save();
+                        }
                     }
                 }
 
@@ -987,9 +1070,10 @@ class ProductController extends Controller
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::where('user_id',$user_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();
-            $models = Model1::get();
+            /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
+            $models = product_models::with('features')->where('product_id',$id)->get();
 
             return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','features_headings'));
         }
@@ -1023,6 +1107,9 @@ class ProductController extends Controller
             product_ladderbands::where('product_id',$id)->delete();
             colors::where('product_id',$id)->delete();
             estimated_prices::where('product_id',$id)->delete();
+            $model_ids = product_models::where('product_id',$id)->pluck('id');
+            product_models::where('product_id',$id)->delete();
+            model_features::whereIn('model_id',$model_ids)->delete();
 
             if($cat->photo == null){
                 $cat->delete();
