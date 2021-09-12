@@ -929,13 +929,29 @@
 
                                                         <div class="form-group" style="margin-bottom: 20px;">
 
-                                                            <div class="row" style="margin: 0;display: flex;justify-content: center;">
+                                                            <div class="row" style="margin: 0;">
 
-                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-5">
+                                                                <div style="font-family: monospace;" class="col-sm-2">
                                                                     <h4>Model</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-5">
+                                                                <div style="font-family: monospace;" class="col-sm-2">
+                                                                    <h4>Value</h4>
+                                                                </div>
+
+                                                                <div style="font-family: monospace;" class="col-sm-2">
+                                                                    <h4>Max Size</h4>
+                                                                </div>
+
+                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
+                                                                    <h4>Price Impact</h4>
+                                                                </div>
+
+                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
+                                                                    <h4>Impact Type</h4>
+                                                                </div>
+
+                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-2">
                                                                     <h4>Action</h4>
                                                                 </div>
 
@@ -945,28 +961,56 @@
 
                                                                 <input type="hidden" name="removed1" id="removed_rows1">
 
-                                                                <div data-id="1" class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">
+                                                                <div data-id="1" class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                    <div style="display: flex;justify-content: center;" class="col-sm-5">
+                                                                    <div class="col-sm-2">
 
-                                                                        <select class="form-control validate js-data-example-ajax2" name="models[]">
-
-                                                                            <option value="">Select Model</option>
-
-                                                                            @foreach($models as $model)
-
-                                                                                <option value="{{$model->id}}">{{$model->cat_name}}</option>
-
-                                                                            @endforeach
-
-                                                                        </select>
+                                                                        <input type="text" placeholder="Model" name="models[]" class="form-control validate models">
 
                                                                     </div>
 
-                                                                    <div style="display: flex;justify-content: center;" class="col-sm-5">
+                                                                    <div class="col-sm-2">
+
+                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
+
+                                                                    </div>
+
+                                                                    <div class="col-sm-2">
+
+                                                                        <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
+
+                                                                    </div>
+
+                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                        <input type="hidden" name="model_price_impact[]" id="price_impact" value="0">
+
+                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                        <label style="margin: 0;" class="switch">
+                                                                            <input class="price_impact" type="checkbox">
+                                                                            <span class="slider round"></span>
+                                                                        </label>
+                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                    </div>
+
+                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                        <input type="hidden" name="model_impact_type[]" id="impact_type" value="0">
+
+                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                        <label style="margin: 0;" class="switch">
+                                                                            <input class="impact_type" type="checkbox">
+                                                                            <span class="slider round"></span>
+                                                                        </label>
+                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                    </div>
+
+                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">
 
                                                                         <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
-                                                                        <span class="ui-close remove-model" data-id="1" style="margin:0;position: relative;right:0;">X</span>
+                                                                        <span class="ui-close remove-model" data-id="1" style="margin:0;position: relative;right:0;top: 0;">X</span>
 
                                                                     </div>
 
@@ -1068,29 +1112,58 @@
             var model_row = $('.model_box').find('.form-group').last().data('id');
             model_row = model_row + 1;
 
-            $(".model_box").append('<div data-id="'+model_row+'" class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+            $(".model_box").append('<div data-id="'+model_row+'" class="form-group" style="margin: 0 0 20px 0;">\n' +
                 '\n' +
-                '                <div style="display: flex;justify-content: center;" class="col-sm-5">\n' +
+                '                                                                   <div class="col-sm-2">\n' +
                 '\n' +
-                '                <select class="form-control validate js-data-example-ajax2" name="models[]">\n' +
+                '                                                                        <input type="text" placeholder="Model" name="models[]" class="form-control validate models">\n' +
                 '\n' +
-                '                <option value="">Select Model</option>\n' +
+                '                                                                    </div>\n' +
                 '\n' +
-                '                @foreach($models as $model) \n' +
+                '                                                                    <div class="col-sm-2">\n' +
                 '\n' +
-                '               <option value="{{$model->id}}">{{$model->cat_name}}</option> \n' +
+                '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '\n' +
-                '               @endforeach \n' +
-                '        </select>\n' +
+                '                                                                    </div>\n' +
                 '\n' +
-                '        </div>\n' +
+                '                                                                    <div class="col-sm-2">\n' +
                 '\n' +
-                '        <div style="display: flex;justify-content: center;" class="col-sm-5">\n' +
+                '                                                                        <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
                 '\n' +
-                '        <button data-id="'+model_row+'" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
-                '        <span class="ui-close remove-model" data-id="'+model_row+'" style="margin:0;position: relative;right:0;">X</span>\n' +
+                '                                                                    </div>\n' +
                 '\n' +
-                '        </div>\n' +
+                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                '\n' +
+                '                                                                        <input type="hidden" name="model_price_impact[]" id="price_impact" value="0">\n' +
+                '\n' +
+                '                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                        <label style="margin: 0;" class="switch">\n' +
+                '                                                                            <input class="price_impact" type="checkbox">\n' +
+                '                                                                            <span class="slider round"></span>\n' +
+                '                                                                        </label>\n' +
+                '                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                '\n' +
+                '                                                                        <input type="hidden" name="model_impact_type[]" id="impact_type" value="0">\n' +
+                '\n' +
+                '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                '                                                                        <label style="margin: 0;" class="switch">\n' +
+                '                                                                            <input class="impact_type" type="checkbox">\n' +
+                '                                                                            <span class="slider round"></span>\n' +
+                '                                                                        </label>\n' +
+                '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">\n' +
+                '\n' +
+                '                                                                        <button data-id="'+model_row+'" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
+                '                                                                        <span class="ui-close remove-model" data-id="'+model_row+'" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
+                '\n' +
+                '                                                                    </div>' +
                 '\n' +
                 '        </div>');
 
@@ -1133,15 +1206,6 @@
                 '        </table>');
 
 
-
-            $(".js-data-example-ajax2").select2({
-                width: '80%',
-                height: '200px',
-                placeholder: "Select Model",
-                allowClear: true,
-            });
-
-
         });
 
         $('body').on('click', '.remove-model' ,function()
@@ -1154,29 +1218,58 @@
             if($(".model_box .form-group").length == 0)
             {
 
-                $(".model_box").append('<div data-id="1" class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+                $(".model_box").append('<div data-id="1" class="form-group" style="margin: 0 0 20px 0;">\n' +
                     '\n' +
-                    '                <div style="display: flex;justify-content: center;" class="col-sm-5">\n' +
+                    '                                                                   <div class="col-sm-2">\n' +
                     '\n' +
-                    '                <select class="form-control validate js-data-example-ajax2" name="models[]">\n' +
+                    '                                                                        <input type="text" placeholder="Model" name="models[]" class="form-control validate models">\n' +
                     '\n' +
-                    '                <option value="">Select Model</option>\n' +
+                    '                                                                    </div>\n' +
                     '\n' +
-                    '                @foreach($models as $model) \n' +
+                    '                                                                    <div class="col-sm-2">\n' +
                     '\n' +
-                    '               <option value="{{$model->id}}">{{$model->cat_name}}</option> \n' +
+                    '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '\n' +
-                    '               @endforeach \n' +
-                    '        </select>\n' +
+                    '                                                                    </div>\n' +
                     '\n' +
-                    '        </div>\n' +
+                    '                                                                    <div class="col-sm-2">\n' +
                     '\n' +
-                    '        <div style="display: flex;justify-content: center;" class="col-sm-5">\n' +
+                    '                                                                        <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
                     '\n' +
-                    '        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
-                    '        <span class="ui-close remove-model" data-id="1" style="margin:0;position: relative;right:0;">X</span>\n' +
+                    '                                                                    </div>\n' +
                     '\n' +
-                    '        </div>\n' +
+                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                    '\n' +
+                    '                                                                        <input type="hidden" name="model_price_impact[]" id="price_impact" value="0">\n' +
+                    '\n' +
+                    '                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                        <label style="margin: 0;" class="switch">\n' +
+                    '                                                                            <input class="price_impact" type="checkbox">\n' +
+                    '                                                                            <span class="slider round"></span>\n' +
+                    '                                                                        </label>\n' +
+                    '                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                    '\n' +
+                    '                                                                        <input type="hidden" name="model_impact_type[]" id="impact_type" value="0">\n' +
+                    '\n' +
+                    '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                    '                                                                        <label style="margin: 0;" class="switch">\n' +
+                    '                                                                            <input class="impact_type" type="checkbox">\n' +
+                    '                                                                            <span class="slider round"></span>\n' +
+                    '                                                                        </label>\n' +
+                    '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">\n' +
+                    '\n' +
+                    '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
+                    '                                                                        <span class="ui-close remove-model" data-id="1" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
+                    '\n' +
+                    '                                                                    </div>' +
                     '\n' +
                     '        </div>');
 
@@ -1196,7 +1289,7 @@
                     var title = $(this).find('.feature_title').val();
                     var value = $(this).find('.feature_value').val();
 
-                    if(title)
+                    if(title && heading && value)
                     {
                         rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
                     }
@@ -1217,15 +1310,6 @@
                     rows +
                     '        </tbody>\n' +
                     '        </table>');
-
-
-
-                $(".js-data-example-ajax2").select2({
-                    width: '80%',
-                    height: '200px',
-                    placeholder: "Select Model",
-                    allowClear: true,
-                });
             }
 
         });
@@ -1250,7 +1334,7 @@
                 {
                     if(!title || !heading || !value)
                     {
-                        $(this).find('tbody').find("[data-id='" + id + "']").remove();
+                        $(this).find('tbody').find("[data-id='" + id + "']").hide();
                     }
                     else
                     {
@@ -1266,7 +1350,9 @@
                                 $(this).text(title);
                             }
 
-                        })
+                        });
+
+                        $(this).find('tbody').find("[data-id='" + id + "']").show();
                     }
                 }
                 else
@@ -1300,7 +1386,7 @@
                 {
                     if(!title || !heading || !value)
                     {
-                        $(this).find('tbody').find("[data-id='" + id + "']").remove();
+                        $(this).find('tbody').find("[data-id='" + id + "']").hide();
                     }
                     else
                     {
@@ -1316,7 +1402,9 @@
                                 $(this).text(title);
                             }
 
-                        })
+                        });
+
+                        $(this).find('tbody').find("[data-id='" + id + "']").show();
                     }
                 }
                 else
@@ -1351,7 +1439,11 @@
                 {
                     if(!title || !heading || !value)
                     {
-                        $(this).find('tbody').find("[data-id='" + id + "']").remove();
+                        $(this).find('tbody').find("[data-id='" + id + "']").hide();
+                    }
+                    else
+                    {
+                        $(this).find('tbody').find("[data-id='" + id + "']").show();
                     }
                 }
                 else
@@ -1600,7 +1692,7 @@
 
         });
 
-        $(document).on('keypress', ".max_size", function(e){
+        $(document).on('keypress', ".max_size, .model_max_size", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -1629,7 +1721,7 @@
 
         });
 
-        $(document).on('focusout', ".max_size", function(e){
+        $(document).on('focusout', ".max_size, .model_max_size", function(e){
 
             if($(this).val().slice($(this).val().length - 1) == ',')
             {
@@ -2012,12 +2104,12 @@
             allowClear: true,
         });
 
-        $(".js-data-example-ajax2").select2({
+        /*$(".js-data-example-ajax2").select2({
             width: '80%',
             height: '200px',
             placeholder: "Select Model",
             allowClear: true,
-        });
+        });*/
 
 
         $(".js-data-example-ajax4").select2({
