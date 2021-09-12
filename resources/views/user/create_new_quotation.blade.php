@@ -2804,7 +2804,7 @@
                                 });
 
                                 $('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').removeClass('hide');
-                                $('.top-bar').css('z-index','1');
+                                /*$('.top-bar').css('z-index','1');*/
                                 $('#myModal').modal('toggle');
                                 $('.modal-backdrop').hide();
                             }
@@ -2894,9 +2894,9 @@
 
             });
 
-            $('#myModal, #myModal2').on('hidden.bs.modal', function () {
+            /*$('#myModal, #myModal2').on('hidden.bs.modal', function () {
                 $('.top-bar').css('z-index','1000');
-            })
+            });*/
 
             $(document).on('click', '.comment-btn', function(){
 
@@ -2920,7 +2920,7 @@
                     );
                 }
 
-                $('.top-bar').css('z-index','1');
+                /*$('.top-bar').css('z-index','1');*/
                 $('#myModal2').modal('toggle');
                 $('.modal-backdrop').hide();
 
@@ -2934,7 +2934,7 @@
                 $('#myModal').find('.modal-body').find('.sub-tables').hide();
                 $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).show();
 
-                $('.top-bar').css('z-index','1');
+                /*$('.top-bar').css('z-index','1');*/
                 $('#myModal').modal('toggle');
                 $('.modal-backdrop').hide();
 

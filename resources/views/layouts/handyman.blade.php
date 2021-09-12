@@ -103,6 +103,11 @@
 
 <style type="text/css">
 
+    .modal-open .top-bar
+    {
+        z-index: 1 !important;
+    }
+
     #sidebar ul
     {
         list-style-type:none;

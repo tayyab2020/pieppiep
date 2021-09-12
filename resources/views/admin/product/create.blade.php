@@ -1230,10 +1230,6 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    @foreach($features_data as $f => $key)
-
-                                                                    @endforeach
-
                                                                 @else
 
                                                                     <div style="position: absolute;" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1277,7 +1273,7 @@
 
                                                             @endif
 
-                                                        </div>
+                                                        </div>.
 
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-3" for=""></label>
