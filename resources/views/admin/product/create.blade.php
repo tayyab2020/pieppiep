@@ -725,6 +725,8 @@
 
                                                                         <div data-id="{{$f+1}}" class="form-group feature-row" style="margin: 0 0 20px 0;">
 
+                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="{{$f+1}}">
+
                                                                             <div class="col-sm-3">
 
                                                                                 <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">
@@ -787,7 +789,7 @@
 
 
                                                                             <div class="col-xs-1 col-sm-1">
-                                                                                <span class="ui-close remove-feature" data-id="{{$f+1}}" style="margin:0;right:70%;">X</span>
+                                                                                <span class="ui-close remove-feature" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
                                                                             </div>
 
                                                                         </div>
@@ -797,6 +799,8 @@
                                                                 @else
 
                                                                     <div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;">
+
+                                                                        <input type="hidden" name="f_rows[]" class="f_row" value="1">
 
                                                                         <div class="col-sm-3">
 
@@ -860,7 +864,7 @@
 
 
                                                                         <div class="col-xs-1 col-sm-1">
-                                                                            <span class="ui-close remove-feature" data-id="1" style="margin:0;right:70%;">X</span>
+                                                                            <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>
                                                                         </div>
 
                                                                     </div>
@@ -1010,7 +1014,7 @@
                                                                     <div style="display: flex;justify-content: center;" class="col-sm-2">
 
                                                                         <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
-                                                                        <span class="ui-close remove-model" data-id="1" style="margin:0;position: relative;right:0;top: 0;">X</span>
+                                                                        <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>
 
                                                                     </div>
 
@@ -1161,7 +1165,7 @@
                 '                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">\n' +
                 '\n' +
                 '                                                                        <button data-id="'+model_row+'" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
-                '                                                                        <span class="ui-close remove-model" data-id="'+model_row+'" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
+                '                                                                        <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
                 '\n' +
                 '                                                                    </div>' +
                 '\n' +
@@ -1174,6 +1178,7 @@
                 var id = $(this).data('id');
                 var heading = $(this).find('.js-data-example-ajax5 option:selected').text();
                 var heading_id = $(this).find('.js-data-example-ajax5').val();
+                var row = $(this).find('.f_row').val();
 
                 if(!heading_id)
                 {
@@ -1185,7 +1190,7 @@
 
                 if(title && heading && value)
                 {
-                    rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
+                    rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature'+row+'[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
                 }
 
             });
@@ -1267,7 +1272,7 @@
                     '                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">\n' +
                     '\n' +
                     '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
-                    '                                                                        <span class="ui-close remove-model" data-id="1" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
+                    '                                                                        <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
                     '\n' +
                     '                                                                    </div>' +
                     '\n' +
@@ -1280,6 +1285,7 @@
                     var id = $(this).data('id');
                     var heading = $(this).find('.js-data-example-ajax5 option:selected').text();
                     var heading_id = $(this).find('.js-data-example-ajax5').val();
+                    var row = $(this).find('.f_row').val();
 
                     if(!heading_id)
                     {
@@ -1291,7 +1297,7 @@
 
                     if(title && heading && value)
                     {
-                        rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
+                        rows += '<tr data-id="'+id+'" style="display: table-row;"><td><input type="checkbox" name="selected_model_feature'+row+'[]"></td><td>'+heading+'</td><td>'+title+'</td></tr>';
                     }
 
                 });
@@ -1319,6 +1325,7 @@
             var id = $(this).parent().parent().attr("data-id");
             var heading = $(this).find("option:selected").text();
             var heading_id = $(this).val();
+            var row = $(this).parent().parent().find('.f_row').val();
 
             if(!heading_id)
             {
@@ -1359,7 +1366,7 @@
                 {
                     if(title && heading && value)
                     {
-                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
+                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature'+row+'[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
                     }
                 }
 
@@ -1372,6 +1379,7 @@
             var title = $(this).val();
             var heading = $(this).parent().parent().find('.js-data-example-ajax5 option:selected').text();
             var heading_id = $(this).parent().parent().find('.js-data-example-ajax5').val();
+            var row = $(this).parent().parent().find('.f_row').val();
 
             if(!heading_id)
             {
@@ -1411,7 +1419,7 @@
                 {
                     if(title && heading && value)
                     {
-                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
+                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature'+row+'[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
                     }
                 }
 
@@ -1425,6 +1433,7 @@
             var value = $(this).val();
             var heading = $(this).parent().parent().find('.js-data-example-ajax5 option:selected').text();
             var heading_id = $(this).parent().parent().find('.js-data-example-ajax5').val();
+            var row = $(this).parent().parent().find('.f_row').val();
 
             if(!heading_id)
             {
@@ -1450,7 +1459,7 @@
                 {
                     if(title && heading && value)
                     {
-                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
+                        $(this).find('tbody').append('<tr data-id="'+id+'"><td><input type="checkbox" name="selected_model_feature'+row+'[]" /></td><td>'+heading+'</td><td>'+title+'</td></tr>');
                     }
                 }
 
@@ -2011,7 +2020,9 @@
 
             $(".feature_box").append('<div data-id="'+feature_row+'" class="form-group feature-row" style="margin: 0 0 20px 0;">\n' +
                 '\n' +
-                '<div class="col-sm-3">\n' +
+                '                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+feature_row+'">\n' +
+                '\n' +
+                '                                                                            <div class="col-sm-3">\n' +
                 '\n' +
                 '                                                                            <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">\n' +
                 '\n' +
@@ -2073,7 +2084,7 @@
                 '\n' +
                 '\n' +
                 '                                                                    <div class="col-xs-1 col-sm-1">\n' +
-                '                                                                        <span class="ui-close remove-feature" data-id="'+feature_row+'" style="margin:0;right:70%;">X</span>\n' +
+                '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>\n' +
                 '                                                                    </div>\n'+
                 '\n' +
                 '                </div>');
@@ -2262,12 +2273,13 @@
         $('body').on('click', '.remove-feature' ,function() {
 
             var id = $(this).data('id');
+            var row_id = $(this).parent().parent().find('.f_row').val();
+            $('#models-features-tables table tbody').find("[data-id='" + row_id + "']").remove();
 
             if(id)
             {
                 rem_arr.push(id);
                 $('#removed_rows').val(rem_arr);
-                $('#models-features-tables table tbody').find("[data-id='" + id + "']").remove();
             }
 
             var parent = this.parentNode.parentNode;
@@ -2279,7 +2291,9 @@
             {
                 $(".feature_box").append('<div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;">\n' +
                     '\n' +
-                    '<div class="col-sm-3">\n' +
+                    '                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="1">\n' +
+                    '\n' +
+                    '                                                                            <div class="col-sm-3">\n' +
                     '\n' +
                     '                                                                            <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">\n' +
                     '\n' +
@@ -2341,7 +2355,7 @@
                     '\n' +
                     '\n' +
                     '                                                                    <div class="col-xs-1 col-sm-1">\n' +
-                    '                                                                        <span class="ui-close remove-feature" data-id="1" style="margin:0;right:70%;">X</span>\n' +
+                    '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>\n' +
                     '                                                                    </div>\n'+
                     '\n' +
                     '                </div>');
