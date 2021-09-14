@@ -103,6 +103,7 @@
                                                                     <th @if(auth()->user()->role_id == 4) style="display: none;" @endif>Supplier</th>
                                                                     <th style="width: 250px;">Product</th>
                                                                     <th>Color</th>
+                                                                    <th>Model</th>
                                                                     <th>Width</th>
                                                                     <th>Height</th>
                                                                     <th>Required</th>
@@ -173,6 +174,20 @@
                                                                                     @endforeach
 
                                                                                 </select>
+                                                                            </td>
+                                                                            <td class="model">
+                                                                                <select name="models[]" class="js-data-example-ajax3">
+
+                                                                                    <option value=""></option>
+
+                                                                                    @foreach($models[$i] as $model)
+
+                                                                                        <option {{$model->id == $item->model ? 'selected' : null}} value="{{$model->id}}">{{$model->model}}</option>
+
+                                                                                    @endforeach
+
+                                                                                </select>
+                                                                                <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="{{$item->model_impact_value}}">
                                                                             </td>
                                                                             <td class="width" style="width: 80px;">
                                                                                 <div class="m-box">
@@ -249,6 +264,14 @@
                                                                                 <option value=""></option>
 
                                                                             </select>
+                                                                        </td>
+                                                                        <td class="model">
+                                                                            <select name="models[]" class="js-data-example-ajax3">
+
+                                                                                <option value=""></option>
+
+                                                                            </select>
+                                                                            <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="0">
                                                                         </td>
                                                                         <td class="width" style="width: 80px;">
                                                                             <div class="m-box">
@@ -1281,6 +1304,7 @@
                 var id = current.val();
                 var row_id = current.parent().parent().data('id');
                 var options = '';
+                var options1 = '';
                 current.parent().parent().find('#area_conflict').val(0);
 
                 $.ajax({
@@ -1291,19 +1315,19 @@
 
                         $('#menu1').find(`[data-id='${row_id}']`).remove();
 
-                        current.parent().parent().find('#delivery_days').val(data[0].delivery_days);
-                        current.parent().parent().find('#ladderband').val(data[0].ladderband);
-                        current.parent().parent().find('#ladderband_value').val(data[0].ladderband_value);
-                        current.parent().parent().find('#ladderband_price_impact').val(data[0].ladderband_price_impact);
-                        current.parent().parent().find('#ladderband_impact_type').val(data[0].ladderband_impact_type);
-                        current.parent().parent().find('#price_based_option').val(data[0].price_based_option);
-                        current.parent().parent().find('#base_price').val(data[0].base_price);
+                        current.parent().parent().find('#delivery_days').val(data.delivery_days);
+                        current.parent().parent().find('#ladderband').val(data.ladderband);
+                        current.parent().parent().find('#ladderband_value').val(data.ladderband_value);
+                        current.parent().parent().find('#ladderband_price_impact').val(data.ladderband_price_impact);
+                        current.parent().parent().find('#ladderband_impact_type').val(data.ladderband_impact_type);
+                        current.parent().parent().find('#price_based_option').val(data.price_based_option);
+                        current.parent().parent().find('#base_price').val(data.base_price);
                         current.parent().parent().find('.price').text('');
                         current.parent().parent().find('#row_total').val('');
                         current.parent().parent().find('#rate').val('');
                         current.parent().parent().find('#basic_price').val('');
 
-                        var price_based_option = data[0].price_based_option;
+                        var price_based_option = data.price_based_option;
 
                         if(price_based_option == 1)
                         {
@@ -1323,7 +1347,7 @@
                             current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',false);
                         }
 
-                        $.each(data, function(index, value) {
+                        $.each(data.colors, function(index, value) {
 
                             if(value.title)
                             {
@@ -1334,10 +1358,26 @@
 
                         });
 
+                        $.each(data.models, function(index1, value1) {
+
+                            if(value1.model)
+                            {
+                                var opt1 = '<option value="'+value1.id+'" >'+value1.model+'</option>';
+
+                                options1 = options1 + opt1;
+                            }
+
+                        });
+
                         current.parent().parent().find('.color').children('select').find('option')
                             .remove()
                             .end()
                             .append('<option value="">Select Color</option>'+options);
+
+                        current.parent().parent().find('.model').children('select').find('option')
+                            .remove()
+                            .end()
+                            .append('<option value="">Select Model</option>'+options1);
 
 
                         if((typeof(data[0]) != "undefined") && data[0].measure)
@@ -1383,12 +1423,25 @@
                 },
             });
 
-            $(document).on('change', ".js-data-example-ajax2", function(e){
+            $(".js-data-example-ajax3").select2({
+                width: '100%',
+                height: '200px',
+                placeholder: "Select Model",
+                allowClear: true,
+                "language": {
+                    "noResults": function(){
+                        return '{{__('text.No results found')}}';
+                    }
+                },
+            });
+
+            $(document).on('change', ".js-data-example-ajax3", function(e){
 
                 var current = $(this);
                 var row_id = current.parent().parent().data('id');
 
-                var color = current.val();
+                var model = current.val();
+                var color = current.parent().parent().find('.color').find('select').val();
 
                 var price_based_option = current.parent().parent().find('#price_based_option').val();
                 var base_price = current.parent().parent().find('#base_price').val();
@@ -1403,7 +1456,7 @@
                 var ladderband = current.parent().parent().find('#ladderband').val();
                 current.parent().parent().find('#area_conflict').val(0);
 
-                if(width && height && color && product)
+                if(width && height && color && model && product)
                 {
                     if($(this).parent().parent().find('.suppliers').hasClass('hide'))
                     {
@@ -1416,7 +1469,259 @@
 
                     $.ajax({
                         type:"GET",
-                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height + "&margin=" + margin,
+                        data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
+                        url: "<?php echo url('/aanbieder/get-price')?>",
+                        success: function(data) {
+
+                            if(typeof data[0].value !== 'undefined')
+                            {
+
+                                if(data[0].value === 'both')
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        html: 'Width & Height are greater than max values <br> Max Width: '+data[0].max_width+'<br> Max Height: '+data[0].max_height,
+                                    });
+
+                                    current.parent().parent().find('.price').text('');
+                                    current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#rate').val('');
+                                    current.parent().parent().find('#basic_price').val('');
+                                    current.parent().parent().find('#area_conflict').val(3);
+                                }
+                                else if(data[0].value === 'x_axis')
+                                {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        html: 'Width is greater than max value <br> Max Width: '+data[0].max_width,
+                                    });
+
+                                    current.parent().parent().find('.price').text('');
+                                    current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#rate').val('');
+                                    current.parent().parent().find('#basic_price').val('');
+                                    current.parent().parent().find('#area_conflict').val(1);
+                                }
+                                else if(data[0].value === 'y_axis')
+                                {
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '{{__('text.Oops...')}}',
+                                        html: 'Height is greater than max value <br> Max Height: '+data[0].max_height,
+                                    });
+
+                                    current.parent().parent().find('.price').text('');
+                                    current.parent().parent().find('#row_total').val('');
+                                    current.parent().parent().find('#rate').val('');
+                                    current.parent().parent().find('#basic_price').val('');
+                                    current.parent().parent().find('#area_conflict').val(2);
+                                }
+                                else
+                                {
+                                    if(price_based_option == 1)
+                                    {
+                                        var price = data[0].value;
+                                        var org = data[0].value;
+                                    }
+                                    else
+                                    {
+                                        var price = base_price;
+                                        var org = base_price;
+                                    }
+
+                                    if(margin == 1)
+                                    {
+                                        if(data[2])
+                                        {
+                                            price = parseFloat(price);
+                                            var supplier_margin = data[2].margin;
+                                            var retailer_margin = data[2].retailer_margin;
+
+                                            if(supplier_margin && retailer_margin)
+                                            {
+                                                price = (price / supplier_margin) * retailer_margin;
+                                                price = price.toFixed(2);
+                                            }
+                                        }
+                                    }
+
+                                    var features = '';
+                                    var f_value = 0;
+
+                                    $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+
+                                    if(ladderband == 1)
+                                    {
+                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
+                                            '<option value="0">No</option>\n' +
+                                            '<option value="1">Yes</option>\n' +
+                                            '</select>\n' +
+                                            '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
+                                            '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '</div><a data-id="'+ row_id +'" class="info ladderband-btn hide">Info</a></div>\n';
+
+                                        features = features + content;
+                                    }
+
+                                    $.each(data[1], function(index, value) {
+
+                                        var opt = '<option value="0">Select Feature</option>';
+
+                                        $.each(value.features, function(index1, value1) {
+
+                                            opt = opt + '<option value="'+value1.id+'">'+value1.title+'</option>';
+
+                                        });
+
+                                        if(value.comment_box == 1)
+                                        {
+                                            var icon = '<a data-feature="'+value.id+'" class="info comment-btn">Info</a>';
+                                        }
+                                        else
+                                        {
+                                            var icon = '';
+                                        }
+
+                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
+                                            '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
+                                            '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                            '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '</div>' + icon + '</div>\n';
+
+                                        features = features + content;
+
+                                    });
+
+                                    if($('#menu1').find(`[data-id='${row_id}']`).length > 0)
+                                    {
+                                        $('#menu1').find(`[data-id='${row_id}']`).remove();
+                                    }
+
+                                    $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
+                                        '\n' +
+                                        '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                        '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                        '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+                                        '</div></div>' + features +
+                                        '</div>');
+
+                                    if(data[3].max_size)
+                                    {
+                                        var sq = (width * height) / 10000;
+                                        var max_size = data[3].max_size;
+
+                                        if(sq > max_size)
+                                        {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: '{{__('text.Oops...')}}',
+                                                text: 'Area is greater than max size: ' + max_size,
+                                            });
+
+                                            current.parent().find('.f_area').val(1);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        current.parent().find('.f_area').val(0);
+                                    }
+
+                                    /*var impact_value = current.parent().parent().find('.model').find('.model_impact_value').val();*/
+                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
+
+                                    /*price = price - impact_value;*/
+
+                                    if(data[3].price_impact == 1)
+                                    {
+                                        if(data[3].impact_type == 0)
+                                        {
+                                            var impact_value = data[3].value;
+                                            impact_value = parseFloat(impact_value).toFixed(2);
+                                            price = parseFloat(price) + parseFloat(impact_value);
+                                            price = price.toFixed(2);
+                                        }
+                                        else
+                                        {
+                                            var impact_value = data[3].value;
+                                            var per = (impact_value)/100;
+                                            impact_value = basic_price * per;
+                                            impact_value = parseFloat(impact_value).toFixed(2);
+                                            price = parseFloat(price) + parseFloat(impact_value);
+                                            price = price.toFixed(2);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var impact_value = 0;
+                                        price = parseFloat(price) + parseFloat(impact_value);
+                                        price = price.toFixed(2);
+                                    }
+
+                                    current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
+                                    current.parent().parent().find('.price').text('€ ' + Math.round(price));
+                                    current.parent().parent().find('#row_total').val(price);
+                                    current.parent().parent().find('#rate').val(price);
+                                    current.parent().parent().find('#basic_price').val(price);
+                                }
+                            }
+                            else
+                            {
+                                current.parent().parent().find('.price').text('');
+                                current.parent().parent().find('#row_total').val('');
+                                current.parent().parent().find('#rate').val('');
+                                current.parent().parent().find('#basic_price').val('');
+                            }
+
+                            calculate_total();
+                        }
+                    });
+                }
+
+            });
+
+            $(document).on('change', ".js-data-example-ajax2", function(e){
+
+                var current = $(this);
+                var row_id = current.parent().parent().data('id');
+
+                var color = current.val();
+                var model = current.parent().parent().find('.model').find('select').val();
+
+                var price_based_option = current.parent().parent().find('#price_based_option').val();
+                var base_price = current.parent().parent().find('#base_price').val();
+
+                var width = current.parent().parent().find('.width').find('.m-input').val();
+                width = width.replace(/\,/g, '.');
+
+                var height = current.parent().parent().find('.height').find('.m-input').val();
+                height = height.replace(/\,/g, '.');
+
+                var product = current.parent().parent().find('.products').find('select').val();
+                var ladderband = current.parent().parent().find('#ladderband').val();
+                current.parent().parent().find('#area_conflict').val(0);
+
+                if(width && height && color && model && product)
+                {
+                    if($(this).parent().parent().find('.suppliers').hasClass('hide'))
+                    {
+                        var margin = 0;
+                    }
+                    else
+                    {
+                        var margin = 1;
+                    }
+
+                    $.ajax({
+                        type:"GET",
+                        data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
@@ -1561,6 +1866,59 @@
                                         '</div></div>' + features +
                                         '</div>');
 
+                                    if(data[3].max_size)
+                                    {
+                                        var sq = (width * height) / 10000;
+                                        var max_size = data[3].max_size;
+
+                                        if(sq > max_size)
+                                        {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: '{{__('text.Oops...')}}',
+                                                text: 'Area is greater than max size: ' + max_size,
+                                            });
+
+                                            current.parent().find('.f_area').val(1);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        current.parent().find('.f_area').val(0);
+                                    }
+
+                                    /*var impact_value = current.parent().parent().find('.model').find('.model_impact_value').val();*/
+                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
+
+                                    /*price = price - impact_value;*/
+
+                                    if(data[3].price_impact == 1)
+                                    {
+                                        if(data[3].impact_type == 0)
+                                        {
+                                            var impact_value = data[3].value;
+                                            impact_value = parseFloat(impact_value).toFixed(2);
+                                            price = parseFloat(price) + parseFloat(impact_value);
+                                            price = price.toFixed(2);
+                                        }
+                                        else
+                                        {
+                                            var impact_value = data[3].value;
+                                            var per = (impact_value)/100;
+                                            impact_value = basic_price * per;
+                                            impact_value = parseFloat(impact_value).toFixed(2);
+                                            price = parseFloat(price) + parseFloat(impact_value);
+                                            price = price.toFixed(2);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var impact_value = 0;
+                                        price = parseFloat(price) + parseFloat(impact_value);
+                                        price = price.toFixed(2);
+                                    }
+
+                                    current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
                                     current.parent().parent().find('#rate').val(price);
@@ -1598,7 +1956,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null)
+            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model_impact_value = null,model = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1654,6 +2012,14 @@
                         '                                                                    <option value=""></option>\n' +
                         '\n' +
                         '                                                                </select>\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td class="model">\n' +
+                        '                                                                <select name="models[]" class="js-data-example-ajax3">\n' +
+                        '\n' +
+                        '                                                                    <option value=""></option>\n' +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                                    <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="">\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="width" style="width: 80px;">\n' +
                         '                                                                <div class="m-box">\n' +
@@ -1718,6 +2084,18 @@
                             }
                         },
                     });
+
+                    last_row.find(".js-data-example-ajax3").select2({
+                        width: '100%',
+                        height: '200px',
+                        placeholder: "Select Model",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function(){
+                                return '{{__('text.No results found')}}';
+                            }
+                        },
+                    });
                 }
                 else
                 {
@@ -1758,6 +2136,14 @@
                         '\n' +
                         '                                                                </select>\n' +
                         '                                                            </td>\n' +
+                        '                                                            <td class="model">\n' +
+                        '                                                                <select name="models[]" class="js-data-example-ajax3">\n' +
+                        '\n' +
+                        models +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                                    <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="'+model_impact_value+'">\n' +
+                        '                                                            </td>\n' +
                         '                                                            <td class="width" style="width: 80px;">\n' +
                         '                                                                <div class="m-box">\n' +
                         '                                                                    <input '+width_readonly+' value="'+width+'" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
@@ -1787,6 +2173,7 @@
                     last_row.find('.js-data-example-ajax').val(product);
                     last_row.find('.js-data-example-ajax1').val(supplier);
                     last_row.find('.js-data-example-ajax2').val(color);
+                    last_row.find('.js-data-example-ajax3').val(model);
 
                     if(features)
                     {
@@ -1874,6 +2261,18 @@
                         width: '100%',
                         height: '200px',
                         placeholder: "Select Color",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function(){
+                                return '{{__('text.No results found')}}';
+                            }
+                        },
+                    });
+
+                    last_row.find(".js-data-example-ajax3").select2({
+                        width: '100%',
+                        height: '200px',
+                        placeholder: "Select Model",
                         allowClear: true,
                         "language": {
                             "noResults": function(){
@@ -2137,6 +2536,9 @@
                 var supplier = current.find('.js-data-example-ajax1').val();
                 var colors = current.find('.js-data-example-ajax2').html();
                 var color = current.find('.js-data-example-ajax2').val();
+                var models = current.find('.js-data-example-ajax3').html();
+                var model = current.find('.js-data-example-ajax3').val();
+                var model_impact_value = current.find('.model_impact_value').val();
                 var width = current.find('.width').find('.m-input').val();
                 var width_unit = current.find('.width').find('.measure-unit').val();
                 var height = current.find('.height').find('.m-input').val();
@@ -2161,7 +2563,7 @@
                     width_readonly = 'readonly';
                 }
 
-                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,delivery_days,price_based_option,base_price,width_readonly,height_readonly);
+                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,models,model,model_impact_value,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,delivery_days,price_based_option,base_price,width_readonly,height_readonly);
 
             });
 
@@ -2304,11 +2706,12 @@
                 height = height.replace(/\,/g, '.');
 
                 var color = current.parent().parent().parent().find('.color').find('select').val();
+                var model = current.parent().parent().parent().find('.model').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
                 current.parent().parent().parent().find('#area_conflict').val(0);
 
-                if(width && height && color && product)
+                if(width && height && color && model && product)
                 {
                     if($(this).parent().parent().parent().find('.suppliers').hasClass('hide'))
                     {
@@ -2321,7 +2724,7 @@
 
                     $.ajax({
                         type:"GET",
-                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height + "&margin=" + margin,
+                        data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
@@ -2464,6 +2867,59 @@
                                         '</div></div>' + features +
                                         '</div>');
 
+                                    if(data[3].max_size)
+                                    {
+                                        var sq = (width * height) / 10000;
+                                        var max_size = data[3].max_size;
+
+                                        if(sq > max_size)
+                                        {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: '{{__('text.Oops...')}}',
+                                                text: 'Area is greater than max size: ' + max_size,
+                                            });
+
+                                            current.parent().find('.f_area').val(1);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        current.parent().find('.f_area').val(0);
+                                    }
+
+                                    /*var impact_value = current.parent().parent().parent().find('.model').find('.model_impact_value').val();*/
+                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
+
+                                    /*price = price - impact_value;*/
+
+                                    if(data[3].price_impact == 1)
+                                    {
+                                        if(data[3].impact_type == 0)
+                                        {
+                                            var impact_value = data[3].value;
+                                            impact_value = parseFloat(impact_value).toFixed(2);
+                                            price = parseFloat(price) + parseFloat(impact_value);
+                                            price = price.toFixed(2);
+                                        }
+                                        else
+                                        {
+                                            var impact_value = data[3].value;
+                                            var per = (impact_value)/100;
+                                            impact_value = basic_price * per;
+                                            impact_value = parseFloat(impact_value).toFixed(2);
+                                            price = parseFloat(price) + parseFloat(impact_value);
+                                            price = price.toFixed(2);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var impact_value = 0;
+                                        price = parseFloat(price) + parseFloat(impact_value);
+                                        price = price.toFixed(2);
+                                    }
+
+                                    current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                     current.parent().parent().parent().find('#rate').val(price);
@@ -2501,11 +2957,12 @@
                 width = width.replace(/\,/g, '.');
 
                 var color = current.parent().parent().parent().find('.color').find('select').val();
+                var model = current.parent().parent().parent().find('.model').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
                 current.parent().parent().parent().find('#area_conflict').val(0);
 
-                if(width && height && color && product)
+                if(width && height && color && model && product)
                 {
                     if($(this).parent().parent().parent().find('.suppliers').hasClass('hide'))
                     {
@@ -2518,7 +2975,7 @@
 
                     $.ajax({
                         type:"GET",
-                        data: "product=" + product + "&color=" + color + "&width=" + width + "&height=" + height + "&margin=" + margin,
+                        data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
                         url: "<?php echo url('/aanbieder/get-price')?>",
                         success: function(data) {
 
@@ -2661,6 +3118,59 @@
                                         '</div></div>' + features +
                                         '</div>');
 
+                                    if(data[3].max_size)
+                                    {
+                                        var sq = (width * height) / 10000;
+                                        var max_size = data[3].max_size;
+
+                                        if(sq > max_size)
+                                        {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: '{{__('text.Oops...')}}',
+                                                text: 'Area is greater than max size: ' + max_size,
+                                            });
+
+                                            current.parent().find('.f_area').val(1);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        current.parent().find('.f_area').val(0);
+                                    }
+
+                                    /*var impact_value = current.parent().parent().parent().find('.model').find('.model_impact_value').val();*/
+                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
+
+                                    /*price = price - impact_value;*/
+
+                                    if(data[3].price_impact == 1)
+                                    {
+                                        if(data[3].impact_type == 0)
+                                        {
+                                            var impact_value = data[3].value;
+                                            impact_value = parseFloat(impact_value).toFixed(2);
+                                            price = parseFloat(price) + parseFloat(impact_value);
+                                            price = price.toFixed(2);
+                                        }
+                                        else
+                                        {
+                                            var impact_value = data[3].value;
+                                            var per = (impact_value)/100;
+                                            impact_value = basic_price * per;
+                                            impact_value = parseFloat(impact_value).toFixed(2);
+                                            price = parseFloat(price) + parseFloat(impact_value);
+                                            price = price.toFixed(2);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var impact_value = 0;
+                                        price = parseFloat(price) + parseFloat(impact_value);
+                                        price = price.toFixed(2);
+                                    }
+
+                                    current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                     current.parent().parent().parent().find('#rate').val(price);

@@ -414,6 +414,7 @@ class ProductController extends Controller
             product_ladderbands::whereIn('id',$removed_ladderband)->delete();
             colors::whereIn('id',$removed_colors)->delete();
             product_models::whereIn('id',$removed1)->delete();
+            model_features::whereIn('model_id',$removed1)->delete();
 
             $cat = Products::where('id',$request->cat_id)->first();
 
@@ -501,31 +502,71 @@ class ProductController extends Controller
             }
 
             $model_ids = product_models::where('product_id',$request->cat_id)->pluck('id');
-            product_models::where('product_id',$request->cat_id)->delete();
-            model_features::whereIn('model_id',$model_ids)->delete();
+            model_features::whereIn('model_id',$model_ids)->whereIn('product_feature_id',$removed)->delete();
 
             foreach ($models as $m => $temp)
             {
-                if($temp != NULL && $request->model_values[$m] != NULL) {
-                    $model = new product_models;
-                    $model->product_id = $request->cat_id;
-                    $model->model = $temp;
-                    $model->value = $request->model_values[$m];
-                    $model->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
-                    $model->price_impact = $request->model_price_impact[$m];
-                    $model->impact_type = $request->model_impact_type[$m];
-                    $model->save();
+                $model_check = product_models::where('product_id',$request->cat_id)->skip($m)->first();
+
+                if($model_check)
+                {
+                    if($temp != NULL && $request->model_values[$m] != NULL)
+                    {
+                        $model_check->model = $temp;
+                        $model_check->value = $request->model_values[$m];
+                        $model_check->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model_check->price_impact = $request->model_price_impact[$m];
+                        $model_check->impact_type = $request->model_impact_type[$m];
+                        $model_check->save();
+                    }
 
                     foreach ($feature_row as $a => $abc)
                     {
+                        $model_features_check = model_features::where('model_id',$model_check->id)->skip($a)->first();
                         $selected_feature = 'selected_model_feature' . $abc;
                         $link = $request->$selected_feature[$m];
 
-                        $model_feature = new model_features;
-                        $model_feature->model_id = $model->id;
-                        $model_feature->product_feature_id = $feature_id[$a];
-                        $model_feature->linked = $link;
-                        $model_feature->save();
+                        if($model_features_check)
+                        {
+                            $model_features_check->model_id = $model_check->id;
+                            $model_features_check->product_feature_id = $feature_id[$a];
+                            $model_features_check->linked = $link;
+                            $model_features_check->save();
+                        }
+                        else
+                        {
+                            $model_feature = new model_features;
+                            $model_feature->model_id = $model_check->id;
+                            $model_feature->product_feature_id = $feature_id[$a];
+                            $model_feature->linked = $link;
+                            $model_feature->save();
+                        }
+                    }
+
+                }
+                else
+                {
+                    if($temp != NULL && $request->model_values[$m] != NULL) {
+                        $model = new product_models;
+                        $model->product_id = $request->cat_id;
+                        $model->model = $temp;
+                        $model->value = $request->model_values[$m];
+                        $model->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model->price_impact = $request->model_price_impact[$m];
+                        $model->impact_type = $request->model_impact_type[$m];
+                        $model->save();
+
+                        foreach ($feature_row as $a => $abc)
+                        {
+                            $selected_feature = 'selected_model_feature' . $abc;
+                            $link = $request->$selected_feature[$m];
+
+                            $model_feature = new model_features;
+                            $model_feature->model_id = $model->id;
+                            $model_feature->product_feature_id = $feature_id[$a];
+                            $model_feature->linked = $link;
+                            $model_feature->save();
+                        }
                     }
                 }
             }

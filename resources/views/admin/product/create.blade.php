@@ -1436,18 +1436,18 @@
 
         });
 
-        /*var rem_mod = [];*/
+        var rem_mod = [];
 
         $('body').on('click', '.remove-model' ,function()
         {
-            /*var id = $(this).data('id');*/
+            var id = $(this).data('id');
             var model_row = $(this).parent().parent().data('id');
 
-            /*if(id)
+            if(id)
             {
                 rem_mod.push(id);
                 $('#removed_rows1').val(rem_mod);
-            }*/
+            }
 
             $('#models-features-tables').find("table[data-id='" + model_row + "']").remove();
             $('.model_box').find("[data-id='" + model_row + "']").remove();

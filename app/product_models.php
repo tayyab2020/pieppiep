@@ -13,4 +13,9 @@ class product_models extends Model
     {
         return $this->hasMany('App\model_features','model_id','id');
     }
+
+    public function product()
+    {
+        return $this->belongsTo('App\Products');
+    }
 }

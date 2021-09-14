@@ -10,6 +10,7 @@ use App\custom_quotations_data;
 use App\customers_details;
 use App\Jobs\SendOrder;
 use App\Jobs\UpdateDates;
+use App\model_features;
 use App\product_ladderbands;
 use App\features;
 use App\handyman_quotes;
@@ -23,6 +24,7 @@ use App\new_quotations_features;
 use App\new_quotations_sub_products;
 use App\product;
 use App\product_features;
+use App\product_models;
 use App\Products;
 use App\quotation_invoices_data;
 use App\quotation_invoices;
@@ -161,7 +163,7 @@ class UserController extends Controller
 
     public function GetColors(Request $request)
     {
-        $data = Products::leftjoin('colors','colors.product_id','=','products.id')->where('products.id',$request->id)->select('products.*','colors.id','colors.title')->get();
+        $data = Products::where('id',$request->id)->with('colors')->with('models')->first();
 
         return $data;
     }
@@ -193,13 +195,21 @@ class UserController extends Controller
             {
                 $features = features::whereHas('features', function($query) use($request)
                 {
-                    $query->where('product_features.product_id','=',$request->product);
+                    $query->leftjoin('model_features','model_features.product_feature_id','=','product_features.id')
+                        ->where('model_features.model_id',$request->model)->where('model_features.linked',1)
+                        ->where('product_features.product_id','=',$request->product)
+                        ->select('product_features.*');
 
                 })->with(['features' => function($query) use($request)
                 {
-                    $query->where('product_features.product_id','=',$request->product);
+                    $query->leftjoin('model_features','model_features.product_feature_id','=','product_features.id')
+                        ->where('model_features.model_id',$request->model)->where('model_features.linked',1)
+                        ->where('product_features.product_id','=',$request->product)
+                        ->select('product_features.*');
 
                 }])->get();
+
+                $model = product_models::where('id',$request->model)->first();
 
                 if($request->margin)
                 {
@@ -210,7 +220,7 @@ class UserController extends Controller
                     $margin = '';
                 }
 
-                $data = array($price,$features,$margin);
+                $data = array($price,$features,$margin,$model);
             }
         }
         else if($max_x_axis < $request->width && $max_y_axis < $request->height)
@@ -2880,6 +2890,8 @@ class UserController extends Controller
             $invoice_items->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
             $invoice_items->product_id = (int)$key;
             $invoice_items->row_id = $row_id;
+            $invoice_items->model_id = $request->models[$i];
+            $invoice_items->model_impact_value = $request->model_impact_value[$i];
             $invoice_items->color = $request->colors[$i];
             $invoice_items->rate = $request->rate[$i];
             $invoice_items->basic_price = $request->basic_price[$i];
