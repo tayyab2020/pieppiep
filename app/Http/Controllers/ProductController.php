@@ -1107,7 +1107,7 @@ class ProductController extends Controller
             }
 
             $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','colors.max_height','price_tables.title as table')->get();
-            $features_data = product_features::where('product_id',$id)->get();
+            $features_data = product_features::where('product_id',$id)->orderBy('heading_id')->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::where('user_id',$user_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();

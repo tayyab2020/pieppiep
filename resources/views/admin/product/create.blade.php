@@ -687,17 +687,17 @@
 
                                                         <div class="form-group" style="margin-bottom: 20px;">
 
-                                                            <div class="row" style="margin: 0;">
+                                                            <div class="row" style="margin: 0;display: flex;justify-content: center;">
 
-                                                                <div style="font-family: monospace;" class="col-sm-3">
+                                                                <div style="font-family: monospace;" class="col-sm-5">
                                                                     <h4>Heading</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Feature</h4>
+                                                                <div style="font-family: monospace;" class="col-sm-5">
+                                                                    <h4>Action</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-1">
+                                                                {{--<div style="font-family: monospace;" class="col-sm-1">
                                                                     <h4>Value</h4>
                                                                 </div>
 
@@ -711,7 +711,7 @@
 
                                                                 <div style="text-align: center;font-family: monospace;" class="col-sm-2">
                                                                     <h4>Impact Type</h4>
-                                                                </div>
+                                                                </div>--}}
 
                                                             </div>
 
@@ -721,15 +721,13 @@
 
                                                                 @if(isset($features_data) && count($features_data) > 0)
 
-                                                                    @foreach($features_data as $f => $key)
+                                                                    @foreach($features_data->unique('heading_id') as $f => $key)
 
-                                                                        <div data-id="{{$f+1}}" class="form-group feature-row" style="margin: 0 0 20px 0;">
+                                                                        <div data-id="{{$f+1}}" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center;">
 
-                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="{{$f+1}}">
+                                                                            <div class="col-sm-5">
 
-                                                                            <div class="col-sm-3">
-
-                                                                                <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">
+                                                                                <select class="form-control validate js-data-example-ajax5">
 
                                                                                     <option value="">Select Feature Heading</option>
 
@@ -743,7 +741,17 @@
 
                                                                             </div>
 
-                                                                            <div class="col-sm-2">
+                                                                            <div style="display:flex;" class="col-sm-5">
+
+                                                                                <button data-id="{{$f+1}}" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>
+
+                                                                                <span class="ui-close remove-feature" data-id="{{$f+1}}" style="margin:0;position: relative;left: 0;right: 0;">X</span>
+
+                                                                                {{--<input class="form-control feature_title" value="{{$key->title}}" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">--}}
+
+                                                                            </div>
+
+                                                                            {{--<div class="col-sm-2">
 
                                                                                 <input class="form-control feature_title" value="{{$key->title}}" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
 
@@ -790,7 +798,7 @@
 
                                                                             <div class="col-xs-1 col-sm-1">
                                                                                 <span class="ui-close remove-feature" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
-                                                                            </div>
+                                                                            </div>--}}
 
                                                                         </div>
 
@@ -798,13 +806,11 @@
 
                                                                 @else
 
-                                                                    <div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;">
+                                                                    <div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center">
 
-                                                                        <input type="hidden" name="f_rows[]" class="f_row" value="1">
+                                                                        <div class="col-sm-5">
 
-                                                                        <div class="col-sm-3">
-
-                                                                            <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">
+                                                                            <select class="form-control validate js-data-example-ajax5">
 
                                                                                 <option value="">Select Feature Heading</option>
 
@@ -818,13 +824,17 @@
 
                                                                         </div>
 
-                                                                        <div class="col-sm-2">
+                                                                        <div style="display:flex;" class="col-sm-5">
 
-                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                            <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>
+
+                                                                            <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>
+
+                                                                            {{--<input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">--}}
 
                                                                         </div>
 
-                                                                        <div class="col-sm-1">
+                                                                        {{--<div class="col-sm-1">
 
                                                                             <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
@@ -860,12 +870,12 @@
                                                                             </label>
                                                                             <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
 
-                                                                        </div>
+                                                                        </div>--}}
 
 
-                                                                        <div class="col-xs-1 col-sm-1">
+                                                                        {{--<div class="col-xs-1 col-sm-1">
                                                                             <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>
-                                                                        </div>
+                                                                        </div>--}}
 
                                                                     </div>
 
@@ -873,13 +883,207 @@
 
                                                             </div>
 
+                                                            @if(isset($features_data))
+
+                                                                <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                    <div style="width: 70%;" class="modal-dialog">
+
+                                                                        <div class="modal-content">
+
+                                                                            <div class="modal-header">
+                                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                <h3 id="myModalLabel">Sub Features</h3>
+                                                                            </div>
+
+                                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
+
+                                                                                <div id="sub-features">
+
+                                                                                    @foreach($features_data->unique('heading_id') as $f => $key)
+
+                                                                                        <div data-id="{{$f+1}}" class="sub-feature-table-container">
+
+                                                                                            <table style="margin: auto;width: 80%;border-collapse: separate;">
+                                                                                                <thead>
+                                                                                                <tr>
+                                                                                                    <th>Feature</th>
+                                                                                                    <th>Value</th>
+                                                                                                    <th>Price Impact</th>
+                                                                                                    <th>Impact Type</th>
+                                                                                                    <th>Remove</th>
+                                                                                                </tr>
+                                                                                                </thead>
+
+                                                                                                <tbody>
+
+                                                                                                @foreach($features_data as $f1 => $key1)
+
+                                                                                                    @if($key->heading_id == $key1->heading_id)
+
+                                                                                                        <tr data-id="{{$f1+1}}">
+                                                                                                            <td>
+                                                                                                                <input type="hidden" name="f_rows[]" class="f_row" value="{{$f1+1}}">
+                                                                                                                <input value="{{$key1->heading_id}}" type="hidden" class="feature_heading" name="feature_headings[]">
+                                                                                                                <input value="{{$key1->title}}" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <input value="{{$key1->value}}" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                    <input type="hidden" name="price_impact[]" id="price_impact" value="{{$key1->price_impact}}">
+
+                                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                                    <label style="margin: 0;" class="switch">
+                                                                                                                        <input class="price_impact" type="checkbox" {{$key1->price_impact ? 'checked' : null}}>
+                                                                                                                        <span class="slider round"></span>
+                                                                                                                    </label>
+                                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                    <input type="hidden" name="impact_type[]" id="impact_type" value="{{$key1->impact_type}}">
+
+                                                                                                                    <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                                                    <label style="margin: 0;" class="switch">
+                                                                                                                        <input class="impact_type" type="checkbox" {{$key1->impact_type ? 'checked' : null}}>
+                                                                                                                        <span class="slider round"></span>
+                                                                                                                    </label>
+                                                                                                                    <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="{{$key1->id}}" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>
+                                                                                                            </td>
+                                                                                                        </tr>
+
+                                                                                                    @endif
+
+                                                                                                @endforeach
+
+                                                                                                </tbody>
+                                                                                            </table>
+
+                                                                                            <div style="margin-top: 20px;" class="col-sm-12 text-center">
+                                                                                                <button data-id="{{$f+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    @endforeach
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            @else
+
+                                                                <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                    <div style="width: 70%;" class="modal-dialog">
+
+                                                                        <div class="modal-content">
+
+                                                                            <div class="modal-header">
+                                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                <h3 id="myModalLabel">Sub Features</h3>
+                                                                            </div>
+
+                                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
+
+                                                                                <div id="sub-features">
+
+                                                                                    <div data-id="1" class="sub-feature-table-container">
+
+                                                                                        <table style="margin: auto;width: 80%;border-collapse: separate;">
+                                                                                            <thead>
+                                                                                            <tr>
+                                                                                                <th>Feature</th>
+                                                                                                <th>Value</th>
+                                                                                                <th>Price Impact</th>
+                                                                                                <th>Impact Type</th>
+                                                                                                <th>Remove</th>
+                                                                                            </tr>
+                                                                                            </thead>
+
+                                                                                            <tbody>
+
+                                                                                            <tr data-id="1">
+                                                                                                <td>
+                                                                                                    <input type="hidden" name="f_rows[]" class="f_row" value="1">
+                                                                                                    <input type="hidden" class="feature_heading" name="feature_headings[]">
+                                                                                                    <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                        <input type="hidden" name="price_impact[]" id="price_impact" value="0">
+
+                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                            <input class="price_impact" type="checkbox">
+                                                                                                            <span class="slider round"></span>
+                                                                                                        </label>
+                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                        <input type="hidden" name="impact_type[]" id="impact_type" value="0">
+
+                                                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                            <input class="impact_type" type="checkbox">
+                                                                                                            <span class="slider round"></span>
+                                                                                                        </label>
+                                                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>
+                                                                                                </td>
+                                                                                            </tr>
+
+                                                                                            </tbody>
+                                                                                        </table>
+
+                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">
+                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            @endif
+
                                                         </div>
 
                                                         <div class="form-group add-color">
                                                             <label class="control-label col-sm-3" for=""></label>
 
                                                             <div class="col-sm-12 text-center">
-                                                                <button class="btn btn-default featured-btn" type="button" id="add-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                                <button class="btn btn-default featured-btn" type="button" id="add-feature-btn"><i class="fa fa-plus"></i> Add More Headings</button>
                                                             </div>
                                                         </div>
 
@@ -1120,7 +1324,7 @@
 
                                                                                                 @if($features_data[$x]->id == $feature->product_feature_id)
 
-                                                                                                    <tr data-id="{{$x+1}}">
+                                                                                                    <tr data-id="{{$x+1}}" data-mainid="{{$s+1}}">
                                                                                                         <td>
                                                                                                             <div style="display: flex;justify-content: center;align-items: center;">
                                                                                                                 <input type="hidden" name="selected_model_feature{{$x+1}}[]" id="price_impact" value="{{$feature->linked}}">
@@ -1313,6 +1517,17 @@
 
     $(document).ready(function() {
 
+        $('body').on('click', '.create-feature-btn' ,function(){
+
+            var id = $(this).data('id');
+            $('#sub-features').children().not(".sub-feature-table-container[data-id='" + id + "']").hide();
+            $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").show();
+
+            $('#myModal1').modal('toggle');
+            $('.modal-backdrop').hide();
+
+        });
+
         $('body').on('click', '.select-feature-btn' ,function(){
 
             var id = $(this).data('id');
@@ -1392,29 +1607,33 @@
                 var id = $(this).data('id');
                 var heading = $(this).find('.js-data-example-ajax5 option:selected').text();
                 var heading_id = $(this).find('.js-data-example-ajax5').val();
-                var row = $(this).find('.f_row').val();
 
                 if(!heading_id)
                 {
                     heading = '';
                 }
 
-                var title = $(this).find('.feature_title').val();
+                $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
 
-                if(title && heading)
-                {
-                    rows += '<tr data-id="'+id+'">' +
-                        '                                                                                 <td>\n' +
-                        '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
-                        '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
-                        '                                                                                <label style="margin: 0;" class="switch">\n' +
-                        '                                                                                    <input class="price_impact" type="checkbox">\n' +
-                        '                                                                                    <span class="slider round"></span>\n' +
-                        '                                                                                </label>\n' +
-                        '                                                                                </div>\n' +
-                        '                                                                                </td>' +
-                        '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>';
-                }
+                    var title = $(this).find('.feature_title').val();
+                    var row = $(this).find('.f_row').val();
+
+                    if(title && heading)
+                    {
+                        rows += '<tr data-id="'+row+'">' +
+                            '                                                                                 <td>\n' +
+                            '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
+                            '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
+                            '                                                                                <label style="margin: 0;" class="switch">\n' +
+                            '                                                                                    <input class="price_impact" type="checkbox">\n' +
+                            '                                                                                    <span class="slider round"></span>\n' +
+                            '                                                                                </label>\n' +
+                            '                                                                                </div>\n' +
+                            '                                                                                </td>' +
+                            '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>';
+                    }
+
+                });
 
             });
 
@@ -1517,30 +1736,34 @@
                     var id = $(this).data('id');
                     var heading = $(this).find('.js-data-example-ajax5 option:selected').text();
                     var heading_id = $(this).find('.js-data-example-ajax5').val();
-                    var row = $(this).find('.f_row').val();
 
                     if(!heading_id)
                     {
                         heading = '';
                     }
 
-                    var title = $(this).find('.feature_title').val();
+                    $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
 
-                    if(title && heading)
-                    {
-                        rows += '<tr data-id="'+id+'">' +
-                            '                                                                                 <td>\n' +
-                            '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
-                            '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
-                            '                                                                                <label style="margin: 0;" class="switch">\n' +
-                            '                                                                                    <input class="price_impact" type="checkbox">\n' +
-                            '                                                                                    <span class="slider round"></span>\n' +
-                            '                                                                                </label>\n' +
-                            '                                                                                </div>\n' +
-                            '                                                                                </td>' +
-                            '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>';
+                        var title = $(this).find('.feature_title').val();
+                        var row = $(this).find('.f_row').val();
 
-                    }
+                        if(title && heading)
+                        {
+                            rows += '<tr data-id="'+row+'">' +
+                                '                                                                                 <td>\n' +
+                                '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
+                                '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
+                                '                                                                                <label style="margin: 0;" class="switch">\n' +
+                                '                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                '                                                                                    <span class="slider round"></span>\n' +
+                                '                                                                                </label>\n' +
+                                '                                                                                </div>\n' +
+                                '                                                                                </td>' +
+                                '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>';
+
+                        }
+
+                    });
 
                 });
 
@@ -1562,81 +1785,111 @@
 
         });
 
-        $('body').on('change', '.js-data-example-ajax5', function()
+        var $selects = $('body').on('change', '.js-data-example-ajax5', function()
         {
             var id = $(this).parent().parent().attr("data-id");
             var heading = $(this).find("option:selected").text();
             var heading_id = $(this).val();
-            var row = $(this).parent().parent().find('.f_row').val();
 
-            if(!heading_id)
-            {
-                heading = '';
+            var selector = this;
+
+            if ($selects.find('option[value=' + heading_id + ']:selected').length > 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'This Heading is already selected!',
+
+                })
+                this.options[0].selected = true;
+
+                $(selector).val('');
+
+                $(selector).select2("destroy");
+
+                $(selector).select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "Select Feature Heading",
+                    allowClear: true,
+                });
             }
-
-            var title = $(this).parent().parent().find('.feature_title').val();
-
-            $('#models-features-tables').find('table', this).each(function (index) {
-
-                if($(this).find('tbody').find("[data-id='" + id + "']").length > 0)
+            else
+            {
+                if(!heading_id)
                 {
-                    if(!title || !heading)
-                    {
-                        $(this).find('tbody').find("[data-id='" + id + "']").hide();
-                    }
-                    else
-                    {
-                        $(this).find('tbody').find("[data-id='" + id + "']").find('td', this).each(function (index) {
-
-                            if(index == 1)
-                            {
-                                $(this).text(heading);
-                            }
-
-                            if(index == 2)
-                            {
-                                $(this).text(title);
-                            }
-
-                        });
-
-                        $(this).find('tbody').find("[data-id='" + id + "']").show();
-                    }
-                }
-                else
-                {
-                    if(title && heading)
-                    {
-                        $(this).find('tbody').append('<tr data-id="'+id+'">' +
-                            '                                                                                 <td>\n' +
-                            '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
-                            '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
-                            '                                                                                <label style="margin: 0;" class="switch">\n' +
-                            '                                                                                    <input class="price_impact" type="checkbox">\n' +
-                            '                                                                                    <span class="slider round"></span>\n' +
-                            '                                                                                </label>\n' +
-                            '                                                                                </div>\n' +
-                            '                                                                                </td>' +
-                            '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>');
-
-                        var $wrapper = $(this).find('tbody');
-
-                        $wrapper.find('tr').sort(function(a, b) {
-                            return +$(a).data('id') - +$(b).data('id');
-                        }).appendTo($wrapper);
-                    }
+                    heading = '';
                 }
 
-            });
+                $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
+
+                    $(this).find('.feature_heading').val(heading_id);
+                    var title = $(this).find('.feature_title').val();
+                    var f_row = $(this).find('.f_row').val();
+
+                    $('#models-features-tables').find('table', this).each(function (index) {
+
+                        if($(this).find('tbody').find("[data-id='" + f_row + "']").length > 0)
+                        {
+                            if(!title || !heading)
+                            {
+                                $(this).find('tbody').find("[data-id='" + f_row + "']").hide();
+                            }
+                            else
+                            {
+                                $(this).find('tbody').find("[data-id='" + f_row + "']").find('td', this).each(function (index) {
+
+                                    if(index == 1)
+                                    {
+                                        $(this).text(heading);
+                                    }
+
+                                    if(index == 2)
+                                    {
+                                        $(this).text(title);
+                                    }
+
+                                });
+
+                                $(this).find('tbody').find("[data-id='" + f_row + "']").show();
+                            }
+                        }
+                        else
+                        {
+                            if(title && heading)
+                            {
+                                $(this).find('tbody').append('<tr data-id="'+f_row+'">' +
+                                    '                                                                                 <td>\n' +
+                                    '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
+                                    '                                                                                <input type="hidden" name="selected_model_feature'+f_row+'[]" id="price_impact" value="0">\n' +
+                                    '                                                                                <label style="margin: 0;" class="switch">\n' +
+                                    '                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                    '                                                                                    <span class="slider round"></span>\n' +
+                                    '                                                                                </label>\n' +
+                                    '                                                                                </div>\n' +
+                                    '                                                                                </td>' +
+                                    '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>');
+
+                                var $wrapper = $(this).find('tbody');
+
+                                $wrapper.find('tr').sort(function(a, b) {
+                                    return +$(a).data('id') - +$(b).data('id');
+                                }).appendTo($wrapper);
+                            }
+                        }
+
+                    });
+
+                });
+            }
         });
 
         $('body').on('input', '.feature_title', function() {
 
-            var id = $(this).parent().parent().attr("data-id");
+            var id = $(this).parent().find('.f_row').val();
+            var main = $(this).parent().parent().parent().parent().parent().data('id');
             var title = $(this).val();
-            var heading = $(this).parent().parent().find('.js-data-example-ajax5 option:selected').text();
-            var heading_id = $(this).parent().parent().find('.js-data-example-ajax5').val();
-            var row = $(this).parent().parent().find('.f_row').val();
+            var heading = $('.feature_box').find(".feature-row[data-id='" + main + "']").find('.js-data-example-ajax5 option:selected').text();
+            var heading_id = $('.feature_box').find(".feature-row[data-id='" + main + "']").find('.js-data-example-ajax5').val();
 
             if(!heading_id)
             {
@@ -1677,7 +1930,7 @@
                         $(this).find('tbody').append('<tr data-id="'+id+'">' +
                             '                                                                                 <td>\n' +
                             '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
-                            '                                                                                <input type="hidden" name="selected_model_feature'+row+'[]" id="price_impact" value="0">\n' +
+                            '                                                                                <input type="hidden" name="selected_model_feature'+id+'[]" id="price_impact" value="0">\n' +
                             '                                                                                <label style="margin: 0;" class="switch">\n' +
                             '                                                                                    <input class="price_impact" type="checkbox">\n' +
                             '                                                                                    <span class="slider round"></span>\n' +
@@ -2245,18 +2498,91 @@
 
         });
 
-        $("#add-feature-btn").on('click',function() {
+        $(document).on('click', "#add-sub-feature-btn", function(e){
 
-            var feature_row = $('.feature_box').find('.feature-row').last().data('id');
+            var id = $(this).data('id');
+            var heading = $('.feature_box').find(".feature-row[data-id='" + id + "']").find('.js-data-example-ajax5').val();
+            var feature_row = null;
+
+            $('#sub-features').find(".sub-feature-table-container").each(function() {
+
+                $(this).find('table tbody tr').each(function() {
+
+                    var value = parseInt($(this).find('.f_row').val());
+                    feature_row = (value > feature_row) ? value : feature_row;
+
+                });
+            });
+
             feature_row = feature_row + 1;
 
-            $(".feature_box").append('<div data-id="'+feature_row+'" class="form-group feature-row" style="margin: 0 0 20px 0;">\n' +
+            $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table').append('<tr data-id="'+feature_row+'">\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+feature_row+'">' +
+                '                                                                                            <input type="hidden" class="feature_heading" name="feature_headings[]" value="'+heading+'">\n' +
+                '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
                 '\n' +
-                '                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+feature_row+'">\n' +
+                '                                                                                                <input type="hidden" name="price_impact[]" id="price_impact" value="0">\n' +
                 '\n' +
-                '                                                                            <div class="col-sm-3">\n' +
+                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                 '\n' +
-                '                                                                            <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                '\n' +
+                '                                                                                                <input type="hidden" name="impact_type[]" id="impact_type" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                    </tr>');
+
+        });
+
+        $("#add-feature-btn").on('click',function() {
+
+            var heading_row = $('.feature_box').find('.feature-row').last().data('id');
+            heading_row = heading_row + 1;
+            var f_row = null;
+
+            $('#sub-features').find(".sub-feature-table-container").each(function() {
+
+                $(this).find('table tbody tr').each(function() {
+
+                    var value = parseInt($(this).find('.f_row').val());
+                    f_row = (value > f_row) ? value : f_row;
+
+                });
+            });
+
+            f_row = f_row + 1;
+
+            $(".feature_box").append('<div data-id="' + heading_row + '" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+                '\n' +
+                '                                                                            <div class="col-sm-5">\n' +
+                '\n' +
+                '                                                                            <select class="form-control validate js-data-example-ajax5">\n' +
                 '\n' +
                 '                                                                                <option value="">Select Feature Heading</option>\n' +
                 '\n' +
@@ -2268,15 +2594,17 @@
                 '\n' +
                 '                                                                            </select>\n' +
                 '\n' +
-                '                                                                        </div>\n'+
+                '                                                                        </div>\n' +
                 '\n' +
-                '<div class="col-sm-2">\n' +
+                '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
                 '\n' +
-                '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '                                                                        <button data-id="' + heading_row + '" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
+                '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
+                /*'                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +*/
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
-                '                                                                    <div class="col-sm-1">\n' +
+                /*'                                                                    <div class="col-sm-1">\n' +
                 '\n' +
                 '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '\n' +
@@ -2312,16 +2640,73 @@
                 '                                                                        </label>\n' +
                 '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
                 '\n' +
-                '                                                                    </div>\n' +
-                '\n' +
-                '\n' +
+                '                                                                    </div>\n' +*/
+                /*'\n' +
                 '                                                                    <div class="col-xs-1 col-sm-1">\n' +
                 '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>\n' +
-                '                                                                    </div>\n'+
+                '                                                                    </div>\n'+*/
                 '\n' +
                 '                </div>');
 
-
+            $('#sub-features').append('<div data-id="'+heading_row+'" class="sub-feature-table-container">\n' +
+                '\n' +
+                '                                                                                    <table style="margin: auto;width: 80%;border-collapse: separate;">\n' +
+                '                                                                                        <thead>\n' +
+                '                                                                                        <tr>\n' +
+                '                                                                                            <th>Feature</th>\n' +
+                '                                                                                            <th>Value</th>\n' +
+                '                                                                                            <th>Price Impact</th>\n' +
+                '                                                                                            <th>Impact Type</th>\n' +
+                '                                                                                            <th>Remove</th>\n' +
+                '                                                                                        </tr>\n' +
+                '                                                                                        </thead>\n' +
+                '\n' +
+                '                                                                                        <tbody>' +
+                '                                                                                   <tr data-id="'+f_row+'">\n' +
+                '\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
+                '                                                                                            <input type="hidden" class="feature_heading" name="feature_headings[]">\n' +
+                '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                '\n' +
+                '                                                                                                <input type="hidden" name="price_impact[]" id="price_impact" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                '\n' +
+                '                                                                                                <input type="hidden" name="impact_type[]" id="impact_type" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                    </tr></tbody></table>' +
+                '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                '                                                                                    </div></div>');
 
             $(".js-data-example-ajax5").select2({
                 width: '100%',
@@ -2502,15 +2887,102 @@
 
         });
 
-        $('body').on('click', '.remove-feature' ,function() {
+        $('body').on('click', '.remove-sub-feature' ,function() {
 
             var id = $(this).data('id');
-            var row_id = $(this).parent().parent().find('.f_row').val();
+            var row_id = $(this).parent().parent().parent().data('id');
+            var heading_id = $(this).parent().parent().parent().parent().parent().parent().data('id');
+            var heading = $('.feature_box').find(".feature-row[data-id='" + heading_id + "']").find('.js-data-example-ajax5').val();
+            var f_row = null;
+
+            $('#sub-features').find(".sub-feature-table-container").each(function() {
+
+                $(this).find('table tbody tr').each(function() {
+
+                    var value = parseInt($(this).find('.f_row').val());
+                    f_row = (value > f_row) ? value : f_row;
+
+                });
+            });
+
+            f_row = f_row + 1;
+
             $('#models-features-tables table tbody').find("[data-id='" + row_id + "']").remove();
 
             if(id)
             {
                 rem_arr.push(id);
+                $('#removed_rows').val(rem_arr);
+            }
+
+            $('#sub-features').find(".sub-feature-table-container[data-id='" + heading_id + "']").find("table tbody tr[data-id='" + row_id + "']").remove();
+
+            if($('#sub-features').find(".sub-feature-table-container[data-id='" + heading_id + "']").find("table tbody tr").length == 0)
+            {
+
+                $('#sub-features').find(".sub-feature-table-container[data-id='" + heading_id + "']").find("table").append('<tr data-id="1">\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
+                    '                                                                                            <input type="hidden" class="feature_heading" name="feature_headings[]" value="'+heading+'">\n' +
+                    '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                    '\n' +
+                    '                                                                                                <input type="hidden" name="price_impact[]" id="price_impact" value="0">\n' +
+                    '\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                    '                                                                                                    <span class="slider round"></span>\n' +
+                    '                                                                                                </label>\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                                                            </div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                    '\n' +
+                    '                                                                                                <input type="hidden" name="impact_type[]" id="impact_type" value="0">\n' +
+                    '\n' +
+                    '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                    '                                                                                                    <span class="slider round"></span>\n' +
+                    '                                                                                                </label>\n' +
+                    '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '\n' +
+                    '                                                                                            </div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                    </tr>');
+
+            }
+
+        });
+
+        $('body').on('click', '.remove-feature' ,function() {
+
+            var id = $(this).data('id');
+            var row_id = $(this).parent().parent().data('id');
+
+            $('#sub-features').find(".sub-feature-table-container[data-id='" + row_id + "']").find('table tbody tr').each(function (index) {
+
+                var row = $(this).find('.f_row').val();
+                rem_arr.push($(this).find('.remove-sub-feature').data('id'));
+                $('#models-features-tables table tbody').find("[data-id='" + row + "']").remove();
+
+            });
+
+            $('#sub-features').find(".sub-feature-table-container[data-id='" + row_id + "']").remove();
+
+            if(id)
+            {
                 $('#removed_rows').val(rem_arr);
             }
 
@@ -2521,13 +2993,13 @@
 
             if($(".feature_box .form-group").length == 0)
             {
-                $(".feature_box").append('<div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;">\n' +
+                $(".feature_box").append('<div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
                     '\n' +
                     '                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="1">\n' +
                     '\n' +
-                    '                                                                            <div class="col-sm-3">\n' +
+                    '                                                                            <div class="col-sm-5">\n' +
                     '\n' +
-                    '                                                                            <select class="form-control validate js-data-example-ajax5" name="feature_headings[]">\n' +
+                    '                                                                            <select class="form-control validate js-data-example-ajax5">\n' +
                     '\n' +
                     '                                                                                <option value="">Select Feature Heading</option>\n' +
                     '\n' +
@@ -2541,13 +3013,15 @@
                     '\n' +
                     '                                                                        </div>\n'+
                     '\n' +
-                    '                                                                    <div class="col-sm-2">\n' +
+                    '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
                     '\n' +
-                    '                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
+                    '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
+                    /*'                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +*/
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
-                    '                                                                    <div class="col-sm-1">\n' +
+                    /*'                                                                    <div class="col-sm-1">\n' +
                     '\n' +
                     '                                                                        <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '\n' +
@@ -2588,7 +3062,7 @@
                     '\n' +
                     '                                                                    <div class="col-xs-1 col-sm-1">\n' +
                     '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;right:70%;">X</span>\n' +
-                    '                                                                    </div>\n'+
+                    '                                                                    </div>\n'+*/
                     '\n' +
                     '                </div>');
 
@@ -2750,24 +3224,23 @@
 
   .swal2-show
   {
-    padding: 40px;
     width: 30%;
 
   }
 
   .swal2-header
   {
-    font-size: 23px;
+    font-size: 14px;
   }
 
   .swal2-content
   {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .swal2-actions
   {
-    font-size: 16px;
+    font-size: 12px;
   }
 
     .switch {
