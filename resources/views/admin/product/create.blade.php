@@ -892,22 +892,23 @@
 
                                                                             <div class="modal-header">
                                                                                 <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                                                <h3 id="myModalLabel">Sub Features</h3>
+                                                                                <h3 id="myModalLabel">Features</h3>
                                                                             </div>
 
                                                                             <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
 
-                                                                                <div id="sub-features">
+                                                                                <div id="primary-features">
 
                                                                                     @foreach($features_data->unique('heading_id') as $f => $key)
 
-                                                                                        <div data-id="{{$f+1}}" class="sub-feature-table-container">
+                                                                                        <div data-id="{{$f+1}}" class="feature-table-container">
 
-                                                                                            <table style="margin: auto;width: 80%;border-collapse: separate;">
+                                                                                            <table style="margin: auto;width: 95%;border-collapse: separate;">
                                                                                                 <thead>
                                                                                                 <tr>
                                                                                                     <th>Feature</th>
                                                                                                     <th>Value</th>
+                                                                                                    <th>Sub Feature</th>
                                                                                                     <th>Price Impact</th>
                                                                                                     <th>Impact Type</th>
                                                                                                     <th>Remove</th>
@@ -928,6 +929,9 @@
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 <input value="{{$key1->value}}" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <button data-id="{{$f1+1}}" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
@@ -958,7 +962,7 @@
                                                                                                                 </div>
                                                                                                             </td>
                                                                                                             <td>
-                                                                                                                <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="{{$key1->id}}" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>
+                                                                                                                <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="{{$key1->id}}" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
                                                                                                             </td>
                                                                                                         </tr>
 
@@ -970,7 +974,7 @@
                                                                                             </table>
 
                                                                                             <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                                <button data-id="{{$f+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                                                                <button data-id="{{$f+1}}" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
                                                                                             </div>
                                                                                         </div>
 
@@ -994,20 +998,21 @@
 
                                                                             <div class="modal-header">
                                                                                 <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                                                <h3 id="myModalLabel">Sub Features</h3>
+                                                                                <h3 id="myModalLabel">Features</h3>
                                                                             </div>
 
                                                                             <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
 
-                                                                                <div id="sub-features">
+                                                                                <div id="primary-features">
 
-                                                                                    <div data-id="1" class="sub-feature-table-container">
+                                                                                    <div data-id="1" class="feature-table-container">
 
-                                                                                        <table style="margin: auto;width: 80%;border-collapse: separate;">
+                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">
                                                                                             <thead>
                                                                                             <tr>
                                                                                                 <th>Feature</th>
                                                                                                 <th>Value</th>
+                                                                                                <th>Sub Features</th>
                                                                                                 <th>Price Impact</th>
                                                                                                 <th>Impact Type</th>
                                                                                                 <th>Remove</th>
@@ -1024,6 +1029,9 @@
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
@@ -1054,7 +1062,7 @@
                                                                                                     </div>
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>
+                                                                                                    <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
                                                                                                 </td>
                                                                                             </tr>
 
@@ -1062,7 +1070,201 @@
                                                                                         </table>
 
                                                                                         <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            @endif
+
+                                                            @if(isset($sub_features_data))
+
+                                                                <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                    <div style="width: 70%;" class="modal-dialog">
+
+                                                                        <div class="modal-content">
+
+                                                                            <div class="modal-header">
+                                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                <h3 id="myModalLabel">Sub Features</h3>
+                                                                            </div>
+
+                                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
+
+                                                                                <div id="sub-features">
+
+                                                                                    @foreach($sub_features_data->unique('heading_id') as $s => $key)
+
+                                                                                        <div data-id="{{$s+1}}" class="sub-feature-table-container">
+
+                                                                                            <table style="margin: auto;width: 95%;border-collapse: separate;">
+                                                                                                <thead>
+                                                                                                <tr>
+                                                                                                    <th>Feature</th>
+                                                                                                    <th>Value</th>
+                                                                                                    <th>Price Impact</th>
+                                                                                                    <th>Impact Type</th>
+                                                                                                    <th>Remove</th>
+                                                                                                </tr>
+                                                                                                </thead>
+
+                                                                                                <tbody>
+
+                                                                                                @foreach($sub_features_data as $s1 => $key1)
+
+                                                                                                    @if($key->heading_id == $key1->heading_id)
+
+                                                                                                        <tr data-id="{{$s1+1}}">
+                                                                                                            <td>
+                                                                                                                <input type="hidden" name="f_rows1[]" class="f_row1" value="{{$s1+1}}">
+                                                                                                                <input value="{{$key1->heading_id}}" type="hidden" class="feature_heading1" name="feature_headings1[]">
+                                                                                                                <input value="{{$key1->title}}" class="form-control feature_title1" name="features1[]" id="blood_group_slug" placeholder="Sub Feature Title" type="text">
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <input value="{{$key1->value}}" class="form-control feature_value1" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                    <input type="hidden" name="price_impact1[]" id="price_impact" value="{{$key1->price_impact}}">
+
+                                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                                    <label style="margin: 0;" class="switch">
+                                                                                                                        <input class="price_impact" type="checkbox" {{$key1->price_impact ? 'checked' : null}}>
+                                                                                                                        <span class="slider round"></span>
+                                                                                                                    </label>
+                                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                    <input type="hidden" name="impact_type1[]" id="impact_type" value="{{$key1->impact_type}}">
+
+                                                                                                                    <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                                                    <label style="margin: 0;" class="switch">
+                                                                                                                        <input class="impact_type" type="checkbox" {{$key1->impact_type ? 'checked' : null}}>
+                                                                                                                        <span class="slider round"></span>
+                                                                                                                    </label>
+                                                                                                                    <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="{{$key1->id}}" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
+                                                                                                            </td>
+                                                                                                        </tr>
+
+                                                                                                    @endif
+
+                                                                                                @endforeach
+
+                                                                                                </tbody>
+                                                                                            </table>
+
+                                                                                            <div style="margin-top: 20px;" class="col-sm-12 text-center">
+                                                                                                <button data-id="{{$s+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    @endforeach
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            @else
+
+                                                                <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                    <div style="width: 70%;" class="modal-dialog">
+
+                                                                        <div class="modal-content">
+
+                                                                            <div class="modal-header">
+                                                                                <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                <h3 id="myModalLabel">Sub Features</h3>
+                                                                            </div>
+
+                                                                            <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
+
+                                                                                <div id="sub-features">
+
+                                                                                    <div data-id="1" class="sub-feature-table-container">
+
+                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">
+                                                                                            <thead>
+                                                                                            <tr>
+                                                                                                <th>Feature</th>
+                                                                                                <th>Value</th>
+                                                                                                <th>Price Impact</th>
+                                                                                                <th>Impact Type</th>
+                                                                                                <th>Remove</th>
+                                                                                            </tr>
+                                                                                            </thead>
+
+                                                                                            <tbody>
+
+                                                                                            <tr data-id="1">
+                                                                                                <td>
+                                                                                                    <input type="hidden" name="f_rows1[]" class="f_row1" value="1">
+                                                                                                    <input type="hidden" class="feature_heading1" name="feature_headings1[]">
+                                                                                                    <input class="form-control feature_title1" name="features1[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <input class="form-control feature_value1" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                        <input type="hidden" name="price_impact1[]" id="price_impact" value="0">
+
+                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                            <input class="price_impact" type="checkbox">
+                                                                                                            <span class="slider round"></span>
+                                                                                                        </label>
+                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                        <input type="hidden" name="impact_type1[]" id="impact_type" value="0">
+
+                                                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                            <input class="impact_type" type="checkbox">
+                                                                                                            <span class="slider round"></span>
+                                                                                                        </label>
+                                                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
+                                                                                                </td>
+                                                                                            </tr>
+
+                                                                                            </tbody>
+                                                                                        </table>
+
+                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">
+                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>
                                                                                         </div>
                                                                                     </div>
 
@@ -1520,12 +1722,28 @@
         $('body').on('click', '.create-feature-btn' ,function(){
 
             var id = $(this).data('id');
-            $('#sub-features').children().not(".sub-feature-table-container[data-id='" + id + "']").hide();
-            $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").show();
+            $('#primary-features').children().not(".feature-table-container[data-id='" + id + "']").hide();
+            $('#primary-features').find(".feature-table-container[data-id='" + id + "']").show();
 
             $('#myModal1').modal('toggle');
             $('.modal-backdrop').hide();
 
+        });
+
+        $('body').on('click', '.create-sub-feature-btn' ,function(){
+
+            var id = $(this).data('id');
+            $('#sub-features').children().not(".sub-feature-table-container[data-id='" + id + "']").hide();
+            $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").show();
+
+            $('#myModal1').modal('toggle');
+            $('#myModal2').modal('toggle');
+            $('.modal-backdrop').hide();
+
+        });
+
+        $('#myModal1').on('hidden.bs.modal', function () {
+            $('body').addClass('modal-open');
         });
 
         $('body').on('click', '.select-feature-btn' ,function(){
@@ -1613,7 +1831,7 @@
                     heading = '';
                 }
 
-                $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
+                $('#primary-features').find(".feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
 
                     var title = $(this).find('.feature_title').val();
                     var row = $(this).find('.f_row').val();
@@ -1742,7 +1960,7 @@
                         heading = '';
                     }
 
-                    $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
+                    $('#primary-features').find(".feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
 
                         var title = $(this).find('.feature_title').val();
                         var row = $(this).find('.f_row').val();
@@ -1820,7 +2038,7 @@
                     heading = '';
                 }
 
-                $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
+                $('#primary-features').find(".feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
 
                     $(this).find('.feature_heading').val(heading_id);
                     var title = $(this).find('.feature_title').val();
@@ -2498,13 +2716,13 @@
 
         });
 
-        $(document).on('click', "#add-sub-feature-btn", function(e){
+        $(document).on('click', "#add-primary-feature-btn", function(e){
 
             var id = $(this).data('id');
             var heading = $('.feature_box').find(".feature-row[data-id='" + id + "']").find('.js-data-example-ajax5').val();
             var feature_row = null;
 
-            $('#sub-features').find(".sub-feature-table-container").each(function() {
+            $('#primary-features').find(".feature-table-container").each(function() {
 
                 $(this).find('table tbody tr').each(function() {
 
@@ -2516,7 +2734,7 @@
 
             feature_row = feature_row + 1;
 
-            $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table').append('<tr data-id="'+feature_row+'">\n' +
+            $('#primary-features').find(".feature-table-container[data-id='" + id + "']").find('table').append('<tr data-id="'+feature_row+'">\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+feature_row+'">' +
                 '                                                                                            <input type="hidden" class="feature_heading" name="feature_headings[]" value="'+heading+'">\n' +
@@ -2524,6 +2742,9 @@
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <button data-id="'+feature_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
@@ -2554,7 +2775,7 @@
                 '                                                                                            </div>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>\n' +
+                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr>');
 
@@ -2566,7 +2787,7 @@
             heading_row = heading_row + 1;
             var f_row = null;
 
-            $('#sub-features').find(".sub-feature-table-container").each(function() {
+            $('#primary-features').find(".feature-table-container").each(function() {
 
                 $(this).find('table tbody tr').each(function() {
 
@@ -2648,9 +2869,9 @@
                 '\n' +
                 '                </div>');
 
-            $('#sub-features').append('<div data-id="'+heading_row+'" class="sub-feature-table-container">\n' +
+            $('#primary-features').append('<div data-id="'+heading_row+'" class="feature-table-container">\n' +
                 '\n' +
-                '                                                                                    <table style="margin: auto;width: 80%;border-collapse: separate;">\n' +
+                '                                                                                    <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
                 '                                                                                        <thead>\n' +
                 '                                                                                        <tr>\n' +
                 '                                                                                            <th>Feature</th>\n' +
@@ -2671,6 +2892,9 @@
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
@@ -2701,11 +2925,11 @@
                 '                                                                                            </div>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>\n' +
+                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr></tbody></table>' +
                 '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
                 '                                                                                    </div></div>');
 
             $(".js-data-example-ajax5").select2({
@@ -2887,7 +3111,7 @@
 
         });
 
-        $('body').on('click', '.remove-sub-feature' ,function() {
+        $('body').on('click', '.remove-primary-feature' ,function() {
 
             var id = $(this).data('id');
             var row_id = $(this).parent().parent().parent().data('id');
@@ -2895,7 +3119,7 @@
             var heading = $('.feature_box').find(".feature-row[data-id='" + heading_id + "']").find('.js-data-example-ajax5').val();
             var f_row = null;
 
-            $('#sub-features').find(".sub-feature-table-container").each(function() {
+            $('#primary-features').find(".feature-table-container").each(function() {
 
                 $(this).find('table tbody tr').each(function() {
 
@@ -2915,12 +3139,12 @@
                 $('#removed_rows').val(rem_arr);
             }
 
-            $('#sub-features').find(".sub-feature-table-container[data-id='" + heading_id + "']").find("table tbody tr[data-id='" + row_id + "']").remove();
+            $('#primary-features').find(".feature-table-container[data-id='" + heading_id + "']").find("table tbody tr[data-id='" + row_id + "']").remove();
 
-            if($('#sub-features').find(".sub-feature-table-container[data-id='" + heading_id + "']").find("table tbody tr").length == 0)
+            if($('#primary-features').find(".feature-table-container[data-id='" + heading_id + "']").find("table tbody tr").length == 0)
             {
 
-                $('#sub-features').find(".sub-feature-table-container[data-id='" + heading_id + "']").find("table").append('<tr data-id="1">\n' +
+                $('#primary-features').find(".feature-table-container[data-id='" + heading_id + "']").find("table").append('<tr data-id="1">\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
                     '                                                                                            <input type="hidden" class="feature_heading" name="feature_headings[]" value="'+heading+'">\n' +
@@ -2928,6 +3152,9 @@
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
@@ -2958,7 +3185,7 @@
                     '                                                                                            </div>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
-                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span></div>\n' +
+                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr>');
 
@@ -2971,15 +3198,15 @@
             var id = $(this).data('id');
             var row_id = $(this).parent().parent().data('id');
 
-            $('#sub-features').find(".sub-feature-table-container[data-id='" + row_id + "']").find('table tbody tr').each(function (index) {
+            $('#primary-features').find(".feature-table-container[data-id='" + row_id + "']").find('table tbody tr').each(function (index) {
 
                 var row = $(this).find('.f_row').val();
-                rem_arr.push($(this).find('.remove-sub-feature').data('id'));
+                rem_arr.push($(this).find('.remove-primary-feature').data('id'));
                 $('#models-features-tables table tbody').find("[data-id='" + row + "']").remove();
 
             });
 
-            $('#sub-features').find(".sub-feature-table-container[data-id='" + row_id + "']").remove();
+            $('#primary-features').find(".feature-table-container[data-id='" + row_id + "']").remove();
 
             if(id)
             {
