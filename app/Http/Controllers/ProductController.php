@@ -500,7 +500,7 @@ class ProductController extends Controller
 
                                 foreach($sub_features as $s => $sub)
                                 {
-                                    $sub_fea_check = product_features::where('heading_id',$key)->skip($s)->first();
+                                    $sub_fea_check = product_features::where('main_id',$fea_check->id)->skip($s)->first();
 
                                     $s_value = 'feature_values'.$request->f_rows[$f];
                                     $s_price_impact = 'price_impact'.$request->f_rows[$f];
@@ -508,14 +508,17 @@ class ProductController extends Controller
 
                                     if($sub_fea_check)
                                     {
-                                        $sub_fea_check->heading_id = $key;
-                                        $sub_fea_check->main_id = $fea_check->id;
-                                        $sub_fea_check->sub_feature = 1;
-                                        $sub_fea_check->title = $sub;
-                                        $sub_fea_check->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                        $sub_fea_check->price_impact = $request->$s_price_impact[$s];
-                                        $sub_fea_check->impact_type = $request->$s_impact_type[$s];
-                                        $sub_fea_check->save();
+                                        if($sub != NULL)
+                                        {
+                                            $sub_fea_check->heading_id = $key;
+                                            $sub_fea_check->main_id = $fea_check->id;
+                                            $sub_fea_check->sub_feature = 1;
+                                            $sub_fea_check->title = $sub;
+                                            $sub_fea_check->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                            $sub_fea_check->price_impact = $request->$s_price_impact[$s];
+                                            $sub_fea_check->impact_type = $request->$s_impact_type[$s];
+                                            $sub_fea_check->save();
+                                        }
                                     }
                                     else
                                     {
@@ -984,8 +987,8 @@ class ProductController extends Controller
             }
 
             $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','colors.max_height','price_tables.title as table')->get();
-            $features_data = product_features::where('product_id',$id)->where('sub_feature',0)->orderBy('heading_id')->get();
-            $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->orderBy('heading_id')->get();
+            $features_data = product_features::where('product_id',$id)->where('sub_feature',0)->get();
+            $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::where('user_id',$user_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();

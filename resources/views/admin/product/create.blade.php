@@ -1128,7 +1128,7 @@
                                                                                                                 <input value="{{$key1->title}}" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Sub Feature Title" type="text">
                                                                                                             </td>
                                                                                                             <td>
-                                                                                                                <input value="{{$key1->value}}" class="form-control feature_value{{$s+1}}" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                                <input value="{{$key1->value}}" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
