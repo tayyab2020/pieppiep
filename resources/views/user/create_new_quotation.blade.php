@@ -182,7 +182,7 @@
 
                                                                                     @foreach($models[$i] as $model)
 
-                                                                                        <option {{$model->id == $item->model ? 'selected' : null}} value="{{$model->id}}">{{$model->model}}</option>
+                                                                                        <option {{$model->id == $item->model_id ? 'selected' : null}} value="{{$model->id}}">{{$model->model}}</option>
 
                                                                                     @endforeach
 
