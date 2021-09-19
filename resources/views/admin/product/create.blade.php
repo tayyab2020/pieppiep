@@ -2052,24 +2052,16 @@
             var selector = this;
 
             if ($selects.find('option[value=' + heading_id + ']:selected').length > 1) {
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'This Heading is already selected!',
 
                 });
-                this.options[0].selected = true;
 
-                $(selector).val('');
-
-                $(selector).select2("destroy");
-
-                $(selector).select2({
-                    width: '100%',
-                    height: '200px',
-                    placeholder: "Select Feature Heading",
-                    allowClear: true,
-                });
+                $(selector).val('').trigger('change.select2');
+                
             }
             else
             {
