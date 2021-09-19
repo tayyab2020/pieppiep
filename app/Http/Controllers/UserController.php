@@ -241,7 +241,11 @@ class UserController extends Controller
 
     public function GetFeaturePrice(Request $request)
     {
-        $data = product_features::where('id',$request->id)->first();
+        $feature = product_features::where('id',$request->id)->first();
+
+        $sub_features = product_features::where('main_id',$request->id)->get();
+
+        $data = array($feature,$sub_features);
 
         return $data;
     }

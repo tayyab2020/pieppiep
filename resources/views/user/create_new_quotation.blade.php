@@ -1956,7 +1956,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model_impact_value = null,model = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null)
+            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model = null,model_impact_value = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -3339,16 +3339,45 @@
                 }
                 else
                 {
+                    var heading = current.find("option:selected").text();
+                    var heading_id = current.val();
+
                     $.ajax({
                         type: "GET",
                         data: "id=" + feature_select,
                         url: "<?php echo url('/aanbieder/get-feature-price')?>",
                         success: function (data) {
 
-                            if(data.max_size)
+                            if(current.parent().parent().next('.sub-features').length > 0)
+                            {
+                                var sub_impact_value = current.parent().parent().next('.sub-features').find('.f_price').val();
+                                total = total - sub_impact_value;
+                                current.parent().parent().next('.sub-features').remove();
+                            }
+
+                            if(data[1].length > 0)
+                            {
+                                var opt = '<option value="0">Select Feature</option>';
+
+                                $.each(data[1], function(index, value) {
+
+                                    opt = opt + '<option value="'+value.id+'">'+value.title+'</option>';
+
+                                });
+
+                                current.parent().parent().after('<div class="row sub-features" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                    '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+heading+'</label>'+
+                                    '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
+                                    '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
+                                    '<input value="'+heading_id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
+                                    '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                    '</div></div>');
+                            }
+
+                            if(data[0] && data[0].max_size)
                             {
                                 var sq = (width * height) / 10000;
-                                var max_size = data.max_size;
+                                var max_size = data[0].max_size;
 
                                 if(sq > max_size)
                                 {
@@ -3366,18 +3395,18 @@
                                 current.parent().find('.f_area').val(0);
                             }
 
-                            if(data.price_impact == 1)
+                            if(data[0] && data[0].price_impact == 1)
                             {
-                                if(data.impact_type == 0)
+                                if(data[0].impact_type == 0)
                                 {
-                                    impact_value = data.value;
+                                    impact_value = data[0].value;
                                     impact_value = parseFloat(impact_value).toFixed(2);
                                     total = parseFloat(total) + parseFloat(impact_value);
                                     total = total.toFixed(2);
                                 }
                                 else
                                 {
-                                    impact_value = data.value;
+                                    impact_value = data[0].value;
                                     var per = (impact_value)/100;
                                     impact_value = basic_price * per;
                                     impact_value = parseFloat(impact_value).toFixed(2);

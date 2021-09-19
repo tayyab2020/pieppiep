@@ -883,7 +883,7 @@
 
                                                             </div>
 
-                                                            @if(isset($features_data))
+                                                            @if(isset($features_data) && count($features_data) > 0)
 
                                                                 <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                                     <div style="width: 70%;" class="modal-dialog">
@@ -2061,7 +2061,7 @@
                 });
 
                 $(selector).val('').trigger('change.select2');
-                
+
             }
             else
             {
