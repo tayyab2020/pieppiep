@@ -428,7 +428,7 @@ class ProductController extends Controller
 
             $cat->fill($input)->save();
 
-            $fea = product_features::where('product_id',$request->cat_id)->get();
+            $fea = product_features::where('product_id',$request->cat_id)->where('sub_feature',0)->get();
 
             if(count($fea) == 0)
             {
@@ -441,10 +441,34 @@ class ProductController extends Controller
                         $fea->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
                         $fea->product_id = $request->cat_id;
                         $fea->heading_id = $key;
-                        $fea->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
+                        $fea->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
                         $fea->price_impact = $request->price_impact[$f];
                         $fea->impact_type = $request->impact_type[$f];
                         $fea->save();
+
+                        $s_titles = 'features'.$request->f_rows[$f];
+                        $sub_features = $request->$s_titles;
+
+                        foreach($sub_features as $s => $sub)
+                        {
+                            $s_value = 'feature_values'.$request->f_rows[$f];
+                            $s_price_impact = 'price_impact'.$request->f_rows[$f];
+                            $s_impact_type = 'impact_type'.$request->f_rows[$f];
+
+                            if($sub != NULL)
+                            {
+                                $sub_feature = new product_features;
+                                $sub_feature->product_id = $request->cat_id;
+                                $sub_feature->heading_id = $key;
+                                $sub_feature->main_id = $fea->id;
+                                $sub_feature->sub_feature = 1;
+                                $sub_feature->title = $sub;
+                                $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                $sub_feature->price_impact = $request->$s_price_impact[$s];
+                                $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                $sub_feature->save();
+                            }
+                        }
 
                         $feature_row[] = $request->f_rows[$f];
                         $feature_id[] = $fea->id;
@@ -457,7 +481,7 @@ class ProductController extends Controller
                 {
                     foreach ($features as $f => $key)
                     {
-                        $fea_check = product_features::where('product_id',$request->cat_id)->skip($f)->first();
+                        $fea_check = product_features::where('product_id',$request->cat_id)->where('sub_feature',0)->skip($f)->first();
 
                         if($fea_check)
                         {
@@ -466,10 +490,50 @@ class ProductController extends Controller
                                 $fea_check->title = $request->features[$f];
                                 $fea_check->heading_id = $key;
                                 $fea_check->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
-                                $fea_check->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
+                                $fea_check->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
                                 $fea_check->price_impact = $request->price_impact[$f];
                                 $fea_check->impact_type = $request->impact_type[$f];
                                 $fea_check->save();
+
+                                $s_titles = 'features'.$request->f_rows[$f];
+                                $sub_features = $request->$s_titles;
+
+                                foreach($sub_features as $s => $sub)
+                                {
+                                    $sub_fea_check = product_features::where('heading_id',$key)->skip($s)->first();
+
+                                    $s_value = 'feature_values'.$request->f_rows[$f];
+                                    $s_price_impact = 'price_impact'.$request->f_rows[$f];
+                                    $s_impact_type = 'impact_type'.$request->f_rows[$f];
+
+                                    if($sub_fea_check)
+                                    {
+                                        $sub_fea_check->heading_id = $key;
+                                        $sub_fea_check->main_id = $fea_check->id;
+                                        $sub_fea_check->sub_feature = 1;
+                                        $sub_fea_check->title = $sub;
+                                        $sub_fea_check->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                        $sub_fea_check->price_impact = $request->$s_price_impact[$s];
+                                        $sub_fea_check->impact_type = $request->$s_impact_type[$s];
+                                        $sub_fea_check->save();
+                                    }
+                                    else
+                                    {
+                                        if($sub != NULL)
+                                        {
+                                            $sub_feature = new product_features;
+                                            $sub_feature->product_id = $request->cat_id;
+                                            $sub_feature->heading_id = $key;
+                                            $sub_feature->main_id = $fea_check->id;
+                                            $sub_feature->sub_feature = 1;
+                                            $sub_feature->title = $sub;
+                                            $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                            $sub_feature->price_impact = $request->$s_price_impact[$s];
+                                            $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                            $sub_feature->save();
+                                        }
+                                    }
+                                }
 
                                 $feature_row[] = $request->f_rows[$f];
                                 $feature_id[] = $fea_check->id;
@@ -484,10 +548,34 @@ class ProductController extends Controller
                                 $fea->title = $request->features[$f];
                                 $fea->heading_id = $key;
                                 $fea->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
-                                $fea->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
+                                $fea->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
                                 $fea->price_impact = $request->price_impact[$f];
                                 $fea->impact_type = $request->impact_type[$f];
                                 $fea->save();
+
+                                $s_titles = 'features'.$request->f_rows[$f];
+                                $sub_features = $request->$s_titles;
+
+                                foreach($sub_features as $s => $sub)
+                                {
+                                    $s_value = 'feature_values'.$request->f_rows[$f];
+                                    $s_price_impact = 'price_impact'.$request->f_rows[$f];
+                                    $s_impact_type = 'impact_type'.$request->f_rows[$f];
+
+                                    if($sub != NULL)
+                                    {
+                                        $sub_feature = new product_features;
+                                        $sub_feature->product_id = $request->cat_id;
+                                        $sub_feature->heading_id = $key;
+                                        $sub_feature->main_id = $fea->id;
+                                        $sub_feature->sub_feature = 1;
+                                        $sub_feature->title = $sub;
+                                        $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                        $sub_feature->price_impact = $request->$s_price_impact[$s];
+                                        $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                        $sub_feature->save();
+                                    }
+                                }
 
                                 $feature_row[] = $request->f_rows[$f];
                                 $feature_id[] = $fea->id;
@@ -728,6 +816,7 @@ class ProductController extends Controller
             }
 
             Session::flash('success', 'Product edited successfully.');
+            return redirect()->route('admin-product-edit',$request->cat_id);
         }
         else
         {
@@ -741,7 +830,7 @@ class ProductController extends Controller
             }
             $input['user_id'] = $user_id;
 
-            $check = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('products.user_id',$user_id)->where('products.title', 'LIKE', '%'.$request->title.'%')->where('products.model_number',$request->model_number)->where('categories.id',$request->category_id)->where('brands.id',$request->brand_id)->where('models.id',$request->model_id)->select('products.*')->first();
+            $check = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->where('products.user_id',$user_id)->where('products.title', 'LIKE', '%'.$request->title.'%')->where('products.model_number',$request->model_number)->where('categories.id',$request->category_id)->where('brands.id',$request->brand_id)->select('products.*')->first();
 
             if(!$check)
             {
@@ -766,10 +855,34 @@ class ProductController extends Controller
                         $feature->title = $request->features[$f];
                         $feature->heading_id = $key;
                         $feature->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
-                        $feature->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
+                        $feature->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
                         $feature->price_impact = $request->price_impact[$f];
                         $feature->impact_type = $request->impact_type[$f];
                         $feature->save();
+
+                        $s_titles = 'features'.$request->f_rows[$f];
+                        $sub_features = $request->$s_titles;
+
+                        foreach($sub_features as $s => $sub)
+                        {
+                            $s_value = 'feature_values'.$request->f_rows[$f];
+                            $s_price_impact = 'price_impact'.$request->f_rows[$f];
+                            $s_impact_type = 'impact_type'.$request->f_rows[$f];
+
+                            if($sub != NULL)
+                            {
+                                $sub_feature = new product_features;
+                                $sub_feature->product_id = $cat->id;
+                                $sub_feature->heading_id = $key;
+                                $sub_feature->main_id = $feature->id;
+                                $sub_feature->sub_feature = 1;
+                                $sub_feature->title = $sub;
+                                $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                $sub_feature->price_impact = $request->$s_price_impact[$s];
+                                $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                $sub_feature->save();
+                            }
+                        }
 
                         $feature_row[] = $request->f_rows[$f];
                         $feature_id[] = $feature->id;
@@ -839,250 +952,14 @@ class ProductController extends Controller
                 }
 
                 Session::flash('success', 'New Product added successfully.');
+                return redirect()->route('admin-product-index');
             }
             else
             {
-                if($file = $request->file('photo'))
-                {
-                    \File::delete(public_path() .'/assets/images/'.$check->photo);
-                    $name = time().$file->getClientOriginalName();
-                    $file->move('assets/images',$name);
-                    $input['photo'] = $name;
-                }
-
-                $check->fill($input)->save();
-
-                $fea = product_features::where('product_id',$check->id)->get();
-
-                if(count($fea) == 0)
-                {
-                    foreach ($features as $f => $key)
-                    {
-                        if($key != NULL && $request->features[$f] != NULL)
-                        {
-                            $feature = new product_features;
-                            $feature->product_id = $check->id;
-                            $feature->title = $request->features[$f];
-                            $feature->heading_id = $key;
-                            $feature->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
-                            $feature->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
-                            $feature->price_impact = $request->price_impact[$f];
-                            $feature->impact_type = $request->impact_type[$f];
-                            $feature->save();
-                        }
-                    }
-                }
-                else
-                {
-                    if(count($features) > 0)
-                    {
-                        foreach ($features as $f => $key)
-                        {
-                            $fea_check = product_features::where('product_id',$check->id)->skip($f)->first();
-
-                            if($fea_check)
-                            {
-                                if($key != NULL && $request->features[$f] != NULL)
-                                {
-                                    $fea_check->title = $request->features[$f];
-                                    $fea_check->heading_id = $key;
-                                    $fea_check->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
-                                    $fea_check->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
-                                    $fea_check->price_impact = $request->price_impact[$f];
-                                    $fea_check->impact_type = $request->impact_type[$f];
-                                    $fea_check->save();
-                                }
-                            }
-                            else
-                            {
-                                if($key != NULL && $request->features[$f] != NULL)
-                                {
-                                    $fea = new product_features;
-                                    $fea->title = $request->features[$f];
-                                    $fea->heading_id = $key;
-                                    $fea->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
-                                    $fea->max_size = $request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;
-                                    $fea->product_id = $check->id;
-                                    $fea->price_impact = $request->price_impact[$f];
-                                    $fea->impact_type = $request->impact_type[$f];
-                                    $fea->save();
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        product_features::where('product_id',$check->id)->delete();
-                    }
-                }
-
-                $sub_pro = product_ladderbands::where('product_id',$check->id)->get();
-
-                if(count($sub_pro) == 0)
-                {
-                    foreach ($sub_products as $s => $key)
-                    {
-                        if($key != NULL && $request->sub_product_titles[$s] != NULL)
-                        {
-                            $sub_pro = new product_ladderbands;
-                            $sub_pro->title = $request->sub_product_titles[$s];
-                            $sub_pro->product_id = $check->id;
-                            $sub_pro->code = $key;
-                            $sub_pro->size1_value = $request->size1_value[$s];
-                            $sub_pro->size2_value = $request->size2_value[$s];
-                            $sub_pro->save();
-                        }
-                    }
-                }
-                else
-                {
-                    if(count($sub_products) > 0)
-                    {
-                        foreach ($sub_products as $s => $key)
-                        {
-                            $sub_check = product_ladderbands::where('product_id',$check->id)->skip($s)->first();
-
-                            if($sub_check)
-                            {
-                                if($key != NULL && $request->sub_product_titles[$s] != NULL)
-                                {
-                                    $sub_check->title = $request->sub_product_titles[$s];
-                                    $sub_check->code = $key;
-                                    $sub_check->size1_value = $request->size1_value[$s];
-                                    $sub_check->size2_value = $request->size2_value[$s];
-                                    $sub_check->save();
-                                }
-                            }
-                            else
-                            {
-                                if($key != NULL && $request->sub_product_titles[$s] != NULL)
-                                {
-                                    $sub_pro = new product_ladderbands;
-                                    $sub_pro->title = $request->sub_product_titles[$s];
-                                    $sub_pro->product_id = $check->id;
-                                    $sub_pro->code = $key;
-                                    $sub_pro->size1_value = $request->size1_value[$s];
-                                    $sub_pro->size2_value = $request->size2_value[$s];
-                                    $sub_pro->save();
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        product_ladderbands::where('product_id',$check->id)->delete();
-                    }
-                }
-
-                $col = colors::where('product_id',$check->id)->get();
-
-                if(count($col) == 0)
-                {
-                    foreach ($colors as $c => $key)
-                    {
-                        if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
-                        {
-                            $col = new colors;
-                            $col->title = $key;
-                            $col->color_code = $request->color_codes[$c];
-                            $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                            $col->product_id = $check->id;
-                            $col->table_id = $request->price_tables[$c];
-                            $col->save();
-                        }
-                    }
-                }
-                else
-                {
-                    if(count($colors) > 0)
-                    {
-                        foreach ($colors as $c => $key)
-                        {
-                            $col_check = colors::where('product_id',$check->id)->skip($c)->first();
-
-                            if($col_check)
-                            {
-                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
-                                {
-                                    $col_check->title = $key;
-                                    $col_check->color_code = $request->color_codes[$c];
-                                    $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                                    $col_check->table_id = $request->price_tables[$c];
-                                    $col_check->save();
-                                }
-                            }
-                            else
-                            {
-                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
-                                {
-                                    $col = new colors;
-                                    $col->title = $key;
-                                    $col->color_code = $request->color_codes[$c];
-                                    $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                                    $col->product_id = $check->id;
-                                    $col->table_id = $request->price_tables[$c];
-                                    $col->save();
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        colors::where('product_id',$check->id)->delete();
-                    }
-                }
-
-                $est = estimated_prices::where('product_id',$check->id)->get();
-
-                if(count($est) == 0)
-                {
-                    foreach ($pricesArray as $price)
-                    {
-                        $est = new estimated_prices;
-                        $est->product_id = $check->id;
-                        $est->price = $price;
-                        $est->save();
-                    }
-                }
-                else
-                {
-                    if(count($pricesArray) > 0)
-                    {
-                        foreach ($pricesArray as $x => $price)
-                        {
-                            $est_check = estimated_prices::where('product_id',$check->id)->skip($x)->first();
-
-                            if($est_check)
-                            {
-                                $est_check->price = $pricesArray[$x];
-                                $est_check->save();
-                            }
-                            else
-                            {
-                                $temp = new estimated_prices;
-                                $temp->product_id = $check->id;
-                                $temp->price = $pricesArray[$x];
-                                $temp->save();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        estimated_prices::where('product_id',$check->id)->delete();
-                    }
-                }
-
-                Session::flash('success', 'Product edited successfully.');
+                $route = route('admin-product-edit',$check->id);
+                Session::flash('unsuccess', 'Product already exists with same title, model number, category and brand. You can edit that product <a style="color: #b44b33;font-weight: bold;" href="'.$route.'">here</a>');
+                return redirect()->route('admin-product-create');
             }
-        }
-
-        if($request->cat_id)
-        {
-            return redirect()->route('admin-product-edit',$request->cat_id);
-        }
-        else
-        {
-            return redirect()->route('admin-product-index');
         }
     }
 
@@ -1115,6 +992,9 @@ class ProductController extends Controller
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
             $models = product_models::with('features')->where('product_id',$id)->get();
+
+            var_dump($models);
+            exit();
 
             return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','features_headings'));
         }

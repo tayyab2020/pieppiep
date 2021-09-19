@@ -11,7 +11,7 @@
 
       <div class="alert alert-danger validation">
       <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <p class="text-left">{{ Session::get('unsuccess') }}</p>
+            <p style="color: #514c4c;" class="text-left">{!! Session::get('unsuccess') !!}</p>
       </div>
 
 @endif

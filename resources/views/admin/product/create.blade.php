@@ -2604,8 +2604,8 @@
 
             var id = this.value;
             var selector = this;
-            var code = $(selector).parent().prev('div').find('input').val();
-            var color = $(selector).parent().prev('div').prev('div').find('input').val();
+            var code = $(selector).parent().parent().find('.color_code').val();
+            var color = $(selector).parent().parent().find('.color_title').val();
             var row_id = $(this).parent().parent().attr("data-id");
 
             $.ajax({
@@ -3348,10 +3348,10 @@
                 $('#sub-features').find(".sub-feature-table-container[data-id='" + heading_id + "']").find('table').append('<tr data-id="'+f_row+'">\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <input type="hidden" name="f_rows'+heading_id+'[]" class="f_row1" value="'+f_row+'">' +
-                    '                                                                                            <input class="form-control feature_title'+heading_id+'" name="features1[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '                                                                                            <input class="form-control feature_title1" name="features'+heading_id+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
-                    '                                                                                            <input class="form-control feature_value'+heading_id+'" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                                            <input class="form-control feature_value1" name="feature_values'+heading_id+'[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
@@ -3507,10 +3507,10 @@
                     '                                                                                        <tr data-id="'+f_row1+'">\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <input type="hidden" name="f_rows'+f_row+'[]" class="f_row1" value="'+f_row1+'">' +
-                    '                                                                                            <input class="form-control feature_title'+f_row+'" name="features1[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '                                                                                            <input class="form-control feature_title1" name="features'+f_row+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
-                    '                                                                                            <input class="form-control feature_value'+f_row+'" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                                            <input class="form-control feature_value1" name="feature_values'+f_row+'[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
