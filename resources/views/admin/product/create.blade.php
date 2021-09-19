@@ -1101,6 +1101,8 @@
 
                                                                                 <div id="sub-features">
 
+                                                                                    <?php $s1 = 1; ?>
+
                                                                                     @foreach($features_data as $s => $key)
 
                                                                                         <div data-id="{{$s+1}}" class="sub-feature-table-container">
@@ -1118,54 +1120,152 @@
 
                                                                                                 <tbody>
 
-                                                                                                @foreach($sub_features_data as $s1 => $key1)
+                                                                                                @if(count($sub_features_data) > 0)
 
-                                                                                                    @if($key->id == $key1->main_id)
+                                                                                                    @foreach($sub_features_data as $key1)
 
-                                                                                                        <tr data-id="{{$s1+1}}">
-                                                                                                            <td>
-                                                                                                                <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1+1}}">
-                                                                                                                <input value="{{$key1->title}}" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Sub Feature Title" type="text">
-                                                                                                            </td>
-                                                                                                            <td>
-                                                                                                                <input value="{{$key1->value}}" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
-                                                                                                            </td>
-                                                                                                            <td>
-                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+                                                                                                        @if($sub_features_data->contains('main_id',$key->id))
 
-                                                                                                                    <input type="hidden" name="price_impact{{$s+1}}[]" id="price_impact" value="{{$key1->price_impact}}">
+                                                                                                            @if($key->id == $key1->main_id)
 
-                                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                                    <label style="margin: 0;" class="switch">
-                                                                                                                        <input class="price_impact" type="checkbox" {{$key1->price_impact ? 'checked' : null}}>
-                                                                                                                        <span class="slider round"></span>
-                                                                                                                    </label>
-                                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+                                                                                                                <tr data-id="{{$s1}}">
+                                                                                                                    <td>
+                                                                                                                        <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
+                                                                                                                        <input value="{{$key1->title}}" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Sub Feature Title" type="text">
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        <input value="{{$key1->value}}" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
 
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                            <td>
-                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+                                                                                                                            <input type="hidden" name="price_impact{{$s+1}}[]" id="price_impact" value="{{$key1->price_impact}}">
 
-                                                                                                                    <input type="hidden" name="impact_type{{$s+1}}[]" id="impact_type" value="{{$key1->impact_type}}">
+                                                                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                                            <label style="margin: 0;" class="switch">
+                                                                                                                                <input class="price_impact" type="checkbox" {{$key1->price_impact ? 'checked' : null}}>
+                                                                                                                                <span class="slider round"></span>
+                                                                                                                            </label>
+                                                                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
-                                                                                                                    <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
-                                                                                                                    <label style="margin: 0;" class="switch">
-                                                                                                                        <input class="impact_type" type="checkbox" {{$key1->impact_type ? 'checked' : null}}>
-                                                                                                                        <span class="slider round"></span>
-                                                                                                                    </label>
-                                                                                                                    <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+                                                                                                                        </div>
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
 
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                            <td>
-                                                                                                                <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="{{$key1->id}}" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
-                                                                                                            </td>
-                                                                                                        </tr>
+                                                                                                                            <input type="hidden" name="impact_type{{$s+1}}[]" id="impact_type" value="{{$key1->impact_type}}">
 
-                                                                                                    @endif
+                                                                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                                                            <label style="margin: 0;" class="switch">
+                                                                                                                                <input class="impact_type" type="checkbox" {{$key1->impact_type ? 'checked' : null}}>
+                                                                                                                                <span class="slider round"></span>
+                                                                                                                            </label>
+                                                                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
 
-                                                                                                @endforeach
+                                                                                                                        </div>
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="{{$key1->id}}" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
+                                                                                                                    </td>
+                                                                                                                </tr>
+
+                                                                                                                <?php $s1 = $s1 + 1; ?>
+
+                                                                                                            @endif
+
+                                                                                                        @else
+
+                                                                                                            <tr data-id="{{$s1}}">
+                                                                                                                <td>
+                                                                                                                    <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
+                                                                                                                    <input value="" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Sub Feature Title" type="text">
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <input value="" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                        <input type="hidden" name="price_impact{{$s+1}}[]" id="price_impact" value="0">
+
+                                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                                            <input class="price_impact" type="checkbox">
+                                                                                                                            <span class="slider round"></span>
+                                                                                                                        </label>
+                                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                                    </div>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                        <input type="hidden" name="impact_type{{$s+1}}[]" id="impact_type" value="0">
+
+                                                                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                                            <input class="impact_type" type="checkbox">
+                                                                                                                            <span class="slider round"></span>
+                                                                                                                        </label>
+                                                                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                                    </div>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
+                                                                                                                </td>
+                                                                                                            </tr>
+
+                                                                                                            <?php $s1 = $s1 + 1; ?>
+
+                                                                                                        @endif
+
+                                                                                                    @endforeach
+
+                                                                                                @else
+
+                                                                                                    <tr data-id="1">
+                                                                                                        <td>
+                                                                                                            <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="1">
+                                                                                                            <input value="" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Sub Feature Title" type="text">
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input value="" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                <input type="hidden" name="price_impact{{$s+1}}[]" id="price_impact" value="0">
+
+                                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                                <label style="margin: 0;" class="switch">
+                                                                                                                    <input class="price_impact" type="checkbox">
+                                                                                                                    <span class="slider round"></span>
+                                                                                                                </label>
+                                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                            </div>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                <input type="hidden" name="impact_type{{$s+1}}[]" id="impact_type" value="0">
+
+                                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
+                                                                                                                <label style="margin: 0;" class="switch">
+                                                                                                                    <input class="impact_type" type="checkbox">
+                                                                                                                    <span class="slider round"></span>
+                                                                                                                </label>
+                                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                            </div>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
+                                                                                                        </td>
+                                                                                                    </tr>
+
+                                                                                                @endif
 
                                                                                                 </tbody>
                                                                                             </table>
@@ -2004,7 +2104,7 @@
                     title: 'Oops...',
                     text: 'This Heading is already selected!',
 
-                })
+                });
                 this.options[0].selected = true;
 
                 $(selector).val('');
@@ -2165,7 +2265,7 @@
             {
                 flag = 1;
                 Swal.fire({
-                    type: 'error',
+                    icon: 'error',
                     title: 'Oops...',
                     text: 'Margin should not be empty!',
                 });
@@ -2174,7 +2274,7 @@
             {
                 flag = 1;
                 Swal.fire({
-                    type: 'error',
+                    icon: 'error',
                     title: 'Oops...',
                     text: 'Margin should not be smaller than 100!',
                 });
@@ -2183,7 +2283,7 @@
             {
                 flag = 1;
                 Swal.fire({
-                    type: 'error',
+                    icon: 'error',
                     title: 'Oops...',
                     text: 'Title should not be empty!',
                 });
@@ -2192,7 +2292,7 @@
             {
                 flag = 1;
                 Swal.fire({
-                    type: 'error',
+                    icon: 'error',
                     title: 'Oops...',
                     text: 'Slug should not be empty!',
                 });
@@ -2201,7 +2301,7 @@
             {
                 flag = 1;
                 Swal.fire({
-                    type: 'error',
+                    icon: 'error',
                     title: 'Oops...',
                     text: 'Category should not be empty!',
                 });
@@ -2210,7 +2310,7 @@
             {
                 flag = 1;
                 Swal.fire({
-                    type: 'error',
+                    icon: 'error',
                     title: 'Oops...',
                     text: 'Brand should not be empty!',
                 });
@@ -2228,7 +2328,7 @@
             {
                 flag = 1;
                 Swal.fire({
-                    type: 'error',
+                    icon: 'error',
                     title: 'Oops...',
                     text: 'Base price should not be empty!',
                 });
