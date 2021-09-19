@@ -1522,32 +1522,29 @@
 
                                                                                             @foreach($mod->features as $x => $feature)
 
-                                                                                                @if($features_data[$x]->id == $feature->product_feature_id)
+                                                                                                <tr data-id="{{$x+1}}">
+                                                                                                    <td>
+                                                                                                        <div style="display: flex;justify-content: center;align-items: center;">
+                                                                                                            <input type="hidden" name="selected_model_feature{{$x+1}}[]" id="price_impact" value="{{$feature->linked}}">
+                                                                                                            <label style="margin: 0;" class="switch">
+                                                                                                                <input class="price_impact" type="checkbox" {{$feature->linked ? 'checked' : null}}>
+                                                                                                                <span class="slider round"></span>
+                                                                                                            </label>
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        @foreach($features_headings as $heading)
 
-                                                                                                    <tr data-id="{{$x+1}}" data-mainid="{{$s+1}}">
-                                                                                                        <td>
-                                                                                                            <div style="display: flex;justify-content: center;align-items: center;">
-                                                                                                                <input type="hidden" name="selected_model_feature{{$x+1}}[]" id="price_impact" value="{{$feature->linked}}">
-                                                                                                                <label style="margin: 0;" class="switch">
-                                                                                                                    <input class="price_impact" type="checkbox" {{$feature->linked ? 'checked' : null}}>
-                                                                                                                    <span class="slider round"></span>
-                                                                                                                </label>
-                                                                                                            </div>
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            @foreach($features_headings as $heading)
+                                                                                                            @if($heading->id == $features_data[$x]->heading_id)
 
-                                                                                                                @if($heading->id == $features_data[$x]->heading_id)
+                                                                                                                {{$heading->title}}
 
-                                                                                                                    {{$heading->title}}
+                                                                                                            @endif
 
-                                                                                                                @endif
-
-                                                                                                            @endforeach
-                                                                                                        </td>
-                                                                                                        <td>{{$features_data[$x]->title}}</td>
-                                                                                                    </tr>
-                                                                                                @endif
+                                                                                                        @endforeach
+                                                                                                    </td>
+                                                                                                    <td>{{$features_data[$x]->title}}</td>
+                                                                                                </tr>
 
                                                                                             @endforeach
 

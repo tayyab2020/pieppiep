@@ -991,7 +991,13 @@ class ProductController extends Controller
             /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
-            $models = product_models::with('features')->where('product_id',$id)->get();
+            $models = product_models::with(['features' => function($query)
+            {
+                $query->leftjoin('product_features','product_features.id','=','model_features.product_feature_id')
+                    ->leftjoin('features','features.id','=','product_features.heading_id')
+                    ->select('model_features.*','features.title as heading','product_features.title as feature_title');
+
+            }])->where('product_id',$id)->get();
 
             var_dump('<pre></pre>'.$models[0].'<pre></pre>');
             exit();
