@@ -984,7 +984,8 @@ class ProductController extends Controller
             }
 
             $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','colors.max_height','price_tables.title as table')->get();
-            $features_data = product_features::where('product_id',$id)->orderBy('heading_id')->get();
+            $features_data = product_features::where('product_id',$id)->where('sub_feature',0)->orderBy('heading_id')->get();
+            $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->orderBy('heading_id')->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::where('user_id',$user_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();
@@ -999,7 +1000,7 @@ class ProductController extends Controller
 
             }])->where('product_id',$id)->get();
 
-            return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','features_headings'));
+            return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
         }
         else
         {
