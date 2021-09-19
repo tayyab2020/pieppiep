@@ -2653,6 +2653,7 @@ class UserController extends Controller
             $supplier_products = array();
             $sub_products = array();
             $colors = array();
+            $models = array();
             $features = array();
 
             $f = 0;
@@ -2661,6 +2662,7 @@ class UserController extends Controller
             {
                 $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->get();
                 $colors[$i] = colors::where('product_id',$item->product_id)->get();
+                $models[$i] = product_models::where('product_id',$item->product_id)->get();
 
                 foreach ($item->features as $feature)
                 {
@@ -2675,7 +2677,7 @@ class UserController extends Controller
                 }
             }
 
-            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','features','customers','invoice','sub_products'));
+            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','models','features','customers','invoice','sub_products'));
         }
         else
         {
