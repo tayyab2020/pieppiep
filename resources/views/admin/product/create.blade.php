@@ -1085,7 +1085,7 @@
 
                                                             @endif
 
-                                                            @if(isset($sub_features_data))
+                                                            @if(isset($sub_features_data) && count($sub_features_data) > 0)
 
                                                                 <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                                     <div style="width: 70%;" class="modal-dialog">
