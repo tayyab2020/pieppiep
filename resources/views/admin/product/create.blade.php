@@ -1533,17 +1533,9 @@
                                                                                                         </div>
                                                                                                     </td>
                                                                                                     <td>
-                                                                                                        @foreach($features_headings as $heading)
-
-                                                                                                            @if($heading->id == $features_data[$x]->heading_id)
-
-                                                                                                                {{$heading->title}}
-
-                                                                                                            @endif
-
-                                                                                                        @endforeach
+                                                                                                        {{$feature->heading}}
                                                                                                     </td>
-                                                                                                    <td>{{$features_data[$x]->title}}</td>
+                                                                                                    <td>{{$feature->feature_title}}</td>
                                                                                                 </tr>
 
                                                                                             @endforeach
