@@ -993,7 +993,7 @@ class ProductController extends Controller
             $features_headings = features::where('user_id',$user_id)->get();
             $models = product_models::with('features')->where('product_id',$id)->get();
 
-            var_dump($models);
+            var_dump('<pre></pre>'.$models[0].'<pre></pre>');
             exit();
 
             return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','features_headings'));
