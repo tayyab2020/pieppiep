@@ -14,6 +14,11 @@ class new_quotations_data extends Model
         return $this->hasMany(new_quotations_features::class, 'quotation_data_id','id');
     }
 
+    public function sub_features()
+    {
+        return $this->hasMany(new_quotations_features::class, 'quotation_data_id','id');
+    }
+
     public function quotation()
     {
         return $this->belongsTo(new_quotations::class);

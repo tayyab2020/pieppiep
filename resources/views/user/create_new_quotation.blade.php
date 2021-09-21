@@ -399,6 +399,7 @@
                                                                                                 <input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
                                                                                                 <input value="0" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
                                                                                                 <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+                                                                                                <input value="0" name="sub_feature{{$x + 1}}[]" class="sub_feature" type="hidden">
                                                                                             </div>
 
                                                                                             @if($feature->ladderband)
@@ -429,6 +430,7 @@
                                                                                                 <input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
                                                                                                 <input value="{{$feature->feature_id}}" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
                                                                                                 <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+                                                                                                <input value="0" name="sub_feature{{$x + 1}}[]" class="sub_feature" type="hidden">
                                                                                             </div>
 
                                                                                             @if($feature->comment_box)
@@ -438,6 +440,37 @@
                                                                                             @endif
 
                                                                                         </div>
+
+                                                                                        @foreach($key1->sub_features as $s => $sub_feature)
+
+                                                                                            @if($sub_feature->feature_id == $feature->feature_sub_id)
+
+                                                                                                <div class="row sub-features" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+
+                                                                                                    <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                                        <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">{{$sub_feature->title}}</label>
+                                                                                                        <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
+
+                                                                                                            <option value="0">Select Feature</option>
+
+                                                                                                            @foreach($sub_features[$s] as $temp)
+
+                                                                                                                <option {{$temp->id == $sub_feature->feature_sub_id ? 'selected' : null}} value="{{$temp->id}}">{{$temp->title}}</option>
+
+                                                                                                            @endforeach
+
+                                                                                                        </select>
+                                                                                                        <input value="{{$sub_feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
+                                                                                                        <input value="{{$sub_feature->feature_id}}" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
+                                                                                                        <input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+                                                                                                        <input value="1" name="sub_feature{{$x + 1}}[]" class="sub_feature" type="hidden">
+                                                                                                    </div>
+
+                                                                                                </div>
+
+                                                                                            @endif
+
+                                                                                        @endforeach
 
                                                                                     @endif
 
@@ -608,13 +641,13 @@
                                                     <div style="margin: 20px 0;" class="row">
                                                         <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <label style="width: 15%;margin-right: 10px;">Width</label>
-                                                            <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
+                                                            <input type="number" value="{{$key1->childsafe_x}}" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
                                                         </div>
                                                     </div>
                                                     <div style="margin: 20px 0;" class="row">
                                                         <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <label style="width: 15%;margin-right: 10px;">Height</label>
-                                                            <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
+                                                            <input type="number" value="{{$key1->childsafe_y}}" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1699,6 +1732,7 @@
                                             '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '<input value="0" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                             '</div><a data-id="'+ row_id +'" class="info ladderband-btn hide">Info</a></div>\n';
 
                                         features = features + content;
@@ -1729,6 +1763,7 @@
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '<input value="0" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                             '</div>' + icon + '</div>\n';
 
                                         features = features + content;
@@ -1985,6 +2020,7 @@
                                             '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '<input value="0" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                             '</div><a data-id="'+ row_id +'" class="info ladderband-btn hide">Info</a></div>\n';
 
                                         features = features + content;
@@ -2015,6 +2051,7 @@
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '<input value="0" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                             '</div>' + icon + '</div>\n';
 
                                         features = features + content;
@@ -2380,6 +2417,7 @@
                             $(obj).find('.f_price').attr('name', 'f_price' + rowCount + '[]');
                             $(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
                             $(obj).find('.f_area').attr('name', 'f_area' + rowCount + '[]');
+                            $(obj).find('.sub_feature').attr('name', 'sub_feature' + rowCount + '[]');
 
                         });
 
@@ -3081,6 +3119,7 @@
                                             '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '<input value="0" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                             '</div><a data-id="'+ row_id +'" class="info ladderband-btn hide">Info</a></div>\n';
 
                                         features = features + content;
@@ -3111,6 +3150,7 @@
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '<input value="0" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                             '</div>' + icon + '</div>\n';
 
                                         features = features + content;
@@ -3365,6 +3405,7 @@
                                             '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="0" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '<input value="0" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                             '</div><a data-id="'+ row_id +'" class="info ladderband-btn hide">Info</a></div>\n';
 
                                         features = features + content;
@@ -3395,6 +3436,7 @@
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                             '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                            '<input value="0" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                             '</div>' + icon + '</div>\n';
 
                                         features = features + content;
@@ -3770,6 +3812,7 @@
                                     '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                     '<input value="'+heading_id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
                                     '<input value="0" name="f_area'+ row_id +'[]" class="f_area" type="hidden">'+
+                                    '<input value="1" name="sub_feature'+ row_id +'[]" class="sub_feature" type="hidden">'+
                                     '</div></div>');
                             }
 

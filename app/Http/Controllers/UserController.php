@@ -2641,7 +2641,14 @@ class UserController extends Controller
             $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
             {
                 $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
+                    ->where('new_quotations_features.sub_feature',0)
                     ->select('new_quotations_features.*','features.title','features.comment_box');
+
+            }])->with(['sub_features' => function($query)
+            {
+                $query->leftjoin('product_features','product_features.id','=','new_quotations_features.feature_id')
+                    ->where('new_quotations_features.sub_feature',1)
+                    ->select('new_quotations_features.*','product_features.title');
 
             }])->get();
 
@@ -2655,8 +2662,10 @@ class UserController extends Controller
             $colors = array();
             $models = array();
             $features = array();
+            $sub_features = array();
 
             $f = 0;
+            $s = 0;
 
             foreach ($invoice as $i => $item)
             {
@@ -2666,7 +2675,7 @@ class UserController extends Controller
 
                 foreach ($item->features as $feature)
                 {
-                    $features[$f] = product_features::where('product_id',$item->product_id)->where('heading_id',$feature->feature_id)->get();
+                    $features[$f] = product_features::where('product_id',$item->product_id)->where('heading_id',$feature->feature_id)->where('sub_feature',0)->get();
 
                     if($feature->ladderband)
                     {
@@ -2675,9 +2684,15 @@ class UserController extends Controller
 
                     $f = $f + 1;
                 }
+
+                foreach ($item->sub_features as $sub_feature)
+                {
+                    $sub_features[$s] = product_features::where('product_id',$item->product_id)->where('main_id',$sub_feature->feature_id)->get();
+                    $s = $s + 1;
+                }
             }
 
-            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','models','features','customers','invoice','sub_products'));
+            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
         }
         else
         {
@@ -2930,6 +2945,7 @@ class UserController extends Controller
                 $childsafe_y = 'childsafe_y'.$row_id;
                 $invoice_items->childsafe_y = $request->$childsafe_y;
             }
+
             $invoice_items->save();
 
             $feature_row = 'features'.$row_id;
@@ -2944,6 +2960,9 @@ class UserController extends Controller
 
                     $f_row1 = 'f_price'.$row_id;
                     $f_prices = $request->$f_row1;
+
+                    $is_sub = 'sub_feature'.$row_id;
+                    $is_sub_feature = $request->$is_sub;
 
                     $comment = 'comment-'.$row_id.'-'.$f_ids[$f];
                     $comment = $request->$comment;
@@ -3001,6 +3020,7 @@ class UserController extends Controller
                         $post->price = $f_prices[$f];
                         $post->feature_id = $f_ids[$f];
                         $post->feature_sub_id = $key1;
+                        $post->sub_feature = $is_sub_feature[$f];
                         $post->comment = $comment;
                         $post->save();
                     }
