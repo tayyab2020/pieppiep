@@ -126,6 +126,7 @@
                                                                             <input type="hidden" value="{{$item->rate}}" id="rate" name="rate[]">
                                                                             <input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
                                                                             <input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
+                                                                            <input type="hidden" value="{{$item->childsafe ? 1 : 0}}" id="childsafe" name="childsafe[]">
                                                                             <input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
                                                                             <input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
                                                                             <input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
@@ -223,6 +224,7 @@
                                                                         <input type="hidden" id="rate" name="rate[]">
                                                                         <input type="hidden" id="row_total" name="total[]">
                                                                         <input type="hidden" value="1" id="row_id" name="row_id[]">
+                                                                        <input type="hidden" value="0" id="childsafe" name="childsafe[]">
                                                                         <input type="hidden" value="0" id="ladderband" name="ladderband[]">
                                                                         <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
                                                                         <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
@@ -333,6 +335,54 @@
                                                                                         <input value="{{$key1->qty}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
                                                                                     </div>
                                                                                 </div>
+
+                                                                                @if($key1->childsafe)
+
+                                                                                    <div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+
+                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>
+                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option{{$x+1}}">
+
+                                                                                                <option value="">Select any option</option>
+
+                                                                                                @if($key1->childsafe_diff <= 150)
+
+                                                                                                    <option {{$key1->childsafe_question == 1 ? 'selected' : null}} value="1">Please note not childsafe</option>
+                                                                                                    <option {{$key1->childsafe_question == 2 ? 'selected' : null}} value="2">Add childsafety clip</option>
+
+                                                                                                @else
+
+                                                                                                    <option {{$key1->childsafe_question == 2 ? 'selected' : null}} value="2">Add childsafety clip</option>
+                                                                                                    <option {{$key1->childsafe_question == 3 ? 'selected' : null}} value="3">Yes childsafe</option>
+
+                                                                                                @endif
+
+                                                                                            </select>
+                                                                                            <input value="{{$key1->childsafe_diff}}" name="childsafe_diff{{$x + 1}}" class="childsafe_diff" type="hidden">
+                                                                                        </div>
+
+                                                                                        <a data-id="{{$x + 1}}" class="info childsafe-btn">Info</a>
+
+                                                                                    </div>
+
+                                                                                    <div class="row childsafe-answer-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+
+                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe Answer</label>
+                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer{{$x+1}}">
+                                                                                                @if($key1->childsafe_question == 1)
+                                                                                                    <option {{$key1->childsafe_answer == 1 ? 'selected' : null}} value="1">Make it childsafe</option>
+                                                                                                    <option {{$key1->childsafe_answer == 2 ? 'selected' : null}} value="2">Yes i agree</option>
+                                                                                                @else
+                                                                                                    <option selected value="3">Is childsafe</option>
+                                                                                                @endif
+                                                                                            </select>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                @endif
 
                                                                                 @foreach($key1->features as $feature)
 
@@ -538,6 +588,50 @@
 
                         </div>
                     </div>
+                    <div id="myModal3" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Childsafe Content</h4>
+                                </div>
+                                <div class="modal-body">
+                                    @if(isset($invoice))
+
+                                        @foreach($invoice as $x => $key1)
+
+                                            @if($key1->childsafe)
+
+                                                <div class="childsafe-content-box" data-id="{{$x+1}}">
+                                                    <div style="margin: 20px 0;" class="row">
+                                                        <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label style="width: 15%;margin-right: 10px;">Width</label>
+                                                            <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
+                                                        </div>
+                                                    </div>
+                                                    <div style="margin: 20px 0;" class="row">
+                                                        <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label style="width: 15%;margin-right: 10px;">Height</label>
+                                                            <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            @endif
+
+                                        @endforeach
+
+                                    @endif
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
                 </form>
 
@@ -692,6 +786,11 @@
         .ladderband-btn
         {
             background-color: #494949 !important;
+        }
+
+        .childsafe-btn
+        {
+            background-color: #56a63c !important;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered
@@ -1256,6 +1355,7 @@
 
                         $('#menu1').find(`[data-id='${row_id}']`).remove();
 
+                        current.parent().parent().find('#childsafe').val(0);
                         current.parent().parent().find('#ladderband').val(0);
                         current.parent().parent().find('#ladderband_value').val(0);
                         current.parent().parent().find('#ladderband_price_impact').val(0);
@@ -1316,6 +1416,7 @@
                         $('#menu1').find(`[data-id='${row_id}']`).remove();
 
                         current.parent().parent().find('#delivery_days').val(data.delivery_days);
+                        current.parent().parent().find('#childsafe').val(data.childsafe);
                         current.parent().parent().find('#ladderband').val(data.ladderband);
                         current.parent().parent().find('#ladderband_value').val(data.ladderband_value);
                         current.parent().parent().find('#ladderband_price_impact').val(data.ladderband_price_impact);
@@ -1453,6 +1554,7 @@
                 height = height.replace(/\,/g, '.');
 
                 var product = current.parent().parent().find('.products').find('select').val();
+                var childsafe = current.parent().parent().find('#childsafe').val();
                 var ladderband = current.parent().parent().find('#ladderband').val();
                 current.parent().parent().find('#area_conflict').val(0);
 
@@ -1552,6 +1654,39 @@
                                     var f_value = 0;
 
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+                                    $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+
+                                    if(childsafe == 1)
+                                    {
+                                        var content = '<div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option'+ row_id +'">\n' +
+                                            '<option value="">Select any option</option>\n' +
+                                            '<option value="2">Add childsafety clip</option>\n' +
+                                            '</select>\n' +
+                                            '<input value="0" name="childsafe_diff'+ row_id +'" class="childsafe_diff" type="hidden">'+
+                                            '</div><a data-id="'+ row_id +'" class="info childsafe-btn">Info</a></div>\n';
+
+                                        features = features + content;
+
+
+                                        $('#myModal3').find('.modal-body').append(
+                                            '<div class="childsafe-content-box" data-id="'+row_id+'">\n' +
+                                            '                                            <div style="margin: 20px 0;" class="row">\n' +
+                                            '                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                                            '                                                    <label style="width: 15%;margin-right: 10px;">Width</label>\n' +
+                                            '                                                    <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x'+row_id+'">\n' +
+                                            '                                                </div>\n' +
+                                            '                                            </div>\n' +
+                                            '                                            <div style="margin: 20px 0;" class="row">\n' +
+                                            '                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                                            '                                                    <label style="width: 15%;margin-right: 10px;">Height</label>\n' +
+                                            '                                                    <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y'+row_id+'">\n' +
+                                            '                                                </div>\n' +
+                                            '                                            </div>\n' +
+                                            '                                        </div>'
+                                        );
+                                    }
 
                                     if(ladderband == 1)
                                     {
@@ -1705,6 +1840,7 @@
                 height = height.replace(/\,/g, '.');
 
                 var product = current.parent().parent().find('.products').find('select').val();
+                var childsafe = current.parent().parent().find('#childsafe').val();
                 var ladderband = current.parent().parent().find('#ladderband').val();
                 current.parent().parent().find('#area_conflict').val(0);
 
@@ -1805,6 +1941,38 @@
                                     var f_value = 0;
 
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+                                    $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+
+                                    if(childsafe == 1)
+                                    {
+                                        var content = '<div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option'+ row_id +'">\n' +
+                                            '<option value="">Select any option</option>\n' +
+                                            '<option value="2">Add childsafety clip</option>\n' +
+                                            '</select>\n' +
+                                            '<input value="0" name="childsafe_diff'+ row_id +'" class="childsafe_diff" type="hidden">'+
+                                            '</div><a data-id="'+ row_id +'" class="info childsafe-btn">Info</a></div>\n';
+
+                                        features = features + content;
+
+                                        $('#myModal3').find('.modal-body').append(
+                                            '<div class="childsafe-content-box" data-id="'+row_id+'">\n' +
+                                            '                                            <div style="margin: 20px 0;" class="row">\n' +
+                                            '                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                                            '                                                    <label style="width: 15%;margin-right: 10px;">Width</label>\n' +
+                                            '                                                    <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x'+row_id+'">\n' +
+                                            '                                                </div>\n' +
+                                            '                                            </div>\n' +
+                                            '                                            <div style="margin: 20px 0;" class="row">\n' +
+                                            '                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                                            '                                                    <label style="width: 15%;margin-right: 10px;">Height</label>\n' +
+                                            '                                                    <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y'+row_id+'">\n' +
+                                            '                                                </div>\n' +
+                                            '                                            </div>\n' +
+                                            '                                        </div>'
+                                        );
+                                    }
 
                                     if(ladderband == 1)
                                     {
@@ -1956,7 +2124,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model = null,model_impact_value = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,qty = null,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null)
+            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model = null,model_impact_value = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,childsafe_question = null,childsafe_answer = null,qty = null,childsafe = 0,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,childsafe_content = null,childsafe_x = null,childsafe_y = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -1972,6 +2140,7 @@
                         '                                                            <input type="hidden" id="rate" name="rate[]">\n' +
                         '                                                            <input type="hidden" id="row_total" name="total[]">\n' +
                         '                                                            <input type="hidden" value="'+rowCount+'" id="row_id" name="row_id[]">\n' +
+                        '                                                            <input type="hidden" value="0" id="childsafe" name="childsafe[]">\n' +
                         '                                                            <input type="hidden" value="0" id="ladderband" name="ladderband[]">\n' +
                         '                                                            <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">\n' +
                         '                                                            <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
@@ -2106,6 +2275,7 @@
                         '                                                            <input value="'+rate+'" type="hidden" id="rate" name="rate[]">\n' +
                         '                                                            <input value="'+price+'" type="hidden" id="row_total" name="total[]">\n' +
                         '                                                            <input type="hidden" value="'+rowCount+'" id="row_id" name="row_id[]">\n' +
+                        '                                                            <input type="hidden" value="'+childsafe+'" id="childsafe" name="childsafe[]">\n' +
                         '                                                            <input type="hidden" value="'+ladderband+'" id="ladderband" name="ladderband[]">\n' +
                         '                                                            <input type="hidden" value="'+ladderband_value+'" id="ladderband_value" name="ladderband_value[]">\n' +
                         '                                                            <input type="hidden" value="'+ladderband_price_impact+'" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
@@ -2181,6 +2351,17 @@
 
                         $('#menu1').find(`[data-id='${rowCount}']`).find('input[name="qty[]"]').val(qty);
 
+                        if(childsafe == 1)
+                        {
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').attr('name', 'childsafe_option' + rowCount);
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe_diff').attr('name', 'childsafe_diff' + rowCount);
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').attr('name', 'childsafe_answer' + rowCount);
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-btn').attr('data-id', rowCount);
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').val(childsafe_question);
+                            $('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').val(childsafe_answer);
+                            $('#myModal3').find('.modal-body').append('<div class="childsafe-content-box" data-id="'+rowCount+'">\n' + childsafe_content + '</div>');
+                        }
+
                         features_selects.each(function(index,select){
 
                             $('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
@@ -2227,6 +2408,15 @@
                             $(obj).find('.sizeB').attr('name', 'sizeB' + rowCount + '[]');
                             $(obj).find('.cus_radio').attr('name', 'cus_radio' + rowCount + '[]');
                             $(obj).find('.cus_radio').attr('data-id', rowCount);
+
+                        });
+
+                        $('#myModal3').find('.modal-body').find(`[data-id='${rowCount}']`).each(function(i, obj) {
+
+                            $(obj).find('#childsafe_x').attr('name', 'childsafe_x' + rowCount);
+                            $(obj).find('#childsafe_y').attr('name', 'childsafe_y' + rowCount);
+                            $(obj).find('#childsafe_x').val(childsafe_x);
+                            $(obj).find('#childsafe_y').val(childsafe_y);
 
                         });
                     }
@@ -2325,6 +2515,7 @@
                     $('#menu1').find(`[data-id='${id}']`).remove();
                     $('#myModal').find('.modal-body').find(`[data-id='${id}']`).remove();
                     $('#myModal2').find('.modal-body').find(`[data-id='${id}']`).remove();
+                    $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).remove();
 
                     var next = current.next('tr');
 
@@ -2412,6 +2603,19 @@
 
                     var id = $(this).val();
                     var conflict_flag = 0;
+
+                    var childsafe = $("[name='childsafe_option" + id + "']").val();
+
+                    if(!childsafe && childsafe != undefined)
+                    {
+                        flag = 1;
+                        conflict_feature = 1;
+                        $("[name='childsafe_option" + id + "']").css('border-bottom','1px solid red');
+                    }
+                    else
+                    {
+                        $("[name='childsafe_option" + id + "']").css('border-bottom','1px solid lightgrey');
+                    }
 
                     $("[name='features" + id + "[]']").each(function(i,obj) {
 
@@ -2521,6 +2725,7 @@
 
                 var current = $('#products_table tbody tr.active');
                 var id = current.data('id');
+                var childsafe = current.find('#childsafe').val();
                 var ladderband = current.find('#ladderband').val();
                 var ladderband_value = current.find('#ladderband_value').val();
                 var ladderband_price_impact = current.find('#ladderband_price_impact').val();
@@ -2545,9 +2750,14 @@
                 var height_unit = current.find('.height').find('.measure-unit').val();
                 var price_text = current.find('.price').text();
                 var features = $('#menu1').find(`[data-id='${id}']`).html();
+                var childsafe_question = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-select').val();
+                var childsafe_answer = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-answer').val();
                 var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
                 var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
                 var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
+                var childsafe_content = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).html();
+                var childsafe_x = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).find('#childsafe_x').val();
+                var childsafe_y = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).find('#childsafe_y').val();
                 var price_based_option = current.find('#price_based_option').val();
                 var base_price = current.find('#base_price').val();
 
@@ -2563,7 +2773,7 @@
                     width_readonly = 'readonly';
                 }
 
-                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,models,model,model_impact_value,width,width_unit,height,height_unit,price_text,features,features_selects,qty,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,delivery_days,price_based_option,base_price,width_readonly,height_readonly);
+                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,models,model,model_impact_value,width,width_unit,height,height_unit,price_text,features,features_selects,childsafe_question,childsafe_answer,qty,childsafe,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,childsafe_content,childsafe_x,childsafe_y,delivery_days,price_based_option,base_price,width_readonly,height_readonly);
 
             });
 
@@ -2589,6 +2799,26 @@
                 var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
                 if (!regex.test(this.value)) {
                     this.value = this.value.substring(0, this.value.length - 1);
+                }
+
+            });
+
+            $(document).on('keypress', ".childsafe_values", function(e){
+
+                e = e || window.event;
+                var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+                var val = String.fromCharCode(charCode);
+
+                if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+                {
+                    e.preventDefault();
+                    return false;
+                }
+
+                if(e.which == 44)
+                {
+                    e.preventDefault();
+                    return false;
                 }
 
             });
@@ -2708,6 +2938,7 @@
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var model = current.parent().parent().parent().find('.model').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
+                var childsafe = current.parent().parent().parent().find('#childsafe').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
                 current.parent().parent().parent().find('#area_conflict').val(0);
 
@@ -2776,6 +3007,7 @@
                                 else
                                 {
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+                                    $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
                                     if(price_based_option == 1)
                                     {
@@ -2806,6 +3038,37 @@
 
                                     var features = '';
                                     var f_value = 0;
+
+                                    if(childsafe == 1)
+                                    {
+                                        var content = '<div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option'+ row_id +'">\n' +
+                                            '<option value="">Select any option</option>\n' +
+                                            '<option value="2">Add childsafety clip</option>\n' +
+                                            '</select>\n' +
+                                            '<input value="0" name="childsafe_diff'+ row_id +'" class="childsafe_diff" type="hidden">'+
+                                            '</div><a data-id="'+ row_id +'" class="info childsafe-btn">Info</a></div>\n';
+
+                                        features = features + content;
+
+                                        $('#myModal3').find('.modal-body').append(
+                                            '<div class="childsafe-content-box" data-id="'+row_id+'">\n' +
+                                            '                                            <div style="margin: 20px 0;" class="row">\n' +
+                                            '                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                                            '                                                    <label style="width: 15%;margin-right: 10px;">Width</label>\n' +
+                                            '                                                    <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x'+row_id+'">\n' +
+                                            '                                                </div>\n' +
+                                            '                                            </div>\n' +
+                                            '                                            <div style="margin: 20px 0;" class="row">\n' +
+                                            '                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                                            '                                                    <label style="width: 15%;margin-right: 10px;">Height</label>\n' +
+                                            '                                                    <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y'+row_id+'">\n' +
+                                            '                                                </div>\n' +
+                                            '                                            </div>\n' +
+                                            '                                        </div>'
+                                        );
+                                    }
 
                                     if(ladderband == 1)
                                     {
@@ -2959,6 +3222,7 @@
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var model = current.parent().parent().parent().find('.model').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
+                var childsafe = current.parent().parent().parent().find('#childsafe').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
                 current.parent().parent().parent().find('#area_conflict').val(0);
 
@@ -3027,6 +3291,7 @@
                                 else
                                 {
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+                                    $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
                                     if(price_based_option == 1)
                                     {
@@ -3057,6 +3322,37 @@
 
                                     var features = '';
                                     var f_value = 0;
+
+                                    if(childsafe == 1)
+                                    {
+                                        var content = '<div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>'+
+                                            '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option'+ row_id +'">\n' +
+                                            '<option value="">Select any option</option>\n' +
+                                            '<option value="2">Add childsafety clip</option>\n' +
+                                            '</select>\n' +
+                                            '<input value="0" name="childsafe_diff'+ row_id +'" class="childsafe_diff" type="hidden">'+
+                                            '</div><a data-id="'+ row_id +'" class="info childsafe-btn">Info</a></div>\n';
+
+                                        features = features + content;
+
+                                        $('#myModal3').find('.modal-body').append(
+                                            '<div class="childsafe-content-box" data-id="'+row_id+'">\n' +
+                                            '                                            <div style="margin: 20px 0;" class="row">\n' +
+                                            '                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                                            '                                                    <label style="width: 15%;margin-right: 10px;">Width</label>\n' +
+                                            '                                                    <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x'+row_id+'">\n' +
+                                            '                                                </div>\n' +
+                                            '                                            </div>\n' +
+                                            '                                            <div style="margin: 20px 0;" class="row">\n' +
+                                            '                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                                            '                                                    <label style="width: 15%;margin-right: 10px;">Height</label>\n' +
+                                            '                                                    <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y'+row_id+'">\n' +
+                                            '                                                </div>\n' +
+                                            '                                            </div>\n' +
+                                            '                                        </div>'
+                                        );
+                                    }
 
                                     if(ladderband == 1)
                                     {
@@ -3187,6 +3483,109 @@
 
                             calculate_total();
                         }
+                    });
+                }
+
+            });
+
+            $(document).on('input', '#childsafe_x, #childsafe_y', function()
+            {
+                var id = $(this).attr('id');
+                var row_id = $(this).parent().parent().parent().data('id');
+
+                if(id == 'childsafe_x')
+                {
+                    var x = $(this).val();
+                    var y = $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
+                }
+                else
+                {
+                    var x = $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
+                    var y = $(this).val();
+                }
+
+                var diff = x-y;
+                diff = Math.abs(diff);
+
+                if(x && y)
+                {
+                    $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+                    $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
+
+                    if(diff <= 150)
+                    {
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1">Please note not childsafe</option><option value="2">Add childsafety clip</option>');
+                    }
+                    else
+                    {
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option><option value="3">Yes childsafe</option>');
+                    }
+
+                    $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe_diff').val(diff);
+                }
+                else
+                {
+                    $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+                    $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
+                    $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option>');
+                }
+
+            });
+
+            $(document).on('change', '.childsafe-select', function()
+            {
+                var current = $(this);
+                var row_id = current.parent().parent().parent().data('id');
+                var value = current.val();
+                var value_x = $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
+                var value_y = $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
+
+                if(value_x && value_y)
+                {
+                    if(!value)
+                    {
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+                    }
+                    else if(value == 2 || value == 3)
+                    {
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">\n' +
+                            '\n' +
+                            '                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                            '                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe Answer</label>\n' +
+                            '                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer'+row_id+'">\n' +
+                            '                                                                                                    <option value="3">Is childsafe</option>\n' +
+                            '                                                                                            </select>\n' +
+                            '                                                                                        </div>\n' +
+                            '\n' +
+                            '                                                                                    </div>');
+                    }
+                    else
+                    {
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">\n' +
+                            '\n' +
+                            '                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
+                            '                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe Answer</label>\n' +
+                            '                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer'+row_id+'">\n' +
+                            '                                                                                                    <option value="1">Make it childsafe</option>\n' +
+                            '                                                                                                    <option value="2">Yes i agree</option>\n' +
+                            '                                                                                            </select>\n' +
+                            '                                                                                        </div>\n' +
+                            '\n' +
+                            '                                                                                    </div>');
+                    }
+                }
+                else
+                {
+                    current.val('');
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{__('text.Oops...')}}',
+                        text: 'Kindly fill both childsafe values first by clicking on "i" icon.',
                     });
                 }
 
@@ -3475,6 +3874,20 @@
 
                 /*$('.top-bar').css('z-index','1');*/
                 $('#myModal').modal('toggle');
+                $('.modal-backdrop').hide();
+
+            });
+
+            $(document).on('click', '.childsafe-btn', function(){
+
+                var current = $(this);
+                var row_id = current.data('id');
+
+                $('#myModal3').find('.modal-body').find('.childsafe-content-box').hide();
+                $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).show();
+
+                /*$('.top-bar').css('z-index','1');*/
+                $('#myModal3').modal('toggle');
                 $('.modal-backdrop').hide();
 
             });

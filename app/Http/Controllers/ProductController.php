@@ -343,6 +343,17 @@ class ProductController extends Controller
 
     public function store(StoreValidationRequest3 $request)
     {
+        $input = $request->all();
+
+        if($request->childsafe)
+        {
+            $input['childsafe'] = 1;
+        }
+        else
+        {
+            $input['childsafe'] = 0;
+        }
+
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
         $colors = $request->colors;
         $features = $request->feature_headings;
@@ -359,8 +370,6 @@ class ProductController extends Controller
         {
             $pricesArray = [];
         }
-
-        $input = $request->all();
 
         if($input['ladderband'])
         {

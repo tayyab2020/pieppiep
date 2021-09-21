@@ -494,6 +494,27 @@
 
                                                             </div>
 
+                                                            <div class="form-group">
+
+                                                                <div class="row" style="margin: 0;">
+
+                                                                    <div style="display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>
+
+                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                        <label style="margin: 0;" class="switch">
+                                                                            <input class="childsafe" name="childsafe" type="checkbox" {{isset($cats) ? ($cats->childsafe ? 'checked' : null) : null}}>
+                                                                            <span class="slider round"></span>
+                                                                        </label>
+                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
                                                             <div @if(isset($cats)) @if(!$cats->ladderband) style='display: none;' @endif @else style='display: none;' @endif id="ladderband_box" class="form-group">
 
                                                                 <div class="row" style="margin: 0;">
