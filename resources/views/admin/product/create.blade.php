@@ -494,27 +494,6 @@
 
                                                             </div>
 
-                                                            <div class="form-group">
-
-                                                                <div class="row" style="margin: 0;">
-
-                                                                    <div style="display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>
-
-                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                        <label style="margin: 0;" class="switch">
-                                                                            <input class="childsafe" name="childsafe" type="checkbox" {{isset($cats) ? ($cats->childsafe ? 'checked' : null) : null}}>
-                                                                            <span class="slider round"></span>
-                                                                        </label>
-                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-
                                                             <div @if(isset($cats)) @if(!$cats->ladderband) style='display: none;' @endif @else style='display: none;' @endif id="ladderband_box" class="form-group">
 
                                                                 <div class="row" style="margin: 0;">
@@ -1583,6 +1562,28 @@
 
                                                                                     @foreach($models as $s => $mod)
 
+                                                                                        <div style="margin-left: 0;margin-right: 0;" data-id="{{$s+1}}" class="form-group model-childsafe">
+
+                                                                                            <div class="row" style="margin: auto;width: 70%;">
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>
+                                                                                                    <input type="hidden" name="childsafe[]" id="childsafe" value="{{$mod->childsafe ? 1 : 0}}">
+
+                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                    <label style="margin: 0;" class="switch">
+                                                                                                        <input class="childsafe" type="checkbox" {{$mod->childsafe ? 'checked' : null}}>
+                                                                                                        <span class="slider round"></span>
+                                                                                                    </label>
+                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                </div>
+
+                                                                                            </div>
+
+                                                                                        </div>
+
                                                                                         <table data-id="{{$s+1}}" style="margin: auto;width: 70%;border-collapse: separate;">
                                                                                             <thead>
                                                                                             <tr>
@@ -1645,6 +1646,28 @@
                                                                                 <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
 
                                                                                     <div id="models-features-tables">
+
+                                                                                        <div style="margin-left: 0;margin-right: 0;" data-id="1" class="form-group model-childsafe">
+
+                                                                                            <div class="row" style="margin: auto;width: 70%;">
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>
+                                                                                                    <input type="hidden" name="childsafe[]" id="childsafe" value="0">
+
+                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                    <label style="margin: 0;" class="switch">
+                                                                                                        <input class="childsafe" type="checkbox">
+                                                                                                        <span class="slider round"></span>
+                                                                                                    </label>
+                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                </div>
+
+                                                                                            </div>
+
+                                                                                        </div>
 
                                                                                         <table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">
                                                                                             <thead>
@@ -1712,6 +1735,28 @@
                                                                                 <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;">
 
                                                                                     <div id="models-features-tables">
+
+                                                                                        <div style="margin-left: 0;margin-right: 0;" data-id="1" class="form-group model-childsafe">
+
+                                                                                            <div class="row" style="margin: auto;width: 70%;">
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>
+                                                                                                    <input type="hidden" name="childsafe[]" id="childsafe" value="0">
+
+                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                    <label style="margin: 0;" class="switch">
+                                                                                                        <input class="childsafe" type="checkbox">
+                                                                                                        <span class="slider round"></span>
+                                                                                                    </label>
+                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                </div>
+
+                                                                                            </div>
+
+                                                                                        </div>
 
                                                                                         <table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">
                                                                                             <thead>
@@ -1810,7 +1855,9 @@
         $('body').on('click', '.select-feature-btn' ,function(){
 
             var id = $(this).data('id');
-            $('#models-features-tables').children().not("table[data-id='" + id + "']").hide();
+            $('#models-features-tables').find("table").hide();
+            $('#models-features-tables').find(".model-childsafe").hide();
+            $('#models-features-tables').find(".model-childsafe[data-id='" + id + "']").show();
             $('#models-features-tables').find("table[data-id='" + id + "']").show();
 
             $('#myModal').modal('toggle');
@@ -1916,7 +1963,28 @@
 
             });
 
-            $('#models-features-tables').append('<table data-id="'+model_row+'" style="margin: auto;width: 70%;border-collapse: separate;">\n' +
+            $('#models-features-tables').append('<div style="margin-left: 0;margin-right: 0;" data-id="'+model_row+'" class="form-group model-childsafe">\n' +
+                '\n' +
+                '                                                                                        <div class="row" style="margin: auto;width: 70%;">\n' +
+                '\n' +
+                '                                                                                            <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '\n' +
+                '                                                                                                <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>\n' +
+                '                                                                                                   <input type="hidden" name="childsafe[]" id="childsafe" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="childsafe" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '\n' +
+                '                                                                                        </div>\n' +
+                '\n' +
+                '                                                                                    </div>' +
+                '<table data-id="'+model_row+'" style="margin: auto;width: 70%;border-collapse: separate;">\n' +
                 '                <thead>\n' +
                 '                <tr>\n' +
                 '                <th></th>\n' +
@@ -1947,6 +2015,7 @@
                 $('#removed_rows1').val(rem_mod);
             }
 
+            $('#models-features-tables').find(".model-childsafe[data-id='" + model_row + "']").remove();
             $('#models-features-tables').find("table[data-id='" + model_row + "']").remove();
             $('.model_box').find("[data-id='" + model_row + "']").remove();
 
@@ -2046,7 +2115,28 @@
 
                 });
 
-                $('#models-features-tables').append('<table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">\n' +
+                $('#models-features-tables').append('<div style="margin-left: 0;margin-right: 0;" data-id="1" class="form-group model-childsafe">\n' +
+                    '\n' +
+                    '                                                                                        <div class="row" style="margin: auto;width: 70%;">\n' +
+                    '\n' +
+                    '                                                                                            <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '\n' +
+                    '                                                                                                <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>\n' +
+                    '                                                                                                   <input type="hidden" name="childsafe[]" id="childsafe" value="0">\n' +
+                    '\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                                                    <input class="childsafe" type="checkbox">\n' +
+                    '                                                                                                    <span class="slider round"></span>\n' +
+                    '                                                                                                </label>\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                                                            </div>\n' +
+                    '\n' +
+                    '                                                                                        </div>\n' +
+                    '\n' +
+                    '                                                                                    </div>' +
+                    '<table data-id="1" style="margin: auto;width: 70%;border-collapse: separate;">\n' +
                     '                <thead>\n' +
                     '                <tr>\n' +
                     '                <th></th>\n' +
@@ -2560,6 +2650,19 @@
             if(!$(this).val())
             {
                 $(this).val(0);
+            }
+
+        });
+
+        $('body').on('change', '.childsafe', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#childsafe').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#childsafe').val(0);
             }
 
         });

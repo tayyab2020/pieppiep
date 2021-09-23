@@ -345,15 +345,6 @@ class ProductController extends Controller
     {
         $input = $request->all();
 
-        if($request->childsafe)
-        {
-            $input['childsafe'] = 1;
-        }
-        else
-        {
-            $input['childsafe'] = 0;
-        }
-
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
         $colors = $request->colors;
         $features = $request->feature_headings;
@@ -617,6 +608,7 @@ class ProductController extends Controller
                         $model_check->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model_check->price_impact = $request->model_price_impact[$m];
                         $model_check->impact_type = $request->model_impact_type[$m];
+                        $model_check->childsafe = $request->childsafe[$m];
                         $model_check->save();
                     }
 
@@ -647,6 +639,7 @@ class ProductController extends Controller
                 else
                 {
                     if($temp != NULL && $request->model_values[$m] != NULL) {
+
                         $model = new product_models;
                         $model->product_id = $request->cat_id;
                         $model->model = $temp;
@@ -654,6 +647,7 @@ class ProductController extends Controller
                         $model->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model->price_impact = $request->model_price_impact[$m];
                         $model->impact_type = $request->model_impact_type[$m];
+                        $model->childsafe = $request->childsafe[$m];
                         $model->save();
 
                         foreach ($feature_row as $a => $abc)
@@ -904,6 +898,7 @@ class ProductController extends Controller
                 foreach ($models as $m => $temp)
                 {
                     if($temp != NULL && $request->model_values[$m] != NULL) {
+
                         $model = new product_models;
                         $model->product_id = $cat->id;
                         $model->model = $temp;
@@ -911,6 +906,7 @@ class ProductController extends Controller
                         $model->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model->price_impact = $request->model_price_impact[$m];
                         $model->impact_type = $request->model_impact_type[$m];
+                        $model->childsafe = $request->childsafe[$m];
                         $model->save();
 
                         foreach ($feature_row as $a => $abc)

@@ -1448,81 +1448,83 @@
 
                         $('#menu1').find(`[data-id='${row_id}']`).remove();
 
-                        current.parent().parent().find('#delivery_days').val(data.delivery_days);
-                        current.parent().parent().find('#childsafe').val(data.childsafe);
-                        current.parent().parent().find('#ladderband').val(data.ladderband);
-                        current.parent().parent().find('#ladderband_value').val(data.ladderband_value);
-                        current.parent().parent().find('#ladderband_price_impact').val(data.ladderband_price_impact);
-                        current.parent().parent().find('#ladderband_impact_type').val(data.ladderband_impact_type);
-                        current.parent().parent().find('#price_based_option').val(data.price_based_option);
-                        current.parent().parent().find('#base_price').val(data.base_price);
-                        current.parent().parent().find('.price').text('');
-                        current.parent().parent().find('#row_total').val('');
-                        current.parent().parent().find('#rate').val('');
-                        current.parent().parent().find('#basic_price').val('');
-
-                        var price_based_option = data.price_based_option;
-
-                        if(price_based_option == 1)
+                        if(data != '')
                         {
-                            current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',false);
-                            current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',false);
-                        }
-                        else if(price_based_option == 2)
-                        {
-                            current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',false);
-                            current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',true);
-                            current.parent().parent().find('.height').children('.m-box').children('.m-input').val(0);
-                        }
-                        else
-                        {
-                            current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',true);
-                            current.parent().parent().find('.width').children('.m-box').children('.m-input').val(0);
-                            current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',false);
-                        }
+                            current.parent().parent().find('#delivery_days').val(data.delivery_days);
+                            current.parent().parent().find('#ladderband').val(data.ladderband);
+                            current.parent().parent().find('#ladderband_value').val(data.ladderband_value);
+                            current.parent().parent().find('#ladderband_price_impact').val(data.ladderband_price_impact);
+                            current.parent().parent().find('#ladderband_impact_type').val(data.ladderband_impact_type);
+                            current.parent().parent().find('#price_based_option').val(data.price_based_option);
+                            current.parent().parent().find('#base_price').val(data.base_price);
+                            current.parent().parent().find('.price').text('');
+                            current.parent().parent().find('#row_total').val('');
+                            current.parent().parent().find('#rate').val('');
+                            current.parent().parent().find('#basic_price').val('');
 
-                        $.each(data.colors, function(index, value) {
+                            var price_based_option = data.price_based_option;
 
-                            if(value.title)
+                            if(price_based_option == 1)
                             {
-                                var opt = '<option value="'+value.id+'" >'+value.title+'</option>';
-
-                                options = options + opt;
+                                current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',false);
+                                current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',false);
+                            }
+                            else if(price_based_option == 2)
+                            {
+                                current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',false);
+                                current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',true);
+                                current.parent().parent().find('.height').children('.m-box').children('.m-input').val(0);
+                            }
+                            else
+                            {
+                                current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly',true);
+                                current.parent().parent().find('.width').children('.m-box').children('.m-input').val(0);
+                                current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly',false);
                             }
 
-                        });
+                            $.each(data.colors, function(index, value) {
 
-                        $.each(data.models, function(index1, value1) {
+                                if(value.title)
+                                {
+                                    var opt = '<option value="'+value.id+'" >'+value.title+'</option>';
 
-                            if(value1.model)
+                                    options = options + opt;
+                                }
+
+                            });
+
+                            $.each(data.models, function(index1, value1) {
+
+                                if(value1.model)
+                                {
+                                    var opt1 = '<option value="'+value1.id+'" >'+value1.model+'</option>';
+
+                                    options1 = options1 + opt1;
+                                }
+
+                            });
+
+                            current.parent().parent().find('.color').children('select').find('option')
+                                .remove()
+                                .end()
+                                .append('<option value="">Select Color</option>'+options);
+
+                            current.parent().parent().find('.model').children('select').find('option')
+                                .remove()
+                                .end()
+                                .append('<option value="">Select Model</option>'+options1);
+
+
+                            if((typeof(data[0]) != "undefined") && data[0].measure)
                             {
-                                var opt1 = '<option value="'+value1.id+'" >'+value1.model+'</option>';
-
-                                options1 = options1 + opt1;
+                                current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val(data[0].measure);
+                                current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val(data[0].measure);
                             }
-
-                        });
-
-                        current.parent().parent().find('.color').children('select').find('option')
-                            .remove()
-                            .end()
-                            .append('<option value="">Select Color</option>'+options);
-
-                        current.parent().parent().find('.model').children('select').find('option')
-                            .remove()
-                            .end()
-                            .append('<option value="">Select Model</option>'+options1);
-
-
-                        if((typeof(data[0]) != "undefined") && data[0].measure)
-                        {
-                            current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val(data[0].measure);
-                            current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val(data[0].measure);
-                        }
-                        else
-                        {
-                            current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val('');
-                            current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val('');
+                            else
+                            {
+                                current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val('');
+                                current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val('');
+                            }
                         }
 
                         calculate_total();
@@ -1587,7 +1589,6 @@
                 height = height.replace(/\,/g, '.');
 
                 var product = current.parent().parent().find('.products').find('select').val();
-                var childsafe = current.parent().parent().find('#childsafe').val();
                 var ladderband = current.parent().parent().find('#ladderband').val();
                 current.parent().parent().find('#area_conflict').val(0);
 
@@ -1610,6 +1611,8 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
+                                current.parent().parent().find('#childsafe').val(data[3].childsafe);
+                                var childsafe = data[3].childsafe;
 
                                 if(data[0].value === 'both')
                                 {
@@ -1875,7 +1878,6 @@
                 height = height.replace(/\,/g, '.');
 
                 var product = current.parent().parent().find('.products').find('select').val();
-                var childsafe = current.parent().parent().find('#childsafe').val();
                 var ladderband = current.parent().parent().find('#ladderband').val();
                 current.parent().parent().find('#area_conflict').val(0);
 
@@ -1898,6 +1900,8 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
+                                current.parent().parent().find('#childsafe').val(data[3].childsafe);
+                                var childsafe = data[3].childsafe;
                                 var color_max_height = data[0].max_height;
 
                                 if(data[0].value === 'both')
@@ -2976,7 +2980,6 @@
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var model = current.parent().parent().parent().find('.model').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
-                var childsafe = current.parent().parent().parent().find('#childsafe').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
                 current.parent().parent().parent().find('#area_conflict').val(0);
 
@@ -2999,6 +3002,9 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
+                                current.parent().parent().parent().find('#childsafe').val(data[3].childsafe);
+                                var childsafe = data[3].childsafe;
+
                                 if(data[0].value === 'both')
                                 {
                                     Swal.fire({
@@ -3262,7 +3268,6 @@
                 var color = current.parent().parent().parent().find('.color').find('select').val();
                 var model = current.parent().parent().parent().find('.model').find('select').val();
                 var product = current.parent().parent().parent().find('.products').find('select').val();
-                var childsafe = current.parent().parent().parent().find('#childsafe').val();
                 var ladderband = current.parent().parent().parent().find('#ladderband').val();
                 current.parent().parent().parent().find('#area_conflict').val(0);
 
@@ -3285,6 +3290,9 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
+                                current.parent().parent().parent().find('#childsafe').val(data[3].childsafe);
+                                var childsafe = data[3].childsafe;
+                                
                                 if(data[0].value === 'both')
                                 {
                                     Swal.fire({
