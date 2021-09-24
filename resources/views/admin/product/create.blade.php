@@ -3576,7 +3576,10 @@
 
                 $('#sub-features').find(".sub-feature-table-container[data-id='" + row_id + "']").find('table tbody tr').each(function (index) {
 
-                    rem_arr.push($(this).find('.remove-sub-feature').data('id'));
+                    if($(this).find('.remove-sub-feature').data('id'))
+                    {
+                        rem_arr.push($(this).find('.remove-sub-feature').data('id'));
+                    }
 
                 });
 
