@@ -415,6 +415,8 @@ class ProductController extends Controller
             colors::whereIn('id',$removed_colors)->delete();
             product_models::whereIn('id',$removed1)->delete();
             model_features::whereIn('model_id',$removed1)->delete();
+            $model_ids = product_models::where('product_id',$request->cat_id)->pluck('id');
+            model_features::whereIn('model_id',$model_ids)->whereIn('product_feature_id',$removed)->delete();
 
             $cat = Products::where('id',$request->cat_id)->first();
 
@@ -588,12 +590,12 @@ class ProductController extends Controller
                 }
                 else
                 {
+                    $features_ids = product_features::where('product_id',$request->cat_id)->pluck('id');
                     product_features::where('product_id',$request->cat_id)->delete();
+                    $model_ids = product_models::where('product_id',$request->cat_id)->pluck('id');
+                    model_features::whereIn('model_id',$model_ids)->whereIn('product_feature_id',$features_ids)->delete();
                 }
             }
-
-            $model_ids = product_models::where('product_id',$request->cat_id)->pluck('id');
-            model_features::whereIn('model_id',$model_ids)->whereIn('product_feature_id',$removed)->delete();
 
             foreach ($models as $m => $temp)
             {

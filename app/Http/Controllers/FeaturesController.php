@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\model_features;
 use App\product_features;
 use App\features;
+use App\product_models;
 use App\User;
 use App\users;
 use Illuminate\Http\Request;
@@ -149,6 +151,10 @@ class FeaturesController extends Controller
             }
 
             $feature->delete();
+
+            $feature_ids = product_features::where('heading_id',$id)->pluck('id');
+            product_features::where('heading_id',$id)->delete();
+            model_features::whereIn('product_feature_id',$feature_ids)->delete();
             Session::flash('success', 'Feature deleted successfully.');
             return redirect()->route('admin-feature-index');
         }
