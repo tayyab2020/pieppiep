@@ -84,7 +84,7 @@ class FeaturesController extends Controller
 
         if($request->heading_id)
         {
-            features::where('id',$request->heading_id)->update(['title' => $request->title, 'comment_box' => $comment_box, 'order_no' => $request->order_no]);
+            features::where('id',$request->heading_id)->update(['title' => $request->title, 'comment_box' => $comment_box, 'order_no' => $request->order_no, 'quote_order_no' => $request->quote_order_no]);
             Session::flash('success', 'Feature updated successfully.');
         }
         else
@@ -94,6 +94,7 @@ class FeaturesController extends Controller
             $feature->title = $request->title;
             $feature->comment_box = $comment_box;
             $feature->order_no = $request->order_no;
+            $feature->quote_order_no = $request->quote_order_no;
             $feature->save();
 
             Session::flash('success', 'New Feature added successfully.');

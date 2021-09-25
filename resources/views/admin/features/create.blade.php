@@ -71,6 +71,13 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">Quote Order</label>
+                                            <div class="col-sm-6">
+                                                <input type="number" value="{{isset($feature) ? $feature->quote_order_no : 0}}" placeholder="Quote Order" class="form-control quote_order_no" name="quote_order_no" id="blood_group_display_name" required="">
+                                            </div>
+                                        </div>
+
                                         <hr>
                                         <div style="padding-top: 20px;" class="add-product-footer">
                                             <button type="submit" class="btn add-product_btn">{{isset($feature) ? 'Edit Feature' : 'Add Feature'}}</button>
@@ -97,6 +104,26 @@
     </script>
 
     <script type="text/javascript">
+
+        $(document).on('keypress', ".quote_order_no", function(e){
+
+            e = e || window.event;
+            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+            var val = String.fromCharCode(charCode);
+
+            if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+            {
+                e.preventDefault();
+                return false;
+            }
+
+            if(e.which == 44)
+            {
+                e.preventDefault();
+                return false;
+            }
+
+        });
 
         function uploadclick(){
             $("#uploadFile").click();

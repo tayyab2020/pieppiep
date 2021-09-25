@@ -207,7 +207,7 @@ class UserController extends Controller
                         ->where('product_features.product_id','=',$request->product)
                         ->select('product_features.*');
 
-                }])->get();
+                }])->orderBy('features.quote_order_no','ASC')->get();
 
                 $model = product_models::where('id',$request->model)->first();
 

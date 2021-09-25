@@ -689,11 +689,15 @@
 
                                                             <div class="row" style="margin: 0;display: flex;justify-content: center;">
 
-                                                                <div style="font-family: monospace;" class="col-sm-5">
+                                                                <div style="font-family: monospace;" class="col-sm-3">
                                                                     <h4>Heading</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-5">
+                                                                <div style="font-family: monospace;" class="col-sm-3">
+                                                                    <h4>Order</h4>
+                                                                </div>
+
+                                                                <div style="font-family: monospace;" class="col-sm-3">
                                                                     <h4>Action</h4>
                                                                 </div>
 
