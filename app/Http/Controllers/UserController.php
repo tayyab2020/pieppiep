@@ -3026,12 +3026,11 @@ class UserController extends Controller
                     }
 
                     /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
-                    $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.heading_id',$f_ids[$f])->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                    $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.id',$key1)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
                 }
             }
 
         }
-
 
         $filename = $quotation_invoice_number . '.pdf';
 
@@ -3869,7 +3868,7 @@ class UserController extends Controller
                         }
                     }
 
-                    $feature_sub_titles[$x][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$temp->product_id)->where('product_features.heading_id',$feature->feature_id)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                    $feature_sub_titles[$x][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$temp->product_id)->where('product_features.id',$feature->feature_sub_id)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
                     $comments[$x][] = $feature->comment;
                 }
             }

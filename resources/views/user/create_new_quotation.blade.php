@@ -330,18 +330,18 @@
 
                                                                             <div data-id="{{$x + 1}}" @if($x == 0) style="margin: 0;" @else style="margin: 0;display: none;" @endif class="form-group">
 
-                                                                                <div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                        <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>
+                                                                                <div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                                                                        <label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>
                                                                                         <input value="{{$key1->qty}}" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text"><span>pcs</span>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 @if($key1->childsafe)
 
-                                                                                    <div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+                                                                                    <div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;">
 
-                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>
+                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>
                                                                                             <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option{{$x+1}}">
 
                                                                                                 <option value="">Select any option</option>
@@ -366,10 +366,10 @@
 
                                                                                     </div>
 
-                                                                                    <div class="row childsafe-answer-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+                                                                                    <div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">
 
-                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe Answer</label>
+                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>
                                                                                             <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer{{$x+1}}">
                                                                                                 @if($key1->childsafe_question == 1)
                                                                                                     <option {{$key1->childsafe_answer == 1 ? 'selected' : null}} value="1">Make it childsafe</option>
@@ -388,10 +388,10 @@
 
                                                                                     @if($feature->feature_id == 0 && $feature->feature_sub_id == 0)
 
-                                                                                        <div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+                                                                                        <div class="row" style="margin: 0;display: flex;align-items: center;">
 
-                                                                                            <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                                <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>
+                                                                                            <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                                                                                <label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>
                                                                                                 <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
                                                                                                     <option {{$feature->ladderband == 0 ? 'selected' : null}} value="0">No</option>
                                                                                                     <option {{$feature->ladderband == 1 ? 'selected' : null}} value="1">Yes</option>
@@ -412,10 +412,10 @@
 
                                                                                     @else
 
-                                                                                        <div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+                                                                                        <div class="row" style="margin: 0;display: flex;align-items: center;">
 
-                                                                                            <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                                <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">{{$feature->title}}</label>
+                                                                                            <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                                                                                <label style="margin-right: 10px;margin-bottom: 0;">{{$feature->title}}</label>
                                                                                                 <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
 
                                                                                                     <option value="0">Select Feature</option>
@@ -445,10 +445,10 @@
 
                                                                                             @if($sub_feature->feature_id == $feature->feature_sub_id)
 
-                                                                                                <div class="row sub-features" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">
+                                                                                                <div class="row sub-features" style="margin: 0;display: flex;align-items: center;">
 
-                                                                                                    <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                                                        <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">{{$sub_feature->title}}</label>
+                                                                                                    <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                                                                                                        <label style="margin-right: 10px;margin-bottom: 0;">{{$sub_feature->title}}</label>
                                                                                                         <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
 
                                                                                                             <option value="0">Select Feature</option>
@@ -779,6 +779,96 @@
     </div>
 
     <style>
+
+        #menu1 .form-group
+        {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #menu1 .form-group .row
+        {
+            padding: 0 20px;
+            justify-content: flex-start;
+            border-right: 1px solid #dddddd;
+            height: 40px;
+            width: 33%;
+            margin: 15px 0 !important;
+        }
+
+        #menu1 .form-group .row:nth-child(3n + 1)
+        {
+            padding-left: 0;
+        }
+
+        #menu1 .form-group .row:nth-child(3n)
+        {
+            border-right: 0;
+            padding-right: 0;
+        }
+
+        @media (max-width: 992px)
+        {
+            #menu1 .form-group .row
+            {
+                width: 50%;
+            }
+
+            #menu1 .form-group .row:nth-child(3n + 1)
+            {
+                padding-left: 20px;
+            }
+
+            #menu1 .form-group .row:nth-child(3n)
+            {
+                border-right: 1px solid #dddddd;
+                padding-right: 20px;
+            }
+
+            #menu1 .form-group .row:nth-child(2n + 1)
+            {
+                padding-left: 0;
+            }
+
+            #menu1 .form-group .row:nth-child(2n)
+            {
+                border-right: 0;
+                padding-right: 0;
+            }
+
+        }
+
+        @media (max-width: 670px)
+        {
+            #menu1 .form-group .row
+            {
+                width: 100%;
+            }
+
+            #menu1 .form-group .row
+            {
+                border-right: 0 !important;
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+
+        }
+
+        @media (max-width: 550px)
+        {
+            .add-product-header
+            {
+                flex-direction: column;
+            }
+
+            .add-product-header .col-md-5
+            {
+                padding: 0;
+                margin-top: 20px;
+                width: 100%;
+            }
+        }
 
         .swal2-html-container
         {
@@ -1694,8 +1784,8 @@
 
                                     if(childsafe == 1)
                                     {
-                                        var content = '<div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>'+
+                                        var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option'+ row_id +'">\n' +
                                             '<option value="">Select any option</option>\n' +
                                             '<option value="2">Add childsafety clip</option>\n' +
@@ -1726,8 +1816,8 @@
 
                                     if(ladderband == 1)
                                     {
-                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
+                                        var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
                                             '<option value="0">No</option>\n' +
                                             '<option value="1">Yes</option>\n' +
@@ -1760,8 +1850,8 @@
                                             var icon = '';
                                         }
 
-                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
+                                        var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
@@ -1780,8 +1870,8 @@
 
                                     $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
                                         '\n' +
-                                        '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                        '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                        '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                        '<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>'+
                                         '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
                                         '</div>');
@@ -1984,8 +2074,8 @@
 
                                     if(childsafe == 1)
                                     {
-                                        var content = '<div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>'+
+                                        var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option'+ row_id +'">\n' +
                                             '<option value="">Select any option</option>\n' +
                                             '<option value="2">Add childsafety clip</option>\n' +
@@ -2015,8 +2105,8 @@
 
                                     if(ladderband == 1)
                                     {
-                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
+                                        var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
                                             '<option value="0">No</option>\n' +
                                             '<option value="1">Yes</option>\n' +
@@ -2049,8 +2139,8 @@
                                             var icon = '';
                                         }
 
-                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
+                                        var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
@@ -2069,8 +2159,8 @@
 
                                     $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
                                         '\n' +
-                                        '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                        '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                        '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                        '<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>'+
                                         '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
                                         '</div>');
@@ -3085,8 +3175,8 @@
 
                                     if(childsafe == 1)
                                     {
-                                        var content = '<div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>'+
+                                        var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option'+ row_id +'">\n' +
                                             '<option value="">Select any option</option>\n' +
                                             '<option value="2">Add childsafety clip</option>\n' +
@@ -3116,8 +3206,8 @@
 
                                     if(ladderband == 1)
                                     {
-                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
+                                        var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
                                             '<option value="0">No</option>\n' +
                                             '<option value="1">Yes</option>\n' +
@@ -3150,8 +3240,8 @@
                                             var icon = '';
                                         }
 
-                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
+                                        var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
@@ -3170,8 +3260,8 @@
 
                                     $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
                                         '\n' +
-                                        '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                        '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                        '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                        '<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>'+
                                         '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
                                         '</div>');
@@ -3292,7 +3382,7 @@
                             {
                                 current.parent().parent().parent().find('#childsafe').val(data[3].childsafe);
                                 var childsafe = data[3].childsafe;
-                                
+
                                 if(data[0].value === 'both')
                                 {
                                     Swal.fire({
@@ -3373,8 +3463,8 @@
 
                                     if(childsafe == 1)
                                     {
-                                        var content = '<div class="row childsafe-question-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe</label>'+
+                                        var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option'+ row_id +'">\n' +
                                             '<option value="">Select any option</option>\n' +
                                             '<option value="2">Add childsafety clip</option>\n' +
@@ -3404,8 +3494,8 @@
 
                                     if(ladderband == 1)
                                     {
-                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Ladderband</label>'+
+                                        var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">\n' +
                                             '<option value="0">No</option>\n' +
                                             '<option value="1">Yes</option>\n' +
@@ -3438,8 +3528,8 @@
                                             var icon = '';
                                         }
 
-                                        var content = '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                            '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+value.title+'</label>'+
+                                        var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                            '<label style="margin-right: 10px;margin-bottom: 0;">'+value.title+'</label>'+
                                             '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                             '<input value="'+f_value+'" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                             '<input value="'+value.id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
@@ -3458,8 +3548,8 @@
 
                                     $('#menu1').append('<div data-id="'+row_id+'" style="margin: 0;" class="form-group">' +
                                         '\n' +
-                                        '<div class="row" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                        '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Quantity</label>'+
+                                        '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                        '<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>'+
                                         '<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
                                         '</div></div>' + features +
                                         '</div>');
@@ -3600,10 +3690,10 @@
                     {
                         $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
 
-                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">\n' +
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
                             '\n' +
-                            '                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                            '                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe Answer</label>\n' +
+                            '                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                            '                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
                             '                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer'+row_id+'">\n' +
                             '                                                                                                    <option value="3">Is childsafe</option>\n' +
                             '                                                                                            </select>\n' +
@@ -3615,10 +3705,10 @@
                     {
                         $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
 
-                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;">\n' +
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
                             '\n' +
-                            '                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                            '                                                                                            <label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">Childsafe Answer</label>\n' +
+                            '                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                            '                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
                             '                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer'+row_id+'">\n' +
                             '                                                                                                    <option value="1">Make it childsafe</option>\n' +
                             '                                                                                                    <option value="2">Yes i agree</option>\n' +
@@ -3814,8 +3904,8 @@
 
                                 });
 
-                                current.parent().parent().after('<div class="row sub-features" style="margin: 0;padding: 20px 0;display: flex;align-items: center;width: 100%;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-3 col-md-3 col-sm-6 col-xs-6">\n' +
-                                    '<label style="margin-right: 10px;margin-bottom: 0;min-width: 50%;">'+heading+'</label>'+
+                                current.parent().parent().after('<div class="row sub-features" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                    '<label style="margin-right: 10px;margin-bottom: 0;">'+heading+'</label>'+
                                     '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features'+ row_id +'[]">'+opt+'</select>\n' +
                                     '<input value="0" name="f_price'+ row_id +'[]" class="f_price" type="hidden">'+
                                     '<input value="'+heading_id+'" name="f_id'+ row_id +'[]" class="f_id" type="hidden">'+
