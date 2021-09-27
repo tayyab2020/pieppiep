@@ -3654,11 +3654,34 @@
 
                     if(diff <= 150)
                     {
-                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1">Please note not childsafe</option><option value="2">Add childsafety clip</option>');
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1" selected>Please note not childsafe</option><option value="2">Add childsafety clip</option>');
+
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
+                            '\n' +
+                            '                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                            '                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
+                            '                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer'+row_id+'">\n' +
+                            '                                                                                                    <option value="1">Make it childsafe</option>\n' +
+                            '                                                                                                    <option value="2">Yes i agree</option>\n' +
+                            '                                                                                            </select>\n' +
+                            '                                                                                        </div>\n' +
+                            '\n' +
+                            '                                                                                    </div>');
                     }
                     else
                     {
-                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option><option value="3">Yes childsafe</option>');
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option><option value="3" selected>Yes childsafe</option>');
+
+                        $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
+                            '\n' +
+                            '                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                            '                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
+                            '                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer'+row_id+'">\n' +
+                            '                                                                                                    <option value="3">Is childsafe</option>\n' +
+                            '                                                                                            </select>\n' +
+                            '                                                                                        </div>\n' +
+                            '\n' +
+                            '                                                                                    </div>');
                     }
 
                     $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe_diff').val(diff);
