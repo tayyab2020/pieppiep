@@ -3810,7 +3810,7 @@ class UserController extends Controller
 
         if($data)
         {
-            $client = User::where('id',$data->user_id)->first();
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->user_id)->select('customers_details.*','users.email')->first();
             $request = new_quotations::where('id',$invoice_id)->first();
             $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
 
