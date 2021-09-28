@@ -3963,9 +3963,9 @@
                                 if(data[0].variable == 1)
                                 {
                                     impact_value = data[0].value;
+                                    impact_value = impact_value * (width / 100);
                                     impact_value = parseFloat(impact_value).toFixed(2);
-                                    var per = impact_value * (width / 100);
-                                    total = parseFloat(total) + parseFloat(per);
+                                    total = parseFloat(total) + parseFloat(impact_value);
                                     total = total.toFixed(2);
                                 }
                                 else
