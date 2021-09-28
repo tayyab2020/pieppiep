@@ -446,6 +446,7 @@ class ProductController extends Controller
                         $fea->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
                         $fea->price_impact = $request->price_impact[$f];
                         $fea->impact_type = $request->impact_type[$f];
+                        $fea->variable = $request->variable[$f];
                         $fea->save();
 
                         $s_titles = 'features'.$request->f_rows[$f];
@@ -456,6 +457,7 @@ class ProductController extends Controller
                             $s_value = 'feature_values'.$request->f_rows[$f];
                             $s_price_impact = 'price_impact'.$request->f_rows[$f];
                             $s_impact_type = 'impact_type'.$request->f_rows[$f];
+                            $s_variable = 'variable'.$request->f_rows[$f];
 
                             if($sub != NULL)
                             {
@@ -468,6 +470,7 @@ class ProductController extends Controller
                                 $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
                                 $sub_feature->price_impact = $request->$s_price_impact[$s];
                                 $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                $sub_feature->variable = $request->$s_variable[$s];
                                 $sub_feature->save();
                             }
                         }
@@ -495,6 +498,7 @@ class ProductController extends Controller
                                 $fea_check->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
                                 $fea_check->price_impact = $request->price_impact[$f];
                                 $fea_check->impact_type = $request->impact_type[$f];
+                                $fea_check->variable = $request->variable[$f];
                                 $fea_check->save();
 
                                 $s_titles = 'features'.$request->f_rows[$f];
@@ -507,6 +511,7 @@ class ProductController extends Controller
                                     $s_value = 'feature_values'.$request->f_rows[$f];
                                     $s_price_impact = 'price_impact'.$request->f_rows[$f];
                                     $s_impact_type = 'impact_type'.$request->f_rows[$f];
+                                    $s_variable = 'variable'.$request->f_rows[$f];
 
                                     if($sub_fea_check)
                                     {
@@ -519,6 +524,7 @@ class ProductController extends Controller
                                             $sub_fea_check->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
                                             $sub_fea_check->price_impact = $request->$s_price_impact[$s];
                                             $sub_fea_check->impact_type = $request->$s_impact_type[$s];
+                                            $sub_fea_check->variable = $request->$s_variable[$s];
                                             $sub_fea_check->save();
                                         }
                                     }
@@ -535,6 +541,7 @@ class ProductController extends Controller
                                             $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
                                             $sub_feature->price_impact = $request->$s_price_impact[$s];
                                             $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                            $sub_feature->variable = $request->$s_variable[$s];
                                             $sub_feature->save();
                                         }
                                     }
@@ -556,6 +563,7 @@ class ProductController extends Controller
                                 $fea->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
                                 $fea->price_impact = $request->price_impact[$f];
                                 $fea->impact_type = $request->impact_type[$f];
+                                $fea->variable = $request->variable[$f];
                                 $fea->save();
 
                                 $s_titles = 'features'.$request->f_rows[$f];
@@ -566,6 +574,7 @@ class ProductController extends Controller
                                     $s_value = 'feature_values'.$request->f_rows[$f];
                                     $s_price_impact = 'price_impact'.$request->f_rows[$f];
                                     $s_impact_type = 'impact_type'.$request->f_rows[$f];
+                                    $s_variable = 'variable'.$request->f_rows[$f];
 
                                     if($sub != NULL)
                                     {
@@ -578,6 +587,7 @@ class ProductController extends Controller
                                         $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
                                         $sub_feature->price_impact = $request->$s_price_impact[$s];
                                         $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                        $sub_feature->variable = $request->$s_variable[$s];
                                         $sub_feature->save();
                                     }
                                 }
@@ -866,6 +876,7 @@ class ProductController extends Controller
                         $feature->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
                         $feature->price_impact = $request->price_impact[$f];
                         $feature->impact_type = $request->impact_type[$f];
+                        $feature->variable = $request->variable[$f];
                         $feature->save();
 
                         $s_titles = 'features'.$request->f_rows[$f];
@@ -876,6 +887,7 @@ class ProductController extends Controller
                             $s_value = 'feature_values'.$request->f_rows[$f];
                             $s_price_impact = 'price_impact'.$request->f_rows[$f];
                             $s_impact_type = 'impact_type'.$request->f_rows[$f];
+                            $s_variable = 'variable'.$request->f_rows[$f];
 
                             if($sub != NULL)
                             {
@@ -888,6 +900,7 @@ class ProductController extends Controller
                                 $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
                                 $sub_feature->price_impact = $request->$s_price_impact[$s];
                                 $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                $sub_feature->variable = $request->$s_variable[$s];
                                 $sub_feature->save();
                             }
                         }

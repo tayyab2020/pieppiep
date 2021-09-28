@@ -915,6 +915,7 @@
                                                                                                     <th>Sub Feature</th>
                                                                                                     <th>Price Impact</th>
                                                                                                     <th>Impact Type</th>
+                                                                                                    <th>Variable</th>
                                                                                                     <th>Remove</th>
                                                                                                 </tr>
                                                                                                 </thead>
@@ -962,6 +963,20 @@
                                                                                                                         <span class="slider round"></span>
                                                                                                                     </label>
                                                                                                                     <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                    <input type="hidden" name="variable[]" id="variable" value="{{$key1->variable}}">
+
+                                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                                    <label style="margin: 0;" class="switch">
+                                                                                                                        <input class="variable" type="checkbox" {{$key1->variable ? 'checked' : null}}>
+                                                                                                                        <span class="slider round"></span>
+                                                                                                                    </label>
+                                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                                                                 </div>
                                                                                                             </td>
@@ -1019,6 +1034,7 @@
                                                                                                 <th>Sub Features</th>
                                                                                                 <th>Price Impact</th>
                                                                                                 <th>Impact Type</th>
+                                                                                                <th>Variable</th>
                                                                                                 <th>Remove</th>
                                                                                             </tr>
                                                                                             </thead>
@@ -1062,6 +1078,20 @@
                                                                                                             <span class="slider round"></span>
                                                                                                         </label>
                                                                                                         <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                        <input type="hidden" name="variable[]" id="variable" value="0">
+
+                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                            <input class="variable" type="checkbox">
+                                                                                                            <span class="slider round"></span>
+                                                                                                        </label>
+                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                                                     </div>
                                                                                                 </td>
@@ -1118,6 +1148,7 @@
                                                                                                     <th>Value</th>
                                                                                                     <th>Price Impact</th>
                                                                                                     <th>Impact Type</th>
+                                                                                                    <th>Variable</th>
                                                                                                     <th>Remove</th>
                                                                                                 </tr>
                                                                                                 </thead>
@@ -1167,6 +1198,20 @@
                                                                                                                     </div>
                                                                                                                 </td>
                                                                                                                 <td>
+                                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                        <input type="hidden" name="variable{{$s+1}}[]" id="variable" value="{{$key1->variable}}">
+
+                                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                                            <input class="variable" type="checkbox" {{$key1->variable ? 'checked' : null}}>
+                                                                                                                            <span class="slider round"></span>
+                                                                                                                        </label>
+                                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                                    </div>
+                                                                                                                </td>
+                                                                                                                <td>
                                                                                                                     <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="{{$key1->id}}" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
                                                                                                                 </td>
                                                                                                             </tr>
@@ -1212,6 +1257,20 @@
                                                                                                                     <span class="slider round"></span>
                                                                                                                 </label>
                                                                                                                 <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                            </div>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                                <input type="hidden" name="variable{{$s+1}}[]" id="variable" value="0">
+
+                                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                                <label style="margin: 0;" class="switch">
+                                                                                                                    <input class="variable" type="checkbox">
+                                                                                                                    <span class="slider round"></span>
+                                                                                                                </label>
+                                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                                                             </div>
                                                                                                         </td>
@@ -1268,6 +1327,7 @@
                                                                                                 <th>Value</th>
                                                                                                 <th>Price Impact</th>
                                                                                                 <th>Impact Type</th>
+                                                                                                <th>Variable</th>
                                                                                                 <th>Remove</th>
                                                                                             </tr>
                                                                                             </thead>
@@ -1307,6 +1367,20 @@
                                                                                                             <span class="slider round"></span>
                                                                                                         </label>
                                                                                                         <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+
+                                                                                                        <input type="hidden" name="variable1[]" id="variable" value="0">
+
+                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                                        <label style="margin: 0;" class="switch">
+                                                                                                            <input class="variable" type="checkbox">
+                                                                                                            <span class="slider round"></span>
+                                                                                                        </label>
+                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                                                     </div>
                                                                                                 </td>
@@ -2738,6 +2812,19 @@
 
         });
 
+        $('body').on('change', '.variable', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#variable').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#variable').val(0);
+            }
+
+        });
+
         $('body').on('input', '.color_title', function() {
 
             var val = $(this).val();
@@ -2935,6 +3022,20 @@
                 '                                                                                            </div>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                '\n' +
+                '                                                                                                <input type="hidden" name="variable[]" id="variable" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="variable" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
                 '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr>');
@@ -2963,6 +3064,7 @@
                 '                                                                                                <th>Value</th>\n' +
                 '                                                                                                <th>Price Impact</th>\n' +
                 '                                                                                                <th>Impact Type</th>\n' +
+                '                                                                                                <th>Variable</th>\n' +
                 '                                                                                                <th>Remove</th>\n' +
                 '                                                                                            </tr>\n' +
                 '                                                                                            </thead>\n' +
@@ -3001,6 +3103,20 @@
                 '                                                                                                    <span class="slider round"></span>\n' +
                 '                                                                                                </label>\n' +
                 '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                '\n' +
+                '                                                                                                <input type="hidden" name="variable'+feature_row+'[]" id="variable" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="variable" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                 '\n' +
                 '                                                                                            </div>\n' +
                 '                                                                                        </td>\n' +
@@ -3064,6 +3180,20 @@
                 '                                                                                                    <span class="slider round"></span>\n' +
                 '                                                                                                </label>\n' +
                 '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                '\n' +
+                '                                                                                                <input type="hidden" name="variable'+id+'[]" id="variable" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="variable" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                 '\n' +
                 '                                                                                            </div>\n' +
                 '                                                                                        </td>\n' +
@@ -3172,6 +3302,7 @@
                 '                                                                                            <th>Sub Features</th>\n' +
                 '                                                                                            <th>Price Impact</th>\n' +
                 '                                                                                            <th>Impact Type</th>\n' +
+                '                                                                                            <th>Variable</th>\n' +
                 '                                                                                            <th>Remove</th>\n' +
                 '                                                                                        </tr>\n' +
                 '                                                                                        </thead>\n' +
@@ -3219,6 +3350,20 @@
                 '                                                                                            </div>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                '\n' +
+                '                                                                                                <input type="hidden" name="variable[]" id="variable" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="variable" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
                 '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr></tbody></table>' +
@@ -3249,6 +3394,7 @@
                 '                                                                                                <th>Value</th>\n' +
                 '                                                                                                <th>Price Impact</th>\n' +
                 '                                                                                                <th>Impact Type</th>\n' +
+                '                                                                                                <th>Variable</th>\n' +
                 '                                                                                                <th>Remove</th>\n' +
                 '                                                                                            </tr>\n' +
                 '                                                                                            </thead>\n' +
@@ -3287,6 +3433,20 @@
                 '                                                                                                    <span class="slider round"></span>\n' +
                 '                                                                                                </label>\n' +
                 '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                                            </div>\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                '\n' +
+                '                                                                                                <input type="hidden" name="variable'+f_row+'[]" id="variable" value="0">\n' +
+                '\n' +
+                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                '                                                                                                    <input class="variable" type="checkbox">\n' +
+                '                                                                                                    <span class="slider round"></span>\n' +
+                '                                                                                                </label>\n' +
+                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                 '\n' +
                 '                                                                                            </div>\n' +
                 '                                                                                        </td>\n' +
@@ -3544,6 +3704,20 @@
                     '                                                                                            </div>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                    '\n' +
+                    '                                                                                                <input type="hidden" name="variable'+heading_id+'[]" id="variable" value="0">\n' +
+                    '\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                                                    <input class="variable" type="checkbox">\n' +
+                    '                                                                                                    <span class="slider round"></span>\n' +
+                    '                                                                                                </label>\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                                                            </div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
                     '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr>');
@@ -3637,6 +3811,20 @@
                     '                                                                                            </div>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                    '\n' +
+                    '                                                                                                <input type="hidden" name="variable[]" id="variable" value="0">\n' +
+                    '\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                                                    <input class="variable" type="checkbox">\n' +
+                    '                                                                                                    <span class="slider round"></span>\n' +
+                    '                                                                                                </label>\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                                                            </div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
                     '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr>');
@@ -3664,6 +3852,7 @@
                     '                                                                                                <th>Value</th>\n' +
                     '                                                                                                <th>Price Impact</th>\n' +
                     '                                                                                                <th>Impact Type</th>\n' +
+                    '                                                                                                <th>Variable</th>\n' +
                     '                                                                                                <th>Remove</th>\n' +
                     '                                                                                            </tr>\n' +
                     '                                                                                            </thead>\n' +
@@ -3702,6 +3891,20 @@
                     '                                                                                                    <span class="slider round"></span>\n' +
                     '                                                                                                </label>\n' +
                     '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '\n' +
+                    '                                                                                            </div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                    '\n' +
+                    '                                                                                                <input type="hidden" name="variable'+f_row+'[]" id="variable" value="0">\n' +
+                    '\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                                                    <input class="variable" type="checkbox">\n' +
+                    '                                                                                                    <span class="slider round"></span>\n' +
+                    '                                                                                                </label>\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                     '\n' +
                     '                                                                                            </div>\n' +
                     '                                                                                        </td>\n' +
@@ -3891,6 +4094,20 @@
                     '                                                                                            </div>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                    '\n' +
+                    '                                                                                                <input type="hidden" name="variable[]" id="variable" value="0">\n' +
+                    '\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                                                    <input class="variable" type="checkbox">\n' +
+                    '                                                                                                    <span class="slider round"></span>\n' +
+                    '                                                                                                </label>\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '\n' +
+                    '                                                                                            </div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
                     '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr></tbody></table>' +
@@ -3908,6 +4125,7 @@
                     '                                                                                                <th>Value</th>\n' +
                     '                                                                                                <th>Price Impact</th>\n' +
                     '                                                                                                <th>Impact Type</th>\n' +
+                    '                                                                                                <th>Variable</th>\n' +
                     '                                                                                                <th>Remove</th>\n' +
                     '                                                                                            </tr>\n' +
                     '                                                                                            </thead>\n' +
@@ -3946,6 +4164,20 @@
                     '                                                                                                    <span class="slider round"></span>\n' +
                     '                                                                                                </label>\n' +
                     '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '\n' +
+                    '                                                                                            </div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                    '\n' +
+                    '                                                                                                <input type="hidden" name="variable1[]" id="variable" value="0">\n' +
+                    '\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                    '                                                                                                    <input class="variable" type="checkbox">\n' +
+                    '                                                                                                    <span class="slider round"></span>\n' +
+                    '                                                                                                </label>\n' +
+                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                     '\n' +
                     '                                                                                            </div>\n' +
                     '                                                                                        </td>\n' +

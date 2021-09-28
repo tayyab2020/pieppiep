@@ -3960,21 +3960,32 @@
 
                             if(data[0] && data[0].price_impact == 1)
                             {
-                                if(data[0].impact_type == 0)
+                                if(data[0].variable == 1)
                                 {
                                     impact_value = data[0].value;
                                     impact_value = parseFloat(impact_value).toFixed(2);
-                                    total = parseFloat(total) + parseFloat(impact_value);
+                                    var per = impact_value * (width / 100);
+                                    total = parseFloat(total) + parseFloat(per);
                                     total = total.toFixed(2);
                                 }
                                 else
                                 {
-                                    impact_value = data[0].value;
-                                    var per = (impact_value)/100;
-                                    impact_value = basic_price * per;
-                                    impact_value = parseFloat(impact_value).toFixed(2);
-                                    total = parseFloat(total) + parseFloat(impact_value);
-                                    total = total.toFixed(2);
+                                    if(data[0].impact_type == 0)
+                                    {
+                                        impact_value = data[0].value;
+                                        impact_value = parseFloat(impact_value).toFixed(2);
+                                        total = parseFloat(total) + parseFloat(impact_value);
+                                        total = total.toFixed(2);
+                                    }
+                                    else
+                                    {
+                                        impact_value = data[0].value;
+                                        var per = (impact_value)/100;
+                                        impact_value = basic_price * per;
+                                        impact_value = parseFloat(impact_value).toFixed(2);
+                                        total = parseFloat(total) + parseFloat(impact_value);
+                                        total = total.toFixed(2);
+                                    }
                                 }
                             }
                             else
