@@ -107,7 +107,6 @@
                                                                     <th>Width</th>
                                                                     <th>Height</th>
                                                                     <th>Required</th>
-                                                                    <th>€ Art.</th>
                                                                     <th>€ Arb.</th>
                                                                     <th>€ Total</th>
                                                                     <th></th>
@@ -203,8 +202,9 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td>1 x 17</td>
-                                                                            <td></td>
-                                                                            <td></td>
+                                                                            <td style="width: 80px;">
+                                                                                <input type="number" value="{{str_replace('.', ',', floatval($item->labor_impact))}}" readonly name="labor_impact[]" style="border: 0;background: transparent;padding: 0;" class="form-control labor_impact">
+                                                                            </td>
                                                                             <td class="price">€ {{round($item->rate)}}</td>
                                                                             <td id="next-row-td" style="padding: 0;">
                                                                             <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
@@ -288,8 +288,9 @@
                                                                             </div>
                                                                         </td>
                                                                         <td>1 x 17</td>
-                                                                        <td></td>
-                                                                        <td></td>
+                                                                        <td style="width: 80px;">
+                                                                            <input type="number" readonly name="labor_impact[]" style="border: 0;background: transparent;padding: 0;" class="form-control labor_impact">
+                                                                        </td>
                                                                         <td class="price"></td>
                                                                         <td id="next-row-td" style="padding: 0;">
                                                                         <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
@@ -1776,6 +1777,24 @@
                                         }
                                     }
 
+                                    if(data[4])
+                                    {
+                                        var labor = data[4].labor;
+
+                                        if(labor)
+                                        {
+                                            labor = labor * (width/100);
+                                            price = parseFloat(price) + parseFloat(labor);
+                                            price = price.toFixed(2);
+                                        }
+
+                                        current.parent().parent().find('.labor_impact').val(labor);
+                                    }
+                                    else
+                                    {
+                                        current.parent().parent().find('.labor_impact').val(0);
+                                    }
+
                                     var features = '';
                                     var f_value = 0;
 
@@ -2066,6 +2085,24 @@
                                         }
                                     }
 
+                                    if(data[4])
+                                    {
+                                        var labor = data[4].labor;
+
+                                        if(labor)
+                                        {
+                                            labor = labor * (width/100);
+                                            price = parseFloat(price) + parseFloat(labor);
+                                            price = price.toFixed(2);
+                                        }
+
+                                        current.parent().parent().find('.labor_impact').val(labor);
+                                    }
+                                    else
+                                    {
+                                        current.parent().parent().find('.labor_impact').val(0);
+                                    }
+
                                     var features = '';
                                     var f_value = 0;
 
@@ -2255,7 +2292,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model = null,model_impact_value = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,childsafe_question = null,childsafe_answer = null,qty = null,childsafe = 0,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,childsafe_content = null,childsafe_x = null,childsafe_y = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null)
+            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model = null,model_impact_value = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,childsafe_question = null,childsafe_answer = null,qty = null,childsafe = 0,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,childsafe_content = null,childsafe_x = null,childsafe_y = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null,labor_impact = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -2334,8 +2371,9 @@
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td>1 x 17</td>\n' +
-                        '                                                            <td></td>\n' +
-                        '                                                            <td></td>\n' +
+                        '                                                            <td style="width: 80px;">\n' +
+                        '                                                                <input type="number" readonly name="labor_impact[]" style="border: 0;background: transparent;padding: 0;" class="form-control labor_impact">\n' +
+                        '                                                            </td>\n' +
                         '                                                            <td class="price"></td>\n' +
                         '                                                            <td id="next-row-td" style="padding: 0;">\n' +
                         '                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
@@ -2458,8 +2496,9 @@
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
                         '                                                            <td>1 x 17</td>\n' +
-                        '                                                            <td></td>\n' +
-                        '                                                            <td></td>\n' +
+                        '                                                            <td style="width: 80px;">\n' +
+                        '                                                                <input type="number" value="'+labor_impact+'" readonly name="labor_impact[]" style="border: 0;background: transparent;padding: 0;" class="form-control labor_impact">\n' +
+                        '                                                            </td>\n' +
                         '                                                            <td class="price">'+price_text+'</td>\n' +
                         '                                                            <td id="next-row-td" style="padding: 0;">\n' +
                         '                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
@@ -2892,6 +2931,7 @@
                 var childsafe_y = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).find('#childsafe_y').val();
                 var price_based_option = current.find('#price_based_option').val();
                 var base_price = current.find('#base_price').val();
+                var labor_impact = current.find('.labor_impact').val();
 
                 var width_readonly = '';
                 var height_readonly = '';
@@ -2905,7 +2945,7 @@
                     width_readonly = 'readonly';
                 }
 
-                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,models,model,model_impact_value,width,width_unit,height,height_unit,price_text,features,features_selects,childsafe_question,childsafe_answer,qty,childsafe,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,childsafe_content,childsafe_x,childsafe_y,delivery_days,price_based_option,base_price,width_readonly,height_readonly);
+                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,models,model,model_impact_value,width,width_unit,height,height_unit,price_text,features,features_selects,childsafe_question,childsafe_answer,qty,childsafe,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,childsafe_content,childsafe_x,childsafe_y,delivery_days,price_based_option,base_price,width_readonly,height_readonly,labor_impact);
 
             });
 
@@ -3168,6 +3208,24 @@
                                                 price = price.toFixed(2);
                                             }
                                         }
+                                    }
+
+                                    if(data[4])
+                                    {
+                                        var labor = data[4].labor;
+
+                                        if(labor)
+                                        {
+                                            labor = labor * (width/100);
+                                            price = parseFloat(price) + parseFloat(labor);
+                                            price = price.toFixed(2);
+                                        }
+
+                                        current.parent().parent().parent().find('.labor_impact').val(labor);
+                                    }
+                                    else
+                                    {
+                                        current.parent().parent().parent().find('.labor_impact').val(0);
                                     }
 
                                     var features = '';
@@ -3456,6 +3514,24 @@
                                                 price = price.toFixed(2);
                                             }
                                         }
+                                    }
+
+                                    if(data[4])
+                                    {
+                                        var labor = data[4].labor;
+
+                                        if(labor)
+                                        {
+                                            labor = labor * (width/100);
+                                            price = parseFloat(price) + parseFloat(labor);
+                                            price = price.toFixed(2);
+                                        }
+
+                                        current.parent().parent().parent().find('.labor_impact').val(labor);
+                                    }
+                                    else
+                                    {
+                                        current.parent().parent().parent().find('.labor_impact').val(0);
                                     }
 
                                     var features = '';

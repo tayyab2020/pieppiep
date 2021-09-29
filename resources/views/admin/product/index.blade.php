@@ -144,6 +144,13 @@
                                                                         Retailer Margin (%)
                                                                     </th>
 
+                                                                    <th class="sorting" tabindex="0"
+                                                                        aria-controls="product-table_wrapper" rowspan="1"
+                                                                        colspan="1" style="width: 314px;"
+                                                                        aria-label="Actions: activate to sort column ascending">
+                                                                        Labor Cost
+                                                                    </th>
+
                                                                 @endif
                                                             </tr>
                                                             </thead>
@@ -208,6 +215,10 @@
                                                                             <input min="100" value="{{$cat->retailer_margin ? $cat->retailer_margin : $cat->margin}}" type="number" step="1" name="margin[]" class="form-control">
                                                                         </td>
 
+                                                                        <td>
+                                                                            <input value="{{$cat->labor ? $cat->labor : 0}}" type="number" step="1" name="labor[]" class="form-control">
+                                                                        </td>
+
                                                                     @endif
 
                                                                 </tr>
@@ -250,6 +261,26 @@
 @section('scripts')
 
     <script type="text/javascript">
+
+        $(document).on('keypress', "input[name='labor[]']", function(e){
+
+            e = e || window.event;
+            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+            var val = String.fromCharCode(charCode);
+
+            if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+            {
+                e.preventDefault();
+                return false;
+            }
+
+            if(e.which == 44)
+            {
+                e.preventDefault();
+                return false;
+            }
+
+        });
 
         $('#example').DataTable();
 

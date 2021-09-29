@@ -127,9 +127,13 @@
 
     #sidebar.active .sub-show {
 
-        -webkit-transform: translateX(118px) !important;
+        /*-webkit-transform: translateX(118px) !important;
 
-        transform: translateX(118px) !important;
+        transform: translateX(118px) !important;*/
+
+        -webkit-transform: translateX(-250px) !important;
+
+        transform: translateX(-250px) !important;
 
         -webkit-transition: transform 0.5s ease-in-out !important;
 
@@ -292,8 +296,10 @@
     }
 
     #sidebar.active {
-        min-width: 120px;
-        max-width: 120px;
+        /*min-width: 120px;
+        max-width: 120px;*/
+        min-width: 0;
+        max-width: 0;
         text-align: center;
         /*margin-left: -250px;*/
     }

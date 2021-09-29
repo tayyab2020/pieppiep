@@ -17,6 +17,7 @@ use App\product_features;
 use App\product_ladderbands;
 use App\product_models;
 use App\Products;
+use App\retailer_labor_costs;
 use App\retailer_margins;
 use App\retailers_requests;
 use App\vats;
@@ -75,7 +76,10 @@ class ProductController extends Controller
                 $cats = Products::leftJoin('retailer_margins', function($join) use($user_id){
                     $join->on('products.id', '=', 'retailer_margins.product_id')
                         ->where('retailer_margins.retailer_id', '=', $user_id);
-                })->leftjoin('retailers_requests','retailers_requests.supplier_id','=','products.user_id')->leftjoin('users','users.id','=','products.user_id')->leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('retailers_requests.retailer_id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->orderBy('products.id','desc')->select('products.*','retailer_margins.margin as retailer_margin','users.company_name','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
+                })->leftJoin('retailer_labor_costs', function($join) use($user_id){
+                    $join->on('products.id', '=', 'retailer_labor_costs.product_id')
+                        ->where('retailer_labor_costs.retailer_id', '=', $user_id);
+                })->leftjoin('retailers_requests','retailers_requests.supplier_id','=','products.user_id')->leftjoin('users','users.id','=','products.user_id')->leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('retailers_requests.retailer_id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->orderBy('products.id','desc')->select('products.*','retailer_labor_costs.labor','retailer_margins.margin as retailer_margin','users.company_name','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
 
                 return view('admin.product.index',compact('cats'));
             }
@@ -114,6 +118,24 @@ class ProductController extends Controller
                     $post->product_id = $key;
                     $post->retailer_id = $user_id;
                     $post->margin = $request->margin[$i] ? $request->margin[$i] : 100;
+                    $post->save();
+                }
+            }
+
+            $check1 = retailer_labor_costs::where('product_id',$key)->where('retailer_id',$user_id);
+
+            if($check1->first())
+            {
+                $check1->update(['labor' => $request->labor[$i] ? $request->labor[$i] : 0]);
+            }
+            else
+            {
+                if(is_numeric($request->labor[$i]))
+                {
+                    $post = new retailer_labor_costs;
+                    $post->product_id = $key;
+                    $post->retailer_id = $user_id;
+                    $post->labor = $request->labor[$i] ? $request->labor[$i] : 0;
                     $post->save();
                 }
             }
