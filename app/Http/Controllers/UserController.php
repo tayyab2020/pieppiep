@@ -2928,7 +2928,7 @@ class UserController extends Controller
             $invoice_items->delivery_days = $request->delivery_days[$i];
             $invoice_items->delivery_date = $delivery_date;
             $invoice_items->price_based_option = $request->price_based_option[$i];
-            $invoice_items->labor_impact = str_replace(',', '.',$request->labor_impact[$i]);
+            $invoice_items->labor_impact = $request->labor_impact[$i];
 
             if($request->childsafe[$i])
             {

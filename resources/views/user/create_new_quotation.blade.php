@@ -107,6 +107,7 @@
                                                                     <th>Width</th>
                                                                     <th>Height</th>
                                                                     <th>Required</th>
+                                                                    <th>€ Art.</th>
                                                                     <th>€ Arb.</th>
                                                                     <th>€ Total</th>
                                                                     <th></th>
@@ -203,7 +204,11 @@
                                                                             </td>
                                                                             <td>1 x 17</td>
                                                                             <td style="width: 80px;">
-                                                                                <input type="number" value="{{str_replace('.', ',', floatval($item->labor_impact))}}" readonly name="labor_impact[]" style="border: 0;background: transparent;padding: 0;" class="form-control labor_impact">
+                                                                                <input type="text" value="{{str_replace('.', ',', floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">
+                                                                            </td>
+                                                                            <td style="width: 80px;">
+                                                                                <input type="text" value="{{$item->labor_impact}}" name="labor_impact[]" class="form-control labor_impact">
+                                                                                <input type="hidden" value="{{$item->labor_impact}}" class="labor_impact_old">
                                                                             </td>
                                                                             <td class="price">€ {{round($item->rate)}}</td>
                                                                             <td id="next-row-td" style="padding: 0;">
@@ -289,7 +294,11 @@
                                                                         </td>
                                                                         <td>1 x 17</td>
                                                                         <td style="width: 80px;">
-                                                                            <input type="number" readonly name="labor_impact[]" style="border: 0;background: transparent;padding: 0;" class="form-control labor_impact">
+                                                                            <input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">
+                                                                        </td>
+                                                                        <td style="width: 80px;">
+                                                                            <input type="text" name="labor_impact[]" class="form-control labor_impact">
+                                                                            <input type="hidden" class="labor_impact_old">
                                                                         </td>
                                                                         <td class="price"></td>
                                                                         <td id="next-row-td" style="padding: 0;">
@@ -980,18 +989,18 @@
             align-items: center;
         }
 
-        .m-input
+        .m-input, .labor_impact
         {
             border-radius: 5px !important;
             width: 70%;
             border: 0;
             padding: 0;
             padding-right: 5px;
-            text-align: right;
+            text-align: left;
             height: 30px !important;
         }
 
-        .m-input:focus
+        .m-input:focus, .labor_impact:focus
         {
             background: #f6f6f6;
         }
@@ -1423,7 +1432,6 @@
                 },
             });
 
-
             function calculate_total()
             {
                 var total = 0;
@@ -1433,6 +1441,7 @@
                     var rate = 0;
                     var row_id = $(this).parent().data('id');
                     var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+                    var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val();
 
                     if(!qty)
                     {
@@ -1453,6 +1462,9 @@
                     total = total.toFixed(2);
                     total = Math.round(total);
 
+                    var price_before_labor = rate - labor_impact;
+
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);
                     $(this).parent().find('#rate').val(rate);
                     $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(rate));
 
@@ -1460,7 +1472,6 @@
 
                 $('#total_amount').val(total);
             }
-
 
             $(document).on('change', ".js-data-example-ajax1", function(e){
 
@@ -1513,13 +1524,12 @@
                         current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val('');
                         current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val('');
 
-                        calculate_total();
+                        /*calculate_total();*/
 
                     }
                 });
 
             });
-
 
             $(document).on('change', ".js-data-example-ajax", function(e){
 
@@ -1618,13 +1628,12 @@
                             }
                         }
 
-                        calculate_total();
+                        /*calculate_total();*/
 
                     }
                 });
 
             });
-
 
             $(".js-data-example-ajax1").select2({
                 width: '100%',
@@ -1702,9 +1711,6 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
-                                current.parent().parent().find('#childsafe').val(data[3].childsafe);
-                                var childsafe = data[3].childsafe;
-
                                 if(data[0].value === 'both')
                                 {
                                     Swal.fire({
@@ -1750,6 +1756,9 @@
                                 }
                                 else
                                 {
+                                    current.parent().parent().find('#childsafe').val(data[3].childsafe);
+                                    var childsafe = data[3].childsafe;
+
                                     if(price_based_option == 1)
                                     {
                                         var price = data[0].value;
@@ -1775,24 +1784,6 @@
                                                 price = price.toFixed(2);
                                             }
                                         }
-                                    }
-
-                                    if(data[4])
-                                    {
-                                        var labor = data[4].labor;
-
-                                        if(labor)
-                                        {
-                                            labor = labor * (width/100);
-                                            price = parseFloat(price) + parseFloat(labor);
-                                            price = price.toFixed(2);
-                                        }
-
-                                        current.parent().parent().find('.labor_impact').val(labor);
-                                    }
-                                    else
-                                    {
-                                        current.parent().parent().find('.labor_impact').val(0);
                                     }
 
                                     var features = '';
@@ -1947,11 +1938,28 @@
                                         price = price.toFixed(2);
                                     }
 
+                                    var labor = 0;
+
+                                    if(data[4])
+                                    {
+                                        labor = data[4].labor;
+                                        labor = labor * (width/100);
+                                        labor = Math.round(labor);
+                                        price = parseFloat(price) + parseFloat(labor);
+                                        price = price.toFixed(2);
+                                    }
+
+                                    current.parent().parent().find('.labor_impact').val(labor);
+                                    current.parent().parent().find('.labor_impact_old').val(labor);
+
+                                    /*var price_before_labor = price - labor;*/
+
                                     current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
                                     current.parent().parent().find('#rate').val(price);
                                     current.parent().parent().find('#basic_price').val(price);
+                                    /*current.parent().parent().find('.price_before_labor').val(price_before_labor);*/
                                 }
                             }
                             else
@@ -1960,6 +1968,7 @@
                                 current.parent().parent().find('#row_total').val('');
                                 current.parent().parent().find('#rate').val('');
                                 current.parent().parent().find('#basic_price').val('');
+                                /*current.parent().parent().find('.price_before_labor').val('');*/
                             }
 
                             calculate_total();
@@ -2009,8 +2018,6 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
-                                current.parent().parent().find('#childsafe').val(data[3].childsafe);
-                                var childsafe = data[3].childsafe;
                                 var color_max_height = data[0].max_height;
 
                                 if(data[0].value === 'both')
@@ -2058,6 +2065,9 @@
                                 }
                                 else
                                 {
+                                    current.parent().parent().find('#childsafe').val(data[3].childsafe);
+                                    var childsafe = data[3].childsafe;
+
                                     if(price_based_option == 1)
                                     {
                                         var price = data[0].value;
@@ -2083,24 +2093,6 @@
                                                 price = price.toFixed(2);
                                             }
                                         }
-                                    }
-
-                                    if(data[4])
-                                    {
-                                        var labor = data[4].labor;
-
-                                        if(labor)
-                                        {
-                                            labor = labor * (width/100);
-                                            price = parseFloat(price) + parseFloat(labor);
-                                            price = price.toFixed(2);
-                                        }
-
-                                        current.parent().parent().find('.labor_impact').val(labor);
-                                    }
-                                    else
-                                    {
-                                        current.parent().parent().find('.labor_impact').val(0);
                                     }
 
                                     var features = '';
@@ -2254,11 +2246,28 @@
                                         price = price.toFixed(2);
                                     }
 
+                                    var labor = 0;
+
+                                    if(data[4])
+                                    {
+                                        labor = data[4].labor;
+                                        labor = labor * (width/100);
+                                        labor = Math.round(labor);
+                                        price = parseFloat(price) + parseFloat(labor);
+                                        price = price.toFixed(2);
+                                    }
+
+                                    current.parent().parent().find('.labor_impact').val(labor);
+                                    current.parent().parent().find('.labor_impact_old').val(labor);
+
+                                    /*var price_before_labor = price - labor;*/
+
                                     current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
                                     current.parent().parent().find('#rate').val(price);
                                     current.parent().parent().find('#basic_price').val(price);
+                                    /*current.parent().parent().find('.price_before_labor').val(price_before_labor);*/
                                 }
                             }
                             else
@@ -2267,6 +2276,7 @@
                                 current.parent().parent().find('#row_total').val('');
                                 current.parent().parent().find('#rate').val('');
                                 current.parent().parent().find('#basic_price').val('');
+                                /*current.parent().parent().find('.price_before_labor').val('');*/
                             }
 
                             calculate_total();
@@ -2292,7 +2302,7 @@
                 $('#products_table > tbody  > tr').each(function(index, tr) { $(this).find('td:eq(0)').text(index + 1); });
             }
 
-            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model = null,model_impact_value = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,childsafe_question = null,childsafe_answer = null,qty = null,childsafe = 0,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,childsafe_content = null,childsafe_x = null,childsafe_y = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null,labor_impact = null)
+            function add_row(copy = false,rate = null,basic_price = null,price = null,products = null,product = null,suppliers = null,supplier = null,colors = null,color = null,models = null,model = null,model_impact_value = null,width = null,width_unit = null,height = null,height_unit = null,price_text = null,features = null,features_selects = null,childsafe_question = null,childsafe_answer = null,qty = null,childsafe = 0,ladderband = 0,ladderband_value = 0,ladderband_price_impact = 0,ladderband_impact_type = 0,area_conflict = 0,subs = null,childsafe_content = null,childsafe_x = null,childsafe_y = null,delivery_days = null,price_based_option = null,base_price = null,width_readonly = null,height_readonly = null,price_before_labor = null,labor_impact = null,labor_impact_old = null)
             {
                 var rowCount = $('#products_table tbody tr:last').data('id');
                 rowCount = rowCount + 1;
@@ -2372,7 +2382,11 @@
                         '                                                            </td>\n' +
                         '                                                            <td>1 x 17</td>\n' +
                         '                                                            <td style="width: 80px;">\n' +
-                        '                                                                <input type="number" readonly name="labor_impact[]" style="border: 0;background: transparent;padding: 0;" class="form-control labor_impact">\n' +
+                        '                                                                <input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td style="width: 80px;">\n' +
+                        '                                                                <input type="text" name="labor_impact[]" class="form-control labor_impact">\n' +
+                        '                                                                <input type="hidden" class="labor_impact_old">\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="price"></td>\n' +
                         '                                                            <td id="next-row-td" style="padding: 0;">\n' +
@@ -2497,7 +2511,11 @@
                         '                                                            </td>\n' +
                         '                                                            <td>1 x 17</td>\n' +
                         '                                                            <td style="width: 80px;">\n' +
-                        '                                                                <input type="number" value="'+labor_impact+'" readonly name="labor_impact[]" style="border: 0;background: transparent;padding: 0;" class="form-control labor_impact">\n' +
+                        '                                                                <input value="'+price_before_labor+'" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
+                        '                                                            </td>\n' +
+                        '                                                            <td style="width: 80px;">\n' +
+                        '                                                                <input value="'+labor_impact+'" type="text" name="labor_impact[]" class="form-control labor_impact">\n' +
+                        '                                                                <input value="'+labor_impact_old+'" type="hidden" class="labor_impact_old">\n' +
                         '                                                            </td>\n' +
                         '                                                            <td class="price">'+price_text+'</td>\n' +
                         '                                                            <td id="next-row-td" style="padding: 0;">\n' +
@@ -2705,7 +2723,6 @@
 
             });
 
-
             $(document).on('click', '.save-data', function(){
 
                 var customer = $('.customer-select').val();
@@ -2891,7 +2908,6 @@
 
             });
 
-
             $(document).on('click', '.copy-row', function(){
 
                 var current = $('#products_table tbody tr.active');
@@ -2931,7 +2947,9 @@
                 var childsafe_y = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).find('#childsafe_y').val();
                 var price_based_option = current.find('#price_based_option').val();
                 var base_price = current.find('#base_price').val();
+                var price_before_labor = current.find('.price_before_labor').val();
                 var labor_impact = current.find('.labor_impact').val();
+                var labor_impact_old = current.find('.labor_impact_old').val();
 
                 var width_readonly = '';
                 var height_readonly = '';
@@ -2945,7 +2963,27 @@
                     width_readonly = 'readonly';
                 }
 
-                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,models,model,model_impact_value,width,width_unit,height,height_unit,price_text,features,features_selects,childsafe_question,childsafe_answer,qty,childsafe,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,childsafe_content,childsafe_x,childsafe_y,delivery_days,price_based_option,base_price,width_readonly,height_readonly,labor_impact);
+                add_row(true,rate,basic_price,price,products,product,suppliers,supplier,colors,color,models,model,model_impact_value,width,width_unit,height,height_unit,price_text,features,features_selects,childsafe_question,childsafe_answer,qty,childsafe,ladderband,ladderband_value,ladderband_price_impact,ladderband_impact_type,area_conflict,subs,childsafe_content,childsafe_x,childsafe_y,delivery_days,price_based_option,base_price,width_readonly,height_readonly,price_before_labor,labor_impact,labor_impact_old);
+
+            });
+
+            $(document).on('keypress', "input[name='labor_impact[]']", function(e){
+
+                e = e || window.event;
+                var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+                var val = String.fromCharCode(charCode);
+
+                if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+                {
+                    e.preventDefault();
+                    return false;
+                }
+
+                if(e.which == 44)
+                {
+                    e.preventDefault();
+                    return false;
+                }
 
             });
 
@@ -3132,9 +3170,6 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
-                                current.parent().parent().parent().find('#childsafe').val(data[3].childsafe);
-                                var childsafe = data[3].childsafe;
-
                                 if(data[0].value === 'both')
                                 {
                                     Swal.fire({
@@ -3180,6 +3215,9 @@
                                 }
                                 else
                                 {
+                                    current.parent().parent().parent().find('#childsafe').val(data[3].childsafe);
+                                    var childsafe = data[3].childsafe;
+
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
                                     $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
@@ -3208,24 +3246,6 @@
                                                 price = price.toFixed(2);
                                             }
                                         }
-                                    }
-
-                                    if(data[4])
-                                    {
-                                        var labor = data[4].labor;
-
-                                        if(labor)
-                                        {
-                                            labor = labor * (width/100);
-                                            price = parseFloat(price) + parseFloat(labor);
-                                            price = price.toFixed(2);
-                                        }
-
-                                        current.parent().parent().parent().find('.labor_impact').val(labor);
-                                    }
-                                    else
-                                    {
-                                        current.parent().parent().parent().find('.labor_impact').val(0);
                                     }
 
                                     var features = '';
@@ -3376,12 +3396,28 @@
                                         price = price.toFixed(2);
                                     }
 
+                                    var labor = 0;
+
+                                    if(data[4])
+                                    {
+                                        labor = data[4].labor;
+                                        labor = labor * (width/100);
+                                        labor = Math.round(labor);
+                                        price = parseFloat(price) + parseFloat(labor);
+                                        price = price.toFixed(2);
+                                    }
+
+                                    current.parent().parent().parent().find('.labor_impact').val(labor);
+                                    current.parent().parent().parent().find('.labor_impact_old').val(labor);
+
+                                    /*var price_before_labor = price - labor;*/
+
                                     current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                     current.parent().parent().parent().find('#rate').val(price);
                                     current.parent().parent().parent().find('#basic_price').val(price);
-
+                                    /*current.parent().parent().parent().find('.price_before_labor').val(price_before_labor);*/
                                 }
                             }
                             else
@@ -3390,6 +3426,7 @@
                                 current.parent().parent().parent().find('#row_total').val('');
                                 current.parent().parent().parent().find('#rate').val('');
                                 current.parent().parent().parent().find('#basic_price').val('');
+                                /*current.parent().parent().parent().find('.price_before_labor').val('');*/
                             }
 
                             calculate_total();
@@ -3438,9 +3475,6 @@
 
                             if(typeof data[0].value !== 'undefined')
                             {
-                                current.parent().parent().parent().find('#childsafe').val(data[3].childsafe);
-                                var childsafe = data[3].childsafe;
-
                                 if(data[0].value === 'both')
                                 {
                                     Swal.fire({
@@ -3486,6 +3520,9 @@
                                 }
                                 else
                                 {
+                                    current.parent().parent().parent().find('#childsafe').val(data[3].childsafe);
+                                    var childsafe = data[3].childsafe;
+
                                     $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
                                     $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
@@ -3514,24 +3551,6 @@
                                                 price = price.toFixed(2);
                                             }
                                         }
-                                    }
-
-                                    if(data[4])
-                                    {
-                                        var labor = data[4].labor;
-
-                                        if(labor)
-                                        {
-                                            labor = labor * (width/100);
-                                            price = parseFloat(price) + parseFloat(labor);
-                                            price = price.toFixed(2);
-                                        }
-
-                                        current.parent().parent().parent().find('.labor_impact').val(labor);
-                                    }
-                                    else
-                                    {
-                                        current.parent().parent().parent().find('.labor_impact').val(0);
                                     }
 
                                     var features = '';
@@ -3682,11 +3701,28 @@
                                         price = price.toFixed(2);
                                     }
 
+                                    var labor = 0;
+
+                                    if(data[4])
+                                    {
+                                        labor = data[4].labor;
+                                        labor = labor * (width/100);
+                                        labor = Math.round(labor);
+                                        price = parseFloat(price) + parseFloat(labor);
+                                        price = price.toFixed(2);
+                                    }
+
+                                    current.parent().parent().parent().find('.labor_impact').val(labor);
+                                    current.parent().parent().parent().find('.labor_impact_old').val(labor);
+
+                                    /*var price_before_labor = price - labor;*/
+
                                     current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                     current.parent().parent().parent().find('#rate').val(price);
                                     current.parent().parent().parent().find('#basic_price').val(price);
+                                    /*current.parent().parent().parent().find('.price_before_labor').val(price_before_labor);*/
                                 }
                             }
                             else
@@ -3695,12 +3731,33 @@
                                 current.parent().parent().parent().find('#row_total').val('');
                                 current.parent().parent().parent().find('#rate').val('');
                                 current.parent().parent().parent().find('#basic_price').val('');
+                                /*current.parent().parent().parent().find('.price_before_labor').val('');*/
                             }
 
                             calculate_total();
                         }
                     });
                 }
+
+            });
+
+            $(document).on('input', '.labor_impact', function()
+            {
+                var value = $(this).val();
+                var old_value = $(this).parent().find('.labor_impact_old').val();
+                var row_id = $(this).parent().parent().data('id');
+                var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
+
+                total = total - parseFloat(old_value);
+                total = total + parseFloat(value);
+                total = parseFloat(total);
+                total = total.toFixed(2);
+
+                $(this).parent().find('.labor_impact_old').val(value);
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+
+                calculate_total();
 
             });
 
