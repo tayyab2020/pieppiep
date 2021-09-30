@@ -204,7 +204,7 @@
                                                                             </td>
                                                                             <td>1 x 17</td>
                                                                             <td style="width: 80px;">
-                                                                                <input type="text" value="{{str_replace('.', ',', floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">
+                                                                                <input type="text" value="{{($item->rate - $item->labor_impact)}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">
                                                                             </td>
                                                                             <td style="width: 80px;">
                                                                                 <input type="text" value="{{$item->labor_impact}}" name="labor_impact[]" class="form-control labor_impact">
