@@ -1776,6 +1776,8 @@
                                         var org = base_price;
                                     }
 
+                                    var basic_price = price;
+
                                     if(margin == 1)
                                     {
                                         if(data[2])
@@ -1913,11 +1915,6 @@
                                         current.parent().find('.f_area').val(0);
                                     }
 
-                                    /*var impact_value = current.parent().parent().find('.model').find('.model_impact_value').val();*/
-                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
-
-                                    /*price = price - impact_value;*/
-
                                     if(data[3].price_impact == 1)
                                     {
                                         if(data[3].impact_type == 0)
@@ -1957,15 +1954,11 @@
 
                                     current.parent().parent().find('.labor_impact').val(labor);
                                     current.parent().parent().find('.labor_impact_old').val(labor);
-
-                                    /*var price_before_labor = price - labor;*/
-
                                     current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
                                     current.parent().parent().find('#rate').val(price);
                                     current.parent().parent().find('#basic_price').val(price);
-                                    /*current.parent().parent().find('.price_before_labor').val(price_before_labor);*/
                                 }
                             }
                             else
@@ -1974,7 +1967,6 @@
                                 current.parent().parent().find('#row_total').val('');
                                 current.parent().parent().find('#rate').val('');
                                 current.parent().parent().find('#basic_price').val('');
-                                /*current.parent().parent().find('.price_before_labor').val('');*/
                             }
 
                             calculate_total();
@@ -2085,6 +2077,8 @@
                                         var org = base_price;
                                     }
 
+                                    var basic_price = price;
+
                                     if(margin == 1)
                                     {
                                         if(data[2])
@@ -2221,11 +2215,6 @@
                                         current.parent().find('.f_area').val(0);
                                     }
 
-                                    /*var impact_value = current.parent().parent().find('.model').find('.model_impact_value').val();*/
-                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
-
-                                    /*price = price - impact_value;*/
-
                                     if(data[3].price_impact == 1)
                                     {
                                         if(data[3].impact_type == 0)
@@ -2265,15 +2254,11 @@
 
                                     current.parent().parent().find('.labor_impact').val(labor);
                                     current.parent().parent().find('.labor_impact_old').val(labor);
-
-                                    /*var price_before_labor = price - labor;*/
-
                                     current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
                                     current.parent().parent().find('#rate').val(price);
                                     current.parent().parent().find('#basic_price').val(price);
-                                    /*current.parent().parent().find('.price_before_labor').val(price_before_labor);*/
                                 }
                             }
                             else
@@ -2282,7 +2267,6 @@
                                 current.parent().parent().find('#row_total').val('');
                                 current.parent().parent().find('#rate').val('');
                                 current.parent().parent().find('#basic_price').val('');
-                                /*current.parent().parent().find('.price_before_labor').val('');*/
                             }
 
                             calculate_total();
@@ -3238,6 +3222,8 @@
                                         var org = base_price;
                                     }
 
+                                    var basic_price = price;
+
                                     if(margin == 1)
                                     {
                                         if(data[2])
@@ -3371,11 +3357,6 @@
                                         current.parent().find('.f_area').val(0);
                                     }
 
-                                    /*var impact_value = current.parent().parent().parent().find('.model').find('.model_impact_value').val();*/
-                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
-
-                                    /*price = price - impact_value;*/
-
                                     if(data[3].price_impact == 1)
                                     {
                                         if(data[3].impact_type == 0)
@@ -3415,15 +3396,11 @@
 
                                     current.parent().parent().parent().find('.labor_impact').val(labor);
                                     current.parent().parent().parent().find('.labor_impact_old').val(labor);
-
-                                    /*var price_before_labor = price - labor;*/
-
                                     current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                     current.parent().parent().parent().find('#rate').val(price);
                                     current.parent().parent().parent().find('#basic_price').val(price);
-                                    /*current.parent().parent().parent().find('.price_before_labor').val(price_before_labor);*/
                                 }
                             }
                             else
@@ -3432,7 +3409,6 @@
                                 current.parent().parent().parent().find('#row_total').val('');
                                 current.parent().parent().parent().find('#rate').val('');
                                 current.parent().parent().parent().find('#basic_price').val('');
-                                /*current.parent().parent().parent().find('.price_before_labor').val('');*/
                             }
 
                             calculate_total();
@@ -3543,6 +3519,8 @@
                                         var org = base_price;
                                     }
 
+                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
+
                                     if(margin == 1)
                                     {
                                         if(data[2])
@@ -3676,11 +3654,6 @@
                                         current.parent().find('.f_area').val(0);
                                     }
 
-                                    /*var impact_value = current.parent().parent().parent().find('.model').find('.model_impact_value').val();*/
-                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
-
-                                    /*price = price - impact_value;*/
-
                                     if(data[3].price_impact == 1)
                                     {
                                         if(data[3].impact_type == 0)
@@ -3720,15 +3693,11 @@
 
                                     current.parent().parent().parent().find('.labor_impact').val(labor);
                                     current.parent().parent().parent().find('.labor_impact_old').val(labor);
-
-                                    /*var price_before_labor = price - labor;*/
-
                                     current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                     current.parent().parent().parent().find('#rate').val(price);
                                     current.parent().parent().parent().find('#basic_price').val(price);
-                                    /*current.parent().parent().parent().find('.price_before_labor').val(price_before_labor);*/
                                 }
                             }
                             else
@@ -3737,7 +3706,6 @@
                                 current.parent().parent().parent().find('#row_total').val('');
                                 current.parent().parent().parent().find('#rate').val('');
                                 current.parent().parent().parent().find('#basic_price').val('');
-                                /*current.parent().parent().parent().find('.price_before_labor').val('');*/
                             }
 
                             calculate_total();
@@ -3751,8 +3719,6 @@
             {
                 var value = $(this).val();
                 var row_id = $(this).parent().parent().data('id');
-                /*var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();*/
-                /*var old_labor_impact = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();*/
                 var price_before_labor = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
                 var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
@@ -3761,8 +3727,6 @@
                     value = 0;
                 }
 
-                /*old_labor_impact = old_labor_impact * qty;
-                total = total - parseFloat(old_labor_impact);*/
                 var total = parseFloat(price_before_labor) + parseFloat(value);
                 total = parseFloat(total);
                 total = total.toFixed(2);
@@ -3922,7 +3886,6 @@
                 var impact_value = current.next('input').val();
                 var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
                 var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
-                var labor = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact').val();
 
                 total = total - impact_value;
 
@@ -4045,10 +4008,6 @@
                         total = total.toFixed(2);
 
                         current.next('input').val(impact_value);
-
-                        /*var price_before_labor = total - labor;
-
-                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);*/
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
@@ -4152,9 +4111,6 @@
                             }
 
                             current.next('input').val(impact_value);
-                            /*var price_before_labor = total - labor;
-
-                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);*/
                             $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
                             $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
