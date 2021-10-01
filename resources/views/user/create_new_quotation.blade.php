@@ -1432,7 +1432,7 @@
                 },
             });
 
-            function calculate_total(qty_changed = 0)
+            function calculate_total(labor_changed = 0)
             {
                 var total = 0;
 
@@ -1461,8 +1461,12 @@
                     var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
                     labor_impact = labor_impact * qty;
                     $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact);
-                    var price_before_labor = rate - labor_impact;
-                    $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);
+
+                    if(labor_changed == 0)
+                    {
+                        var price_before_labor = rate - labor_impact;
+                        $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);
+                    }
 
                     total = parseFloat(total) + parseFloat(rate);
                     total = total.toFixed(2);
@@ -3037,7 +3041,7 @@
 
             $(document).on('input', "input[name='qty[]']", function(e) {
 
-                calculate_total(1);
+                calculate_total();
 
             });
 
@@ -3747,8 +3751,9 @@
             {
                 var value = $(this).val();
                 var row_id = $(this).parent().parent().data('id');
-                var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
-                var old_labor_impact = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
+                /*var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();*/
+                /*var old_labor_impact = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();*/
+                var price_before_labor = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
                 var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
                 if(!value)
@@ -3756,19 +3761,22 @@
                     value = 0;
                 }
 
-                old_labor_impact = old_labor_impact * qty;
-                total = total - parseFloat(old_labor_impact);
-                total = total + parseFloat(value);
+                /*old_labor_impact = old_labor_impact * qty;
+                total = total - parseFloat(old_labor_impact);*/
+                var total = parseFloat(price_before_labor) + parseFloat(value);
                 total = parseFloat(total);
                 total = total.toFixed(2);
+                var price = total;
+                total = total / qty;
 
                 var new_old_value = value / qty;
 
                 $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(new_old_value);
                 $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#rate').val(price);
                 $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
-                calculate_total();
+                calculate_total(1);
 
             });
 
