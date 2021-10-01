@@ -1432,7 +1432,7 @@
                 },
             });
 
-            function calculate_total()
+            function calculate_total(qty_changed = 0)
             {
                 var total = 0;
 
@@ -1441,7 +1441,6 @@
                     var rate = 0;
                     var row_id = $(this).parent().data('id');
                     var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
-                    var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val();
 
                     if(!qty)
                     {
@@ -1458,13 +1457,16 @@
                     }
 
                     rate = rate * qty;
+
+                    var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
+                    labor_impact = labor_impact * qty;
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact);
+                    var price_before_labor = rate - labor_impact;
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);
+
                     total = parseFloat(total) + parseFloat(rate);
                     total = total.toFixed(2);
                     total = Math.round(total);
-
-                    var price_before_labor = rate - labor_impact;
-
-                    $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);
                     $(this).parent().find('#rate').val(rate);
                     $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(rate));
 
@@ -3035,7 +3037,7 @@
 
             $(document).on('input', "input[name='qty[]']", function(e) {
 
-                calculate_total();
+                calculate_total(1);
 
             });
 
@@ -3744,16 +3746,25 @@
             $(document).on('input', '.labor_impact', function()
             {
                 var value = $(this).val();
-                var old_value = $(this).parent().find('.labor_impact_old').val();
                 var row_id = $(this).parent().parent().data('id');
                 var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
+                var old_labor_impact = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
+                var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
-                total = total - parseFloat(old_value);
+                if(!value)
+                {
+                    value = 0;
+                }
+
+                old_labor_impact = old_labor_impact * qty;
+                total = total - parseFloat(old_labor_impact);
                 total = total + parseFloat(value);
                 total = parseFloat(total);
                 total = total.toFixed(2);
 
-                $(this).parent().find('.labor_impact_old').val(value);
+                var new_old_value = value / qty;
+
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(new_old_value);
                 $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
                 $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
@@ -3903,6 +3914,7 @@
                 var impact_value = current.next('input').val();
                 var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
                 var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
+                var labor = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact').val();
 
                 total = total - impact_value;
 
@@ -4026,6 +4038,9 @@
 
                         current.next('input').val(impact_value);
 
+                        /*var price_before_labor = total - labor;
+
+                        $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);*/
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
                         $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
@@ -4129,7 +4144,9 @@
                             }
 
                             current.next('input').val(impact_value);
+                            /*var price_before_labor = total - labor;
 
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);*/
                             $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
                             $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
