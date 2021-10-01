@@ -1958,7 +1958,7 @@
                                     current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
                                     current.parent().parent().find('#rate').val(price);
-                                    current.parent().parent().find('#basic_price').val(price);
+                                    current.parent().parent().find('#basic_price').val(basic_price);
                                 }
                             }
                             else
@@ -2258,7 +2258,7 @@
                                     current.parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().find('#row_total').val(price);
                                     current.parent().parent().find('#rate').val(price);
-                                    current.parent().parent().find('#basic_price').val(price);
+                                    current.parent().parent().find('#basic_price').val(basic_price);
                                 }
                             }
                             else
@@ -3400,7 +3400,7 @@
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                     current.parent().parent().parent().find('#rate').val(price);
-                                    current.parent().parent().parent().find('#basic_price').val(price);
+                                    current.parent().parent().parent().find('#basic_price').val(basic_price);
                                 }
                             }
                             else
@@ -3519,7 +3519,7 @@
                                         var org = base_price;
                                     }
 
-                                    var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
+                                    var basic_price = price;
 
                                     if(margin == 1)
                                     {
@@ -3697,7 +3697,7 @@
                                     current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
                                     current.parent().parent().parent().find('#row_total').val(price);
                                     current.parent().parent().parent().find('#rate').val(price);
-                                    current.parent().parent().parent().find('#basic_price').val(price);
+                                    current.parent().parent().parent().find('#basic_price').val(basic_price);
                                 }
                             }
                             else
