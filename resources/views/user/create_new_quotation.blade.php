@@ -360,9 +360,9 @@
                                                                     </tr>
                                                                     
                                                                     <tr class="" data-id="1">
-                                                                            <td colspan="9"></td>
-                                                                            <td colspan="3">
-                                                                                <div style="display: flex;align-items: center;justify-content: center;">
+                                                                            <td colspan="2"></td>
+                                                                            <td colspan="10">
+                                                                                <div style="display: flex;align-items: center;justify-content: flex-end;">
                                                                                     <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: €</span>
                                                                                     <input name="net_amount" id="net_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->net_amount : 0}}">
                                                                                 </div>
@@ -370,9 +370,9 @@
                                                                     </tr>
 
                                                                     <tr class="" data-id="1">
-                                                                        <td colspan="9"></td>
-                                                                        <td colspan="3">
-                                                                            <div style="display: flex;align-items: center;justify-content: center;">
+                                                                        <td colspan="2"></td>
+                                                                        <td colspan="10">
+                                                                            <div style="display: flex;align-items: center;justify-content: flex-end;">
                                                                                 <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): €</span>
                                                                                 <input name="tax_amount" id="tax_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->tax_amount : 0}}">
                                                                             </div>
