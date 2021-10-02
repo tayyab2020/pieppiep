@@ -316,27 +316,33 @@
                                                             </table>
 
                                                             <div style="display: flex;justify-content: flex-end;align-items: center;" id="total_box">
-                                                                <div style="display: flex;align-items: center;">
-                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
-                                                                    <input name="total_amount" id="total_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->grand_total : 0}}">
+                                                                <div style="display: flex;align-items: center;width: 8%;">
+                                                                    <span style="font-size: 14px;font-weight: bold;margin-right: 5px;font-family: monospace;">Totaal</span>
                                                                 </div>
-                                                                <div style="display: flex;align-items: center;">
+                                                                <div style="display: flex;align-items: center;width: 6%;">
                                                                     <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
                                                                     <input name="price_before_labor_total" id="price_before_labor_total" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->price_before_labor_total : 0}}">
                                                                 </div>
-                                                                <div style="display: flex;align-items: center;">
+                                                                <div style="display: flex;align-items: center;width: 14%;">
                                                                     <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
                                                                     <input name="labor_cost_total" id="labor_cost_total" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->labor_cost_total : 0}}">
                                                                 </div>
-                                                                <div style="display: flex;align-items: center;">
+                                                                <div style="display: flex;align-items: center;width: 11%;">
+                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
+                                                                    <input name="total_amount" id="total_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->grand_total : 0}}">
+                                                                </div>
+                                                            </div>
+                                                                
+                                                            <div style="display: flex;justify-content: flex-end;align-items: center;" id="tax_box">
+                                                            <div style="display: flex;align-items: center;width: 18%;">
                                                                     <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: €</span>
                                                                     <input name="net_amount" id="net_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->net_amount : 0}}">
                                                                 </div>
                                                             </div>
 
                                                             <div style="display: flex;justify-content: flex-end;align-items: center;" id="tax_box">
-                                                                <div style="display: flex;align-items: center;">
-                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW: €</span>
+                                                                <div style="display: flex;align-items: center;width: 17%;">
+                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): €</span>
                                                                     <input name="tax_amount" id="tax_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->tax_amount : 0}}">
                                                                 </div>
                                                             </div>
