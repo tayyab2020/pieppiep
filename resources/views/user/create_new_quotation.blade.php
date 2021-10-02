@@ -106,9 +106,9 @@
                                                                     <th>Model</th>
                                                                     <th>Width</th>
                                                                     <th>Height</th>
-                                                                    <th>Required</th>
                                                                     <th>€ Art.</th>
                                                                     <th>€ Arb.</th>
+                                                                    <th>Discount</th>
                                                                     <th>€ Total</th>
                                                                     <th></th>
                                                                 </tr>
@@ -202,7 +202,6 @@
                                                                                     <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
                                                                                 </div>
                                                                             </td>
-                                                                            <td>1 x 17</td>
                                                                             <td style="width: 80px;">
                                                                                 <input type="text" value="{{($item->rate - $item->labor_impact)}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">
                                                                             </td>
@@ -210,6 +209,7 @@
                                                                                 <input type="text" value="{{$item->labor_impact}}" name="labor_impact[]" class="form-control labor_impact">
                                                                                 <input type="hidden" value="{{$item->labor_impact}}" class="labor_impact_old">
                                                                             </td>
+                                                                            <td></td>
                                                                             <td class="price">€ {{round($item->rate)}}</td>
                                                                             <td id="next-row-td" style="padding: 0;">
                                                                             <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
@@ -292,7 +292,6 @@
                                                                                 <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">
                                                                             </div>
                                                                         </td>
-                                                                        <td>1 x 17</td>
                                                                         <td style="width: 80px;">
                                                                             <input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">
                                                                         </td>
@@ -300,6 +299,7 @@
                                                                             <input type="text" name="labor_impact[]" class="form-control labor_impact">
                                                                             <input type="hidden" class="labor_impact_old">
                                                                         </td>
+                                                                        <td></td>
                                                                         <td class="price"></td>
                                                                         <td id="next-row-td" style="padding: 0;">
                                                                         <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
@@ -316,8 +316,29 @@
                                                             </table>
 
                                                             <div style="display: flex;justify-content: flex-end;align-items: center;" id="total_box">
-                                                                <span style="font-size: 18px;font-weight: 500;margin-right: 5px;">Total: €</span>
-                                                                <input name="total_amount" id="total_amount" style="border: 0;font-size: 18px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->grand_total : 0}}">
+                                                                <div style="display: flex;align-items: center;">
+                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
+                                                                    <input name="total_amount" id="total_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->grand_total : 0}}">
+                                                                </div>
+                                                                <div style="display: flex;align-items: center;">
+                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
+                                                                    <input name="price_before_labor_total" id="price_before_labor_total" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->price_before_labor_total : 0}}">
+                                                                </div>
+                                                                <div style="display: flex;align-items: center;">
+                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
+                                                                    <input name="labor_cost_total" id="labor_cost_total" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->labor_cost_total : 0}}">
+                                                                </div>
+                                                                <div style="display: flex;align-items: center;">
+                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: €</span>
+                                                                    <input name="net_amount" id="net_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->net_amount : 0}}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div style="display: flex;justify-content: flex-end;align-items: center;" id="tax_box">
+                                                                <div style="display: flex;align-items: center;">
+                                                                    <span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW: €</span>
+                                                                    <input name="tax_amount" id="tax_amount" style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;" type="text" readonly value="{{isset($invoice) ? $invoice[0]->tax_amount : 0}}">
+                                                                </div>
                                                             </div>
 
                                                         </div>
@@ -1435,6 +1456,8 @@
             function calculate_total(labor_changed = 0)
             {
                 var total = 0;
+                var price_before_labor_total = 0;
+                var labor_cost_total = 0;
 
                 $("input[name='total[]']").each(function(i, obj) {
 
@@ -1460,6 +1483,7 @@
 
                     var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
                     labor_impact = labor_impact * qty;
+                    labor_impact = Math.round(labor_impact);
                     $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact);
 
                     if(labor_changed == 0)
@@ -1474,9 +1498,26 @@
                     $(this).parent().find('#rate').val(rate);
                     $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(rate));
 
+
+                    var art = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
+                    price_before_labor_total = price_before_labor_total + parseInt(art);
+
+                    var arb = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val();
+                    labor_cost_total = labor_cost_total + parseInt(arb);
+
                 });
 
+                var net_amount = (total / 121) * 100;
+                net_amount = net_amount.toFixed(2);
+                net_amount = Math.round(net_amount);
+
+                var tax_amount = total - net_amount;
+
                 $('#total_amount').val(total);
+                $('#price_before_labor_total').val(price_before_labor_total);
+                $('#labor_cost_total').val(labor_cost_total);
+                $('#net_amount').val(net_amount);
+                $('#tax_amount').val(tax_amount);
             }
 
             $(document).on('change', ".js-data-example-ajax1", function(e){
@@ -2370,7 +2411,6 @@
                         '                                                                    <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">\n' +
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
-                        '                                                            <td>1 x 17</td>\n' +
                         '                                                            <td style="width: 80px;">\n' +
                         '                                                                <input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
                         '                                                            </td>\n' +
@@ -2378,6 +2418,7 @@
                         '                                                                <input type="text" name="labor_impact[]" class="form-control labor_impact">\n' +
                         '                                                                <input type="hidden" class="labor_impact_old">\n' +
                         '                                                            </td>\n' +
+                        '                                                            <td></td>\n' +
                         '                                                            <td class="price"></td>\n' +
                         '                                                            <td id="next-row-td" style="padding: 0;">\n' +
                         '                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
@@ -2499,7 +2540,6 @@
                         '                                                                    <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="'+height_unit+'">\n' +
                         '                                                                </div>\n' +
                         '                                                            </td>\n' +
-                        '                                                            <td>1 x 17</td>\n' +
                         '                                                            <td style="width: 80px;">\n' +
                         '                                                                <input value="'+price_before_labor+'" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
                         '                                                            </td>\n' +
@@ -2507,6 +2547,7 @@
                         '                                                                <input value="'+labor_impact+'" type="text" name="labor_impact[]" class="form-control labor_impact">\n' +
                         '                                                                <input value="'+labor_impact_old+'" type="hidden" class="labor_impact_old">\n' +
                         '                                                            </td>\n' +
+                        '                                                            <td></td>\n' +
                         '                                                            <td class="price">'+price_text+'</td>\n' +
                         '                                                            <td id="next-row-td" style="padding: 0;">\n' +
                         '                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
@@ -3732,11 +3773,12 @@
                 total = total.toFixed(2);
                 var price = total;
                 total = total / qty;
+                total = Math.round(total);
 
                 var new_old_value = value / qty;
 
                 $('#products_table tbody').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(new_old_value);
-                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
                 $('#products_table tbody').find(`[data-id='${row_id}']`).find('#rate').val(price);
                 $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
@@ -4110,8 +4152,10 @@
                                 total = total.toFixed(2);
                             }
 
+                            total = Math.round(total);
+
                             current.next('input').val(impact_value);
-                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
                             $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
                             calculate_total();

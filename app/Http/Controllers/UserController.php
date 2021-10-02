@@ -2863,7 +2863,7 @@ class UserController extends Controller
         {
             $ask = new_quotations::where('id',$request->quotation_id)->pluck('ask_customization')->first();
 
-            new_quotations::where('id',$request->quotation_id)->update(['customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => $request->total_amount, 'grand_total' => $request->total_amount]);
+            new_quotations::where('id',$request->quotation_id)->update(['price_before_labor_total' => $request->price_before_labor_total, 'labor_cost_total' => $request->labor_cost_total, 'net_amount' => $request->net_amount, 'tax_amount' => $request->tax_amount, 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => $request->total_amount, 'grand_total' => $request->total_amount]);
 
             $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
             $feature_ids = new_quotations_features::whereIn('quotation_data_id',$data_ids)->pluck('id');
@@ -2887,6 +2887,10 @@ class UserController extends Controller
             $invoice->vat_percentage = 21;
             $invoice->subtotal = $request->total_amount;
             $invoice->grand_total = $request->total_amount;
+            $invoice->price_before_labor_total = $request->price_before_labor_total;
+            $invoice->labor_cost_total = $request->labor_cost_total;
+            $invoice->net_amount = $request->net_amount;
+            $invoice->tax_amount = $request->tax_amount;
             $invoice->save();
         }
 
