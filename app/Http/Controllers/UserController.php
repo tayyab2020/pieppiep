@@ -2641,7 +2641,7 @@ class UserController extends Controller
                 $suppliers = array();
             }
 
-            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
+            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')->with(['features' => function($query)
             {
                 $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
                     ->where('new_quotations_features.sub_feature',0)
@@ -2932,7 +2932,11 @@ class UserController extends Controller
             $invoice_items->delivery_days = $request->delivery_days[$i];
             $invoice_items->delivery_date = $delivery_date;
             $invoice_items->price_based_option = $request->price_based_option[$i];
+            $invoice_items->price_before_labor = $request->price_before_labor[$i];
             $invoice_items->labor_impact = $request->labor_impact[$i];
+            $invoice_items->discount = $request->discount[$i];
+            $invoice_items->labor_discount = $request->labor_discount[$i];
+            $invoice_items->total_discount = $request->total_discount[$i];
 
             if($request->childsafe[$i])
             {
