@@ -1683,10 +1683,13 @@
 
 				$("#address-error").remove();
 				$('#address').parent().parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;">{{__('text.Kindly write your full address with house / building number so system can detect postal code and city from it!')}}</small>');
-	}
+	
+			}
 
-			});
-		}
+			
+		});
+		
+	}
 
 	$("#address").on('input', function (e) {
 		$(this).next('input').val(0);
@@ -1892,15 +1895,15 @@
 				var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
 				labor_impact = labor_impact * qty;
 				labor_impact = parseFloat(labor_impact).toFixed(2);
-				/*labor_impact = Math.round(labor_impact);*/
+				labor_impact = Math.round(labor_impact);
 				$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact);
 
 				if(discount_changed == 0)
 				{
 					var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
 					total_discount = total_discount * qty;
-					total_discount = parseFloat(total_discount).toFixed(2);
-					/*total_discount = Math.round(total_discount);*/
+					/*total_discount = parseFloat(total_discount).toFixed(2);*/
+					total_discount = Math.round(total_discount);
 					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(total_discount);
 				}
 
@@ -1912,11 +1915,11 @@
 				}
 
 				total = parseFloat(total) + parseFloat(rate);
-				total = total.toFixed(2);
-				/*total = Math.round(total);*/
+				/*total = total.toFixed(2);*/
+				total = Math.round(total);
 				$(this).parent().find('#rate').val(rate);
-				/*$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(rate));*/
-				$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate);
+				$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(rate));
+				/*$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate);*/
 
 
 				var art = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
@@ -4128,7 +4131,7 @@
 
 		$(document).on('input', '.labor_impact', function () {
 			var value = $(this).val();
-			var row_id = $(this).parent().parent().data('id');
+			var row_id = $(this).parent().parent().parent().data('id');
 			var price_before_labor = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
 			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
