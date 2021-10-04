@@ -297,7 +297,7 @@
 																				name="labor_impact[]"
 																				class="form-control labor_impact">
 																			<input type="hidden"
-																				value="{{round($item->labor_impact/$item->qty)}}" class="labor_impact_old">
+																				value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
 																			<i style="position: relative;top: 0.5px;cursor: pointer;"
 																				class="fa fa-fw fa-plus-circle labor_discount_btn"></i>
 																		</div>
@@ -306,7 +306,7 @@
 																		<input type="text" name="total_discount[]" readonly
 																		value="{{$item->total_discount}}" style="border: 0;background: transparent;padding: 0;"
 																		class="form-control total_discount">
-																		<input type="hidden" value="{{round($item->total_discount/$item->qty)}}" class="total_discount_old">
+																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
 																	</td>
 																	<td class="price">€ {{round($item->rate)}}</td>
 																	<td id="next-row-td" style="padding: 0;">
@@ -1869,6 +1869,7 @@
 		});
 
 		function calculate_total(labor_changed = 0,discount_changed = 0) {
+			
 			var total = 0;
 			var price_before_labor_total = 0;
 			var labor_cost_total = 0;
