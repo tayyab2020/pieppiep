@@ -23,8 +23,7 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div class="add-product-header products">
 
-											<h2>{{isset($invoice) ? __('text.Edit Quotation') : __('text.Create
-												Quotation')}}</h2>
+											<h2>{{isset($invoice) ? __('text.Edit Quotation') : __('text.Create Quotation')}}</h2>
 
 											<div class="col-md-5">
 												<div class="form-group" style="margin: 0;">
@@ -46,8 +45,7 @@
 														</select>
 														<button type="button" href="#myModal1" role="button"
 															data-toggle="modal" style="outline: none;margin-left: 10px;"
-															class="btn btn-primary">{{__('text.Add New
-															Customer')}}</button>
+															class="btn btn-primary">{{__('text.Add New Customer')}}</button>
 													</div>
 												</div>
 											</div>
@@ -286,6 +284,7 @@
 																				readonly name="price_before_labor[]"
 																				style="border: 0;background: transparent;padding: 0;"
 																				class="form-control price_before_labor">
+																				<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
 																			<i style="position: relative;top: 0.5px;cursor: pointer;"
 																				class="fa fa-fw fa-plus-circle discount_btn"></i>
 																		</div>
@@ -296,8 +295,7 @@
 																				value="{{$item->labor_impact}}"
 																				name="labor_impact[]"
 																				class="form-control labor_impact">
-																			<input type="hidden"
-																				value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
+																			<input type="hidden" value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
 																			<i style="position: relative;top: 0.5px;cursor: pointer;"
 																				class="fa fa-fw fa-plus-circle labor_discount_btn"></i>
 																		</div>
@@ -428,28 +426,25 @@
 																	</td>
 																	<td style="width: 80px;">
 																		<div style="display: flex;align-items: center;">
-																			<input type="text" readonly
-																				name="price_before_labor[]"
-																				style="border: 0;background: transparent;padding: 0;"
-																				class="form-control price_before_labor">
+																			<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">
+																			<input type="hidden" value="0" class="price_before_labor_old">
 																			<i style="position: relative;top: 0.5px;cursor: pointer;"
 																				class="fa fa-fw fa-plus-circle discount_btn"></i>
 																		</div>
 																	</td>
 																	<td style="width: 80px;">
 																		<div style="display: flex;align-items: center;">
-																			<input type="text" name="labor_impact[]"
-																				class="form-control labor_impact">
-																			<input type="hidden" class="labor_impact_old">
+																			<input type="text" value="0" name="labor_impact[]" class="form-control labor_impact">
+																			<input type="hidden" value="0" class="labor_impact_old">
 																			<i style="position: relative;top: 0.5px;cursor: pointer;"
 																				class="fa fa-fw fa-plus-circle labor_discount_btn"></i>
 																		</div>
 																	</td>
 																	<td style="width: 80px;">
-																		<input type="text" name="total_discount[]" readonly
+																		<input type="text" value="0" name="total_discount[]" readonly
 																		style="border: 0;background: transparent;padding: 0;"
 																		class="form-control total_discount">
-																		<input type="hidden" class="total_discount_old">
+																		<input type="hidden" value="0" class="total_discount_old">
 																	</td>
 																	<td class="price"></td>
 																	<td id="next-row-td" style="padding: 0;">
@@ -1088,7 +1083,7 @@
 											class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 											<label style="margin-right: 10px;white-space: nowrap;">Discount % </label>
 											<input placeholder="Enter discount in percentage" type="text"
-												class="form-control discount_values" name="discount[]">
+												class="form-control discount_values" value="0" name="discount[]">
 										</div>
 									</div>
 								</div>
@@ -1139,7 +1134,7 @@
 											class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 											<label style="margin-right: 10px;white-space: nowrap;">Labor Discount % </label>
 											<input placeholder="Enter discount in percentage" type="text"
-												class="form-control labor_discount_values" name="labor_discount[]">
+												class="form-control labor_discount_values" value="0" name="labor_discount[]">
 										</div>
 									</div>
 								</div>
@@ -1868,7 +1863,7 @@
 			},
 		});
 
-		function calculate_total(labor_changed = 0,discount_changed = 0) {
+		function calculate_total(qty_changed = 0) {
 			
 			var total = 0;
 			var price_before_labor_total = 0;
@@ -1899,21 +1894,67 @@
 				labor_impact = Math.round(labor_impact);
 				$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact);
 
-				if(discount_changed == 0)
+				var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
+				price_before_labor = price_before_labor * qty;
+				price_before_labor = parseFloat(price_before_labor).toFixed(2);
+				price_before_labor = Math.round(price_before_labor);
+				$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);
+
+				if(qty_changed == 0)
 				{
-					var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
-					total_discount = total_discount * qty;
-					/*total_discount = parseFloat(total_discount).toFixed(2);*/
-					total_discount = Math.round(total_discount);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(total_discount);
+					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
+								
+					rate = rate - old_discount;
+
+					var discount = $('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val();
+					var labor_discount = $('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val();
+			
+
+					if(!discount)
+					{
+						discount = 0;
+					}
+
+
+					if(!labor_discount)
+					{
+						labor_discount = 0;
+					}
+
+					var discount_val = parseFloat(price_before_labor) * (discount/100);
+					/*discount_val = Math.round(discount_val);*/
+					var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
+					/*labor_discount_val = Math.round(labor_discount_val);*/
+
+					var total_discount = discount_val + labor_discount_val;
+					var old_discount = total_discount / qty;
+					old_discount = parseFloat(old_discount).toFixed(2);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(-total_discount);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(-old_discount);
+
+					rate = parseFloat(rate) - parseFloat(total_discount);
+					var price = rate / qty;
+					price = Math.round(price);
+				
+					/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
+					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+
+				}
+				else
+				{
+					var price = rate / qty;
+					price = Math.round(price);
+				
+					/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
+					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+
+					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
+					old_discount = old_discount * qty;
+
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(old_discount);
 				}
 
-				if (labor_changed == 0) {
-					var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-					var price_before_labor = rate - labor_impact;
-					price_before_labor = price_before_labor - total_discount;
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);
-				}
+				rate = Math.round(rate);
 
 				total = parseFloat(total) + parseFloat(rate);
 				/*total = total.toFixed(2);*/
@@ -1924,10 +1965,10 @@
 
 
 				var art = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
-				price_before_labor_total = price_before_labor_total + parseInt(art);
+				price_before_labor_total = price_before_labor_total + parseFloat(art);
 
 				var arb = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val();
-				labor_cost_total = labor_cost_total + parseInt(arb);
+				labor_cost_total = labor_cost_total + parseFloat(arb);
 
 			});
 
@@ -1961,11 +2002,20 @@
 
 					$('#menu1').find(`[data-id='${row_id}']`).remove();
 
+					$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);
+					$('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val(0);
 					current.parent().parent().find('#childsafe').val(0);
 					current.parent().parent().find('#ladderband').val(0);
 					current.parent().parent().find('#ladderband_value').val(0);
 					current.parent().parent().find('#ladderband_price_impact').val(0);
 					current.parent().parent().find('#ladderband_impact_type').val(0);
+					current.parent().parent().find('.total_discount').val(0);
+					current.parent().parent().find('.total_discount_old').val(0);
+					current.parent().parent().find('.price_before_labor').val('');
+					current.parent().parent().find('.price_before_labor_old').val('');
+					current.parent().parent().find('.labor_impact').val('');
+					current.parent().parent().find('.labor_impact_old').val('');
+					current.parent().parent().find('.model').find('.model_impact_value').val('');
 					current.parent().parent().find('.price').text('');
 					current.parent().parent().find('#row_total').val('');
 					current.parent().parent().find('#rate').val('');
@@ -2020,6 +2070,16 @@
 					$('#menu1').find(`[data-id='${row_id}']`).remove();
 
 					if (data != '') {
+
+						$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);
+						$('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val(0);
+						current.parent().parent().find('.total_discount').val(0);
+						current.parent().parent().find('.total_discount_old').val(0);
+						current.parent().parent().find('.price_before_labor').val('');
+						current.parent().parent().find('.price_before_labor_old').val('');
+						current.parent().parent().find('.labor_impact').val('');
+						current.parent().parent().find('.labor_impact_old').val('');
+						current.parent().parent().find('.model').find('.model_impact_value').val('');
 						current.parent().parent().find('#delivery_days').val(data.delivery_days);
 						current.parent().parent().find('#ladderband').val(data.ladderband);
 						current.parent().parent().find('#ladderband_value').val(data.ladderband_value);
@@ -2155,12 +2215,18 @@
 			current.parent().parent().find('#area_conflict').val(0);
 
 			if (width && height && color && model && product) {
+
 				if ($(this).parent().parent().find('.suppliers').hasClass('hide')) {
 					var margin = 0;
 				}
 				else {
 					var margin = 1;
 				}
+
+				$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);			
+				$('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val(0);
+				current.parent().parent().find('.total_discount').val(0);
+				current.parent().parent().find('.total_discount_old').val(0);
 
 				$.ajax({
 					type: "GET",
@@ -2169,6 +2235,7 @@
 					success: function (data) {
 
 						if (typeof data[0].value !== 'undefined') {
+
 							if (data[0].value === 'both') {
 								Swal.fire({
 									icon: 'error',
@@ -2176,6 +2243,11 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
+								current.parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().find('.labor_impact').val('');
+								current.parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().find('.price').text('');
 								current.parent().parent().find('#row_total').val('');
 								current.parent().parent().find('#rate').val('');
@@ -2189,6 +2261,11 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
+								current.parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().find('.labor_impact').val('');
+								current.parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().find('.price').text('');
 								current.parent().parent().find('#row_total').val('');
 								current.parent().parent().find('#rate').val('');
@@ -2203,6 +2280,11 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
+								current.parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().find('.labor_impact').val('');
+								current.parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().find('.price').text('');
 								current.parent().parent().find('#row_total').val('');
 								current.parent().parent().find('#rate').val('');
@@ -2210,6 +2292,7 @@
 								current.parent().parent().find('#area_conflict').val(2);
 							}
 							else {
+
 								current.parent().parent().find('#childsafe').val(data[3].childsafe);
 								var childsafe = data[3].childsafe;
 
@@ -2372,6 +2455,7 @@
 									price = price.toFixed(2);
 								}
 
+								var price_before_labor = Math.round(price);
 								var labor = 0;
 
 								if (data[4]) {
@@ -2382,6 +2466,8 @@
 									price = price.toFixed(2);
 								}
 
+								current.parent().parent().find('.price_before_labor').val(price_before_labor);
+								current.parent().parent().find('.price_before_labor_old').val(price_before_labor);
 								current.parent().parent().find('.labor_impact').val(labor);
 								current.parent().parent().find('.labor_impact_old').val(labor);
 								current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
@@ -2389,9 +2475,15 @@
 								current.parent().parent().find('#row_total').val(price);
 								current.parent().parent().find('#rate').val(price);
 								current.parent().parent().find('#basic_price').val(basic_price);
+								
 							}
 						}
 						else {
+							current.parent().parent().find('.price_before_labor').val('');
+							current.parent().parent().find('.price_before_labor_old').val('');
+							current.parent().parent().find('.labor_impact').val('');
+							current.parent().parent().find('.labor_impact_old').val('');
+							current.parent().parent().find('.model').find('.model_impact_value').val('');
 							current.parent().parent().find('.price').text('');
 							current.parent().parent().find('#row_total').val('');
 							current.parent().parent().find('#rate').val('');
@@ -2427,12 +2519,18 @@
 			current.parent().parent().find('#area_conflict').val(0);
 
 			if (width && height && color && model && product) {
+
 				if ($(this).parent().parent().find('.suppliers').hasClass('hide')) {
 					var margin = 0;
 				}
 				else {
 					var margin = 1;
 				}
+
+				$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);
+				$('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val(0);
+				current.parent().parent().find('.total_discount').val(0);
+				current.parent().parent().find('.total_discount_old').val(0);
 
 				$.ajax({
 					type: "GET",
@@ -2450,6 +2548,12 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
+								
+								current.parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().find('.labor_impact').val('');
+								current.parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().find('.price').text('');
 								current.parent().parent().find('#row_total').val('');
 								current.parent().parent().find('#rate').val('');
@@ -2463,6 +2567,11 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
+								current.parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().find('.labor_impact').val('');
+								current.parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().find('.price').text('');
 								current.parent().parent().find('#row_total').val('');
 								current.parent().parent().find('#rate').val('');
@@ -2477,6 +2586,11 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
+								current.parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().find('.labor_impact').val('');
+								current.parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().find('.price').text('');
 								current.parent().parent().find('#row_total').val('');
 								current.parent().parent().find('#rate').val('');
@@ -2645,6 +2759,7 @@
 									price = price.toFixed(2);
 								}
 
+								var price_before_labor = Math.round(price);
 								var labor = 0;
 
 								if (data[4]) {
@@ -2655,6 +2770,8 @@
 									price = price.toFixed(2);
 								}
 
+								current.parent().parent().find('.price_before_labor').val(price_before_labor);
+								current.parent().parent().find('.price_before_labor_old').val(price_before_labor);
 								current.parent().parent().find('.labor_impact').val(labor);
 								current.parent().parent().find('.labor_impact_old').val(labor);
 								current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
@@ -2665,6 +2782,11 @@
 							}
 						}
 						else {
+							current.parent().parent().find('.price_before_labor').val('');
+							current.parent().parent().find('.price_before_labor_old').val('');
+							current.parent().parent().find('.labor_impact').val('');
+							current.parent().parent().find('.labor_impact_old').val('');
+							current.parent().parent().find('.model').find('.model_impact_value').val('');
 							current.parent().parent().find('.price').text('');
 							current.parent().parent().find('#row_total').val('');
 							current.parent().parent().find('#rate').val('');
@@ -2692,7 +2814,7 @@
 			$('#products_table > tbody  > tr').each(function (index, tr) { $(this).find('td:eq(0)').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, width_readonly = null, height_readonly = null, price_before_labor = null, labor_impact = null, labor_impact_old = null, discount_content = null, discount = null, labor_discount_content = null, labor_discount = null, total_discount = null, total_discount_old = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount_content = null, discount = null, labor_discount_content = null, labor_discount = null, total_discount = null, total_discount_old = null) {
 
 			var rowCount = $('#products_table tbody tr:last').data('id');
 			rowCount = rowCount + 1;
@@ -2772,6 +2894,7 @@
 					'                                                            <td style="width: 80px;">\n' +
 					'																															<div style="display: flex;align-items: center;">\n' +
 					'																																<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
+					'																																<input type="hidden" class="price_before_labor_old">\n' +
 					'																																<i style="position: relative;top: 0.5px;cursor: pointer;" class="fa fa-fw fa-plus-circle discount_btn"></i>\n' +
 					'																																</div>\n' +
 					'                                                            </td>\n' +
@@ -2783,8 +2906,8 @@
 					'																																</div>\n' +
 					'                                                            </td>\n' +
 					'                                                            <td style="width: 80px;">\n' +
-					'																<input type="text" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0;" class="form-control total_discount">\n' +
-					'																<input type="hidden" class="total_discount_old">\n' +
+					'																<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0;" class="form-control total_discount">\n' +
+					'																<input type="hidden" value="0" class="total_discount_old">\n' +
 					'                                                            </td>\n' +
 					'                                                            <td class="price"></td>\n' +
 					'                                                            <td id="next-row-td" style="padding: 0;">\n' +
@@ -2800,7 +2923,7 @@
 						'<div style="margin: 20px 0;" class="row">\n' +
 										'<div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
 										'	<label style="margin-right: 10px;white-space: nowrap;">Discount % </label>\n' +
-										'	<input placeholder="Enter discount in percentage" type="text" value="" class="form-control discount_values" name="discount[]">\n' +
+										'	<input placeholder="Enter discount in percentage" type="text" value="0" class="form-control discount_values" name="discount[]">\n' +
 										'</div>\n' +
 						'</div>\n' +
 					'</div>');
@@ -2810,7 +2933,7 @@
 						'<div style="margin: 20px 0;" class="row">\n' +
 										'<div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
 										'	<label style="margin-right: 10px;white-space: nowrap;">Labor Discount % </label>\n' +
-										'	<input placeholder="Enter discount in percentage" type="text" value="" class="form-control labor_discount_values" name="labor_discount[]">\n' +
+										'	<input placeholder="Enter discount in percentage" type="text" value="0" class="form-control labor_discount_values" name="labor_discount[]">\n' +
 										'</div>\n' +
 						'</div>\n' +
 					'</div>');
@@ -2927,10 +3050,11 @@
 					'                                                                </div>\n' +
 					'                                                            </td>\n' +
 					'                                                            <td style="width: 80px;">\n' +
-					'																															<div style="display: flex;align-items: center;">\n' +
-					'                                                               <input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
-					'																																<i style="position: relative;top: 0.5px;cursor: pointer;" class="fa fa-fw fa-plus-circle discount_btn"></i>\n' +
-					'																																</div>\n' +
+					'																 <div style="display: flex;align-items: center;">\n' +
+					'                                                               	 <input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
+					'                                                               	 <input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
+					'																	 <i style="position: relative;top: 0.5px;cursor: pointer;" class="fa fa-fw fa-plus-circle discount_btn"></i>\n' +
+					'																 </div>\n' +
 					'                                                            </td>\n' +
 					'                                                            <td style="width: 80px;">\n' +
 					'																															<div style="display: flex;align-items: center;">\n' +
@@ -3355,6 +3479,7 @@
 			var price_based_option = current.find('#price_based_option').val();
 			var base_price = current.find('#base_price').val();
 			var price_before_labor = current.find('.price_before_labor').val();
+			var price_before_labor_old = current.find('.price_before_labor_old').val();
 			var labor_impact = current.find('.labor_impact').val();
 			var labor_impact_old = current.find('.labor_impact_old').val();
 			var discount_content = $('#myModal4').find('.modal-body').find(`[data-id='${id}']`).html();
@@ -3374,7 +3499,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, width_readonly, height_readonly, price_before_labor, labor_impact, labor_impact_old, discount_content, discount, labor_discount_content, labor_discount, total_discount, total_discount_old);
+			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount_content, discount, labor_discount_content, labor_discount, total_discount, total_discount_old);
 
 		});
 
@@ -3442,67 +3567,15 @@
 		});
 
 		$(document).on('input', ".discount_values, .labor_discount_values", function (e) {
-		
-			var current = $(this);
-			var name = current.attr('name');
-			var row_id = current.parent().parent().parent().data('id');
-			var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
-			var labor = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val();
-			var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-			var rate = $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val();
-			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
-			rate = rate - old_discount;
-			var price = rate / qty;
-
-			if(name == 'discount[]')
-			{
-				var discount = current.val();
-				var labor_discount = $('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val();
-			}
-			else
-			{
-				var labor_discount = current.val();
-				var discount = $('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val();
-			}
-			
-
-			if(!discount)
-			{
-				discount = 0;
-			}
-
-
-			if(!labor_discount)
-			{
-				labor_discount = 0;
-			}
-
-			var discount_val = parseInt(price_before_labor) * (discount/100);
-			discount_val = Math.round(discount_val);
-			var labor_discount_val = parseInt(labor) * (labor_discount/100);
-			labor_discount_val = Math.round(labor_discount_val);
-
-			var total_discount = discount_val + labor_discount_val;
-			var old_discount = total_discount / qty;
-			old_discount = parseFloat(old_discount).toFixed(2);
-			$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(-total_discount);
-			$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(-old_discount);
-
-			rate = parseInt(rate) - total_discount;
-			var price = rate / qty;
-
-			/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
-			$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-
-			calculate_total(1,1);
+			calculate_total();
 
 		});
 
 
 		$(document).on('input', "input[name='qty[]']", function (e) {
 
-			calculate_total();
+			calculate_total(1);
 
 		});
 
@@ -3611,12 +3684,18 @@
 			current.parent().parent().parent().find('#area_conflict').val(0);
 
 			if (width && height && color && model && product) {
+
 				if ($(this).parent().parent().parent().find('.suppliers').hasClass('hide')) {
 					var margin = 0;
 				}
 				else {
 					var margin = 1;
 				}
+
+				$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);
+				$('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val(0);
+				current.parent().parent().parent().find('.total_discount').val(0);
+				current.parent().parent().parent().find('.total_discount_old').val(0);
 
 				$.ajax({
 					type: "GET",
@@ -3632,6 +3711,11 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
+								current.parent().parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().parent().find('.labor_impact').val('');
+								current.parent().parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().parent().find('.price').text('');
 								current.parent().parent().parent().find('#row_total').val('');
 								current.parent().parent().parent().find('#rate').val('');
@@ -3645,6 +3729,11 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
+								current.parent().parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().parent().find('.labor_impact').val('');
+								current.parent().parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().parent().find('.price').text('');
 								current.parent().parent().parent().find('#row_total').val('');
 								current.parent().parent().parent().find('#rate').val('');
@@ -3659,6 +3748,11 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
+								current.parent().parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().parent().find('.labor_impact').val('');
+								current.parent().parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().parent().find('.price').text('');
 								current.parent().parent().parent().find('#row_total').val('');
 								current.parent().parent().parent().find('#rate').val('');
@@ -3827,6 +3921,7 @@
 									price = price.toFixed(2);
 								}
 
+								var price_before_labor = Math.round(price);
 								var labor = 0;
 
 								if (data[4]) {
@@ -3837,6 +3932,8 @@
 									price = price.toFixed(2);
 								}
 
+								current.parent().parent().parent().find('.price_before_labor').val(price_before_labor);
+								current.parent().parent().parent().find('.price_before_labor_old').val(price_before_labor);
 								current.parent().parent().parent().find('.labor_impact').val(labor);
 								current.parent().parent().parent().find('.labor_impact_old').val(labor);
 								current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
@@ -3847,6 +3944,11 @@
 							}
 						}
 						else {
+							current.parent().parent().parent().find('.price_before_labor').val('');
+							current.parent().parent().parent().find('.price_before_labor_old').val('');
+							current.parent().parent().parent().find('.labor_impact').val('');
+							current.parent().parent().parent().find('.labor_impact_old').val('');
+							current.parent().parent().parent().find('.model').find('.model_impact_value').val('');
 							current.parent().parent().parent().find('.price').text('');
 							current.parent().parent().parent().find('#row_total').val('');
 							current.parent().parent().parent().find('#rate').val('');
@@ -3881,12 +3983,18 @@
 			current.parent().parent().parent().find('#area_conflict').val(0);
 
 			if (width && height && color && model && product) {
+
 				if ($(this).parent().parent().parent().find('.suppliers').hasClass('hide')) {
 					var margin = 0;
 				}
 				else {
 					var margin = 1;
 				}
+
+				$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);
+				$('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val(0);
+				current.parent().parent().parent().find('.total_discount').val(0);
+				current.parent().parent().parent().find('.total_discount_old').val(0);								
 
 				$.ajax({
 					type: "GET",
@@ -3902,6 +4010,11 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
+								current.parent().parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().parent().find('.labor_impact').val('');
+								current.parent().parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().parent().find('.price').text('');
 								current.parent().parent().parent().find('#row_total').val('');
 								current.parent().parent().parent().find('#rate').val('');
@@ -3915,6 +4028,11 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
+								current.parent().parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().parent().find('.labor_impact').val('');
+								current.parent().parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().parent().find('.price').text('');
 								current.parent().parent().parent().find('#row_total').val('');
 								current.parent().parent().parent().find('#rate').val('');
@@ -3929,6 +4047,11 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
+								current.parent().parent().parent().find('.price_before_labor').val('');
+								current.parent().parent().parent().find('.price_before_labor_old').val('');
+								current.parent().parent().parent().find('.labor_impact').val('');
+								current.parent().parent().parent().find('.labor_impact_old').val('');
+								current.parent().parent().parent().find('.model').find('.model_impact_value').val('');
 								current.parent().parent().parent().find('.price').text('');
 								current.parent().parent().parent().find('#row_total').val('');
 								current.parent().parent().parent().find('#rate').val('');
@@ -4097,6 +4220,7 @@
 									price = price.toFixed(2);
 								}
 
+								var price_before_labor = Math.round(price);
 								var labor = 0;
 
 								if (data[4]) {
@@ -4107,6 +4231,8 @@
 									price = price.toFixed(2);
 								}
 
+								current.parent().parent().parent().find('.price_before_labor').val(price_before_labor);
+								current.parent().parent().parent().find('.price_before_labor_old').val(price_before_labor);
 								current.parent().parent().parent().find('.labor_impact').val(labor);
 								current.parent().parent().parent().find('.labor_impact_old').val(labor);
 								current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
@@ -4117,6 +4243,11 @@
 							}
 						}
 						else {
+							current.parent().parent().parent().find('.price_before_labor').val('');
+							current.parent().parent().parent().find('.price_before_labor_old').val('');
+							current.parent().parent().parent().find('.labor_impact').val('');
+							current.parent().parent().parent().find('.labor_impact_old').val('');
+							current.parent().parent().parent().find('.model').find('.model_impact_value').val('');
 							current.parent().parent().parent().find('.price').text('');
 							current.parent().parent().parent().find('#row_total').val('');
 							current.parent().parent().parent().find('#rate').val('');
@@ -4154,7 +4285,7 @@
 			$('#products_table tbody').find(`[data-id='${row_id}']`).find('#rate').val(price);
 			$('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
-			calculate_total(1);
+			calculate_total();
 
 		});
 
@@ -4287,8 +4418,11 @@
 			var impact_value = current.next('input').val();
 			var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
 			var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
+			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
 			total = total - impact_value;
+			var price_before_labor = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
+			price_before_labor = price_before_labor - impact_value;
 
 			if (id == 0) {
 				if (feature_select == 1) {
@@ -4314,9 +4448,14 @@
 						total = total.toFixed(2);
 					}
 
+					total = Math.round(total);
+					price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
+					price_before_labor = Math.round(price_before_labor);
+
 					current.next('input').val(impact_value);
 
-					$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
+					$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+					$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
 					$('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
 					calculate_total();
@@ -4395,9 +4534,14 @@
 					impact_value = 0;
 					total = parseFloat(total) + parseFloat(impact_value);
 					total = total.toFixed(2);
+					total = Math.round(total);
+					price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
+					price_before_labor = Math.round(price_before_labor);
 
 					current.next('input').val(impact_value);
-					$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(total));
+
+					$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+					$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
 					$('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
 					calculate_total();
@@ -4488,8 +4632,12 @@
 						}
 
 						total = Math.round(total);
+						price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
+						price_before_labor = Math.round(price_before_labor);
 
 						current.next('input').val(impact_value);
+
+						$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
 						$('#products_table tbody').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total);
 						$('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 

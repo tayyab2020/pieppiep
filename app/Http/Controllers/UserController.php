@@ -2933,10 +2933,10 @@ class UserController extends Controller
             $invoice_items->delivery_date = $delivery_date;
             $invoice_items->price_based_option = $request->price_based_option[$i];
             $invoice_items->price_before_labor = $request->price_before_labor[$i];
-            $invoice_items->labor_impact = $request->labor_impact[$i];
-            $invoice_items->discount = $request->discount[$i];
-            $invoice_items->labor_discount = $request->labor_discount[$i];
-            $invoice_items->total_discount = $request->total_discount[$i];
+            $invoice_items->labor_impact = $request->labor_impact[$i] ? $request->labor_impact[$i] : 0;
+            $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
+            $invoice_items->labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
+            $invoice_items->total_discount = $request->total_discount[$i] ? $request->total_discount[$i] : 0;
 
             if($request->childsafe[$i])
             {
