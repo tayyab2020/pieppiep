@@ -1945,8 +1945,11 @@
 					var price = rate / qty;
 					price = Math.round(price);
 				
-					/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
-					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+					if(qty != 0)
+					{
+						/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
+						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+					}
 
 					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
 					old_discount = old_discount * qty;
