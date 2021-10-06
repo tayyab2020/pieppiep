@@ -657,7 +657,7 @@ class ProductController extends Controller
                         }
                         else
                         {
-                            var_dump($m);
+                            var_dump($request->selected_model_feature22);
                             exit();
                         }
 
