@@ -306,7 +306,7 @@
 																		class="form-control total_discount">
 																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
 																	</td>
-																	<td class="price">€ {{round($item->rate)}}</td>
+																	<td class="price">€ {{str_replace('.', ',',floatval($item->rate))}}</td>
 																	<td id="next-row-td" style="padding: 0;">
 																		<span id="next-row-span"
 																			class="tooltip1 next-row"
@@ -1909,7 +1909,10 @@
 					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
 					old_discount = old_discount.replace(/\,/g, '.');
 					old_discount = parseFloat(old_discount).toFixed(2);
-								
+
+					console.log(old_discount);
+					console.log(rate);
+
 					rate = rate - old_discount;
 
 					var discount = $('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val();
