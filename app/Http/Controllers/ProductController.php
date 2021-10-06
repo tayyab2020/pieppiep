@@ -365,6 +365,7 @@ class ProductController extends Controller
 
     public function store(StoreValidationRequest3 $request)
     {
+        phpinfo();
                         var_dump($request->selected_model_feature22);
                         exit();
         $input = $request->all();
