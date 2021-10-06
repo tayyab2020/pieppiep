@@ -646,17 +646,20 @@ class ProductController extends Controller
                         $model_check->save();
                     }
 
-                    var_dump($feature_row);
-                    exit();
-
                     foreach ($feature_row as $a => $abc)
                     {
                         $model_features_check = model_features::where('model_id',$model_check->id)->skip($a)->first();
                         $selected_feature = 'selected_model_feature' . $abc;
-                        $link = $request->$selected_feature[$m];
+                        
 
-                        var_dump($request->$selected_feature);
-                        exit();
+                        try {
+                            $link = $request->$selected_feature[$m];
+                          }
+                          
+                          catch (customException $e) {
+                            var_dump('error');
+                            exit();
+                          }
 
                         if($model_features_check)
                         {
