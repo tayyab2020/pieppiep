@@ -365,6 +365,8 @@ class ProductController extends Controller
 
     public function store(StoreValidationRequest3 $request)
     {
+                        var_dump($request->selected_model_feature22);
+                        exit();
         $input = $request->all();
 
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
