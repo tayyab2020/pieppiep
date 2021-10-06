@@ -365,8 +365,6 @@ class ProductController extends Controller
 
     public function store(StoreValidationRequest3 $request)
     {
-                        var_dump($request->selected_model_feature22);
-                        exit();
         $input = $request->all();
 
         $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
@@ -652,19 +650,7 @@ class ProductController extends Controller
                     {
                         $model_features_check = model_features::where('model_id',$model_check->id)->skip($a)->first();
                         $selected_feature = 'selected_model_feature' . $abc;
-
-                        var_dump('<br>selected_model_feature'.$abc.': ');
-                        var_dump($request->$selected_feature);
-
-                        if(isset($request->$selected_feature[$m]))
-                        {
-                            $link = $request->$selected_feature[$m];
-                        }
-                        else
-                        {
-                            var_dump($request->selected_model_feature22);
-                            exit();
-                        }
+                        $link = $request->$selected_feature[$m];
 
                         if($model_features_check)
                         {
