@@ -651,6 +651,7 @@ class ProductController extends Controller
                         $model_features_check = model_features::where('model_id',$model_check->id)->skip($a)->first();
                         $selected_feature = 'selected_model_feature' . $abc;
 
+                        var_dump('<br>selected_model_feature'.$abc.': ');
                         var_dump($request->$selected_feature);
 
                         if(isset($request->$selected_feature[$m]))
