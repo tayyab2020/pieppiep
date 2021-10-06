@@ -2863,7 +2863,7 @@ class UserController extends Controller
         {
             $ask = new_quotations::where('id',$request->quotation_id)->pluck('ask_customization')->first();
 
-            new_quotations::where('id',$request->quotation_id)->update(['price_before_labor_total' => $request->price_before_labor_total, 'labor_cost_total' => $request->labor_cost_total, 'net_amount' => $request->net_amount, 'tax_amount' => $request->tax_amount, 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => $request->total_amount, 'grand_total' => $request->total_amount]);
+            new_quotations::where('id',$request->quotation_id)->update(['price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount)]);
 
             $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
             $feature_ids = new_quotations_features::whereIn('quotation_data_id',$data_ids)->pluck('id');
@@ -2885,12 +2885,12 @@ class UserController extends Controller
             $invoice->user_id = $client->user_id;
             $invoice->customer_details = $request->customer;
             $invoice->vat_percentage = 21;
-            $invoice->subtotal = $request->total_amount;
-            $invoice->grand_total = $request->total_amount;
-            $invoice->price_before_labor_total = $request->price_before_labor_total;
-            $invoice->labor_cost_total = $request->labor_cost_total;
-            $invoice->net_amount = $request->net_amount;
-            $invoice->tax_amount = $request->tax_amount;
+            $invoice->subtotal = str_replace(',', '.',$request->total_amount);
+            $invoice->grand_total = str_replace(',', '.',$request->total_amount);
+            $invoice->price_before_labor_total = str_replace(',', '.',$request->price_before_labor_total);
+            $invoice->labor_cost_total = str_replace(',', '.',$request->labor_cost_total);
+            $invoice->net_amount = str_replace(',', '.',$request->net_amount);
+            $invoice->tax_amount = str_replace(',', '.',$request->tax_amount);
             $invoice->save();
         }
 
@@ -2932,11 +2932,11 @@ class UserController extends Controller
             $invoice_items->delivery_days = $request->delivery_days[$i];
             $invoice_items->delivery_date = $delivery_date;
             $invoice_items->price_based_option = $request->price_based_option[$i];
-            $invoice_items->price_before_labor = $request->price_before_labor[$i];
-            $invoice_items->labor_impact = $request->labor_impact[$i] ? $request->labor_impact[$i] : 0;
+            $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
+            $invoice_items->labor_impact = $request->labor_impact[$i] ? str_replace(',', '.',$request->labor_impact[$i]) : 0;
             $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
             $invoice_items->labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
-            $invoice_items->total_discount = $request->total_discount[$i] ? $request->total_discount[$i] : 0;
+            $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
 
             if($request->childsafe[$i])
             {
