@@ -1910,9 +1910,6 @@
 					old_discount = old_discount.replace(/\,/g, '.');
 					old_discount = parseFloat(old_discount).toFixed(2);
 
-					console.log(old_discount);
-					console.log(rate);
-
 					rate = rate - old_discount;
 
 					var discount = $('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val();
@@ -4308,12 +4305,15 @@
 			var price_before_labor = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
 			price_before_labor = price_before_labor.replace(/\,/g, '.');
 			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+			var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
+			total_discount = total_discount.replace(/\,/g, '.');
 
 			if (!value) {
 				value = 0;
 			}
 
 			var total = parseFloat(price_before_labor) + parseFloat(value);
+			total = total + parseFloat(total_discount);
 			total = parseFloat(total);
 			total = total.toFixed(2);
 			var price = total;
