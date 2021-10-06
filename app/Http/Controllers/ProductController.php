@@ -650,16 +650,16 @@ class ProductController extends Controller
                     {
                         $model_features_check = model_features::where('model_id',$model_check->id)->skip($a)->first();
                         $selected_feature = 'selected_model_feature' . $abc;
-                        
 
-                        try {
+                        if(isset($request->$selected_feature[$m]))
+                        {
                             $link = $request->$selected_feature[$m];
-                          }
-                          
-                          catch (customException $e) {
-                            var_dump('error');
+                        }
+                        else
+                        {
+                            var_dump($request->$selected_feature);
                             exit();
-                          }
+                        }
 
                         if($model_features_check)
                         {
