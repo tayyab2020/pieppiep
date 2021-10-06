@@ -867,6 +867,8 @@ class ProductController extends Controller
                 }
             }
 
+            exit();
+
             Session::flash('success', 'Product edited successfully.');
             return redirect()->route('admin-product-edit',$request->cat_id);
         }
