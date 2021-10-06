@@ -646,6 +646,9 @@ class ProductController extends Controller
                         $model_check->save();
                     }
 
+                    var_dump($feature_row);
+                    exit();
+
                     foreach ($feature_row as $a => $abc)
                     {
                         $model_features_check = model_features::where('model_id',$model_check->id)->skip($a)->first();
