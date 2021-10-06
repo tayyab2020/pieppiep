@@ -652,6 +652,9 @@ class ProductController extends Controller
                         $selected_feature = 'selected_model_feature' . $abc;
                         $link = $request->$selected_feature[$m];
 
+                        var_dump($request->selected_feature);
+                        exit();
+
                         if($model_features_check)
                         {
                             $model_features_check->model_id = $model_check->id;
