@@ -246,7 +246,7 @@
 																			name="model_impact_value[]"
 																			value="{{$item->model_impact_value}}">
 																	</td>
-																	<td class="width" style="width: 80px;">
+																	<td class="width" style="width: 100px;">
 																		<div class="m-box">
 																			<input {{$item->price_based_option == 3 ?
 																			'readonly' : null}}
@@ -261,7 +261,7 @@
 																				value="{{$item->width_unit}}">
 																		</div>
 																	</td>
-																	<td class="height" style="width: 80px;">
+																	<td class="height" style="width: 100px;">
 																		<div class="m-box">
 																			<input {{$item->price_based_option == 2 ?
 																			'readonly' : null}}
@@ -277,7 +277,7 @@
 																				value="{{$item->height_unit}}">
 																		</div>
 																	</td>
-																	<td style="width: 80px;">
+																	<td style="width: 100px;">
 																		<div style="display: flex;align-items: center;">
 																			<input type="text"
 																				value="{{str_replace('.', ',',floatval($item->price_before_labor))}}"
@@ -289,7 +289,7 @@
 																				class="fa fa-fw fa-plus-circle discount_btn"></i>
 																		</div>
 																	</td>
-																	<td style="width: 80px;">
+																	<td style="width: 100px;">
 																		<div style="display: flex;align-items: center;">
 																			<input type="text"
 																				value="{{str_replace('.', ',',floatval($item->labor_impact))}}"
@@ -403,7 +403,7 @@
 																		<input type="hidden" class="model_impact_value"
 																			name="model_impact_value[]" value="0">
 																	</td>
-																	<td class="width" style="width: 80px;">
+																	<td class="width" style="width: 100px;">
 																		<div class="m-box">
 																			<input class="form-control m-input"
 																				maskedFormat="9,1" autocomplete="off"
@@ -413,7 +413,7 @@
 																				class="measure-unit" value="cm">
 																		</div>
 																	</td>
-																	<td class="height" style="width: 80px;">
+																	<td class="height" style="width: 100px;">
 																		<div class="m-box">
 																			<input class="form-control m-input"
 																				maskedFormat="9,1" autocomplete="off"
@@ -424,7 +424,7 @@
 																				class="measure-unit" value="cm">
 																		</div>
 																	</td>
-																	<td style="width: 80px;">
+																	<td style="width: 100px;">
 																		<div style="display: flex;align-items: center;">
 																			<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">
 																			<input type="hidden" value="0" class="price_before_labor_old">
@@ -432,7 +432,7 @@
 																				class="fa fa-fw fa-plus-circle discount_btn"></i>
 																		</div>
 																	</td>
-																	<td style="width: 80px;">
+																	<td style="width: 100px;">
 																		<div style="display: flex;align-items: center;">
 																			<input type="text" value="0" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact">
 																			<input type="hidden" value="0" class="labor_impact_old">
@@ -1451,7 +1451,6 @@
 		width: 70%;
 		border: 0;
 		padding: 0;
-		padding-right: 5px;
 		text-align: left;
 		height: 30px !important;
 	}
@@ -2899,33 +2898,33 @@
 					'                                                                    <option value=""></option>\n' +
 					'\n' +
 					'                                                                </select>\n' +
-					'                                                                    <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="">\n' +
+					'                                                                   <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="">\n' +
 					'                                                            </td>\n' +
-					'                                                            <td class="width" style="width: 80px;">\n' +
+					'                                                            <td class="width" style="width: 100px;">\n' +
 					'                                                                <div class="m-box">\n' +
-					'                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
-					'                                                                    <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">\n' +
+					'                                                                	<input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
+					'                                                                   <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">\n' +
 					'                                                                </div>\n' +
 					'                                                            </td>\n' +
-					'                                                            <td class="height" style="width: 80px;">\n' +
+					'                                                            <td class="height" style="width: 100px;">\n' +
 					'                                                                <div class="m-box">\n' +
-					'                                                                    <input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
-					'                                                                    <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">\n' +
+					'                                                                	<input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
+					'                                                                	<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">\n' +
 					'                                                                </div>\n' +
 					'                                                            </td>\n' +
-					'                                                            <td style="width: 80px;">\n' +
-					'																															<div style="display: flex;align-items: center;">\n' +
-					'																																<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
-					'																																<input type="hidden" class="price_before_labor_old">\n' +
-					'																																<i style="position: relative;top: 0.5px;cursor: pointer;" class="fa fa-fw fa-plus-circle discount_btn"></i>\n' +
-					'																																</div>\n' +
+					'                                                            <td style="width: 100px;">\n' +
+					'																 <div style="display: flex;align-items: center;">\n' +
+					'																 	<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
+					'																	<input type="hidden" class="price_before_labor_old">\n' +
+					'																 	<i style="position: relative;top: 0.5px;cursor: pointer;" class="fa fa-fw fa-plus-circle discount_btn"></i>\n' +
+					'																 </div>\n' +
 					'                                                            </td>\n' +
-					'                                                            <td style="width: 80px;">\n' +
-					'																															<div style="display: flex;align-items: center;">\n' +
-					'																																<input type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact">\n' +
-					'                                                               																<input type="hidden" class="labor_impact_old">\n' +
-					'																																<i style="position: relative;top: 0.5px;cursor: pointer;" class="fa fa-fw fa-plus-circle labor_discount_btn"></i>\n' +
-					'																																</div>\n' +
+					'                                                            <td style="width: 100px;">\n' +
+					'																 <div style="display: flex;align-items: center;">\n' +
+					'																 	<input type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact">\n' +
+					'                                                                	<input type="hidden" class="labor_impact_old">\n' +
+					'																 	<i style="position: relative;top: 0.5px;cursor: pointer;" class="fa fa-fw fa-plus-circle labor_discount_btn"></i>\n' +
+					'															     </div>\n' +
 					'                                                            </td>\n' +
 					'                                                            <td style="width: 80px;">\n' +
 					'																<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0;" class="form-control total_discount">\n' +
@@ -3059,26 +3058,26 @@
 					'                                                                </select>\n' +
 					'                                                                    <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="' + model_impact_value + '">\n' +
 					'                                                            </td>\n' +
-					'                                                            <td class="width" style="width: 80px;">\n' +
+					'                                                            <td class="width" style="width: 100px;">\n' +
 					'                                                                <div class="m-box">\n' +
 					'                                                                    <input ' + width_readonly + ' value="' + width + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
 					'                                                                    <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="' + width_unit + '">\n' +
 					'                                                                </div>\n' +
 					'                                                            </td>\n' +
-					'                                                            <td class="height" style="width: 80px;">\n' +
+					'                                                            <td class="height" style="width: 100px;">\n' +
 					'                                                                <div class="m-box">\n' +
 					'                                                                    <input ' + height_readonly + ' value="' + height + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
 					'                                                                    <input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="' + height_unit + '">\n' +
 					'                                                                </div>\n' +
 					'                                                            </td>\n' +
-					'                                                            <td style="width: 80px;">\n' +
+					'                                                            <td style="width: 100px;">\n' +
 					'																 <div style="display: flex;align-items: center;">\n' +
 					'                                                               	 <input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0;" class="form-control price_before_labor">\n' +
 					'                                                               	 <input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
 					'																	 <i style="position: relative;top: 0.5px;cursor: pointer;" class="fa fa-fw fa-plus-circle discount_btn"></i>\n' +
 					'																 </div>\n' +
 					'                                                            </td>\n' +
-					'                                                            <td style="width: 80px;">\n' +
+					'                                                            <td style="width: 100px;">\n' +
 					'																<div style="display: flex;align-items: center;">\n' +
 					'                                                               	<input value="' + labor_impact + '" type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact">\n' +
 					'                                                               	<input value="' + labor_impact_old + '" type="hidden" class="labor_impact_old">\n' +
