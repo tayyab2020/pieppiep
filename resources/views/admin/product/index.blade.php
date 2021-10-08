@@ -262,7 +262,7 @@
 
     <script type="text/javascript">
 
-        $(document).on('keypress', "input[name='labor[]']", function(e){
+        $(document).on('keypress', "input[name='margin[]'], input[name='labor[]']", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;

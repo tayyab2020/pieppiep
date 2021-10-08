@@ -48,6 +48,7 @@
 
                                                 {{csrf_field()}}
 
+                                                <input type="hidden" id="submit_check" value="0">
                                                 <input type="hidden" name="cat_id" value="{{isset($cats) ? $cats->id : null}}" />
 
                                                 <div style="padding: 40px 15px 20px 15px;border: 1px solid #24232329;" class="tab-content">
@@ -58,7 +59,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_display_name">Margin (%)*</label>
                                                             <div class="col-sm-6">
-                                                                <input min="100" value="{{isset($cats) ? $cats->margin : null}}" class="form-control" name="margin" id="blood_group_display_name" placeholder="Enter Product margin" required step="1" type="number">
+                                                                <input min="100" value="{{isset($cats) ? $cats->margin : null}}" class="form-control" name="margin" id="margin_input" placeholder="Enter Product margin" required step="1" type="number">
                                                             </div>
                                                         </div>
 
@@ -1901,20 +1902,27 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function() {
+    window.onbeforeunload = function (e) {
 
-        window.onbeforeunload = function (e) {
-            
+        if($('#submit_check').val() == 0)
+        {
             e = e || window.event;
-            
+
             // For IE and Firefox prior to version 4
             if (e) {
                 e.returnValue = 'Sure?';
-                }
-                // For Safari
-                return 'Sure?';
-                
-        };
+            }
+            // For Safari
+            return 'Sure?';
+        }
+        else
+        {
+            // do nothing
+        }
+
+    };
+
+    $(document).ready(function() {
 
         $('body').on('click', '.create-feature-btn' ,function(){
 
@@ -2483,6 +2491,7 @@
 
             if(!flag)
             {
+                $('#submit_check').val(1);
                 $('#product_form').submit();
             }
 
@@ -2716,7 +2725,7 @@
             }
         });
 
-        $(document).on('keypress', ".base_price", function(e){
+        $(document).on('keypress', ".base_price, #margin_input", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;

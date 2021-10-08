@@ -171,6 +171,10 @@
 																		name="price_based_option[]">
 																	<input type="hidden" value="{{$item->base_price}}"
 																		id="base_price" name="base_price[]">
+                                                                    <input type="hidden" value="{{$item->supplier_margin}}"
+                                                                           id="supplier_margin" name="supplier_margin[]">
+                                                                    <input type="hidden" value="{{$item->retailer_margin}}"
+                                                                           id="retailer_margin" name="retailer_margin[]">
 
 																	<td @if(auth()->user()->role_id == 4)
 																		class="suppliers hide" @else class="suppliers"
@@ -352,6 +356,8 @@
 																		name="price_based_option[]">
 																	<input type="hidden" id="base_price"
 																		name="base_price[]">
+                                                                    <input type="hidden" id="supplier_margin" name="supplier_margin[]">
+                                                                    <input type="hidden" id="retailer_margin" name="retailer_margin[]">
 
 																	<td @if(auth()->user()->role_id == 4)
 																		class="suppliers hide" @else class="suppliers"
@@ -1677,12 +1683,12 @@
 
 				$("#address-error").remove();
 				$('#address').parent().parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;">{{__('text.Kindly write your full address with house / building number so system can detect postal code and city from it!')}}</small>');
-	
+
 			}
 
-			
+
 		});
-		
+
 	}
 
 	$("#address").on('input', function (e) {
@@ -1863,7 +1869,7 @@
 		});
 
 		function calculate_total(qty_changed = 0,labor_changed = 0) {
-			
+
 			var total = 0;
 			var price_before_labor_total = 0;
 			var labor_cost_total = 0;
@@ -1913,7 +1919,7 @@
 
 					var discount = $('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val();
 					var labor_discount = $('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val();
-			
+
 
 					if(!discount)
 					{
@@ -1941,7 +1947,7 @@
 					rate = parseFloat(rate) - parseFloat(total_discount);
 					var price = rate / qty;
 					/*price = Math.round(price);*/
-				
+
 					/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
 					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
 
@@ -1950,7 +1956,7 @@
 				{
 					var price = rate / qty;
 					/*price = Math.round(price);*/
-				
+
 					if(qty != 0)
 					{
 						/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
@@ -2239,7 +2245,7 @@
 					var margin = 1;
 				}
 
-				$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);			
+				$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);
 				$('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val(0);
 				current.parent().parent().find('.total_discount').val(0);
 				current.parent().parent().find('.total_discount_old').val(0);
@@ -2328,6 +2334,9 @@
 										price = parseFloat(price);
 										var supplier_margin = data[2].margin;
 										var retailer_margin = data[2].retailer_margin;
+
+                                        current.parent().parent().find('#supplier_margin').val(supplier_margin);
+                                        current.parent().parent().find('#retailer_margin').val(retailer_margin);
 
 										if (supplier_margin && retailer_margin) {
 											price = (price / supplier_margin) * retailer_margin;
@@ -2493,7 +2502,7 @@
 								current.parent().parent().find('#row_total').val(price);
 								current.parent().parent().find('#rate').val(price);
 								current.parent().parent().find('#basic_price').val(basic_price);
-								
+
 							}
 						}
 						else {
@@ -2566,7 +2575,7 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
-								
+
 								current.parent().parent().find('.price_before_labor').val('');
 								current.parent().parent().find('.price_before_labor_old').val('');
 								current.parent().parent().find('.labor_impact').val('');
@@ -2635,6 +2644,9 @@
 										price = parseFloat(price);
 										var supplier_margin = data[2].margin;
 										var retailer_margin = data[2].retailer_margin;
+
+                                        current.parent().parent().find('#supplier_margin').val(supplier_margin);
+                                        current.parent().parent().find('#retailer_margin').val(retailer_margin);
 
 										if (supplier_margin && retailer_margin) {
 											price = (price / supplier_margin) * retailer_margin;
@@ -2834,7 +2846,7 @@
 			$('#products_table > tbody  > tr').each(function (index, tr) { $(this).find('td:eq(0)').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount_content = null, discount = null, labor_discount_content = null, labor_discount = null, total_discount = null, total_discount_old = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount_content = null, discount = null, labor_discount_content = null, labor_discount = null, total_discount = null, total_discount_old = null) {
 
 			var rowCount = $('#products_table tbody tr:last').data('id');
 			rowCount = rowCount + 1;
@@ -2859,6 +2871,8 @@
 					'                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
 					'                                                            <input type="hidden" id="price_based_option" name="price_based_option[]">\n' +
 					'                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
+                    '                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
+                    '                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
 					'                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>\n' +
 					'                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
 					'\n' +
@@ -3028,6 +3042,8 @@
 					'                                                            <input type="hidden" value="' + delivery_days + '" id="delivery_days" name="delivery_days[]">\n' +
 					'                                                            <input type="hidden" value="' + price_based_option + '" id="price_based_option" name="price_based_option[]">\n' +
 					'                                                            <input type="hidden" value="' + base_price + '" id="base_price" name="base_price[]">\n' +
+                    '                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
+                    '                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
 					'                                                            <td @if(auth()->user()->role_id == 4) class="suppliers hide" @else class="suppliers" @endif>\n' +
 					'                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
 					'\n' +
@@ -3182,7 +3198,7 @@
 				$('#myModal4').find('.modal-body').find(`[data-id='${rowCount}']`).each(function (i, obj) {
 
 						$(obj).find('.discount_values').val(discount);
-					
+
 				});
 
 				$('#myModal5').find('.modal-body').append('<div class="labor-discount-box" data-id="' + rowCount + '">\n' + labor_discount_content + '</div>');
@@ -3190,7 +3206,7 @@
 				$('#myModal5').find('.modal-body').find(`[data-id='${rowCount}']`).each(function (i, obj) {
 
 						$(obj).find('.labor_discount_values').val(labor_discount);
-					
+
 				});
 
 				focus_row(last_row);
@@ -3501,6 +3517,8 @@
 			var childsafe_y = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).find('#childsafe_y').val();
 			var price_based_option = current.find('#price_based_option').val();
 			var base_price = current.find('#base_price').val();
+            var supplier_margin = current.find('#supplier_margin').val();
+            var retailer_margin = current.find('#retailer_margin').val();
 			var price_before_labor = current.find('.price_before_labor').val();
 			var price_before_labor_old = current.find('.price_before_labor_old').val();
 			var labor_impact = current.find('.labor_impact').val();
@@ -3522,7 +3540,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount_content, discount, labor_discount_content, labor_discount, total_discount, total_discount_old);
+			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount_content, discount, labor_discount_content, labor_discount, total_discount, total_discount_old);
 
 		});
 
@@ -3814,6 +3832,9 @@
 										var supplier_margin = data[2].margin;
 										var retailer_margin = data[2].retailer_margin;
 
+                                        current.parent().parent().parent().find('#supplier_margin').val(supplier_margin);
+                                        current.parent().parent().parent().find('#retailer_margin').val(retailer_margin);
+
 										if (supplier_margin && retailer_margin) {
 											price = (price / supplier_margin) * retailer_margin;
 											price = price.toFixed(2);
@@ -4027,7 +4048,7 @@
 				$('#myModal4').find('.modal-body').find(`[data-id='${row_id}']`).find('.discount_values').val(0);
 				$('#myModal5').find('.modal-body').find(`[data-id='${row_id}']`).find('.labor_discount_values').val(0);
 				current.parent().parent().parent().find('.total_discount').val(0);
-				current.parent().parent().parent().find('.total_discount_old').val(0);								
+				current.parent().parent().parent().find('.total_discount_old').val(0);
 
 				$.ajax({
 					type: "GET",
@@ -4114,6 +4135,9 @@
 										price = parseFloat(price);
 										var supplier_margin = data[2].margin;
 										var retailer_margin = data[2].retailer_margin;
+
+                                        current.parent().parent().parent().find('#supplier_margin').val(supplier_margin);
+                                        current.parent().parent().parent().find('#retailer_margin').val(retailer_margin);
 
 										if (supplier_margin && retailer_margin) {
 											price = (price / supplier_margin) * retailer_margin;
@@ -4464,16 +4488,32 @@
 			var total = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val();
 			var basic_price = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#basic_price').val();
 			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+			var margin = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide');
+			var supplier_margin = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#supplier_margin').val();
+            var retailer_margin = $('#products_table tbody').find(`[data-id='${row_id}']`).find('#retailer_margin').val();
 
 			total = total - impact_value;
 			var price_before_labor = $('#products_table tbody').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
 			price_before_labor = price_before_labor - impact_value;
 
 			if (id == 0) {
+
 				if (feature_select == 1) {
+
 					if (ladderband_price_impact == 1) {
 						if (ladderband_impact_type == 0) {
 							impact_value = ladderband_value;
+
+                            if(!margin)
+                            {
+                                if (supplier_margin && retailer_margin) {
+                                    if(supplier_margin != 0)
+                                    {
+                                        impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                    }
+                                }
+                            }
+
 							impact_value = parseFloat(impact_value).toFixed(2);
 							total = parseFloat(total) + parseFloat(impact_value);
 							total = total.toFixed(2);
@@ -4482,6 +4522,17 @@
 							impact_value = ladderband_value;
 							var per = (impact_value) / 100;
 							impact_value = basic_price * per;
+
+                            if(!margin)
+                            {
+                                if (supplier_margin && retailer_margin) {
+                                    if(supplier_margin != 0)
+                                    {
+                                        impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                    }
+                                }
+                            }
+
 							impact_value = parseFloat(impact_value).toFixed(2);
 							total = parseFloat(total) + parseFloat(impact_value);
 							total = total.toFixed(2);
@@ -4489,6 +4540,17 @@
 					}
 					else {
 						impact_value = 0;
+
+                        if(!margin)
+                        {
+                            if (supplier_margin && retailer_margin) {
+                                if(supplier_margin != 0)
+                                {
+                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                }
+                            }
+                        }
+
 						total = parseFloat(total) + parseFloat(impact_value);
 						total = total.toFixed(2);
 					}
@@ -4574,10 +4636,22 @@
 					});
 				}
 				else {
+
 					$('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').addClass('hide');
 					$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
 					impact_value = 0;
+
+                    if(!margin)
+                    {
+                        if (supplier_margin && retailer_margin) {
+                            if(supplier_margin != 0)
+                            {
+                                impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                            }
+                        }
+                    }
+
 					total = parseFloat(total) + parseFloat(impact_value);
 					total = total.toFixed(2);
 					//total = Math.round(total);
@@ -4607,6 +4681,7 @@
 						if (current.parent().parent().next('.sub-features').length > 0) {
 							var sub_impact_value = current.parent().parent().next('.sub-features').find('.f_price').val();
 							total = total - sub_impact_value;
+							price_before_labor = price_before_labor - sub_impact_value;
 							current.parent().parent().next('.sub-features').remove();
 						}
 
@@ -4648,9 +4723,21 @@
 						}
 
 						if (data[0] && data[0].price_impact == 1) {
+
 							if (data[0].variable == 1) {
 								impact_value = data[0].value;
 								impact_value = impact_value * (width / 100);
+
+                                if(!margin)
+                                {
+                                    if (supplier_margin && retailer_margin) {
+                                        if(supplier_margin != 0)
+                                        {
+                                            impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                        }
+                                    }
+                                }
+
 								impact_value = parseFloat(impact_value).toFixed(2);
 								total = parseFloat(total) + parseFloat(impact_value);
 								total = total.toFixed(2);
@@ -4658,6 +4745,17 @@
 							else {
 								if (data[0].impact_type == 0) {
 									impact_value = data[0].value;
+
+                                    if(!margin)
+                                    {
+                                        if (supplier_margin && retailer_margin) {
+                                            if(supplier_margin != 0)
+                                            {
+                                                impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                            }
+                                        }
+                                    }
+
 									impact_value = parseFloat(impact_value).toFixed(2);
 									total = parseFloat(total) + parseFloat(impact_value);
 									total = total.toFixed(2);
@@ -4666,6 +4764,17 @@
 									impact_value = data[0].value;
 									var per = (impact_value) / 100;
 									impact_value = basic_price * per;
+
+                                    if(!margin)
+                                    {
+                                        if (supplier_margin && retailer_margin) {
+                                            if(supplier_margin != 0)
+                                            {
+                                                impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                            }
+                                        }
+                                    }
+
 									impact_value = parseFloat(impact_value).toFixed(2);
 									total = parseFloat(total) + parseFloat(impact_value);
 									total = total.toFixed(2);
@@ -4674,6 +4783,17 @@
 						}
 						else {
 							impact_value = 0;
+
+                            if(!margin)
+                            {
+                                if (supplier_margin && retailer_margin) {
+                                    if(supplier_margin != 0)
+                                    {
+                                        impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                    }
+                                }
+                            }
+
 							total = parseFloat(total) + parseFloat(impact_value);
 							total = total.toFixed(2);
 						}
