@@ -2679,7 +2679,7 @@ class UserController extends Controller
 
                 foreach ($item->features as $feature)
                 {
-                    $features[$f] = product_features::leftjoin('model_features','model_features.product_feature_id','=','product_features.id')->where('product_features.product_id',$item->product_id)->where('product_features.heading_id',$feature->feature_id)->where('product_features.sub_feature',0)->where('model_features.model_id',$item->model_id)->where('model_features.linked',1)->get();
+                    $features[$f] = product_features::leftjoin('model_features','model_features.product_feature_id','=','product_features.id')->where('product_features.product_id',$item->product_id)->where('product_features.heading_id',$feature->feature_id)->where('product_features.sub_feature',0)->where('model_features.model_id',$item->model_id)->where('model_features.linked',1)->select('product_features.*')->get();
 
                     if($feature->ladderband)
                     {
