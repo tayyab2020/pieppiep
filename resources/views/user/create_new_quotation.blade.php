@@ -2461,6 +2461,20 @@
 								if (data[3].price_impact == 1) {
 									if (data[3].impact_type == 0) {
 										var impact_value = data[3].value;
+
+                                        if(margin == 1)
+                                        {
+                                            if (data[2]) {
+
+                                                var supplier_margin = data[2].margin;
+                                                var retailer_margin = data[2].retailer_margin;
+
+                                                if (supplier_margin && retailer_margin) {
+                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                }
+                                            }
+                                        }
+
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
@@ -2469,6 +2483,20 @@
 										var impact_value = data[3].value;
 										var per = (impact_value) / 100;
 										impact_value = basic_price * per;
+
+                                        if(margin == 1)
+                                        {
+                                            if (data[2]) {
+
+                                                var supplier_margin = data[2].margin;
+                                                var retailer_margin = data[2].retailer_margin;
+
+                                                if (supplier_margin && retailer_margin) {
+                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                }
+                                            }
+                                        }
+
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
@@ -2770,6 +2798,20 @@
 								if (data[3].price_impact == 1) {
 									if (data[3].impact_type == 0) {
 										var impact_value = data[3].value;
+
+                                        if(margin == 1)
+                                        {
+                                            if (data[2]) {
+
+                                                var supplier_margin = data[2].margin;
+                                                var retailer_margin = data[2].retailer_margin;
+
+                                                if (supplier_margin && retailer_margin) {
+                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                }
+                                            }
+                                        }
+
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
@@ -2778,6 +2820,20 @@
 										var impact_value = data[3].value;
 										var per = (impact_value) / 100;
 										impact_value = basic_price * per;
+
+                                        if(margin == 1)
+                                        {
+                                            if (data[2]) {
+
+                                                var supplier_margin = data[2].margin;
+                                                var retailer_margin = data[2].retailer_margin;
+
+                                                if (supplier_margin && retailer_margin) {
+                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                }
+                                            }
+                                        }
+
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
@@ -3954,6 +4010,20 @@
 								if (data[3].price_impact == 1) {
 									if (data[3].impact_type == 0) {
 										var impact_value = data[3].value;
+
+                                        if(margin == 1)
+                                        {
+                                            if (data[2]) {
+
+                                                var supplier_margin = data[2].margin;
+                                                var retailer_margin = data[2].retailer_margin;
+
+                                                if (supplier_margin && retailer_margin) {
+                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                }
+                                            }
+                                        }
+
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
@@ -3962,6 +4032,20 @@
 										var impact_value = data[3].value;
 										var per = (impact_value) / 100;
 										impact_value = basic_price * per;
+
+                                        if(margin == 1)
+                                        {
+                                            if (data[2]) {
+
+                                                var supplier_margin = data[2].margin;
+                                                var retailer_margin = data[2].retailer_margin;
+
+                                                if (supplier_margin && retailer_margin) {
+                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                }
+                                            }
+                                        }
+
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
@@ -4258,6 +4342,20 @@
 								if (data[3].price_impact == 1) {
 									if (data[3].impact_type == 0) {
 										var impact_value = data[3].value;
+
+                                        if(margin == 1)
+                                        {
+                                            if (data[2]) {
+
+                                                var supplier_margin = data[2].margin;
+                                                var retailer_margin = data[2].retailer_margin;
+
+                                                if (supplier_margin && retailer_margin) {
+                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                }
+                                            }
+                                        }
+
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
@@ -4266,6 +4364,20 @@
 										var impact_value = data[3].value;
 										var per = (impact_value) / 100;
 										impact_value = basic_price * per;
+
+                                        if(margin == 1)
+                                        {
+                                            if (data[2]) {
+
+                                                var supplier_margin = data[2].margin;
+                                                var retailer_margin = data[2].retailer_margin;
+
+                                                if (supplier_margin && retailer_margin) {
+                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                }
+                                            }
+                                        }
+                                        
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
@@ -4540,17 +4652,6 @@
 					}
 					else {
 						impact_value = 0;
-
-                        if(!margin)
-                        {
-                            if (supplier_margin && retailer_margin) {
-                                if(supplier_margin != 0)
-                                {
-                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                }
-                            }
-                        }
-
 						total = parseFloat(total) + parseFloat(impact_value);
 						total = total.toFixed(2);
 					}
@@ -4641,17 +4742,6 @@
 					$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
 					impact_value = 0;
-
-                    if(!margin)
-                    {
-                        if (supplier_margin && retailer_margin) {
-                            if(supplier_margin != 0)
-                            {
-                                impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                            }
-                        }
-                    }
-
 					total = parseFloat(total) + parseFloat(impact_value);
 					total = total.toFixed(2);
 					//total = Math.round(total);
@@ -4783,17 +4873,6 @@
 						}
 						else {
 							impact_value = 0;
-
-                            if(!margin)
-                            {
-                                if (supplier_margin && retailer_margin) {
-                                    if(supplier_margin != 0)
-                                    {
-                                        impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                    }
-                                }
-                            }
-
 							total = parseFloat(total) + parseFloat(impact_value);
 							total = total.toFixed(2);
 						}
