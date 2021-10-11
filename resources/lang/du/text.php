@@ -271,4 +271,7 @@ return [
     'Select Service' => 'Selecteer dienst',
     'Select Installation Date' => 'Selecteer gewenste installatie datum',
     'Edit Customer' => 'Wijzig klantgegevens',
+    'Color Number' => 'Kleurnummer',
+    'Width' => 'Breedte',
+    'Height' => 'Hoogte',
 ];

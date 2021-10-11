@@ -2898,11 +2898,12 @@ class UserController extends Controller
         foreach ($products as $i => $key) {
 
             /*$feature_titles[$i][] = 'empty';*/
-            $feature_sub_titles[$i][] = 'empty';
+            /*$feature_sub_titles[$i][] = 'empty';*/
             $sub_titles[$i] = '';
             $row_id = $request->row_id[$i];
             $product_titles[] = product::where('id',$key)->pluck('title')->first();
             $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
+            $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
 
             date_default_timezone_set('Europe/Amsterdam');
             $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
@@ -3080,7 +3081,22 @@ class UserController extends Controller
         $date = $invoice->created_at;
         $role = 'retailer';
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        /*$cols = array_chunk($feature_sub_titles[0], 3);
+
+        foreach($cols as $col)
+        {
+            var_dump(count($col));
+            exit();
+            foreach ($col as $c)
+            {
+                var_dump($c);
+
+            }
+            var_dump('AAAAA');
+        }
+        exit();*/
+
+        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'potrait')->setOptions(['dpi' => 160]);
 
         $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
 

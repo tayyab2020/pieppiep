@@ -271,4 +271,7 @@ return [
     'Select Service' => 'Select Service',
     'Select Installation Date' => 'Select Installation Date',
     'Edit Customer' => 'Edit Customer',
+    'Color Number' => 'Color Number',
+    'Width' => 'Width',
+    'Height' => 'Height',
 ];

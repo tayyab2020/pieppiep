@@ -4377,7 +4377,7 @@
                                                 }
                                             }
                                         }
-                                        
+
 										impact_value = parseFloat(impact_value).toFixed(2);
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
