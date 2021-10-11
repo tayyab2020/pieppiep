@@ -200,7 +200,7 @@
                                             $labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
                                             ?>
                                             <td style="font-size: 20px;padding: 5px;">Artikel Eh prijs &nbsp;&nbsp; {{str_replace('.', ',',$request->rate[$i])}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">Ex BTW € {{str_replace('.', ',',number_format((float)($request->rate[$i]/121)*100, 2))}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">Ex BTW € {{number_format((float)($request->rate[$i]/121)*100, 2, ',', '.')}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{str_replace('.', ',',($discount + $labor_discount))}}%</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: right;">Netto bedrag € {{str_replace('.', ',',$request->price_before_labor[$i])}}</td>
                                         </tr>
@@ -228,7 +228,7 @@
                                                 <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$date}}</span>
                                             </div>
                                         </td>
-                                        <td style="width: 60%;padding: 5px;padding-left: 10px;">
+                                        <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
                                                 <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
                                                 <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{str_replace('.', ',',($request->net_amount))}}</span>
@@ -240,10 +240,10 @@
                                         <td style="width: 40%;padding: 5px;">
                                             <div style="display: inline-block;width: 100%;">
                                                 <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Planning verzending:</span>
-                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;padding-right: 20px !important;">@if($role == 'supplier' || $role == 'invoice') {{$request->delivery_date[$i]}} @endif</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'supplier' || $role == 'invoice') {{$request->delivery_date[$i]}} @endif</span>
                                             </div>
                                         </td>
-                                        <td style="width: 60%;padding: 5px;padding-left: 10px;">
+                                        <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
                                                 <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{str_replace('.', ',',($request->net_amount))}}</span>
                                                 <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{str_replace('.', ',',($request->tax_amount))}}</span>
@@ -253,7 +253,7 @@
 
                                     <tr>
                                         <td style="width: 40%;font-size: 20px;padding: 5px;"></td>
-                                        <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 10px;">
+                                        <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
                                                 <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Totaal incl btw</span>
                                                 <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{str_replace('.', ',',($request->total_amount))}}</span>
