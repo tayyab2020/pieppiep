@@ -161,20 +161,27 @@
 
                                         <thead>
                                         <tr>
-                                            <th style="width: 10% !important;font-size: 22px;">{{__('text.Qty')}}</th>
                                             <th style="width: 60% !important;font-size: 22px;font-weight: 500;">Product</th>
-                                            <th style="width: 15% !important;font-size: 22px;text-align: center;font-weight: 500;">Eh.prijs</th>
-                                            <th style="width: 15% !important;font-size: 22px;text-align: center;font-weight: 500;">Netto</th>
+                                            <th style="width: 10% !important;font-size: 22px;">{{__('text.Qty')}}</th>
+                                            <th style="width: 15% !important;font-size: 22px;text-align: center;font-weight: 500;">Prijs</th>
+                                            <th style="width: 15% !important;font-size: 22px;text-align: center;font-weight: 500;">Totaal</th>
                                         </tr>
                                         </thead>
 
                                         <tbody>
 
                                         <tr>
+                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
                                             <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
-                                            <td style="font-size: 20px;padding: 5px;">{{$model_titles[$i] . ', ' . $color_titles[$i] . ', ' . $request->width[$i] . $request->width_unit[$i] . ', ' . $request->height[$i] . $request->height_unit[$i]}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{str_replace('.', ',',$request->rate[$i])}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{str_replace('.', ',',$request->price_before_labor[$i])}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{str_replace('.', ',',$request->total[$i])}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->rate[$i] - str_replace(',', '.',$request->labor_impact[$i])), 2, ',', '.')}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="font-size: 20px;padding: 5px;"></td>
+                                            <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)(str_replace(',', '.',$request->labor_impact[$i])/$request->qty[$i]), 2, ',', '.')}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->labor_impact[$i]}}</td>
                                         </tr>
 
                                         </tbody>
@@ -185,10 +192,10 @@
 
                                         <thead>
                                         <tr>
-                                            <th style="width: 20% !important;font-size: 22px;"></th>
-                                            <th style="width: 20% !important;font-size: 22px;font-weight: 500;text-align: center;">VAT</th>
-                                            <th style="width: 25% !important;font-size: 22px;text-align: center;font-weight: 500;">Discount</th>
-                                            <th style="width: 35% !important;font-size: 22px;"></th>
+                                            <th style="width: 20% !important;font-size: 22px;">Totaal korting</th>
+                                            <th style="width: 20% !important;font-size: 22px;font-weight: 500;text-align: center;">Exclusief BTW</th>
+                                            <th style="width: 25% !important;font-size: 22px;text-align: center;font-weight: 500;">BTW</th>
+                                            <th style="width: 35% !important;font-size: 22px;">Te betalen</th>
                                         </tr>
                                         </thead>
 
@@ -196,13 +203,15 @@
 
                                         <tr>
                                             <?php
-                                            $discount = $request->discount[$i] ? $request->discount[$i] : 0;
-                                            $labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
+                                            $ex_vat = ($request->rate[$i]/121)*100;
+                                            $vat = $request->rate[$i] - $ex_vat;
+                                            $vat = number_format((float)($vat), 2, ',', '.');
+                                            $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
                                             ?>
-                                            <td style="font-size: 20px;padding: 5px;">Artikel Eh prijs &nbsp;&nbsp; {{str_replace('.', ',',$request->rate[$i])}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">Ex BTW € {{number_format((float)($request->rate[$i]/121)*100, 2, ',', '.')}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{str_replace('.', ',',($discount + $labor_discount))}}%</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: right;">Netto bedrag € {{str_replace('.', ',',$request->price_before_labor[$i])}}</td>
+                                            <td style="font-size: 20px;padding: 5px;">€ {{str_replace(',', '.',abs($request->total_discount[$i]))}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{str_replace('.', ',',$request->rate[$i])}}</td>
                                         </tr>
 
                                         </tbody>

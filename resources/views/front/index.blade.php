@@ -1,2106 +1,356 @@
-@extends('layouts.front')
-@section('styles')
-    <style type="text/css">
-        /* Hide the list on focus of the input field */
-        datalist {
-            display: none;
-        }
-        /* specifically hide the arrow on focus */
-        input::-webkit-calendar-picker-indicator {
-            display: none;
-        }
 
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl-nl"
+      lang="nl-nl" dir="ltr">
+<head><script>nld_layer = [{'dL_pageTitle':'Reeleezee | Real easy boekhouden voor ZZP & kleine ondernemers | Exact','dL_countryIso':'nl-NL','dL_breadCrumb':'Home > Reeleezee homepage','dL_businessUnit':'exact','dL_funnelStage':'touch'}];global_layer = [{'dL_pageTitle':'Reeleezee | Real easy boekhouden voor ZZP & kleine ondernemers | Exact','dL_countryIso':'nl-NL','dL_breadCrumb':'Home > Reeleezee homepage','dL_businessUnit':'exact','dL_funnelStage':'touch'}];</script>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=5.0">
+    <meta charset="utf-8" />
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="Makkelijk boekhouden en factureren voor kleine ondernemers. Reeleezee is de beste administratie software voor uw boekhouding, facturen en btw-aangiften." />
+    <title>Reeleezee | Real easy boekhouden voor ZZP &amp; kleine ondernemers | Exact</title>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+    <link href="https://www.exact.com/nl/reeleezee" rel="canonical" />
+    <style>
+        .sp-page-builder .page-content #header{padding-top:125px;padding-right:0px;padding-bottom:50px;padding-left:0px;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;background-image:url(/images/reeleezee/headers/header-homepage_.jpg);background-repeat:no-repeat;background-size:cover;background-attachment:inherit;background-position:100% 0;}@media (min-width:768px) and (max-width:991px) { .sp-page-builder .page-content #header{padding-top:100px;padding-right:30px;padding-bottom:30px;padding-left:30px;} }@media (max-width:767px) { .sp-page-builder .page-content #header{padding-top:100px;padding-right:0;padding-bottom:30px;padding-left:0;} }#column-id-1623675747033{box-shadow:0 0 0 0 #fff;}#sppb-addon-wrapper-1623675747036 {margin:0px 0px 30px 0px;}#sppb-addon-1623675747036 {box-shadow:0 0 0 0 #ffffff;}@media (min-width:768px) and (max-width:991px) {#sppb-addon-wrapper-1623675747036 {margin-top:0px;margin-right:0px;margin-bottom:30px;margin-left:0px;}}@media (max-width:767px) {#sppb-addon-wrapper-1623675747036 {margin-top:0px;margin-right:0px;margin-bottom:30px;margin-left:0px;}}#sppb-addon-1623675747036 .sppb-addon-title { font-weight:600;margin-bottom:30px; }#sppb-addon-wrapper-1623675747037 {margin:0 0 30px 0;}#sppb-addon-1623675747037 {box-shadow:0 0 0 0 #ffffff;}@media (min-width:768px) and (max-width:991px) {#sppb-addon-wrapper-1623675747037 {margin-top:0;margin-right:0;margin-bottom:20px;margin-left:0;}}@media (max-width:767px) {#sppb-addon-wrapper-1623675747037 {margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;}}#sppb-addon-1623675747037 .sppb-addon-content {margin:0 -10px;}#sppb-addon-1623675747037 .sppb-addon-content .btn {margin:10px;}.sp-page-builder .page-content #section-id-1623738603432{padding-top:60px;padding-right:0px;padding-bottom:60px;padding-left:0px;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;box-shadow:0 0 0 0 #ffffff;}@media (min-width:768px) and (max-width:991px) { .sp-page-builder .page-content #section-id-1623738603432{padding-top:45px;padding-right:0px;padding-bottom:45px;padding-left:0px;} }@media (max-width:767px) { .sp-page-builder .page-content #section-id-1623738603432{padding-top:45px;padding-right:0;padding-bottom:45px;padding-left:0;} }#column-id-1623738603429{padding-top:0px;padding-right:60px;padding-bottom:0px;padding-left:60px;box-shadow:0 0 0 0 #fff;}@media (max-width:767px) { #column-id-1623738603429{padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;} }#sppb-addon-wrapper-1623738603435 {margin:0 0 0 0;}#sppb-addon-1623738603435 {box-shadow:0 0 0 0 #ffffff;}.sp-page-builder .page-content #section-id-1623738603409{margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}#column-id-1623738603408{box-shadow:0 0 0 0 #fff;}.sp-page-builder .page-content #section-id-1623746996019{padding-top:30px;padding-right:0px;padding-bottom:45px;padding-left:0px;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}#column-id-1623746996020{box-shadow:0 0 0 0 #fff;}@media (max-width:767px) { #column-id-1623746996020{padding-top:0px;padding-right:0px;padding-bottom:15px;padding-left:0px;} }#sppb-addon-wrapper-1623746996011 {margin:30px 0 0 0;}#sppb-addon-1623746996011 {box-shadow:0 0 0 0 #ffffff;}@media (min-width:768px) and (max-width:991px) {#sppb-addon-wrapper-1623746996011 {margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;}}@media (max-width:767px) {#sppb-addon-1623746996011 {padding-top:30px;padding-right:0px;padding-bottom:0px;padding-left:0px;}#sppb-addon-wrapper-1623746996011 {margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;}}#column-id-1623746996023{padding-top:45px;padding-right:45px;padding-bottom:45px;padding-left:45px;}@media (min-width:768px) and (max-width:991px) { #column-id-1623746996023{padding-top:30px;padding-right:30px;padding-bottom:30px;padding-left:30px;} }@media (max-width:767px) { #column-id-1623746996023{padding-top:30px;padding-right:0px;padding-bottom:30px;padding-left:0px;} }#sppb-addon-wrapper-1623828553884 {margin:0px 0px 30px 0px;}#sppb-addon-1623828553884 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1623746995951 {margin:0px 0px 30px 0px;}#sppb-addon-1623746995951 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1623828553887 {margin:0px 0px 0 0px;}#sppb-addon-1623828553887 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1623828553890 {margin:30px 0 0 0;}#sppb-addon-1623828553890 {box-shadow:0 0 0 0 #ffffff;padding:0 0 0 0;}@media (min-width:768px) and (max-width:991px) {#sppb-addon-wrapper-1623828553890 {margin-top:0;margin-right:0;margin-bottom:20px;margin-left:0;}}@media (max-width:767px) {#sppb-addon-wrapper-1623828553890 {margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;}}#sppb-addon-1623828553890 .sppb-addon-content {margin:0 -10px;}#sppb-addon-1623828553890 .sppb-addon-content .btn {margin:10px;}.sp-page-builder .page-content #section-id-1623828553997{padding-top:30px;padding-right:0px;padding-bottom:90px;padding-left:0px;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}@media (max-width:767px) { .sp-page-builder .page-content #section-id-1623828553997{padding-top:30px;padding-right:0px;padding-bottom:30px;padding-left:0px;} }#column-id-1623828553996{box-shadow:0 0 0 0 #fff;}#column-id-1623828553995{box-shadow:0 0 0 0 #fff;}@media (min-width:768px) and (max-width:991px) { #column-id-1623828553995{padding-top:0px;padding-right:30px;padding-bottom:0px;padding-left:30px;} }@media (max-width:767px) { #column-id-1623828553995{padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;} }.sp-page-builder .page-content #section-id-1623828553998{padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}#column-id-1623828553999{padding-bottom:30px;box-shadow:0 0 0 0 #fff;}#sppb-addon-wrapper-1623828553910 {margin:0 0 0 0;}#sppb-addon-1623828553910 {box-shadow:0 0 0 0 #ffffff;}@media (max-width:767px) { #column-id-1623828554002{padding-top:15px;padding-right:15px;padding-bottom:15px;padding-left:15px;} }#sppb-addon-wrapper-1623828553915 {margin:0px 0px 0 0px;}#sppb-addon-1623828553915 {box-shadow:0 0 0 0 #ffffff;}@media (max-width:767px) { #column-id-1623828554003{padding-top:15px;padding-right:15px;padding-bottom:15px;padding-left:15px;} }#sppb-addon-wrapper-1623828553917 {margin:0px 0px 0 0px;}#sppb-addon-1623828553917 {box-shadow:0 0 0 0 #ffffff;}@media (max-width:767px) { #column-id-1623828554004{padding-top:15px;padding-right:15px;padding-bottom:15px;padding-left:15px;} }#sppb-addon-wrapper-1623828553913 {margin:0px 0px 0 0px;}#sppb-addon-1623828553913 {box-shadow:0 0 0 0 #ffffff;}.sp-page-builder .page-content #section-id-1623746996055{padding-top:60px;padding-right:0px;padding-bottom:60px;padding-left:0px;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1623746996071 {margin:0px 0px 30px 0px;}#sppb-addon-1623746996071 {box-shadow:0 0 0 0 #ffffff;}#column-id-1623746996056{box-shadow:0 0 0 0 #fff;}.sp-page-builder .page-content #section-id-1623996709062{padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}@media (max-width:767px) { .sp-page-builder .page-content #section-id-1623996709062{padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;margin-top:0;margin-right:0;margin-bottom:30px;margin-left:0;} }#column-id-1623996709063{box-shadow:0 0 0 0 #fff;}#sppb-addon-wrapper-1623746996082 {margin:0px 0px 30px 0px;}#sppb-addon-1623746996082 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1623746996058 {margin:0px 0px 30px 0px;}#sppb-addon-1623746996058 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1626267733560 {margin:0px 0px 30px 0px;}#sppb-addon-1626267733560 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-1626267733560 .sppb-addon-content {margin:0 -5px;}#sppb-addon-1626267733560 .sppb-addon-content .btn {margin:5px;}#column-id-1623746996059{box-shadow:0 0 0 0 #fff;}.sp-page-builder .page-content #section-id-1623996709075{padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}@media (max-width:767px) { .sp-page-builder .page-content #section-id-1623996709075{padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;margin-top:0;margin-right:0;margin-bottom:30px;margin-left:0;} }#column-id-1623996709076{box-shadow:0 0 0 0 #fff;}#sppb-addon-wrapper-1623746996097 {margin:0px 0px 30px 0px;}#sppb-addon-1623746996097 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1623746996100 {margin:0px 0px 30px 0px;}#sppb-addon-1623746996100 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1626267733547 {margin:0px 0px 30px 0px;}#sppb-addon-1626267733547 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-1626267733547 .sppb-addon-content {margin:0 -5px;}#sppb-addon-1626267733547 .sppb-addon-content .btn {margin:5px;}#column-id-1623746996062{box-shadow:0 0 0 0 #fff;}.sp-page-builder .page-content #section-id-1623996709082{padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}@media (max-width:767px) { .sp-page-builder .page-content #section-id-1623996709082{padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;} }#column-id-1623996709083{box-shadow:0 0 0 0 #fff;}#sppb-addon-wrapper-1623746996103 {margin:0px 0px 30px 0px;}#sppb-addon-1623746996103 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1623746996106 {margin:0px 0px 30px 0px;}#sppb-addon-1623746996106 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1626267733542 {margin:0px 0px 30px 0px;}#sppb-addon-1626267733542 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-1626267733542 .sppb-addon-content {margin:0 -5px;}#sppb-addon-1626267733542 .sppb-addon-content .btn {margin:5px;}.sp-page-builder .page-content #section-id-1623746996115{padding-top:30px;padding-right:0px;padding-bottom:60px;padding-left:0px;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}@media (max-width:767px) { .sp-page-builder .page-content #section-id-1623746996115{padding-top:30px;padding-right:0px;padding-bottom:30px;padding-left:0px;} }#column-id-1623746996116{box-shadow:0 0 0 0 #fff;}#column-id-1623746996117{padding-top:45px;padding-right:45px;padding-bottom:45px;padding-left:45px;box-shadow:0 0 0 0 #fff;}#sppb-addon-wrapper-1623746996118 {margin:0 0 0 0;}#sppb-addon-1623746996118 {box-shadow:0 0 0 0 #ffffff;}#sppb-addon-wrapper-1623746996126 {margin:0 0 0 0;}#sppb-addon-1623746996126 {box-shadow:0 0 0 0 #ffffff;}@media (min-width:768px) and (max-width:991px) {#sppb-addon-wrapper-1623746996126 {margin-top:0;margin-right:0;margin-bottom:20px;margin-left:0;}}@media (max-width:767px) {#sppb-addon-wrapper-1623746996126 {margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;}}#sppb-addon-1623746996126 .sppb-addon-content {margin:0 -10px;}#sppb-addon-1623746996126 .sppb-addon-content .btn {margin:10px;}#column-id-1623746996119{box-shadow:0 0 0 0 #fff;}
     </style>
-@endsection
-@section('content')
+    <script type="application/json" class="joomla-script-options new">{"csrf.token":"cfb3bcd6f268aa29aa3020055bb101df","system.paths":{"root":"","base":""}}</script>
+    <script type="application/ld+json">
+{
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": [{"@type":"ListItem","position":1,"name":"Exact","item":"https:\/\/www.exact.com\/"},{"@type":"ListItem","position":2,"item":"https:\/\/www.exact.com\/nl\/reeleezee","name":"Reeleezee homepage"}]}
+
+	</script>
+    <meta property="og:title" content="Reeleezee | Real easy boekhouden voor ZZP & kleine ondernemers" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.exact.com/nl/reeleezee" />
+    <meta property="og:site_name" content="exact.com" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="exact.com" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#e1141d">
+    <meta name="msapplication-TileColor" content="#e1141d">
+    <meta name="theme-color" content="#e1141d">
+
+    <link rel="dns-prefetch" href="https://files.exact.com">
+    <link rel="preconnect" href="https://match.prod.bidr.io">
+    <link rel="preconnect" href="https://snap.licdn.com">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net">
+    <link rel="preconnect" href="https://connect.facebook.net">
+
+    <link rel="preload" href="https://files.exact.com/static/rainbow/v0/fonts/Apax-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://files.exact.com/static/rainbow/v0/fonts/Apax-Medium.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://files.exact.com/static/rainbow/assets/fonts/fa-v5-regular-400.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="https://files.exact.com/static/rainbow/assets/fonts/fa-v5-brands-400.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="https://files.exact.com/static/rainbow/assets/fonts/fa-v5-solid-900.woff" as="font" type="font/woff" crossorigin>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','global_layer','GTM-PRCMV8');</script>
+    <!-- End Google Tag Manager -->
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:269100,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
 
 
-    <div class="hero-area overlay" style="background-image: url({{asset('assets/images/'.$gs->bgimg)}});z-index: auto;color: black;padding-top: 20px;padding-bottom: 45px;background-color: #ebebeb;">
+    <style>
+        body{font-family:Arial,sans-serif;font-weight:400;line-height:1.5em;font-size:16px;color:#787a7a;-webkit-font-smoothing:antialiased;margin:0;padding:0}*{box-sizing:border-box}.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6{color:#333;line-height:1.2em;font-family:Apax,Arial,sans-serif;font-weight:400;margin-top:0}h1{font-weight:600;margin-bottom:30px}h2,h3,h4,h5,h6{margin-bottom:20px}p{margin-top:0;margin-bottom:1rem}a{text-decoration:none}.float-left{float:left}.float-right{float:right}.fixed-top{position:fixed;top:0;right:0;left:0;z-index:1030}.img-responsive{max-width:100%}.container{margin:0 auto;max-width:1140px;padding:0 15px}.row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-15px;margin-left:-15px}.mainmenu .navbar-collapse,.navbar-brand{display:inline-block;vertical-align:top}.navbar>.container{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between}.navbar-collapse{flex-grow:1}.navbar-brand{margin-right:1rem;padding-top:.3125rem;padding-bottom:.3125rem}.navbar-brand img{width:135px}.mainmenu ul{margin:0;padding:0}.mainmenu .navbar-collapse>ul.menu>li{display:inline-block;vertical-align:top;margin:15px 0}.mainmenu .navbar-collapse>ul.menu>li>a{display:block;padding:15px 20px;color:#333}.mainmenu .dropdown-menu{display:none}.mainmenu ul.menu>li>a.btn-blue{background-color:#0650d0;color:#fff;border-radius:2px}.btn{display:inline-block;font-weight:400;text-align:center;vertical-align:middle;line-height:1.5}.btn.btn-sm{padding:10px 20px}.link-blue{color:#0650d0;padding:0}.btn,.link-blue{font-weight:600;padding:20px 25px;border-radius:2px}.btn-blue{background:#0650d0;color:#fff}.text-center{text-align:center}.header .btn.link-blue{padding:0}.bg-mustard-20{background:#f9f2dc}.bg-navy-20{background:#e6ecf1}.bg-beige-20{background:#f8f5f3}.nav-sub .btn{padding:10px}.article-header .category{margin:0 0 10px;font-size:18px;font-weight:600}.header-navy .header{background-color:#e6ecf1}@media(min-width:768px){body.country .mainmenu{top:80px}.country-selector-bar{padding:15px;min-height:73px;display:block;position:relative}.country-selector-bar p{font-size:12px;margin:0;line-height:1.8em}.mod-searchbar.hide{display:none}.mainmenu .navbar-collapse>ul.menu>li>a.menu-right.toggle-search{font-size:0}.nav-sub .sppb-addon-title{margin:0}.col-lg-10,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-md-10,.col-md-5,.col-md-6,.col-md-7,.col-md-8{padding-left:15px;padding-right:15px}.col-md-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-md-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-md-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-md-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-md-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}#preferences{padding:0}}@media (min-width:992px){.h1,h1{font-size:48px}.h2,h2{font-size:36px}.h3,h3{font-size:24px}.navbar-expand-lg .navbar-toggler{display:none}.navbar-expand-lg>.container{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.col-lg-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-lg-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-lg-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-lg-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-lg-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.offset-md-1{margin-left:8.333333%}.offset-lg-2{margin-left:16.666667%}.stormdigital-cookieWall-header{min-height:230px}.toggle-search-mobile{display:none}.header-image img{position:absolute;bottom:0;left:0;max-width:calc((100vw / 3) + 120px)}.bbs-left img{width:100%}.bbs-left{position:relative;margin:0 -30px 0 0}.sppb-modal-selector{height:100%;display:block;position:relative;text-align:center}.modal-trigger .overlay-icon{position:absolute}.article-header{padding:120px 0 100px}.article-header.small-header{padding:120px 0 0}.blog .article-header-image img{margin-top:-100px;width:100%}.blog .article-info{margin:20px 0 40px}.blog-article #sp-page-builder .page-content>section.sppb-section{padding:0 0 30px}.blog-article #sp-page-builder{margin:0 -15px}.blog-article .news-feed{margin-top:50px}.article-extra-info{padding-bottom:50px}.blog-article .share-icons{margin-bottom:40px}.blog-article .share-icons a{height:40px;width:40px;display:inline-flex;align-items:center;justify-content:center;margin-right:10px}}.nav-sub .sppb-addon-button-group{float:right}.nav-sub .sppb-addon-button-group.nav-phone{float:none}.nav-sub .btn.link-blue{color:#333;font-weight:400}.sp-page-builder .header{position:relative}.nav-sub .sppb-addon-title a{color:inherit}.nav-phone .btn{font-size:12px;letter-spacing:.5px;background:#e6ecf1;color:inherit;padding:3px 10px 0;line-height:1.8em;margin:5px 5px 0}.header-image .sppb-column-addons>div{position:absolute;left:calc(100% / 3 * 2);width:calc(100% / 3);top:0;height:100%}.container .container{padding:0}.blog-article .container .container{padding:0 15px}.country-selector-bar .col-dropdown{display:none}@media (max-width:767px){body{font-size:14px;overflow-x:hidden}.container{padding:0 30px}.row>div{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%;width:100%;padding-right:15px;padding-left:15px;position:relative}body.country .mainmenu{top:0}.mainmenu{background-color:#fff;padding:0 15px 0 30px}.mainmenu .navbar-collapse{position:absolute;top:54px;right:-100%;width:100%;padding:0}.mainmenu ul.menu>li>a{padding:7px 15px}.navbar-brand{margin:15px 0}.navbar-brand img{width:90px}.navbar-toggler{display:none}.navbar-expand-lg>.container,.navbar-expand-lg>.container-fluid{padding-left:0}.toggle-search-mobile{position:fixed;top:20px;right:70px;z-index:501;font-size:20px;width:25px;height:20px;display:block}.toggle-search-mobile .fa-search{font-size:0}.toggle-search-mobile .fa-search:before{font-size:20px}.h1,h1{font-size:28px;margin-bottom:20px}.btn{padding:15px 20px;font-size:100%}.mod-searchbar{display:none}.mod-searchbar.show{display:block}.blog-article .container .container{padding:0 30px}.hidden-xs{display:none}.sppb-section{position:relative}body .sp-page-builder .page-content #header{padding-top:80px}.stormdigital-cookieWall-header{min-height:250px}#disclaimer_mobile{min-height:115px}.nav-sub .sppb-addon-button-group,.nav-sub .sppb-addon-title{text-align:center;line-height:30px!important;font-size:18px!important;margin-bottom:15px;float:none}.nav-sub .sppb-addon-title{margin-bottom:15px}.nav-sub .btn{margin:0!important;padding:10px 5px;font-size:14px}.nav-sub .sppb-addon-button-group .nav .btn-blue{display:block;visibility:hidden;opacity:0;max-height:0;padding:0!important}.article-header{padding:90px 0 10px}.article-header .category a{font-size:14px}.article-header-image{margin:0 -30px;min-height:160px}.blog .article-header-image img{width:100%}.blog-article #sp-page-builder{margin:0 -30px}.blog-article #sp-page-builder .page-content>section.sppb-section{padding:0 0 15px}.blog .article-info{margin:20px 0}.article-header h1{font-size:20px}.blog .article-info .info-item{display:inline-block}}
+    </style>
 
-        @if(Session::has('unsuccess'))
 
-            <div class="alert alert-danger validation" style="position: absolute;top: 0px;width: 100%;background-color: #e53333;color: white;border: none;">
 
-                <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close" style="text-shadow: none;opacity: 1;"><span aria-hidden="true" style="font-size: 30px;">×</span></button>
+</head>
 
-                <ul class="text-left" style="text-align: center;font-size: 21px;list-style: none;padding-left: 0;font-weight: 600;font-family: monospace;">
+<body class="frontend exact-ac">
 
-                    <li>{{ Session::get('unsuccess') }}</li>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PRCMV8"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><div class="mod-sppagebuilder mod-searchbar hide sp-page-builder" data-module_id="403">
+    <div class="page-content">
+        <div id="section-id-1598447628638" class="sppb-section" ><div class="container"><div class="row"><div class="col-lg-2" id="column-wrap-id-1598447628635"><div id="column-id-1598447628635" class="sppb-column" ><div class="sppb-column-addons"></div></div></div><div class="col-lg-8" id="column-wrap-id-1598447628636"><div id="column-id-1598447628636" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1598447628641" class="sppb-addon-wrapper" ><div id="sppb-addon-1598447628641" class="clearfix "     >		<div class="addon-searchbar">
+                                            <form method="get" class="m-bottom-20 m-top-10" id="search" action="/nl/zoeken">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text" data-search><span class="fas fa-search"></span></div>
+                                                    </div>
+                                                    <input id="searchInput" type="text" name="search" placeholder="Vul je zoekterm in" class="wide form-control" value=""/>
+                                                    <a href="#search" class="toggle-search no-scroll hidden-md hidden-lg"><span class="fas fa-times"></span></a>
+                                                </div>
+                                            </form>
+                                            <div class="results-wrapper">
+                                                <ul id="results"></ul>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            (function() {
+                                                function generateResults(title = '', url = '', text = '') {
+                                                    var div = document.getElementById('results');
 
-                </ul>
-            </div>
+                                                    var element = document.createElement('li');
+                                                    if(title === 'Bekijk alle resultaten'){
+                                                        element.setAttribute('class', 'result result-all');
+                                                    }else{
+                                                        element.setAttribute('class', 'result');
+                                                    }
+                                                    if (url) {
+                                                        var link = document.createElement('a');
+                                                        link.href = url;
+                                                        link.className = 'resultLink';
+                                                        link.text = title;
+                                                        if(title === 'Bekijk alle resultaten'){
+                                                            link.setAttribute('class', 'link-blue');
+                                                        }else{
+                                                            link.setAttribute('class', 'h5');
+                                                        }
+                                                        element.insertAdjacentElement('beforeend', link);
+                                                        var resultText = document.createElement('p');
+                                                        resultText.innerText = text;
+                                                        link.insertAdjacentElement('beforeend', resultText);
+                                                    }else{
+                                                        var resultText = document.createElement('p');
+                                                        resultText.innerText = text;
+                                                        element.insertAdjacentElement('beforeend', resultText);
+                                                    }
 
-        @endif
+                                                    div.insertAdjacentElement('beforeend', element);
+                                                }
 
-            @if(Session::has('success'))
+                                                function debounce(func, wait, immediate) {
+                                                    var timeout;
+                                                    return function() {
+                                                        var context = this, args = arguments;
+                                                        var later = function() {
+                                                            timeout = null;
+                                                            if (!immediate) func.apply(context, args);
+                                                        };
 
-                <div class="alert alert-success validation" style="position: absolute;top: 0px;width: 100%;border: none;">
+                                                        var callNow = immediate && !timeout;
+                                                        clearTimeout(timeout);
+                                                        timeout = setTimeout(later, wait);
+                                                        if (callNow) func.apply(context, args);
+                                                    };
+                                                };
 
-                    <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close" style="text-shadow: none;opacity: 1;"><span aria-hidden="true" style="font-size: 30px;">×</span></button>
+                                                var request = debounce(function() {
+                                                    var fullPage = '/nl/zoeken',
+                                                        label = 'Bekijk alle resultaten',
+                                                        searchPhrase = $('#searchInput').val();
 
-                    <ul class="text-left" style="text-align: center;font-size: 21px;list-style: none;padding-left: 0;font-weight: 600;font-family: monospace;">
+                                                    $.ajax(
+                                                        {
+                                                            url: '/nl?option=com_ajax&plugin=pwtelastic&format=json',
+                                                            type: 'GET',
+                                                            data: {
+                                                                search: searchPhrase,
+                                                                lang: 'nl-NL'
+                                                            },
+                                                            success: function(response) {
+                                                                if (response.success && response.success === true) {
+                                                                    var div = document.getElementById('results');
 
-                        <li>{{ Session::get('success') }}</li>
+                                                                    while(div.firstChild) {
+                                                                        div.removeChild(div.firstChild);
+                                                                    }
 
+                                                                    if (response['data'][0]['content']['hits'].length) {
+                                                                        response['data'][0]['content']['hits'].slice(0, 4).map(function(e) {
+                                                                            generateResults(e._source.title, e._source.url, e._source.text);
+                                                                        });
+
+                                                                        if (fullPage.length && label.length && response['data'][0]['content']['hits'].length > 4) {
+                                                                            generateResults(label, fullPage + '?search=' + $('#searchInput').val());
+                                                                        }
+                                                                    } else {
+                                                                        generateResults(false, false, 'Geen resultaten gevonden');
+                                                                    }
+
+                                                                    global_layer.push({'event': 'customEvent','eventCategory': 'Site Search','eventAction': 'Query','eventLabel': searchPhrase});
+                                                                }
+                                                            }
+                                                        }
+                                                    );
+                                                }, 1000);
+
+                                                document.getElementById("searchInput").addEventListener("keyup", request);
+                                            })();
+                                            window.addEventListener("load",function(){
+                                                $(".toggle-search").click(function(event) {
+                                                    event.stopPropagation();
+                                                    $(".mod-searchbar").toggleClass("hide").toggleClass("show");
+                                                    $("#searchInput").focus();
+                                                });
+                                                $(document).click(function() {
+                                                    $(".mod-searchbar").addClass("hide");
+                                                });
+                                                $(".addon-searchbar").click(function(event) {
+                                                    event.stopPropagation();
+                                                });
+                                                $('[data-search]').click(function() {
+                                                    $('#search').submit();
+                                                });
+                                            });
+                                        </script><style type="text/css">#sppb-addon-wrapper-1598447628641 {
+                                                margin:0px 0px 0px 0px;}
+                                            #sppb-addon-1598447628641 {
+                                                box-shadow: 0 0 0 0 #ffffff;
+                                            }
+                                            #sppb-addon-1598447628641 {
+                                            }
+                                            #sppb-addon-1598447628641.sppb-element-loaded {
+                                            }
+                                            @media (min-width: 768px) and (max-width: 991px) {#sppb-addon-1598447628641 {}}@media (max-width: 767px) {#sppb-addon-1598447628641 {}}</style><style type="text/css">.mod-searchbar {position:fixed; top:0; left:0; width:100vw; z-index:999; top:74px;}.addon-searchbar {background-color: #FFF; padding: 20px; box-shadow: 0 15px 15px rgba(69, 99, 121, 0.15);}.addon-searchbar ul#results {margin:0; max-height:calc(100vh - 180px); overflow:auto;}.addon-searchbar ul#results li.result {padding:0;}.addon-searchbar ul#results li.result:before {display:none;}.addon-searchbar ul#results li p {margin:10px 0;}.addon-searchbar ul#results li.result a {display:block; padding:20px 0 10px; border-bottom: 1px solid #cbd8e2;}.addon-searchbar ul#results li.result-all a {border-bottom:none; padding:20px 0 0; margin:0 0 -20px;}.addon-searchbar .h5 p {color:#6d6f6f; font-family:"arial",sans-serif; font-size:16px; line-height:1.5em; margin:10px 0;}.results-wrapper {position:relative;}.addon-searchbar .input-group-text:hover {cursor:pointer;}@media(max-width:992px){.mod-searchbar {top:61px}.addon-searchbar .toggle-search {padding: 10px 15px; margin-right: 0px; font-size: 20px; color: #a5a9a9;}}@media(max-width:768px){.mod-searchbar {top:61px}.addon-searchbar {margin:0 -30px;}.addon-searchbar .h5 p {font-size:14px;}.addon-searchbar .toggle-search {margin-right: -15px;}}</style></div></div></div></div></div><div class="col-lg-2" id="column-wrap-id-1598447628637"><div id="column-id-1598447628637" class="sppb-column" ><div class="sppb-column-addons"></div></div></div></div></div></div><style type="text/css">.sp-page-builder .page-content #section-id-1598447628638{padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;box-shadow:0 0 0 0 #ffffff;}#column-id-1598447628635{box-shadow:0 0 0 0 #fff;}#column-id-1598447628636{box-shadow:0 0 0 0 #fff;}#column-id-1598447628637{box-shadow:0 0 0 0 #fff;}</style>	</div>
+</div>
+
+
+<div class="hidden-md hidden-lg toggle-search-mobile"  >
+    <a href="#search" class="toggle-search no-scroll"><span class="fas fa-search">&nbsp;</span></a>
+</div>
+
+<style>.exact-ac .country-selector-bar {display: none;}body.country.exact-ac .mainmenu {top: 0;}.exact-ac .navbar-brand img {opacity: 0;}.exact-ac .mainmenu .deeper.parent.active>a {color: #f78c2d;}.exact-ac .mainmenu .dropdown.show>a:after {background: #f78c2d;}</style>
+
+<nav class="navbar fixed-top navbar-expand-lg mainmenu">
+    <div class="container">
+        <a class="navbar-brand" href="https://www.exact.com/nl">
+            <img src="https://files.exact.com/static/rainbow/v0/img/exact-logo.svg" alt="Exact logo"/>
+        </a>
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav float-left menu">
+                <li class="item-6903"><a href="/nl/reeleezee/ondernemer">Ondernemer</a></li><li class="item-6925"><a href="/nl/reeleezee/accountancy">Accountancy</a></li><li class="item-6952"><a href="/nl/reeleezee/ondernemer/prijzen">Prijzen</a></li><li class="item-6967 deeper parent dropdown"><a href="/nl/reeleezee/contact" id="navbarDropdown-6967" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Services</a><div class="mainmenu-dropdown dropdown-menu" aria-labelledby="navbarDropdown-6967"><div class="container"><div class="backbone-menu"></div><div class="row"><div class="col-xs-12 col-sm-9 col-menu"><div class="row"><ul class="col-xs-12 col-md-4 nav-child nav flex-column"><li class="item-6968"><a href="/nl/reeleezee/contact">Contact</a></li><li class="item-6969"><a href="https://www.reeleezee.nl/kennisbank/">Kennisbank</a></li><li class="item-7061"><a href="/nl/reeleezee/ondernemer/vind-een-adviseur">Vind een adviseur</a></li></ul></div></div><div class="col-xs-12 col-md-3 col-default bg-light-blue"></div></div></div></div></li></ul><ul class="menu-right nav menu float-right"><li class="item-6953"><a href="https://www.exact.com/nl/reeleezee/login" class="link-blue menu-right" target="_blank" rel="noopener">Login</a></li><li class="item-7035"><a href="/nl/reeleezee/probeer/slim-boekhouden-start" class="btn-blue">Probeer nu</a></li></ul>
+
+        </div>
+    </div>
+</nav>
+
+
+<div id="system-message-container">
+</div>
+
+<div id="sp-page-builder" class="sp-page-builder reeleezee page-7647">
+
+
+    <div class="page-content">
+        <section id="header" class="sppb-section" ><div class="sppb-row-overlay"></div><div class="container"><div class="row"><div class="col-lg-7 col-md-7" id="column-wrap-id-1623675747033"><div id="column-id-1623675747033" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623675747036" class="sppb-addon-wrapper" ><div id="sppb-addon-1623675747036" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-left "><h1 class="sppb-addon-title "><span>Real easy boekhouden</span> voor kleine ondernemers & hun boekhouders
+                                            </h1><div class="sppb-addon-content"><p>Wil je tijd besparen op je boekhouding? Maak het jezelf makkelijk met de boekhoudsoftware van Reeleezee. Ook te koppelen met je boekhouder of accountant!</p></div></div></div></div><div id="sppb-addon-wrapper-1623675747037" class="sppb-addon-wrapper" ><div id="sppb-addon-1623675747037" class="clearfix "     ><div class="sppb-addon sppb-addon-button-group text-left"><div class="sppb-addon-content nav"><a onclick="myFunction()" id="btn-1623675747037" href="/nl/reeleezee/probeer/slim-boekhouden-start" class="nav-link btn btn-blue">Probeer 30 dagen gratis</a><a onclick="myFunction()" id="btn-1623675747038" href="/nl/reeleezee/bestellen/slim-boekhouden-start" class="nav-link btn link-blue">of bestel direct</a></div></div></div></div></div></div></div><div class="col-lg-5 col-md-4" id="column-wrap-id-1623675747043"><div id="column-id-1623675747043" class="sppb-column  hidden-sm hidden-xs" ><div class="sppb-column-addons"></div></div></div></div></div></section><section id="section-id-1623738603432" class="sppb-section" ><div class="container"><div class="row"><div class="col-lg-12" id="column-wrap-id-1623738603429"><div id="column-id-1623738603429" class="sppb-column force-left" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623738603435" class="sppb-addon-wrapper" ><div id="sppb-addon-1623738603435" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-center "><h2 class="sppb-addon-title ">Makkelijk en snel je boekhouding doen,<span class="mobile"><br></span> <span>waar & wanneer</span> jij dat wilt</h2><div class="sppb-addon-content"><p>Je bent ondernemer; geen boekhouder. Logisch dus dat je zo min mogelijk tijd kwijt wilt zijn aan je boekhouding. Met Reeleezee regel je het makkelijk en snel, wanneer het jou uitkomt. Boekhoudkennis is niet nodig. Zo houd je tijd over en hoef je niet meer tegen je boekhouding aan te hikken.</p></div></div></div></div></div></div></div></div></div></section><section id="section-id-1623738603409" class="sppb-section full-width bg-beige-20" ><div class="container"><div class="row"><div class="col-lg-12" id="column-wrap-id-1623738603408"><div id="column-id-1623738603408" class="sppb-column " ><div class="sppb-column-addons"><div id="section-id-1623746996019" class="sppb-section bg-beige-20 full-width" ><div class="container"><div class="row"><div class="col-lg-5 order-sm-3 order-xs-3" id="column-wrap-id-1623746996020"><div id="column-id-1623746996020" class="sppb-column extend-left" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996011" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996011" class="clearfix "     ><div class="sppb-addon sppb-addon-single-image text-center "><div class="sppb-addon-content"><div class="sppb-addon-single-image-container"><img class="img-responsive lazyload" data-src="https://www.exact.com/images/reeleezee/screens/screens-app-general.png" src="/images/misc/placeholder.png" alt="Reeleezee apps"></div></div></div></div></div></div></div></div><div class="col-lg-7 order-sm-1 order-xs-1" id="column-wrap-id-1623746996023"><div id="column-id-1623746996023" class="sppb-column " ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623828553884" class="sppb-addon-wrapper" ><div id="sppb-addon-1623828553884" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-left "><h3 class="sppb-addon-title ">Betrouwbaar</h3><div class="sppb-addon-content"><p>Je wilt natuurlijk dat je boekhouding in goede handen is. Dan ben je bij ons aan het juiste adres. Reeleezee slaat je data op een veilige manier op in de cloud en maakt real-time backups van je boekhouding.</p></div></div></div></div><div id="sppb-addon-wrapper-1623746995951" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746995951" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-left "><h3 class="sppb-addon-title ">Gemakkelijk</h3><div class="sppb-addon-content"><p>Reeleezee maakt boekhouden écht makkelijk. Het is simpel in gebruik, overal toegankelijk en je hebt geen boekhoudkennis nodig. Lastige boekhoudtermen? Daar doen we niet aan – we houden het real easy.</p></div></div></div></div><div id="sppb-addon-wrapper-1623828553887" class="sppb-addon-wrapper" ><div id="sppb-addon-1623828553887" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-left "><h3 class="sppb-addon-title ">Intuïtief</h3><div class="sppb-addon-content"><p>Je kunt direct aan de slag met Reeleezee. Ons boekhoudprogramma is ontwikkeld om het boekhouden voor jou zo begrijpelijk mogelijk te maken. Samen met ondernemers, omdat zij weten wat je echt nodig hebt.</p></div></div></div></div><div id="sppb-addon-wrapper-1623828553890" class="sppb-addon-wrapper" ><div id="sppb-addon-1623828553890" class="clearfix "     ><div class="sppb-addon sppb-addon-button-group text-left"><div class="sppb-addon-content nav"><a onclick="myFunction()" id="btn-1623828553890" href="/nl/reeleezee/features" class="nav-link btn btn-blue">Bekijk alle functies</a></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></section><section id="section-id-1623828553997" class="sppb-section" ><div class="container"><div class="row"><div class="col-lg-3" id="column-wrap-id-1623828553996"><div id="column-id-1623828553996" class="sppb-column  hidden-sm hidden-xs" ><div class="sppb-column-addons"></div></div></div><div class="col-lg-6 col-md-12" id="column-wrap-id-1623828553995"><div id="column-id-1623828553995" class="sppb-column" ><div class="sppb-column-addons"><div id="section-id-1623828553998" class="sppb-section" ><div class="container"><div class="row"><div class="col-lg-12 col-sm-12" id="column-wrap-id-1623828553999"><div id="column-id-1623828553999" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623828553910" class="sppb-addon-wrapper" ><div id="sppb-addon-1623828553910" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block  "><h2 class="sppb-addon-title ">Veilig en betrouwbaar</h2><div class="sppb-addon-content"><p>Reeleezee is onderdeel van de Exact Group. Ook zijn we partner van De Belastingdienst en hebben we onder andere het Keurmerk Zeker-Online Boekhouden. Kies je voor Reeleezee, dan kies je dus voor een veilig en betrouwbaar boekhoudprogramma.</p></div></div></div></div></div></div></div><div class="col-lg-4 col-md-4 col-sm-4" id="column-wrap-id-1623828554002"><div id="column-id-1623828554002" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623828553915" class="sppb-addon-wrapper" ><div id="sppb-addon-1623828553915" class="clearfix "     ><div class="sppb-addon sppb-addon-single-image text-center "><div class="sppb-addon-content"><div class="sppb-addon-single-image-container"><img class="img-responsive lazyload" data-src="https://www.exact.com/images/reeleezee/logo/logo-ubl-ready.png" src="/images/misc/placeholder.png" alt="UBL Ready"></div></div></div></div></div></div></div></div><div class="col-lg-4 col-md-4 col-sm-4" id="column-wrap-id-1623828554003"><div id="column-id-1623828554003" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623828553917" class="sppb-addon-wrapper" ><div id="sppb-addon-1623828553917" class="clearfix "     ><div class="sppb-addon sppb-addon-single-image text-center "><div class="sppb-addon-content"><div class="sppb-addon-single-image-container"><img class="img-responsive lazyload" data-src="https://www.exact.com/images/reeleezee/logo/logo-rgs-ready.png" src="/images/misc/placeholder.png" alt="RGS Readdy"></div></div></div></div></div></div></div></div><div class="col-lg-4 col-md-4 col-sm-4" id="column-wrap-id-1623828554004"><div id="column-id-1623828554004" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623828553913" class="sppb-addon-wrapper" ><div id="sppb-addon-1623828553913" class="clearfix "     ><div class="sppb-addon sppb-addon-single-image text-center "><div class="sppb-addon-content"><div class="sppb-addon-single-image-container"><img class="img-responsive lazyload" data-src="https://www.exact.com/images/reeleezee/logo/logo-zeker-online.png" src="/images/misc/placeholder.png" alt="Keurmerk zeker-online"></div></div></div></div></div></div></div></div></div></div></div></div></div></div><div class="col-lg-3" id="column-wrap-id-1623828554014"><div id="column-id-1623828554014" class="sppb-column hidden-sm hidden-xs" ><div class="sppb-column-addons"></div></div></div></div></div></section><section id="section-id-1623746996055" class="sppb-section customers" ><div class="container"><div class="row"><div class="col-lg-12" id="column-wrap-id-1623746996065"><div id="column-id-1623746996065" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996071" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996071" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-center "><h2 class="sppb-addon-title ">Meer dan <span>10.000 ondernemers</span> gingen je voor</h2><div class="sppb-addon-content"><p>Benieuwd waarom zij blij worden van onze software? Ze vertellen het je zelf.</p></div></div></div></div></div></div></div><div class="col-lg-4" id="column-wrap-id-1623746996056"><div id="column-id-1623746996056" class="sppb-column" ><div class="sppb-column-addons"><div id="section-id-1623996709062" class="sppb-section" ><div class="container"><div class="row"><div class="col-lg-12 col-md-6" id="column-wrap-id-1623996709063"><div id="column-id-1623996709063" class="sppb-column hidden-xs" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996082" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996082" class="clearfix "     ><div class="sppb-addon sppb-addon-single-image text-center "><div class="sppb-addon-content"><div class="sppb-addon-single-image-container"><img class="img-responsive lazyload" data-src="https://www.exact.com/images/reeleezee/klantverhalen/lennaert-meijboom-cashr-thevillagecoffee.jpg" src="/images/misc/placeholder.png" alt="Klantverhaal The Village Coffee"></div></div></div></div></div></div></div></div><div class="col-lg-12 col-md-6" id="column-wrap-id-1623996709066"><div id="column-id-1623996709066" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996058" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996058" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-left "><h3 class="sppb-addon-title ">Zorgeloos ondernemen!</h3><div class="sppb-addon-content"><p class="quote">“Door de verschillende geldstromen (drie bars, festivals en losse koffieverkoop) is overzicht essentieel. </p>
+                                                                        <p class="name">Lennaert Meijboom – The Village Coffee</p></div></div></div></div><div id="sppb-addon-wrapper-1626267733560" class="sppb-addon-wrapper" ><div id="sppb-addon-1626267733560" class="clearfix "     ><div class="sppb-addon sppb-addon-button-group text-left"><div class="sppb-addon-content nav"><a id="btn-1626267733560" href="/nl/reeleezee/klantervaringen/the-village-coffee" class="nav-link btn link-blue">Lees het hele verhaal</a></div></div></div></div></div></div></div></div></div></div></div></div></div><div class="col-lg-4" id="column-wrap-id-1623746996059"><div id="column-id-1623746996059" class="sppb-column" ><div class="sppb-column-addons"><div id="section-id-1623996709075" class="sppb-section" ><div class="container"><div class="row"><div class="col-lg-12 col-md-6" id="column-wrap-id-1623996709076"><div id="column-id-1623996709076" class="sppb-column hidden-xs" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996097" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996097" class="clearfix "     ><div class="sppb-addon sppb-addon-single-image text-center "><div class="sppb-addon-content"><div class="sppb-addon-single-image-container"><img class="img-responsive lazyload" data-src="https://www.exact.com/images/reeleezee/klantverhalen/Klantverhaal_Naturals_visual3.jpg" src="/images/misc/placeholder.png" alt="Klantverhaal Naturals"></div></div></div></div></div></div></div></div><div class="col-lg-12 col-md-6" id="column-wrap-id-1623996709078"><div id="column-id-1623996709078" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996100" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996100" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-left "><h3 class="sppb-addon-title ">Half uurtje voor je btw-aangifte.</h3><div class="sppb-addon-content"><p class="quote">Eens in het kwartaal pak ik er een half uur voor en dan zet ik de btw-aangifte door naar de Belastingdienst.</p>
+                                                                        <p class="name">Harry Weeda – Naturals</p></div></div></div></div><div id="sppb-addon-wrapper-1626267733547" class="sppb-addon-wrapper" ><div id="sppb-addon-1626267733547" class="clearfix "     ><div class="sppb-addon sppb-addon-button-group text-left"><div class="sppb-addon-content nav"><a id="btn-1626267733547" href="/nl/reeleezee/klantervaringen/naturals-bloemen" class="nav-link btn link-blue">Lees het hele verhaal</a></div></div></div></div></div></div></div></div></div></div></div></div></div><div class="col-lg-4" id="column-wrap-id-1623746996062"><div id="column-id-1623746996062" class="sppb-column" ><div class="sppb-column-addons"><div id="section-id-1623996709082" class="sppb-section" ><div class="container"><div class="row"><div class="col-lg-12 col-md-6" id="column-wrap-id-1623996709083"><div id="column-id-1623996709083" class="sppb-column hidden-xs" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996103" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996103" class="clearfix "     ><div class="sppb-addon sppb-addon-single-image text-center "><div class="sppb-addon-content"><div class="sppb-addon-single-image-container"><img class="img-responsive lazyload" data-src="https://www.exact.com/images/reeleezee/klantverhalen/unscared-cashr-crossfit-eleiko-kettlebells.jpg" src="/images/misc/placeholder.png" alt="Klantverhaal Poundwise"></div></div></div></div></div></div></div></div><div class="col-lg-12 col-md-6" id="column-wrap-id-1623996709085"><div id="column-id-1623996709085" class="sppb-column" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996106" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996106" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-left "><h3 class="sppb-addon-title ">Crossfitters, voor niemand bang</h3><div class="sppb-addon-content"><p class="quote">Elke keer als er een pinbetaling hier wordt gedaan, wordt het direct geboekt in ons boekhoudprogramma.</p>
+                                                                        <p class="name">Jochem Oldenbroek – Unscared Crossfit</p></div></div></div></div><div id="sppb-addon-wrapper-1626267733542" class="sppb-addon-wrapper" ><div id="sppb-addon-1626267733542" class="clearfix "     ><div class="sppb-addon sppb-addon-button-group text-left"><div class="sppb-addon-content nav"><a id="btn-1626267733542" href="/nl/reeleezee/klantervaringen/unscared-crossfit" class="nav-link btn link-blue">Lees het hele verhaal</a></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></section><section id="section-id-1623746996115" class="sppb-section" ><div class="container"><div class="row"><div class="col-lg-2 col-md-1" id="column-wrap-id-1623746996116"><div id="column-id-1623746996116" class="sppb-column" ><div class="sppb-column-addons"></div></div></div><div class="col-lg-8 col-md-10" id="column-wrap-id-1623746996117"><div id="column-id-1623746996117" class="sppb-column bg-navy-20" ><div class="sppb-column-addons"><div id="sppb-addon-wrapper-1623746996118" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996118" class="clearfix "     ><div class="sppb-addon sppb-addon-text-block text-center "><h2 class="sppb-addon-title ">Probeer het zelf</h2><div class="sppb-addon-content"><p>Wil jij ook minder tijd kwijt zijn aan je boekhouding? Maak dan nu een account aan en probeer Reeleezee 30 dagen gratis uit. Zo wordt boekhouden real easy – ook als je geen boekhoudkennis hebt!</p></div></div></div></div><div id="sppb-addon-wrapper-1623746996126" class="sppb-addon-wrapper" ><div id="sppb-addon-1623746996126" class="clearfix "     ><div class="sppb-addon sppb-addon-button-group text-center"><div class="sppb-addon-content nav"><a onclick="myFunction()" id="btn-1623746996126" href="/nl/reeleezee/probeer/slim-boekhouden-start" class="nav-link btn btn-blue">Probeer 30 dagen gratis</a></div></div></div></div></div></div></div><div class="col-lg-2 col-md-1" id="column-wrap-id-1623746996119"><div id="column-id-1623746996119" class="sppb-column" ><div class="sppb-column-addons"></div></div></div></div></div></section>
+    </div>
+</div>
+
+
+<footer id="page-footer" class="footer bg-gray">
+    <div class="container">
+        <div class="row">
+            <div class="hidden-xs col-xs-12 col-md-3">
+
+                <h4>Start een gesprek</h4>
+
+
+
+                <div class="hidden-xs"  >
+                    <ul>
+                        <li><a href="tel:0346258080">0346 - 258 080</a></li>
+                        <li><a href="/nl/reeleezee/contact">Contactformulier</a></li>
                     </ul>
                 </div>
 
-            @endif
-
-            @include('includes.form-error')
-
-
-        <div class="container" style="width: 100%;">
-
-            <div class="row" style="display: flex;justify-content: center;">
-
-                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12" id="quote-con">
-
-                    <h3 class="box-heading" style="text-align: center;padding-top: 25px;color: black;/*text-shadow: 1px 2px 5px #4f4f4f;*/font-weight: 500;">{{__('text.Fill information for Quotation')}}</h3>
-
-                    {{--<h1 style="color: black;">{{$gs->bg_title}}</h1>
-                    <p>{!!$gs->bg_text!!}</p>--}}
-
-                    <style>
-                        .main-form
-                        {
-                            background-color: {{($gs->form_bg == null) ? (($gs->colors == null) ? '#f3bd02 !important;' : $gs->colors.' !important;') : $gs->form_bg. ' !important;' }};
-                            color: {{($gs->form_col != null) ? $gs->form_col. ' !important;' : 'black !important;' }};
-                            border: 1px solid {{($gs->form_ic == null) ? (($gs->colors == null) ? '#f3bd02 !important;' : $gs->colors.' !important;') : $gs->form_ic. ' !important;' }};
-                        }
-                    </style>
-
-                    <div class="row o-box" style="margin: 35px 0 30px 0;display: flex;justify-content: center;">
-
-                        <div class="btn-box col-lg-11 col-md-11 col-sm-11 col-xs-12" style="display: flex;justify-content: center;">
-
-                            <div style="text-align: center;" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
-                                <button data-id="1" class="btn btn-success p-btns">
-                                    <span>Product</span> <i class="fas fa-arrow-right" style="text-decoration: none;"></i>
-                                </button>
-
-                            </div>
-
-                            <div style="text-align: center;" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
-                                <button data-id="2" class="btn btn-success p-btns">
-                                    <span>Product + Dienst</span> <i class="fas fa-arrow-right" style="text-decoration: none;"></i>
-                                </button>
-
-                            </div>
-
-                            <div style="text-align: center;" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
-                                <button data-id="3" class="btn btn-success p-btns">
-                                    <span>Dienst</span> <i class="fas fa-arrow-right" style="text-decoration: none;"></i>
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="main-form cbm-box" style="display: none;border-radius: 10px;box-shadow: 0px 0px 4px 0px #dbdbdb;">
-
-                        <div id="quote-box" style="display: flex;justify-content: space-between;width: 100%;padding: 20px;">
-
-                            <div style="width: 20%;">
-
-                                <select class="js-data-example-ajax1 form-control quote-category" name="group" id="blood_grp">
-
-                                    <option value="">{{__('text.Select Category')}}</option>
-
-                                    @foreach($quote_cats as $cat)
-                                        <option value="{{$cat->id}}">{{$cat->cat_name}}</option>
-                                    @endforeach
-
-                                    <option value="Diensten">Diensten</option>
-
-                                </select>
-
-                            </div>
-
-                            <div class="linked-boxes" style="width: 20%;">
-
-                                <select class="js-data-example-ajax3 form-control quote-brand" name="group" id="blood_grp">
-
-                                    <option value="">{{__('text.Select Brand')}}</option>
-
-                                </select>
-
-                            </div>
-
-                            <div class="linked-boxes" style="width: 20%;">
-
-                                <select class="js-data-example-ajax4 quote-model form-control" name="group" id="blood_grp">
-
-                                    <option value="">{{__('text.Select Model')}}</option>
-
-                                </select>
-
-                            </div>
-
-                            <div class="linked-boxes" style="width: 20%;">
-
-                                <input type="text" style="height: 100%;" name="model_number" class="form-control quote-model-number" placeholder="{{__('text.Model Number (Optional)')}}" />
-
-                            </div>
-
-                            <div class="unlinked-boxes" style="width: 60%;display: none;">
-
-                                <select class="js-data-example-ajax0 form-control quote-service" name="group" id="blood_grp">
-
-                                    <option value="">{{__('text.Select Service')}}</option>
-
-                                    @if(isset($quote_services))
-
-                                        @foreach($quote_services as $service)
-                                            <option value="{{$service->id}}">{{$service->title}}</option>
-                                        @endforeach
-
-                                    @endif
-
-                                </select>
-
-                            </div>
-
-                            <button href="#aanvragen" role="button" data-toggle="modal" style="height: 45px;min-width: 100px;float: right;border: 0;outline: none;font-size: 18px;" class="btn btn-primary">{{__('text.Search')}}</button>
-
-                        </div>
-                    </div>
-
-                    <div class="header-top-area" style="border-radius: 10px;margin-top: 10px;">
-                        <div class="container" style="width: 100%;">
-
-                            <div class="row" style="display: flex;">
-
-                                <div style="width: 100%;">
-                                    <div>
-                                        <ul style="display: flex;justify-content: center;">
-                                            <li class="t-h" style="display: flex;align-items: center;">
-                                                <img style="width: 20px;height: 20px;margin-right: 5px;" src="{{asset('assets/images/deal.png')}}">
-                                                <span style="vertical-align: inherit;">{!! __('text.Your reliable partner') !!}</span>
-                                            </li>
-                                            <li class="c-h" style="display: flex;align-items: center;">
-                                                <img style="width: 20px;height: 20px;margin-right: 5px;" src="{{asset('assets/images/deal.png')}}">
-                                                <span style="vertical-align: inherit;">{!! __('text.We match supply and demand transparently') !!}</span>
-                                            </li>
-                                            <li class="t-h" style="display: flex;align-items: center;">
-                                                <img style="width: 20px;height: 20px;margin-right: 5px;" src="{{asset('assets/images/deal.png')}}">
-                                                <span style="vertical-align: inherit;">{!! __('text.We are involved in the growth of your company') !!}</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="main-form p-box" style="display: none;border-radius: 10px;box-shadow: 0px 0px 4px 0px #dbdbdb;margin-top: 10px;">
-
-                        <div id="quote-box" style="display: flex;justify-content: space-between;width: 100%;padding: 20px;">
-
-                            <div style="width: 90%;">
-
-                                <div class="autocomplete" style="width:100%;">
-                                    <input id="productInput" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
-                                </div>
-
-                                <select style="display: none;" class="form-control all-products" name="group" id="blood_grp">
-
-                                    @foreach($quote_products as $product)
-                                        <option data-cat="{{$product->cat_name}}" value="{{$product->id}}">{{$product->title}}</option>
-                                    @endforeach
-
-                                </select>
-
-                            </div>
-
-                            <button href="#aanvragen" role="button" data-toggle="modal" style="height: 45px;min-width: 100px;float: right;border: 0;outline: none;font-size: 18px;" class="btn btn-primary">{{__('text.Start')}}</button>
-
-                        </div>
-                    </div>
-
-                    <style>
-
-                        @media (max-width: 767px)
-                        {
-                            .btn-box
-                            {
-                                display: block !important;
-                            }
-
-                            .btn-box div
-                            {
-                                margin: 20px 0;
-                            }
-                        }
-
-                        .p-btns
-                        {
-                            padding: 20px 15px;
-                            text-align: center;
-                            font-size: 14px;
-                            -webkit-transition: opacity .45s cubic-bezier(0.25,1,0.33,1);
-                            transition: opacity .45s cubic-bezier(0.25,1,0.33,1);
-                            color: white;
-                            font-weight: 600;
-                            display: inline-block;
-                            width: 80%;
-                            border: 0;
-                            border-radius: 6px;
-                            background-color: {{($gs->form_bg == null) ? (($gs->colors == null) ? '#f3bd02 !important;' : $gs->colors.' !important;') : $gs->form_bg. ' !important;' }}
-                        }
-
-                        .p-btns span
-                        {
-                            left: 0;
-                            display: inline-block;
-                            transform: translateX(0);
-                            -webkit-transform: translateX(0);
-                            transition: opacity .45s cubic-bezier(0.25,1,0.33,1),transform .45s cubic-bezier(0.25,1,0.33,1);
-                            -webkit-transition: opacity .45s cubic-bezier(0.25,1,0.33,1),transform .45s cubic-bezier(0.25,1,0.33,1);
-                            position: relative;
-                        }
-
-                        .p-btns:hover span
-                        {
-                            transform: translateX(-18px);
-                            -webkit-transform: translateX(-18px);
-                        }
-
-                        .p-btns i
-                        {
-                            text-decoration: none;
-                            background-color: transparent!important;
-                            top: 53% !important;
-                            right: 20% !important;
-                            font-size: 18px;
-                            line-height: 18px;
-                            width: 18px;
-                            position: absolute;
-                            margin-top: -9px;
-                            opacity: 0;
-                            transition: all .45s cubic-bezier(0.25,1,0.33,1);
-                            -webkit-transition: all .45s cubic-bezier(0.25,1,0.33,1);
-                            display: inline-block;
-                            word-spacing: 1px;
-                            text-align: center;
-                            vertical-align: middle;
-                            max-width: 100%;
-                        }
-
-                        .p-btns:hover i
-                        {
-                            opacity: 1;
-                        }
-
-                        .autocomplete ::-webkit-input-placeholder {
-                            text-align: center;
-                        }
-
-                        .autocomplete :-moz-placeholder { /* Firefox 18- */
-                            text-align: center;
-                        }
-
-                        .autocomplete ::-moz-placeholder {  /* Firefox 19+ */
-                            text-align: center;
-                        }
-
-                        .autocomplete :-ms-input-placeholder {
-                            text-align: center;
-                        }
-
-                        .autocomplete {
-                            position: relative;
-                            display: inline-block;
-                        }
-
-                        .quote-product {
-                            /*border: 1px solid transparent;*/
-                            background-color: #f1f1f1;
-                            padding: 10px;
-                            font-size: 16px;
-                        }
-
-                        .quote-product {
-                            background-color: #f1f1f1;
-                            width: 100%;
-                            height: 45px;
-                        }
-
-                        .autocomplete-items {
-                            position: absolute;
-                            border: 1px solid #d4d4d4;
-                            border-bottom: none;
-                            border-top: none;
-                            z-index: 99;
-                            /*position the autocomplete items to be the same width as the container:*/
-                            top: 100%;
-                            left: 0;
-                            right: 0;
-                            max-height: 230px;
-                            overflow-x: hidden;
-                            overflow-y: auto;
-                        }
-
-                        .autocomplete-items div {
-                            padding: 10px;
-                            cursor: pointer;
-                            background-color: #fff;
-                            border-bottom: 1px solid #d4d4d4;
-                        }
-
-                        /*when hovering an item:*/
-                        .autocomplete-items div:hover {
-                            background-color: #e9e9e9;
-                        }
-
-                        /*when navigating through the items using the arrow keys:*/
-                        .autocomplete-active {
-                            background-color: DodgerBlue !important;
-                            color: #ffffff;
-                        }
-
-                        .terms .checkmark-checkbox:after
-                        {
-                            left: 4px !important;
-                            top: 1.5px !important;
-                        }
-
-                        .container-checkbox {
-                            display: flex;
-                            position: relative;
-                            padding-left: 30px;
-                            margin-bottom: 12px;
-                            cursor: pointer;
-                            font-size: 22px;
-                            font-weight: 300;
-                            -webkit-user-select: none;
-                            -moz-user-select: none;
-                            -ms-user-select: none;
-                            user-select: none;
-                            align-items: center;
-                            font-family: sans-serif;
-                            color: #353535;
-                        }
-
-                        /* Hide the browser's default radio button */
-                        .container-checkbox input {
-                            position: absolute;
-                            opacity: 0;
-                            cursor: pointer;
-                            height: 0;
-                            width: 0;
-                        }
-
-                        /* Create a custom radio button */
-                        .checkmark-checkbox {
-                            position: absolute;
-                            /*top: 6.5px;*/
-                            left: 0;
-                            height: 20px;
-                            width: 20px;
-                            background-color: transparent;
-                            border: 1px solid #e5e5e5;
-                            border-radius: 2px;
-                        }
-
-                        /* On mouse-over, add a grey background color */
-                        .container-checkbox:hover input ~ .checkmark-checkbox {
-                            background-color: #ccc;
-                        }
-
-                        /* When the radio button is checked, add a blue background */
-                        .container-checkbox input:checked ~ .checkmark-checkbox {
-                            background-color: #2196F3;
-                        }
-
-                        /* Create the indicator (the dot/circle - hidden when not checked) */
-                        .checkmark-checkbox:after {
-                            content: "";
-                            position: absolute;
-                            display: none;
-                        }
-
-                        /* Show the indicator (dot/circle) when checked */
-                        .container-checkbox input:checked ~ .checkmark-checkbox:after {
-                            display: block;
-                        }
-
-                        /* Style the indicator (dot/circle) */
-                        .container-checkbox .checkmark-checkbox:after {
-                            left: 7px;
-                            top: 3.5px;
-                            width: 5px;
-                            height: 10px;
-                            border: solid white;
-                            border-width: 0 3px 3px 0;
-                            -webkit-transform: rotate(45deg);
-                            -ms-transform: rotate(45deg);
-                            transform: rotate(45deg);
-                        }
-
-                        .pac-container
-                        {
-                            z-index: 1000000;
-                        }
-
-                        #quote-box .select2
-                        {
-                            /*width: 70% !important;
-                            float: left;*/
-                            border: 1px solid lightgrey;
-                        }
-
-                        @media (max-width: 1020px)
-                        {
-                            .t-h
-                            {
-                                display: none !important;
-                            }
-
-                            .c-h
-                            {
-                                border: 0 !important;
-                            }
-                        }
-
-                        @media (max-width: 500px)
-                        {
-
-                            .box-heading
-                            {
-                                font-size: 20px;
-                            }
-
-                            #quote-box
-                            {
-                                flex-wrap: wrap;
-                            }
-
-                            #quote-box div
-                            {
-                                width: 100% !important;
-                                margin: 5px;
-                                height: 45px;
-                            }
-
-                            #quote-box button
-                            {
-                                width: 100%;
-                                margin-top: 20px;
-                            }
-                        }
-
-                        @media (max-width: 767px)
-                        {
-                            #quote-con
-                            {
-                                margin-bottom: 30px;
-                            }
-                        }
-
-                        .well
-                        {
-                            box-shadow: none;
-                            margin-bottom: 0;
-                            background-color: #ffffff;
-                            border: 0;
-                            overflow-y: auto;
-                        }
-
-                        .well .select2
-                        {
-                            border: 1px solid #e1e1e1;
-                        }
-
-                    </style>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- Ending of Hero area -->
-
-
-    <!-- Starting of All - sectors area -->
-    <div class="section-padding all-sectors-wrap wow fadeInUp" style="background-color: white;">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="section-title pb_50 text-center">
-                        <h2>{{$lang->bgs}}</h2>
-
-                        <div class="section-borders">
-                            <span></span>
-                            <span class="black-border"></span>
-                            <span></span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <div class="row">
+            <div class=" col-xs-12 col-md-3">
 
-                @foreach($quote_cats as $cat)
+                <h4>Contact</h4>
 
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
-                            <div class="mainflip">
 
-                                <a href="{{url('products/?_token='.@csrf_token().'&category='.$cat->id)}}">
-                                    <div class="frontside">
-                                        <div class="card">
-                                            <div class="card-body text-center">
-
-                                                <p>
-                                                    @if($cat->photo == NULL)
-
-                                                        <img class=" img-fluid" src="{{asset('assets/default.jpg')}}" >
-
-                                                    @else
-
-                                                        <img class=" img-fluid" src="{{asset('assets/images/'.$cat->photo)}}" >
-
-                                                    @endif
-
-                                                </p>
-
-                                                <h4 class="card-title" style="font-weight: 600;padding-top: 30px;font-family: monospace;font-size: 15px;">{{$cat->cat_name}}</h4>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <div class="backside" >
-                                    <div class="card">
-                                        <div class="card-body text-center mt-4">
-
-                                            <h4 class="card-title">{{$cat->cat_name}}</h4>
-
-                                            <p class="card-text">{!! $cat->description !!}</p>
-
-                                            <a target="_blank" class="btn btn-primary" style="color: white !important;margin-top: 20px;" href="{{url('products/?_token='.@csrf_token().'&category='.$cat->id)}}">View</a>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                @endforeach
-
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
-                            <div class="mainflip">
-
-                                <a href="{{url('our-services')}}">
-                                    <div class="frontside">
-                                        <div class="card">
-                                            <div class="card-body text-center">
-                                                <p>
-                                                    <img class=" img-fluid" src="{{asset('assets/Diensten.jpeg')}}">
-                                                </p>
-
-                                                <h4 class="card-title" style="font-weight: 600;padding-top: 30px;font-family: monospace;font-size: 15px;">{{__('text.Services')}}</h4>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <div class="backside" >
-                                    <div class="card">
-                                        <div class="card-body text-center mt-4">
-
-                                            <h4 class="card-title">{{__('text.Services')}}</h4>
-
-                                            <p class="card-text"></p>
-
-                                            <a target="_blank" class="btn btn-primary" style="color: white !important;margin-top: 20px;" href="{{url('our-services')}}">View</a>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- Ending of All - sectors area -->
-
-    <section id="steps" class="steps steps--en">
-        <div class="row row1" style="max-width: 80%;margin-left: auto;margin-right: auto;display: flex;flex-flow: row wrap;">
-            <div class="small-12 columns" style="padding-top: 20px;">
-                <h2 class="hiw">{{$lang->hiwh}}</h2>
-
-                {{--@if($language == 'eng')
-
-                    <div id="languagePickerContainer">
-                        <a class="languageSelector" onclick="changeLanguage(1)" id="dutch" title="dutch">Nederlands</a>
-                        <div class="infographic__separator">·</div>
-                        <a class="languageSelector languageSelector-selected" title="english" id="english" onclick="changeLanguage(0)">English</a>
-                    </div>
-
-
-                @else
-
-                    <div id="languagePickerContainer">
-                        <a class="languageSelector languageSelector-selected" onclick="changeLanguage(1)" id="dutch" title="dutch">Nederlands</a>
-                        <div class="infographic__separator">·</div>
-                        <a class="languageSelector" title="english" id="english" onclick="changeLanguage(0)">English</a>
-                    </div>
-
-
-                @endif--}}
-
-            </div>
-        </div>
-        <div class="row steps__items row1" style="max-width: 80%;margin-left: auto;margin-right: auto;display: flex;flex-flow: row wrap;margin-top: 35px;">
-            <div class="small-12 medium-6 large-3 columns">
-                <div class="step"> <img src="{{asset('assets/images/Profile PNG.png')}}" class="ic-img">
-                    <div class="step__header step__header_en @if($language == 'du') hide @endif"> 1. {{$hiw->heading1}}</div>
-                    <div class="step__header step__header_de @if($language == 'eng') hide @endif"> 1. {{$hiw->dh1}}</div>
-                    <p class="step_description step__description_en ic-p @if($language == 'du') hide @endif"> {{$hiw->desc1}} </p>
-                    <p class="step_description step__description_de ic-p @if($language == 'eng') hide @endif"> {{$hiw->dd1}} </p>
-                </div>
-            </div>
-            <div class="small-12 medium-6 large-3 columns">
-                <div class="step"> <img src="{{asset('assets/images/Date PNG.png')}}" class="ic-img">
-                    <div class="step__header step__header_en @if($language == 'du') hide @endif"> 2. {{$hiw->heading2}}</div>
-                    <div class="step__header step__header_de @if($language == 'eng') hide @endif"> 2. {{$hiw->dh2}}</div>
-                    <p class="step_description step__description_en ic-p @if($language == 'du') hide @endif"> {{$hiw->desc2}} </p>
-                    <p class="step_description step__description_de ic-p @if($language == 'eng') hide @endif"> {{$hiw->dd2}} </p>
-                </div>
-            </div>
-            <div class="small-12 medium-6 large-3 columns">
-                <div class="step"> <img src="{{asset('assets/images/Send Reservation PNG.png')}}" class="ic-img">
-                    <div class="step__header step__header_en @if($language == 'du') hide @endif"> 3. {{$hiw->heading3}}</div>
-                    <div class="step__header step__header_de @if($language == 'eng') hide @endif"> 3. {{$hiw->dh3}}</div>
-                    <p class="step_description step__description_en ic-p @if($language == 'du') hide @endif"> {{$hiw->desc3}} </p>
-                    <p class="step_description step__description_de ic-p @if($language == 'eng') hide @endif"> {{$hiw->dd3}}  </p>
-                </div>
-            </div>
-            <div class="small-12 medium-6 large-3 columns">
-                <div class="step"> <img src="{{asset('assets/images/Warranty.png')}}" class="ic-img">
-                    <div class="step__header step__header_en @if($language == 'du') hide @endif"> 4. {{$hiw->heading4}}</div>
-                    <div class="step__header step__header_de @if($language == 'eng') hide @endif"> 4. {{$hiw->dh4}}</div>
-                    <p class="step_description step__description_en ic-p @if($language == 'du') hide @endif"> {{$hiw->desc4}} </p>
-                    <p class="step_description step__description_de ic-p @if($language == 'eng') hide @endif"> {{$hiw->dd4}}  </p>
-                </div>
-            </div>
-            <div class="small-12 medium-6 large-3 columns">
-                <div class="step"> <img src="{{asset('assets/images/Location PNG.png')}}" class="ic-img">
-                    <div class="step__header step__header_en @if($language == 'du') hide @endif"> 5. {{$hiw->heading5}}</div>
-                    <div class="step__header step__header_de @if($language == 'eng') hide @endif"> 5. {{$hiw->dh5}}</div>
-                    <p class="step_description step__description_en ic-p @if($language == 'du') hide @endif"> {{$hiw->desc5}} </p>
-                    <p class="step_description step__description_de ic-p @if($language == 'eng') hide @endif"> {{$hiw->dd5}}  </p>
-                </div>
-            </div>
-            <div class="small-12 medium-6 large-3 columns">
-                <div class="step"> <img src="{{asset('assets/images/Payment PNG.png')}}" class="ic-img">
-                    <div class="step__header step__header_en @if($language == 'du') hide @endif"> 6. {{$hiw->heading6}}</div>
-                    <div class="step__header step__header_de @if($language == 'eng') hide @endif"> 6. {{$hiw->dh6}}</div>
-                    <p class="step_description step__description_en ic-p @if($language == 'du') hide @endif"> {{$hiw->desc6}} </p>
-                    <p class="step_description step__description_de ic-p @if($language == 'eng') hide @endif"> {{$hiw->dd6}}  </p>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
-
-    <div style="margin-top: 50px;" class="container">
-        <h2 class="heading" style="text-align: center;">{{__('text.Our Brands')}}</h2>
-
-        <section class="customer-logos slider" style="padding-bottom: 20px;padding-top: 20px;">
-
-            @foreach($brands as $brand)
-
-                <div class="slide"><a target="_blank" href="{{url('products/?_token='.@csrf_token().'&brand='.$brand->id)}}"><img src="{{ asset('assets/images/'.$brand->photo) }}"></a></div>
-
-            @endforeach
-
-        </section>
-    </div>
-
-    <!-- Starting of blog area -->
-    <div style="padding-top: 0;" class="section-padding blog-area-wrapper wow fadeInUp">
-
-        <section id="usp" class="usp">
-            <div class="row row1" style="max-width: 80%;margin-left: auto;margin-right: auto;display: flex;flex-flow: row wrap;margin-top: 35px;">
-                <div class="small-12 medium-12 large-12 columns">
-                    <h2 class="hiw">{{$lang->rtbh}}</h2>
-                </div>
-            </div>
-            <div class="row usps__row row2" style="max-width: 60%;margin-left: auto;margin-right: auto;display: flex;flex-flow: row wrap;margin-top: 35px;">
-                <div class="large-4 medium-8 small-11 columns">
-                    <div class="usp__block">
-                        <div>
-                            <img src="{{asset('assets/images/Marketplace PNG.png')}}" class="ic-img">
-                            <p class="usp__block__title step__header_en ic-p @if($language == 'du') hide @endif">{{$rtb->heading1}}</p>
-                            <p class="usp__block__title step__header_de ic-p @if($language == 'eng') hide @endif">{{$rtb->dh1}}</p>
-                        </div>
-                        <span class="step__description_en @if($language == 'du') hide @endif">{{$rtb->desc1}} </span>
-                        <span class="step__description_de @if($language == 'eng') hide @endif">{{$rtb->dd1}} </span>
-                    </div>
-                </div>
-                <div class="large-4 medium-8 small-11 columns">
-                    <div class="usp__block">
-                        <div>
-                            <img src="{{asset('assets/images/Payment PNG.png')}}" class="ic-img">
-                            <p class="usp__block__title step__header_en ic-p @if($language == 'du') hide @endif">{{$rtb->heading2}}</p>
-                            <p class="usp__block__title step__header_de ic-p @if($language == 'eng') hide @endif">{{$rtb->dh2}}</p>
-                        </div>
-                        <span class="step__description_en @if($language == 'du') hide @endif">{{$rtb->desc2}}</span>
-                        <span class="step__description_de @if($language == 'eng') hide @endif">{{$rtb->dd2}}</span>
-                    </div>
-                </div>
-                <div class="large-4 medium-8 small-11 columns">
-                    <div class="usp__block">
-                        <div>
-                            <img src="{{asset('assets/images/Warranty.png')}}" class="ic-img">
-                            <p class="usp__block__title step__header_en ic-p @if($language == 'du') hide @endif">{{$rtb->heading3}}</p>
-                            <p class="usp__block__title step__header_de ic-p @if($language == 'eng') hide @endif">{{$rtb->dh3}}</p>
-                        </div>
-                        <span class="step__description_en @if($language == 'du') hide @endif">{{$rtb->desc3}}</span>
-                        <span class="step__description_de @if($language == 'eng') hide @endif">{{$rtb->dd3}}</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <style>
-
-            .slick-slide {
-                margin: 0px 20px;
-            }
-
-            .slick-slide img {
-
-                width: 100%;
-            }
-
-            .slick-slider
-            {
-                position: relative;
-                display: block;
-                box-sizing: border-box;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                -webkit-touch-callout: none;
-                -khtml-user-select: none;
-                -ms-touch-action: pan-y;
-                touch-action: pan-y;
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            .slick-list
-            {
-                position: relative;
-                display: block;
-                overflow: hidden;
-                margin: 0;
-                padding: 0;
-            }
-            .slick-list:focus
-            {
-                outline: none;
-            }
-            .slick-list.dragging
-            {
-                cursor: pointer;
-                cursor: hand;
-            }
-
-            .slick-slider .slick-track,
-            .slick-slider .slick-list
-            {
-                -webkit-transform: translate3d(0, 0, 0);
-                -moz-transform: translate3d(0, 0, 0);
-                -ms-transform: translate3d(0, 0, 0);
-                -o-transform: translate3d(0, 0, 0);
-                transform: translate3d(0, 0, 0);
-            }
-
-            .slick-track
-            {
-                position: relative;
-                top: 0;
-                left: 0;
-                display: block;
-                margin: auto;
-            }
-            .slick-track:before,
-            .slick-track:after
-            {
-                display: table;
-                content: '';
-            }
-            .slick-track:after
-            {
-                clear: both;
-            }
-            .slick-loading .slick-track
-            {
-                visibility: hidden;
-            }
-
-            .slick-slide
-            {
-                display: none;
-                float: left;
-                position: relative;
-                height: 140px;
-                min-height: 1px;
-            }
-            [dir='rtl'] .slick-slide
-            {
-                float: right;
-            }
-            .slick-slide img
-            {
-                display: block;
-            }
-            .slick-slide.slick-loading img
-            {
-                display: none;
-            }
-            .slick-slide.dragging img
-            {
-                pointer-events: none;
-            }
-            .slick-initialized .slick-slide
-            {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-            .slick-loading .slick-slide
-            {
-                visibility: hidden;
-            }
-            .slick-vertical .slick-slide
-            {
-                display: block;
-                height: auto;
-                border: 1px solid transparent;
-            }
-            .slick-arrow.slick-hidden {
-                display: none;
-            }
-
-        </style>
-
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap" async defer></script>
-
-        <script type="text/javascript">
-
-            $(document).ready(function(){
-
-                $('.p-btns').click(function(){
-
-                    $('.o-box').hide();
-                    $('.cbm-box').show();
-                    $('.p-box').show();
-
-                    var id = $(this).data('id');
-
-                    $('.navbar a[href="#step1"]').trigger('click');
-                    $('.back').hide();
-
-                    if(id == 1 || id == 2)
-                    {
-                        $('.quote-category').val('');
-                        $(".quote-category").trigger('change.select2');
-
-                        $('.quote-service').removeClass('quote_validation');
-                        $('.quote-category').addClass('quote_validation');
-                        $('.quote-brand').addClass('quote_validation');
-                        $('.quote-model').addClass('quote_validation');
-
-                        $('#step1').children('.well').css('height','300px');
-                        $('.quote_delivery').attr("placeholder", "{{__('text.Select Delivery Date')}}");
-
-                        $('.unlinked-boxes').hide();
-                        $('.linked-boxes').show();
-                    }
-                    else
-                    {
-                        $('.quote-category').val('Diensten');
-                        $(".quote-category").trigger('change.select2');
-
-                        $('.linked-boxes').hide();
-                        $('.unlinked-boxes').show();
-
-                        $('.quote-service').addClass('quote_validation');
-                        $('.quote-category').removeClass('quote_validation');
-                        $('.quote-brand').removeClass('quote_validation');
-                        $('.quote-model').removeClass('quote_validation');
-
-                        $('#step1').children('.well').css('height','');
-
-                        $('.quote_delivery').attr("placeholder", "{{__('text.Select Installation Date')}}");
-                    }
-
-                });
-
-                $('.customer-logos').slick({
-                    slidesToShow: 6,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 1500,
-                    arrows: false,
-                    dots: false,
-                    pauseOnHover: false,
-                    responsive: [{
-                        breakpoint: 768,
-                        settings: {
-                            slidesToShow: 4
-                        }
-                    }, {
-                        breakpoint: 520,
-                        settings: {
-                            slidesToShow: 3
-                        }
-                    }]
-                });
-            });
-
-            function initMap() {
-
-                var input = document.getElementById('quote-zipcode');
-
-                var options = {
-                    componentRestrictions: {country: "nl"}
-                };
-
-                var autocomplete = new google.maps.places.Autocomplete(input,options);
-
-                // Set the data fields to return when the user selects a place.
-                autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
-
-
-                autocomplete.addListener('place_changed', function() {
-
-                    var flag = 0;
-
-                    var place = autocomplete.getPlace();
-
-
-                    if (!place.geometry) {
-
-                        // User entered the name of a Place that was not suggested and
-                        // pressed the Enter key, or the Place Details request failed.
-                        window.alert("{{__('text.No details available for input: ')}}" + place.name);
-                        return;
-                    }
-                    else
-                    {
-                        var string = $('#quote-zipcode').val().substring(0, $('#quote-zipcode').val().indexOf(',')); //first string before comma
-
-                        if(string)
-                        {
-                            var is_number = $('#quote-zipcode').val().match(/\d+/);
-
-                            if(is_number === null)
-                            {
-                                flag = 1;
-                            }
-                        }
-                    }
-
-                    var city = '';
-                    var postal_code = '';
-
-
-                    for(var i=0; i < place.address_components.length; i++)
-                    {
-                        if(place.address_components[i].types[0] == 'postal_code')
-                        {
-                            postal_code = place.address_components[i].long_name;
-                        }
-
-                        if(place.address_components[i].types[0] == 'locality')
-                        {
-                            city = place.address_components[i].long_name;
-                        }
-
-                    }
-
-
-                    if(city == '')
-                    {
-                        for(var i=0; i < place.address_components.length; i++)
-                        {
-                            if(place.address_components[i].types[0] == 'administrative_area_level_2')
-                            {
-                                city = place.address_components[i].long_name;
-
-                            }
-                        }
-                    }
-
-
-                    if(postal_code == '' || city == '')
-                    {
-                        flag = 1;
-                    }
-
-                    if(!flag)
-                    {
-                        $('#check_address').val(1);
-                        $("#address-error").remove();
-                        $('#postcode').val(postal_code);
-                        $("#city").val(city);
-                    }
-                    else
-                    {
-                        $('#quote-zipcode').val('');
-                        $('#postcode').val('');
-                        $("#city").val('');
-
-                        $("#address-error").remove();
-                        $('#quote-zipcode').parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;padding-left: 5px;">{{__('text.Kindly write your full address with house/building number so system can detect postal code and city from it!')}}</small>');
-                    }
-
-                });
-            }
-
-            $(document).ready(function() {
-
-                $('.topMembers').slick({
-                    dots: false,
-                    arrows: true,
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                    responsive: [
-                        {
-                            breakpoint: 768,
-                            settings: {
-                                arrows: true,
-                                centerMode: false,
-                                centerPadding: '0px',
-                                slidesToShow: 2
-                            }
-                        },
-                        {
-                            breakpoint: 480,
-                            settings: {
-                                arrows: false,
-                                centerMode: true,
-                                centerPadding: '40px',
-                                slidesToShow: 1
-                            }
-                        }
-                    ],
-                    prevArrow: "<button class='slick-arrow slick-prev' data-role='none' type='button' style='display: block;'><svg class='domain-icon css-oee40j' viewBox='0 0 24 24' aria-hidden='true'><path fill='none' stroke='currentColor' stroke-width='2' d='M15 5l-7 7 7 7'></path></svg><span class='css-16q9xmc'>Prev</span></button>",
-                    nextArrow: "<button class='slick-arrow slick-next' data-role='none' type='button' style='display: block;'><svg class='domain-icon css-oee40j' viewBox='0 0 24 24' aria-hidden='true'><path fill='none' stroke='currentColor' stroke-width='2' d='M9 5l7 7-7 7'></path></svg><span class='css-16q9xmc'>Next</span></button>"
-                });
-
-                function autocomplete(inp, arr, values, categories) {
-                    /*the autocomplete function takes two arguments,
-                    the text field element and an array of possible autocompleted values:*/
-                    var currentFocus;
-                    /*execute a function when someone writes in the text field:*/
-                    inp.addEventListener("input", function(e) {
-                        var a, b, i, val = this.value;
-                        /*close any already open lists of autocompleted values*/
-                        closeAllLists();
-                        if (!val) { return false;}
-                        currentFocus = -1;
-                        /*create a DIV element that will contain the items (values):*/
-                        a = document.createElement("DIV");
-                        a.setAttribute("id", this.id + "autocomplete-list");
-                        a.setAttribute("class", "autocomplete-items");
-                        /*append the DIV element as a child of the autocomplete container:*/
-                        this.parentNode.appendChild(a);
-                        /*for each item in the array...*/
-                        for (i = 0; i < arr.length; i++) {
-
-                            var string = arr[i];
-                            string = string.toLowerCase();
-                            val = val.toLowerCase();
-                            var res = string.includes(val);
-
-                            if (res) {
-                                /*create a DIV element for each matching element:*/
-                                b = document.createElement("DIV");
-                                /*make the matching letters bold:*/
-                                /*b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                                b.innerHTML += arr[i].substr(val.length);*/
-                                b.innerHTML = arr[i] + ', ' + categories[i];
-                                /*insert a input field that will hold the current array item's value:*/
-                                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'><input type='hidden' value='" + values[i] + "'>";
-                                /*execute a function when someone clicks on the item value (DIV element):*/
-                                b.addEventListener("click", function(e) {
-                                    /*insert the value for the autocomplete text field:*/
-                                    inp.value = this.getElementsByTagName("input")[0].value;
-
-                                    $('.quote-service').removeClass('quote_validation');
-                                    $('.quote-category').addClass('quote_validation');
-                                    $('.quote-brand').addClass('quote_validation');
-                                    $('.quote-model').addClass('quote_validation');
-
-                                    $('#step1').children('.well').css('height','300px');
-                                    $('.quote_delivery').attr("placeholder", "{{__('text.Select Delivery Date')}}");
-
-                                    $('.unlinked-boxes').hide();
-                                    $('.linked-boxes').show();
-
-                                    var product_id = this.getElementsByTagName("input")[1].value;
-                                    var options = '';
-
-                                    $.ajax({
-                                        type: "GET",
-                                        data: "id=" + product_id,
-                                        url: "<?php echo url('/products-by-id')?>",
-                                        success: function (data) {
-
-                                            $('.quote-category').val(data.category_id);
-                                            $(".quote-category").trigger('change.select2');
-
-                                            var category_id = data.category_id;
-                                            var brand_id = data.brand_id;
-                                            var model_id = data.model_id;
-                                            var options = '';
-
-                                            $.ajax({
-                                                type: "GET",
-                                                data: "id=" + category_id,
-                                                url: "<?php echo url('get-questions')?>",
-
-                                                success: function (data) {
-
-                                                    $('#step2').children('.well').empty();
-
-                                                    var index_count = 0;
-
-                                                    $.each(data, function (index, val) {
-
-                                                        if (data.length == index + 1) {
-                                                            $('#step2').children('.well').append('<div style="margin-bottom: 20px;"></div>');
-                                                        } else {
-                                                            $('#step2').children('.well').append('<div style="margin-bottom: 40px;"></div>');
-                                                        }
-
-                                                        var last = $('#step2').children('.well').children().last('div');
-
-                                                        last.append('<h3 style="text-align: center;color: #4b4b4b;margin-bottom: 20px;">' + val.title + '</h3><input type="hidden" name="questions[]" value="' + val.title + '">');
-
-                                                        if (val.predefined == 1) {
-
-                                                            last.append('<div class="checkbox_validation"><input name="predefined' + index + '" type="hidden" value="1"></div>');
-
-                                                            $.each(val.answers, function (index1, val1) {
-
-                                                                last.children('div').append('<hr>\n' +
-                                                                    '                                        <label class="container-checkbox">' + val1.title + '\n' +
-                                                                    '                                        <input name="answers' + index + '[]" type="checkbox" value="' + val1.title + '">\n' +
-                                                                    '                                        <span class="checkmark-checkbox"></span>\n' +
-                                                                    '                                        </label>');
-
-                                                            });
-                                                        } else {
-                                                            if (val.placeholder) {
-                                                                var placeholder = val.placeholder;
-                                                            } else {
-                                                                var placeholder = '';
-                                                            }
-
-                                                            last.append('<input name="predefined' + index + '" type="hidden" value="0">\n' +
-                                                                '<textarea name="answers' + index + '" style="resize: vertical;" rows="1" class="form-control quote_validation" placeholder="' + placeholder + '"></textarea>');
-                                                        }
-
-                                                        index_count = index;
-
-                                                    });
-
-                                                    $('#step2').children('.well').append('<input type="hidden" name="index_count" value="' + index_count + '">');
-
-                                                    /*$('#step2').children('div').children('h3').
-                                                    console.log(data);*/
-                                                }
-                                            });
-
-                                            $.ajax({
-                                                type: "GET",
-                                                data: "id=" + category_id,
-                                                url: "<?php echo url('/products-brands-by-category')?>",
-                                                success: function (data) {
-
-                                                    $.each(data, function (index, value) {
-
-                                                        var opt = '<option value="' + value.id + '" >' + value.cat_name + '</option>';
-
-                                                        options = options + opt;
-
-                                                    });
-
-                                                    $('.quote-model').find('option')
-                                                        .remove()
-                                                        .end()
-                                                        .append('<option value="">Select Model</option>');
-
-                                                    $('.quote-brand').find('option')
-                                                        .remove()
-                                                        .end()
-                                                        .append('<option value="">Select Brand</option>' + options);
-
-                                                    $('.quote-brand').val(brand_id);
-                                                    $(".quote-brand").trigger('change.select2');
-
-
-                                                    var options = '';
-
-                                                    $.ajax({
-                                                        type: "GET",
-                                                        data: "id=" + brand_id,
-                                                        url: "<?php echo url('/products-models-by-brands')?>",
-                                                        success: function (data) {
-
-                                                            $.each(data, function (index, value) {
-
-                                                                var opt = '<option value="' + value.id + '" >' + value.cat_name + '</option>';
-
-                                                                options = options + opt;
-
-                                                            });
-
-                                                            $('.quote-model').find('option')
-                                                                .remove()
-                                                                .end()
-                                                                .append('<option value="">Select Model</option>' + options);
-
-                                                            $('.quote-model').val(model_id);
-                                                            $(".quote-model").trigger('change.select2');
-
-                                                        }
-                                                    });
-
-                                                    $.ajax({
-                                                        type:"GET",
-                                                        data: "id=" + model_id + "&brand_id=" + brand_id + "&cat_id=" + category_id,
-                                                        url: "<?php echo url('/products-model-number-by-model')?>",
-                                                        success: function(data) {
-
-                                                            $('.quote-model-number').val(data.model_number);
-
-                                                        }
-                                                    });
-
-                                                }
-                                            });
-
-                                            $('.navbar a[href="#step1"]').trigger('click');
-
-                                            $('.back').hide();
-
-                                        }
-
-                                    });
-
-                                    /*close the list of autocompleted values,
-                                    (or any other open lists of autocompleted values:*/
-                                    closeAllLists();
-                                });
-                                a.appendChild(b);
-                            }
-                        }
-                    });
-                    /*execute a function presses a key on the keyboard:*/
-                    inp.addEventListener("keydown", function(e) {
-                        var x = document.getElementById(this.id + "autocomplete-list");
-                        if (x) x = x.getElementsByTagName("div");
-                        if (e.keyCode == 40) {
-                            /*If the arrow DOWN key is pressed,
-                            increase the currentFocus variable:*/
-                            currentFocus++;
-                            /*and and make the current item more visible:*/
-                            addActive(x);
-                        } else if (e.keyCode == 38) { //up
-                            /*If the arrow UP key is pressed,
-                            decrease the currentFocus variable:*/
-                            currentFocus--;
-                            /*and and make the current item more visible:*/
-                            addActive(x);
-                        } else if (e.keyCode == 13) {
-                            /*If the ENTER key is pressed, prevent the form from being submitted,*/
-                            e.preventDefault();
-                            if (currentFocus > -1) {
-                                /*and simulate a click on the "active" item:*/
-                                if (x) x[currentFocus].click();
-                            }
-                        }
-                    });
-                    function addActive(x) {
-                        /*a function to classify an item as "active":*/
-                        if (!x) return false;
-                        /*start by removing the "active" class on all items:*/
-                        removeActive(x);
-                        if (currentFocus >= x.length) currentFocus = 0;
-                        if (currentFocus < 0) currentFocus = (x.length - 1);
-                        /*add class "autocomplete-active":*/
-                        x[currentFocus].classList.add("autocomplete-active");
-                    }
-                    function removeActive(x) {
-                        /*a function to remove the "active" class from all autocomplete items:*/
-                        for (var i = 0; i < x.length; i++) {
-                            x[i].classList.remove("autocomplete-active");
-                        }
-                    }
-                    function closeAllLists(elmnt) {
-                        /*close all autocomplete lists in the document,
-                        except the one passed as an argument:*/
-                        var x = document.getElementsByClassName("autocomplete-items");
-                        for (var i = 0; i < x.length; i++) {
-                            if (elmnt != x[i] && elmnt != inp) {
-                                x[i].parentNode.removeChild(x[i]);
-                            }
-                        }
-                    }
-                    /*execute a function when someone clicks in the document:*/
-                    document.addEventListener("click", function (e) {
-                        closeAllLists(e.target);
-                    });
-                }
-
-                /*An array containing all the country names in the world:*/
-                options = [];
-                texts = [];
-                categories = [];
-
-                var sel = $(".all-products");
-                var length = sel.children('option').length;
-
-                $(".all-products > option").each(function() {
-                    if (this.value) options.push(this.value); texts.push(this.text); categories.push(this.getAttribute('data-cat'));
-                });
-
-                /*for (var i=0, n=length;i<n;i++) { // looping over the options
-                    console.log($('.all-products option:eq(i)').text());
-                    if (sel.options[i].value) options.push(sel.options[i].value);
-                }
-
-                console.log(options);*/
-
-                autocomplete(document.getElementById("productInput"), texts, options, categories);
-
-            });
-
-            function changeLanguage(id)
-            {
-                if(id == 1)
-                {
-
-                    $('#dutch').addClass('languageSelector-selected');
-                    $('#english').removeClass('languageSelector-selected');
-
-                    $('.step__header_en').addClass('hide');
-                    $('.step__header_de').removeClass('hide');
-
-                    $('.step__description_en').addClass('hide');
-                    $('.step__description_de').removeClass('hide');
-
-                }
-                else{
-
-                    $('#english').addClass('languageSelector-selected');
-                    $('#dutch').removeClass('languageSelector-selected');
-
-                    $('.step__header_de').addClass('hide');
-                    $('.step__header_en').removeClass('hide');
-
-
-                    $('.step__description_de').addClass('hide');
-                    $('.step__description_en').removeClass('hide');
-
-                }
-            }
-
-        </script>
-
-        <style type="text/css">
-
-            .slick-slide
-            {
-                outline: none;
-            }
-
-            @media (min-width: 1200px){
-
-                .slick-slide
-                {
-                    padding: 0 20px;
-                }
-
-            }
-
-            @media (min-width: 1250px){
-
-                .slick-slide
-                {
-                    padding: 0 30px;
-                }
-
-            }
-
-            .slick-arrow{position:absolute;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%);background:rgba(#fff,0.8);text-align:center;cursor:pointer;z-index:1;width:48px;height:48px;background:#fff;color:#3c475b;border:0;border-radius:50%;box-shadow:0 1px 3px 0 rgba(30,41,61,0.1),0 1px 2px 0 rgba(30,41,61,0.2);opacity:0.9;}
-
-            .slick-arrow:before
-            {
-                display: none;
-            }
-
-            .slick-arrow:hover , .slick-arrow:focus
-            {
-                outline: none;
-                background: #fff;
-            }
-
-            .slick-prev:hover, .slick-prev:focus, .slick-next:hover, .slick-next:focus
-            {
-                color: #0ea800;
-            }
-
-            .form-control:focus
-            {
-                border-color: #66afe9 !important;
-            }
-
-            #team {
-                background: #eee !important;
-            }
-
-            .btn-primary:hover,
-            .btn-primary:focus {
-                background-color: #108d6f;
-                border-color: #108d6f;
-                box-shadow: none;
-                outline: none;
-            }
-
-            .btn-primary {
-                color: #fff;
-                background-color: #007b5e;
-                border-color: #007b5e;
-            }
-
-            section {
-                padding: 60px 0;
-            }
-
-            section .section-title {
-                text-align: center;
-                color: #007b5e;
-                margin-bottom: 50px;
-                text-transform: uppercase;
-            }
-
-            .card {
-                border: none;
-                position: relative;
-                display: flex;
-                -webkit-box-orient: vertical;
-                -webkit-box-direction: normal;
-                flex-direction: column;
-                min-width: 0;
-                word-wrap: break-word;
-                background-clip: border-box;
-                border-radius: .25rem;
-            }
-
-            .card-body
-            {
-                -webkit-box-flex:1;
-                flex:1 1 auto;
-                padding:1.25rem;
-            }
-
-
-            /*.image-flip:hover .backside,
-            .image-flip.hover .backside {
-                -webkit-transform: rotateY(0deg);
-                -moz-transform: rotateY(0deg);
-                -o-transform: rotateY(0deg);
-                -ms-transform: rotateY(0deg);
-                transform: rotateY(0deg);
-                border-radius: .25rem;
-            }
-
-            .image-flip:hover .frontside,
-            .image-flip.hover .frontside {
-                -webkit-transform: rotateY(180deg);
-                -moz-transform: rotateY(180deg);
-                -o-transform: rotateY(180deg);
-                transform: rotateY(180deg);
-            }*/
-
-            .mainflip {
-                -webkit-transition: 1s;
-                -webkit-transform-style: preserve-3d;
-                -ms-transition: 1s;
-                -moz-transition: 1s;
-                -moz-transform: perspective(1000px);
-                -moz-transform-style: preserve-3d;
-                -ms-transform-style: preserve-3d;
-                transition: 1s;
-                transform-style: preserve-3d;
-                position: relative;
-                border: 1px solid #fff;
-            }
-
-
-
-            .frontside {
-                position: relative;
-                -webkit-transform: rotateY(0deg);
-                -ms-transform: rotateY(0deg);
-                z-index: 2;
-                margin-bottom: 30px;
-            }
-
-            .backside {
-                position: absolute;
-                top: 0;
-                left: 0;
-                -webkit-transform: rotateY(-180deg);
-                -moz-transform: rotateY(-180deg);
-                -o-transform: rotateY(-180deg);
-                -ms-transform: rotateY(-180deg);
-                transform: rotateY(-180deg);
-                -webkit-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-                -moz-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-                box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
-
-
-            }
-
-
-            .frontside,
-            .backside {
-                -webkit-backface-visibility: hidden;
-                -moz-backface-visibility: hidden;
-                -ms-backface-visibility: hidden;
-                backface-visibility: hidden;
-                -webkit-transition: 1s;
-                -webkit-transform-style: preserve-3d;
-                -moz-transition: 1s;
-                -moz-transform-style: preserve-3d;
-                -o-transition: 1s;
-                -o-transform-style: preserve-3d;
-                -ms-transition: 1s;
-                -ms-transform-style: preserve-3d;
-                transition: 1s;
-                transform-style: preserve-3d;
-                padding-top: 20px;
-                border:1px solid #ffffff;
-                border-radius: 5%;
-                width: 100%;
-                background-color: #f2f4f4;
-                /*background-image: linear-gradient(141deg, #d9d9d9 0%, #edf0f1 51%, #aad9ea 75%);*/
-                background-image: linear-gradient(141deg, #e7e7e700 0%,  #d6ebf2a1 75%);
-                opacity: 0.8;
-            }
-
-            .frontside .card,
-            .backside .card {
-                min-height: 312px;
-            }
-
-            .backside .card a {
-                font-size: 18px;
-                color: #007b5e !important;
-            }
-
-            .frontside .card .card-title,
-            .backside .card .card-title {
-                color: #2b2b2b !important;
-
-            }
-
-            .frontside .card .card-body img {
-                width: 85%;
-                height: 200px;
-                border-radius: 7%;
-            }
-
-            .steps{
-
-                background: #f5f5f5;
-
-            }
-
-            @media screen and (min-width: 1024px){
-
-                .steps{
-
-                    padding: 3rem;
-
-                }
-
-            }
-
-
-            .column,.columns{-ms-flex:1 1 0px;flex:1 1 0px;padding-right:.3125rem;padding-left:.3125rem;min-width:initial}
-
-
-
-
-            .hiw{-ms-flex-positive:2;flex-grow:2;color:#444;text-align:center;-ms-flex-align:center;align-items:center;font-family:"Lato",sans-serif;font-size:2.25rem;font-weight:700;line-height:1.25;padding-bottom:2.25rem;margin:0;text-align:center;font-size:2rem}
-
-
-
-            @media screen and (min-width: 30em){
-
-                .hiw{
-
-                    font-size: 38px;
-
-                }
-
-            }
-
-            @media screen and (min-width: 64em){
-
-                .hiw{
-
-                    padding-bottom: 38px;
-
-                }
-
-            }
-
-
-            #languagePickerContainer{left:0;right:0;margin:.625rem auto;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;z-index:999;padding-bottom:1rem;margin-top:-2rem}
-
-            .languageSelector{font-size:1em;margin-right:4%;margin:0 1%;color:#666;font-weight:400;cursor:pointer}
-
-
-            .infographic__separator{content:"\B7";font-family:"Fira Sans";font-size:2.25rem;line-height:1rem;color:#666}
-
-            .languageSelector-selected{color: <?php if($gs->btn_bg == null) { if($gs->colors == null){ echo '#f3bd02 !important;'; } else {   echo $gs->colors.' !important;'; }} else { echo $gs->btn_bg. ' !important;'; } ?>}
-
-            .steps__items {
-                justify-content: center;
-            }
-
-            .steps__items{text-align:center;font-family:"Lato",sans-serif}
-
-
-
-            .large-3{-ms-flex:0 0 30%;flex:0 0 30%;max-width:30%}
-
-            @media print, screen and (max-width: 1600px){
-
-                .row1{
-
-                    max-width: 100% !important;
-                }
-
-            }
-
-
-            @media print, screen and (max-width: 1300px){
-
-                .medium-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}
-
-            }
-
-
-            @media print, screen and (max-width: 760px){
-
-                .small-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}
-
-            }
-
-            .step{margin-bottom:2.5625rem;margin-left:.9375rem;margin-right:.9375rem}
-
-            @media screen and (min-width: 480px){
-                .step img {
-                    max-height: 5.375rem;
-                    min-height: 80px;
-                }
-            }
-
-            .step img {
-                max-width: 100%;
-                max-height: 80px;
-            }
-
-
-            .ic-img{display:inline-block;vertical-align:middle;max-width:100%;height:auto;-ms-interpolation-mode:bicubic}
-
-
-
-            .steps--en .step__header_en{display:block}
-
-            .step__header{font-weight:700;font-size:20px;color:#444;margin-top: 20px;}
-
-
-            @media screen and (min-width: 30em){
-
-                .step__header{
-
-                    font-size: 20px;
-                    margin-top: 20px;
-
-                }
-
-
-            }
-
-
-
-
-            .steps--en .step__description_en{
-
-                display: block;
-            }
-
-            @media screen and (min-width: 480px){
-
-                .steps__items p{
-
-                    font-size: 17px;
-                }
-            }
-
-            .steps__items p{
-
-                font-size: 17px;
-                color: #999;
-            }
-
-
-
-
-            .ic-p{margin-bottom:1rem;font-size:inherit;line-height:1.6;text-rendering:optimizeLegibility}
-
-
-            #usp{
-
-                background: #fff;
-            }
-
-            .usp{padding-top:3rem;padding-bottom:3rem;background-color:#F3F3F3}
-
-            .large-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}
-
-            @media screen and (min-width: 30em)
-            {
-                .usps__row{
-
-                    padding: 1.25rem;
-                }
-            }
-
-            .usps__row{-ms-flex-pack:center;justify-content:center}
-
-
-
-            .small-11{-ms-flex:0 0 91.66667%;flex:0 0 91.66667%;max-width:91.66667%;margin-bottom: 20px;}
-
-
-            @media print, screen and (min-width: 30em)
-            {
-                .medium-8{-ms-flex:0 0 66.66667%;flex:0 0 66.66667%;max-width:66.66667%;margin-bottom: 20px;}
-            }
-
-            @media print, screen and (min-width: 64em)
-            {
-                .large-4{-ms-flex:0 0 33.33333%;flex:0 0 33.33333%;max-width:33.33333%}
-            }
-
-
-
-
-            @media screen and (min-width: 64em)
-            {
-                .usp__block{min-height:26rem;padding:1.525rem}
-            }
-
-
-            .usp__block {
-                box-shadow: 0px 0px 5px 4px #f3f3f3;
-                border: 1px solid #dddddd;
-                min-height: 42rem;
-            }
-
-
-
-            @media screen and (min-width: 1024px)
-            {
-
-                .usp__block
-                {
-                    min-height: 42rem;
-                }
-            }
-
-
-            .usp__block{height: 100%;text-align:center;font-family:"Lato", sans-serif;border:solid;border-width:thin;border-color:#ccc;margin:0.1875rem;padding:1.525rem 1.525rem 2.525rem;min-width:8.25rem;background-color:#fff}
-
-
-            .usp__block div{
-
-                min-height: 7rem;
-            }
-
-            .usp__block div{display:block;text-decoration:none;color:#666;padding-top:0.5rem;font-weight:600;min-height:9rem;margin-bottom: 20px;}
-
-            .usp__block img {
-                max-width: 100%;
-                height: 80px;
-                padding-bottom:0.5rem;
-            }
-
-
-            .usp__block__title{margin-top:0;margin-bottom:0;font-size:20px;color:#444}
-
-            @media screen and (min-width: 30em)
-            {
-                .usp__block span{
-
-                    font-size: 13px;
-                }
-            }
-
-            .usp__block span{font-weight:300;color:#666;font-size:15px;word-break: break-word;}
-
-
-
-
-            @media print, screen and (max-width: 1600px){
-
-                .row2{
-
-                    max-width: 80% !important;
-                }
-
-            }
-
-            @media print, screen and (max-width: 1200px){
-
-                .row2{
-
-                    max-width: 90% !important;
-                }
-
-            }
-
-        </style>
-
-
-        <div class="container">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="section-title pb_50 text-center">
-                        <h2>{{$lang->lns}}</h2>
-                        <div class="section-borders">
-                            <span></span>
-                            <span class="black-border"></span>
-                            <span></span>
-                        </div>
-                    </div>
-                </div>
+                <p>De Corridor 5A<br />3621 ZA Breukelen<br />Nederland<br/><a href="mailto:start@reeleezee.nl">start@reeleezee.nl</a></p>
             </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="owl-carousel blog-area-slider">
-                        @foreach($lblogs as $lblog)
-                            <a href="{{route('front.blogshow',$lblog->title)}}" class="single-blog-box">
+            <div class=" col-xs-12 col-md-3">
 
-                                <div class="blog-thumb-wrapper">
-                                    @if($lblog->photo)
-                                        <img src="{{asset('assets/images/'.$lblog->photo)}}" alt="Blog Image">
-                                    @else
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG" alt="Blog Image">
-                                    @endif
-                                </div>
+                <h4>Volg ons</h4>
 
-                                <div class="blog-text">
 
-                                    <h4 style="height: auto;margin-bottom: 10px;">{{$lblog->title}}</h4>
-                                    <p style="height: 120px;text-overflow: ellipsis;display: -webkit-box;width: 100%;visibility: visible;-webkit-line-clamp: 4;-webkit-box-orient: vertical;overflow: hidden;line-height: 2;font-size: 15px;">{{substr(strip_tags($lblog->details),0,250)}}</p>
-                                    <span class="boxed-btn blog">{{$lang->vd}}</span>
-                                </div>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
+                <ul class="social">
+                    <li><a href="https://www.facebook.com/Reeleezee/" target="_blank" rel="noopener" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com/reeleezee" target="_blank" rel="noopener" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="https://www.linkedin.com/company/reeleezee" target="_blank" rel="noopener" title="LinkedIn"><i class="fa fa-linkedin"></i></a></li>
+                    <li><a href="https://www.youtube.com/channel/UCENbU9Okgca9JgnymuHY5_A" target="_blank" rel="noopener" title="YouTube"><i class="fa fa-youtube-play"></i></a></li>
+                </ul>
             </div>
+
 
         </div>
     </div>
-    <!-- Ending of blog area -->
+</footer>
+<section class="bottom-menu">
+    <div class="container">
+        <div class="copyright">&copy; Exact
+            2021			</div>
 
-    <style>
+        <ul>
+            <li><a href="/privacy-statement">Privacy statement</a></li>
+            <li><a href="/cookies">Cookies</a></li>
+            <li><a href="/disclaimer">Disclaimer</a></li>
+            <li><a href="/site-conditions">Site conditions</a></li>
+            <li><a href="/terms-and-conditions">Terms & conditions</a></li>
+            <li><a href="/information-security">Information security</a></li>
+        </ul>
 
-        .select2-container{
-
-            height: 100%;
-        }
-
-        .select2-container--default .select2-selection--single{
-
-            height: 100%;
-            padding: 7px;
-            border: none;
-            border-radius: 0;
-            outline: none;
-
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__arrow{
-
-            padding: 19px;
-        }
-
-        .select2-selection__clear{
-
-            display: none;
-        }
-
-    </style>
-
-    <script type="text/javascript">
-
-        $(document).ready(function() {
-
-            if(window.location.hash) {
-                var hash = window.location.hash;
-                $(hash).modal('toggle');
-            }
-
-        });
-
-    </script>
-
-    <script>
-
-        $(".js-data-example-ajax0").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "{{__('text.Select Service')}}",
-            allowClear: true,
-            "language": {
-                "noResults": function(){
-                    return '{{__('text.No results found')}}';
-                }
-            },
-        });
+        <a href="/country-selector" class="country-selector ">
+            <span class="pretext">NL</span>
+            <span class="posttext">Select your country</span>
+        </a>
+    </div>
+</section>
 
 
-        $(".js-data-example-ajax10").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "{{__('text.Select Service')}}",
-            allowClear: true,
-            dropdownParent: $('#aanvragen'),
-            "language": {
-                "noResults": function(){
-                    return '{{__('text.No results found')}}';
-                }
-            },
-        });
+
+<!--[if IE]>
+<style>.navbar li { list-style-type: none; }</style>
+<![endif]-->
 
 
-        $(".js-data-example-ajax1").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "{{__('text.Select Category')}}",
-            allowClear: true,
-            "language": {
-                "noResults": function(){
-                    return '{{__('text.No results found')}}';
-                }
-            },
-        });
+<link href="https://files.exact.com/static/rainbow/assets/css/font-awesome-5.min.css" rel="stylesheet" type="text/css">
+<link href="https://files.exact.com/static/rainbow/v0/css/rainbow.min.css" rel="stylesheet" type="text/css">
 
-        $(".js-data-example-ajax3").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "{{__('text.Select Brand')}}",
-            allowClear: true,
-            "language": {
-                "noResults": function(){
-                    return '{{__('text.No results found')}}';
-                }
-            },
-        });
+<script src="https://files.exact.com/static/rainbow/v0/js/jquery-3.5.1.min.js"></script>
+<script src="https://files.exact.com/static/rainbow/v0/js/rainbow.min.js"></script>
 
-        $(".js-data-example-ajax4").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "{{__('text.Select Model')}}",
-            allowClear: true,
-            "language": {
-                "noResults": function(){
-                    return '{{__('text.No results found')}}';
-                }
-            },
-        });
+<script>
+    var logoLink = document.querySelector(".navbar-brand");
+    var logo = logoLink.querySelector("img")
+    logoLink.href = "/nl/reeleezee";
+    logo.src="https://files.exact.com/static/rainbow/v0/img/reeleezee-logo.png";
+    window.addEventListener("load",function(){
+        $('.navbar-brand img').css('opacity',1);
+    });
+</script>
+<link href="https://files.exact.com/static/rainbow/assets/css/exact-ac.css" rel="stylesheet" type="text/css">
 
-        $(".js-data-example-ajax2").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "{{__('text.Select Category')}}",
-            allowClear: true,
-            dropdownParent: $('#aanvragen'),
-            "language": {
-                "noResults": function(){
-                    return '{{__('text.No results found')}}';
-                }
-            },
-        });
 
-        $(".js-data-example-ajax5").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "{{__('text.Select Brand')}}",
-            allowClear: true,
-            dropdownParent: $('#aanvragen'),
-            "language": {
-                "noResults": function(){
-                    return '{{__('text.No results found')}}';
-                }
-            },
 
-        });
 
-        $(".js-data-example-ajax6").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "{{__('text.Select Model')}}",
-            allowClear: true,
-            dropdownParent: $('#aanvragen'),
-            "language": {
-                "noResults": function(){
-                    return '{{__('text.No results found')}}';
-                }
-            },
 
-        });
-
-    </script>
-
-@endsection
+</body>
+</html>
