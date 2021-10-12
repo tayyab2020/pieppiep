@@ -177,10 +177,17 @@
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->rate[$i] - str_replace(',', '.',$request->labor_impact[$i])), 2, ',', '.')}}</td>
                                         </tr>
 
+                                        <?php
+                                        $arb_qty = (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
+                                        $arb_price = str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
+                                        $arb_price = number_format((float)($arb_price), 2, ',', '.');
+                                        $arb_qty = str_replace('.', ',',$arb_qty);
+                                        ?>
+
                                         <tr>
-                                            <td style="font-size: 20px;padding: 5px;"></td>
-                                            <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)(str_replace(',', '.',$request->labor_impact[$i])/$request->qty[$i]), 2, ',', '.')}}</td>
+                                            <td style="font-size: 20px;padding: 5px;">Inclusief € {{str_replace(',', '.',abs($request->total_discount[$i]))}} korting <br> Installatie {{$product_titles[$i]}} per meter</td>
+                                            <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->labor_impact[$i]}}</td>
                                         </tr>
 
