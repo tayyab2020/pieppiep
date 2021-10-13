@@ -185,10 +185,22 @@
                                         ?>
 
                                         <tr>
-                                            <td style="font-size: 20px;padding: 5px;">Inclusief € {{str_replace(',', '.',abs($request->total_discount[$i]))}} korting <br> Installatie {{$product_titles[$i]}} per meter</td>
+                                            <td style="font-size: 20px;padding: 5px;">Inclusief € {{str_replace(',', '.',abs($request->total_discount[$i]))}} korting</td>
                                             <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->labor_impact[$i]}}</td>
+                                        </tr>
+
+                                        <?php
+                                        $art_price = str_replace(',', '.',$request->price_before_labor[$i]) / $request->qty[$i];
+                                        $art_price = number_format((float)($art_price), 2, ',', '.');
+                                        ?>
+
+                                        <tr>
+                                            <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
+                                            <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art_price}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->price_before_labor[$i]}}</td>
                                         </tr>
 
                                         </tbody>
@@ -202,7 +214,7 @@
                                             <th style="width: 20% !important;font-size: 22px;">Totaal korting</th>
                                             <th style="width: 20% !important;font-size: 22px;font-weight: 500;text-align: center;">Exclusief BTW</th>
                                             <th style="width: 25% !important;font-size: 22px;text-align: center;font-weight: 500;">BTW</th>
-                                            <th style="width: 35% !important;font-size: 22px;">Te betalen</th>
+                                            <th style="width: 35% !important;font-size: 22px;text-align: right;">Te betalen</th>
                                         </tr>
                                         </thead>
 
