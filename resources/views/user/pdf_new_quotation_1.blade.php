@@ -314,7 +314,7 @@
                                         <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
                                                 <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
-                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)($request->net_amount), 2, ',', '.')}}</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -328,8 +328,8 @@
                                         </td>
                                         <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
-                                                <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{number_format((float)($request->net_amount), 2, ',', '.')}}</span>
-                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)($request->tax_amount), 2, ',', '.')}}</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)(str_replace(',', '.',$request->tax_amount)), 2, ',', '.')}}</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -339,7 +339,7 @@
                                         <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
                                                 <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Totaal incl btw</span>
-                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)($request->total_amount), 2, ',', '.')}}</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)(str_replace(',', '.',$request->total_amount)), 2, ',', '.')}}</span>
                                             </div>
                                         </td>
                                     </tr>
