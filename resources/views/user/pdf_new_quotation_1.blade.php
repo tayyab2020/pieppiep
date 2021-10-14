@@ -314,7 +314,7 @@
                                         <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
                                                 <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
-                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{str_replace('.', ',',($request->net_amount))}}</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)($request->net_amount), 2, ',', '.')}}</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -328,8 +328,8 @@
                                         </td>
                                         <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
-                                                <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{str_replace('.', ',',($request->net_amount))}}</span>
-                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{str_replace('.', ',',($request->tax_amount))}}</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{number_format((float)($request->net_amount), 2, ',', '.')}}</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)($request->tax_amount), 2, ',', '.')}}</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -339,7 +339,7 @@
                                         <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
                                                 <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Totaal incl btw</span>
-                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{str_replace('.', ',',($request->total_amount))}}</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)($request->total_amount), 2, ',', '.')}}</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -359,35 +359,6 @@
                             }
 
                         </style>
-
-                        {{--@if($role == 'retailer' || $role == 'invoice')
-
-                            <div class="d-flex flex-row-reverse bg-dark text-white p-4" style="background-color: #343a40 !important;display: block !important;margin: 0 !important;">
-
-                                <table class="table">
-                                    <thead>
-
-                                    <tr>
-                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Subtotal')}}</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Grand Total')}}</th>
-                                    </tr>
-
-                                    </thead>
-
-                                    <tbody>
-
-                                    <tr>
-                                        <td>{{$request->total_amount}}</td>
-                                        <td>{{$request->total_amount}}</td>
-                                    </tr>
-
-                                    </tbody>
-
-                                </table>
-
-                            </div>
-
-                        @endif--}}
 
                     </div>
                 </div>
