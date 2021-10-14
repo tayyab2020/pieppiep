@@ -100,11 +100,13 @@
                                             <td style="text-align: left !important;">{{__('text.Height')}}: {{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
                                         </tr>
 
+                                        <?php $d = 1; ?>
+
                                         @foreach($cols as $f => $col)
 
                                             <tr>
 
-                                                @foreach($col as $feature)
+                                                @foreach($col as $x => $feature)
 
                                                     @if($role == 'retailer')
 
@@ -172,6 +174,24 @@
                                                     @endif
 
                                                     <td style="text-align: left !important;">{!! $string !!}</td>
+
+                                                        @if(count($feature_sub_titles[$i]) == $d)
+
+                                                            <?php $rem = 3 - ($x+1); ?>
+
+                                                        @else
+
+                                                            <?php $rem = 0; ?>
+
+                                                        @endif
+
+                                                        @for($p = 0;$p < $rem;$p++)
+
+                                                            <td></td>
+
+                                                        @endfor
+
+                                                        <?php $d = $d + 1; ?>
 
                                                 @endforeach
 

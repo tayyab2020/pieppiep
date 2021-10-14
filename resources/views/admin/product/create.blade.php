@@ -1701,6 +1701,10 @@
 
                                                                                 </div>
 
+                                                                                <div style="text-align: center;margin-top: 25px;">
+                                                                                    <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">Save</button>
+                                                                                </div>
+
                                                                             </div>
 
                                                                         </div>
@@ -1790,6 +1794,10 @@
                                                                                             </tbody>
                                                                                         </table>
 
+                                                                                        <div style="text-align: center;margin-top: 25px;">
+                                                                                            <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">Save</button>
+                                                                                        </div>
+
                                                                                     </div>
 
                                                                                 </div>
@@ -1851,6 +1859,10 @@
                                                                                             </tbody>
                                                                                         </table>
 
+                                                                                    </div>
+
+                                                                                    <div style="text-align: center;margin-top: 25px;">
+                                                                                        <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">Save</button>
                                                                                     </div>
 
                                                                                 </div>

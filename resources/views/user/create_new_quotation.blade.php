@@ -3738,7 +3738,7 @@
 
 		});
 
-		$(document).on('focusout', "input[name='qty[]']", function (e) {
+		$(document).on('focusout', "input[name='qty[]'], input[name='labor_impact[]']", function (e) {
 
 			if (!$(this).val()) {
 				$(this).val(0);
@@ -3751,16 +3751,8 @@
 			}
 		});
 
-		$(document).on('focusout', "input[name='width[]']", function (e) {
+		$(document).on('focusout', "input[name='width[]'], input[name='height[]']", function (e) {
 
-			if ($(this).val().slice($(this).val().length - 1) == ',') {
-				var val = $(this).val();
-				val = val + '00';
-				$(this).val(val);
-			}
-		});
-
-		$(document).on('focusout', "input[name='height[]']", function (e) {
 			if ($(this).val().slice($(this).val().length - 1) == ',') {
 				var val = $(this).val();
 				val = val + '00';
