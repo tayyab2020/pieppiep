@@ -174,7 +174,7 @@
                                             <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
                                             <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{str_replace('.', ',',$request->total[$i])}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->rate[$i] - str_replace(',', '.',$request->labor_impact[$i])), 2, ',', '.')}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
                                         </tr>
 
                                         <?php
@@ -183,10 +183,10 @@
                                         $arb_price = number_format((float)($arb_price), 2, ',', '.');
                                         $arb_qty = str_replace('.', ',',$arb_qty);
                                         $art_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i]/100);
-                                        $art_discount = $request->rate[$i] - $art_discount;
                                         $art_discount = number_format((float)($art_discount), 2, ',', '.');
                                         $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i]/100);
-                                        $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
+                                        $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
+                                        $art = number_format((float)($art), 2, ',', '.');
                                         $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
                                         ?>
 
@@ -201,7 +201,7 @@
                                             <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
                                             <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->labor_impact[$i]}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
                                         </tr>
 
                                         <tr>
