@@ -183,8 +183,10 @@
                                         $arb_price = number_format((float)($arb_price), 2, ',', '.');
                                         $arb_qty = str_replace('.', ',',$arb_qty);
                                         $art_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i]/100);
+                                        $art_discount = $request->rate[$i] - $art_discount;
                                         $art_discount = number_format((float)($art_discount), 2, ',', '.');
                                         $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i]/100);
+                                        $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
                                         $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
                                         ?>
 
