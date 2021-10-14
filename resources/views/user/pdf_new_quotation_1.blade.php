@@ -285,7 +285,7 @@
                                             <td style="font-size: 20px;padding: 5px;">€ {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)(str_replace('.', ',',$request->rate[$i])), 2, ',', '.')}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
                                         </tr>
 
                                         </tbody>
