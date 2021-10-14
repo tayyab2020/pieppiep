@@ -237,7 +237,7 @@
                                             $vat = number_format((float)($vat), 2, ',', '.');
                                             $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
                                             ?>
-                                            <td style="font-size: 20px;padding: 5px;">€ {{abs(number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
+                                            <td style="font-size: 20px;padding: 5px;">€ {{number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.')}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)(str_replace('.', ',',$request->rate[$i])), 2, ',', '.')}}</td>
