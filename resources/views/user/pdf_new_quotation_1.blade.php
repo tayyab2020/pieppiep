@@ -65,16 +65,39 @@
 
                                         <tbody>
 
-                                        <?php $cols = array_chunk($feature_sub_titles[$i], 3); ?>
+                                        <?php
+
+                                        if($role == 'retailer') {
+
+                                            $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+
+                                        }
+                                        else {
+
+                                            $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+
+                                        }
+
+                                        if($childsafe_answer)
+                                        {
+                                            $data = array (
+                                                'childsafe' => 1,
+                                                'childsafe_answer' => $childsafe_answer,
+                                            );
+                                            array_push($feature_sub_titles[$i],$data);
+                                        }
+
+                                        $cols = array_chunk($feature_sub_titles[$i], 3);
+                                        ?>
 
                                         <tr>
                                             <td style="border: 0 !important;"><p class="text-muted" style="font-size: 20px;width: auto !important;padding: 10px !important;font-weight: bold;">{{$product_titles[$i]}}</p></td>
                                         </tr>
 
                                         <tr>
-                                            <td style="border-bottom: 1px solid #dee2e6;">{{__('text.Color Number')}}: {{$color_titles[$i]}}</td>
-                                            <td style="border-bottom: 1px solid #dee2e6;">{{__('text.Width')}}: {{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
-                                            <td style="border-bottom: 1px solid #dee2e6;">{{__('text.Height')}}: {{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
+                                            <td style="border-bottom: 1px solid #dee2e6;text-align: left !important;">{{__('text.Color Number')}}: {{$color_titles[$i]}}</td>
+                                            <td style="border-bottom: 1px solid #dee2e6;text-align: left !important;">{{__('text.Width')}}: {{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
+                                            <td style="border-bottom: 1px solid #dee2e6;text-align: left !important;">{{__('text.Height')}}: {{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
                                         </tr>
 
                                         @foreach($cols as $f => $col)
@@ -87,13 +110,7 @@
 
                                                         <?php
 
-                                                        $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
-
-                                                        if($childsafe_answer)
-                                                        {
-                                                            $string = 'Childsafe: ' . $childsafe_answer;
-                                                        }
-                                                        elseif(!$feature)
+                                                        if(!$feature)
                                                         {
                                                             if(isset($sub_titles[$i]->code))
                                                             {
@@ -106,10 +123,16 @@
                                                         }
                                                         else
                                                         {
-                                                            $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
-                                                            $comment = $request->$comment ? ', '.$request->$comment : null;
-                                                            $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
-                                                            /*$string = substr($string, 4);*/
+                                                            if($feature['childsafe'])
+                                                            {
+                                                                $string = 'Childsafe: ' . $feature['childsafe_answer'];
+                                                            }
+                                                            else {
+                                                                $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
+                                                                $comment = $request->$comment ? ', '.$request->$comment : null;
+                                                                $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
+                                                                /*$string = substr($string, 4);*/
+                                                            }
                                                         }
 
                                                         ?>
@@ -118,13 +141,7 @@
 
                                                         <?php
 
-                                                        $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
-
-                                                        if($childsafe_answer)
-                                                        {
-                                                            $string = 'Childsafe: ' . $childsafe_answer;
-                                                        }
-                                                        elseif(!$feature)
+                                                        if(!$feature)
                                                         {
                                                             if(isset($sub_titles[$i]->code))
                                                             {
@@ -137,16 +154,24 @@
                                                         }
                                                         else
                                                         {
-                                                            $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null;
-                                                            $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
-                                                            /*$string = substr($string, 4);*/
+                                                            if($feature['childsafe'])
+                                                            {
+                                                                $string = 'Childsafe: ' . $feature['childsafe_answer'];
+                                                            }
+                                                            else {
+
+                                                                $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null;
+                                                                $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
+                                                                /*$string = substr($string, 4);*/
+
+                                                            }
                                                         }
 
                                                         ?>
 
                                                     @endif
 
-                                                    <td style="border-bottom: 1px solid #dee2e6;">{!! $string !!}</td>
+                                                    <td style="text-align: left !important;">{!! $string !!}</td>
 
                                                 @endforeach
 

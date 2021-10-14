@@ -3081,22 +3081,8 @@ class UserController extends Controller
         $date = $invoice->created_at;
         $role = 'retailer';
 
-        /*$cols = array_chunk($feature_sub_titles[0], 3);
 
-        foreach($cols as $col)
-        {
-            var_dump(count($col));
-            exit();
-            foreach ($col as $c)
-            {
-                var_dump($c);
-
-            }
-            var_dump('AAAAA');
-        }
-        exit();*/
-
-        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'potrait')->setOptions(['dpi' => 160]);
+        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
 
         $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
 
