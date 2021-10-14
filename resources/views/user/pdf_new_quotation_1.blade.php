@@ -95,9 +95,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td style="border-bottom: 1px solid #dee2e6;text-align: left !important;">{{__('text.Color Number')}}: {{$color_titles[$i]}}</td>
-                                            <td style="border-bottom: 1px solid #dee2e6;text-align: left !important;">{{__('text.Width')}}: {{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
-                                            <td style="border-bottom: 1px solid #dee2e6;text-align: left !important;">{{__('text.Height')}}: {{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
+                                            <td style="text-align: left !important;">{{__('text.Color Number')}}: {{$color_titles[$i]}}</td>
+                                            <td style="text-align: left !important;">{{__('text.Width')}}: {{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
+                                            <td style="text-align: left !important;">{{__('text.Height')}}: {{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
                                         </tr>
 
                                         @foreach($cols as $f => $col)
