@@ -1418,120 +1418,7 @@
                                                 <ul id="results"></ul>
                                             </div>
                                         </div>
-                                        <script>
-                                            (function () {
-                                                function generateResults(title = '', url = '', text = '') {
-                                                    var div = document.getElementById('results');
 
-                                                    var element = document.createElement('li');
-                                                    if (title === 'Bekijk alle resultaten') {
-                                                        element.setAttribute('class', 'result result-all');
-                                                    } else {
-                                                        element.setAttribute('class', 'result');
-                                                    }
-                                                    if (url) {
-                                                        var link = document.createElement('a');
-                                                        link.href = url;
-                                                        link.className = 'resultLink';
-                                                        link.text = title;
-                                                        if (title === 'Bekijk alle resultaten') {
-                                                            link.setAttribute('class', 'link-blue');
-                                                        } else {
-                                                            link.setAttribute('class', 'h5');
-                                                        }
-                                                        element.insertAdjacentElement('beforeend', link);
-                                                        var resultText = document.createElement('p');
-                                                        resultText.innerText = text;
-                                                        link.insertAdjacentElement('beforeend', resultText);
-                                                    } else {
-                                                        var resultText = document.createElement('p');
-                                                        resultText.innerText = text;
-                                                        element.insertAdjacentElement('beforeend', resultText);
-                                                    }
-
-                                                    div.insertAdjacentElement('beforeend', element);
-                                                }
-
-                                                function debounce(func, wait, immediate) {
-                                                    var timeout;
-                                                    return function () {
-                                                        var context = this, args = arguments;
-                                                        var later = function () {
-                                                            timeout = null;
-                                                            if (!immediate) func.apply(context, args);
-                                                        };
-
-                                                        var callNow = immediate && !timeout;
-                                                        clearTimeout(timeout);
-                                                        timeout = setTimeout(later, wait);
-                                                        if (callNow) func.apply(context, args);
-                                                    };
-                                                };
-
-                                                var request = debounce(function () {
-                                                    var fullPage = '/nl/zoeken',
-                                                        label = 'Bekijk alle resultaten',
-                                                        searchPhrase = $('#searchInput').val();
-
-                                                    $.ajax(
-                                                        {
-                                                            url: '/nl?option=com_ajax&plugin=pwtelastic&format=json',
-                                                            type: 'GET',
-                                                            data: {
-                                                                search: searchPhrase,
-                                                                lang: 'nl-NL'
-                                                            },
-                                                            success: function (response) {
-                                                                if (response.success && response.success === true) {
-                                                                    var div = document.getElementById('results');
-
-                                                                    while (div.firstChild) {
-                                                                        div.removeChild(div.firstChild);
-                                                                    }
-
-                                                                    if (response['data'][0]['content']['hits'].length) {
-                                                                        response['data'][0]['content']['hits'].slice(0, 4).map(function (e) {
-                                                                            generateResults(e._source.title, e._source.url, e._source.text);
-                                                                        });
-
-                                                                        if (fullPage.length && label.length && response['data'][0]['content']['hits'].length > 4) {
-                                                                            generateResults(label, fullPage + '?search=' + $('#searchInput').val());
-                                                                        }
-                                                                    } else {
-                                                                        generateResults(false, false, 'Geen resultaten gevonden');
-                                                                    }
-
-                                                                    global_layer.push({
-                                                                        'event': 'customEvent',
-                                                                        'eventCategory': 'Site Search',
-                                                                        'eventAction': 'Query',
-                                                                        'eventLabel': searchPhrase
-                                                                    });
-                                                                }
-                                                            }
-                                                        }
-                                                    );
-                                                }, 1000);
-
-                                                document.getElementById("searchInput").addEventListener("keyup", request);
-                                            })();
-                                            window.addEventListener("load", function () {
-                                                $(".toggle-search").click(function (event) {
-                                                    event.stopPropagation();
-                                                    $(".mod-searchbar").toggleClass("hide").toggleClass("show");
-                                                    $("#searchInput").focus();
-                                                });
-                                                $(document).click(function () {
-                                                    $(".mod-searchbar").addClass("hide");
-                                                });
-                                                $(".addon-searchbar").click(function (event) {
-                                                    event.stopPropagation();
-                                                });
-                                                $('[data-search]').click(function () {
-                                                    $('#search').submit();
-                                                });
-                                            });
-                                        </script>
                                         <style type="text/css">#sppb-addon-wrapper-1598447628641 {
                                                 margin: 0px 0px 0px 0px;
                                             }
@@ -1777,12 +1664,9 @@
                                 <div id="sppb-addon-wrapper-1623675747036" class="sppb-addon-wrapper">
                                     <div id="sppb-addon-1623675747036" class="clearfix ">
                                         <div class="sppb-addon sppb-addon-text-block text-left "><h1
-                                                class="sppb-addon-title "><span>Real easy boekhouden</span> voor kleine
-                                                ondernemers & hun boekhouders
+                                                class="sppb-addon-title "><span>PiepPiep ordersoftware</span>  voor leveranciers, retailers & hun klanten
                                             </h1>
-                                            <div class="sppb-addon-content"><p>Wil je tijd besparen op je boekhouding?
-                                                    Maak het jezelf makkelijk met de boekhoudsoftware van Reeleezee. Ook
-                                                    te koppelen met je boekhouder of accountant!</p></div>
+                                            <div class="sppb-addon-content"><p>Wil je tijd besparen bij het maken van een order en de kans op fouten verminderen? Maak het jezelf en je klanten makkelijker met de ordersoftware van PiepPiep.</p></div>
                                         </div>
                                     </div>
                                 </div>
@@ -1820,14 +1704,10 @@
                                 <div id="sppb-addon-wrapper-1623738603435" class="sppb-addon-wrapper">
                                     <div id="sppb-addon-1623738603435" class="clearfix ">
                                         <div class="sppb-addon sppb-addon-text-block text-center "><h2
-                                                class="sppb-addon-title ">Makkelijk en snel je boekhouding doen,<span
+                                                class="sppb-addon-title ">Makkelijk en snel een offerte opstellen en deze omtoveren in een order,<span
                                                     class="mobile"><br></span> <span>waar & wanneer</span> jij dat wilt
                                             </h2>
-                                            <div class="sppb-addon-content"><p>Je bent ondernemer; geen boekhouder.
-                                                    Logisch dus dat je zo min mogelijk tijd kwijt wilt zijn aan je
-                                                    boekhouding. Met Reeleezee regel je het makkelijk en snel, wanneer
-                                                    het jou uitkomt. Boekhoudkennis is niet nodig. Zo houd je tijd over
-                                                    en hoef je niet meer tegen je boekhouding aan te hikken.</p></div>
+                                            <div class="sppb-addon-content"><p>PiepPiep verbindt retailers in de woonbranche met hun klanten en leveranciers. Alle informatie van offerte tot factuur is terug te vinden in je eigen dashboard. Als retailer beschik je over alle actuele producten en prijzen van je leverancier. Zo heb je meer tijd voor je klant en verkoop je nooit meer néé. </p></div>
                                         </div>
                                     </div>
                                 </div>
@@ -2339,9 +2219,10 @@
                 <h4>Start een gesprek</h4>
 
 
-                <div class="hidden-xs">
+
+                <div class="hidden-xs"  >
                     <ul>
-                        <li><a href="tel:0346258080">0346 - 258 080</a></li>
+                        <li><a href="tel:0201111111">020 - 1234 567</a></li>
                         <li><a href="/nl/reeleezee/contact">Contactformulier</a></li>
                     </ul>
                 </div>
@@ -2353,8 +2234,7 @@
                 <h4>Contact</h4>
 
 
-                <p>De Corridor 5A<br/>3621 ZA Breukelen<br/>Nederland<br/><a href="mailto:start@reeleezee.nl">start@reeleezee.nl</a>
-                </p>
+                <p>Herengracht 420<br />1017 BZ Amsterdam<br />Nederland<br/><a href="mailto:info@pieppiep.nl">info@pieppiep.nl</a></p>
             </div>
 
             <div class=" col-xs-12 col-md-3">
@@ -2363,14 +2243,10 @@
 
 
                 <ul class="social">
-                    <li><a href="https://www.facebook.com/Reeleezee/" target="_blank" rel="noopener" title="Facebook"><i
-                                class="fa fa-facebook"></i></a></li>
-                    <li><a href="https://twitter.com/reeleezee" target="_blank" rel="noopener" title="Twitter"><i
-                                class="fa fa-twitter"></i></a></li>
-                    <li><a href="https://www.linkedin.com/company/reeleezee" target="_blank" rel="noopener"
-                           title="LinkedIn"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="https://www.youtube.com/channel/UCENbU9Okgca9JgnymuHY5_A" target="_blank"
-                           rel="noopener" title="YouTube"><i class="fa fa-youtube-play"></i></a></li>
+                    <li><a href="https://www.facebook.com//" target="_blank" rel="noopener" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com/" target="_blank" rel="noopener" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="https://www.linkedin.com/company/" target="_blank" rel="noopener" title="LinkedIn"><i class="fa fa-linkedin"></i></a></li>
+                    <li><a href="https://www.youtube.com/" target="_blank" rel="noopener" title="YouTube"><i class="fa fa-youtube-play"></i></a></li>
                 </ul>
             </div>
 
@@ -2381,8 +2257,7 @@
 <section class="bottom-menu">
     <div class="container">
         <div class="copyright">&copy; Exact
-            2021
-        </div>
+            2021			</div>
 
         <ul>
             <li><a href="/privacy-statement">Privacy statement</a></li>
