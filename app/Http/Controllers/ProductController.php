@@ -639,7 +639,10 @@ class ProductController extends Controller
                     {
                         $model_check->model = $temp;
                         $model_check->value = $request->model_values[$m];
-                        $model_check->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model_check->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model_check->max_m2 = is_numeric($request->model_max_m2[$m]) || $request->model_max_m2[$m] ? str_replace(",", ".", $request->model_max_m2[$m]) : NULL;
+                        $model_check->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
+                        $model_check->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
                         $model_check->price_impact = $request->model_price_impact[$m];
                         $model_check->impact_type = $request->model_impact_type[$m];
                         $model_check->childsafe = $request->childsafe[$m];
@@ -678,7 +681,10 @@ class ProductController extends Controller
                         $model->product_id = $request->cat_id;
                         $model->model = $temp;
                         $model->value = $request->model_values[$m];
-                        $model->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model->max_m2 = is_numeric($request->model_max_m2[$m]) || $request->model_max_m2[$m] ? str_replace(",", ".", $request->model_max_m2[$m]) : NULL;
+                        $model->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
+                        $model->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
                         $model->price_impact = $request->model_price_impact[$m];
                         $model->impact_type = $request->model_impact_type[$m];
                         $model->childsafe = $request->childsafe[$m];
@@ -940,7 +946,10 @@ class ProductController extends Controller
                         $model->product_id = $cat->id;
                         $model->model = $temp;
                         $model->value = $request->model_values[$m];
-                        $model->max_size = $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
+                        $model->max_m2 = is_numeric($request->model_max_m2[$m]) || $request->model_max_m2[$m] ? str_replace(",", ".", $request->model_max_m2[$m]) : NULL;
+                        $model->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
+                        $model->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
                         $model->price_impact = $request->model_price_impact[$m];
                         $model->impact_type = $request->model_impact_type[$m];
                         $model->childsafe = $request->childsafe[$m];

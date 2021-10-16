@@ -237,12 +237,16 @@
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
                                         </tr>
 
-                                        <tr>
-                                            <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
-                                            <td style="font-size: 20px;padding: 5px;"></td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                        </tr>
+                                        @if($arb_discount != 0)
+
+                                            <tr>
+                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
+                                                <td style="font-size: 20px;padding: 5px;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                            </tr>
+
+                                        @endif
 
                                         <tr>
                                             <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
@@ -251,12 +255,16 @@
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
                                         </tr>
 
-                                        <tr>
-                                            <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
-                                            <td style="font-size: 20px;padding: 5px;"></td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                        </tr>
+                                        @if($art_labor_discount != 0)
+
+                                            <tr>
+                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
+                                                <td style="font-size: 20px;padding: 5px;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                            </tr>
+
+                                        @endif
 
                                         </tbody>
 

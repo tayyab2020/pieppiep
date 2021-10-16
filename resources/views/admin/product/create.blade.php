@@ -1610,9 +1610,10 @@
 
                                                                         </div>
 
-                                                                        <div style="display: flex;justify-content: center;" class="col-sm-2">
+                                                                        <div style="display: flex;justify-content: space-between;" class="col-sm-2">
 
                                                                             <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
+                                                                            {{--<span class="ui-close select-feature-btn" data-id="1" style="margin:0;position: relative;right:0;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>--}}
                                                                             <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>
 
                                                                         </div>
@@ -1656,6 +1657,27 @@
                                                                                                         <span class="slider round"></span>
                                                                                                     </label>
                                                                                                     <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
+                                                                                                    <input value="{{str_replace(".",",",$mod->max_m2)}}" class="form-control model_max_m2" name="model_max_m2[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
+                                                                                                    <input value="{{str_replace(".",",",$mod->max_width)}}" class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
+                                                                                                    <input value="{{str_replace(".",",",$mod->max_height)}}" class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
 
                                                                                                 </div>
 
@@ -1745,6 +1767,27 @@
                                                                                                         <span class="slider round"></span>
                                                                                                     </label>
                                                                                                     <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
+                                                                                                    <input class="form-control model_max_m2" name="model_max_m2[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
+                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
+                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
 
                                                                                                 </div>
 
@@ -1841,6 +1884,27 @@
 
                                                                                                 </div>
 
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
+                                                                                                    <input class="form-control model_max_m2" name="model_max_m2[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
+                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
+                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
+
+                                                                                                </div>
+
                                                                                             </div>
 
                                                                                         </div>
@@ -1908,6 +1972,22 @@
             </div>
         </div>
     </div>
+
+    <style>
+
+        #menu7 .switch
+        {
+            width: 75px;
+        }
+
+        #menu7 input:checked + .slider:before
+        {
+            -webkit-transform: translateX(50px);
+            transform: translateX(50px);
+        }
+
+    </style>
+
 @endsection
 
 @section('scripts')
@@ -2659,7 +2739,7 @@
 
         });
 
-        $(document).on('keypress', ".max_size, .model_max_size", function(e){
+        $(document).on('keypress', ".max_size, .model_max_size, .model_max_m2, .model_max_width, .model_max_height", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -2688,7 +2768,7 @@
 
         });
 
-        $(document).on('focusout', ".max_size, .model_max_size", function(e){
+        $(document).on('focusout', ".max_size, .model_max_size, .model_max_m2, .model_max_width, .model_max_height", function(e){
 
             if($(this).val().slice($(this).val().length - 1) == ',')
             {
