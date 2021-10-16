@@ -916,7 +916,7 @@
                                                                                                     <th>Sub Feature</th>
                                                                                                     <th>Price Impact</th>
                                                                                                     <th>Impact Type</th>
-                                                                                                    <th>Variable</th>
+                                                                                                    <th>m¹ Impact</th>
                                                                                                     <th>Remove</th>
                                                                                                 </tr>
                                                                                                 </thead>
@@ -1035,7 +1035,7 @@
                                                                                                 <th>Sub Features</th>
                                                                                                 <th>Price Impact</th>
                                                                                                 <th>Impact Type</th>
-                                                                                                <th>Variable</th>
+                                                                                                <th>m¹ Impact</th>
                                                                                                 <th>Remove</th>
                                                                                             </tr>
                                                                                             </thead>
@@ -1149,7 +1149,7 @@
                                                                                                     <th>Value</th>
                                                                                                     <th>Price Impact</th>
                                                                                                     <th>Impact Type</th>
-                                                                                                    <th>Variable</th>
+                                                                                                    <th>m¹ Impact</th>
                                                                                                     <th>Remove</th>
                                                                                                 </tr>
                                                                                                 </thead>
@@ -1328,7 +1328,7 @@
                                                                                                 <th>Value</th>
                                                                                                 <th>Price Impact</th>
                                                                                                 <th>Impact Type</th>
-                                                                                                <th>Variable</th>
+                                                                                                <th>m¹ Impact</th>
                                                                                                 <th>Remove</th>
                                                                                             </tr>
                                                                                             </thead>
@@ -1475,12 +1475,8 @@
                                                                     <h4>Model</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-2">
+                                                                <div style="font-family: monospace;" class="col-sm-1">
                                                                     <h4>Value</h4>
-                                                                </div>
-
-                                                                <div style="font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Max Size</h4>
                                                                 </div>
 
                                                                 <div style="text-align: center;font-family: monospace;" class="col-sm-2">
@@ -1491,7 +1487,15 @@
                                                                     <h4>Impact Type</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-2">
+                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
+                                                                    <h4>m² Impact</h4>
+                                                                </div>
+
+                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
+                                                                    <h4>m¹ Impact</h4>
+                                                                </div>
+
+                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-1">
                                                                     <h4>Action</h4>
                                                                 </div>
 
@@ -1513,15 +1517,9 @@
 
                                                                             </div>
 
-                                                                            <div class="col-sm-2">
+                                                                            <div class="col-sm-1">
 
                                                                                 <input value="{{$key->value}}" class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
-
-                                                                            </div>
-
-                                                                            <div class="col-sm-2">
-
-                                                                                <input value="{{str_replace(".",",",$key->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
 
                                                                             </div>
 
@@ -1551,9 +1549,36 @@
 
                                                                             </div>
 
-                                                                            <div style="display: flex;justify-content: center;" class="col-sm-2">
+                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                                <button data-id="{{$m+1}}" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
+                                                                                <input type="hidden" name="model_m2_impact[]" id="m2_impact" value="{{$key->m2_impact}}">
+
+                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                <label style="margin: 0;" class="switch">
+                                                                                    <input class="m2_impact" type="checkbox" {{$key->m2_impact ? 'checked' : null}}>
+                                                                                    <span class="slider round"></span>
+                                                                                </label>
+                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                            </div>
+
+                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                                <input type="hidden" name="model_width_impact[]" id="width_impact" value="{{$key->width_impact}}">
+
+                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                                <label style="margin: 0;" class="switch">
+                                                                                    <input class="width_impact" type="checkbox" {{$key->width_impact ? 'checked' : null}}>
+                                                                                    <span class="slider round"></span>
+                                                                                </label>
+                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                            </div>
+
+                                                                            <div style="display: flex;justify-content: space-between;" class="col-sm-1">
+
+                                                                                {{--<button data-id="{{$m+1}}" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>--}}
+                                                                                <span class="ui-close select-feature-btn" data-id="{{$m+1}}" style="margin:0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
                                                                                 <span class="ui-close remove-model" data-id="{{$key->id}}" style="margin:0;position: relative;right:0;top: 0;">X</span>
 
                                                                             </div>
@@ -1572,15 +1597,9 @@
 
                                                                         </div>
 
-                                                                        <div class="col-sm-2">
+                                                                        <div class="col-sm-1">
 
                                                                             <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
-
-                                                                        </div>
-
-                                                                        <div class="col-sm-2">
-
-                                                                            <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
 
                                                                         </div>
 
@@ -1610,10 +1629,36 @@
 
                                                                         </div>
 
-                                                                        <div style="display: flex;justify-content: space-between;" class="col-sm-2">
+                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                            <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>
-                                                                            {{--<span class="ui-close select-feature-btn" data-id="1" style="margin:0;position: relative;right:0;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>--}}
+                                                                            <input type="hidden" name="model_m2_impact[]" id="m2_impact" value="0">
+
+                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                            <label style="margin: 0;" class="switch">
+                                                                                <input class="m2_impact" type="checkbox">
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                        </div>
+
+                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+
+                                                                            <input type="hidden" name="model_width_impact[]" id="width_impact" value="0">
+
+                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
+                                                                            <label style="margin: 0;" class="switch">
+                                                                                <input class="width_impact" type="checkbox">
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+
+                                                                        </div>
+
+                                                                        <div style="display: flex;justify-content: space-between;" class="col-sm-1">
+
+                                                                            {{--<button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>--}}
+                                                                            <span class="ui-close select-feature-btn" data-id="1" style="margin:0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
                                                                             <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>
 
                                                                         </div>
@@ -1662,22 +1707,8 @@
 
                                                                                                 <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
-                                                                                                    <input value="{{str_replace(".",",",$mod->max_m2)}}" class="form-control model_max_m2" name="model_max_m2[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
-
-                                                                                                </div>
-
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
-                                                                                                    <input value="{{str_replace(".",",",$mod->max_width)}}" class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
-
-                                                                                                </div>
-
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
-                                                                                                    <input value="{{str_replace(".",",",$mod->max_height)}}" class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>
+                                                                                                    <input value="{{str_replace(".",",",$key->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
 
                                                                                                 </div>
 
@@ -1772,22 +1803,8 @@
 
                                                                                                 <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
-                                                                                                    <input class="form-control model_max_m2" name="model_max_m2[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
-
-                                                                                                </div>
-
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
-                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
-
-                                                                                                </div>
-
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
-                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>
+                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
 
                                                                                                 </div>
 
@@ -1886,22 +1903,8 @@
 
                                                                                                 <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
-                                                                                                    <input class="form-control model_max_m2" name="model_max_m2[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
-
-                                                                                                </div>
-
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
-                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
-
-                                                                                                </div>
-
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
-                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>
+                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
 
                                                                                                 </div>
 
@@ -2070,15 +2073,9 @@
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
-                '                                                                    <div class="col-sm-2">\n' +
+                '                                                                    <div class="col-sm-1">\n' +
                 '\n' +
                 '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                '\n' +
-                '                                                                    </div>\n' +
-                '\n' +
-                '                                                                    <div class="col-sm-2">\n' +
-                '\n' +
-                '                                                                        <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
@@ -2108,9 +2105,36 @@
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
-                '                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">\n' +
+                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                 '\n' +
-                '                                                                        <button data-id="'+model_row+'" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
+                '                                                                        <input type="hidden" name="model_m2_impact[]" id="m2_impact" value="0">\n' +
+                '\n' +
+                '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                '                                                                        <label style="margin: 0;" class="switch">\n' +
+                '                                                                            <input class="m2_impact" type="checkbox">\n' +
+                '                                                                            <span class="slider round"></span>\n' +
+                '                                                                        </label>\n' +
+                '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                '\n' +
+                '                                                                        <input type="hidden" name="model_width_impact[]" id="width_impact" value="0">\n' +
+                '\n' +
+                '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                '                                                                        <label style="margin: 0;" class="switch">\n' +
+                '                                                                            <input class="width_impact" type="checkbox">\n' +
+                '                                                                            <span class="slider round"></span>\n' +
+                '                                                                        </label>\n' +
+                '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '\n' +
+                '                                                                    </div>\n' +
+                '\n' +
+                '                                                                    <div style="display: flex;justify-content: space-between;" class="col-sm-1">\n' +
+                '\n' +
+                /*'                                                                        <button data-id="'+model_row+'" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +*/
+                '                                                                        <span class="ui-close select-feature-btn" data-id="'+model_row+'" style="margin:0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
                 '                                                                        <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
                 '\n' +
                 '                                                                    </div>' +
@@ -2172,6 +2196,13 @@
                 '\n' +
                 '                                                                                            </div>\n' +
                 '\n' +
+                '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>\n' +
+                '                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
+                '\n' +
+                '                                                                                                </div>\n' +
+                '\n' +
                 '                                                                                        </div>\n' +
                 '\n' +
                 '                                                                                    </div>' +
@@ -2221,15 +2252,9 @@
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
-                    '                                                                    <div class="col-sm-2">\n' +
+                    '                                                                    <div class="col-sm-1">\n' +
                     '\n' +
                     '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                    '\n' +
-                    '                                                                    </div>\n' +
-                    '\n' +
-                    '                                                                    <div class="col-sm-2">\n' +
-                    '\n' +
-                    '                                                                        <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
@@ -2259,9 +2284,36 @@
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
-                    '                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">\n' +
+                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +
+                    '                                                                        <input type="hidden" name="model_m2_impact[]" id="m2_impact" value="0">\n' +
+                    '\n' +
+                    '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                    '                                                                        <label style="margin: 0;" class="switch">\n' +
+                    '                                                                            <input class="m2_impact" type="checkbox">\n' +
+                    '                                                                            <span class="slider round"></span>\n' +
+                    '                                                                        </label>\n' +
+                    '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                    '\n' +
+                    '                                                                        <input type="hidden" name="model_width_impact[]" id="width_impact" value="0">\n' +
+                    '\n' +
+                    '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                    '                                                                        <label style="margin: 0;" class="switch">\n' +
+                    '                                                                            <input class="width_impact" type="checkbox">\n' +
+                    '                                                                            <span class="slider round"></span>\n' +
+                    '                                                                        </label>\n' +
+                    '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                                                                    <div style="display: flex;justify-content: space-between;" class="col-sm-1">\n' +
+                    '\n' +
+                    /*'                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +*/
+                    '                                                                        <span class="ui-close select-feature-btn" data-id="1" style="margin:0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
                     '                                                                        <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
                     '\n' +
                     '                                                                    </div>' +
@@ -2323,6 +2375,13 @@
                     '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
                     '\n' +
                     '                                                                                            </div>\n' +
+                    '\n' +
+                    '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>\n' +
+                    '                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
+                    '\n' +
+                    '                                                                                                </div>\n' +
                     '\n' +
                     '                                                                                        </div>\n' +
                     '\n' +
@@ -2739,7 +2798,7 @@
 
         });
 
-        $(document).on('keypress', ".max_size, .model_max_size, .model_max_m2, .model_max_width, .model_max_height", function(e){
+        $(document).on('keypress', ".max_size, .model_max_size", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -2768,7 +2827,7 @@
 
         });
 
-        $(document).on('focusout', ".max_size, .model_max_size, .model_max_m2, .model_max_width, .model_max_height", function(e){
+        $(document).on('focusout', ".max_size, .model_max_size", function(e){
 
             if($(this).val().slice($(this).val().length - 1) == ',')
             {
@@ -3178,7 +3237,7 @@
                 '                                                                                                <th>Value</th>\n' +
                 '                                                                                                <th>Price Impact</th>\n' +
                 '                                                                                                <th>Impact Type</th>\n' +
-                '                                                                                                <th>Variable</th>\n' +
+                '                                                                                                <th>m¹ Impact</th>\n' +
                 '                                                                                                <th>Remove</th>\n' +
                 '                                                                                            </tr>\n' +
                 '                                                                                            </thead>\n' +
@@ -3416,7 +3475,7 @@
                 '                                                                                            <th>Sub Features</th>\n' +
                 '                                                                                            <th>Price Impact</th>\n' +
                 '                                                                                            <th>Impact Type</th>\n' +
-                '                                                                                            <th>Variable</th>\n' +
+                '                                                                                            <th>m¹ Impact</th>\n' +
                 '                                                                                            <th>Remove</th>\n' +
                 '                                                                                        </tr>\n' +
                 '                                                                                        </thead>\n' +
@@ -3508,7 +3567,7 @@
                 '                                                                                                <th>Value</th>\n' +
                 '                                                                                                <th>Price Impact</th>\n' +
                 '                                                                                                <th>Impact Type</th>\n' +
-                '                                                                                                <th>Variable</th>\n' +
+                '                                                                                                <th>m¹ Impact</th>\n' +
                 '                                                                                                <th>Remove</th>\n' +
                 '                                                                                            </tr>\n' +
                 '                                                                                            </thead>\n' +
@@ -3966,7 +4025,7 @@
                     '                                                                                                <th>Value</th>\n' +
                     '                                                                                                <th>Price Impact</th>\n' +
                     '                                                                                                <th>Impact Type</th>\n' +
-                    '                                                                                                <th>Variable</th>\n' +
+                    '                                                                                                <th>m¹ Impact</th>\n' +
                     '                                                                                                <th>Remove</th>\n' +
                     '                                                                                            </tr>\n' +
                     '                                                                                            </thead>\n' +
@@ -4239,7 +4298,7 @@
                     '                                                                                                <th>Value</th>\n' +
                     '                                                                                                <th>Price Impact</th>\n' +
                     '                                                                                                <th>Impact Type</th>\n' +
-                    '                                                                                                <th>Variable</th>\n' +
+                    '                                                                                                <th>m¹ Impact</th>\n' +
                     '                                                                                                <th>Remove</th>\n' +
                     '                                                                                            </tr>\n' +
                     '                                                                                            </thead>\n' +
