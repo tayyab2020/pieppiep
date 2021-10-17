@@ -4073,7 +4073,7 @@
 
                                         if (m2_impact == 1) {
 
-                                            impact_value = impact_value * ((width * height) / 100);
+                                            impact_value = impact_value * ((width/100) * (height/100));
 
                                         }
 
@@ -4108,7 +4108,7 @@
 
                                         if (m2_impact == 1) {
 
-                                            impact_value = impact_value * ((width * height) / 100);
+                                            impact_value = impact_value * ((width/100) * (height/100));
 
                                         }
 
@@ -4434,7 +4434,7 @@
 
                                         if (m2_impact == 1) {
 
-                                            impact_value = impact_value * ((width * height) / 100);
+                                            impact_value = impact_value * ((width/100) * (height/100));
 
                                         }
 
@@ -4469,10 +4469,10 @@
 
                                         if (m2_impact == 1) {
 
-                                            impact_value = impact_value * ((width * height) / 100);
+                                            impact_value = impact_value * ((width/100) * (height/100));
 
                                         }
-                                        
+
                                         if(margin == 1)
                                         {
                                             if (data[2]) {
