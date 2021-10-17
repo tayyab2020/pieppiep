@@ -642,6 +642,8 @@ class ProductController extends Controller
                         $model_check->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model_check->price_impact = $request->model_price_impact[$m];
                         $model_check->impact_type = $request->model_impact_type[$m];
+                        $model_check->m2_impact = $request->model_m2_impact[$m];
+                        $model_check->m1_impact = $request->model_width_impact[$m];
                         $model_check->childsafe = $request->childsafe[$m];
                         $model_check->save();
                     }
@@ -681,6 +683,8 @@ class ProductController extends Controller
                         $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model->price_impact = $request->model_price_impact[$m];
                         $model->impact_type = $request->model_impact_type[$m];
+                        $model->m2_impact = $request->model_m2_impact[$m];
+                        $model->m1_impact = $request->model_width_impact[$m];
                         $model->childsafe = $request->childsafe[$m];
                         $model->save();
 
@@ -943,6 +947,8 @@ class ProductController extends Controller
                         $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model->price_impact = $request->model_price_impact[$m];
                         $model->impact_type = $request->model_impact_type[$m];
+                        $model->m2_impact = $request->model_m2_impact[$m];
+                        $model->m1_impact = $request->model_width_impact[$m];
                         $model->childsafe = $request->childsafe[$m];
                         $model->save();
 

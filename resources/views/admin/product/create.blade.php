@@ -1564,11 +1564,11 @@
 
                                                                             <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                                <input type="hidden" name="model_width_impact[]" id="width_impact" value="{{$key->width_impact}}">
+                                                                                <input type="hidden" name="model_width_impact[]" id="width_impact" value="{{$key->m1_impact}}">
 
                                                                                 <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
                                                                                 <label style="margin: 0;" class="switch">
-                                                                                    <input class="width_impact" type="checkbox" {{$key->width_impact ? 'checked' : null}}>
+                                                                                    <input class="width_impact" type="checkbox" {{$key->m1_impact ? 'checked' : null}}>
                                                                                     <span class="slider round"></span>
                                                                                 </label>
                                                                                 <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
@@ -2981,6 +2981,32 @@
             else
             {
                 $(this).parent().parent().find('#impact_type').val(0);
+            }
+
+        });
+
+        $('body').on('change', '.m2_impact', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#m2_impact').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#m2_impact').val(0);
+            }
+
+        });
+
+        $('body').on('change', '.width_impact', function() {
+
+            if($(this).is(":checked"))
+            {
+                $(this).parent().parent().find('#width_impact').val(1);
+            }
+            else
+            {
+                $(this).parent().parent().find('#width_impact').val(0);
             }
 
         });
