@@ -2347,6 +2347,8 @@
 
 								var features = '';
 								var f_value = 0;
+                                var m1_impact = data[3].m1_impact;
+                                var m2_impact = data[3].m2_impact;
 
 								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
@@ -2459,8 +2461,22 @@
 								}
 
 								if (data[3].price_impact == 1) {
+
 									if (data[3].impact_type == 0) {
+
 										var impact_value = data[3].value;
+
+                                        if (m1_impact == 1) {
+
+                                            impact_value = impact_value * (width / 100);
+
+                                        }
+
+                                        if (m2_impact == 1) {
+
+                                            impact_value = impact_value * ((width * height) / 100);
+
+                                        }
 
                                         if(margin == 1)
                                         {
@@ -2480,9 +2496,22 @@
 										price = price.toFixed(2);
 									}
 									else {
+
 										var impact_value = data[3].value;
 										var per = (impact_value) / 100;
 										impact_value = basic_price * per;
+
+                                        if (m1_impact == 1) {
+
+                                            impact_value = impact_value * (width / 100);
+
+                                        }
+
+                                        if (m2_impact == 1) {
+
+                                            impact_value = impact_value * ((width * height) / 100);
+
+                                        }
 
                                         if(margin == 1)
                                         {
@@ -2685,6 +2714,8 @@
 
 								var features = '';
 								var f_value = 0;
+                                var m1_impact = data[3].m1_impact;
+                                var m2_impact = data[3].m2_impact;
 
 								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
@@ -2796,8 +2827,22 @@
 								}
 
 								if (data[3].price_impact == 1) {
+
 									if (data[3].impact_type == 0) {
-										var impact_value = data[3].value;
+
+									    var impact_value = data[3].value;
+
+                                        if (m1_impact == 1) {
+
+                                            impact_value = impact_value * (width / 100);
+
+                                        }
+
+                                        if (m2_impact == 1) {
+
+                                            impact_value = impact_value * ((width * height) / 100);
+
+                                        }
 
                                         if(margin == 1)
                                         {
@@ -2817,9 +2862,22 @@
 										price = price.toFixed(2);
 									}
 									else {
+
 										var impact_value = data[3].value;
 										var per = (impact_value) / 100;
 										impact_value = basic_price * per;
+
+                                        if (m1_impact == 1) {
+
+                                            impact_value = impact_value * (width / 100);
+
+                                        }
+
+                                        if (m2_impact == 1) {
+
+                                            impact_value = impact_value * ((width * height) / 100);
+
+                                        }
 
                                         if(margin == 1)
                                         {
@@ -3892,6 +3950,8 @@
 
 								var features = '';
 								var f_value = 0;
+                                var m1_impact = data[3].m1_impact;
+                                var m2_impact = data[3].m2_impact;
 
 								if (childsafe == 1) {
 									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
@@ -4000,8 +4060,22 @@
 								}
 
 								if (data[3].price_impact == 1) {
+
 									if (data[3].impact_type == 0) {
+
 										var impact_value = data[3].value;
+
+                                        if (m1_impact == 1) {
+
+                                            impact_value = impact_value * (width / 100);
+
+                                        }
+
+                                        if (m2_impact == 1) {
+
+                                            impact_value = impact_value * ((width * height) / 100);
+
+                                        }
 
                                         if(margin == 1)
                                         {
@@ -4021,9 +4095,22 @@
 										price = price.toFixed(2);
 									}
 									else {
-										var impact_value = data[3].value;
+
+									    var impact_value = data[3].value;
 										var per = (impact_value) / 100;
 										impact_value = basic_price * per;
+
+                                        if (m1_impact == 1) {
+
+                                            impact_value = impact_value * (width / 100);
+
+                                        }
+
+                                        if (m2_impact == 1) {
+
+                                            impact_value = impact_value * ((width * height) / 100);
+
+                                        }
 
                                         if(margin == 1)
                                         {
@@ -4224,6 +4311,8 @@
 
 								var features = '';
 								var f_value = 0;
+                                var m1_impact = data[3].m1_impact;
+                                var m2_impact = data[3].m2_impact;
 
 								if (childsafe == 1) {
 									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
@@ -4332,8 +4421,22 @@
 								}
 
 								if (data[3].price_impact == 1) {
+
 									if (data[3].impact_type == 0) {
+
 										var impact_value = data[3].value;
+
+                                        if (m1_impact == 1) {
+
+                                            impact_value = impact_value * (width / 100);
+
+                                        }
+
+                                        if (m2_impact == 1) {
+
+                                            impact_value = impact_value * ((width * height) / 100);
+
+                                        }
 
                                         if(margin == 1)
                                         {
@@ -4353,10 +4456,23 @@
 										price = price.toFixed(2);
 									}
 									else {
+
 										var impact_value = data[3].value;
 										var per = (impact_value) / 100;
 										impact_value = basic_price * per;
 
+                                        if (m1_impact == 1) {
+
+                                            impact_value = impact_value * (width / 100);
+
+                                        }
+
+                                        if (m2_impact == 1) {
+
+                                            impact_value = impact_value * ((width * height) / 100);
+
+                                        }
+                                        
                                         if(margin == 1)
                                         {
                                             if (data[2]) {
