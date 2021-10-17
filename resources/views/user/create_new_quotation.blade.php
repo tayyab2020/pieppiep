@@ -2329,7 +2329,7 @@
 
 								var basic_price = price;
 
-								if (margin == 1) {
+								/*if (margin == 1) {
 									if (data[2]) {
 										price = parseFloat(price);
 										var supplier_margin = data[2].margin;
@@ -2343,7 +2343,7 @@
 											price = price.toFixed(2);
 										}
 									}
-								}
+								}*/
 
 								var features = '';
 								var f_value = 0;
