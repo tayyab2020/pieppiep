@@ -1155,6 +1155,48 @@
 					</div>
 				</div>
 
+                <div id="myModal6" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Quotation Mail Body</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <div style="margin: 20px 0;" class="row">
+                                    <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>To:</label>
+                                        <input type="text" name="mail_to" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div style="margin: 20px 0;" class="row">
+                                    <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Subject:</label>
+                                        <input type="text" name="mail_subject" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div style="margin: 20px 0;" class="row">
+                                    <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Text:</label>
+                                        <input type="hidden" name="mail_body">
+                                        <div class="summernote"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form">Submit</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
 			</form>
 
 		</div>
@@ -1277,6 +1319,12 @@
 </div>
 
 <style>
+
+    .note-editor
+    {
+        width: 100%;
+    }
+
 	#menu1 .form-group {
 		display: flex;
 		align-items: center;
@@ -1605,6 +1653,27 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
+
+    $('.summernote').summernote({
+        toolbar: [
+            // [groupName, [list of button]]
+            ['style', ['style']],
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            /*['color', ['color']],*/
+            ['fontname', ['fontname']],
+            ['forecolor', ['forecolor']],
+        ],
+        height: 200,   //set editable area's height
+        codemirror: { // codemirror options
+            theme: 'monokai'
+        },
+        callbacks: {
+            onChange: function(contents, $editable) {
+                $(this).prev('input').val(contents);
+            }
+        }
+    });
 
 	function initMap() {
 
@@ -3587,10 +3656,57 @@
 			}
 
 			if (!flag) {
-				$('#form-quote').submit();
+                $('#myModal6').modal('toggle');
+                $('.modal-backdrop').hide();
 			}
 
 		});
+
+        $(document).on('click', '.submit-form', function () {
+
+            var flag = 0;
+
+            if(!$("[name='mail_to']").val())
+            {
+                $("[name='mail_to']").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if(regex.test($("[name='mail_to']").val()))
+                {
+                    $("[name='mail_to']").css('border','');
+                }
+                else{
+                    $("[name='mail_to']").css('border','1px solid red');
+                    flag = 1;
+                }
+            }
+
+            if(!$("[name='mail_subject']").val())
+            {
+                $("[name='mail_subject']").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $("[name='mail_subject']").css('border','');
+            }
+
+            if(!$("[name='mail_body']").val())
+            {
+                $(".note-editable").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $(".note-editable").css('border','');
+            }
+
+            if(!flag)
+            {
+                $('#form-quote').submit();
+            }
+
+        });
 
 		$(document).on('click', '.copy-row', function () {
 

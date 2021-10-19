@@ -2179,9 +2179,13 @@ class UserController extends Controller
             }
             else
             {
+                $flag1 = 1;
+            }
+            /*else
+            {
                 $response = array('data' => $check, 'message' => 'This email address is already taken');
                 return $response;
-            }
+            }*/
 
         }
         else
@@ -3083,7 +3087,28 @@ class UserController extends Controller
 
         $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
 
-        $pdf->save(public_path() . '/assets/newQuotations/' . $filename);
+        $file = public_path() . '/assets/newQuotations/' . $filename;
+
+        $pdf->save($file);
+
+        $msg = $request->mail_body;
+        $msg = str_replace('{name}',$client->name,$msg);
+        $msg = str_replace('{order_type}','quote',$msg);
+        $msg = str_replace('{factuurnummer}',$quotation_invoice_number,$msg);
+
+
+        \Mail::send('user.global_mail',
+            array(
+                'msg' => $msg,
+            ), function ($message) use ($request,$msg,$file,$filename) {
+            $message->to($request->mail_to)
+                ->from('info@vloerofferte.nl')
+                ->subject($request->mail_subject)
+                ->attach($file, [
+                    'as' => $filename,
+                    'mime' => 'application/pdf',
+                ]);
+        });
 
         return redirect()->route('new-quotations');
     }
