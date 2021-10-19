@@ -148,9 +148,7 @@ class UserController extends Controller
                 $suppliers = array();*/
             }
 
-            $quotation_email_template = email_templates::where('type','quotation')->where('user_id',$user_id)->first();
-
-            return view('user.create_new_quotation', compact('products','customers','suppliers','quotation_email_template'));
+            return view('user.create_new_quotation', compact('products','customers','suppliers'));
         }
         else
         {
@@ -2294,7 +2292,7 @@ class UserController extends Controller
     {
         $id = $request->id;
 
-        $email = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$id)->select('users.email')->first();
+        $email = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->where('new_quotations.id',$id)->select('users.email')->first();
 
         return $email;
     }
@@ -2627,7 +2625,9 @@ class UserController extends Controller
                 $invoices = $invoices->unique('invoice_id');
             }
 
-            return view('user.quote_invoices', compact('invoices'));
+            $quotation_email_template = email_templates::where('type','quotation')->where('user_id',$user_id)->first();
+
+            return view('user.quote_invoices', compact('invoices','quotation_email_template'));
         }
         else
         {
@@ -2720,9 +2720,7 @@ class UserController extends Controller
                 }
             }
 
-            $quotation_email_template = email_templates::where('type','quotation')->where('user_id',$user_id)->first();
-
-            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products','quotation_email_template'));
+            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
         }
         else
         {
@@ -2918,7 +2916,6 @@ class UserController extends Controller
             $invoice->labor_cost_total = str_replace(',', '.',$request->labor_cost_total);
             $invoice->net_amount = str_replace(',', '.',$request->net_amount);
             $invoice->tax_amount = str_replace(',', '.',$request->tax_amount);
-            $invoice->mail_to = $request->mail_to;
             $invoice->save();
         }
 
@@ -3080,7 +3077,7 @@ class UserController extends Controller
 
         if($request->quotation_id)
         {
-            /*if($ask)
+            if($ask)
             {
                 \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number) {
                     $message->to($client->email)
@@ -3088,7 +3085,7 @@ class UserController extends Controller
                         ->subject('Quotation updated!')
                         ->setBody("Quotation QUO# <b>" . $quotation_invoice_number . "</b> have been updated by retailer on your review request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
                 });
-            }*/
+            }
 
             Session::flash('success','Quotation has been updated successfully!');
         }
@@ -3111,25 +3108,6 @@ class UserController extends Controller
         $file = public_path() . '/assets/newQuotations/' . $filename;
 
         $pdf->save($file);
-
-        $msg = $request->mail_body;
-        $msg = str_replace('{name}',$client->name,$msg);
-        $msg = str_replace('{order_type}','quote',$msg);
-        $msg = str_replace('{factuurnummer}',$quotation_invoice_number,$msg);
-
-
-        \Mail::send('user.global_mail',
-            array(
-                'msg' => $msg,
-            ), function ($message) use ($request,$msg,$file,$filename) {
-            $message->to($request->mail_to)
-                ->from('info@vloerofferte.nl')
-                ->subject($request->mail_subject)
-                ->attach($file, [
-                    'as' => $filename,
-                    'mime' => 'application/pdf',
-                ]);
-        });
 
         return redirect()->route('new-quotations');
     }
@@ -3634,7 +3612,7 @@ class UserController extends Controller
         }
     }
 
-    public function SendNewQuotation($id)
+    public function SendNewQuotation(Request $request)
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
@@ -3646,14 +3624,14 @@ class UserController extends Controller
             $user_id = $user->id;
         }
 
-        $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
+        $check = new_quotations::where('id',$request->quotation_id)->where('creator_id',$user_id)->first();
 
         if($check)
         {
             $user_name = $user->name;
             $user_email = $user->email;
             $company_name = $user->company_name;
-            $result = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.id', $id)->select('users.company_name', 'users.id', 'users.name', 'users.family_name', 'users.email', 'new_quotations.*')->first();
+            $result = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.id', $request->quotation_id)->select('users.company_name', 'users.id', 'users.name', 'users.family_name', 'users.email', 'new_quotations.*')->first();
             $result->approved = 1;
             $result->status = 1;
             $result->save();
@@ -3669,7 +3647,28 @@ class UserController extends Controller
             $client_email = $result->email;
             $client_name = $result->name;
 
-            \Mail::send('user.custom_quotation_mail',
+            $msg = $request->mail_body;
+            $msg = str_replace('{name}',$client_name,$msg);
+            $msg = str_replace('{order_type}','quotation',$msg);
+            $msg = str_replace('{factuurnummer}',$quotation_invoice_number,$msg);
+
+
+            \Mail::send('user.global_mail',
+                array(
+                    'msg' => $msg,
+                ), function ($message) use ($request,$msg,$file,$filename) {
+                    $message->to($request->mail_to)
+                        ->from('info@vloerofferte.nl')
+                        ->subject($request->mail_subject)
+                        ->attach($file, [
+                            'as' => $filename,
+                            'mime' => 'application/pdf',
+                        ]);
+                });
+
+            new_quotations::where('id', $request->quotation_id)->update(['mail_to' => $request->mail_to]);
+
+            /*\Mail::send('user.custom_quotation_mail',
                 array(
                     'username' => $user_name,
                     'client' => $client_name,
@@ -3685,7 +3684,7 @@ class UserController extends Controller
                         'mime' => 'application/pdf',
                     ]);
 
-                });
+                });*/
 
 
             Session::flash('success', __('text.Quotation has been sent to customer'));

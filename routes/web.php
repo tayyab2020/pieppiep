@@ -129,7 +129,7 @@
   Route::post('/pay-quotation', 'UserController@PayQuotation');
   Route::get('/quotation-payment-redirect-page/{id}', 'FrontendController@QuotationPaymentRedirectPage');
   Route::get('/versturen-eigen-offerte/{id}', 'UserController@SendCustomQuotation');
-  Route::get('/send-new-quotation/{id}', 'UserController@SendNewQuotation');
+  Route::post('/send-new-quotation', 'UserController@SendNewQuotation')->name('send-new-quotation');
   Route::get('/send-order/{id}', 'UserController@SendOrder');
   Route::get('/change-delivery-dates/{id}', 'UserController@ChangeDeliveryDates');
   Route::get('/supplier-order-delivered/{id}', 'UserController@SupplierOrderDelivered');

@@ -688,7 +688,7 @@
 
                                                                                         @if(!$key->approved)
 
-                                                                                            <li><a href="{{ url('/aanbieder/send-new-quotation/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
+                                                                                            <li><a class="send-new-quotation" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Send Quotation')}}</a></li>
 
                                                                                         @endif
 
@@ -814,8 +814,70 @@
         </div>
     </div>
 
+    @if(Route::currentRouteName() == 'new-quotations')
+
+        <div id="myModal2" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <form id="send-quotation-form" action="{{route('send-new-quotation')}}" method="POST" enctype="multipart/form-data">
+                    {{csrf_field()}}
+
+                    <input type="hidden" name="quotation_id" id="quotation_id">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Quotation Mail Body</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div style="margin: 20px 0;" class="row">
+                                <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>To:</label>
+                                    <input type="text" name="mail_to" class="form-control">
+                                </div>
+                            </div>
+
+                            <div style="margin: 20px 0;" class="row">
+                                <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>Subject:</label>
+                                    <input value="{{$quotation_email_template ? $quotation_email_template->subject : null}}" type="text" name="mail_subject" class="form-control">
+                                </div>
+                            </div>
+
+                            <div style="margin: 20px 0;" class="row">
+                                <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>Text:</label>
+                                    <input type="hidden" name="mail_body" value="{{$quotation_email_template ? $quotation_email_template->body : null}}">
+                                    <div class="summernote">{!! $quotation_email_template ? $quotation_email_template->body : null !!}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    @endif
 
     <style type="text/css">
+
+        .note-editor
+        {
+            width: 100%;
+        }
+
+        .note-toolbar
+        {
+            line-height: 1;
+        }
 
         .btn-primary1
         {
@@ -1020,6 +1082,100 @@
 @section('scripts')
 
     <script type="text/javascript">
+
+        $('.summernote').summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['fontsize', ['fontsize']],
+                /*['color', ['color']],*/
+                ['fontname', ['fontname']],
+                ['forecolor', ['forecolor']],
+            ],
+            height: 200,   //set editable area's height
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            },
+            callbacks: {
+                onChange: function(contents, $editable) {
+                    $(this).prev('input').val(contents);
+                }
+            }
+        });
+
+        $(".send-new-quotation").on('click', function (e) {
+
+            var id = $(this).data('id');
+
+            $.ajax({
+
+                type: "GET",
+                data: "id=" + id,
+                url: "<?php echo url('/aanbieder/get-customer-email')?>",
+
+                success: function (data) {
+
+                    $('#quotation_id').val(id);
+                    $("[name='mail_to']").val(data.email);
+                    $('#myModal2').modal('toggle');
+                    $('.modal-backdrop').hide();
+
+                },
+                error: function (data) {
+
+
+                }
+
+            });
+
+        });
+
+        $(document).on('click', '.submit-form', function () {
+
+            var flag = 0;
+
+            if(!$("[name='mail_to']").val())
+            {
+                $("[name='mail_to']").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if(regex.test($("[name='mail_to']").val()))
+                {
+                    $("[name='mail_to']").css('border','');
+                }
+                else{
+                    $("[name='mail_to']").css('border','1px solid red');
+                    flag = 1;
+                }
+            }
+
+            if(!$("[name='mail_subject']").val())
+            {
+                $("[name='mail_subject']").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $("[name='mail_subject']").css('border','');
+            }
+
+            if(!$("[name='mail_body']").val())
+            {
+                $(".note-editable").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $(".note-editable").css('border','');
+            }
+
+            if(!flag)
+            {
+                $('#send-quotation-form').submit();
+            }
+
+        });
 
         function ask(e)
         {
