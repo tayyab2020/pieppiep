@@ -146,7 +146,7 @@
             min-width: 0;
             word-wrap: break-word;
             background-clip: border-box;
-            box-shadow: 0 0 6px 0 #00000026;
+            box-shadow: 0 0 6px -1px #00000047;
         }
 
         .card-body
@@ -158,12 +158,12 @@
 
         label, .form-text
         {
-            color: white;
+            color: black;
         }
 
         .header-title
         {
-            color: white;
+            color: black;
             font-family: 'Lato', sans-serif;
             font-size: 18px;
             font-weight: 600;
