@@ -1902,6 +1902,29 @@
 			},
 		});
 
+        $(".customer-select").change(function () {
+
+            var id = $(this).val();
+
+            $.ajax({
+
+                type: "GET",
+                data: "id=" + id,
+                url: "<?php echo url('/aanbieder/get-customer-email')?>",
+
+                success: function (data) {
+
+                    $("[name='mail_to']").val(data.email);
+
+                },
+                error: function (data) {
+
+
+                }
+
+            });
+        });
+
 		var current_desc = '';
 
 		$(".add-desc").click(function () {

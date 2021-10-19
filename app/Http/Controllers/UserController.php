@@ -2287,6 +2287,15 @@ class UserController extends Controller
 
     }
 
+    public function GetCustomerEmail(Request $request)
+    {
+        $id = $request->id;
+
+        $email = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$id)->select('users.email')->first();
+
+        return $email;
+    }
+
     public function DownloadHandymanQuoteRequest($id)
     {
         $user = Auth::guard('user')->user();

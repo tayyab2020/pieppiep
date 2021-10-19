@@ -98,6 +98,7 @@
   Route::get('/klant-aanmaken', 'UserController@CreateCustomerForm')->name('handyman-user-create');
   Route::get('/handleiding','UserController@InstructionManual')->name('instruction-manual');
   Route::post('/create-customer','UserController@CreateCustomer');
+  Route::get('/get-customer-email','UserController@GetCustomerEmail');
   Route::get('/aanvrager-offerte/{id?}', 'UserController@CustomerQuotations')->name('customer-quotations');
   Route::get('/aanvrager-facturen/{id?}', 'UserController@CustomerInvoices')->name('customer-invoices');
   Route::get('/aanbieder-opstellen-offerte', 'UserController@HandymanCreateQuote')->name('create-custom-quotation');
