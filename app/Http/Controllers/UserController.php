@@ -3074,7 +3074,7 @@ class UserController extends Controller
 
         if($request->quotation_id)
         {
-            if($ask)
+            /*if($ask)
             {
                 \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number) {
                     $message->to($client->email)
@@ -3082,9 +3082,7 @@ class UserController extends Controller
                         ->subject('Quotation updated!')
                         ->setBody("Quotation QUO# <b>" . $quotation_invoice_number . "</b> have been updated by retailer on your review request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
                 });
-            }
-
-            /*\File::delete(public_path() .'/assets/newQuotations/'.$filename);*/
+            }*/
 
             Session::flash('success','Quotation has been updated successfully!');
         }
