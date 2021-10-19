@@ -1169,22 +1169,22 @@
                                 <div style="margin: 20px 0;" class="row">
                                     <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <label>To:</label>
-                                        <input type="text" name="mail_to" class="form-control">
+                                        <input value="{{ isset($invoice) ? $invoice[0]->mail_to : null }}" type="text" name="mail_to" class="form-control">
                                     </div>
                                 </div>
 
                                 <div style="margin: 20px 0;" class="row">
                                     <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <label>Subject:</label>
-                                        <input type="text" name="mail_subject" class="form-control">
+                                        <input value="{{$quotation_email_template ? $quotation_email_template->subject : null}}" type="text" name="mail_subject" class="form-control">
                                     </div>
                                 </div>
 
                                 <div style="margin: 20px 0;" class="row">
                                     <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <label>Text:</label>
-                                        <input type="hidden" name="mail_body">
-                                        <div class="summernote"></div>
+                                        <input type="hidden" name="mail_body" value="{{$quotation_email_template ? $quotation_email_template->body : null}}">
+                                        <div class="summernote">{!! $quotation_email_template ? $quotation_email_template->body : null !!}</div>
                                     </div>
                                 </div>
 
@@ -1323,6 +1323,11 @@
     .note-editor
     {
         width: 100%;
+    }
+
+    .note-toolbar
+    {
+        line-height: 1;
     }
 
 	#menu1 .form-group {
@@ -1641,6 +1646,7 @@
 	.modal-body table thead tr th {
 		padding: 5px 10px;
 	}
+
 </style>
 
 @endsection

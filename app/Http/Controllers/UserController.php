@@ -8,6 +8,7 @@ use App\colors;
 use App\custom_quotations;
 use App\custom_quotations_data;
 use App\customers_details;
+use App\email_templates;
 use App\Jobs\SendOrder;
 use App\Jobs\UpdateDates;
 use App\model_features;
@@ -147,7 +148,9 @@ class UserController extends Controller
                 $suppliers = array();*/
             }
 
-            return view('user.create_new_quotation', compact('products','customers','suppliers'));
+            $quotation_email_template = email_templates::where('type','quotation')->where('user_id',$user_id)->first();
+
+            return view('user.create_new_quotation', compact('products','customers','suppliers','quotation_email_template'));
         }
         else
         {
@@ -2717,7 +2720,9 @@ class UserController extends Controller
                 }
             }
 
-            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
+            $quotation_email_template = email_templates::where('type','quotation')->where('user_id',$user_id)->first();
+
+            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products','quotation_email_template'));
         }
         else
         {
@@ -2885,7 +2890,7 @@ class UserController extends Controller
         {
             $ask = new_quotations::where('id',$request->quotation_id)->pluck('ask_customization')->first();
 
-            new_quotations::where('id',$request->quotation_id)->update(['price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount)]);
+            new_quotations::where('id',$request->quotation_id)->update(['price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
 
             $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
             $feature_ids = new_quotations_features::whereIn('quotation_data_id',$data_ids)->pluck('id');
@@ -2913,6 +2918,7 @@ class UserController extends Controller
             $invoice->labor_cost_total = str_replace(',', '.',$request->labor_cost_total);
             $invoice->net_amount = str_replace(',', '.',$request->net_amount);
             $invoice->tax_amount = str_replace(',', '.',$request->tax_amount);
+            $invoice->mail_to = $request->mail_to;
             $invoice->save();
         }
 
@@ -3126,6 +3132,66 @@ class UserController extends Controller
         });
 
         return redirect()->route('new-quotations');
+    }
+
+    public function EmailTemplates()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $uer_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
+        if($uer_role != 2)
+        {
+            return redirect()->route('user-login');
+        }
+
+        $quotation_email_template = email_templates::where('user_id',$user_id)->where('type','quotation')->first();
+        $order_email_template = email_templates::where('user_id',$user_id)->where('type','order')->first();
+        $invoice_email_template = email_templates::where('user_id',$user_id)->where('type','invoice')->first();
+
+        return view('user.email_templates',compact('quotation_email_template','order_email_template','invoice_email_template'));
+    }
+
+    public function SaveEmailTemplate(Request $request)
+    {
+        $type = $request->type == 1 ? 'quotation' : ($request->type == 2 ? 'order' : 'invoice');
+        $template_id = $request->template_id;
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
+        if($template_id)
+        {
+            email_templates::where('user_id',$user_id)->where('type',$type)->update(['subject' => $request->mail_subject, 'body' => $request->mail_body]);
+
+            Session::flash('success', 'Email template updated successfully!');
+            return redirect()->back();
+        }
+        else
+        {
+            $post = new email_templates;
+            $post->type = $type;
+            $post->subject = $request->mail_subject;
+            $post->body = $request->mail_body;
+            $post->user_id = $user_id;
+            $post->save();
+
+            Session::flash('success', 'Email template saved successfully!');
+            return redirect()->back();
+        }
     }
 
     public function StoreQuotation(Request $request)
