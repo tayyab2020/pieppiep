@@ -2163,7 +2163,7 @@ class UserController extends Controller
 
         if ($check) {
 
-            if($check->role_id == 3)
+            /*if($check->role_id == 3)
             {
                 $check1 = customers_details::where('user_id',$check->id)->where('retailer_id',$user_id)->first();
 
@@ -2179,13 +2179,21 @@ class UserController extends Controller
             }
             else
             {
-                $flag1 = 1;
-            }
-            /*else
-            {
                 $response = array('data' => $check, 'message' => 'This email address is already taken');
                 return $response;
             }*/
+
+            $check1 = customers_details::where('user_id',$check->id)->where('retailer_id',$user_id)->first();
+
+            if($check1)
+            {
+                $response = array('data' => $check, 'message' => __('text.User already created'));
+                return $response;
+            }
+            else
+            {
+                $flag1 = 1;
+            }
 
         }
         else
