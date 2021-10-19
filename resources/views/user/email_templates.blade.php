@@ -134,7 +134,7 @@
 
         .card
         {
-            background-color: #373737;
+            background-color: #f5f5f5;
             border: none;
             border-radius: 4px;
             position: relative;
