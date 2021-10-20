@@ -4439,6 +4439,7 @@
 									if (data[3].impact_type == 0) {
 
 										var model_impact_value = data[3].value;
+										console.log(model_impact_value);
 
                                         if (m1_impact == 1) {
 
@@ -4461,6 +4462,7 @@
 
                                                 if (supplier_margin && retailer_margin) {
                                                     price = (parseFloat(price) / supplier_margin) * retailer_margin;
+                                                    console.log(price);
                                                 }
                                             }
                                         }
