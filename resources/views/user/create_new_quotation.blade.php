@@ -4440,13 +4440,13 @@
 
                                         if (m1_impact == 1) {
 
-                                            impact_value = impact_value * (width / 100);
+                                            var m1_impact_value = impact_value * (width / 100);
 
                                         }
 
                                         if (m2_impact == 1) {
 
-                                            impact_value = impact_value * ((width/100) * (height/100));
+                                            var m2_impact_value = impact_value * ((width/100) * (height/100));
 
                                         }
 
@@ -4464,7 +4464,7 @@
                                         }
 
 										impact_value = parseFloat(impact_value).toFixed(2);
-										price = parseFloat(price) + parseFloat(impact_value);
+										price = parseFloat(price) + parseFloat(impact_value) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
 										price = price.toFixed(2);
 									}
 									else {
@@ -4475,13 +4475,13 @@
 
                                         if (m1_impact == 1) {
 
-                                            impact_value = impact_value * (width / 100);
+                                            var m1_impact_value = impact_value * (width / 100);
 
                                         }
 
                                         if (m2_impact == 1) {
 
-                                            impact_value = impact_value * ((width/100) * (height/100));
+                                            var m2_impact_value = impact_value * ((width/100) * (height/100));
 
                                         }
 
@@ -4498,7 +4498,8 @@
                                             }
                                         }
 
-										impact_value = parseFloat(impact_value).toFixed(2);
+                                        impact_value = parseFloat(impact_value) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+										/*impact_value = parseFloat(impact_value).toFixed(2);*/
 										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
 									}
