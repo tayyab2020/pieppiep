@@ -4463,8 +4463,9 @@
                                             }
                                         }
 
-										impact_value = parseFloat(impact_value).toFixed(2);
-										price = parseFloat(price) + parseFloat(impact_value) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+                                        impact_value = parseFloat(impact_value) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+										/*impact_value = parseFloat(impact_value).toFixed(2);*/
+										price = parseFloat(price) + parseFloat(impact_value);
 										price = price.toFixed(2);
 									}
 									else {
