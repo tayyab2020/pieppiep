@@ -3691,7 +3691,7 @@ class UserController extends Controller
                     'msg' => $msg,
                 ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename) {
                     $message->to($mail_to)
-                        ->from('info@vloerofferte.nl')
+                        ->from('info@pieppiep.com')
                         ->subject($subject)
                         ->attach($file, [
                             'as' => $filename,
