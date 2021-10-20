@@ -4434,81 +4434,53 @@
 									current.parent().find('.f_area').val(0);
 								}
 
+                                var model_impact_value = data[3].value;
+
+                                if (m1_impact == 1) {
+
+                                    m1_impact_value = model_impact_value * (width / 100);
+
+                                }
+
+                                if (m2_impact == 1) {
+
+                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
+
+                                }
+
+                                if(margin == 1)
+                                {
+                                    if (data[2]) {
+
+                                        var supplier_margin = data[2].margin;
+                                        var retailer_margin = data[2].retailer_margin;
+
+                                        if (supplier_margin && retailer_margin) {
+                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
+                                        }
+                                    }
+                                }
+                                
+                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+                                price = price.toFixed(2);
+
 								if (data[3].price_impact == 1) {
 
 									if (data[3].impact_type == 0) {
 
-										var model_impact_value = data[3].value;
-										console.log(model_impact_value);
-
-                                        if (m1_impact == 1) {
-
-                                            m1_impact_value = model_impact_value * (width / 100);
-
-                                        }
-
-                                        if (m2_impact == 1) {
-
-                                            m2_impact_value = model_impact_value * ((width/100) * (height/100));
-
-                                        }
-
-                                        if(margin == 1)
-                                        {
-                                            if (data[2]) {
-
-                                                var supplier_margin = data[2].margin;
-                                                var retailer_margin = data[2].retailer_margin;
-
-                                                if (supplier_margin && retailer_margin) {
-                                                    price = (parseFloat(price) / supplier_margin) * retailer_margin;
-                                                    console.log(price);
-                                                }
-                                            }
-                                        }
-
-                                        price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+                                        price = parseFloat(price) + parseFloat(model_impact_value);
 										price = price.toFixed(2);
+
 									}
 									else {
 
-                                        var model_impact_value = data[3].value;
-										var per = (price) / 100;
-										price = basic_price * per;
+										var per = (model_impact_value) / 100;
+                                        model_impact_value = basic_price * per;
 
-                                        if (m1_impact == 1) {
-
-                                            m1_impact_value = model_impact_value * (width / 100);
-
-                                        }
-
-                                        if (m2_impact == 1) {
-
-                                            m2_impact_value = model_impact_value * ((width/100) * (height/100));
-
-                                        }
-
-                                        if(margin == 1)
-                                        {
-                                            if (data[2]) {
-
-                                                var supplier_margin = data[2].margin;
-                                                var retailer_margin = data[2].retailer_margin;
-
-                                                if (supplier_margin && retailer_margin) {
-                                                    price = (parseFloat(price) / supplier_margin) * retailer_margin;
-                                                }
-                                            }
-                                        }
-
-                                        price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+                                        price = parseFloat(price) + parseFloat(model_impact_value);
 										price = price.toFixed(2);
 									}
-								}
-								else {
-									var impact_value = 0;
-									price = parseFloat(price) + parseFloat(impact_value);
-									price = price.toFixed(2);
+
 								}
 
 								var price_before_labor = parseFloat(price).toFixed(2);
