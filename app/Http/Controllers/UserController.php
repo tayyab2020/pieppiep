@@ -1360,6 +1360,31 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function AcceptNewQuotationMail($id)
+    {
+        $id = Crypt::decrypt($id);
+
+        $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.id', $id)->where('new_quotations.status',1)->first();
+
+        if (!$invoice) {
+            return redirect()->route('front.index');
+        }
+
+        new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1]);
+
+        $creator_email = $invoice->email;
+        $creator_name = $invoice->name;
+
+        \Mail::send(array(), array(), function ($message) use ($creator_email, $creator_name, $invoice) {
+            $message->to($creator_email)
+                ->from('info@pieppiep.com')
+                ->subject(__('text.Quotation Accepted!'))
+                ->setBody("Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br> Quotation QUO# " . $invoice->quotation_invoice_number . " has been accepted.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+        });
+
+        return view('front.thankyou1');
+    }
+
     public function AcceptNewQuotation($id)
     {
         $user = Auth::guard('user')->user();
@@ -3646,20 +3671,28 @@ class UserController extends Controller
 
             $client_email = $result->email;
             $client_name = $result->name;
+            $link = route('accept-new-quotation-mail', ['id' => Crypt::encrypt($request->quotation_id)]);
+
+            $mail_to = $request->mail_to;
+
+            $subject = $request->mail_subject;
+            $subject = str_replace('{offerte_nummer}',$quotation_invoice_number,$subject);
 
             $msg = $request->mail_body;
-            $msg = str_replace('{name}',$client_name,$msg);
-            $msg = str_replace('{order_type}','quotation',$msg);
-            $msg = str_replace('{factuurnummer}',$quotation_invoice_number,$msg);
+            $msg = str_replace('{aan_voornaam}',$client_name,$msg);
+            $msg = str_replace('{offerte_nummer}',$quotation_invoice_number,$msg);
+            $msg = str_replace('{onderteken_link}','Click <a href="'.$link.'">here</a> to accept this quote directly online',$msg);
+            $msg = str_replace('{van_voornaam}',$user_name,$msg);
+            $msg = str_replace('{van_bedrijfsnaam}',$company_name,$msg);
 
 
             \Mail::send('user.global_mail',
                 array(
                     'msg' => $msg,
-                ), function ($message) use ($request,$msg,$file,$filename) {
-                    $message->to($request->mail_to)
+                ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename) {
+                    $message->to($mail_to)
                         ->from('info@vloerofferte.nl')
-                        ->subject($request->mail_subject)
+                        ->subject($subject)
                         ->attach($file, [
                             'as' => $filename,
                             'mime' => 'application/pdf',
