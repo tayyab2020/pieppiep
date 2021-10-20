@@ -4325,6 +4325,8 @@
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
                                 var m2_impact = data[3].m2_impact;
+                                var m1_impact_value = 0;
+                                var m2_impact_value = 0;
 
 								if (childsafe == 1) {
 									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
@@ -4436,17 +4438,17 @@
 
 									if (data[3].impact_type == 0) {
 
-										var impact_value = data[3].value;
+										var model_impact_value = data[3].value;
 
                                         if (m1_impact == 1) {
 
-                                            var m1_impact_value = impact_value * (width / 100);
+                                            m1_impact_value = model_impact_value * (width / 100);
 
                                         }
 
                                         if (m2_impact == 1) {
 
-                                            var m2_impact_value = impact_value * ((width/100) * (height/100));
+                                            m2_impact_value = model_impact_value * ((width/100) * (height/100));
 
                                         }
 
@@ -4458,31 +4460,29 @@
                                                 var retailer_margin = data[2].retailer_margin;
 
                                                 if (supplier_margin && retailer_margin) {
-                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                    price = (parseFloat(price) / supplier_margin) * retailer_margin;
                                                 }
                                             }
                                         }
 
-                                        impact_value = parseFloat(impact_value) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
-										/*impact_value = parseFloat(impact_value).toFixed(2);*/
-										price = parseFloat(price) + parseFloat(impact_value);
+                                        price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
 										price = price.toFixed(2);
 									}
 									else {
 
-										var impact_value = data[3].value;
-										var per = (impact_value) / 100;
-										impact_value = basic_price * per;
+                                        var model_impact_value = data[3].value;
+										var per = (price) / 100;
+										price = basic_price * per;
 
                                         if (m1_impact == 1) {
 
-                                            var m1_impact_value = impact_value * (width / 100);
+                                            m1_impact_value = model_impact_value * (width / 100);
 
                                         }
 
                                         if (m2_impact == 1) {
 
-                                            var m2_impact_value = impact_value * ((width/100) * (height/100));
+                                            m2_impact_value = model_impact_value * ((width/100) * (height/100));
 
                                         }
 
@@ -4494,14 +4494,12 @@
                                                 var retailer_margin = data[2].retailer_margin;
 
                                                 if (supplier_margin && retailer_margin) {
-                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+                                                    price = (parseFloat(price) / supplier_margin) * retailer_margin;
                                                 }
                                             }
                                         }
 
-                                        impact_value = parseFloat(impact_value) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
-										/*impact_value = parseFloat(impact_value).toFixed(2);*/
-										price = parseFloat(price) + parseFloat(impact_value);
+                                        price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
 										price = price.toFixed(2);
 									}
 								}
@@ -4527,7 +4525,7 @@
 								current.parent().parent().parent().find('.price_before_labor_old').val(price_before_labor);
 								current.parent().parent().parent().find('.labor_impact').val(labor.replace(/\./g, ','));
 								current.parent().parent().parent().find('.labor_impact_old').val(labor);
-								current.parent().parent().parent().find('.model').find('.model_impact_value').val(impact_value);
+								current.parent().parent().parent().find('.model').find('.model_impact_value').val(model_impact_value);
 								//current.parent().parent().parent().find('.price').text('€ ' + Math.round(price));
 								current.parent().parent().parent().find('.price').text('€ ' + price.replace(/\./g, ','));
 								current.parent().parent().parent().find('#row_total').val(price);
