@@ -4434,17 +4434,15 @@
 									current.parent().find('.f_area').val(0);
 								}
 
-                                var model_impact_value = data[3].value;
-
                                 if (m1_impact == 1) {
 
-                                    m1_impact_value = model_impact_value * (width / 100);
+                                    m1_impact_value = price * (width / 100);
 
                                 }
 
                                 if (m2_impact == 1) {
 
-                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
+                                    m2_impact_value = price * ((width/100) * (height/100));
 
                                 }
 
@@ -4460,11 +4458,13 @@
                                         }
                                     }
                                 }
-                                
+
                                 price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
                                 price = price.toFixed(2);
 
 								if (data[3].price_impact == 1) {
+
+                                    var model_impact_value = data[3].value;
 
 									if (data[3].impact_type == 0) {
 
