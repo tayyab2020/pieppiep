@@ -2361,6 +2361,8 @@
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
                                 var m2_impact = data[3].m2_impact;
+                                var m1_impact_value = 0;
+                                var m2_impact_value = 0;
 
 								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
@@ -2472,82 +2474,55 @@
 									current.parent().find('.f_area').val(0);
 								}
 
-								if (data[3].price_impact == 1) {
+                                var model_impact_value = data[3].value;
 
-									if (data[3].impact_type == 0) {
+                                if (m1_impact == 1) {
 
-										var impact_value = data[3].value;
+                                    m1_impact_value = model_impact_value * (width / 100);
 
-                                        if (m1_impact == 1) {
+                                }
 
-                                            impact_value = impact_value * (width / 100);
+                                if (m2_impact == 1) {
 
+                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
+
+                                }
+
+                                if (data[3].price_impact == 1) {
+
+                                    if (data[3].impact_type == 0) {
+
+                                        price = parseFloat(price) + parseFloat(model_impact_value);
+                                        price = price.toFixed(2);
+
+                                    }
+                                    else {
+
+                                        var per = (model_impact_value) / 100;
+                                        model_impact_value = basic_price * per;
+
+                                        price = parseFloat(price) + parseFloat(model_impact_value);
+                                        price = price.toFixed(2);
+                                    }
+
+                                }
+
+                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+
+                                if(margin == 1)
+                                {
+                                    if (data[2]) {
+
+                                        var supplier_margin = data[2].margin;
+                                        var retailer_margin = data[2].retailer_margin;
+
+                                        if (supplier_margin && retailer_margin) {
+                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
                                         }
+                                    }
+                                }
 
-                                        if (m2_impact == 1) {
-
-                                            impact_value = impact_value * ((width/100) * (height/100));
-
-                                        }
-
-                                        if(margin == 1)
-                                        {
-                                            if (data[2]) {
-
-                                                var supplier_margin = data[2].margin;
-                                                var retailer_margin = data[2].retailer_margin;
-
-                                                if (supplier_margin && retailer_margin) {
-                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                                }
-                                            }
-                                        }
-
-										impact_value = parseFloat(impact_value).toFixed(2);
-										price = parseFloat(price) + parseFloat(impact_value);
-										price = price.toFixed(2);
-									}
-									else {
-
-										var impact_value = data[3].value;
-										var per = (impact_value) / 100;
-										impact_value = basic_price * per;
-
-                                        if (m1_impact == 1) {
-
-                                            impact_value = impact_value * (width / 100);
-
-                                        }
-
-                                        if (m2_impact == 1) {
-
-                                            impact_value = impact_value * ((width/100) * (height/100));
-
-                                        }
-
-                                        if(margin == 1)
-                                        {
-                                            if (data[2]) {
-
-                                                var supplier_margin = data[2].margin;
-                                                var retailer_margin = data[2].retailer_margin;
-
-                                                if (supplier_margin && retailer_margin) {
-                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                                }
-                                            }
-                                        }
-
-										impact_value = parseFloat(impact_value).toFixed(2);
-										price = parseFloat(price) + parseFloat(impact_value);
-										price = price.toFixed(2);
-									}
-								}
-								else {
-									var impact_value = 0;
-									price = parseFloat(price) + parseFloat(impact_value);
-									price = price.toFixed(2);
-								}
+                                price = parseFloat(price).toFixed(2);
 
 								var price_before_labor = parseFloat(price).toFixed(2);
 								var labor = 0;
@@ -2565,7 +2540,7 @@
 								current.parent().parent().find('.price_before_labor_old').val(price_before_labor);
 								current.parent().parent().find('.labor_impact').val(labor.replace(/\./g, ','));
 								current.parent().parent().find('.labor_impact_old').val(labor);
-								current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
+								current.parent().parent().find('.model').find('.model_impact_value').val(model_impact_value);
 								//current.parent().parent().find('.price').text('€ ' + Math.round(price));
 								current.parent().parent().find('.price').text('€ ' + price.replace(/\./g, ','));
 								current.parent().parent().find('#row_total').val(price);
@@ -2728,6 +2703,8 @@
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
                                 var m2_impact = data[3].m2_impact;
+                                var m1_impact_value = 0;
+                                var m2_impact_value = 0;
 
 								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
@@ -2838,82 +2815,55 @@
 									current.parent().find('.f_area').val(0);
 								}
 
-								if (data[3].price_impact == 1) {
+                                var model_impact_value = data[3].value;
 
-									if (data[3].impact_type == 0) {
+                                if (m1_impact == 1) {
 
-									    var impact_value = data[3].value;
+                                    m1_impact_value = model_impact_value * (width / 100);
 
-                                        if (m1_impact == 1) {
+                                }
 
-                                            impact_value = impact_value * (width / 100);
+                                if (m2_impact == 1) {
 
+                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
+
+                                }
+
+                                if (data[3].price_impact == 1) {
+
+                                    if (data[3].impact_type == 0) {
+
+                                        price = parseFloat(price) + parseFloat(model_impact_value);
+                                        price = price.toFixed(2);
+
+                                    }
+                                    else {
+
+                                        var per = (model_impact_value) / 100;
+                                        model_impact_value = basic_price * per;
+
+                                        price = parseFloat(price) + parseFloat(model_impact_value);
+                                        price = price.toFixed(2);
+                                    }
+
+                                }
+
+                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+
+                                if(margin == 1)
+                                {
+                                    if (data[2]) {
+
+                                        var supplier_margin = data[2].margin;
+                                        var retailer_margin = data[2].retailer_margin;
+
+                                        if (supplier_margin && retailer_margin) {
+                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
                                         }
+                                    }
+                                }
 
-                                        if (m2_impact == 1) {
-
-                                            impact_value = impact_value * ((width/100) * (height/100));
-
-                                        }
-
-                                        if(margin == 1)
-                                        {
-                                            if (data[2]) {
-
-                                                var supplier_margin = data[2].margin;
-                                                var retailer_margin = data[2].retailer_margin;
-
-                                                if (supplier_margin && retailer_margin) {
-                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                                }
-                                            }
-                                        }
-
-										impact_value = parseFloat(impact_value).toFixed(2);
-										price = parseFloat(price) + parseFloat(impact_value);
-										price = price.toFixed(2);
-									}
-									else {
-
-										var impact_value = data[3].value;
-										var per = (impact_value) / 100;
-										impact_value = basic_price * per;
-
-                                        if (m1_impact == 1) {
-
-                                            impact_value = impact_value * (width / 100);
-
-                                        }
-
-                                        if (m2_impact == 1) {
-
-                                            impact_value = impact_value * ((width/100) * (height/100));
-
-                                        }
-
-                                        if(margin == 1)
-                                        {
-                                            if (data[2]) {
-
-                                                var supplier_margin = data[2].margin;
-                                                var retailer_margin = data[2].retailer_margin;
-
-                                                if (supplier_margin && retailer_margin) {
-                                                    impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                                }
-                                            }
-                                        }
-
-										impact_value = parseFloat(impact_value).toFixed(2);
-										price = parseFloat(price) + parseFloat(impact_value);
-										price = price.toFixed(2);
-									}
-								}
-								else {
-									var impact_value = 0;
-									price = parseFloat(price) + parseFloat(impact_value);
-									price = price.toFixed(2);
-								}
+                                price = parseFloat(price).toFixed(2);
 
 								var price_before_labor = parseFloat(price).toFixed(2);
 								var labor = 0;
@@ -2931,7 +2881,7 @@
 								current.parent().parent().find('.price_before_labor_old').val(price_before_labor);
 								current.parent().parent().find('.labor_impact').val(labor.replace(/\./g, ','));
 								current.parent().parent().find('.labor_impact_old').val(labor);
-								current.parent().parent().find('.model').find('.model_impact_value').val(impact_value);
+								current.parent().parent().find('.model').find('.model_impact_value').val(model_impact_value);
 								//current.parent().parent().find('.price').text('€ ' + Math.round(price));
 								current.parent().parent().find('.price').text('€ ' + price.replace(/\./g, ','));
 								current.parent().parent().find('#row_total').val(price);
