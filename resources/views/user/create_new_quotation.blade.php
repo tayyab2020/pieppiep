@@ -4477,14 +4477,12 @@
                                         var retailer_margin = data[2].retailer_margin;
 
                                         if (supplier_margin && retailer_margin) {
-                                            console.log(price);
                                             price = (parseFloat(price) / supplier_margin) * retailer_margin;
-                                            console.log(price);
                                         }
                                     }
                                 }
 
-                                price = price.toFixed(2);
+                                price = parseFloat(price).toFixed(2);
 
 								var price_before_labor = parseFloat(price).toFixed(2);
 								var labor = 0;
