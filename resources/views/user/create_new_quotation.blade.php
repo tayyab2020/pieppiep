@@ -4477,7 +4477,9 @@
                                         var retailer_margin = data[2].retailer_margin;
 
                                         if (supplier_margin && retailer_margin) {
+                                            console.log(price);
                                             price = (parseFloat(price) / supplier_margin) * retailer_margin;
+                                            console.log(price);
                                         }
                                     }
                                 }
