@@ -65,6 +65,7 @@
   Route::get('/login', 'Auth\UserLoginController@showLoginForm')->name('user-login');
   Route::post('/login', 'Auth\UserLoginController@login')->name('user-login-submit');
   Route::get('/logout', 'Auth\UserLoginController@logout')->name('user-logout');
+  Route::get('/compress-images','UserController@compress_image');
 
 
   Route::prefix('aanbieder')->group(function() {

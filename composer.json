@@ -7,11 +7,12 @@
     "require": {
         "php": ">=7.1.3",
         "anhskohbo/no-captcha": "^3.1",
-        "barryvdh/laravel-dompdf": "^0.8.5",
+        "barryvdh/laravel-dompdf": "0.8.7",
         "cartalyst/stripe-laravel": "10.0.*",
         "doctrine/inflector": "1.2.x",
         "elic-dev/laravel-site-protection": "^1.0",
         "google/recaptcha": "^1.2",
+        "intervention/image": "^2.7",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "^3.1",

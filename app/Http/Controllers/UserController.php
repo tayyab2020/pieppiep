@@ -65,6 +65,7 @@ use App\handyman_unavailability_hours;
 use File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Intervention\Image\Facades\Image;
 use PDF;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -6377,6 +6378,49 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function compressImage($source, $destination, $quality) {
+
+        $info = getimagesize($source);
+
+        if (isset($info['mime']) && $info['mime'] == 'image/jpeg')
+        {
+            $source = imagecreatefromjpeg($source);
+        }
+
+        $img = Image::make($source);
+
+        $img->resize(300, 300, function($constraint){
+            $constraint->aspectRatio();
+        })->save($destination);
+
+        return;
+
+    }
+
+    public function compress_image()
+    {
+        $users = User::all();
+
+        foreach($users as $user)
+        {
+            if($user->photo)
+            {
+                $path = public_path('assets/images/' . $user->photo);
+
+                if (File::exists($path)) {
+                    $tmpFilePath = 'assets/images/';
+                    $hardPath =  time() . '.' .pathinfo($path, PATHINFO_EXTENSION);
+
+                    $target_file = $tmpFilePath . $hardPath;
+
+                    $this->compressImage($path,$target_file,20);
+                    $user->compressed_photo = $hardPath;
+                    $user->save();
+                }
+            }
+        }
+    }
+
     public function TemporaryProfileUpdate(Request $request)
     {
         $input = $request->all();
@@ -6428,32 +6472,61 @@ class UserController extends Controller
                     \File::delete(public_path() .'/assets/images/'.$check->photo);
                 }
 
+                if ($check->compressed_photo) {
+                    \File::delete(public_path() .'/assets/images/'.$check->compressed_photo);
+                }
+
+                $image = $request->file('photo');
+
+                $tmpFilePath = 'assets/images/';
+                $hardPath =  time() . $image->getClientOriginalName();
+
+                $target_file = $tmpFilePath . $hardPath;
+
+                $this->compressImage($image,$target_file,20);
+
                 $name = time() . $file->getClientOriginalName();
                 $file->move('assets/images', $name);
 
-                $handyman = User::where('id',$user_id)->update(['photo' => $name]);
+                User::where('id',$user_id)->update(['photo' => $name, 'compressed_photo' => $hardPath]);
 
                 $input['photo'] = $name;
+                $input['compressed_photo'] = $hardPath;
+
             } else {
 
                 $input['photo'] = $check->photo;
+                $input['compressed_photo'] = null;
 
             }
 
-            $temp = handyman_temporary::where('handyman_id', $user->id)->update(['handyman_id' => $user->id, 'email' => $user->email, 'name' => $input['name'], 'family_name' => $input['family_name'], 'photo' => $input['photo'], 'description' => $input['description'], 'language' => $input['language'], 'education' => $input['education'], 'profession' => $input['profession'], 'city' => $input['city'], 'address' => $input['address'], 'phone' => $input['phone'], 'web' => $input['web'], 'special' => $input['special'], 'registration_number' => $input['registration_number'], 'company_name' => $input['company_name'], 'tax_number' => $input['tax_number'], 'bank_account' => $input['bank_account'], 'postcode' => $input['postcode'], 'longitude' => $longitude, 'latitude' => $latitude ]);
+            handyman_temporary::where('handyman_id', $user->id)->update(['handyman_id' => $user->id, 'email' => $user->email, 'name' => $input['name'], 'family_name' => $input['family_name'], 'photo' => $input['photo'], 'compressed_photo' => $input['compressed_photo'], 'description' => $input['description'], 'language' => $input['language'], 'education' => $input['education'], 'profession' => $input['profession'], 'city' => $input['city'], 'address' => $input['address'], 'phone' => $input['phone'], 'web' => $input['web'], 'special' => $input['special'], 'registration_number' => $input['registration_number'], 'company_name' => $input['company_name'], 'tax_number' => $input['tax_number'], 'bank_account' => $input['bank_account'], 'postcode' => $input['postcode'], 'longitude' => $longitude, 'latitude' => $latitude ]);
 
         } else {
 
             if ($file = $request->file('photo')) {
+
+                $image = $request->file('photo');
+
+                $tmpFilePath = 'assets/images/';
+                $hardPath =  time() . $image->getClientOriginalName();
+
+                $target_file = $tmpFilePath . $hardPath;
+
+                $this->compressImage($image,$target_file,20);
+
                 $name = time() . $file->getClientOriginalName();
                 $file->move('assets/images', $name);
 
-                $handyman = User::where('id',$user_id)->update(['photo' => $name]);
+                User::where('id',$user_id)->update(['photo' => $name, 'compressed_photo' => $hardPath]);
 
                 $input['photo'] = $name;
+                $input['compressed_photo'] = $hardPath;
+
             } else {
 
                 $input['photo'] = null;
+                $input['compressed_photo'] = null;
 
             }
 
@@ -6463,6 +6536,7 @@ class UserController extends Controller
             $post->name = $input['name'];
             $post->family_name = $input['family_name'];
             $post->photo = $input['photo'];
+            $post->compressed_photo = $input['compressed_photo'];
             $post->description = $input['description'];
             $post->language = $input['language'];
             $post->education = $input['education'];
