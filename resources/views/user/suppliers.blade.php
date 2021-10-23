@@ -101,6 +101,7 @@
 
                                                                         @if($user->active)
 
+                                                                            <a href="{{route('supplier-products',$user->id)}}" class="btn btn-success product-btn" style="margin: 5px !important;"><i class="fa fa-product-hunt" ></i> Products</a>
                                                                             <a href="{{route('supplier-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;margin: 5px !important;"><i class="fa fa-user" ></i> Details</a>
 
                                                                         @endif

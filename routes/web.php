@@ -398,6 +398,7 @@
   Route::get('/suppliers/create', 'AdminUserController@createSupplier')->name('admin-supplier-create');
   Route::get('/suppliers/edit/{id}', 'AdminUserController@editSupplier')->name('admin-supplier-edit');
   Route::get('/suppliers/details/{id}', 'AdminUserController@DetailsSupplier')->name('admin-supplier-details');
+  Route::get('/suppliers/products/{id}', 'ProductController@ProductsSupplier')->name('supplier-products');
 
   Route::get('/handymans/details/{id}', 'AdminUserController@Details')->name('admin-user-details');
 

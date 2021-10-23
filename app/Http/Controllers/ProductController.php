@@ -20,6 +20,7 @@ use App\Products;
 use App\retailer_labor_costs;
 use App\retailer_margins;
 use App\retailers_requests;
+use App\User;
 use App\vats;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -73,16 +74,48 @@ class ProductController extends Controller
             }
             else
             {
-                $cats = Products::leftJoin('retailer_margins', function($join) use($user_id){
-                    $join->on('products.id', '=', 'retailer_margins.product_id')
-                        ->where('retailer_margins.retailer_id', '=', $user_id);
-                })->leftJoin('retailer_labor_costs', function($join) use($user_id){
-                    $join->on('products.id', '=', 'retailer_labor_costs.product_id')
-                        ->where('retailer_labor_costs.retailer_id', '=', $user_id);
-                })->leftjoin('retailers_requests','retailers_requests.supplier_id','=','products.user_id')->leftjoin('users','users.id','=','products.user_id')->leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('retailers_requests.retailer_id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->orderBy('products.id','desc')->select('products.*','retailer_labor_costs.labor','retailer_margins.margin as retailer_margin','users.company_name','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
-
-                return view('admin.product.index',compact('cats'));
+                return redirect()->route('suppliers');
             }
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function ProductsSupplier($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->can('user-products'))
+        {
+            $cats = Products::leftJoin('retailer_margins', function($join) use($user_id){
+                $join->on('products.id', '=', 'retailer_margins.product_id')
+                    ->where('retailer_margins.retailer_id', '=', $user_id);
+            })->leftJoin('retailer_labor_costs', function($join) use($user_id){
+                $join->on('products.id', '=', 'retailer_labor_costs.product_id')
+                    ->where('retailer_labor_costs.retailer_id', '=', $user_id);
+            })
+                ->leftjoin('retailers_requests','retailers_requests.supplier_id','=','products.user_id')
+                ->leftjoin('users','users.id','=','products.user_id')
+                ->leftjoin('categories','categories.id','=','products.category_id')
+                ->leftjoin('brands','brands.id','=','products.brand_id')
+                ->leftjoin('models','models.id','=','products.model_id')
+                ->where('products.user_id',$id)
+                ->where('retailers_requests.retailer_id',$user_id)
+                ->where('retailers_requests.status',1)
+                ->where('retailers_requests.active',1)
+                ->orderBy('products.id','desc')
+                ->select('products.*','retailer_labor_costs.labor','retailer_margins.margin as retailer_margin','users.company_name','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
+
+            return view('admin.product.index',compact('cats'));
         }
         else
         {
