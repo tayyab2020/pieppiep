@@ -40,15 +40,15 @@
 
                                     <div class="col-md-6 col-sm-6 col-xs-12">
 
-                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">Customer Details</p>
-                                        <p class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
-                                        <p class="mb-1 m-rest">{{$client_address}}</p>
-                                        <p class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
-                                        <p class="mb-1 m-rest">{{$client->email}}</p>
-                                        <br>
-                                        <br>
-                                        @if($role != 'retailer') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
-                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">Customer Details</p>
+                                    <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
+                                    <p style="font-size: 18px;" class="mb-1 m-rest">{{$client_address}}</p>
+                                    <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
+                                    <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->email}}</p>
+                                    <br>
+                                    <br>
+                                    @if($role != 'retailer') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
 
                                     </div>
 
@@ -282,10 +282,10 @@
 
                                         <thead>
                                         <tr>
-                                            <th style="width: 20% !important;font-size: 22px;">Totaal korting</th>
-                                            <th style="width: 20% !important;font-size: 22px;font-weight: 500;text-align: center;">Exclusief BTW</th>
-                                            <th style="width: 25% !important;font-size: 22px;text-align: center;font-weight: 500;">BTW</th>
-                                            <th style="width: 35% !important;font-size: 22px;text-align: right;">Bedrag inc. btw</th>
+                                            <th style="width: 20% !important;font-size: 16px;">Totaal korting</th>
+                                            <th style="width: 20% !important;font-size: 16px;font-weight: 500;text-align: center;">Exclusief BTW</th>
+                                            <th style="width: 25% !important;font-size: 16px;text-align: center;font-weight: 500;">BTW</th>
+                                            <th style="width: 35% !important;font-size: 16px;text-align: right;">Bedrag inc. btw</th>
                                         </tr>
                                         </thead>
 
