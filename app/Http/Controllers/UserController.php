@@ -2319,6 +2319,7 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
+        $req_type = $request->type;
 
         if($main_id)
         {
@@ -2327,29 +2328,69 @@ class UserController extends Controller
         }
 
         $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->where('new_quotations.id',$id)->select('new_quotations.*','users.name','users.email')->first();
-        $quotation_mail_template = email_templates::where('type','quotation')->where('user_id',$user_id)->first();
 
-        if(!$quotation_mail_template)
+        if($req_type == 'quotation')
         {
-            $quotation_mail_subject_template = 'Offerte: {offerte_nummer}';
-            $quotation_mail_body_template = '<div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Beste {aan_voornaam},</span></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;"><br></span></span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr;"><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px; color: windowtext; margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Hierbij de offerte met offertenummer {offerte_nummer}.</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><br></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 16px; font-variant-ligatures: none;">{Click here to accept this quote directly online}</span><br></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1287498014" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{217}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 12pt;">&nbsp;</span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="588099994" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{36}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Met vriendelijke groet,</span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_voornaam}</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_bedrijfsnaam}</span></span></p></div>';
+            $mail_template = email_templates::where('type','quotation')->where('user_id',$user_id)->first();
+
+            if(!$mail_template)
+            {
+                $mail_subject_template = 'Offerte: {offerte_nummer}';
+                $mail_body_template = '<div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Beste {aan_voornaam},</span></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;"><br></span></span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr;"><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px; color: windowtext; margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Hierbij de offerte met offertenummer {offerte_nummer}.</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><br></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 16px; font-variant-ligatures: none;">{Click here to accept this quote directly online}</span><br></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1287498014" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{217}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 12pt;">&nbsp;</span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="588099994" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{36}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Met vriendelijke groet,</span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_voornaam}</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_bedrijfsnaam}</span></span></p></div>';
+            }
+            else
+            {
+                $mail_subject_template = $mail_template->subject;
+                $mail_body_template = $mail_template->body;
+            }
+
+            $link = route('accept-new-quotation-mail', ['id' => Crypt::encrypt($data->id)]);
+
+            $mail_subject_template = str_replace('{offerte_nummer}',$data->quotation_invoice_number,$mail_subject_template);
+            $mail_body_template = str_replace('{aan_voornaam}',$data->name,$mail_body_template);
+            $mail_body_template = str_replace('{offerte_nummer}',$data->quotation_invoice_number,$mail_body_template);
+            $mail_body_template = str_replace('{Click here to accept this quote directly online}','Click <a style="color: blue;" href="'.$link.'">here</a> to accept this quote directly online',$mail_body_template);
+            $mail_body_template = str_replace('{van_voornaam}',$user->name,$mail_body_template);
+            $mail_body_template = str_replace('{van_bedrijfsnaam}',$user->company_name,$mail_body_template);
+        }
+        else if($req_type == 'order')
+        {
+            $mail_template = email_templates::where('type','order')->where('user_id',$user_id)->first();
+
+            if(!$mail_template)
+            {
+                $mail_subject_template = 'Order: {order_nummer}';
+                $mail_body_template = '<div class="OutlineElement Ltr  BCX0 SCXW88000976" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW88000976 BCX0" paraid="1492123990" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{70}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW88000976 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Beste {aan_voornaam},</span></span></p><p class="Paragraph SCXW88000976 BCX0" paraid="1492123990" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{70}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span class="EOP SCXW88000976 BCX0" data-ccp-props="{&quot;134233117&quot;:true,&quot;134233118&quot;:true,&quot;201341983&quot;:0,&quot;335559739&quot;:300,&quot;335559740&quot;:240}" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br></span></p></div><div class="OutlineElement Ltr  BCX0 SCXW88000976" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW88000976 BCX0" paraid="175123627" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{80}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span class="LineBreakBlob BlobObject DragDrop SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="NormalTextRun SCXW140321656 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-variant-ligatures: none;">Hiebij de order met ordernummer {order_nummer}.</span></span></p><p class="Paragraph SCXW88000976 BCX0" paraid="175123627" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{80}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span class="EOP SCXW88000976 BCX0" data-ccp-props="{&quot;134233117&quot;:true,&quot;134233118&quot;:true,&quot;201341983&quot;:0,&quot;335559739&quot;:300,&quot;335559740&quot;:240}" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);">&nbsp;</span></p></div><div class="OutlineElement Ltr  BCX0 SCXW88000976" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW88000976 BCX0" paraid="1552157293" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{102}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Graag ontvangen we hier een orderbevestiging van.</span></p></div><div class="OutlineElement Ltr  BCX0 SCXW88000976" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW88000976 BCX0" paraid="2113674558" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{108}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Met vriendelijke groet,</span><span class="LineBreakBlob BlobObject DragDrop SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW88000976 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_voornaam}</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW88000976 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW88000976 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_bedrijfsnaam}</span></span></p></div>';
+            }
+            else
+            {
+                $mail_subject_template = $mail_template->subject;
+                $mail_body_template = $mail_template->body;
+            }
         }
         else
         {
-            $quotation_mail_subject_template = $quotation_mail_template->subject;
-            $quotation_mail_body_template = $quotation_mail_template->body;
+            $mail_template = email_templates::where('type','invoice')->where('user_id',$user_id)->first();
+
+            if(!$mail_template)
+            {
+                $mail_subject_template = 'Factuur: {factuur_nummer}';
+                $mail_body_template = '<div class="OutlineElement Ltr  BCX0 SCXW91431922" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW91431922 BCX0" paraid="1500201224" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{95}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW91431922 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Beste {aan_voornaam},</span></span></p></div><div class="OutlineElement Ltr  BCX0 SCXW91431922" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW91431922 BCX0" paraid="44738701" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{105}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW91431922 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;"><br></span></span></p><p class="Paragraph SCXW91431922 BCX0" paraid="44738701" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{105}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span class="LineBreakBlob BlobObject DragDrop SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="NormalTextRun  BCX0 SCXW141786481" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-variant-ligatures: none;">Hierbij de factuur met factuurnummer {factuur_nummer}.</span></span></p><p class="Paragraph SCXW91431922 BCX0" paraid="44738701" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{105}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><br></p></div><div class="OutlineElement Ltr  BCX0 SCXW91431922" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW91431922 BCX0" paraid="1765816471" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{151}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Met vriendelijke groet,</span><span class="LineBreakBlob BlobObject DragDrop SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW91431922 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_voornaam}</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW91431922 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW91431922 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_bedrijfsnaam}</span></span></p></div>';
+            }
+            else
+            {
+                $mail_subject_template = $mail_template->subject;
+                $mail_body_template = $mail_template->body;
+            }
+
+            $mail_subject_template = str_replace('{factuur_nummer}',$data->invoice_number,$mail_subject_template);
+            $mail_body_template = str_replace('{aan_voornaam}',$data->name,$mail_body_template);
+            $mail_body_template = str_replace('{factuur_nummer}',$data->invoice_number,$mail_body_template);
+            $mail_body_template = str_replace('{van_voornaam}',$user->name,$mail_body_template);
+            $mail_body_template = str_replace('{van_bedrijfsnaam}',$user->company_name,$mail_body_template);
         }
 
-        $link = route('accept-new-quotation-mail', ['id' => Crypt::encrypt($data->id)]);
-
-        $quotation_mail_subject_template = str_replace('{offerte_nummer}',$data->quotation_invoice_number,$quotation_mail_subject_template);
-        $quotation_mail_body_template = str_replace('{aan_voornaam}',$data->name,$quotation_mail_body_template);
-        $quotation_mail_body_template = str_replace('{offerte_nummer}',$data->quotation_invoice_number,$quotation_mail_body_template);
-        $quotation_mail_body_template = str_replace('{Click here to accept this quote directly online}','Click <a style="color: blue;" href="'.$link.'">here</a> to accept this quote directly online',$quotation_mail_body_template);
-        $quotation_mail_body_template = str_replace('{van_voornaam}',$user->name,$quotation_mail_body_template);
-        $quotation_mail_body_template = str_replace('{van_bedrijfsnaam}',$user->company_name,$quotation_mail_body_template);
-
-        $post = array($data->email,$quotation_mail_subject_template,$quotation_mail_body_template);
+        $post = array($data->email,$mail_subject_template,$mail_body_template);
 
         return $post;
     }
@@ -3750,7 +3791,7 @@ class UserController extends Controller
         }
     }
 
-    public function SendOrder($id)
+    public function SendOrder(Request $request)
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
@@ -3762,14 +3803,14 @@ class UserController extends Controller
             $user_id = $user->id;
         }
 
-        $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
+        $check = new_quotations::where('id',$request->quotation_id1)->where('creator_id',$user_id)->first();
 
         if($check)
         {
             $check->processing = 1;
             $check->save();
 
-            SendOrder::dispatch($id,$user);
+            SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1);
 
             Session::flash('success', 'Order will be sent to supplier(s) soon...');
             return redirect()->route('new-quotations');
@@ -3917,7 +3958,7 @@ class UserController extends Controller
         }
     }
 
-    public function SendInvoice($id)
+    public function SendInvoice(Request $request)
     {
         $user = Auth::guard('user')->user();
         $main_id = $user->main_id;
@@ -3928,7 +3969,7 @@ class UserController extends Controller
         }
 
         $user_id = $user->id;
-        $check = new_quotations::where('new_quotations.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.invoice',1)->where('new_quotations.invoice_sent',0)->first();
+        $check = new_quotations::where('new_quotations.id',$request->quotation_id2)->where('new_quotations.creator_id',$user_id)->where('new_quotations.invoice',1)->where('new_quotations.invoice_sent',0)->first();
 
         if (!$check) {
             return redirect()->route('new-quotations');
@@ -3946,7 +3987,26 @@ class UserController extends Controller
         $file = public_path() . '/assets/newInvoices/' . $filename;
         $quotation_invoice_number = $check->quotation_invoice_number;
 
-        \Mail::send('user.custom_quotation_mail',
+        $mail_to = $request->mail_to2;
+        $subject = $request->mail_subject2;
+        $msg = $request->mail_body2;
+
+        \Mail::send('user.global_mail',
+            array(
+                'msg' => $msg,
+            ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename) {
+                $message->to($mail_to)
+                    ->from('info@pieppiep.com')
+                    ->subject($subject)
+                    ->attach($file, [
+                        'as' => $filename,
+                        'mime' => 'application/pdf',
+                    ]);
+            });
+
+        new_quotations::where('id', $request->quotation_id2)->update(['mail_invoice_to' => $request->mail_to2]);
+
+        /*\Mail::send('user.custom_quotation_mail',
             array(
                 'client' => $client_name,
                 'company_name' => $retailer_company,
@@ -3962,7 +4022,7 @@ class UserController extends Controller
                     'mime' => 'application/pdf',
                 ]);
 
-            });
+            });*/
 
         Session::flash('success', 'Invoice sent to customer successfully!');
         return redirect()->back();
@@ -3986,8 +4046,8 @@ class UserController extends Controller
 
         if($data)
         {
-            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->user_id)->select('customers_details.*','users.email')->first();
-            $request = new_quotations::where('id',$invoice_id)->first();
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->customer_details)->select('customers_details.*','users.email')->first();
+            $request = new_quotations::where('id',$invoice_id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
             $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
 
             $product_titles = array();
@@ -4001,20 +4061,33 @@ class UserController extends Controller
             $comments = array();
             $delivery = array();
             $feature_sub_titles = array();
-            $rates = array();
+            $labor_impact = array();
+            $price_before_labor = array();
+            $discount = array();
+            $rate = array();
+            $labor_discount = array();
+            $total = array();
+            $total_discount = array();
 
             foreach ($request->products as $x => $temp)
             {
-                $feature_sub_titles[$x][] = 'empty';
+                /*$feature_sub_titles[$x][] = 'empty';*/
                 $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
                 $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
+                $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
                 $qty[] = $temp->qty;
                 $width[] = $temp->width;
                 $width_unit[] = $temp->width_unit;
                 $height[] = $temp->height;
                 $height_unit[] = $temp->height_unit;
                 $delivery[] = $temp->delivery_date;
-                $rates[] = $temp->rate;
+                $labor_impact[] = $temp->labor_impact;
+                $price_before_labor[] = $temp->price_before_labor;
+                $discount[] = $temp->discount;
+                $rate[] = $temp->rate;
+                $labor_discount[] = $temp->labor_discount;
+                $total[] = $temp->amount;
+                $total_discount[] = $temp->total_discount;
 
                 $features = new_quotations_features::where('quotation_data_id',$temp->id)->get();
 
@@ -4056,8 +4129,13 @@ class UserController extends Controller
             $request->height = $height;
             $request->height_unit = $height_unit;
             $request->delivery_date = $delivery;
-            $request->rate = $rates;
-            $request->total_amount = $request->grand_total;
+            $request->labor_impact = $labor_impact;
+            $request->price_before_labor = $price_before_labor;
+            $request->discount = $discount;
+            $request->rate = $rate;
+            $request->labor_discount = $labor_discount;
+            $request->total = $total;
+            $request->total_discount = $total_discount;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
             $order_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter_invoice);
@@ -4069,7 +4147,7 @@ class UserController extends Controller
             $date = date("Y-m-d");
             $role = 'invoice';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
 
             $pdf->save($file);
 

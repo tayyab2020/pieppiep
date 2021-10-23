@@ -22,33 +22,37 @@
                                     </div>
 
                                     <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
-                                        @if($role != 'retailer') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
-                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
+                                        {{--<p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>--}}
+                                        <p style="margin: 0">{{$user->company_name}}</p>
+                                        <p style="margin: 0">{{$address}}</p>
+                                        <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
+                                        <p style="margin: 0">TEL: {{$user->phone}}</p>
+                                        <p style="margin: 0">{{$user->email}}</p>
                                     </div>
 
                                 </div>
 
-                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="row p-5" style="margin-right: 15px !important;">
 
-                                    <p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>
-                                    <p style="margin: 0">{{$user->company_name}}</p>
-                                    <p style="margin: 0">{{$address}}</p>
-                                    <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
-                                    <p style="margin: 0">TEL: {{$user->phone}}</p>
-                                    <p style="margin: 0">{{$user->email}}</p>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
 
-                                </div>
+                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">Customer Details</p>
+                                        <p class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
+                                        <p class="mb-1 m-rest">{{$client_address}}</p>
+                                        <p class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
+                                        <p class="mb-1 m-rest">{{$client->email}}</p>
+                                        <br>
+                                        <br>
+                                        @if($role != 'retailer') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
+                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
 
-                                <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
+                                    </div>
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">Customer Details</p>
-                                    <p class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
-                                    <p class="mb-1 m-rest">{{$client_address}}</p>
-                                    <p class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
-                                    <p class="mb-1 m-rest">{{$client->email}}</p>
-                                    <br>
-                                    <p class="text-muted" style="font-size: 15px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
-                                    <p class="text-muted" style="font-size: 15px;margin: 0;">Client ID {{sprintf('%04u', $client->id)}}</p>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
+                                        <br><br><br><br><br>
+                                        <p class="text-muted" style="font-size: 15px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
+                                        {{--<p class="text-muted" style="font-size: 15px;margin: 0;">Client ID {{sprintf('%04u', $client->id)}}</p>--}}
+                                    </div>
 
                                 </div>
 
@@ -162,7 +166,7 @@
                                                             }
                                                             else {
 
-                                                                $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null;
+                                                                $comment = $comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null;
                                                                 $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
                                                                 /*$string = substr($string, 4);*/
 
@@ -277,7 +281,7 @@
                                             <th style="width: 20% !important;font-size: 22px;">Totaal korting</th>
                                             <th style="width: 20% !important;font-size: 22px;font-weight: 500;text-align: center;">Exclusief BTW</th>
                                             <th style="width: 25% !important;font-size: 22px;text-align: center;font-weight: 500;">BTW</th>
-                                            <th style="width: 35% !important;font-size: 22px;text-align: right;">Te betalen</th>
+                                            <th style="width: 35% !important;font-size: 22px;text-align: right;">Bedrag inc. btw</th>
                                         </tr>
                                         </thead>
 
@@ -346,7 +350,7 @@
                                         <td style="width: 40%;font-size: 20px;padding: 5px;"></td>
                                         <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
                                             <div style="display: inline-block;width: 100%;">
-                                                <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Totaal incl btw</span>
+                                                <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Te betalen</span>
                                                 <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)(str_replace(',', '.',$request->total_amount)), 2, ',', '.')}}</span>
                                             </div>
                                         </td>

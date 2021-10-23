@@ -11,6 +11,7 @@ use App\new_quotations_sub_products;
 use App\product;
 use App\product_features;
 use App\product_ladderbands;
+use App\product_models;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -25,6 +26,9 @@ class SendOrder implements ShouldQueue
 
     private $id = null;
     private $user = null;
+    private $mail_to = null;
+    private $mail_subject = null;
+    private $mail_body = null;
     public $timeout = 0;
 
     /**
@@ -32,10 +36,12 @@ class SendOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($id,$user)
+    public function __construct($id,$user,$mail_subject,$mail_body)
     {
         $this->id = $id;
         $this->user = $user;
+        $this->mail_subject = $mail_subject;
+        $this->mail_body = $mail_body;
     }
 
     /**
@@ -46,10 +52,11 @@ class SendOrder implements ShouldQueue
     public function handle()
     {
         $id = $this->id;
-
         $user = $this->user;
         $user_id = $user->id;
         $main_id = $user->main_id;
+        $mail_subject = $this->mail_subject;
+        $mail_body = $this->mail_body;
         $sup_mail = array();
 
         if($main_id)
@@ -74,11 +81,12 @@ class SendOrder implements ShouldQueue
             $supplier_email = $supplier_data->email;
             $counter = $supplier_data->counter_order;
 
-            $request = new_quotations::where('id',$id)->first();
+            $request = new_quotations::where('id',$id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
             $request->products = new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->get();
 
             $product_titles = array();
             $color_titles = array();
+            $model_titles = array();
             $sub_titles = array();
             $qty = array();
             $width = array();
@@ -87,19 +95,34 @@ class SendOrder implements ShouldQueue
             $height_unit = array();
             $comments = array();
             $delivery = array();
+            $labor_impact = array();
+            $price_before_labor = array();
+            $discount = array();
+            $rate = array();
+            $labor_discount = array();
+            $total = array();
+            $total_discount = array();
             $feature_sub_titles = array();
 
             foreach ($request->products as $x => $temp)
             {
-                $feature_sub_titles[$x][] = 'empty';
+                /*$feature_sub_titles[$x][] = 'empty';*/
                 $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
                 $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
+                $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
                 $qty[] = $temp->qty;
                 $width[] = $temp->width;
                 $width_unit[] = $temp->width_unit;
                 $height[] = $temp->height;
                 $height_unit[] = $temp->height_unit;
                 $delivery[] = $temp->delivery_date;
+                $labor_impact[] = $temp->labor_impact;
+                $price_before_labor[] = $temp->price_before_labor;
+                $discount[] = $temp->discount;
+                $rate[] = $temp->rate;
+                $labor_discount[] = $temp->labor_discount;
+                $total[] = $temp->amount;
+                $total_discount[] = $temp->total_discount;
 
                 $features = new_quotations_features::where('quotation_data_id',$temp->id)->get();
 
@@ -141,6 +164,13 @@ class SendOrder implements ShouldQueue
             $request->height = $height;
             $request->height_unit = $height_unit;
             $request->delivery_date = $delivery;
+            $request->labor_impact = $labor_impact;
+            $request->price_before_labor = $price_before_labor;
+            $request->discount = $discount;
+            $request->rate = $rate;
+            $request->labor_discount = $labor_discount;
+            $request->total = $total;
+            $request->total_discount = $total_discount;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
             $order_number = date("Y") . "-" . sprintf('%04u', $key) . '-' . sprintf('%04u', $counter);
@@ -154,7 +184,7 @@ class SendOrder implements ShouldQueue
             $date = $request->created_at;
             $role = 'supplier1';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
 
             $pdf->save($file);
 
@@ -169,7 +199,26 @@ class SendOrder implements ShouldQueue
 
         foreach ($sup_mail as $sup)
         {
-            \Mail::send('user.custom_quotation_mail',
+            $mail_subject = str_replace('{order_nummer}',$sup['order_number'],$mail_subject);
+            $mail_body = str_replace('{aan_voornaam}',$sup['name'],$mail_body);
+            $mail_body = str_replace('{order_nummer}',$sup['order_number'],$mail_body);
+            $mail_body = str_replace('{van_voornaam}',$retailer_name,$mail_body);
+            $mail_body = str_replace('{van_bedrijfsnaam}',$retailer_company,$mail_body);
+
+            \Mail::send('user.global_mail',
+                array(
+                    'msg' => $mail_body,
+                ), function ($message) use ($sup,$mail_subject) {
+                    $message->to($sup['email'])
+                        ->from('info@pieppiep.com')
+                        ->subject($mail_subject)
+                        ->attach($sup['file'], [
+                            'as' => $sup['file_name'],
+                            'mime' => 'application/pdf',
+                        ]);
+                });
+
+            /*\Mail::send('user.custom_quotation_mail',
                 array(
                     'supplier' => $sup['name'],
                     'retailer' => $retailer_name,
@@ -185,7 +234,7 @@ class SendOrder implements ShouldQueue
                         'mime' => 'application/pdf',
                     ]);
 
-                });
+                });*/
         }
 
         new_quotations::where('id',$id)->update(['processing' => 0, 'finished' => 1]);

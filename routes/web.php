@@ -130,7 +130,7 @@
   Route::get('/quotation-payment-redirect-page/{id}', 'FrontendController@QuotationPaymentRedirectPage');
   Route::get('/versturen-eigen-offerte/{id}', 'UserController@SendCustomQuotation');
   Route::post('/send-new-quotation', 'UserController@SendNewQuotation')->name('send-new-quotation');
-  Route::get('/send-order/{id}', 'UserController@SendOrder');
+  Route::post('/send-order', 'UserController@SendOrder')->name('send-new-order');
   Route::get('/change-delivery-dates/{id}', 'UserController@ChangeDeliveryDates');
   Route::get('/supplier-order-delivered/{id}', 'UserController@SupplierOrderDelivered');
   Route::get('/retailer-mark-delivered/{id}', 'UserController@RetailerMarkDelivered');
@@ -140,7 +140,7 @@
   Route::get('/eigen-offerte/accepteren-offerte/{id}', 'UserController@CustomQuotationAcceptQuotation');
   Route::get('/accept-new-quotation/{id}', 'UserController@AcceptNewQuotation');
   Route::get('/accept-new-quotation-mail/{id}', 'UserController@AcceptNewQuotationMail')->name('accept-new-quotation-mail');
-  Route::get('/send-invoice/{id}', 'UserController@SendInvoice');
+  Route::post('/send-invoice', 'UserController@SendInvoice')->name('send-new-invoice');
   Route::get('/bekijk-offerteaanvraag-aanbieder/{id}', 'UserController@HandymanQuoteRequest');
   Route::get('/download-handyman-quote-request/{id}', 'UserController@DownloadHandymanQuoteRequest');
   Route::get('/opstellen-offerte/{id}', 'UserController@CreateQuotation');

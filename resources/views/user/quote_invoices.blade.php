@@ -493,7 +493,7 @@
 
                                                                                 @if(!$key->invoice_sent)
 
-                                                                                    <li><a href="{{ url('/aanbieder/send-invoice/'.$key->invoice_id) }}">Send Invoice</a></li>
+                                                                                    <li><a class="send-new-invoice" data-id="{{$key->invoice_id}}" href="javascript:void(0)">Send Invoice</a></li>
 
                                                                                 @endif
 
@@ -582,7 +582,7 @@
 
                                                                                                 @if(!$key->invoice_sent)
 
-                                                                                                    <li><a href="{{ url('/aanbieder/send-invoice/'.$key->invoice_id) }}">Send Invoice</a></li>
+                                                                                                    <li><a class="send-new-invoice" data-id="{{$key->invoice_id}}" href="javascript:void(0)">Send Invoice</a></li>
 
                                                                                                 @endif
 
@@ -614,7 +614,7 @@
 
                                                                                         @if($key->accepted && !$key->processing && !$key->finished)
 
-                                                                                            <li><a href="{{ url('/aanbieder/send-order/'.$key->invoice_id) }}">Send Order</a></li>
+                                                                                            <li><a class="send-new-order" data-id="{{$key->invoice_id}}" href="javascript:void(0)">Send Order</a></li>
 
                                                                                         @endif
 
@@ -857,6 +857,97 @@
                         </div>
                         <div class="modal-footer">
                             <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+        <div id="myModal3" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <form id="send-order-form" action="{{route('send-new-order')}}" method="POST" enctype="multipart/form-data">
+                    {{csrf_field()}}
+
+                    <input type="hidden" name="quotation_id1" id="quotation_id1">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Order Mail Body</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div style="margin: 20px 0;" class="row">
+                                <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>Subject:</label>
+                                    <input type="text" name="mail_subject1" class="form-control">
+                                </div>
+                            </div>
+
+                            <div style="margin: 20px 0;" class="row">
+                                <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>Text:</label>
+                                    <input type="hidden" name="mail_body1">
+                                    <div class="summernote"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form1">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+        <div id="myModal4" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <form id="send-invoice-form" action="{{route('send-new-invoice')}}" method="POST" enctype="multipart/form-data">
+                    {{csrf_field()}}
+
+                    <input type="hidden" name="quotation_id2" id="quotation_id2">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Invoice Mail Body</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div style="margin: 20px 0;" class="row">
+                                <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>To:</label>
+                                    <input type="text" name="mail_to2" class="form-control">
+                                </div>
+                            </div>
+
+                            <div style="margin: 20px 0;" class="row">
+                                <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>Subject:</label>
+                                    <input type="text" name="mail_subject2" class="form-control">
+                                </div>
+                            </div>
+
+                            <div style="margin: 20px 0;" class="row">
+                                <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>Text:</label>
+                                    <input type="hidden" name="mail_body2">
+                                    <div class="summernote"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form2">Submit</button>
                         </div>
                     </div>
 
@@ -1111,7 +1202,7 @@
             $.ajax({
 
                 type: "GET",
-                data: "id=" + id,
+                data: "id=" + id + '&type=quotation',
                 url: "<?php echo url('/aanbieder/get-customer-email')?>",
 
                 success: function (data) {
@@ -1120,7 +1211,7 @@
                     $("[name='mail_to']").val(data[0]);
                     $("[name='mail_subject']").val(data[1]);
                     $("[name='mail_body']").val(data[2]);
-                    $(".note-editable").html(data[2]);
+                    $('#myModal2').find(".note-editable").html(data[2]);
                     $('#myModal2').modal('toggle');
                     $('.modal-backdrop').hide();
 
@@ -1166,16 +1257,150 @@
 
             if(!$("[name='mail_body']").val())
             {
-                $(".note-editable").css('border','1px solid red');
+                $('#myModal2').find(".note-editable").css('border','1px solid red');
                 flag = 1;
             }
             else{
-                $(".note-editable").css('border','');
+                $('#myModal2').find(".note-editable").css('border','');
             }
 
             if(!flag)
             {
                 $('#send-quotation-form').submit();
+            }
+
+        });
+
+        $(".send-new-order").on('click', function (e) {
+
+            var id = $(this).data('id');
+
+            $.ajax({
+
+                type: "GET",
+                data: "id=" + id + '&type=order',
+                url: "<?php echo url('/aanbieder/get-customer-email')?>",
+
+                success: function (data) {
+
+                    $('#quotation_id1').val(id);
+                    $("[name='mail_subject1']").val(data[1]);
+                    $("[name='mail_body1']").val(data[2]);
+                    $('#myModal3').find(".note-editable").html(data[2]);
+                    $('#myModal3').modal('toggle');
+                    $('.modal-backdrop').hide();
+
+                },
+                error: function (data) {
+
+
+                }
+
+            });
+
+        });
+
+        $(document).on('click', '.submit-form1', function () {
+
+            var flag = 0;
+
+            if(!$("[name='mail_subject1']").val())
+            {
+                $("[name='mail_subject1']").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $("[name='mail_subject1']").css('border','');
+            }
+
+            if(!$("[name='mail_body1']").val())
+            {
+                $('#myModal3').find(".note-editable").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $('#myModal3').find(".note-editable").css('border','');
+            }
+
+            if(!flag)
+            {
+                $('#send-order-form').submit();
+            }
+
+        });
+
+        $(".send-new-invoice").on('click', function (e) {
+
+            var id = $(this).data('id');
+
+            $.ajax({
+
+                type: "GET",
+                data: "id=" + id + '&type=invoice',
+                url: "<?php echo url('/aanbieder/get-customer-email')?>",
+
+                success: function (data) {
+
+                    $('#quotation_id2').val(id);
+                    $("[name='mail_to2']").val(data[0]);
+                    $("[name='mail_subject2']").val(data[1]);
+                    $("[name='mail_body2']").val(data[2]);
+                    $('#myModal4').find(".note-editable").html(data[2]);
+                    $('#myModal4').modal('toggle');
+                    $('.modal-backdrop').hide();
+
+                },
+                error: function (data) {
+
+
+                }
+
+            });
+
+        });
+
+        $(document).on('click', '.submit-form2', function () {
+
+            var flag = 0;
+
+            if(!$("[name='mail_to2']").val())
+            {
+                $("[name='mail_to2']").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if(regex.test($("[name='mail_to2']").val()))
+                {
+                    $("[name='mail_to2']").css('border','');
+                }
+                else{
+                    $("[name='mail_to2']").css('border','1px solid red');
+                    flag = 1;
+                }
+            }
+
+            if(!$("[name='mail_subject2']").val())
+            {
+                $("[name='mail_subject2']").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $("[name='mail_subject2']").css('border','');
+            }
+
+            if(!$("[name='mail_body2']").val())
+            {
+                $('#myModal4').find(".note-editable").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $('#myModal4').find(".note-editable").css('border','');
+            }
+
+            if(!flag)
+            {
+                $('#send-invoice-form').submit();
             }
 
         });
