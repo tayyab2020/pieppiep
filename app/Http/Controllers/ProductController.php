@@ -360,12 +360,94 @@ class ProductController extends Controller
                 $newPost->save();
             }
 
-            $features_data = product_features::where('product_id','=',$id)->get();
+            $features_data = product_features::where('product_id','=',$id)->where('main_id','!=',NULL)->get();
+            $fe_array = array();
+            $ma_array = array();
+
+            foreach ($features_data as $s => $feature)
+            {
+                if(!in_array( $feature->main_id ,$ma_array ))
+                {
+                    $org = product_features::where('id',$feature->main_id)->first();
+                    $org->product_id = $product_id;
+                    $newPost = $org->replicate();
+                    $newPost->save();
+                    $ma_array[] = $feature->main_id;
+                    $fe_array[] = $newPost->id;
+                }
+                else
+                {
+                    $ma_array[] = $ma_array[count($ma_array)-1];
+                    $fe_array[] = $fe_array[count($fe_array)-1];
+                }
+            }
+
+
+            $features_data = product_features::where('product_id','=',$id)->whereNotIn('id',$ma_array)->get();
+            $t = 0;
 
             foreach ($features_data as $feature)
             {
+                if($feature->main_id)
+                {
+                    $feature->main_id = $fe_array[$t];
+                    $t = $t + 1;
+                }
+
                 $feature->product_id = $product_id;
                 $newPost = $feature->replicate();
+                $newPost->save();
+            }
+
+            $models_data = product_models::where('product_id','=',$id)->get();
+            $mod_array = array();
+            $newmod_array = array();
+
+            foreach ($models_data as $model)
+            {
+                $model->product_id = $product_id;
+                $newPost = $model->replicate();
+                $newPost->save();
+
+                $mod_array[] = $model->id;
+                $newmod_array[] = $newPost->id;
+            }
+
+            $model_features_data = model_features::whereIn('model_id',$mod_array)->get();
+            $mod_fe_array = array();
+            $p = -1;
+
+            foreach ($model_features_data as $model_feature)
+            {
+                if(!in_array( $model_feature->model_id ,$mod_fe_array ))
+                {
+                    $p = $p + 1;
+                }
+
+                $mod_fe_array[] = $model_feature->model_id;
+
+                $index = array_search($model_feature->product_feature_id, $ma_array);
+                $model_feature->model_id = $newmod_array[$p];
+                $model_feature->product_feature_id = $fe_array[$index];
+                $newPost = $model_feature->replicate();
+                $newPost->save();
+            }
+
+            $labor_data = retailer_labor_costs::where('product_id','=',$id)->get();
+
+            foreach ($labor_data as $labor)
+            {
+                $labor->product_id = $product_id;
+                $newPost = $labor->replicate();
+                $newPost->save();
+            }
+
+            $margin_data = retailer_margins::where('product_id','=',$id)->get();
+
+            foreach ($margin_data as $margin)
+            {
+                $margin->product_id = $product_id;
+                $newPost = $margin->replicate();
                 $newPost->save();
             }
 
@@ -1119,6 +1201,8 @@ class ProductController extends Controller
             $model_ids = product_models::where('product_id',$id)->pluck('id');
             product_models::where('product_id',$id)->delete();
             model_features::whereIn('model_id',$model_ids)->delete();
+            retailer_labor_costs::where('product_id',$id)->delete();
+            retailer_margins::where('product_id',$id)->delete();
 
             if($cat->photo == null){
                 $cat->delete();

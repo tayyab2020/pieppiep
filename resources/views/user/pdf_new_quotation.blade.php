@@ -1,7 +1,11 @@
-@extends('layouts.pdfHead')
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-@section('content')
+</head>
+<body>
 
+<div class="dashboard-wrapper">
     <div class="container" style="width: 100%;">
         <div class="row">
             <div class="col-12">
@@ -32,7 +36,7 @@
 
                                 <div style="text-align: center;" class="col-md-4 col-sm-4 col-xs-12">
 
-                                    <img class="img-fluid" src="{{ $user->photo ? public_path('assets/images/'.$user->photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:20%;height:100%;margin-bottom: 30px;">
+                                    <img class="img-fluid" src="{{ $user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:20%;height:100%;margin-bottom: 30px;">
 
                                 </div>
 
@@ -97,24 +101,24 @@
 
                                             @if($role == 'retailer')
 
-                                                <td><?php $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 1){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 2){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 4){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 5){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 6){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td>{{round($request->rate[$i])}}</td>
 
                                             @else
 
-                                                <td><?php $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 0){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 1){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 2){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = $comments[$i][$f] ? ', '.$comments[$i][$f] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 1){ $comment = $comments[$i][$f] ? ', '.$comments[$i][$f] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 2){ $comment = $comments[$i][$f] ? ', '.$comments[$i][$f] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 4){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 5){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature && $feature != 'empty'){ if($feature->order_no == 6){ $comment = $comments[$i][$f-1] ? ', '.$comments[$i][$f-1] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 4){ $comment = $comments[$i][$f] ? ', '.$comments[$i][$f] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 5){ $comment = $comments[$i][$f] ? ', '.$comments[$i][$f] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 6){ $comment = $comments[$i][$f] ? ', '.$comments[$i][$f] : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
 
                                                 @if($role == 'invoice')
 
@@ -182,9 +186,149 @@
             </div>
         </div>
     </div>
+</div>
 
 
     <style type="text/css">
+
+        body
+        {
+            background-color: #f5f5f5;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #333;
+            margin: 0;
+            display: block;
+        }
+
+        *
+        {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        html
+        {
+            font-size: 10px;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            font-family: sans-serif;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        :after, :before
+        {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .dashboard-wrapper
+        {
+            background-color: #f5f5f5;
+        }
+
+        .container{
+            padding-right:15px;
+            padding-left:15px;
+            margin-right:auto;
+            margin-left:auto;
+        }
+
+        .btn-group-vertical>.btn-group:after, .btn-toolbar:after, .clearfix:after, .container-fluid:after, .container:after, .dl-horizontal dd:after, .form-horizontal .form-group:after, .modal-footer:after, .modal-header:after, .nav:after, .navbar-collapse:after, .navbar-header:after, .navbar:after, .pager:after, .panel-body:after, .row:after
+        {
+            clear: both;
+        }
+
+        .col-xs-12
+        {
+            width: 100%;
+        }
+
+        .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9
+        {
+            float: left;
+        }
+
+        .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9
+        {
+            position: relative;
+            min-height: 1px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        img
+        {
+            max-width: 100%;
+            height: auto;
+            vertical-align: middle;
+            border: 0;
+        }
+
+        .text-right
+        {
+            text-align: right;
+        }
+
+        .text-muted
+        {
+            color: #777;
+        }
+
+        .table
+        {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        table
+        {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th
+        {
+            line-height: 1.42857143;
+            vertical-align: top;
+            border-top: 1px solid #ddd;
+        }
+
+        td, th
+        {
+            padding: 0;
+        }
+
+        th
+        {
+            text-align: left;
+        }
+
+        @media (min-width: 768px)
+        {
+            .col-sm-6
+            {
+                width: 50%;
+            }
+
+            .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9
+            {
+                float: left;
+            }
+        }
+
+        @media (min-width: 992px)
+        {
+            .col-md-6
+            {
+                width: 50%;
+            }
+
+            .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9
+            {
+                float: left;
+            }
+        }
 
         @media (max-width: 768px) {
 
@@ -416,4 +560,5 @@
 
     </style>
 
-@endsection
+</body>
+</html>

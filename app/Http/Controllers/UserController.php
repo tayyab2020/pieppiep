@@ -3850,7 +3850,7 @@ class UserController extends Controller
         }
     }
 
-    public function UpdateDeliveryDates(Request $request)
+        public function UpdateDeliveryDates(Request $request)
     {
         $rows = $request->data_id;
         $user = Auth::guard('user')->user();
