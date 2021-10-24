@@ -360,45 +360,29 @@ class ProductController extends Controller
                 $newPost->save();
             }
 
-            $features_data = product_features::where('product_id','=',$id)->where('main_id','!=',NULL)->get();
+            $features_data = product_features::where('product_id','=',$id)->get();
             $fe_array = array();
             $ma_array = array();
 
             foreach ($features_data as $s => $feature)
             {
-                if(!in_array( $feature->main_id ,$ma_array ))
-                {
-                    $org = product_features::where('id',$feature->main_id)->first();
-                    $org->product_id = $product_id;
-                    $newPost = $org->replicate();
-                    $newPost->save();
-                    $ma_array[] = $feature->main_id;
-                    $fe_array[] = $newPost->id;
-                }
-                else
-                {
-                    $index = array_search($feature->main_id ,$ma_array);
-                    $ma_array[] = $ma_array[$index];
-                    $fe_array[] = $fe_array[$index];
-                }
-            }
-
-
-            $features_data = product_features::where('product_id','=',$id)->whereNotIn('id',$ma_array)->get();
-            $t = 0;
-
-            foreach ($features_data as $feature)
-            {
                 if($feature->main_id)
                 {
-                    $feature->main_id = $fe_array[$t];
-                    $t = $t + 1;
+                    $ma_array[] = $feature->main_id;
+                    $org = product_features::where('id',$feature->main_id)->first();
+                    $check = product_features::where('product_id',$product_id)->where('heading_id',$org->heading_id)->where('main_id',NULL)->where('sub_feature',$org->sub_feature)->where('title',$org->title)->where('value',$org->value)->where('max_size',$org->max_size)->where('price_impact',$org->price_impact)->where('impact_type',$org->impact_type)->where('variable',$org->variable)->first();
+                    $feature->main_id = $check->id;
+                    $fe_array[] = $check->id;
                 }
 
                 $feature->product_id = $product_id;
                 $newPost = $feature->replicate();
                 $newPost->save();
+
             }
+
+            $ma_array = array_unique($ma_array);
+            $fe_array = array_unique($fe_array);
 
             $models_data = product_models::where('product_id','=',$id)->get();
             $mod_array = array();
@@ -406,29 +390,23 @@ class ProductController extends Controller
 
             foreach ($models_data as $model)
             {
+                $mod_array[] = $model->id;
                 $model->product_id = $product_id;
                 $newPost = $model->replicate();
                 $newPost->save();
-
-                $mod_array[] = $model->id;
                 $newmod_array[] = $newPost->id;
             }
 
+            $mod_array = array_unique($mod_array);
+            $newmod_array = array_unique($newmod_array);
+
             $model_features_data = model_features::whereIn('model_id',$mod_array)->get();
-            $mod_fe_array = array();
-            $p = -1;
 
             foreach ($model_features_data as $model_feature)
             {
-                if(!in_array( $model_feature->model_id ,$mod_fe_array ))
-                {
-                    $p = $p + 1;
-                }
-
-                $mod_fe_array[] = $model_feature->model_id;
-
                 $index = array_search($model_feature->product_feature_id, $ma_array);
-                $model_feature->model_id = $newmod_array[$p];
+                $index1 = array_search($model_feature->model_id, $mod_array);
+                $model_feature->model_id = $newmod_array[$index1];
                 $model_feature->product_feature_id = $fe_array[$index];
                 $newPost = $model_feature->replicate();
                 $newPost->save();
