@@ -377,8 +377,9 @@ class ProductController extends Controller
                 }
                 else
                 {
-                    $ma_array[] = $ma_array[count($ma_array)-1];
-                    $fe_array[] = $fe_array[count($fe_array)-1];
+                    $index = array_search($feature->main_id ,$ma_array);
+                    $ma_array[] = $ma_array[$index];
+                    $fe_array[] = $fe_array[$index];
                 }
             }
 
