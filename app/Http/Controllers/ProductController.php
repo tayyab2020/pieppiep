@@ -368,16 +368,23 @@ class ProductController extends Controller
             {
                 if($feature->main_id)
                 {
-                    $ma_array[] = $feature->main_id;
                     $org = product_features::where('id',$feature->main_id)->first();
                     $check = product_features::where('product_id',$product_id)->where('heading_id',$org->heading_id)->where('main_id',NULL)->where('sub_feature',$org->sub_feature)->where('title',$org->title)->where('value',$org->value)->where('max_size',$org->max_size)->where('price_impact',$org->price_impact)->where('impact_type',$org->impact_type)->where('variable',$org->variable)->first();
                     $feature->main_id = $check->id;
-                    $fe_array[] = $check->id;
+                }
+                else
+                {
+                    $ma_array[] = $feature->id;
                 }
 
                 $feature->product_id = $product_id;
                 $newPost = $feature->replicate();
                 $newPost->save();
+
+                if(!$feature->main_id)
+                {
+                    $fe_array[] = $newPost->id;
+                }
 
             }
 
