@@ -312,15 +312,22 @@
 																	</td>
 																	<td class="price">€ {{str_replace('.', ',',floatval($item->rate))}}</td>
 																	<td id="next-row-td" style="padding: 0;">
-																		<span id="next-row-span"
-																			class="tooltip1 next-row"
-																			style="cursor: pointer;font-size: 20px;">
+                                                                        <div style="display: flex;justify-content: space-between;align-items: center;">
+                                                                            <div class="green-circle tooltip1">
+                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+                                                                            </div>
+                                                                            <div style="display: none;" class="yellow-circle tooltip1">
+                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+                                                                            </div>
+                                                                            <span id="next-row-span"
+                                                                                  class="tooltip1 next-row"
+                                                                                  style="cursor: pointer;font-size: 20px;">
 																			<i id="next-row-icon"
-																				style="color: #868686;"
-																				class="fa fa-fw fa-chevron-right"></i>
-																			<span style="top: 45px;"
-																				class="tooltiptext">Next</span>
+                                                                               style="color: #868686;"
+                                                                               class="fa fa-fw fa-chevron-right"></i>
+																			<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
 																		</span>
+                                                                        </div>
 																	</td>
 																</tr>
 
@@ -454,15 +461,22 @@
 																	</td>
 																	<td class="price"></td>
 																	<td id="next-row-td" style="padding: 0;">
-																		<span id="next-row-span"
-																			class="tooltip1 next-row"
-																			style="cursor: pointer;font-size: 20px;">
+                                                                        <div style="display: flex;justify-content: space-between;align-items: center;">
+                                                                            <div style="display: none;" class="green-circle tooltip1">
+                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+                                                                            </div>
+                                                                            <div style="visibility: hidden;" class="yellow-circle tooltip1">
+                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
+                                                                            </div>
+                                                                            <span id="next-row-span"
+                                                                                  class="tooltip1 next-row"
+                                                                                  style="cursor: pointer;font-size: 20px;">
 																			<i id="next-row-icon"
-																				style="color: #868686;"
-																				class="fa fa-fw fa-chevron-right"></i>
-																			<span style="top: 45px;"
-																				class="tooltiptext">Next</span>
+                                                                               style="color: #868686;"
+                                                                               class="fa fa-fw fa-chevron-right"></i>
+																			<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
 																		</span>
+                                                                        </div>
 																	</td>
 																</tr>
 
@@ -1278,6 +1292,59 @@
 
 <style>
 
+    .yellow-circle
+    {
+        background: #fae91a;width: 20px;height: 20px;border-radius: 50%;animation: yellow-glow 2s ease infinite;
+    }
+
+    @keyframes yellow-glow {
+        0% {
+            box-shadow: 0 0 #fae91a;
+        }
+
+        100% {
+            box-shadow: 0 0 10px 8px transparent;
+        }
+    }
+
+    .green-circle
+    {
+        background: #62e660;width: 20px;height: 20px;border-radius: 50%;animation: green-glow 2s ease infinite;
+    }
+
+    @keyframes green-glow {
+        0% {
+            box-shadow: 0 0 #62e660;
+        }
+
+        100% {
+            box-shadow: 0 0 10px 8px transparent;
+        }
+    }
+
+    /*.yellow-circle
+    {
+        background: #fae91a;width: 20px;height: 20px;border-radius: 50%;animation: anim-glow 2s linear infinite;
+    }
+
+    @keyframes anim-glow {
+        0% {
+            box-shadow: 0 0 9px 0px #ffec00;
+        }
+        25% {
+            box-shadow: 0 0 5px 0px #ffec00;
+        }
+        50% {
+            box-shadow: 0 0 0px 0px #ffec00;
+        }
+        75% {
+            box-shadow: 0 0 5px 0px #ffec00;
+        }
+        100% {
+            box-shadow: 0 0 9px 0px #ffec00;
+        }
+    }*/
+
     .note-editor
     {
         width: 100%;
@@ -1500,13 +1567,14 @@
 		background-color: #7e7e7e;
 		color: #fff;
 		text-align: center;
-		padding: 5px 0;
+		padding: 10px;
 		border-radius: 6px;
 		position: absolute;
 		z-index: 1;
 		left: 0;
 		top: 55px;
 		font-size: 12px;
+        white-space: nowrap;
 	}
 
 	/* Show the tooltip text when you mouse over the tooltip container */
@@ -2700,6 +2768,7 @@
 								}*/
 
 								var features = '';
+								var count_features = 0;
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
                                 var m2_impact = data[3].m2_impact;
@@ -2710,6 +2779,9 @@
 								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
 								if (childsafe == 1) {
+
+								    count_features = count_features + 1;
+
 									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
@@ -2737,9 +2809,11 @@
 										'                                            </div>\n' +
 										'                                        </div>'
 									);
+
 								}
 
 								if (ladderband == 1) {
+
 									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
@@ -2753,9 +2827,12 @@
 										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
 
 									features = features + content;
+
 								}
 
 								$.each(data[1], function (index, value) {
+
+                                    count_features = count_features + 1;
 
 									var opt = '<option value="0">Select Feature</option>';
 
@@ -2784,6 +2861,19 @@
 									features = features + content;
 
 								});
+
+								if(count_features > 0)
+                                {
+                                    current.parent().parent().find('#next-row-td').find('.green-circle').hide();
+                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+                                }
+								else
+                                {
+                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').hide();
+                                    current.parent().parent().find('#next-row-td').find('.green-circle').css('visibility','visible');
+                                    current.parent().parent().find('#next-row-td').find('.green-circle').show();
+                                }
 
 								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
 									$('#menu1').find(`[data-id='${row_id}']`).remove();
@@ -2922,7 +3012,7 @@
 			$('#products_table > tbody  > tr').each(function (index, tr) { $(this).find('td:eq(0)').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount_content = null, discount = null, labor_discount_content = null, labor_discount = null, total_discount = null, total_discount_old = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount_content = null, discount = null, labor_discount_content = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null) {
 
 			var rowCount = $('#products_table tbody tr:last').data('id');
 			rowCount = rowCount + 1;
@@ -3022,11 +3112,19 @@
 					'                                                            </td>\n' +
 					'                                                            <td class="price"></td>\n' +
 					'                                                            <td id="next-row-td" style="padding: 0;">\n' +
-					'                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
-					'                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>\n' +
-					'                                                                    <span style="top: 45px;" class="tooltiptext">Next</span>\n' +
-					'                                                                </span>\n' +
-					'                                                            </td>\n' +
+                    '                                                               <div style="display: flex;justify-content: space-between;align-items: center;">\n' +
+                    '                                                                   <div style="display: none;" class="green-circle tooltip1">\n' +
+                    '                                                                       <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>\n' +
+                    '                                                                   </div>\n' +
+                    '                                                                   <div style="visibility: hidden;" class="yellow-circle tooltip1">\n' +
+                    '                                                                       <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>\n' +
+                    '                                                                   </div>\n' +
+                    '                                                                   <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
+                    '                                                                       <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>\n' +
+                    '                                                                       <span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>\n' +
+                    '                                                                   </span>\n' +
+                    '                                                               </div>\n' +
+                    '                                                            </td>\n' +
 					'                                                        </tr>');
 
 					$('#myModal4').find('.modal-body').append(
@@ -3181,12 +3279,9 @@
 					'																<input value="' + total_discount_old + '" type="hidden" class="total_discount_old">\n' +
 					'                                                            </td>\n' +
 					'                                                            <td class="price">' + price_text + '</td>\n' +
-					'                                                            <td id="next-row-td" style="padding: 0;">\n' +
-					'                                                                <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
-					'                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>\n' +
-					'                                                                    <span style="top: 45px;" class="tooltiptext">Next</span>\n' +
-					'                                                                </span>\n' +
-					'                                                            </td>\n' +
+                    '                                                            <td id="next-row-td" style="padding: 0;">\n' +
+                    last_column +
+                    '                                                            </td>\n' +
 					'                                                        </tr>');
 
 				var last_row = $('#products_table tbody tr:last');
@@ -3605,6 +3700,7 @@
 			var labor_discount = $('#myModal5').find('.modal-body').find(`[data-id='${id}']`).find('.labor_discount_values').val();
 			var total_discount = current.find('.total_discount').val();
 			var total_discount_old = current.find('.total_discount_old').val();
+			var last_column = current.find('#next-row-td').html();
 
 			var width_readonly = '';
 			var height_readonly = '';
@@ -3616,7 +3712,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount_content, discount, labor_discount_content, labor_discount, total_discount, total_discount_old);
+			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount_content, discount, labor_discount_content, labor_discount, total_discount, total_discount_old, last_column);
 
 		});
 
@@ -4505,6 +4601,7 @@
 			diff = Math.abs(diff);
 
 			if (x && y) {
+
 				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
 				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
 
@@ -4539,8 +4636,47 @@
 				}
 
 				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe_diff').val(diff);
+
+                var flag = 0;
+
+                var childsafe = $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-select').val();
+
+                if (!childsafe && childsafe != undefined) {
+                    flag = 1;
+                }
+
+                $("[name='features" + row_id + "[]']").each(function (i, obj) {
+
+                    var selected_feature = $(this).val();
+                    var feature_id = $(this).parent().find('.f_id').val();
+
+                    if (feature_id != 0) {
+                        if (selected_feature == 0) {
+                            flag = 1;
+                        }
+                    }
+
+                });
+
+                if(flag == 1)
+                {
+                    $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                    $('#products_table tbody').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+                    $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+                }
+                else
+                {
+                    $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+                    $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+                    $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+                }
 			}
 			else {
+
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+
 				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
 				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
 				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option>');
@@ -4913,7 +5049,62 @@
 				});
 			}
 
+			var flag = 0;
+
+			var childsafe = $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-select').val();
+
+            if (!childsafe && childsafe != undefined) {
+                flag = 1;
+            }
+
+            $("[name='features" + row_id + "[]']").each(function (i, obj) {
+
+                var selected_feature = $(this).val();
+                var feature_id = $(this).parent().find('.f_id').val();
+
+                if (feature_id != 0) {
+                    if (selected_feature == 0) {
+                        flag = 1;
+                    }
+                }
+
+            });
+
+            if(flag == 1)
+            {
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+            }
+            else
+            {
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+            }
+
 		});
+
+        $(document).on('change', '.childsafe-select', function () {
+
+            var current = $(this);
+            var row_id = current.parent().parent().parent().data('id');
+            var feature_select = current.val();
+
+            if(!feature_select)
+            {
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+            }
+            else
+            {
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+            }
+
+        });
 
 		/*$('#myModal, #myModal2').on('hidden.bs.modal', function () {
 			$('.top-bar').css('z-index','1000');
