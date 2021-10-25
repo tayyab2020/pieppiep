@@ -2151,6 +2151,10 @@
 				}
 			});
 
+            current.parent().parent().find('#next-row-td').find('.green-circle').hide();
+            current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+            current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+
 		});
 
 		$(document).on('change', ".js-data-example-ajax", function (e) {
@@ -2256,6 +2260,10 @@
 
 				}
 			});
+
+            current.parent().parent().find('#next-row-td').find('.green-circle').hide();
+            current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+            current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
 
 		});
 
@@ -2426,6 +2434,7 @@
 								}*/
 
 								var features = '';
+                                var count_features = 0;
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
                                 var m2_impact = data[3].m2_impact;
@@ -2436,6 +2445,9 @@
 								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
 								if (childsafe == 1) {
+
+                                    count_features = count_features + 1;
+
 									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
@@ -2464,9 +2476,11 @@
 										'                                            </div>\n' +
 										'                                        </div>'
 									);
+
 								}
 
 								if (ladderband == 1) {
+
 									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
@@ -2480,9 +2494,12 @@
 										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
 
 									features = features + content;
+
 								}
 
 								$.each(data[1], function (index, value) {
+
+                                    count_features = count_features + 1;
 
 									var opt = '<option value="0">Select Feature</option>';
 
@@ -2511,6 +2528,19 @@
 									features = features + content;
 
 								});
+
+                                if(count_features > 0)
+                                {
+                                    current.parent().parent().find('#next-row-td').find('.green-circle').hide();
+                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+                                }
+                                else
+                                {
+                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').hide();
+                                    current.parent().parent().find('#next-row-td').find('.green-circle').css('visibility','visible');
+                                    current.parent().parent().find('#next-row-td').find('.green-circle').show();
+                                }
 
 								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
 									$('#menu1').find(`[data-id='${row_id}']`).remove();
@@ -2627,12 +2657,22 @@
 							current.parent().parent().find('#row_total').val('');
 							current.parent().parent().find('#rate').val('');
 							current.parent().parent().find('#basic_price').val('');
+
+                            current.parent().parent().find('#next-row-td').find('.green-circle').hide();
+                            current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                            current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
 						}
 
 						calculate_total();
 					}
 				});
 			}
+			else
+            {
+                current.parent().parent().find('#next-row-td').find('.green-circle').hide();
+                current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+            }
 
 		});
 
@@ -2678,6 +2718,7 @@
 					success: function (data) {
 
 						if (typeof data[0].value !== 'undefined') {
+
 							var color_max_height = data[0].max_height;
 
 							if (data[0].value === 'both') {
@@ -2989,12 +3030,22 @@
 							current.parent().parent().find('#row_total').val('');
 							current.parent().parent().find('#rate').val('');
 							current.parent().parent().find('#basic_price').val('');
+
+                            current.parent().parent().find('#next-row-td').find('.green-circle').hide();
+                            current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                            current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
 						}
 
 						calculate_total();
 					}
 				});
 			}
+			else
+            {
+                current.parent().parent().find('#next-row-td').find('.green-circle').hide();
+                current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+            }
 
 		});
 
@@ -4007,6 +4058,7 @@
 								}*/
 
 								var features = '';
+								var count_features = 0;
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
                                 var m2_impact = data[3].m2_impact;
@@ -4014,6 +4066,9 @@
                                 var m2_impact_value = 0;
 
 								if (childsafe == 1) {
+
+								    count_features = count_features + 1;
+
 									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
@@ -4041,9 +4096,11 @@
 										'                                            </div>\n' +
 										'                                        </div>'
 									);
+
 								}
 
 								if (ladderband == 1) {
+
 									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
@@ -4057,9 +4114,12 @@
 										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
 
 									features = features + content;
+
 								}
 
 								$.each(data[1], function (index, value) {
+
+                                    count_features = count_features + 1;
 
 									var opt = '<option value="0">Select Feature</option>';
 
@@ -4088,6 +4148,19 @@
 									features = features + content;
 
 								});
+
+                                if(count_features > 0)
+                                {
+                                    current.parent().parent().parent().find('#next-row-td').find('.green-circle').hide();
+                                    current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                                    current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').show();
+                                }
+                                else
+                                {
+                                    current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').hide();
+                                    current.parent().parent().parent().find('#next-row-td').find('.green-circle').css('visibility','visible');
+                                    current.parent().parent().parent().find('#next-row-td').find('.green-circle').show();
+                                }
 
 								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
 									$('#menu1').find(`[data-id='${row_id}']`).remove();
@@ -4203,12 +4276,22 @@
 							current.parent().parent().parent().find('#row_total').val('');
 							current.parent().parent().parent().find('#rate').val('');
 							current.parent().parent().parent().find('#basic_price').val('');
+
+                            current.parent().parent().parent().find('#next-row-td').find('.green-circle').hide();
+                            current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                            current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').show();
 						}
 
 						calculate_total();
 					}
 				});
 			}
+			else
+            {
+                current.parent().parent().parent().find('#next-row-td').find('.green-circle').hide();
+                current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').show();
+            }
 
 		});
 
@@ -4343,6 +4426,7 @@
 								}*/
 
 								var features = '';
+								var count_features = 0;
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
                                 var m2_impact = data[3].m2_impact;
@@ -4350,6 +4434,9 @@
                                 var m2_impact_value = 0;
 
 								if (childsafe == 1) {
+
+								    count_features = count_features + 1;
+
 									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
@@ -4377,9 +4464,11 @@
 										'                                            </div>\n' +
 										'                                        </div>'
 									);
+
 								}
 
 								if (ladderband == 1) {
+
 									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
@@ -4393,9 +4482,12 @@
 										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
 
 									features = features + content;
+
 								}
 
 								$.each(data[1], function (index, value) {
+
+                                    count_features = count_features + 1;
 
 									var opt = '<option value="0">Select Feature</option>';
 
@@ -4424,6 +4516,19 @@
 									features = features + content;
 
 								});
+
+                                if(count_features > 0)
+                                {
+                                    current.parent().parent().parent().find('#next-row-td').find('.green-circle').hide();
+                                    current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                                    current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').show();
+                                }
+                                else
+                                {
+                                    current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').hide();
+                                    current.parent().parent().parent().find('#next-row-td').find('.green-circle').css('visibility','visible');
+                                    current.parent().parent().parent().find('#next-row-td').find('.green-circle').show();
+                                }
 
 								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
 									$('#menu1').find(`[data-id='${row_id}']`).remove();
@@ -4539,12 +4644,22 @@
 							current.parent().parent().parent().find('#row_total').val('');
 							current.parent().parent().parent().find('#rate').val('');
 							current.parent().parent().parent().find('#basic_price').val('');
+
+                            current.parent().parent().parent().find('#next-row-td').find('.green-circle').hide();
+                            current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                            current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').show();
 						}
 
 						calculate_total();
 					}
 				});
 			}
+			else
+            {
+                current.parent().parent().parent().find('#next-row-td').find('.green-circle').hide();
+                current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                current.parent().parent().parent().find('#next-row-td').find('.yellow-circle').show();
+            }
 
 		});
 
@@ -5045,43 +5160,43 @@
 						$('#products_table tbody').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
 						calculate_total();
+
+                        var flag = 0;
+
+                        var childsafe = $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-select').val();
+
+                        if (!childsafe && childsafe != undefined) {
+                            flag = 1;
+                        }
+
+                        $("[name='features" + row_id + "[]']").each(function (i, obj) {
+
+                            var selected_feature = $(this).val();
+                            var feature_id = $(this).parent().find('.f_id').val();
+
+                            if (feature_id != 0) {
+                                if (selected_feature == 0) {
+                                    flag = 1;
+                                }
+                            }
+
+                        });
+
+                        if(flag == 1)
+                        {
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+                        }
+                        else
+                        {
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+                            $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+                        }
 					}
 				});
 			}
-
-			var flag = 0;
-
-			var childsafe = $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-select').val();
-
-            if (!childsafe && childsafe != undefined) {
-                flag = 1;
-            }
-
-            $("[name='features" + row_id + "[]']").each(function (i, obj) {
-
-                var selected_feature = $(this).val();
-                var feature_id = $(this).parent().find('.f_id').val();
-
-                if (feature_id != 0) {
-                    if (selected_feature == 0) {
-                        flag = 1;
-                    }
-                }
-
-            });
-
-            if(flag == 1)
-            {
-                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table tbody').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
-                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-            }
-            else
-            {
-                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                $('#products_table tbody').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-            }
 
 		});
 
