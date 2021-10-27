@@ -18,6 +18,7 @@
                     <!-- Starting of Dashboard Top reference + Most Used OS area -->
                     <div class="reference-OS-area">
 
+                        <h3 style="margin: 50px 0 20px 0;">Order status of last 10 orders</h3>
                         <table border="1" style="width: 100%;margin-bottom: 40px;">
 
                             <thead>
