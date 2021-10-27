@@ -265,6 +265,13 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if ($user->role_id == 3) {
             return redirect()->route('user-login');
@@ -275,7 +282,6 @@ class UserController extends Controller
             $no = 0;
             $commission_percentage = Generalsetting::findOrFail(1);
 
-
             $post = invoices::where('handyman_id', '=', $user->id)->where('is_completed', 1)->get();
 
             foreach ($post as $temp) {
@@ -283,7 +289,65 @@ class UserController extends Controller
                 $no = $no + 1;
             }
 
-            return view('user.dashboard', compact('user', 'no','commission_percentage'));
+            $orders = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_quotations_data.supplier_id')->orderBy('new_quotations_data.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_quotations_data.delivery_date')->get();
+
+            $start = strtotime(date('Y-m-01', strtotime('0 month')));
+            $end = strtotime(date('Y-m-01', strtotime('-5 month')));
+
+            $dates = array();
+            $month = $start;
+
+            while ($end < $month) {
+                $dates[] = date('Y-m-01', $month);
+                $month = strtotime("-1 month", $month);
+            }
+
+            $invoices_chart = array();
+            $quotes_chart = array();
+
+            $dates = array_reverse($dates);
+
+            foreach ($dates as $date) {
+
+                $c_date = date('m', strtotime($date));
+
+                $month_chart = new_quotations::where('creator_id', $user_id)->whereMonth('created_at', '=', $c_date)->get();
+
+                $invoice_total = 0;
+                $quotes_count = 0;
+                $quotes_total = 0;
+                $quotes_accepted_total = 0;
+
+                foreach ($month_chart as $value) {
+
+                    if($value->invoice)
+                    {
+                        $invoice_total = $invoice_total + $value->grand_total;
+                    }
+
+                    $quotes_count = $quotes_count + 1;
+                    $quotes_total = $quotes_total + $value->grand_total;
+
+                    if($value->accepted)
+                    {
+                        $quotes_accepted_total = $quotes_accepted_total + $value->grand_total;
+                    }
+
+                }
+
+                /*$invoice_total = number_format((float)$invoice_total, 2, ',', '.');*/
+
+                $quotes_chart[] = array('count' => $quotes_count, 'Quotes' => $quotes_total, 'Accepted' => $quotes_accepted_total);
+                $invoices_chart[] = array('date' => $date, 'Invoices Total' => $invoice_total);
+            }
+
+            ini_set('precision', 10);
+            ini_set('serialize_precision', 10);
+
+            $invoices_chart = json_encode($invoices_chart);
+            $quotes_chart = json_encode($quotes_chart);
+
+            return view('user.dashboard', compact('user', 'no','commission_percentage','invoices_chart','quotes_chart','orders'));
         }
         else
         {

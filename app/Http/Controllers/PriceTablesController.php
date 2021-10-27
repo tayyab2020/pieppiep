@@ -103,9 +103,9 @@ class PriceTablesController extends Controller
         ini_set('memory_limit', '-1');
         $extension = strtolower($request->excel_file->getClientOriginalExtension());
 
-        if(!in_array($extension, ['csv', 'xls', 'xlsx']))
+        if(!in_array($extension, ['xls', 'xlsx']))
         {
-            return redirect()->back()->withErrors("File should be of format xlsx, xls or csv")->withInput();
+            return redirect()->back()->withErrors("File should be of format xlsx or xls")->withInput();
         }
 
         $import = new PricesImport($request->table_id);

@@ -17,6 +17,60 @@
 
                     <!-- Starting of Dashboard Top reference + Most Used OS area -->
                     <div class="reference-OS-area">
+
+                        <table border="1" style="width: 100%;margin-bottom: 40px;">
+
+                            <thead>
+
+                            <tr>
+                                <th>Order Date</th>
+                                <th>Supplier</th>
+                                <th>Consumer Name</th>
+                                <th>Delivery Date</th>
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            @foreach($orders as $key)
+
+                                <tr>
+                                    <td></td>
+                                    <td>{{$key->company_name}}</td>
+                                    <td>{{$key->name}}</td>
+                                    <td>{{$key->delivery_date}}</td>
+                                </tr>
+
+                            @endforeach
+
+                            </tbody>
+
+                        </table>
+
+                        <style>
+
+                            th, td {
+                                padding: 15px;
+                                border-width: 2px;
+                            }
+
+                        </style>
+
+                        <div class="row" style="margin: 0 0 50px 0;">
+
+                            <h3 style="text-align: center;">Quotes</h3>
+                            <div id="chart-bar"></div>
+
+                        </div>
+
+                        <div class="row" style="margin: 0 0 50px 0;">
+
+                            <h3 style="text-align: center;">Invoices</h3>
+                            <div id="chart"></div>
+
+                        </div>
+
                         <div class="donors-profile-top-bg overlay text-center wow fadeInUp"
                              style="background-image: url({{asset('assets/images/'.$gs->h_dashbg)}}); visibility: visible; animation-name: fadeInUp;z-index: auto;color: black;">
                             <div class="container">
@@ -420,6 +474,58 @@
 @section('scripts')
 
     <script>
+
+        var chart = c3.generate({
+            bindto: '#chart-bar',
+            data: {
+                type: 'bar',
+                json:  <?php echo $quotes_chart; ?>,
+                keys: {
+                    x: 'count',
+                    value: ['Quotes','Accepted'],
+                }
+            },
+            bar: {
+                width: {
+                    ratio: 0.5 // this makes bar width 50% of length between ticks
+                }
+                // or
+                //width: 100 // this makes bar width 100px
+            }
+        });
+
+        var chart = c3.generate({
+            bindto: '#chart',
+            data: {
+                json:  <?php echo $invoices_chart; ?>,
+                keys: {
+                    x: 'date',
+                    value: ['Invoices Total'],
+                }
+            },
+            axis: {
+                x: {
+                    type: 'timeseries',
+
+                    tick: {
+                        format: function(time) {
+                            var dat = new Date(time);
+                            var _months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+                            var month = dat.getMonth();
+                            return _months[month];
+                        }
+                    },
+                },
+                y:{
+                    min: 0,
+                    padding: {top:5, bottom:5},
+                    label: { // ADD
+                        text: 'Amounts in €',
+                        position: 'outer-middle'
+                    }
+                }
+            }
+        });
 
         $("#opt").change(function () {
 

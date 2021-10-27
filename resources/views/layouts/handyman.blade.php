@@ -17,6 +17,7 @@
     <link href="{{asset('assets/admin/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('assets/admin/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('assets/admin/css/responsive.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/admin/css/c3.css')}}" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{asset('assets/images/'.$gs->favicon)}}">
 
 
@@ -39,6 +40,8 @@
     <!-- include summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script src="{{ asset('assets/admin/js/d3-5.8.2.min.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/c3.min.js') }}"></script>
 
 @include('styles.admin-design')
 
