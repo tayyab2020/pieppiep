@@ -19,15 +19,21 @@
                     <div class="reference-OS-area">
 
                         <h3 style="margin: 50px 0 20px 0;">Order status of last 10 orders</h3>
-                        <table border="1" style="width: 100%;margin-bottom: 40px;">
+
+                        <table id="example" class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline" role="grid" aria-describedby="product-table_wrapper_info" style="width: 100%;margin-top: 10px !important;margin-bottom: 50px !important;" width="100%" cellspacing="0">
 
                             <thead>
 
-                            <tr>
-                                <th>Order Date</th>
-                                <th>Supplier</th>
-                                <th>Consumer Name</th>
-                                <th>Delivery Date</th>
+                            <tr role="row">
+
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Order Date</th>
+
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Supplier</th>
+
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Consumer Name</th>
+
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Delivery Date</th>
+
                             </tr>
 
                             </thead>
@@ -36,7 +42,7 @@
 
                             @foreach($orders as $key)
 
-                                <tr>
+                                <tr role="row" class="odd">
                                     <td></td>
                                     <td>{{$key->company_name}}</td>
                                     <td>{{$key->name}}</td>
@@ -48,15 +54,6 @@
                             </tbody>
 
                         </table>
-
-                        <style>
-
-                            th, td {
-                                padding: 15px;
-                                border-width: 2px;
-                            }
-
-                        </style>
 
                         <div class="row" style="margin: 0 0 50px 0;">
 
@@ -466,6 +463,19 @@
 
         }
 
+        table.dataTable thead>tr>th.sorting_asc, table.dataTable thead>tr>th.sorting_desc, table.dataTable thead>tr>th.sorting, table.dataTable thead>tr>td.sorting_asc, table.dataTable thead>tr>td.sorting_desc, table.dataTable thead>tr>td.sorting{
+
+            padding-right: 0;
+            padding-left: 0;
+            text-align: center;
+            border-top: 1px solid black !important;
+            border-bottom: 1px solid black !important;
+        }
+
+        .table.products > tbody > tr > td
+        {
+            text-align: center;
+        }
 
     </style>
 
@@ -475,6 +485,11 @@
 @section('scripts')
 
     <script>
+
+        $('#example').DataTable({
+            order: [[0, 'desc']],
+            searching: false, paging: false, info: false
+        });
 
         var chart = c3.generate({
             bindto: '#chart-bar',
