@@ -26,11 +26,13 @@
 
                             <tr role="row">
 
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Consumer Name</th>
+
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Quote Number</th>
+
                                 <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Order Date</th>
 
                                 <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Supplier</th>
-
-                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Consumer Name</th>
 
                                 <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Delivery Date</th>
 
@@ -43,10 +45,11 @@
                             @foreach($orders as $key)
 
                                 <tr role="row" class="odd">
-                                    <td></td>
                                     <td>{{$key->company_name}}</td>
+                                    <td>{{$key->quotation_invoice_number}}</td>
+                                    <td>{{$key->order_date}}</td>
                                     <td>{{$key->name}}</td>
-                                    <td>{{$key->delivery_date}}</td>
+                                    <td>{{$key->approved ? $key->delivery_date : null}}</td>
                                 </tr>
 
                             @endforeach
@@ -497,8 +500,29 @@
                 type: 'bar',
                 json:  <?php echo $quotes_chart; ?>,
                 keys: {
-                    x: 'count',
+                    x: 'date',
                     value: ['Quotes','Accepted'],
+                }
+            },
+            axis: {
+                x: {
+                    type: 'timeseries',
+                    tick: {
+                        format: function(time) {
+                            var dat = new Date(time);
+                            var _months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+                            var month = dat.getMonth();
+                            return _months[month];
+                        }
+                    },
+                },
+                y: {
+                    tick: {
+                        format: function (d) {
+                            return '€ ' + d;
+                        },
+                        width: 0
+                    }
                 }
             },
             bar: {
@@ -513,6 +537,7 @@
         var chart = c3.generate({
             bindto: '#chart',
             data: {
+                type: 'bar',
                 json:  <?php echo $invoices_chart; ?>,
                 keys: {
                     x: 'date',
@@ -522,7 +547,6 @@
             axis: {
                 x: {
                     type: 'timeseries',
-
                     tick: {
                         format: function(time) {
                             var dat = new Date(time);
@@ -532,12 +556,16 @@
                         }
                     },
                 },
-                y:{
-                    min: 0,
-                    padding: {top:5, bottom:5},
-                    label: { // ADD
-                        text: 'Amounts in €',
-                        position: 'outer-middle'
+                y: {
+                    padding: {
+                        bottom: 0,
+                        top: 0
+                    },
+                    tick: {
+                        format: function (d) {
+                            return '€ ' + d;
+                        },
+                        width: 0
                     }
                 }
             }

@@ -289,7 +289,7 @@ class UserController extends Controller
                 $no = $no + 1;
             }
 
-            $orders = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_quotations_data.supplier_id')->orderBy('new_quotations_data.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_quotations_data.delivery_date')->get();
+            $orders = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_quotations_data.supplier_id')->orderBy('new_quotations_data.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_quotations_data.delivery_date','new_quotations_data.order_date','new_quotations_data.approved','new_quotations.*')->get();
 
             $start = strtotime(date('Y-m-01', strtotime('0 month')));
             $end = strtotime(date('Y-m-01', strtotime('-5 month')));
@@ -337,7 +337,7 @@ class UserController extends Controller
 
                 /*$invoice_total = number_format((float)$invoice_total, 2, ',', '.');*/
 
-                $quotes_chart[] = array('count' => $quotes_count, 'Quotes' => $quotes_total, 'Accepted' => $quotes_accepted_total);
+                $quotes_chart[] = array('date' => $date, 'Quotes' => $quotes_total, 'Accepted' => $quotes_accepted_total);
                 $invoices_chart[] = array('date' => $date, 'Invoices Total' => $invoice_total);
             }
 
@@ -3914,7 +3914,7 @@ class UserController extends Controller
         }
     }
 
-        public function UpdateDeliveryDates(Request $request)
+    public function UpdateDeliveryDates(Request $request)
     {
         $rows = $request->data_id;
         $user = Auth::guard('user')->user();

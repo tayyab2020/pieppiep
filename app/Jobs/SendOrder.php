@@ -177,7 +177,7 @@ class SendOrder implements ShouldQueue
             $filename = $order_number . '.pdf';
             $file = public_path() . '/assets/supplierQuotations/' . $filename;
 
-            new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_number' => $order_number]);
+            new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_number' => $order_number,'order_date' => date('Y-m-d')]);
 
             ini_set('max_execution_time', 180);
 
