@@ -45,10 +45,10 @@
                             @foreach($orders as $key)
 
                                 <tr role="row" class="odd">
-                                    <td>{{$key->company_name}}</td>
+                                    <td>{{$key->name}}</td>
                                     <td>{{$key->quotation_invoice_number}}</td>
                                     <td>{{$key->order_date}}</td>
-                                    <td>{{$key->name}}</td>
+                                    <td>{{$key->company_name}}</td>
                                     <td>{{$key->approved ? $key->delivery_date : null}}</td>
                                 </tr>
 
@@ -60,15 +60,19 @@
 
                         <div class="row" style="margin: 0 0 50px 0;">
 
-                            <h3 style="text-align: center;">Quotes</h3>
-                            <div id="chart-bar"></div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
-                        </div>
+                                <h3 style="text-align: center;">Quotes</h3>
+                                <div id="chart-bar"></div>
 
-                        <div class="row" style="margin: 0 0 50px 0;">
+                            </div>
 
-                            <h3 style="text-align: center;">Invoices</h3>
-                            <div id="chart"></div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 top-m">
+
+                                <h3 style="text-align: center;">Invoices</h3>
+                                <div id="chart"></div>
+
+                            </div>
 
                         </div>
 
@@ -460,6 +464,19 @@
 
     <style>
 
+        .top-m
+        {
+            margin-top: 30px;
+        }
+
+        @media (min-width: 992px)
+        {
+            .top-m
+            {
+                margin-top: 0;
+            }
+        }
+
         #dashboard {
             color: #fff;
             background: {{$gs->colors == null ? 'rgba(207, 55, 58, 0.70)':$gs->colors.'c2'}};
@@ -491,7 +508,9 @@
 
         $('#example').DataTable({
             order: [[0, 'desc']],
-            searching: false, paging: false, info: false
+            searching: false,
+            paging: false,
+            info: false,
         });
 
         var chart = c3.generate({
@@ -519,7 +538,7 @@
                 y: {
                     tick: {
                         format: function (d) {
-                            return '€ ' + d;
+                            return '€ ' + d.toLocaleString("nl-NL");
                         },
                         width: 0
                     }
@@ -527,7 +546,7 @@
             },
             bar: {
                 width: {
-                    ratio: 0.5 // this makes bar width 50% of length between ticks
+                    ratio: 0.8 // this makes bar width 50% of length between ticks
                 }
                 // or
                 //width: 100 // this makes bar width 100px
@@ -563,11 +582,18 @@
                     },
                     tick: {
                         format: function (d) {
-                            return '€ ' + d;
+                            return '€ ' + d.toLocaleString("nl-NL");
                         },
                         width: 0
                     }
                 }
+            },
+            bar: {
+                width: {
+                    ratio: 0.8 // this makes bar width 50% of length between ticks
+                }
+                // or
+                //width: 100 // this makes bar width 100px
             }
         });
 
