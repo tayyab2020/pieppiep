@@ -350,6 +350,12 @@ class FrontendController extends Controller
 
     public function index()
     {
+        \Mail::send(array(), array(), function ($message) {
+            $message->to('tayyabkhurram62@gmail.com')
+                ->from('info@pieppiep.com')
+                ->subject('Test')
+                ->setBody('Hi', 'text/html');
+        });
 
         $language = $this->lang->lang;
         $blogs = Blog::all();
