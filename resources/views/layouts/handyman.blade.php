@@ -267,6 +267,8 @@
 
         overflow-y: auto;
 
+        padding-bottom: 87px;
+
     }
 
     #sidebar:hover > #sidebar::-webkit-scrollbar
@@ -1349,6 +1351,8 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
         $('#sidebarCollapse1').on('click', function () {
 
+            $('#sidebar').css('overflow-y','');
+
             if($(window).innerWidth() <= 768)
             {
                 $('#sidebar ul li ul').removeClass('sub-show');
@@ -1372,6 +1376,18 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             $('#sidebar ul li ul').not($(this).next('ul')).removeClass('sub-show');
             $(this).next('ul').toggleClass('sub-show');
+
+            if($(window).innerWidth() <= 768)
+            {
+                if($(this).next('ul').hasClass('sub-show'))
+                {
+                    $('#sidebar').css('overflow-y','hidden');
+                }
+                else
+                {
+                    $('#sidebar').css('overflow-y','');
+                }
+            }
 
         });
 
