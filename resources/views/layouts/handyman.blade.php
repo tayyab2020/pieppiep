@@ -42,6 +42,7 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script src="{{ asset('assets/admin/js/d3-5.8.2.min.js') }}"></script>
     <script src="{{ asset('assets/admin/js/c3.min.js') }}"></script>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 
 @include('styles.admin-design')
 
@@ -123,7 +124,65 @@
     #sidebar ul li a
     {
         text-decoration:none;
-        text-align: left !important;
+        text-align: center !important;
+    }
+
+    #sidebar ul li a .icon
+    {
+        width: 48px;
+        height: 48px;
+        display: block;
+        margin: auto;
+    }
+
+    .dashboard-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Dashboard.svg')}});
+    }
+
+    .active1 .dashboard-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Dashboard-Active.svg')}});
+    }
+
+    .customer-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Customers.svg')}});
+    }
+
+    .active .customer-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Customers-Active.svg')}});
+    }
+
+    .catalog-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Catalog.svg')}});
+    }
+
+    .active .catalog-icon, .active1 .catalog-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Catalog-Active.svg')}});
+    }
+
+    .sales-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Sales.svg')}});
+    }
+
+    .active1 .sales-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Sales-Active.svg')}});
+    }
+
+    .configuration-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Configure.svg')}});
+    }
+
+    .active .configuration-icon
+    {
+        background-image: url({{asset('assets/admin/img/Icon-Configure-Active.svg')}});
     }
 
     #sidebar ul li a::before
@@ -153,9 +212,9 @@
 
     #sidebar .sub-show {
 
-        -webkit-transform: translateX(248px) !important;
+        -webkit-transform: translateX(118px) !important;
 
-        transform: translateX(248px) !important;
+        transform: translateX(118px) !important;
 
         -webkit-transition: transform 1s ease-in !important;
 
@@ -167,11 +226,18 @@
 
     }
 
+    #sidebar .sub-show li a
+    {
+        font-size: 14px !important;
+        display: block;
+        text-align: left !important;
+    }
+
     #sidebar ul li > ul {
 
         position: absolute;
 
-        background-color: #35A7E8;
+        background-color: #fff;
 
         top: 87px;
 
@@ -179,7 +245,7 @@
 
         z-index: 1000;
 
-        height: 100%;
+        height: 89%;
 
         -webkit-transform: translateX(-250px);
 
@@ -196,6 +262,10 @@
         padding: 0;
 
         border-left: 1px solid #3f99e6;
+
+        border-right: 1px solid hsla(0,0%,63.5%,.2);
+
+        overflow-y: auto;
 
     }
 
@@ -225,6 +295,7 @@
     }
 
     @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
     body {
         font-family: 'Poppins', sans-serif;
         background: #fafafa;
@@ -291,14 +362,18 @@
         position: static;
         z-index: 1000;
         height: 100%;
-        min-width: 250px;
-        max-width: 250px;
-        background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors.'c9'}};
+        /*min-width: 250px;
+        max-width: 250px;*/
+        min-width: 120px;
+        max-width: 120px;
+        /*background-color: {{$gs->colors == null ? 'rgba(204, 37, 42, 0.79)':$gs->colors.'c9'}};*/
+        background-color: #fff;
         color: #fff;
         transition: all 1s;
         overflow-x: hidden;
         overflow-y: auto;
         padding-bottom: 100px;
+        border-right: 1px solid hsla(0,0%,63.5%,.2);
     }
 
     #sidebar.active {
@@ -344,19 +419,23 @@
     }
 
     #sidebar ul li a {
-        text-align: left;
+        text-align: center;
+        font-family: Montserrat,sans-serif;
+        color: #a2a2a2;
     }
 
     #sidebar ul li a.active
     {
-        color: #fff;
-        background: {{$gs->colors == null ? 'rgba(207, 55, 58, 0.70)':$gs->colors.'c2'}};
+        /*color: #fff;
+        background: {{$gs->colors == null ? 'rgba(207, 55, 58, 0.70)':$gs->colors.'c2'}};*/
+        color: #0041ff;
     }
 
     #sidebar ul li a.active1
     {
         background-color: #fff;
-        color: {{$gs->colors == null ? 'rgba(207, 55, 58, 0.70)':$gs->colors.'c2'}};
+        /*color: {{$gs->colors == null ? 'rgba(207, 55, 58, 0.70)':$gs->colors.'c2'}};*/
+        color: #0041ff;
     }
 
     #sidebar.active ul li a {
@@ -425,18 +504,27 @@
 
     #sidebar ul li a {
         padding: 10px;
-        font-size: 1.1em;
-        display: block;
+        font-size: 0.8em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
-    #sidebar .components li a:hover, #sidebar .profile .profile-submenu li a:hover {
+    #sidebar .profile .profile-submenu li a:hover {
         color: #7386D5;
         background: #fff;
     }
 
-    #sidebar ul li a i {
-        margin-right: 10px;
+    .sub-show li a:hover
+    {
+        background-color: #0041ff !important;
+        color: white !important;
     }
+
+    /*#sidebar ul li a i {
+        margin-right: 10px;
+    }*/
 
     #sidebar .components li.active>a {
         color: #fff;
@@ -496,7 +584,9 @@
 
         #sidebar ul li > ul
         {
-            top: 0 !important;
+            top: 87px !important;
+            position: fixed;
+            height: 86.9%;
         }
 
         .user-info, a[aria-expanded="false"]::before, a[aria-expanded="true"]::before
@@ -535,6 +625,8 @@
         #sidebar
         {
             position: absolute;
+            min-width: 250px;
+            max-width: 250px;
         }
 
         #sidebar.active .sub-show {
@@ -582,9 +674,23 @@
         }
         #sidebar ul li a {
             padding: 20px 10px;
+            flex-direction: row;
+            justify-content: flex-start;
         }
+
+        #sidebar ul li a .icon
+        {
+            width: 25%;
+            height: 40px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            margin: 0;
+        }
+
         #sidebar ul li a span {
-            font-size: 0.85em;
+            font-size: 1.65em;
+            max-width: 70%;
+            text-align: left !important;
         }
         /*#sidebar ul li a i {
             margin-right: 0;
@@ -784,7 +890,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
         <ul class="parent-menu list-unstyled components">
 
-            <li><a @if(Route::currentRouteName() == 'user-dashboard' || Route::currentRouteName() == 'user-profile' || Route::currentRouteName() == 'radius-management' || Route::currentRouteName() == 'user-complete-profile') class="active1" @endif href="javascript:"><i class="fa fa-fw fa-file-code-o"></i> <span>{{$lang->dashboard}}</span></a>
+            <li><a @if(Route::currentRouteName() == 'user-dashboard' || Route::currentRouteName() == 'user-profile' || Route::currentRouteName() == 'radius-management' || Route::currentRouteName() == 'user-complete-profile') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>{{$lang->dashboard}}</span></a>
 
                 <ul class="hide">
 
@@ -828,7 +934,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                 @if(auth()->user()->can('retailer-suppliers'))
 
                     <li>
-                        <a href="{{route('suppliers')}}"><i class="fa fa-fw fa-file-text"></i> <span>Suppliers</span></a>
+                        <a href="{{route('suppliers')}}"><span class="icon customer-icon"></span> <span>Suppliers</span></a>
                     </li>
 
                 @endif
@@ -850,13 +956,13 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('create-new-quotation'))
 
                 <li>
-                    <a href="{{route('new-quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span>New Quotations</span></a>
+                    <a href="{{route('new-quotations')}}"><span class="icon catalog-icon"></span> <span>New Quotations</span></a>
                 </li>
 
                 @if(auth()->user()->role_id == 2)
 
                     <li>
-                        <a href="{{route('create-new-quotation')}}"><i class="fa fa-fw fa-file-text"></i> <span>Create Quotation (New)</span></a>
+                        <a href="{{route('create-new-quotation')}}"><span class="icon catalog-icon"></span> <span>Create Quotation (New)</span></a>
                     </li>
 
                 @endif
@@ -866,15 +972,15 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->role_id == 2)
 
                 <li>
-                    <a href="{{route('email-templates')}}"><i class="fa fa-fw fa-file-text"></i> <span>Email Templates</span></a>
+                    <a href="{{route('email-templates')}}"><span class="icon catalog-icon"></span> <span>Email Templates</span></a>
                 </li>
 
                 <li>
-                    <a href="{{route('new-orders')}}"><i class="fa fa-fw fa-file-text"></i> <span>New Orders</span></a>
+                    <a href="{{route('new-orders')}}"><span class="icon catalog-icon"></span> <span>New Orders</span></a>
                 </li>
 
                 <li>
-                    <a href="{{route('new-invoices')}}"><i class="fa fa-fw fa-file-text"></i> <span>New Invoices</span></a>
+                    <a href="{{route('new-invoices')}}"><span class="icon catalog-icon"></span> <span>New Invoices</span></a>
                 </li>
 
             @endif
@@ -882,7 +988,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('handyman-quotation-requests'))
 
                 <li>
-                    <a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-fw fa-file-text"></i> <span>{{__('text.Quotation Requests')}}</span></a>
+                    <a href="{{route('handyman-quotation-requests')}}"><span class="icon catalog-icon"></span> <span>{{__('text.Quotation Requests')}}</span></a>
                 </li>
 
             @endif
@@ -891,7 +997,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('quotations'))
 
                 <li>
-                    <a href="{{route('quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span>{{__('text.Quotations')}}</span></a>
+                    <a href="{{route('quotations')}}"><span class="icon catalog-icon"></span> <span>{{__('text.Quotations')}}</span></a>
                 </li>
 
             @endif
@@ -900,7 +1006,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('quotations-invoices'))
 
                 <li>
-                    <a href="{{route('quotations-invoices')}}"><i class="fa fa-fw fa-file-text"></i> <span>{{__('text.Quotation Invoices')}}</span></a>
+                    <a href="{{route('quotations-invoices')}}"><span class="icon catalog-icon"></span> <span>{{__('text.Quotation Invoices')}}</span></a>
                 </li>
 
             @endif
@@ -909,7 +1015,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('commission-invoices'))
 
                 <li>
-                    <a href="{{route('commission-invoices')}}"><i class="fa fa-fw fa-file-text"></i> <span>{{__('text.Commission Invoices')}}</span></a>
+                    <a href="{{route('commission-invoices')}}"><span class="icon catalog-icon"></span> <span>{{__('text.Commission Invoices')}}</span></a>
                 </li>
 
             @endif
@@ -918,7 +1024,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('customers'))
 
                 <li>
-                    <a href="{{route('customers')}}"><i class="fa fa-fw fa-file-text"></i> <span>{{__('text.Customers')}}</span></a>
+                    <a href="{{route('customers')}}"><span class="icon customer-icon"></span> <span>{{__('text.Customers')}}</span></a>
                 </li>
 
             @endif
@@ -927,7 +1033,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('employees'))
 
                 <li>
-                    <a href="{{route('employees')}}"><i class="fa fa-fw fa-file-text"></i> <span>Employees</span></a>
+                    <a href="{{route('employees')}}"><span class="icon customer-icon"></span> <span>Employees</span></a>
                 </li>
 
             @endif
@@ -935,7 +1041,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->hasAnyPermission(['customer-quotations', 'customer-invoices']))
 
-                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices') class="active1" @endif href="javascript:"><i class="fa fa-fw fa-file-code-o"></i> <span>{{__('text.Sales')}}</span></a>
+                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices') class="active1" @endif href="javascript:"><span class="icon sales-icon"></span> <span>{{__('text.Sales')}}</span></a>
 
                     <ul class="hide">
 
@@ -989,7 +1095,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->hasAnyPermission(['user-products', 'user-colors', 'user-price-tables', 'my-services', 'user-categories', 'user-brands', 'user-models', 'user-items', 'user-features']))
 
-                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index') class="active1" @endif href="javascript:"><i class="fa fa-fw fa-file-code-o"></i> <span>Products</span></a>
+                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index' || Route::currentRouteName() == 'supplier-products') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Products</span></a>
 
                     <ul class="hide">
 
@@ -1112,7 +1218,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('ratings'))
 
                 <li>
-                    <a href="{{ route('ratings') }}" id="rating"><i class="fa fa-fw fa-book"></i> <span>{{$lang->hpmrt}}</span></a>
+                    <a href="{{ route('ratings') }}" id="rating"><span class="icon catalog-icon"></span> <span>{{$lang->hpmrt}}</span></a>
                 </li>
 
             @endif
@@ -1121,7 +1227,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->can('instruction-manual'))
 
                 <li>
-                    <a href="{{ route('instruction-manual') }}" id="instruction"><i class="fa fa-fw fa-book"></i> <span>{{__('text.Instruction Manual')}}</span></a>
+                    <a href="{{ route('instruction-manual') }}" id="instruction"><span class="icon configuration-icon"></span> <span>{{__('text.Instruction Manual')}}</span></a>
                 </li>
 
             @endif
