@@ -245,7 +245,7 @@
 
         z-index: 1000;
 
-        height: 89%;
+        height: 100%;
 
         -webkit-transform: translateX(-250px);
 
@@ -584,9 +584,9 @@
 
         #sidebar ul li > ul
         {
-            top: 87px !important;
-            position: fixed;
-            height: 86.9%;
+            top: 0 !important;
+            /*position: fixed;
+            height: 86.9%;*/
         }
 
         .user-info, a[aria-expanded="false"]::before, a[aria-expanded="true"]::before
