@@ -267,7 +267,7 @@
 
         overflow-y: auto;
 
-        padding-bottom: 87px;
+        
 
     }
 
