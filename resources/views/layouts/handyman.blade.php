@@ -885,7 +885,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 <div class="wrapper">
 
     <!-- Sidebar  -->
-    <nav id="sidebar">
+    <nav id="sidebar" @if(preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"])) class="active" @endif>
 
         {{--<div class="sidebar-header">
 
@@ -959,8 +959,6 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                             <li><a href="{{route('user-complete-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->cmpt}}</a></li>
 
                         @endif
-
-                            <li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li><li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> ABC</a></li>
 
                     </div>
 
@@ -1368,11 +1366,6 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 </div>
 
 <script type="text/javascript">
-
-    if($(window).innerWidth() <= 768)
-    {
-        $('#sidebar').addClass('active');
-    }
 
     function formSubmit(e) {
         var value = $(e).data('value');
