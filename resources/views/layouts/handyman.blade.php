@@ -864,7 +864,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
         display: none;
         position: absolute;
         top: 25px;
-        right: -8px;
+        right: -12px;
     }
 
     .accordian-left-icon
@@ -1084,19 +1084,28 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                 <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices') class="active1" @endif href="javascript:"><span class="icon sales-icon"></span> <span>{{__('text.Sales')}}</span></a>
 
+
                     <ul class="hide">
 
-                        @if(auth()->user()->can('customer-quotations'))
+                        <span class="toggle-aside-nav">
+                            <i class="icon accordian-left-icon"></i>
+                        </span>
 
-                            <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotations')}}</a></li>
+                        <div style="overflow-y: auto;height: 100%;">
 
-                        @endif
+                            @if(auth()->user()->can('customer-quotations'))
 
-                        @if(auth()->user()->can('customer-invoices'))
+                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotations')}}</a></li>
 
-                            <li><a href="{{route('customer-invoices')}}"><i class="fa fa-angle-right"></i> {{__('text.Invoices')}}</a></li>
+                            @endif
 
-                        @endif
+                            @if(auth()->user()->can('customer-invoices'))
+
+                                <li><a href="{{route('customer-invoices')}}"><i class="fa fa-angle-right"></i> {{__('text.Invoices')}}</a></li>
+
+                            @endif
+
+                        </div>
 
                     </ul>
 
@@ -1140,63 +1149,71 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                     <ul class="hide">
 
-                        @if(auth()->user()->can('user-products'))
+                        <span class="toggle-aside-nav">
+                            <i class="icon accordian-left-icon"></i>
+                        </span>
 
-                            <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 4) My Products @else Suppliers Products @endif</a></li>
+                        <div style="overflow-y: auto;height: 100%;">
 
-                        @endif
+                            @if(auth()->user()->can('user-products'))
 
-                        @if(auth()->user()->role_id == 4)
-
-                            @if(auth()->user()->can('user-colors'))
-
-                                <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> Colors</a></li>
+                                <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 4) My Products @else Suppliers Products @endif</a></li>
 
                             @endif
 
-                            @if(auth()->user()->can('user-price-tables'))
+                            @if(auth()->user()->role_id == 4)
 
-                                <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> Price Tables</a></li>
+                                @if(auth()->user()->can('user-colors'))
+
+                                    <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> Colors</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('user-price-tables'))
+
+                                    <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> Price Tables</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('my-services'))
+
+                                    <li><a href="{{route('admin-service-index')}}"><i class="fa fa-angle-right"></i> Services</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('user-categories'))
+
+                                    <li><a href="{{route('admin-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('user-brands'))
+
+                                    <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('user-models'))
+
+                                    <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('user-items'))
+
+                                    <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('user-features'))
+
+                                    <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
+
+                                @endif
 
                             @endif
 
-                            @if(auth()->user()->can('my-services'))
-
-                                <li><a href="{{route('admin-service-index')}}"><i class="fa fa-angle-right"></i> Services</a></li>
-
-                            @endif
-
-                            @if(auth()->user()->can('user-categories'))
-
-                                <li><a href="{{route('admin-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
-
-                            @endif
-
-                            @if(auth()->user()->can('user-brands'))
-
-                                <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
-
-                            @endif
-
-                            @if(auth()->user()->can('user-models'))
-
-                                <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
-
-                            @endif
-
-                            @if(auth()->user()->can('user-items'))
-
-                                <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
-
-                            @endif
-
-                            @if(auth()->user()->can('user-features'))
-
-                                <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
-
-                            @endif
-
-                        @endif
+                        </div>
 
                     </ul>
 
@@ -1387,6 +1404,17 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
         }, function(){
             $('#sidebar').addClass('active');
         });*/
+
+        $('.toggle-aside-nav').on('click', function () {
+
+            $(this).parent().removeClass('sub-show');
+
+            if($(window).innerWidth() <= 768)
+            {
+                $('#sidebar').css('overflow-y','');
+            }
+
+        });
 
         $('#sidebarCollapse1').on('click', function () {
 
