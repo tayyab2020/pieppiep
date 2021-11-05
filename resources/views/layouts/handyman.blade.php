@@ -1330,6 +1330,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
     var device = navigator.userAgent.toLowerCase();
     var ios = device.match(/(iphone|ipod|ipad)/);
 
+    alert(ios);
     if (ios)
     {
         $('#sidebar ul li a').on('click touchend', function(e) {
