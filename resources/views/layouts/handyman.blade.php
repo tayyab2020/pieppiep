@@ -1327,17 +1327,6 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
 <script type="text/javascript">
 
-    if (
-        navigator.userAgent.match(/iPhone/i) ||
-        navigator.userAgent.match(/iPod/i)
-    ) {
-        // iPhone double-click polyfill
-        $(document).on("touchstart", "#sidebar ul li a", function (e) {
-            e.preventDefault();
-            $(this).trigger("click");
-        });
-    }
-
     function formSubmit(e) {
         var value = $(e).data('value');
 
@@ -1382,24 +1371,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             }*/
         });
 
-        $('#sidebar ul li a').on('click', function () {
-
-            $('#sidebar ul li ul').not($(this).next('ul')).removeClass('sub-show');
-            $(this).next('ul').toggleClass('sub-show');
-
-            if($(window).innerWidth() <= 768)
-            {
-                if($(this).next('ul').hasClass('sub-show'))
-                {
-                    $('#sidebar').css('overflow-y','hidden');
-                }
-                else
-                {
-                    $('#sidebar').css('overflow-y','');
-                }
-            }
-
-        });
+        
 
     });
 
