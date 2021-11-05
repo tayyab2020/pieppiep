@@ -112,9 +112,9 @@
 
 
     @media (hover: none) {
-        a:hover { color: inherit; }
+        a:hover { color: inherit !important; }
     }
-    
+
     .modal-open .top-bar
     {
         z-index: 1 !important;
