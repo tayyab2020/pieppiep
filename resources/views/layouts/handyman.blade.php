@@ -113,6 +113,7 @@
     a:hover
     {
         transition: none !important;
+        outline: none !important;
     }
 
     .modal-open .top-bar
