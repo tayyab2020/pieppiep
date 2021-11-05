@@ -518,11 +518,7 @@
         background: #fff;
     }
 
-    .sub-show li a:hover
-    {
-        background-color: #0041ff !important;
-        color: white !important;
-    }
+    
 
     /*#sidebar ul li a i {
         margin-right: 10px;
