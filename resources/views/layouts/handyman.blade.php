@@ -1332,8 +1332,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
     if (ios)
     {
-        alert();
-        $('#sidebar ul li a').on('click touchend', function(e) {
+        $('#sidebar ul li a').on('touchend', function(e) {
             var el = $(this);
             el.trigger("click");
         });
