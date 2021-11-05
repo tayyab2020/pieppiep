@@ -1327,6 +1327,11 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
 <script type="text/javascript">
 
+    $('#sidebar ul li a').on('click touchend', function(e) {
+        alert();
+        
+    });
+
     function formSubmit(e) {
         var value = $(e).data('value');
 
