@@ -110,6 +110,11 @@
 
 <style type="text/css">
 
+    a:hover
+    {
+        transition: none !important;
+    }
+
     .modal-open .top-bar
     {
         z-index: 1 !important;
