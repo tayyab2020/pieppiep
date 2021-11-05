@@ -1334,7 +1334,16 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
     {
         $('#sidebar ul li a').on('touchend', function(e) {
             var el = $(this);
-            el.trigger("click");
+            var link = el.attr('href');
+
+            if(link != 'javascript:')
+            {
+                window.location = link;
+            }
+            else
+            {
+                el.trigger("click");
+            }
         });
     }
 
