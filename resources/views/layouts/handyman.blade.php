@@ -226,13 +226,6 @@
 
     }
 
-    #sidebar .sub-show li a
-    {
-        font-size: 14px !important;
-        display: block;
-        text-align: left !important;
-    }
-
     #sidebar ul li > ul {
 
         position: absolute;
@@ -466,6 +459,9 @@
 
     #sidebar ul ul a {
         padding: 1em !important;
+        font-size: 14px !important;
+        display: block !important;
+        text-align: left !important;
     }
 
     #sidebar.active .dropdown-toggle::before {
