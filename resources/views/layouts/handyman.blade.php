@@ -1327,15 +1327,24 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
 <script type="text/javascript">
 
-    var os = navigator.platform;
+    var device = navigator.userAgent.toLowerCase();
+    var ios = device.match(/(iphone|ipod|ipad)/);
 
-    if(os == 'iPhone')
+    if (ios)
+    {
+        $('#sidebar ul li a').on('click touchend', function(e) {
+            var el = $(this);
+            el.trigger("click");
+        });
+    }
+
+    /*if(os == 'iPhone')
     {
         $('#sidebar ul li a').on('touchend', function(e) {
             var el = $(this);
             el.trigger("click");
         });
-    }
+    }*/
 
     function formSubmit(e) {
         var value = $(e).data('value');
