@@ -1326,7 +1326,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 </div>
 
 <script type="text/javascript">
-    
+
     if (
         navigator.userAgent.match(/iPhone/i) ||
         navigator.userAgent.match(/iPod/i)
@@ -1335,10 +1335,6 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
         $(document).on("touchstart", "#sidebar ul li a", function (e) {
             e.preventDefault();
             $(this).trigger("click");
-        });
-        $(document).on("click", "#sidebar ul li a", function (e) {
-            // no-op
-            e.preventDefault();
         });
     }
 
