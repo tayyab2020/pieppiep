@@ -1332,7 +1332,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
     if (ios)
     {
-        $('#sidebar ul li a').on('touchend', function(e) {
+        $('#sidebar ul li a').on('click', function(e) {
             var el = $(this);
             var link = el.attr('href');
 
