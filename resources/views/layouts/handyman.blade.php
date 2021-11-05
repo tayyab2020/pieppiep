@@ -110,6 +110,11 @@
 
 <style type="text/css">
 
+
+    @media (hover: none) {
+        a:hover { color: inherit; }
+    }
+    
     .modal-open .top-bar
     {
         z-index: 1 !important;
