@@ -518,7 +518,11 @@
         background: #fff;
     }
 
-    
+    .sub-show li a:hover
+    {
+        background-color: #0041ff !important;
+        color: white !important;
+    }
 
     /*#sidebar ul li a i {
         margin-right: 10px;
@@ -1322,6 +1326,21 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 </div>
 
 <script type="text/javascript">
+    
+    if (
+        navigator.userAgent.match(/iPhone/i) ||
+        navigator.userAgent.match(/iPod/i)
+    ) {
+        // iPhone double-click polyfill
+        $(document).on("touchstart", "#sidebar ul li a", function (e) {
+            e.preventDefault();
+            $(this).trigger("click");
+        });
+        $(document).on("click", "#sidebar ul li a", function (e) {
+            // no-op
+            e.preventDefault();
+        });
+    }
 
     function formSubmit(e) {
         var value = $(e).data('value');
