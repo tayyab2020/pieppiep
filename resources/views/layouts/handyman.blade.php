@@ -586,9 +586,8 @@
 
         #sidebar ul li > ul
         {
-            top: 0 !important;
-            /*position: fixed;
-            height: 86.9%;*/
+            /*top: 0 !important;*/
+            position: fixed;
         }
 
         .user-info, a[aria-expanded="false"]::before, a[aria-expanded="true"]::before
