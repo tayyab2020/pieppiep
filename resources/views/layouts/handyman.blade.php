@@ -265,8 +265,6 @@
 
         border-right: 1px solid hsla(0,0%,63.5%,.2);
 
-        overflow-y: auto;
-
         padding-bottom: 87px;
 
     }
@@ -777,6 +775,14 @@
         margin: 0;
     }
 
+    @media (min-width: 769px)
+    {
+        #sidebarCollapse1
+        {
+            display: none;
+        }
+    }
+
     @media only screen and (min-width: 1200px) and (min-width: 768px) {
 
         ul.profile li.active img {
@@ -848,12 +854,38 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
         background-image: url("<?php echo asset('assets/images/nicEditIcons-latest.gif'); ?>") !important;
     }
 
+    .sub-show .toggle-aside-nav
+    {
+        display: block;
+    }
+
+    .toggle-aside-nav
+    {
+        display: none;
+        position: absolute;
+        top: 25px;
+        right: -8px;
+    }
+
+    .accordian-left-icon
+    {
+        background-image: url({{asset('assets/admin/img/chevron-left.svg')}});
+        width: 24px;
+        height: 24px;
+    }
+
+    .icon
+    {
+        display: inline-block;
+        background-size: cover;
+    }
+
 </style>
 
 <div class="wrapper">
 
     <!-- Sidebar  -->
-    <nav id="sidebar" class="active">
+    <nav id="sidebar">
 
         {{--<div class="sidebar-header">
 
@@ -895,32 +927,40 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                 <ul class="hide">
 
-                    @if(auth()->user()->can('show-dashboard'))
+                    <span class="toggle-aside-nav">
+                        <i class="icon accordian-left-icon"></i>
+                    </span>
 
-                        <li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li>
+                    <div style="overflow-y: auto;height: 100%;">
 
-                    @endif
+                        @if(auth()->user()->can('show-dashboard'))
 
+                            <li><a href="{{route('user-dashboard')}}"><i class="fa fa-angle-right"></i> {{__('text.Dashboard')}}</a></li>
 
-                    @if(auth()->user()->can('edit-profile'))
-
-                        <li><a href="{{route('user-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->edit}}</a></li>
-
-                    @endif
-
-
-                    @if(auth()->user()->can('radius-management'))
-
-                        <li><a href="{{route('radius-management')}}"><i class="fa fa-angle-right"></i> {{$lang->rm}}</a></li>
-
-                    @endif
+                        @endif
 
 
-                    @if(auth()->user()->can('user-complete-profile'))
+                        @if(auth()->user()->can('edit-profile'))
 
-                        <li><a href="{{route('user-complete-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->cmpt}}</a></li>
+                            <li><a href="{{route('user-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->edit}}</a></li>
 
-                    @endif
+                        @endif
+
+
+                        @if(auth()->user()->can('radius-management'))
+
+                            <li><a href="{{route('radius-management')}}"><i class="fa fa-angle-right"></i> {{$lang->rm}}</a></li>
+
+                        @endif
+
+
+                        @if(auth()->user()->can('user-complete-profile'))
+
+                            <li><a href="{{route('user-complete-profile')}}"><i class="fa fa-angle-right"></i> {{$lang->cmpt}}</a></li>
+
+                        @endif
+
+                    </div>
 
                 </ul>
 
@@ -1326,6 +1366,11 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 </div>
 
 <script type="text/javascript">
+
+    if($(window).innerWidth() <= 768)
+    {
+        $('#sidebar').addClass('active');
+    }
 
     function formSubmit(e) {
         var value = $(e).data('value');
