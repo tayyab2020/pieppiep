@@ -110,6 +110,11 @@
 
 <style type="text/css">
 
+    .panel-default.admin>.panel-heading
+    {
+        border: 0;
+    }
+
     .modal-open .top-bar
     {
         z-index: 1 !important;
@@ -968,10 +973,40 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->role_id == 2)
 
-                @if(auth()->user()->can('retailer-suppliers'))
+                @if(auth()->user()->hasAnyPermission(['retailer-suppliers', 'customers', 'employees']))
 
-                    <li>
-                        <a href="{{route('suppliers')}}"><span class="icon customer-icon"></span> <span>Suppliers</span></a>
+                    <li><a @if(Route::currentRouteName() == 'suppliers' || Route::currentRouteName() == 'customers' || Route::currentRouteName() == 'employees') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>Relations</span></a>
+
+                        <ul class="hide">
+
+                            <span class="toggle-aside-nav">
+                                <i class="icon accordian-left-icon"></i>
+                            </span>
+
+                            <div style="overflow-y: auto;height: 100%;">
+
+                                @if(auth()->user()->can('retailer-suppliers'))
+
+                                    <li><a href="{{route('suppliers')}}"><i class="fa fa-angle-right"></i> Suppliers</a></li>
+
+                                @endif
+
+                                    @if(auth()->user()->can('customers'))
+
+                                        <li><a href="{{route('customers')}}"><i class="fa fa-angle-right"></i> {{__('text.Customers')}}</a></li>
+
+                                    @endif
+
+                                    @if(auth()->user()->can('employees'))
+
+                                        <li><a href="{{route('employees')}}"><i class="fa fa-angle-right"></i> Employees</a></li>
+
+                                    @endif
+
+                            </div>
+
+                        </ul>
+
                     </li>
 
                 @endif
@@ -980,15 +1015,72 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->role_id == 4)
 
-                @if(auth()->user()->can('supplier-retailers'))
+                @if(auth()->user()->hasAnyPermission(['supplier-retailers', 'customers', 'employees']))
 
-                    <li>
-                        <a href="{{route('retailers')}}"><i class="fa fa-fw fa-file-text"></i> <span>Retailers</span></a>
+                    <li><a @if(Route::currentRouteName() == 'suppliers' || Route::currentRouteName() == 'customers' || Route::currentRouteName() == 'employees') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>Relations</span></a>
+
+                        <ul class="hide">
+
+                            <span class="toggle-aside-nav">
+                                <i class="icon accordian-left-icon"></i>
+                            </span>
+
+                            <div style="overflow-y: auto;height: 100%;">
+
+                                @if(auth()->user()->can('retailer-suppliers'))
+
+                                    <li><a href="{{route('retailers')}}"><i class="fa fa-angle-right"></i> Retailers</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('customers'))
+
+                                    <li><a href="{{route('customers')}}"><i class="fa fa-angle-right"></i> {{__('text.Customers')}}</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('employees'))
+
+                                    <li><a href="{{route('employees')}}"><i class="fa fa-angle-right"></i> Employees</a></li>
+
+                                @endif
+
+                            </div>
+
+                        </ul>
+
                     </li>
 
                 @endif
 
             @endif
+
+
+            @if(auth()->user()->role_id == 2)
+
+                <li><a @if(Route::currentRouteName() == 'retailer-company-info' || Route::currentRouteName() == 'email-templates') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Configurations</span></a>
+
+                    <ul class="hide">
+
+                            <span class="toggle-aside-nav">
+                                <i class="icon accordian-left-icon"></i>
+                            </span>
+
+                        <div style="overflow-y: auto;height: 100%;">
+
+                            <li><a href="{{route('retailer-company-info')}}"><i class="fa fa-angle-right"></i> Company Info</a></li>
+
+                            <li><a href="{{route('email-templates')}}"><i class="fa fa-angle-right"></i> Email Templates</a></li>
+
+
+                        </div>
+
+                    </ul>
+
+                </li>
+
+            @endif
+
 
             @if(auth()->user()->can('create-new-quotation'))
 
@@ -1009,10 +1101,6 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @if(auth()->user()->role_id == 2)
 
                 <li>
-                    <a href="{{route('email-templates')}}"><span class="icon catalog-icon"></span> <span>Email Templates</span></a>
-                </li>
-
-                <li>
                     <a href="{{route('new-orders')}}"><span class="icon catalog-icon"></span> <span>New Orders</span></a>
                 </li>
 
@@ -1022,7 +1110,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @endif
 
-            @if(auth()->user()->can('handyman-quotation-requests'))
+            {{--@if(auth()->user()->can('handyman-quotation-requests'))
 
                 <li>
                     <a href="{{route('handyman-quotation-requests')}}"><span class="icon catalog-icon"></span> <span>{{__('text.Quotation Requests')}}</span></a>
@@ -1055,25 +1143,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                     <a href="{{route('commission-invoices')}}"><span class="icon catalog-icon"></span> <span>{{__('text.Commission Invoices')}}</span></a>
                 </li>
 
-            @endif
-
-
-            @if(auth()->user()->can('customers'))
-
-                <li>
-                    <a href="{{route('customers')}}"><span class="icon customer-icon"></span> <span>{{__('text.Customers')}}</span></a>
-                </li>
-
-            @endif
-
-
-            @if(auth()->user()->can('employees'))
-
-                <li>
-                    <a href="{{route('employees')}}"><span class="icon customer-icon"></span> <span>Employees</span></a>
-                </li>
-
-            @endif
+            @endif--}}
 
 
             @if(auth()->user()->hasAnyPermission(['customer-quotations', 'customer-invoices']))

@@ -174,6 +174,7 @@
   Route::get('/reset', 'UserController@resetform')->name('user-reset');
   Route::post('/reset', 'UserController@reset')->name('user-reset-submit');
   Route::get('/profile', 'UserController@profile')->name('user-profile');
+  Route::get('/retailer-company-info', 'UserController@profile')->name('retailer-company-info');
   Route::get('/availability-manager', 'UserController@AvailabilityManager')->name('user-availability');
   Route::get('/radius-management', 'UserController@RadiusManagement')->name('radius-management');
   Route::get('/client-profile', 'UserController@ClientProfile')->name('client-profile');

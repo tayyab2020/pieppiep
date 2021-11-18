@@ -161,8 +161,7 @@
                                                     </div>
                                                 </div>
 
-
-                                                <div class="form-group">
+                                                <div class="form-group" @if(Route::currentRouteName() != 'user-profile') style="display:none;" @endif>
                                                     <label for="profile_description" class="col-sm-3 control-label">{{$lang->dopd}}</label>
                                                     <div class="col-sm-8">
                                                         <textarea class="form-control" name="description" id="profile_description" rows="5" style="resize: vertical;">{{$user->description}}</textarea>
@@ -171,8 +170,7 @@
 
                                             </div>
 
-
-                                            <div class="form-group">
+                                            <div class="form-group" @if(Route::currentRouteName() != 'user-profile') style="display:none;" @endif>
                                                 <label for="special" class="col-sm-3 control-label">{{__('text.Specialties')}} </label>
                                                 <div class="col-sm-8">
                                                     @if($user->special != null)
@@ -212,7 +210,7 @@
                                             </div>
 
 
-                                            <div class="form-group">
+                                            <div class="form-group" @if(Route::currentRouteName() != 'user-profile') style="display:none;" @endif>
                                                 <label for="tax_number" class="col-sm-3 control-label">{{$lang->tn}}</label>
                                                 <div class="col-sm-8">
                                                     <input class="form-control" id="tax_number" name="tax_number" placeholder="{{$lang->tn}}" type="text" value="{{$user->tax_number}}" >
@@ -220,13 +218,12 @@
                                             </div>
 
 
-                                            <div class="form-group">
+                                            <div class="form-group" @if(Route::currentRouteName() != 'user-profile') style="display:none;" @endif>
                                                 <label for="bank_account" class="col-sm-3 control-label">{{$lang->ba}}</label>
                                                 <div class="col-sm-8">
                                                     <input class="form-control" id="bank_account" name="bank_account" placeholder="{{$lang->ba}}" type="text" value="{{$user->bank_account}}" >
                                                 </div>
                                             </div>
-
 
 
                                             <div class="form-group" style="display: none;">
@@ -237,15 +234,12 @@
                                             </div>
 
 
-
-                                            <div class="form-group">
+                                            <div class="form-group" @if(Route::currentRouteName() != 'user-profile') style="display:none;" @endif>
                                                 <label for="web" class="col-sm-3 control-label">Website</label>
                                                 <div class="col-sm-8">
                                                     <input class="form-control" name="web" id="web" placeholder="Website" type="text" value="{{$user->web}}">
                                                 </div>
                                             </div>
-
-
 
                                             <div class="submit-area margin-bottom-30">
                                                 <div class="row">

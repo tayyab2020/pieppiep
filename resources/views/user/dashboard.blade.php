@@ -10,7 +10,7 @@
                     <!-- Starting of Dashboard header items area -->
                     <div class="panel panel-default admin">
 
-                        <div class="panel-heading admin-title">{{Auth::guard('user')->user()->role_id == 2 ? 'Retailer Dashboard' : 'Supplier Dashboard'}}</div>
+                        <div class="panel-heading admin-title">{{Auth::guard('user')->user()->role_id == 2 ? $user->company_name : 'Supplier Dashboard'}}</div>
 
                     </div>
                     <!-- Ending of Dashboard header items area -->
@@ -76,7 +76,7 @@
 
                         </div>
 
-                        <div class="donors-profile-top-bg overlay text-center wow fadeInUp"
+                        <!--<div class="donors-profile-top-bg overlay text-center wow fadeInUp"
                              style="background-image: url({{asset('assets/images/'.$gs->h_dashbg)}}); visibility: visible; animation-name: fadeInUp;z-index: auto;color: black;">
                             <div class="container">
                                 <div class="row">
@@ -241,9 +241,9 @@
 
                                         </style>
 
-                                        <!--                         <div class="add-area margin-bottom-30">
-                                                                    <img src="assets/img/add.jpg" alt="Ad. Image">
-                                                                </div> -->
+                                        <div class="add-area margin-bottom-30">
+                                            <img src="assets/img/add.jpg" alt="Ad. Image">
+                                        </div>
 
                                     </div>
                                     <div class="col-md-4">
@@ -292,21 +292,19 @@
                                                     allowfullscreen>
                                                 </iframe>
                                             </div>
-                                            <!--                             <div class="add-area">
-                                                                        <img src="assets/img/ad1.jpg" alt="Ad. Image">
-                                                                    </div> -->
+                                            <div class="add-area">
+                                                <img src="assets/img/ad1.jpg" alt="Ad. Image">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Modal -->
-                        <!-- Modal -->
+                        
                         <div class="modal fade-scale" id="ModalAll" role="dialog">
                             <div class="modal-dialog">
 
-                                <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -381,11 +379,9 @@
                         </div>
 
 
-                        <!-- Modal -->
                         <div class="modal fade-scale" id="ModalFeature" role="dialog">
                             <div class="modal-dialog">
 
-                                <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -452,7 +448,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <!-- Ending of Dashboard Top reference + Most Used OS area -->
 
