@@ -78,7 +78,8 @@
   Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadInvoicePDF');
   Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');
   Route::get('/download-order-confirmation-pdf/{id}', 'UserController@DownloadOrderConfirmationPDF');
-  Route::get('/create-new-quotation', 'UserController@CreateNewQuotation')->name('create-new-quotation');
+  Route::get('/offerte-form', 'UserController@SelectQuotationForm')->name('select-quotation-form');
+  Route::get('/offerte/binnen-zonwering', 'UserController@CreateNewQuotation')->name('create-new-quotation');
   Route::post('/store-new-quotation', 'UserController@StoreNewQuotation')->name('store-new-quotation');
   Route::get('/get-supplier-products', 'UserController@GetSupplierProducts');
   Route::get('/get-colors', 'UserController@GetColors');
@@ -104,7 +105,7 @@
   Route::post('/save-email-template','UserController@SaveEmailTemplate')->name('save-email-template');
   Route::get('/aanvrager-offerte/{id?}', 'UserController@CustomerQuotations')->name('customer-quotations');
   Route::get('/aanvrager-facturen/{id?}', 'UserController@CustomerInvoices')->name('customer-invoices');
-  Route::get('/aanbieder-opstellen-offerte', 'UserController@HandymanCreateQuote')->name('create-custom-quotation');
+  Route::get('/offerte/vloeren', 'UserController@HandymanCreateQuote')->name('create-custom-quotation');
   Route::get('/aanbieder-opstellen-directe-verkoopfactuur', 'UserController@HandymanCreateQuote')->name('create-direct-invoice');
   Route::post('/opstellen-eigen-offerte', 'UserController@StoreCustomQuotation')->name('store-custom-quotation');
   Route::post('/create-direct-invoice', 'UserController@StoreCustomQuotation')->name('store-direct-invoice');

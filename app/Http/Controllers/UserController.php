@@ -121,6 +121,11 @@ class UserController extends Controller
         $this->gs = Generalsetting::findOrFail(1);
     }
 
+    public function SelectQuotationForm()
+    {
+        return view('user.select_quotation_form');
+    }
+
     public function CreateNewQuotation()
     {
         $user = Auth::guard('user')->user();

@@ -1091,7 +1091,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                 @if(auth()->user()->role_id == 2)
 
                     <li>
-                        <a href="{{route('create-new-quotation')}}"><span class="icon catalog-icon"></span> <span>Create Quotation (New)</span></a>
+                        <a href="{{route('select-quotation-form')}}"><span class="icon catalog-icon"></span> <span>Create Quotation (New)</span></a>
                     </li>
 
                 @endif
