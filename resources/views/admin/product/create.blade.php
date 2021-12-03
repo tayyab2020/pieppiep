@@ -286,6 +286,207 @@
 
                                                     <div id="menu3" class="tab-pane fade">
 
+                                                        <div class="wrapper1">
+                                                            <div class="file-upload">
+                                                                <input id="upload" type=file  name="files[]">
+                                                                <i style="font-size: 15px;margin-right: 15px;" class="fa fa-arrow-up"></i> Import Colors
+                                                            </div>
+                                                        </div>
+
+                                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+                                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+
+                                                        <script>
+
+                                                            var ExcelToJSON = function() {
+
+                                                                this.parseExcel = function(file) {
+
+                                                                    var reader = new FileReader();
+                                                                    reader.onload = function(e) {
+
+                                                                        var data = e.target.result;
+                                                                        var workbook = XLSX.read(data, {
+                                                                            type: 'binary'
+                                                                        });
+
+                                                                        workbook.SheetNames.forEach(function(sheetName) {
+                                                                            // Here is your object
+                                                                            var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                                                                            var json_object = JSON.stringify(XL_row_object);
+                                                                            var data = JSON.parse(json_object);
+
+                                                                            for (i = 0; i < data.length; ++i)
+                                                                            {
+                                                                                var color_title = data[i]['Color Title'];
+
+                                                                                if(!color_title)
+                                                                                {
+                                                                                    color_title = '';
+                                                                                }
+
+                                                                                var color_code = data[i]['Color Code'];
+
+                                                                                if(!color_code)
+                                                                                {
+                                                                                    color_code = '';
+                                                                                }
+
+                                                                                var max_height = data[i]['Max Height'];
+
+                                                                                if(!max_height)
+                                                                                {
+                                                                                    max_height = '';
+                                                                                }
+
+                                                                                var price_table = data[i]['Price Table'];
+
+                                                                                if(!price_table)
+                                                                                {
+                                                                                    price_table = '';
+                                                                                }
+
+                                                                                var color_row = $('.color_box').find('.form-group').last().data('id');
+                                                                                color_row = color_row + 1;
+
+                                                                                <?php
+                                                                                $js_array = json_encode($tables);
+                                                                                echo "var tables_array = ". $js_array . ";\n";
+                                                                                ?>
+
+                                                                                var options = "";
+
+                                                                                for (x = 0; x < tables_array.length; ++x)
+                                                                                {
+                                                                                    if(tables_array[x]['title'] == data[i]['Price Table'])
+                                                                                    {
+                                                                                        options = options + '<option selected value="'+tables_array[x]['id']+'">'+tables_array[x]['title']+'</option>';
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        options = options + '<option value="'+tables_array[x]['id']+'">'+tables_array[x]['title']+'</option>';
+                                                                                    }
+                                                                                }
+
+                                                                                $(".color_box").append('<div class="form-group" data-id="'+color_row+'">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                <div class="col-sm-3">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                    <input class="form-control color_title" name="colors[]" value="'+color_title+'" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                </div>\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                <div class="col-sm-3">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                    <input class="form-control color_code" name="color_codes[]" value="'+color_code+'" id="blood_group_slug" placeholder="Color Code" type="text">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                </div>\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                <div class="col-sm-2">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" value="'+max_height+'" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                </div>\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                <div class="col-sm-3">\n' +
+                                                                                    '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                        <option value="">Select Price Table</option>\n' +
+                                                                                    '\n' +
+                                                                                                                                                              options +
+                                                                                    '\n' +
+                                                                                    '                                                                    </select>\n' +
+                                                                                    '                                                                </div>\n'+
+                                                                                    '\n' +
+                                                                                    '                <div class="col-xs-1 col-sm-1">\n' +
+                                                                                    '                <span class="ui-close remove-color" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                                                                                    '                </div>\n' +
+                                                                                    '\n' +
+                                                                                    '                </div>');
+
+                                                                                $(".js-data-example-ajax4").select2({
+                                                                                    width: '100%',
+                                                                                    height: '200px',
+                                                                                    placeholder: "Select Price Table",
+                                                                                    allowClear: true,
+                                                                                });
+
+                                                                                $('.js-data-example-ajax4').trigger('change');
+
+                                                                            }
+
+                                                                        });
+                                                                    };
+
+                                                                    reader.onerror = function(ex) {
+                                                                        alert(ex);
+                                                                    };
+
+                                                                    reader.readAsBinaryString(file);
+
+                                                                };
+
+                                                            };
+
+                                                            function handleFileSelect(evt) {
+
+                                                                if($('#upload').val())
+                                                                {
+                                                                    var files = evt.target.files; // FileList object
+                                                                    var xl2json = new ExcelToJSON();
+                                                                    xl2json.parseExcel(files[0]);
+                                                                    $('#upload').val(null);
+                                                                }
+
+                                                            }
+
+                                                            document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+
+                                                        </script>
+
+                                                        <style>
+
+                                                            .wrapper1 {
+                                                                width: 100%;
+                                                                height: 100%;
+                                                                display: flex;
+                                                                align-items: center;
+                                                                justify-content: flex-start;
+                                                                margin-bottom: 20px;
+                                                            }
+                                                            .wrapper1 .file-upload {
+                                                                height: 50px;
+                                                                width: 170px;
+                                                                border-radius: 5px;
+                                                                position: relative;
+                                                                display: flex;
+                                                                justify-content: center;
+                                                                align-items: center;
+                                                                /*border: 4px solid #fff;*/
+                                                                overflow: hidden;
+                                                                background-image: linear-gradient(to bottom, #2590eb 50%, #fff 50%);
+                                                                background-size: 100% 200%;
+                                                                transition: all 1s;
+                                                                color: #fff;
+                                                                font-size: 16px;
+                                                                font-weight: 600;
+                                                            }
+                                                            .wrapper1 .file-upload input[type='file'] {
+                                                                height: 50px;
+                                                                width: 170px;
+                                                                position: absolute;
+                                                                top: 0;
+                                                                left: 0;
+                                                                opacity: 0;
+                                                                cursor: pointer;
+                                                            }
+                                                            .wrapper1 .file-upload:hover {
+                                                                background-position: 0 -101%;
+                                                                color: #2590eb;
+                                                            }
+
+                                                        </style>
+
                                                         <div class="color_box" style="margin-bottom: 20px;">
 
                                                             <input type="hidden" name="removed_colors" id="removed_colors">
