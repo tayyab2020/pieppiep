@@ -38,7 +38,7 @@
 
                                                 @if(auth()->user()->can('create-custom-quotation'))
 
-                                                    <a style="float: right;" href="{{route('select-quotation-form')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create New Quotation')}}</a>
+                                                    <a style="float: right;" href="{{route('create-custom-quotation')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create New Quotation')}}</a>
 
                                                 @endif
 
@@ -54,7 +54,7 @@
 
                                                 @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                    <a style="float: right;margin-right: 10px;" href="{{route('select-quotation-form')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Create New Quotation</a>
+                                                    <a style="float: right;margin-right: 10px;" href="{{route('create-new-quotation')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Create New Quotation</a>
 
                                                 @endif
 

@@ -78,7 +78,8 @@
   Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadInvoicePDF');
   Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');
   Route::get('/download-order-confirmation-pdf/{id}', 'UserController@DownloadOrderConfirmationPDF');
-  Route::get('/offerte-form', 'UserController@SelectQuotationForm')->name('select-quotation-form');
+  Route::get('/offerte-type', 'UserController@SelectQuotationsType')->name('select-quotations-type');
+  Route::get('/facturen-type', 'UserController@SelectInvoicesType')->name('select-invoices-type');
   Route::get('/offerte/binnen-zonwering', 'UserController@CreateNewQuotation')->name('create-new-quotation');
   Route::post('/store-new-quotation', 'UserController@StoreNewQuotation')->name('store-new-quotation');
   Route::get('/get-supplier-products', 'UserController@GetSupplierProducts');

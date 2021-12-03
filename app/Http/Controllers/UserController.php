@@ -121,9 +121,16 @@ class UserController extends Controller
         $this->gs = Generalsetting::findOrFail(1);
     }
 
-    public function SelectQuotationForm()
+    public function SelectQuotationsType()
     {
-        return view('user.select_quotation_form');
+        $type = 1;
+        return view('user.select_type', compact('type'));
+    }
+
+    public function SelectInvoicesType()
+    {
+        $type = 2;
+        return view('user.select_type', compact('type'));
     }
 
     public function CreateNewQuotation()

@@ -1,10 +1,22 @@
 <div class="wrapper">
- <input type="radio" value="{{route('create-custom-quotation')}}" class="select-form" name="select" id="option-1">
- <input type="radio" value="{{route('create-new-quotation')}}" class="select-form" name="select" id="option-2">
-   <label for="option-1" class="option option-1">
-     <div class="dot"></div>
-      <span>Vloeren</span>
-      </label>
+
+  @if($type == 1)
+
+    <input type="radio" value="{{route('customer-quotations')}}" class="select-form" name="select" id="option-1">
+    <input type="radio" value="{{route('new-quotations')}}" class="select-form" name="select" id="option-2">
+
+  @else
+
+    <input type="radio" value="{{route('customer-invoices')}}" class="select-form" name="select" id="option-1">
+    <input type="radio" value="{{route('new-invoices')}}" class="select-form" name="select" id="option-2">
+
+  @endif
+ 
+  <label for="option-1" class="option option-1">
+    <div class="dot"></div>
+     <span>Vloeren</span>
+  </label>
+
    <label for="option-2" class="option option-2">
      <div class="dot"></div>
       <span>Binnen zonwering</span>
