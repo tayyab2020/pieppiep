@@ -411,11 +411,11 @@
                                                                                     allowClear: true,
                                                                                 });
 
-                                                                                $('.js-data-example-ajax4').trigger('change');
-
                                                                             }
 
                                                                         });
+
+                                                                        $('.js-data-example-ajax4').trigger('change');
                                                                     };
 
                                                                     reader.onerror = function(ex) {
