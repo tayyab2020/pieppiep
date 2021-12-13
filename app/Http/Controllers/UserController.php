@@ -161,7 +161,7 @@ class UserController extends Controller
                 $suppliers = array();*/
             }
 
-            return view('user.create_new_quotation', compact('products','customers','suppliers'));
+            return view('user.create_new_quotation1', compact('products','customers','suppliers'));
         }
         else
         {
@@ -711,6 +711,7 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $user_role = $user->role_id;
         $main_id = $user->main_id;
 
         if($main_id)
@@ -718,15 +719,31 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        if($user->can('customer-quotations'))
+        if($user->can('customer-quotations') || $user->can('create-new-quotation'))
         {
             if ($id) {
+                
                 $invoices = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.user_id')->where('custom_quotations.handyman_id', $user_id)->where('custom_quotations.id', $id)->where('custom_quotations.status','!=',3)->orderBy('custom_quotations.created_at', 'desc')->select('custom_quotations.*', 'custom_quotations.id as invoice_id', 'custom_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
-            } else {
-                $invoices = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.user_id')->where('custom_quotations.handyman_id', $user_id)->where('custom_quotations.status','!=',3)->orderBy('custom_quotations.created_at', 'desc')->select('custom_quotations.*', 'custom_quotations.id as invoice_id', 'custom_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
-            }
+            
+                return view('user.quote_invoices', compact('invoices'));
 
-            return view('user.quote_invoices', compact('invoices'));
+            } else {
+
+                $invoices = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.user_id')->where('custom_quotations.handyman_id', $user_id)->where('custom_quotations.status','!=',3)->orderBy('custom_quotations.created_at', 'desc')->select('custom_quotations.*', 'custom_quotations.id as invoice_id', 'custom_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+
+                if($user_role == 2)
+                {
+                    $new_invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+                }
+                else
+                {
+                    $new_invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
+                    $new_invoices = $invoices->unique('invoice_id');
+                }
+
+                return view('user.quotations', compact('invoices','new_invoices'));
+
+            }
         }
         else
         {
