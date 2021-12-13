@@ -1246,13 +1246,13 @@
 		.m-input
 		{
 			border-radius: 0 !important;
-			width: 85%;
+			width: 75%;
 		}
 
 		.measure-unit
 		{
 			height: 30px;
-			width: 15%;
+			width: 25%;
 			padding-bottom: 3px;
 		}
 
@@ -1627,8 +1627,8 @@
 		display: flex;
 		flex-direction: column;
 		background: #fff;
-		overflow-y: hidden;
-		overflow-x: auto;
+		/*overflow-y: hidden;
+		overflow-x: auto;*/
 	}
 
 	table tr th {
@@ -2119,9 +2119,9 @@
 			var current = $(this);
 
 			var id = current.val();
-			var row_id = current.parent().parent().data('id');
+			var row_id = current.parents(".content-div").data('id');
 			var options = '';
-			current.parent().parent().find('#area_conflict').val(0);
+			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
 
 			$.ajax({
 				type: "GET",
@@ -2133,22 +2133,22 @@
 
 					$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
 					$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-					current.parent().parent().find('#childsafe').val(0);
-					current.parent().parent().find('#ladderband').val(0);
-					current.parent().parent().find('#ladderband_value').val(0);
-					current.parent().parent().find('#ladderband_price_impact').val(0);
-					current.parent().parent().find('#ladderband_impact_type').val(0);
-					current.parent().parent().find('.total_discount').val(0);
-					current.parent().parent().find('.total_discount_old').val(0);
-					current.parent().parent().find('.price_before_labor').val('');
-					current.parent().parent().find('.price_before_labor_old').val('');
-					current.parent().parent().find('.labor_impact').val('');
-					current.parent().parent().find('.labor_impact_old').val('');
-					current.parent().parent().find('.model').find('.model_impact_value').val('');
-					current.parent().parent().find('.price').text('');
-					current.parent().parent().find('#row_total').val('');
-					current.parent().parent().find('#rate').val('');
-					current.parent().parent().find('#basic_price').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
 
 					$.each(data, function (index, value) {
 
@@ -2160,27 +2160,28 @@
 
 					});
 
-					current.parent().parent().find('.products').children('select').find('option')
+					$('#products_table').find(`[data-id='${row_id}']`).find('.products').children('select').find('option')
 						.remove()
 						.end()
 						.append('<option value="">Select Product</option>' + options);
 
 
-					current.parent().parent().find('.color').children('select').find('option')
+					$('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
 						.remove()
 						.end()
 						.append('<option value="">Select Color</option>');
-					current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val('');
-					current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val('');
+
+					$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.measure-unit').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.measure-unit').val('');
 
 					/*calculate_total();*/
 
 				}
 			});
 
-            current.parent().parent().find('#next-row-td').find('.green-circle').hide();
-            current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-            current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
 
 		});
 
@@ -2189,10 +2190,10 @@
 			var current = $(this);
 
 			var id = current.val();
-			var row_id = current.parent().parent().data('id');
+			var row_id = current.parents(".content-div").data('id');
 			var options = '';
 			var options1 = '';
-			current.parent().parent().find('#area_conflict').val(0);
+			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
 
 			$.ajax({
 				type: "GET",
@@ -2206,40 +2207,40 @@
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-						current.parent().parent().find('.total_discount').val(0);
-						current.parent().parent().find('.total_discount_old').val(0);
-						current.parent().parent().find('.price_before_labor').val('');
-						current.parent().parent().find('.price_before_labor_old').val('');
-						current.parent().parent().find('.labor_impact').val('');
-						current.parent().parent().find('.labor_impact_old').val('');
-						current.parent().parent().find('.model').find('.model_impact_value').val('');
-						current.parent().parent().find('#delivery_days').val(data.delivery_days);
-						current.parent().parent().find('#ladderband').val(data.ladderband);
-						current.parent().parent().find('#ladderband_value').val(data.ladderband_value);
-						current.parent().parent().find('#ladderband_price_impact').val(data.ladderband_price_impact);
-						current.parent().parent().find('#ladderband_impact_type').val(data.ladderband_impact_type);
-						current.parent().parent().find('#price_based_option').val(data.price_based_option);
-						current.parent().parent().find('#base_price').val(data.base_price);
-						current.parent().parent().find('.price').text('');
-						current.parent().parent().find('#row_total').val('');
-						current.parent().parent().find('#rate').val('');
-						current.parent().parent().find('#basic_price').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
+						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(data.ladderband_value);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(data.ladderband_price_impact);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val(data.price_based_option);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
+						$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
 
 						var price_based_option = data.price_based_option;
 
 						if (price_based_option == 1) {
-							current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly', false);
-							current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly', false);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', false);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', false);
 						}
 						else if (price_based_option == 2) {
-							current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly', false);
-							current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly', true);
-							current.parent().parent().find('.height').children('.m-box').children('.m-input').val(0);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', false);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', true);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').val(0);
 						}
 						else {
-							current.parent().parent().find('.width').children('.m-box').children('.m-input').attr('readonly', true);
-							current.parent().parent().find('.width').children('.m-box').children('.m-input').val(0);
-							current.parent().parent().find('.height').children('.m-box').children('.m-input').attr('readonly', false);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', true);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').val(0);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', false);
 						}
 
 						$.each(data.colors, function (index, value) {
@@ -2262,24 +2263,24 @@
 
 						});
 
-						current.parent().parent().find('.color').children('select').find('option')
+						$('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
 							.remove()
 							.end()
 							.append('<option value="">Select Color</option>' + options);
 
-						current.parent().parent().find('.model').children('select').find('option')
+							$('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
 							.remove()
 							.end()
 							.append('<option value="">Select Model</option>' + options1);
 
 
 						if ((typeof (data[0]) != "undefined") && data[0].measure) {
-							current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val(data[0].measure);
-							current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val(data[0].measure);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.measure-unit').val(data[0].measure);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.measure-unit').val(data[0].measure);
 						}
 						else {
-							current.parent().parent().find('.width').children('.m-box').children('.measure-unit').val('');
-							current.parent().parent().find('.height').children('.m-box').children('.measure-unit').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.measure-unit').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.measure-unit').val('');
 						}
 					}
 
@@ -2288,9 +2289,9 @@
 				}
 			});
 
-            current.parent().parent().find('#next-row-td').find('.green-circle').hide();
-            current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-            current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
 
 		});
 
@@ -2333,27 +2334,27 @@
 		$(document).on('change', ".js-data-example-ajax3", function (e) {
 
 			var current = $(this);
-			var row_id = current.parent().parent().data('id');
+			var row_id = current.parents(".content-div").data('id');
 
 			var model = current.val();
-			var color = current.parent().parent().find('.color').find('select').val();
+			var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
 
-			var price_based_option = current.parent().parent().find('#price_based_option').val();
-			var base_price = current.parent().parent().find('#base_price').val();
+			var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
+			var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
 
-			var width = current.parent().parent().find('.width').find('.m-input').val();
+			var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
 			width = width.replace(/\,/g, '.');
 
-			var height = current.parent().parent().find('.height').find('.m-input').val();
+			var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
 			height = height.replace(/\,/g, '.');
 
-			var product = current.parent().parent().find('.products').find('select').val();
-			var ladderband = current.parent().parent().find('#ladderband').val();
-			current.parent().parent().find('#area_conflict').val(0);
+			var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+			var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
+			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
 
 			if (width && height && color && model && product) {
 
-				if ($(this).parent().parent().find('.suppliers').hasClass('hide')) {
+				if ($('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide')) {
 					var margin = 0;
 				}
 				else {
@@ -2362,8 +2363,8 @@
 
 				$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
 				$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-				current.parent().parent().find('.total_discount').val(0);
-				current.parent().parent().find('.total_discount_old').val(0);
+				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
 
 				$.ajax({
 					type: "GET",
@@ -2380,16 +2381,16 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
-								current.parent().parent().find('.price_before_labor').val('');
-								current.parent().parent().find('.price_before_labor_old').val('');
-								current.parent().parent().find('.labor_impact').val('');
-								current.parent().parent().find('.labor_impact_old').val('');
-								current.parent().parent().find('.model').find('.model_impact_value').val('');
-								current.parent().parent().find('.price').text('');
-								current.parent().parent().find('#row_total').val('');
-								current.parent().parent().find('#rate').val('');
-								current.parent().parent().find('#basic_price').val('');
-								current.parent().parent().find('#area_conflict').val(3);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
 							}
 							else if (data[0].value === 'x_axis') {
 								Swal.fire({
@@ -2398,16 +2399,16 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
-								current.parent().parent().find('.price_before_labor').val('');
-								current.parent().parent().find('.price_before_labor_old').val('');
-								current.parent().parent().find('.labor_impact').val('');
-								current.parent().parent().find('.labor_impact_old').val('');
-								current.parent().parent().find('.model').find('.model_impact_value').val('');
-								current.parent().parent().find('.price').text('');
-								current.parent().parent().find('#row_total').val('');
-								current.parent().parent().find('#rate').val('');
-								current.parent().parent().find('#basic_price').val('');
-								current.parent().parent().find('#area_conflict').val(1);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
 							}
 							else if (data[0].value === 'y_axis') {
 
@@ -2417,20 +2418,20 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
-								current.parent().parent().find('.price_before_labor').val('');
-								current.parent().parent().find('.price_before_labor_old').val('');
-								current.parent().parent().find('.labor_impact').val('');
-								current.parent().parent().find('.labor_impact_old').val('');
-								current.parent().parent().find('.model').find('.model_impact_value').val('');
-								current.parent().parent().find('.price').text('');
-								current.parent().parent().find('#row_total').val('');
-								current.parent().parent().find('#rate').val('');
-								current.parent().parent().find('#basic_price').val('');
-								current.parent().parent().find('#area_conflict').val(2);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
 							}
 							else {
 
-								current.parent().parent().find('#childsafe').val(data[3].childsafe);
+								$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
 								var childsafe = data[3].childsafe;
 
 								if (price_based_option == 1) {
@@ -2558,15 +2559,15 @@
 
                                 if(count_features > 0)
                                 {
-                                    current.parent().parent().find('#next-row-td').find('.green-circle').hide();
-                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
                                 }
                                 else
                                 {
-                                    current.parent().parent().find('#next-row-td').find('.yellow-circle').hide();
-                                    current.parent().parent().find('#next-row-td').find('.green-circle').css('visibility','visible');
-                                    current.parent().parent().find('#next-row-td').find('.green-circle').show();
+                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
                                 }
 
 								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
@@ -2661,33 +2662,33 @@
 									labor = parseFloat(labor).toFixed(2);
 								}
 
-								current.parent().parent().find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								current.parent().parent().find('.price_before_labor_old').val(price_before_labor);
-								current.parent().parent().find('.labor_impact').val(labor.replace(/\./g, ','));
-								current.parent().parent().find('.labor_impact_old').val(labor);
-								current.parent().parent().find('.model').find('.model_impact_value').val(model_impact_value);
-								//current.parent().parent().find('.price').text('€ ' + Math.round(price));
-								current.parent().parent().find('.price').text('€ ' + price.replace(/\./g, ','));
-								current.parent().parent().find('#row_total').val(price);
-								current.parent().parent().find('#rate').val(price);
-								current.parent().parent().find('#basic_price').val(basic_price);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
+								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
+								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
+								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
 
 							}
 						}
 						else {
-							current.parent().parent().find('.price_before_labor').val('');
-							current.parent().parent().find('.price_before_labor_old').val('');
-							current.parent().parent().find('.labor_impact').val('');
-							current.parent().parent().find('.labor_impact_old').val('');
-							current.parent().parent().find('.model').find('.model_impact_value').val('');
-							current.parent().parent().find('.price').text('');
-							current.parent().parent().find('#row_total').val('');
-							current.parent().parent().find('#rate').val('');
-							current.parent().parent().find('#basic_price').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
 
-                            current.parent().parent().find('#next-row-td').find('.green-circle').hide();
-                            current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                            current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
 						}
 
 						calculate_total();
@@ -2696,9 +2697,9 @@
 			}
 			else
             {
-                current.parent().parent().find('#next-row-td').find('.green-circle').hide();
-                current.parent().parent().find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                current.parent().parent().find('#next-row-td').find('.yellow-circle').show();
+                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
             }
 
 		});
@@ -2706,27 +2707,27 @@
 		$(document).on('change', ".js-data-example-ajax2", function (e) {
 
 			var current = $(this);
-			var row_id = current.parent().parent().data('id');
+			var row_id = current.parents(".content-div").data('id');
 
 			var color = current.val();
-			var model = current.parent().parent().find('.model').find('select').val();
+			var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
 
-			var price_based_option = current.parent().parent().find('#price_based_option').val();
-			var base_price = current.parent().parent().find('#base_price').val();
+			var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
+			var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
 
-			var width = current.parent().parent().find('.width').find('.m-input').val();
+			var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
 			width = width.replace(/\,/g, '.');
 
-			var height = current.parent().parent().find('.height').find('.m-input').val();
+			var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
 			height = height.replace(/\,/g, '.');
 
-			var product = current.parent().parent().find('.products').find('select').val();
-			var ladderband = current.parent().parent().find('#ladderband').val();
-			current.parent().parent().find('#area_conflict').val(0);
+			var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+			var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
+			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
 
 			if (width && height && color && model && product) {
 
-				if ($(this).parent().parent().find('.suppliers').hasClass('hide')) {
+				if ($('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide')) {
 					var margin = 0;
 				}
 				else {
