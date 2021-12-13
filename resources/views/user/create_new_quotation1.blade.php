@@ -1260,12 +1260,12 @@
 		{
 			height: 35px;
 			line-height: 35px;
-			font-size: 8px;
+			font-size: 10px;
 		}
 
 		:is(.color, .model) > .select2-container--default .select2-selection--single, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__arrow, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered
 		{
-			font-size: 12px;
+			font-size: 10px;
 		}
 
 		.sr-res
