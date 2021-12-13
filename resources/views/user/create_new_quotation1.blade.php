@@ -1254,6 +1254,7 @@
 			height: 30px;
 			width: 25%;
 			padding-bottom: 3px;
+			border-radius: 0;
 		}
 
 		.full-res .select2-container .select2-selection--single, .full-res .select2-container--default .select2-selection--single .select2-selection__rendered, .full-res .select2-container--default .select2-selection--single .select2-selection__arrow
