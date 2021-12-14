@@ -2910,7 +2910,7 @@ class UserController extends Controller
                 }
             }
 
-            return view('user.create_new_quotation', compact('products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
+            return view('user.create_new_quotation1', compact('products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
         }
         else
         {

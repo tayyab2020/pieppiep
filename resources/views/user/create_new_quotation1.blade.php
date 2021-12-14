@@ -122,7 +122,208 @@
 																<div class="headings" style="width: 13%;"></div>
                                                             </div>
 
-                                                            <div class="content-div active" data-id="1">
+															@if(isset($invoice))
+
+																@foreach($invoice as $i => $item)
+
+																<div @if($i==0) class="content-div active" @else class="content-div" @endif data-id="{{$i+1}}">
+
+                                                                    <div class="content full-res item1" style="width: 2%;">
+																		<label class="content-label">Sr. No</label>
+																		<div style="padding: 0 5px;" class="sr-res">{{$i+1}}</div>
+																	</div>
+
+																	<input type="hidden" value="{{$item->basic_price}}" id="basic_price" name="basic_price[]">
+																	<input type="hidden" value="{{$item->rate}}" id="rate" name="rate[]">
+																	<input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
+																	<input type="hidden" value="{{$i+1}}" value="1" id="row_id" name="row_id[]">
+																	<input type="hidden" value="{{$item->childsafe ? 1 : 0}}" id="childsafe" name="childsafe[]">
+																	<input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
+																	<input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
+																	<input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
+																	<input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
+																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+																	<input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
+																	<input type="hidden" value="{{$item->price_based_option}}" id="price_based_option" name="price_based_option[]">
+																	<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
+                                                                    <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
+                                                                    <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
+
+																	<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
+
+																		<label class="content-label">Supplier</label>
+
+																		<select name="suppliers[]" class="js-data-example-ajax1">
+
+																			<option value=""></option>
+
+																			@foreach($suppliers as $key)
+
+																			<option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
+
+																			@endforeach
+
+																		</select>
+
+                                                                    </div>
+
+																	<div style="width: 22%;" class="products content item3 full-res">
+
+																		<label class="content-label">Product</label>
+
+																		<select name="products[]" class="js-data-example-ajax">
+
+																			<option value=""></option>
+
+																			@foreach($supplier_products[$i] as $key)
+
+																			<option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+
+																			@endforeach
+
+																		</select>
+
+                                                                    </div>
+
+																	<div class="width item4 content" style="width: 10%;">
+
+																		<label class="content-label">Width</label>
+
+																		<div class="m-box">
+																			<input {{$item->price_based_option == 3 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+																			<input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="{{$item->width_unit}}">
+																		</div>
+                                                                    </div>
+
+																	<div class="height item5 content" style="width: 10%;">
+
+																		<label class="content-label">Height</label>
+
+																		<div class="m-box">
+																			<input {{$item->price_based_option == 2 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+																			<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
+																		</div>
+                                                                    </div>
+
+																	<div class="content item6" style="width: 7%;">
+
+																		<label class="content-label">€ Art.</label>
+
+																		<div style="display: flex;align-items: center;">
+																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																			<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
+																		</div>
+                                                                    </div>
+
+																	<div class="content item7" style="width: 7%;">
+
+																		<label class="content-label">€ Arb.</label>
+
+																		<div style="display: flex;align-items: center;">
+																			<input type="text" value="{{str_replace('.', ',',floatval($item->labor_impact))}}" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
+																			<input type="hidden" value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
+																		</div>
+                                                                    </div>
+
+																	<div class="content item8" style="width: 10%;">
+
+																		<label class="content-label">Discount</label>
+
+																		<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
+																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
+                                                                    </div>
+
+																	<div style="width: 7%;" class="content item9">
+
+																		<label class="content-label">€ Total</label>
+																		<div class="price res-white">€ {{str_replace('.', ',',floatval($item->rate))}}</div>
+
+																	</div>
+
+																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
+                                                                        <div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                                                                            <div style="display: none;" class="green-circle tooltip1">
+                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+                                                                            </div>
+                                                                            <div style="visibility: hidden;" class="yellow-circle tooltip1">
+                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
+                                                                            </div>
+                                                                            <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+																			<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+																			<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
+																		</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
+                                                                        <button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo"></button>
+                                                                    </div>
+
+                                                                    <div style="width: 100%;" id="demo" class="item16 collapse">
+
+                                                                        <div style="width: 25%;" class="color item12">
+
+                                                                            <label>Color</label>
+
+																		    <select name="colors[]" class="js-data-example-ajax2">
+
+																			    <option value=""></option>
+
+																				@foreach($colors[$i] as $color)
+
+																				<option {{$color->id == $item->color ? 'selected' : null}} value="{{$color->id}}">{{$color->title}}</option>
+
+																				@endforeach
+
+																		    </select>
+
+                                                                        </div>
+
+                                                                        <div style="width: 25%;margin-left: 10px;" class="model item13">
+
+                                                                            <label>Model</label>
+
+                                                                            <select name="models[]" class="js-data-example-ajax3">
+
+																			    <option value=""></option>
+
+																				@foreach($models[$i] as $model)
+
+																				<option {{$model->id == $item->model_id ? 'selected' : null}} value="{{$model->id}}">{{$model->model}}</option>
+
+																				@endforeach
+
+																		    </select>
+
+                                                                            <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="{{$item->model_impact_value}}">
+
+                                                                        </div>
+
+                                                                        <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
+
+                                                                            <label>Discount % </label>
+
+                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
+
+                                                                        </div>
+
+                                                                        <div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">
+
+                                                                            <label>Labor Discount % </label>
+
+                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" value="{{$item->labor_discount}}" name="labor_discount[]">
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                            	</div>
+
+																@endforeach
+
+															@else
+
+															<div class="content-div active" data-id="1">
 
                                                                     <div class="content full-res item1" style="width: 2%;">
 																		<label class="content-label">Sr. No</label>
@@ -302,6 +503,8 @@
                                                                     </div>
 
                                                             </div>
+
+															@endif
 
                                                         </section>
 
