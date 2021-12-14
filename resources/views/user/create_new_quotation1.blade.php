@@ -1311,6 +1311,7 @@
 			'item13 item13 item13 item13 item13 item13'
 			'item14 item14 item14 item14 item14 item14'
 			'item15 item15 item15 item15 item15 item15';
+			margin-top: 0 !important;
 		}
 
 		.color, .model, .discount-box, .labor-discount-box
@@ -1400,6 +1401,7 @@
     .content-div .collapsing, .content-div .collapse.in
     {
         display: flex;
+		margin-top: 10px;
     }
 
     .header-div, .content-div
@@ -2406,7 +2408,13 @@
 
 					/*calculate_total();*/
 
-					$('#products_table').find(`[data-id='${row_id}']`).find('.collapse').collapse();
+					var windowsize = $(window).width();
+        		
+					if (windowsize > 992) {
+
+						$('#products_table').find(`[data-id='${row_id}']`).find('.collapse').collapse();
+
+					}
 
 				}
 			});
