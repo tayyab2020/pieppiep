@@ -21,9 +21,27 @@
 							<div style="margin: 0;" class="row">
 								<div style="padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<div style="box-shadow: none;" class="add-product-box">
-										<div class="add-product-header products">
+										<div style="align-items: center;" class="add-product-header products">
 
-											<h2>{{isset($invoice) ? __('text.Edit Quotation') : __('text.Create Quotation')}}</h2>
+											<h2 style="margin-top: 0;">{{isset($invoice) ? __('text.Edit Quotation') : __('text.Create Quotation')}}</h2>
+
+											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
+
+												<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+													<i class="fa fa-fw fa-save"></i>
+													<span class="tooltiptext">Save</span>
+												</span>
+
+												<a href="{{Request::url()}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
+													<i class="fa fa-fw fa-close"></i>
+													<span class="tooltiptext">Close</span>
+												</a>
+
+											</div>
+
+										</div>
+
+										<hr>
 
 											<div class="col-md-5">
 												<div class="form-group" style="margin: 0;">
@@ -50,9 +68,7 @@
 												</div>
 											</div>
 
-										</div>
-										<hr>
-										<div>
+										<div style="display: inline-block;">
 
 											<div class="alert-box">
 
@@ -62,48 +78,7 @@
 
 											<div style="padding-bottom: 0;" class="form-horizontal">
 
-												<div style="margin: 0;background: #f5f5f5;" class="row">
-
-													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 first-row">
-
-														<div>
-
-															<span class="tooltip1 add-row" style="margin-right: 10px;">
-																<i class="fa fa-fw fa-plus-circle"></i>
-																<span class="tooltiptext">Add</span>
-															</span>
-
-															<span class="tooltip1 remove-row"
-																style="cursor: pointer;font-size: 20px;margin-right: 10px;">
-																<i class="fa fa-fw fa-minus-circle"></i>
-																<span class="tooltiptext">Remove</span>
-															</span>
-
-															<span class="tooltip1 copy-row"
-																style="cursor: pointer;font-size: 20px;">
-																<i class="fa fa-fw fa-copy"></i>
-																<span class="tooltiptext">Copy</span>
-															</span>
-
-														</div>
-
-														<div>
-
-															<span class="tooltip1 save-data"
-																style="cursor: pointer;font-size: 20px;margin-right: 10px;">
-																<i class="fa fa-fw fa-save"></i>
-																<span class="tooltiptext">Save</span>
-															</span>
-
-															<a href="{{Request::url()}}" class="tooltip1"
-																style="cursor: pointer;font-size: 20px;margin-right: 10px;">
-																<i class="fa fa-fw fa-close"></i>
-																<span class="tooltiptext">Close</span>
-															</a>
-
-														</div>
-
-													</div>
+												<div style="margin: 0;border-top: 1px solid #eee;" class="row">
 
 													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="padding-bottom: 15px;">
 
@@ -242,16 +217,34 @@
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
                                                                         <div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                                                                            <div style="display: none;" class="green-circle tooltip1">
+
+																			<div style="display: none;" class="green-circle tooltip1">
                                                                                 <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
                                                                             </div>
                                                                             <div style="visibility: hidden;" class="yellow-circle tooltip1">
                                                                                 <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
                                                                             </div>
-                                                                            <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-																			<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-																			<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																		</span>
+
+																			<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																				<span class="tooltiptext">Add</span>
+																			</span>
+
+																			<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																				<span class="tooltiptext">Remove</span>
+																			</span>
+
+																			<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
+																				<span class="tooltiptext">Copy</span>
+																			</span>
+
+																			<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+																				<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+																				<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
+																			</span>-->
+
                                                                         </div>
                                                                     </div>
 
@@ -439,16 +432,34 @@
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
                                                                         <div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                                                                            <div style="display: none;" class="green-circle tooltip1">
+
+																			<div style="display: none;" class="green-circle tooltip1">
                                                                                 <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
                                                                             </div>
+
                                                                             <div style="visibility: hidden;" class="yellow-circle tooltip1">
                                                                                 <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
                                                                             </div>
-                                                                            <span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+
+																			<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																				<span class="tooltiptext">Add</span>
+																			</span>
+
+																			<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																				<span class="tooltiptext">Remove</span>
+																			</span>
+
+																			<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
+																				<span class="tooltiptext">Copy</span>
+																			</span>
+
+                                                                            <!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
 																			<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
 																			<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																		</span>
+																			</span>-->
                                                                         </div>
                                                                     </div>
 
@@ -1274,8 +1285,19 @@
 		width: 50%;
 	}
 
+	.add-product-box hr
+		{
+			margin-bottom: 20px;
+		}
+
 	@media (max-width: 992px)
 	{
+
+		.add-product-box hr
+		{
+			margin-top: 0;
+		}
+
 		.header-div
 		{
 			display:none !important;
@@ -1611,9 +1633,6 @@
 	}
 
 	@media (max-width: 550px) {
-		.add-product-header {
-			flex-direction: column;
-		}
 
 		.add-product-header .col-md-5 {
 			padding: 0;
@@ -2439,7 +2458,7 @@
 					/*calculate_total();*/
 
 					var windowsize = $(window).width();
-        		
+
 					if (windowsize > 992) {
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.collapse').collapse('show');
@@ -3245,7 +3264,7 @@
 			var windowsize = $(window).width();
 
 			if (windowsize > 992) {
-				
+
 				$('#products_table .content-div').not(last_row).find('.collapse[aria-expanded]').collapse("hide");
 
 			}
@@ -3397,13 +3416,31 @@
 					'																	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>\n' +
 					'																</div>\n' +
 					'\n' +
-					'																<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">\n' +
+					'																<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
 					'\n' +
-					'																<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>\n' +
+					'																	<i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
 					'\n' +
-					'																<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>\n' +
+					'																	<span class="tooltiptext">Add</span>\n' +
 					'\n' +
-					'																</span></div>\n' +
+					'																</span>\n' +
+					'\n' +
+					'																<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
+					'\n' +
+					'																	<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
+					'\n' +
+					'																	<span class="tooltiptext">Remove</span>\n' +
+					'\n' +
+					'																</span>\n' +
+					'\n' +
+					'																<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
+					'\n' +
+					'																	<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
+					'\n' +
+					'																	<span class="tooltiptext">Copy</span>\n' +
+					'\n' +
+					'																</span>\n' +
+					'\n' +
+					'                                                            </div>\n' +
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -4240,7 +4277,7 @@
 				val = val + '00';
 				$(this).val(val);
 			}
-			
+
 		});
 
 		$(document).on('focusout', "input[name='width[]'], input[name='height[]']", function (e) {
