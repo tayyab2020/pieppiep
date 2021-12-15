@@ -519,104 +519,78 @@
 
                                                         </section>
 
-														<table style="width: 100%;">
-															<thead>
-																<tr>
-																	<th style="width: 40px;"></th>
-																	<th style="width: 135px;"></th>
-																	<th style="width: 250px;"></th>
-																	<th style="width: 200px;"></th>
-																	<th style="width: 210px;"></th>
-																	<th style="width: 100px;"></th>
-																	<th style="width: 100px;"></th>
-																	<th style="width: 20px;"></th>
-																	<th style="width: 50px;"></th>
-																	<th style="width: 100px;"></th>
-																	<th style="width: 100px;"></th>
-																	<th style="width: 50px;"></th>
-																</tr>
-															</thead>
+														<div style="width: 100%;margin-top: 10px;">
 
-															<tbody>
+															<div style="display: flex;justify-content: center;">
 
-																<tr class="" data-id="1">
-																	<td colspan="6"></td>
-																	<td><span
-																			style="font-size: 14px;font-weight: bold;margin-right: 5px;font-family: monospace;">Totaal</span>
-																	</td>
-																	<td>
-																		<div
-																			style="display: flex;align-items: center;justify-content: center;">
-																			<span
-																				style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
-																			<input name="price_before_labor_total"
-																				id="price_before_labor_total"
-																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																				type="text" readonly
-																				value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
-																		</div>
-																	</td>
-																	<td>
-																		<div
-																			style="display: flex;align-items: center;justify-content: center;">
-																			<span
-																				style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
-																			<input name="labor_cost_total"
-																				id="labor_cost_total"
-																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																				type="text" readonly
-																				value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->labor_cost_total)) : 0}}">
-																		</div>
-																	</td>
-																	<td></td>
-																	<td colspan="2">
-																		<div
-																			style="display: flex;align-items: center;justify-content: center;">
-																			<span
-																				style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">€</span>
-																			<input name="total_amount" id="total_amount"
-																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																				type="text" readonly
-																				value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->grand_total)) : 0}}">
-																		</div>
-																	</td>
-																</tr>
+																<div class="headings1" style="width: 56%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
+																<div class="headings1" style="width: 7%;">
+																	<div style="display: flex;align-items: center;justify-content: center;">
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
+																		<input name="price_before_labor_total"
+																			id="price_before_labor_total"
+																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																			type="text" readonly
+																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
+																	</div>
+																</div>
+																<div class="headings1" style="width: 7%;">
+																	<div style="display: flex;align-items: center;justify-content: center;">
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
+																		<input name="labor_cost_total"
+																			id="labor_cost_total"
+																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																			type="text" readonly
+																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->labor_cost_total)) : 0}}">
+																	</div>
+																</div>
+																<div class="headings1" style="width: 30%;">
+																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
+																		<input name="total_amount" id="total_amount"
+																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																			type="text" readonly
+																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->grand_total)) : 0}}">
+																	</div>
+																</div>
 
-																<tr class="" data-id="1">
-																	<td colspan="2"></td>
-																	<td colspan="10">
-																		<div
-																			style="display: flex;align-items: center;justify-content: flex-end;">
-																			<span
-																				style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag:
-																				€</span>
+															</div>
+
+															<div style="display: flex;justify-content: flex-end;">
+
+																<div class="headings1" style="width: 56%;"></div>
+																<div class="headings1" style="width: 7%;"></div>
+																<div class="headings1" style="width: 7%;"></div>
+																<div class="headings2" style="width: 30%;">
+																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: €</span>
 																			<input name="net_amount" id="net_amount"
 																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																				type="text" readonly
 																				value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->net_amount)) : 0}}">
-																		</div>
-																	</td>
-																</tr>
+																	</div>
+																</div>
 
-																<tr class="" data-id="1">
-																	<td colspan="2"></td>
-																	<td colspan="10">
-																		<div
-																			style="display: flex;align-items: center;justify-content: flex-end;">
-																			<span
-																				style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW
-																				(21%): €</span>
-																			<input name="tax_amount" id="tax_amount"
-																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																				type="text" readonly
-																				value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->tax_amount)) : 0}}">
-																		</div>
-																	</td>
-																</tr>
+															</div>
 
-															</tbody>
+															<div style="display: flex;justify-content: flex-end;">
 
-														</table>
+																<div class="headings1" style="width: 56%;"></div>
+																<div class="headings1" style="width: 7%;"></div>
+																<div class="headings1" style="width: 7%;"></div>
+																<div class="headings2" style="width: 30%;">
+																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): €</span>
+																		<input name="tax_amount" id="tax_amount"
+																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																			type="text" readonly
+																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->tax_amount)) : 0}}">
+																	</div>
+																</div>
+																	
+															</div>
+															
+														</div>
 
 													</div>
 
@@ -1292,6 +1266,31 @@
 
 	@media (max-width: 992px)
 	{
+
+		.headings1
+		{
+			width: 25% !important;
+		}
+
+		.headings1 input
+		{
+			width: 40% !important;
+		}
+
+		.headings2
+		{
+			width: 100% !important;
+		}
+
+		.headings2 div
+		{
+			width: 100% !important;
+		}
+
+		.headings2 input
+		{
+			width: 28% !important;
+		}
 
 		.add-product-box hr
 		{
