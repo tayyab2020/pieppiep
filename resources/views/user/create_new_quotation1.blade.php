@@ -387,7 +387,7 @@
 																		<label class="content-label">Width</label>
 
 																		<div class="m-box">
-																			<input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+																			<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
 																			<input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">
 																		</div>
                                                                     </div>
@@ -397,7 +397,7 @@
 																		<label class="content-label">Height</label>
 
 																		<div class="m-box">
-																			<input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+																			<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
 																			<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">
 																		</div>
                                                                     </div>
@@ -1212,6 +1212,15 @@
 
 <style>
 
+	.res-collapse
+	{
+		box-shadow: none !important;
+		border: 0;
+		background: white !important;
+		color: black !important;
+		padding: 0;
+	}
+
 	button.btn.collapsed:before
 	{
     	content: 'Toon alle velden' ;
@@ -1422,7 +1431,6 @@
     .content-div .collapsing, .content-div .collapse.in
     {
         display: flex;
-		margin-top: 10px;
     }
 
     .header-div, .content-div
@@ -2316,8 +2324,8 @@
 						.end()
 						.append('<option value="">Select Color</option>');
 
-					$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.measure-unit').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.measure-unit').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
+					$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
 
 					/*calculate_total();*/
 
@@ -2418,14 +2426,13 @@
 							.end()
 							.append('<option value="">Select Model</option>' + options1);
 
-
-						if ((typeof (data[0]) != "undefined") && data[0].measure) {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.measure-unit').val(data[0].measure);
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.measure-unit').val(data[0].measure);
+						if ((typeof (data) != "undefined") && data.measure) {
+							$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val(data.measure);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val(data.measure);
 						}
 						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.measure-unit').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.measure-unit').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
 						}
 					}
 
@@ -2435,7 +2442,7 @@
         		
 					if (windowsize > 992) {
 
-						$('#products_table').find(`[data-id='${row_id}']`).find('.collapse').collapse();
+						$('#products_table').find(`[data-id='${row_id}']`).find('.collapse').collapse('show');
 
 					}
 
@@ -3234,6 +3241,15 @@
 		});
 
 		function focus_row(last_row) {
+
+			var windowsize = $(window).width();
+
+			if (windowsize > 992) {
+				
+				$('#products_table .content-div').not(last_row).find('.collapse[aria-expanded]').collapse("hide");
+
+			}
+
 			$('#products_table .content-div.active').removeClass('active');
 			last_row.addClass('active');
 
@@ -3241,13 +3257,14 @@
 
 			$('#menu1').children().not(`[data-id='${id}']`).hide();
 			$('#menu1').find(`[data-id='${id}']`).show();
+
 		}
 
 		function numbering() {
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null, collapse_button = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -3318,7 +3335,7 @@
 					'                       									 	<label class="content-label">Width</label>\n' +
 					'\n' +
 					'                                                                <div class="m-box">\n' +
-					'                                                                	<input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
+					'                                                                	<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
 					'                                                                   <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">\n' +
 					'                                                                </div>\n' +
 					'                                                            </div>\n' +
@@ -3328,7 +3345,7 @@
 					'                       									 	<label class="content-label">Height</label>\n' +
 					'\n' +
 					'                                                                <div class="m-box">\n' +
-					'                                                                	<input class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
+					'                                                                	<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
 					'                                                                	<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">\n' +
 					'                                                                </div>\n' +
 					'                                                            </div>\n' +
@@ -3497,17 +3514,6 @@
 			}
 			else {
 
-				if(collapse_button)
-				{
-					var collapse_button = '<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" aria-expanded="true" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n';
-					var collapse_content = '<div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse">\n';
-				}
-				else
-				{
-					var collapse_button = '<button style="outline: none;" type="button" class="btn btn-info res-collapse" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n';
-					var collapse_content = '<div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse in" aria-expanded="true">\n';
-				}
-
 				$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
 					'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
                     '                       									 	<label class="content-label">Sr. No</label>\n' +
@@ -3619,11 +3625,11 @@
 					'\n' +
 					'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
 					'\n' +
-					collapse_button +
+					'																<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" aria-expanded="true" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					collapse_content +
+					'															<div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse in" aria-expanded="true">\n' +
 					'\n' +
 					'                       									 	<div style="width: 25%;" class="color item12">\n' +
 					'\n' +
@@ -4070,7 +4076,6 @@
 			var total_discount = current.find('.total_discount').val();
 			var total_discount_old = current.find('.total_discount_old').val();
 			var last_column = current.find('#next-row-td').html();
-			var collapse_button = current.find('.res-collapse').hasClass('collapsed');
 
 			var width_readonly = '';
 			var height_readonly = '';
@@ -4082,7 +4087,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount, labor_discount, total_discount, total_discount_old, last_column, collapse_button);
+			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount, labor_discount, total_discount, total_discount_old, last_column);
 
 		});
 

@@ -85,12 +85,12 @@
                                                             </div>
                                                         </div>
 
-                                                        <!--<div class="form-group">
+                                                        <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Size</label>
                                                             <div class="col-sm-6">
                                                                 <input value="{{isset($cats) ? $cats->size : null}}" class="form-control" name="size" id="blood_group_slug" placeholder="Enter Size" type="text">
                                                             </div>
-                                                        </div>-->
+                                                        </div>
 
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Measure</label>
