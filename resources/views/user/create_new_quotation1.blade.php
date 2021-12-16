@@ -692,9 +692,6 @@
 																				class="childsafe_diff" type="hidden">
 																		</div>
 
-																		<a data-id="{{$x + 1}}"
-																			class="info childsafe-btn">Info</a>
-
 																	</div>
 
 																	<div class="row childsafe-answer-box"
@@ -3672,7 +3669,6 @@
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').attr('name', 'childsafe_option' + rowCount);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe_diff').attr('name', 'childsafe_diff' + rowCount);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').attr('name', 'childsafe_answer' + rowCount);
-						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-btn').attr('data-id', rowCount);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_x').val(childsafe_x);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_y').val(childsafe_y);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').val(childsafe_question);
