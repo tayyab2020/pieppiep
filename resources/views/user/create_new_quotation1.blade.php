@@ -544,9 +544,9 @@
 																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->labor_cost_total)) : 0}}">
 																	</div>
 																</div>
-																<div class="headings1" style="width: 30%;">
+																<div class="headings2" style="width: 30%;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">Te betalen: €</span>
 																		<input name="total_amount" id="total_amount"
 																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																			type="text" readonly
@@ -634,6 +634,20 @@
 																	</div>
 
 																	@if($key1->childsafe)
+
+																	<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;">
+																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																			<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>
+																			<input value="{{$key1->childsafe_x}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
+																		</div>
+																	</div>
+
+																	<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;">
+																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																			<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>
+																			<input value="{{$key1->childsafe_y}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
+																		</div>
+																	</div>
 
 																	<div class="row childsafe-question-box"
 																		style="margin: 0;display: flex;align-items: center;">
@@ -980,6 +994,7 @@
 
 					</div>
 				</div>
+
 				<div id="myModal2" class="modal fade" role="dialog">
 					<div class="modal-dialog">
 
@@ -1014,57 +1029,6 @@
 
 								@endif
 
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							</div>
-						</div>
-
-					</div>
-				</div>
-
-				<div id="myModal3" class="modal fade" role="dialog">
-					<div class="modal-dialog">
-
-						<!-- Modal content-->
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">Childsafe Content</h4>
-							</div>
-							<div class="modal-body">
-								@if(isset($invoice))
-
-								@foreach($invoice as $x => $key1)
-
-								@if($key1->childsafe)
-
-								<div class="childsafe-content-box" data-id="{{$x+1}}">
-									<div style="margin: 20px 0;" class="row">
-										<div style="display: flex;align-items: center;"
-											class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-											<label style="margin-right: 10px;">Montagehoogte </label>
-											<input type="number" value="{{$key1->childsafe_x}}"
-												class="form-control childsafe_values" id="childsafe_x"
-												name="childsafe_x{{$x+1}}">
-										</div>
-									</div>
-									<div style="margin: 20px 0;" class="row">
-										<div style="display: flex;align-items: center;"
-											class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-											<label style="margin-right: 10px;">Kettinglengte </label>
-											<input type="number" value="{{$key1->childsafe_y}}"
-												class="form-control childsafe_values" id="childsafe_y"
-												name="childsafe_y{{$x+1}}">
-										</div>
-									</div>
-								</div>
-
-								@endif
-
-								@endforeach
-
-								@endif
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -2648,40 +2612,29 @@
                                 var m2_impact_value = 0;
 
 								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
 								if (childsafe == 1) {
 
                                     count_features = count_features + 1;
 
-									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+										'</div></div>\n' +
+										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+										'</div></div>\n' +
+										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
 										'<option value="">Select any option</option>\n' +
 										'<option value="2">Add childsafety clip</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info childsafe-btn">Info</a></div>\n';
+										'</div></div>\n';
 
 									features = features + content;
-
-
-									$('#myModal3').find('.modal-body').append(
-										'<div class="childsafe-content-box" data-id="' + row_id + '">\n' +
-										'                                            <div style="margin: 20px 0;" class="row">\n' +
-										'                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-										'                                                    <label style="margin-right: 10px;">Montagehoogte </label>\n' +
-										'                                                    <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'                                                </div>\n' +
-										'                                            </div>\n' +
-										'                                            <div style="margin: 20px 0;" class="row">\n' +
-										'                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-										'                                                    <label style="margin-right: 10px;">Kettinglengte </label>\n' +
-										'                                                    <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'                                                </div>\n' +
-										'                                            </div>\n' +
-										'                                        </div>'
-									);
 
 								}
 
@@ -3025,39 +2978,29 @@
                                 var m2_impact_value = 0;
 
 								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
 								if (childsafe == 1) {
 
 								    count_features = count_features + 1;
 
-									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+										'</div></div>\n' +
+										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+										'</div></div>\n' +
+										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
 										'<option value="">Select any option</option>\n' +
 										'<option value="2">Add childsafety clip</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info childsafe-btn">Info</a></div>\n';
+										'</div></div>\n';
 
 									features = features + content;
-
-									$('#myModal3').find('.modal-body').append(
-										'<div class="childsafe-content-box" data-id="' + row_id + '">\n' +
-										'                                            <div style="margin: 20px 0;" class="row">\n' +
-										'                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-										'                                                    <label style="margin-right: 10px;">Montagehoogte </label>\n' +
-										'                                                    <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'                                                </div>\n' +
-										'                                            </div>\n' +
-										'                                            <div style="margin: 20px 0;" class="row">\n' +
-										'                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-										'                                                    <label style="margin-right: 10px;">Kettinglengte </label>\n' +
-										'                                                    <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'                                                </div>\n' +
-										'                                            </div>\n' +
-										'                                        </div>'
-									);
 
 								}
 
@@ -3282,7 +3225,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_content = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -3730,9 +3673,10 @@
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe_diff').attr('name', 'childsafe_diff' + rowCount);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').attr('name', 'childsafe_answer' + rowCount);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-btn').attr('data-id', rowCount);
+						$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_x').val(childsafe_x);
+						$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_y').val(childsafe_y);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').val(childsafe_question);
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').val(childsafe_answer);
-						$('#myModal3').find('.modal-body').append('<div class="childsafe-content-box" data-id="' + rowCount + '">\n' + childsafe_content + '</div>');
 					}
 
 					features_selects.each(function (index, select) {
@@ -3753,6 +3697,8 @@
 						$(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
 						$(obj).find('.f_area').attr('name', 'f_area' + rowCount + '[]');
 						$(obj).find('.sub_feature').attr('name', 'sub_feature' + rowCount + '[]');
+						$(obj).find('#childsafe_x').attr('name', 'childsafe_x' + rowCount);
+						$(obj).find('#childsafe_y').attr('name', 'childsafe_y' + rowCount);
 
 					});
 
@@ -3782,14 +3728,6 @@
 
 					});
 
-					$('#myModal3').find('.modal-body').find(`[data-id='${rowCount}']`).each(function (i, obj) {
-
-						$(obj).find('#childsafe_x').attr('name', 'childsafe_x' + rowCount);
-						$(obj).find('#childsafe_y').attr('name', 'childsafe_y' + rowCount);
-						$(obj).find('#childsafe_x').val(childsafe_x);
-						$(obj).find('#childsafe_y').val(childsafe_y);
-
-					});
 				}
 
 				focus_row(last_row);
@@ -3884,7 +3822,6 @@
 				$('#menu1').find(`[data-id='${id}']`).remove();
 				$('#myModal').find('.modal-body').find(`[data-id='${id}']`).remove();
 				$('#myModal2').find('.modal-body').find(`[data-id='${id}']`).remove();
-				$('#myModal3').find('.modal-body').find(`[data-id='${id}']`).remove();
 
 				var next = current.next('.content-div');
 
@@ -4096,9 +4033,8 @@
 			var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
 			var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
 			var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
-			var childsafe_content = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).html();
-			var childsafe_x = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).find('#childsafe_x').val();
-			var childsafe_y = $('#myModal3').find('.modal-body').find(`[data-id='${id}']`).find('#childsafe_y').val();
+			var childsafe_x = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_x').val();
+			var childsafe_y = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_y').val();
 			var price_based_option = current.find('#price_based_option').val();
 			var base_price = current.find('#base_price').val();
             var supplier_margin = current.find('#supplier_margin').val();
@@ -4123,7 +4059,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_content, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount, labor_discount, total_discount, total_discount_old, last_column);
+			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount, labor_discount, total_discount, total_discount_old, last_column);
 
 		});
 
@@ -4392,7 +4328,6 @@
 								var childsafe = data[3].childsafe;
 
 								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
 								if (price_based_option == 1) {
 									var price = data[0].value;
@@ -4433,33 +4368,24 @@
 
 								    count_features = count_features + 1;
 
-									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+										'</div></div>\n' +
+										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+										'</div></div>\n' +
+										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
 										'<option value="">Select any option</option>\n' +
 										'<option value="2">Add childsafety clip</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info childsafe-btn">Info</a></div>\n';
+										'</div></div>\n';
 
 									features = features + content;
-
-									$('#myModal3').find('.modal-body').append(
-										'<div class="childsafe-content-box" data-id="' + row_id + '">\n' +
-										'                                            <div style="margin: 20px 0;" class="row">\n' +
-										'                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-										'                                                    <label style="margin-right: 10px;">Montagehoogte </label>\n' +
-										'                                                    <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'                                                </div>\n' +
-										'                                            </div>\n' +
-										'                                            <div style="margin: 20px 0;" class="row">\n' +
-										'                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-										'                                                    <label style="margin-right: 10px;">Kettinglengte </label>\n' +
-										'                                                    <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'                                                </div>\n' +
-										'                                            </div>\n' +
-										'                                        </div>'
-									);
 
 								}
 
@@ -4766,7 +4692,6 @@
 								var childsafe = data[3].childsafe;
 
 								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-								$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
 								if (price_based_option == 1) {
 									var price = data[0].value;
@@ -4807,33 +4732,24 @@
 
 								    count_features = count_features + 1;
 
-									var content = '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+										'</div></div>\n' +
+										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+										'</div></div>\n' +
+										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
 										'<option value="">Select any option</option>\n' +
 										'<option value="2">Add childsafety clip</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info childsafe-btn">Info</a></div>\n';
+										'</div></div>\n';
 
 									features = features + content;
-
-									$('#myModal3').find('.modal-body').append(
-										'<div class="childsafe-content-box" data-id="' + row_id + '">\n' +
-										'                                            <div style="margin: 20px 0;" class="row">\n' +
-										'                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-										'                                                    <label style="margin-right: 10px;">Montagehoogte </label>\n' +
-										'                                                    <input type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'                                                </div>\n' +
-										'                                            </div>\n' +
-										'                                            <div style="margin: 20px 0;" class="row">\n' +
-										'                                                <div style="display: flex;align-items: center;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-										'                                                    <label style="margin-right: 10px;">Kettinglengte </label>\n' +
-										'                                                    <input type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'                                                </div>\n' +
-										'                                            </div>\n' +
-										'                                        </div>'
-									);
 
 								}
 
@@ -5078,10 +4994,10 @@
 
 			if (id == 'childsafe_x') {
 				var x = $(this).val();
-				var y = $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
+				var y = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
 			}
 			else {
-				var x = $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
+				var x = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
 				var y = $(this).val();
 			}
 
@@ -5180,8 +5096,8 @@
 			var current = $(this);
 			var row_id = current.parent().parent().parent().data('id');
 			var value = current.val();
-			var value_x = $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
-			var value_y = $('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
+			var value_x = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
+			var value_y = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
 
 			if (value_x && value_y) {
 				if (!value) {
@@ -5223,7 +5139,7 @@
 				Swal.fire({
 					icon: 'error',
 					title: '{{__('text.Oops...')}}',
-					text: 'Kindly fill both childsafe values first by clicking on "i" icon.',
+					text: 'Kindly fill both childsafe values first.',
 				});
 			}
 
@@ -5638,20 +5554,6 @@
 
 			/*$('.top-bar').css('z-index','1');*/
 			$('#myModal').modal('toggle');
-			$('.modal-backdrop').hide();
-
-		});
-
-		$(document).on('click', '.childsafe-btn', function () {
-
-			var current = $(this);
-			var row_id = current.data('id');
-
-			$('#myModal3').find('.modal-body').find('.childsafe-content-box').hide();
-			$('#myModal3').find('.modal-body').find(`[data-id='${row_id}']`).show();
-
-			/*$('.top-bar').css('z-index','1');*/
-			$('#myModal3').modal('toggle');
 			$('.modal-backdrop').hide();
 
 		});
