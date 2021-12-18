@@ -53,11 +53,13 @@
 
                                                     <tbody>
 
-                                                        @foreach($invoices as $key)
+                                                        @foreach($invoices as $i => $key)
+
+                                                            @if($key->getTable() == 'custom_quotations')
 
                                                             <tr role="row" class="odd">
 
-                                                                <td>{{$key->invoice_id}}</td>
+                                                                <td>{{$i+1}}</td>
 
                                                                 <td><a href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}">@if(Auth::guard('user')->user()->role_id == 4) OR# {{$key->order_number}} @else OF# {{$key->quotation_invoice_number}} @endif</a></td>
 
@@ -120,9 +122,9 @@
 
                                                                 <?php $date = strtotime($key->invoice_date);
 
-                                                                $date = date('d-m-Y',$date);  ?>
+                                                                $date1 = date('d-m-Y',$date); ?>
 
-                                                                <td>{{$date}}</td>
+                                                                <td><span style="display: none;">{{date('m-d-Y',$date)}}</span>{{$date1}}</td>
 
                                                                 <td>
                                                                     <div class="dropdown">
@@ -199,13 +201,11 @@
                                                                 </td>
                                                             </tr>
 
-                                                        @endforeach
-
-                                                        @foreach($new_invoices as $key)
+                                                            @else
 
                                                             <tr role="row" class="odd">
 
-                                                                <td>{{$key->invoice_id}}</td>
+                                                                <td>{{$i+1}}</td>
 
                                                                 <td><a href="">@if(Auth::guard('user')->user()->role_id == 4) OR# {{$key->order_number}} @else OF# {{$key->quotation_invoice_number}} @endif</a></td>
 
@@ -353,9 +353,9 @@
 
                                                                 <?php $date = strtotime($key->invoice_date);
 
-                                                                $date = date('d-m-Y',$date);  ?>
+                                                                $date1 = date('d-m-Y',$date); ?>
 
-                                                                <td>{{$date}}</td>
+                                                                <td><span style="display: none;">{{date('m-d-Y',$date)}}</span>{{$date1}}</td>
 
                                                                 <td>
                                                                     <div class="dropdown">
@@ -489,6 +489,8 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
+
+                                                            @endif
 
                                                         @endforeach
 
@@ -1127,7 +1129,7 @@
         }
 
         $('#example').DataTable({
-            order: [[0, 'desc']],
+            order: [[5, 'desc']],
             "oLanguage": {
                 "sLengthMenu": "<?php echo __('text.Show') . ' _MENU_ ' . __('text.records'); ?>",
                 "sSearch": "<?php echo __('text.Search') . ':' ?>",

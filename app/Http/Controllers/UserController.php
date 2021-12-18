@@ -719,7 +719,7 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        if($user->can('customer-quotations') || $user->can('create-new-quotation'))
+        if($user->can('customer-quotations'))
         {
             if ($id) {
                 
@@ -731,19 +731,36 @@ class UserController extends Controller
 
                 $invoices = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.user_id')->where('custom_quotations.handyman_id', $user_id)->where('custom_quotations.status','!=',3)->orderBy('custom_quotations.created_at', 'desc')->select('custom_quotations.*', 'custom_quotations.id as invoice_id', 'custom_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
 
-                if($user_role == 2)
-                {
-                    $new_invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
-                }
-                else
-                {
-                    $new_invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
-                    $new_invoices = $invoices->unique('invoice_id');
-                }
-
-                return view('user.quotations', compact('invoices','new_invoices'));
-
             }
+        }
+        else
+        {
+            $invoices = '';
+        }
+
+        if($user->can('create-new-quotation'))
+        {
+
+            if($user_role == 2)
+            {
+                $new_invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+            }
+            else
+            {
+                $new_invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
+                $new_invoices = $invoices->unique('invoice_id');
+            }
+        }
+        else
+        {
+            $new_invoices = '';
+        }
+
+        $invoices = $invoices->concat($new_invoices);
+
+        if($invoices)
+        {
+            return view('user.quotations', compact('invoices'));
         }
         else
         {
@@ -756,21 +773,44 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
+        $user_role = $user->role_id;
 
         if($main_id)
         {
             $user_id = $main_id;
         }
 
+        if($user_role == 2)
+        {
+            $new_invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.invoice',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+        }
+        else
+        {
+            $new_invoices = '';
+        }
+
         if($user->can('customer-invoices'))
         {
             if ($id) {
+
                 $invoices = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.user_id')->where('custom_quotations.handyman_id', $user_id)->where('custom_quotations.id', $id)->where('custom_quotations.status','=',3)->orderBy('custom_quotations.created_at', 'desc')->select('custom_quotations.*', 'custom_quotations.id as invoice_id', 'custom_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
+
+                return view('user.quote_invoices', compact('invoices'));
+                
             } else {
                 $invoices = custom_quotations::leftjoin('users', 'users.id', '=', 'custom_quotations.user_id')->where('custom_quotations.handyman_id', $user_id)->where('custom_quotations.status','=',3)->orderBy('custom_quotations.created_at', 'desc')->select('custom_quotations.*', 'custom_quotations.id as invoice_id', 'custom_quotations.created_at as invoice_date', 'users.name', 'users.family_name')->get();
             }
+        }
+        else
+        {
+            $invoices = '';
+        }
 
-            return view('user.quote_invoices', compact('invoices'));
+        $invoices = $invoices->concat($new_invoices);
+
+        if($invoices)
+        {
+            return view('user.invoices', compact('invoices'));
         }
         else
         {

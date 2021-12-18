@@ -1160,7 +1160,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                             @if(auth()->user()->can('create-new-quotation'))
 
-                                <li><a href="{{route('select-quotations-type')}}"><i class="fa fa-angle-right"></i> New Quotations</a></li>
+                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> New Quotations</a></li>
 
                             @endif
 
@@ -1168,7 +1168,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 <li><a href="{{route('new-orders')}}"><i class="fa fa-angle-right"></i> New Orders</a></li>
 
-                                <li><a href="{{route('select-invoices-type')}}"><i class="fa fa-angle-right"></i> New Invoices</a></li>
+                                <li><a href="{{route('customer-invoices')}}"><i class="fa fa-angle-right"></i> New Invoices</a></li>
 
                             @endif
 

@@ -2,8 +2,8 @@
 
   @if($type == 1)
 
-    <input type="radio" value="{{route('customer-quotations')}}" class="select-form" name="select" id="option-1">
-    <input type="radio" value="{{route('new-quotations')}}" class="select-form" name="select" id="option-2">
+    <input type="radio" value="{{route('create-custom-quotation')}}" class="select-form" name="select" id="option-1">
+    <input type="radio" value="{{route('create-new-quotation')}}" class="select-form" name="select" id="option-2">
 
   @else
 
