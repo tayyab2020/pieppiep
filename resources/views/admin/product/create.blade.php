@@ -1909,7 +1909,7 @@
                                                                                                 <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>
-                                                                                                    <input value="{{str_replace(".",",",$key->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
+                                                                                                    <input value="{{str_replace(".",",",$mod->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
 
                                                                                                 </div>
 
