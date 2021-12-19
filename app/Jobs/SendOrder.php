@@ -198,6 +198,8 @@ class SendOrder implements ShouldQueue
             $sup_mail[] = array('email' => $supplier_email,'name' => $supplier_name,'file' => $file,'file_name' => $filename,'order_number' => $order_number);
         }
 
+        new_quotations::where('id',$id)->update(['processing' => 0, 'finished' => 1]);
+
         foreach ($sup_mail as $sup)
         {
             $mail_subject = str_replace('{order_nummer}',$sup['order_number'],$mail_subject);
@@ -206,23 +208,18 @@ class SendOrder implements ShouldQueue
             $mail_body = str_replace('{van_voornaam}',$retailer_name,$mail_body);
             $mail_body = str_replace('{van_bedrijfsnaam}',$retailer_company,$mail_body);
 
-            try{
-                \Mail::send('user.global_mail',
-                    array(
-                        'msg' => $mail_body,
-                    ), function ($message) use ($sup,$mail_subject) {
-                        $message->to($sup['email'])
-                            ->from('info@pieppiep.com')
-                            ->subject($mail_subject)
-                            ->attach($sup['file'], [
-                                'as' => $sup['file_name'],
-                                'mime' => 'application/pdf',
-                            ]);
-                    });
-            }
-            catch(\Exception $e){
-                // Get error here
-            }
+            \Mail::send('user.global_mail',
+                array(
+                    'msg' => $mail_body,
+                ), function ($message) use ($sup,$mail_subject) {
+                    $message->to($sup['email'])
+                        ->from('info@pieppiep.com')
+                        ->subject($mail_subject)
+                        ->attach($sup['file'], [
+                            'as' => $sup['file_name'],
+                            'mime' => 'application/pdf',
+                        ]);
+                });
 
             /*\Mail::send('user.custom_quotation_mail',
                 array(
@@ -242,8 +239,6 @@ class SendOrder implements ShouldQueue
 
                 });*/
         }
-
-        new_quotations::where('id',$id)->update(['processing' => 0, 'finished' => 1]);
     }
 
     public function failed()
