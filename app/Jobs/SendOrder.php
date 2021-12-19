@@ -198,8 +198,6 @@ class SendOrder implements ShouldQueue
             $sup_mail[] = array('email' => $supplier_email,'name' => $supplier_name,'file' => $file,'file_name' => $filename,'order_number' => $order_number);
         }
 
-        new_quotations::where('id',$id)->update(['processing' => 0, 'finished' => 1]);
-
         foreach ($sup_mail as $sup)
         {
             $mail_subject = str_replace('{order_nummer}',$sup['order_number'],$mail_subject);
@@ -239,6 +237,8 @@ class SendOrder implements ShouldQueue
 
                 });*/
         }
+
+        new_quotations::where('id',$id)->update(['processing' => 0, 'finished' => 1]);
     }
 
     public function failed()
