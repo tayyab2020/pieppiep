@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\vats;
 use Illuminate\Http\Request;
 use App\Category;
+use App\my_categories;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreValidationRequest;
 use App\Http\Requests\UpdateValidationRequest;
@@ -45,6 +46,29 @@ class CategoryController extends Controller
         return redirect($payment->getCheckoutUrl(), 303);
     }
 
+    public function MyCategoriesIndex()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->role_id == 4)
+        {
+            $cats = my_categories::where('user_id',$user_id)->orWhere('user_id',0)->orderBy('id','desc')->get();
+
+            return view('admin.category.my_categories_index',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
 
     public function index()
     {
@@ -69,6 +93,20 @@ class CategoryController extends Controller
         }
     }
 
+    public function MyCategoryCreate()
+    {
+        $user = Auth::guard('user')->user();
+
+        if($user->role_id == 4)
+        {
+            return view('admin.category.create_my_category');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
     public function create()
     {
         $user = Auth::guard('user')->user();
@@ -81,6 +119,44 @@ class CategoryController extends Controller
         {
             return redirect()->route('user-login');
         }
+    }
+
+    public function MyCategoryStore(StoreValidationRequest $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($request->cat_id)
+        {
+            $cat = my_categories::where('id',$request->cat_id)->first();
+            Session::flash('success', 'Category edited successfully.');
+        }
+        else
+        {
+            $cat = new my_categories;
+            Session::flash('success', 'New Category added successfully.');
+        }
+
+        $input = $request->all();
+        $input['user_id'] = $user_id;
+
+
+        if ($file = $request->file('photo'))
+        {
+            $name = time().$file->getClientOriginalName();
+            $file->move('assets/images',$name);
+            $input['photo'] = $name;
+        }
+
+        $cat->fill($input)->save();
+
+        return redirect()->route('admin-my-cat-index');
     }
 
     public function store(StoreValidationRequest $request)
@@ -121,6 +197,34 @@ class CategoryController extends Controller
         $cat->fill($input)->save();
 
         return redirect()->route('admin-cat-index');
+    }
+
+    public function MyCategoryEdit($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->role_id == 4)
+        {
+            $cats = my_categories::where('id','=',$id)->where('user_id',$user_id)->first();
+
+            if(!$cats)
+            {
+                return redirect()->back();
+            }
+
+            return view('admin.category.create_my_category',compact('cats'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function edit($id)
@@ -216,6 +320,43 @@ class CategoryController extends Controller
         $cat->update($input);
         Session::flash('success', 'Service updated successfully.');
         return redirect()->route('admin-cat-index');
+    }
+
+    public function MyCategoryDestroy($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->role_id == 4)
+        {
+            $cat = my_categories::where('id',$id)->where('user_id',$user_id)->first();
+
+            if(!$cat)
+            {
+                return redirect()->back();
+            }
+
+            if($cat->photo == null){
+                $cat->delete();
+                Session::flash('success', 'Category deleted successfully.');
+                return redirect()->route('admin-my-cat-index');
+            }
+
+            \File::delete(public_path() .'/assets/images/'.$cat->photo);
+            $cat->delete();
+            Session::flash('success', 'Category deleted successfully.');
+            return redirect()->route('admin-my-cat-index');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
     }
 
     public function destroy($id)

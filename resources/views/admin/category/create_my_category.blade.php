@@ -27,7 +27,7 @@
                                             <a href="{{route('admin-cat-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                         </div>
                                         <hr>
-                                        <form class="form-horizontal" action="{{route('admin-cat-store')}}" method="POST" enctype="multipart/form-data">
+                                        <form class="form-horizontal" action="{{route('admin-my-cat-store')}}" method="POST" enctype="multipart/form-data">
 
                                             @include('includes.form-error')
                                             @include('includes.form-success')
@@ -159,5 +159,9 @@
             $('#cp1').colorpicker();
             $('#cp2').colorpicker();
     </script>
+
+
+
+
 
 @endsection

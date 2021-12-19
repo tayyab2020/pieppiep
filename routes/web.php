@@ -284,6 +284,12 @@
   /*Route::post('/category/update/{id}', 'CategoryController@update')->name('admin-cat-update');*/
   Route::get('/category/delete/{id}', 'CategoryController@destroy')->name('admin-cat-delete');
 
+  Route::get('/my-categories', 'CategoryController@MyCategoriesIndex')->name('admin-my-cat-index');
+  Route::get('/my-category/create', 'CategoryController@MyCategoryCreate')->name('admin-my-cat-create');
+  Route::post('/my-category/create', 'CategoryController@MyCategoryStore')->name('admin-my-cat-store');
+  Route::get('/my-category/edit/{id}', 'CategoryController@MyCategoryEdit')->name('admin-my-cat-edit');
+  Route::get('/my-category/delete/{id}', 'CategoryController@MyCategoryDestroy')->name('admin-my-cat-delete');
+
   Route::get('/brands', 'BrandController@index')->name('admin-brand-index');
   Route::get('/brand/create', 'BrandController@create')->name('admin-brand-create');
   Route::post('/brand/create', 'BrandController@store')->name('admin-brand-store');

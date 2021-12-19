@@ -1290,6 +1290,8 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @endif
 
+                                <li><a href="{{route('admin-my-cat-index')}}"><i class="fa fa-angle-right"></i> My Categories</a></li>
+
                             @endif
 
                         </div>
