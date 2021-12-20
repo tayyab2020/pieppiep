@@ -53,6 +53,13 @@
                                                         </div>
 
                                                         <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Attribute Value*</label>
+                                                            <div class="col-sm-6">
+                                                                <input value="{{isset($attributes) ? $attributes->value : null}}" class="form-control" name="value" id="blood_group_display_name" placeholder="Enter Attribute value" required="" type="number">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
 
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Attribute Type*</label>
 
@@ -118,28 +125,46 @@
                                                     </div>
                                                 </li>
 
-                                                <li>
+                                                <li style="display: none;" id="options-li">
                                                     <input type="checkbox">
                                                     <h2>Options <i class="arrow"></i></h2>
                                                     <div class="accordion-content">
 
-                                                        <table style="margin: auto;">
+                                                        <div class="table options-table">
 
-                                                            <thead>
-                                                            <tr>
-                                                                <th>Title</th>
-                                                                <th>Position</th>
-                                                            </tr>
-                                                            </thead>
+                                                            <table style="margin: auto;">
 
-                                                            <tbody>
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                            </tr>
-                                                            </tbody>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th style="border-top-left-radius: 9px;">Title</th>
+                                                                    <th>Position</th>
+                                                                    <th style="width: 10%;border-top-right-radius: 9px;"></th>
+                                                                </tr>
+                                                                </thead>
 
-                                                        </table>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <input class="form-control" name="attribute_option_title[]" placeholder="" required="" type="text">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" name="attribute_option_position[]" placeholder="" required="" type="number">
+                                                                    </td>
+                                                                    <td style="text-align: center;">
+                                                                        <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">
+                                                                            <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																		</span>
+
+                                                                        <span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
+																			<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																		</span>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+
+                                                            </table>
+
+                                                        </div>
 
                                                     </div>
                                                 </li>
@@ -148,6 +173,96 @@
                                                     <input type="checkbox">
                                                     <h2>Configurations <i class="arrow"></i></h2>
                                                     <div class="accordion-content">
+
+                                                        <div class="table sub-attributes-table">
+
+                                                            <table style="margin: auto;">
+
+                                                                <thead>
+                                                                <tr>
+                                                                    <th style="border-top-left-radius: 9px;">Sub Attribute Title</th>
+                                                                    <th style="width: 10%;">Value</th>
+                                                                    <th>Required</th>
+                                                                    <th>Unique</th>
+                                                                    <th>Price Impact</th>
+                                                                    <th>Impact Type</th>
+                                                                    <th>m¹ Impact</th>
+                                                                    <th>m² Impact</th>
+                                                                    <th style="border-top-right-radius: 9px;"></th>
+                                                                </tr>
+                                                                </thead>
+
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <input class="form-control" name="sub_attribute_title[]" placeholder="" required="" type="text">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" name="sub_attribute_value[]" placeholder="" required="" type="number">
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_required[]" required>
+
+                                                                            <option value="0">No</option>
+                                                                            <option value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_unique[]" required>
+
+                                                                            <option value="0">No</option>
+                                                                            <option value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_price_impact[]" required>
+
+                                                                            <option value="0">No</option>
+                                                                            <option value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_impact_type[]" required>
+
+                                                                            <option value="0">€</option>
+                                                                            <option value="1">%</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_m1_impact[]" required>
+
+                                                                            <option value="0">No</option>
+                                                                            <option value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_m2_impact[]" required>
+
+                                                                            <option value="0">No</option>
+                                                                            <option value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td style="text-align: center;">
+                                                                        <span id="next-row-span" class="tooltip1 add-row1" style="cursor: pointer;font-size: 20px;">
+                                                                            <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																		</span>
+
+                                                                        <span id="next-row-span" class="tooltip1 remove-row1" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
+																			<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																		</span>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+
+                                                            </table>
+
+                                                        </div>
 
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Attribute Category*</label>
@@ -163,6 +278,70 @@
                                                                         <option {{isset($attributes) ? ($attributes->category_id == $cat->id ? 'selected' : null) : null}} value="{{$cat->id}}">{{$cat->cat_name}}</option>
 
                                                                     @endforeach
+
+                                                                </select>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Price Impact</label>
+
+                                                            <div class="col-sm-6">
+
+                                                                <select class="form-control" name="price_impact" id="price_impact" required>
+
+                                                                    <option {{isset($attributes) ? ($attributes->price_impact == 0 ? 'selected' : null) : null}} value="0">No</option>
+                                                                    <option {{isset($attributes) ? ($attributes->price_impact == 1 ? 'selected' : null) : null}} value="1">Yes</option>
+
+                                                                </select>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Impact Type</label>
+
+                                                            <div class="col-sm-6">
+
+                                                                <select class="form-control" name="impact_type" id="impact_type" required>
+
+                                                                    <option {{isset($attributes) ? ($attributes->impact_type == 0 ? 'selected' : null) : null}} value="0">€</option>
+                                                                    <option {{isset($attributes) ? ($attributes->impact_type == 1 ? 'selected' : null) : null}} value="1">%</option>
+
+                                                                </select>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">m¹ Impact</label>
+
+                                                            <div class="col-sm-6">
+
+                                                                <select class="form-control" name="m1_impact" id="m1_impact" required>
+
+                                                                    <option {{isset($attributes) ? ($attributes->m1_impact == 0 ? 'selected' : null) : null}} value="0">No</option>
+                                                                    <option {{isset($attributes) ? ($attributes->m1_impact == 1 ? 'selected' : null) : null}} value="1">Yes</option>
+
+                                                                </select>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">m² Impact</label>
+
+                                                            <div class="col-sm-6">
+
+                                                                <select class="form-control" name="m2_impact" id="m2_impact" required>
+
+                                                                    <option {{isset($attributes) ? ($attributes->m2_impact == 0 ? 'selected' : null) : null}} value="0">No</option>
+                                                                    <option {{isset($attributes) ? ($attributes->m2_impact == 1 ? 'selected' : null) : null}} value="1">Yes</option>
 
                                                                 </select>
 
@@ -211,20 +390,26 @@
 
 <style>
 
+.table{width: 100%;padding: 0 20px;}
+.table table{border-collapse: inherit;text-align: left;width: 100%;border: 1px solid #d6d6d6;border-radius: 10px;}
+.table table thead th{font-weight: 700;padding: 12px 10px;background: #f8f9fa;color: #3a3a3a;}
+.table table tbody td{padding: 10px;border-bottom: 1px solid #d3d3d3;color: #3a3a3a;vertical-align: middle;}
+.table table tbody tr:last-child td{ border-bottom: none; }
+
 .accordion-menu h2 {
 	font-size: 18px;
 	line-height: 34px;
 	font-weight: 500;
 	letter-spacing: 1px;
 	margin: 0;
-  cursor: pointer;
-  color: black;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #fbfbfb;
-  padding: 15px;
-  border-top: 1px solid #dadada;
+    cursor: pointer;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fbfbfb;
+    padding: 15px;
+    border-top: 1px solid #dadada;
 }
 .accordion-menu .accordion-content {
 	color: rgba(48, 69, 92, 0.8);
@@ -259,8 +444,7 @@
 
 .accordion-menu ul li:nth-of-type(1) { animation-delay: 0.5s; }
 .accordion-menu ul li:nth-of-type(2) { animation-delay: 0.75s; }
-.accordion-menu ul li:nth-of-type(3) { animation-delay: 1.0s; }
-.accordion-menu ul li:nth-of-type(4) { animation-delay: 1.25s; }
+.accordion-menu ul li:nth-of-type(4) { animation-delay: 1.0s; }
 .accordion-menu ul li:last-of-type { padding-bottom: 0; }
 .accordion-menu ul li:last-of-type h2{ border-bottom: 1px solid #dadada; }
 
@@ -359,14 +543,143 @@
 
 <script type="text/javascript">
 
-  function uploadclick(){
+    $(document).on('change', '#attribute_type', function () {
+
+        var value = $(this).val();
+
+        if(value == 'Select' || value == 'Multiselect' || value == 'Checkbox')
+        {
+            $('#options-li').show();
+        }
+        else
+        {
+            $('#options-li').hide();
+        }
+
+    });
+
+    $(document).on('click', '.add-row', function () {
+
+        $(".options-table table tbody").append('<tr>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <input class="form-control" name="attribute_option_title[]" placeholder="" required="" type="text">\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <input class="form-control" name="attribute_option_position[]" placeholder="" required="" type="number">\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td style="text-align: center;">\n' +
+            '                                                                        <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">\n' +
+            '                                                                            <i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
+            '                                                                        </span>\n' +
+            '\n' +
+            '                                                                        <span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">\n' +
+            '                                                                            <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
+            '                                                                        </span>\n' +
+            '                                                                    </td>\n' +
+            '                                                                </tr>');
+
+	});
+
+    $(document).on('click', '.remove-row', function () {
+
+        if ($(".options-table table tbody tr").length > 1) {
+
+            $(this).parent().parent().remove();
+
+        }
+
+    });
+
+    $(document).on('click', '.add-row1', function () {
+
+        $(".sub-attributes-table table tbody").append('<tr>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <input class="form-control" name="sub_attribute_title[]" placeholder="" required="" type="text">\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <input class="form-control" name="sub_attribute_value[]" placeholder="" required="" type="number">\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_required[]" required>\n' +
+            '\n' +
+            '                                                                            <option value="0">No</option>\n' +
+            '                                                                            <option value="1">Yes</option>\n' +
+            '\n' +
+            '                                                                        </select>\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_unique[]" required>\n' +
+            '\n' +
+            '                                                                            <option value="0">No</option>\n' +
+            '                                                                            <option value="1">Yes</option>\n' +
+            '\n' +
+            '                                                                        </select>\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_price_impact[]" required>\n' +
+            '\n' +
+            '                                                                            <option value="0">No</option>\n' +
+            '                                                                            <option value="1">Yes</option>\n' +
+            '\n' +
+            '                                                                        </select>\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_impact_type[]" required>\n' +
+            '\n' +
+            '                                                                            <option value="0">€</option>\n' +
+            '                                                                            <option value="1">%</option>\n' +
+            '\n' +
+            '                                                                        </select>\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_m1_impact[]" required>\n' +
+            '\n' +
+            '                                                                            <option value="0">No</option>\n' +
+            '                                                                            <option value="1">Yes</option>\n' +
+            '\n' +
+            '                                                                        </select>\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_m2_impact[]" required>\n' +
+            '\n' +
+            '                                                                            <option value="0">No</option>\n' +
+            '                                                                            <option value="1">Yes</option>\n' +
+            '\n' +
+            '                                                                        </select>\n' +
+            '                                                                    </td>\n' +
+            '                                                                    <td style="text-align: center;">\n' +
+            '                                                                        <span id="next-row-span" class="tooltip1 add-row1" style="cursor: pointer;font-size: 20px;">\n' +
+            '                                                                            <i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
+            '                                                                        </span>\n' +
+            '\n' +
+            '                                                                        <span id="next-row-span" class="tooltip1 remove-row1" style="cursor: pointer;font-size: 20px;margin-left: 10px;">\n' +
+            '                                                                            <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
+            '                                                                        </span>\n' +
+            '                                                                    </td>\n' +
+            '                                                                </tr>');
+
+	});
+
+    $(document).on('click', '.remove-row1', function () {
+
+        if ($(".sub-attributes-table table tbody tr").length > 1) {
+
+            $(this).parent().parent().remove();
+
+        }
+
+    });
+
+  function uploadclick()
+  {
+
     $("#uploadFile").click();
     $("#uploadFile").change(function(event) {
           readURL(this);
         $("#uploadTrigger").html($("#uploadFile").val());
     });
 
-}
+  }
 
 
     function readURL(input) {

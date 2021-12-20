@@ -17,6 +17,7 @@ use App\sub_services;
 use App\handyman_products;
 use App\carts;
 use App\attributes;
+use App\attributes_options;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AttributeController extends Controller
@@ -39,7 +40,7 @@ class AttributeController extends Controller
 
         if($user->role_id == 4)
         {
-            $attributes = attributes::where('user_id',$user_id)->orderBy('id','desc')->get();
+            $attributes = attributes::where('user_id',$user_id)->where('main_id',NULL)->orderBy('id','desc')->get();
 
             return view('admin.attribute.index',compact('attributes'));
         }
@@ -72,7 +73,7 @@ class AttributeController extends Controller
         }
     }
 
-    public function MyCategoryStore(StoreValidationRequest $request)
+    public function store(Request $request)
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
@@ -83,99 +84,76 @@ class AttributeController extends Controller
             $user_id = $main_id;
         }
 
-        if($request->cat_id)
+        if($request->attribute_id)
         {
-            $cat = my_categories::where('id',$request->cat_id)->first();
-            Session::flash('success', 'Category edited successfully.');
+            $attributes = attributes::where('id',$request->attribute_id)->first();
+            Session::flash('success', 'Attribute edited successfully.');
         }
         else
         {
-            $cat = new my_categories;
-            Session::flash('success', 'New Category added successfully.');
+            $attributes = new attributes;
+            Session::flash('success', 'New Attribute added successfully.');
         }
 
-        $input = $request->all();
-        $input['user_id'] = $user_id;
+        $attributes->user_id = $user_id;
+        $attributes->title = $request->title;
+        $attributes->value = $request->value;
+        $attributes->type = $request->attribute_type;
+        $attributes->is_required = $request->attribute_required;
+        $attributes->is_unique = $request->attribute_unique;
+        $attributes->category_id = $request->attribute_category;
+        $attributes->impact_type = $request->impact_type;
+        $attributes->price_impact = $request->price_impact;
+        $attributes->m1_impact = $request->m1_impact;
+        $attributes->m2_impact = $request->m2_impact;
+        $attributes->filter = $request->attribute_filter;
+        $attributes->save();
 
+        $attribute_main_id = $attributes->id; 
 
-        if ($file = $request->file('photo'))
+        if($request->attribute_type == 'Select' || $request->attribute_type == 'Multiselect' || $request->attribute_type == 'Checkbox')
         {
-            $name = time().$file->getClientOriginalName();
-            $file->move('assets/images',$name);
-            $input['photo'] = $name;
-        }
+            $attribute_options_title = $request->attribute_option_title;
 
-        $cat->fill($input)->save();
-
-        return redirect()->route('admin-my-cat-index');
-    }
-
-    public function store(StoreValidationRequest $request)
-    {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
-
-        if($main_id)
-        {
-            $user_id = $main_id;
-        }
-
-        $request['main_service'] = 1;
-
-        if($request->cat_id)
-        {
-            $cat = Category::where('id',$request->cat_id)->first();
-            Session::flash('success', 'Category edited successfully.');
-        }
-        else
-        {
-            $cat = new Category;
-            Session::flash('success', 'New Category added successfully.');
-        }
-
-        $input = $request->all();
-        $input['user_id'] = $user_id;
-
-
-        if ($file = $request->file('photo'))
-        {
-            $name = time().$file->getClientOriginalName();
-            $file->move('assets/images',$name);
-            $input['photo'] = $name;
-        }
-
-        $cat->fill($input)->save();
-
-        return redirect()->route('admin-cat-index');
-    }
-
-    public function MyCategoryEdit($id)
-    {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
-
-        if($main_id)
-        {
-            $user_id = $main_id;
-        }
-
-        if($user->role_id == 4)
-        {
-            $cats = my_categories::where('id','=',$id)->where('user_id',$user_id)->first();
-
-            if(!$cats)
+            foreach($attribute_options_title as $x => $key)
             {
-                return redirect()->back();
+                if($key)
+                {
+                    $options = new attributes_options;
+                    $options->attribute_id = $attribute_main_id;
+                    $options->title = $key;
+                    $options->position = $request->attribute_option_position[$x] ? $request->attribute_option_position[$x] : 0;
+                    $options->save();
+                }
             }
-
-            return view('admin.category.create_my_category',compact('cats'));
         }
         else
         {
-            return redirect()->route('user-login');
+            attributes_options::where('attribute_id',$attribute_main_id)->delete();
         }
+
+        $sub_attributes_title = $request->sub_attribute_title;
+
+        foreach($sub_attributes_title as $a => $key1)
+        {
+            $sub_attribute = new attributes;
+            $sub_attribute->user_id = $user_id;
+            $sub_attribute->main_id = $attribute_main_id;
+            $sub_attribute->title = $key1;
+            $sub_attribute->value = $request->sub_attribute_value[$a];
+            $sub_attribute->type = $request->attribute_type;
+            $sub_attribute->is_required = $request->sub_attribute_required[$a];
+            $sub_attribute->is_unique = $request->sub_attribute_unique[$a];
+            $sub_attribute->category_id = $request->attribute_category;
+            $sub_attribute->impact_type = $request->sub_attribute_impact_type[$a];
+            $sub_attribute->price_impact = $request->sub_attribute_price_impact[$a];
+            $sub_attribute->m1_impact = $request->sub_attribute_m1_impact[$a];
+            $sub_attribute->m2_impact = $request->sub_attribute_m2_impact[$a];
+            $sub_attribute->filter = $request->attribute_filter;
+            $sub_attribute->save();
+        }
+
+        return redirect()->route('admin-attribute-index');
     }
 
     public function edit($id)
@@ -199,110 +177,6 @@ class AttributeController extends Controller
             }
 
             return view('admin.category.create',compact('cats'));
-        }
-        else
-        {
-            return redirect()->route('user-login');
-        }
-    }
-
-    public function update(UpdateValidationRequest $request, $id)
-    {
-
-        $vat = vats::where('id',$request->vat)->first();
-
-        if(!$request->main_service)
-        {
-
-            $i =0;
-
-        foreach ($request->sub_service as $key) {
-
-            if($request->s_id[$i] != 0)
-            {
-
-            $update = sub_services::where('id',$request->s_id[$i])->update(['cat_id'=>$key]);
-
-            }
-            else
-            {
-
-            $sub_services = new sub_services;
-            $sub_services->cat_id = $key;
-            $sub_services->sub_id = $id;
-            $sub_services->save();
-
-            }
-
-            $i++;
-
-        }
-        }
-
-        if($request->variable_questions)
-        {
-            $request['variable_questions'] = 1;
-        }
-        else
-        {
-            $request['variable_questions'] = 0;
-        }
-
-        $cat = Category::findOrFail($id);
-
-        $input = $request->all();
-
-        $input['vat_id'] = $vat->id;
-        $input['vat_percentage'] = $vat->vat_percentage;
-        $input['vat_rule'] = $vat->rule;
-        $input['vat_code'] = $vat->code;
-
-        if ($file = $request->file('photo'))
-        {
-            $name = time().$file->getClientOriginalName();
-            $file->move('assets/images',$name);
-            if($cat->photo != null)
-            {
-                \File::delete(public_path() .'/assets/images/'.$cat->photo);
-            }
-            $input['photo'] = $name;
-        }
-
-        $cat->update($input);
-        Session::flash('success', 'Service updated successfully.');
-        return redirect()->route('admin-cat-index');
-    }
-
-    public function MyCategoryDestroy($id)
-    {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
-
-        if($main_id)
-        {
-            $user_id = $main_id;
-        }
-
-        if($user->role_id == 4)
-        {
-            $cat = my_categories::where('id',$id)->where('user_id',$user_id)->first();
-
-            if(!$cat)
-            {
-                return redirect()->back();
-            }
-
-            if($cat->photo == null){
-                $cat->delete();
-                Session::flash('success', 'Category deleted successfully.');
-                return redirect()->route('admin-my-cat-index');
-            }
-
-            \File::delete(public_path() .'/assets/images/'.$cat->photo);
-            $cat->delete();
-            Session::flash('success', 'Category deleted successfully.');
-            return redirect()->route('admin-my-cat-index');
         }
         else
         {
