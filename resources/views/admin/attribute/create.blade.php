@@ -125,7 +125,7 @@
                                                     </div>
                                                 </li>
 
-                                                <li style="display: none;" id="options-li">
+                                                <li @if(!isset($attributes) || ($attributes->type != 'Select' && $attributes->type != 'Multiselect' && $attributes->type != 'Checkbox')) style="display: none;" @endif id="options-li">
                                                     <input type="checkbox">
                                                     <h2>Options <i class="arrow"></i></h2>
                                                     <div class="accordion-content">
@@ -143,12 +143,17 @@
                                                                 </thead>
 
                                                                 <tbody>
+
+                                                                @if(isset($options) && count($options) > 0)
+
+                                                                @foreach($options as $key)
+
                                                                 <tr>
                                                                     <td>
-                                                                        <input class="form-control" name="attribute_option_title[]" placeholder="" required="" type="text">
+                                                                        <input value="{{$key->title}}" class="form-control" name="attribute_option_title[]" placeholder="" type="text">
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" name="attribute_option_position[]" placeholder="" required="" type="number">
+                                                                        <input value="{{$key->position}}" class="form-control" name="attribute_option_position[]" placeholder="" type="number">
                                                                     </td>
                                                                     <td style="text-align: center;">
                                                                         <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">
@@ -160,6 +165,31 @@
 																		</span>
                                                                     </td>
                                                                 </tr>
+
+                                                                @endforeach
+
+                                                                @else
+
+                                                                <tr>
+                                                                    <td>
+                                                                        <input class="form-control" name="attribute_option_title[]" placeholder="" type="text">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" name="attribute_option_position[]" placeholder="" type="number">
+                                                                    </td>
+                                                                    <td style="text-align: center;">
+                                                                        <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">
+                                                                            <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																		</span>
+
+                                                                        <span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
+																			<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																		</span>
+                                                                    </td>
+                                                                </tr>
+
+                                                                @endif
+                                                                
                                                                 </tbody>
 
                                                             </table>
@@ -193,15 +223,90 @@
                                                                 </thead>
 
                                                                 <tbody>
+
+                                                                @if(isset($sub_attributes) && count($sub_attributes) > 0)
+
+                                                                @foreach($sub_attributes as $key1)
+
                                                                 <tr>
                                                                     <td>
-                                                                        <input class="form-control" name="sub_attribute_title[]" placeholder="" required="" type="text">
+                                                                        <input value="{{$key1->title}}" class="form-control" name="sub_attribute_title[]" placeholder="" type="text">
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" name="sub_attribute_value[]" placeholder="" required="" type="number">
+                                                                        <input value="{{$key1->value}}" class="form-control" name="sub_attribute_value[]" placeholder="" type="number">
                                                                     </td>
                                                                     <td>
-                                                                        <select class="form-control" name="sub_attribute_required[]" required>
+                                                                        <select class="form-control" name="sub_attribute_required[]">
+
+                                                                            <option {{$key1->is_required == 0 ? 'selected' : null}} value="0">No</option>
+                                                                            <option {{$key1->is_required == 1 ? 'selected' : null}} value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_unique[]">
+
+                                                                            <option {{$key1->is_unique == 0 ? 'selected' : null}} value="0">No</option>
+                                                                            <option {{$key1->is_unique == 1 ? 'selected' : null}} value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_price_impact[]">
+
+                                                                            <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">No</option>
+                                                                            <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_impact_type[]">
+
+                                                                            <option {{$key1->impact_type == 0 ? 'selected' : null}} value="0">€</option>
+                                                                            <option {{$key1->impact_type == 1 ? 'selected' : null}} value="1">%</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_m1_impact[]">
+
+                                                                            <option {{$key1->m1_impact == 0 ? 'selected' : null}} value="0">No</option>
+                                                                            <option {{$key1->m1_impact == 1 ? 'selected' : null}} value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_m2_impact[]">
+
+                                                                            <option {{$key1->m2_impact == 0 ? 'selected' : null}} value="0">No</option>
+                                                                            <option {{$key1->m2_impact == 1 ? 'selected' : null}} value="1">Yes</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td style="text-align: center;">
+                                                                        <span id="next-row-span" class="tooltip1 add-row1" style="cursor: pointer;font-size: 20px;">
+                                                                            <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																		</span>
+
+                                                                        <span id="next-row-span" class="tooltip1 remove-row1" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
+																			<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																		</span>
+                                                                    </td>
+                                                                </tr>
+
+                                                                @endforeach
+
+                                                                @else
+
+                                                                <tr>
+                                                                    <td>
+                                                                        <input class="form-control" name="sub_attribute_title[]" placeholder="" type="text">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" name="sub_attribute_value[]" placeholder="" type="number">
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control" name="sub_attribute_required[]">
 
                                                                             <option value="0">No</option>
                                                                             <option value="1">Yes</option>
@@ -209,7 +314,7 @@
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <select class="form-control" name="sub_attribute_unique[]" required>
+                                                                        <select class="form-control" name="sub_attribute_unique[]">
 
                                                                             <option value="0">No</option>
                                                                             <option value="1">Yes</option>
@@ -217,7 +322,7 @@
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <select class="form-control" name="sub_attribute_price_impact[]" required>
+                                                                        <select class="form-control" name="sub_attribute_price_impact[]">
 
                                                                             <option value="0">No</option>
                                                                             <option value="1">Yes</option>
@@ -225,7 +330,7 @@
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <select class="form-control" name="sub_attribute_impact_type[]" required>
+                                                                        <select class="form-control" name="sub_attribute_impact_type[]">
 
                                                                             <option value="0">€</option>
                                                                             <option value="1">%</option>
@@ -233,7 +338,7 @@
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <select class="form-control" name="sub_attribute_m1_impact[]" required>
+                                                                        <select class="form-control" name="sub_attribute_m1_impact[]">
 
                                                                             <option value="0">No</option>
                                                                             <option value="1">Yes</option>
@@ -241,7 +346,7 @@
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <select class="form-control" name="sub_attribute_m2_impact[]" required>
+                                                                        <select class="form-control" name="sub_attribute_m2_impact[]">
 
                                                                             <option value="0">No</option>
                                                                             <option value="1">Yes</option>
@@ -258,6 +363,9 @@
 																		</span>
                                                                     </td>
                                                                 </tr>
+
+                                                                @endif
+
                                                                 </tbody>
 
                                                             </table>
@@ -442,9 +550,15 @@
 
 .accordion-menu ul li input[type=checkbox]:not(:checked) ~ h2 { border-bottom: 1px solid #dadada; }
 
-.accordion-menu ul li:nth-of-type(1) { animation-delay: 0.5s; }
-.accordion-menu ul li:nth-of-type(2) { animation-delay: 0.75s; }
-.accordion-menu ul li:nth-of-type(4) { animation-delay: 1.0s; }
+<?php if(!isset($attributes) || ($attributes->type != 'Select' && $attributes->type != 'Multiselect' && $attributes->type != 'Checkbox')) { ?> 
+    .accordion-menu ul li:nth-of-type(1) { animation-delay: 0.5s; }
+    .accordion-menu ul li:nth-of-type(2) { animation-delay: 0.75s; }
+    .accordion-menu ul li:nth-of-type(4) { animation-delay: 1.0s; } <?php }else{ ?> 
+    .accordion-menu ul li:nth-of-type(1) { animation-delay: 0.5s; }
+    .accordion-menu ul li:nth-of-type(2) { animation-delay: 0.75s; }
+    .accordion-menu ul li:nth-of-type(3) { animation-delay: 1.0s; }
+    .accordion-menu ul li:nth-of-type(4) { animation-delay: 1.25s; } <?php } ?>
+
 .accordion-menu ul li:last-of-type { padding-bottom: 0; }
 .accordion-menu ul li:last-of-type h2{ border-bottom: 1px solid #dadada; }
 
@@ -546,6 +660,7 @@
     $(document).on('change', '#attribute_type', function () {
 
         var value = $(this).val();
+        $('.accordion-menu ul li').css('animation-delay','0s');
 
         if(value == 'Select' || value == 'Multiselect' || value == 'Checkbox')
         {
@@ -562,10 +677,10 @@
 
         $(".options-table table tbody").append('<tr>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <input class="form-control" name="attribute_option_title[]" placeholder="" required="" type="text">\n' +
+            '                                                                        <input class="form-control" name="attribute_option_title[]" placeholder="" type="text">\n' +
             '                                                                    </td>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <input class="form-control" name="attribute_option_position[]" placeholder="" required="" type="number">\n' +
+            '                                                                        <input class="form-control" name="attribute_option_position[]" placeholder="" type="number">\n' +
             '                                                                    </td>\n' +
             '                                                                    <td style="text-align: center;">\n' +
             '                                                                        <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">\n' +
@@ -594,13 +709,13 @@
 
         $(".sub-attributes-table table tbody").append('<tr>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <input class="form-control" name="sub_attribute_title[]" placeholder="" required="" type="text">\n' +
+            '                                                                        <input class="form-control" name="sub_attribute_title[]" placeholder="" type="text">\n' +
             '                                                                    </td>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <input class="form-control" name="sub_attribute_value[]" placeholder="" required="" type="number">\n' +
+            '                                                                        <input class="form-control" name="sub_attribute_value[]" placeholder="" type="number">\n' +
             '                                                                    </td>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <select class="form-control" name="sub_attribute_required[]" required>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_required[]">\n' +
             '\n' +
             '                                                                            <option value="0">No</option>\n' +
             '                                                                            <option value="1">Yes</option>\n' +
@@ -608,7 +723,7 @@
             '                                                                        </select>\n' +
             '                                                                    </td>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <select class="form-control" name="sub_attribute_unique[]" required>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_unique[]">\n' +
             '\n' +
             '                                                                            <option value="0">No</option>\n' +
             '                                                                            <option value="1">Yes</option>\n' +
@@ -616,7 +731,7 @@
             '                                                                        </select>\n' +
             '                                                                    </td>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <select class="form-control" name="sub_attribute_price_impact[]" required>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_price_impact[]">\n' +
             '\n' +
             '                                                                            <option value="0">No</option>\n' +
             '                                                                            <option value="1">Yes</option>\n' +
@@ -624,7 +739,7 @@
             '                                                                        </select>\n' +
             '                                                                    </td>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <select class="form-control" name="sub_attribute_impact_type[]" required>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_impact_type[]">\n' +
             '\n' +
             '                                                                            <option value="0">€</option>\n' +
             '                                                                            <option value="1">%</option>\n' +
@@ -632,7 +747,7 @@
             '                                                                        </select>\n' +
             '                                                                    </td>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <select class="form-control" name="sub_attribute_m1_impact[]" required>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_m1_impact[]">\n' +
             '\n' +
             '                                                                            <option value="0">No</option>\n' +
             '                                                                            <option value="1">Yes</option>\n' +
@@ -640,7 +755,7 @@
             '                                                                        </select>\n' +
             '                                                                    </td>\n' +
             '                                                                    <td>\n' +
-            '                                                                        <select class="form-control" name="sub_attribute_m2_impact[]" required>\n' +
+            '                                                                        <select class="form-control" name="sub_attribute_m2_impact[]">\n' +
             '\n' +
             '                                                                            <option value="0">No</option>\n' +
             '                                                                            <option value="1">Yes</option>\n' +

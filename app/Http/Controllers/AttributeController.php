@@ -117,15 +117,36 @@ class AttributeController extends Controller
 
             foreach($attribute_options_title as $x => $key)
             {
-                if($key)
+                $attribute_options_check = attributes_options::where('attribute_id',$attribute_main_id)->skip($x)->first();
+
+                if($attribute_options_check)
                 {
-                    $options = new attributes_options;
-                    $options->attribute_id = $attribute_main_id;
-                    $options->title = $key;
-                    $options->position = $request->attribute_option_position[$x] ? $request->attribute_option_position[$x] : 0;
-                    $options->save();
+                    if($key)
+                    {
+                        $attribute_options_check->attribute_id = $attribute_main_id;
+                        $attribute_options_check->title = $key;
+                        $attribute_options_check->position = $request->attribute_option_position[$x] ? $request->attribute_option_position[$x] : 0;
+                        $attribute_options_check->save();
+                    }
+                }
+                else
+                {
+                    if($key)
+                    {
+                        $options = new attributes_options;
+                        $options->attribute_id = $attribute_main_id;
+                        $options->title = $key;
+                        $options->position = $request->attribute_option_position[$x] ? $request->attribute_option_position[$x] : 0;
+                        $options->save();
+                    }
                 }
             }
+
+            $x = $x + 1;
+
+            $count = attributes_options::count();
+            attributes_options::where('attribute_id',$attribute_main_id)->take($count)->skip($x)->get()->each(function($row){ $row->delete(); });
+
         }
         else
         {
@@ -136,22 +157,53 @@ class AttributeController extends Controller
 
         foreach($sub_attributes_title as $a => $key1)
         {
-            $sub_attribute = new attributes;
-            $sub_attribute->user_id = $user_id;
-            $sub_attribute->main_id = $attribute_main_id;
-            $sub_attribute->title = $key1;
-            $sub_attribute->value = $request->sub_attribute_value[$a];
-            $sub_attribute->type = $request->attribute_type;
-            $sub_attribute->is_required = $request->sub_attribute_required[$a];
-            $sub_attribute->is_unique = $request->sub_attribute_unique[$a];
-            $sub_attribute->category_id = $request->attribute_category;
-            $sub_attribute->impact_type = $request->sub_attribute_impact_type[$a];
-            $sub_attribute->price_impact = $request->sub_attribute_price_impact[$a];
-            $sub_attribute->m1_impact = $request->sub_attribute_m1_impact[$a];
-            $sub_attribute->m2_impact = $request->sub_attribute_m2_impact[$a];
-            $sub_attribute->filter = $request->attribute_filter;
-            $sub_attribute->save();
+            $sub_attribute_check = attributes::where('main_id',$attribute_main_id)->skip($a)->first();
+
+            if($sub_attribute_check)
+            {
+                if($key1)
+                {
+                    $sub_attribute_check->title = $key1;
+                    $sub_attribute_check->value = $request->sub_attribute_value[$a] ? $request->sub_attribute_value[$a] : 0;
+                    $sub_attribute_check->type = $request->attribute_type;
+                    $sub_attribute_check->is_required = $request->sub_attribute_required[$a];
+                    $sub_attribute_check->is_unique = $request->sub_attribute_unique[$a];
+                    $sub_attribute_check->category_id = $request->attribute_category;
+                    $sub_attribute_check->impact_type = $request->sub_attribute_impact_type[$a];
+                    $sub_attribute_check->price_impact = $request->sub_attribute_price_impact[$a];
+                    $sub_attribute_check->m1_impact = $request->sub_attribute_m1_impact[$a];
+                    $sub_attribute_check->m2_impact = $request->sub_attribute_m2_impact[$a];
+                    $sub_attribute_check->filter = $request->attribute_filter;
+                    $sub_attribute_check->save();
+                }
+            }
+            else
+            {
+                if($key1)
+                {
+                    $sub_attribute = new attributes;
+                    $sub_attribute->user_id = $user_id;
+                    $sub_attribute->main_id = $attribute_main_id;
+                    $sub_attribute->title = $key1;
+                    $sub_attribute->value = $request->sub_attribute_value[$a] ? $request->sub_attribute_value[$a] : 0;
+                    $sub_attribute->type = $request->attribute_type;
+                    $sub_attribute->is_required = $request->sub_attribute_required[$a];
+                    $sub_attribute->is_unique = $request->sub_attribute_unique[$a];
+                    $sub_attribute->category_id = $request->attribute_category;
+                    $sub_attribute->impact_type = $request->sub_attribute_impact_type[$a];
+                    $sub_attribute->price_impact = $request->sub_attribute_price_impact[$a];
+                    $sub_attribute->m1_impact = $request->sub_attribute_m1_impact[$a];
+                    $sub_attribute->m2_impact = $request->sub_attribute_m2_impact[$a];
+                    $sub_attribute->filter = $request->attribute_filter;
+                    $sub_attribute->save();
+                }
+            }
         }
+
+        $a = $a + 1;
+
+        $count = attributes::where('main_id',$attribute_main_id)->count();
+        attributes::where('main_id',$attribute_main_id)->take($count)->skip($a)->get()->each(function($row){ $row->delete(); });
 
         return redirect()->route('admin-attribute-index');
     }
@@ -167,16 +219,19 @@ class AttributeController extends Controller
             $user_id = $main_id;
         }
 
-        if($user->can('category-edit'))
+        if($user->role_id == 4)
         {
-            $cats = Category::where('id','=',$id)->where('user_id',$user_id)->first();
+            $attributes = attributes::where('id','=',$id)->where('user_id',$user_id)->first();
+            $sub_attributes = attributes::where('main_id','=',$id)->where('attributes.user_id',$user_id)->get();
+            $options = attributes_options::where('attribute_id',$id)->get();
+            $cats = my_categories::where('user_id',$user_id)->orWhere('user_id',0)->get();
 
-            if(!$cats)
+            if(!$attributes)
             {
                 return redirect()->back();
             }
 
-            return view('admin.category.create',compact('cats'));
+            return view('admin.attribute.create',compact('attributes','sub_attributes','options','cats'));
         }
         else
         {
@@ -195,25 +250,13 @@ class AttributeController extends Controller
             $user_id = $main_id;
         }
 
-        if($user->can('category-delete'))
+        if($user->role_id == 4)
         {
-            $cat = Category::where('id',$id)->where('user_id',$user_id)->first();
-
-            if(!$cat)
-            {
-                return redirect()->back();
-            }
-
-            if($cat->photo == null){
-                $cat->delete();
-                Session::flash('success', 'Category deleted successfully.');
-                return redirect()->route('admin-cat-index');
-            }
-
-            \File::delete(public_path() .'/assets/images/'.$cat->photo);
-            $cat->delete();
-            Session::flash('success', 'Category deleted successfully.');
-            return redirect()->route('admin-cat-index');
+            attributes::where('id',$id)->where('user_id',$user_id)->delete();
+            attributes::where('main_id',$id)->where('user_id',$user_id)->delete();
+            attributes_options::where('attribute_id',$id)->delete();
+            Session::flash('success', 'Attribute deleted successfully.');
+            return redirect()->route('admin-attribute-index');
         }
         else
         {
