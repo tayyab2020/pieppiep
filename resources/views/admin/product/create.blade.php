@@ -896,10 +896,6 @@
                                                                 </div>
 
                                                                 <div style="font-family: monospace;" class="col-sm-3">
-                                                                    <h4>Order</h4>
-                                                                </div>
-
-                                                                <div style="font-family: monospace;" class="col-sm-3">
                                                                     <h4>Action</h4>
                                                                 </div>
 
@@ -1672,31 +1668,23 @@
 
                                                             <div class="row" style="margin: 0;">
 
-                                                                <div style="font-family: monospace;" class="col-sm-2">
+                                                                <div style="font-family: monospace;" class="col-sm-3">
                                                                     <h4>Model</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-1">
+                                                                <div style="font-family: monospace;" class="col-sm-3">
                                                                     <h4>Value</h4>
                                                                 </div>
 
-                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
+                                                                <div style="font-family: monospace;" class="col-sm-2">
                                                                     <h4>Price Impact</h4>
                                                                 </div>
 
-                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
+                                                                <div style="font-family: monospace;" class="col-sm-2">
                                                                     <h4>Impact Type</h4>
                                                                 </div>
 
-                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
-                                                                    <h4>m² Impact</h4>
-                                                                </div>
-
-                                                                <div style="text-align: center;font-family: monospace;" class="col-sm-2">
-                                                                    <h4>m¹ Impact</h4>
-                                                                </div>
-
-                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-1">
+                                                                <div style="font-family: monospace;text-align: center;" class="col-sm-2">
                                                                     <h4>Action</h4>
                                                                 </div>
 
@@ -1712,13 +1700,13 @@
 
                                                                         <div data-id="{{$m+1}}" class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                            <div class="col-sm-2">
+                                                                            <div class="col-sm-3">
 
                                                                                 <input type="text" value="{{$key->model}}" placeholder="Model" name="models[]" class="form-control validate models">
 
                                                                             </div>
 
-                                                                            <div class="col-sm-1">
+                                                                            <div class="col-sm-3">
 
                                                                                 <input value="{{$key->value}}" class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
@@ -1726,61 +1714,29 @@
 
                                                                             <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                                <input type="hidden" name="model_price_impact[]" id="price_impact" value="{{$key->price_impact}}">
-
-                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                <label style="margin: 0;" class="switch">
-                                                                                    <input class="price_impact" type="checkbox" {{$key->price_impact ? 'checked' : null}}>
-                                                                                    <span class="slider round"></span>
-                                                                                </label>
-                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+                                                                                <select class="form-control" id="price_impact" name="model_price_impact[]">
+                                                                                    <option {{$key->price_impact == 0 ? 'selected' : null}} value="0">No</option>
+                                                                                    <option {{$key->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
+                                                                                    <option {{$key->m1_impact == 1 ? 'selected' : null}} value="2">m¹ Impact</option>
+                                                                                    <option {{$key->m2_impact == 1 ? 'selected' : null}} value="3">m² Impact</option>
+                                                                                </select>
 
                                                                             </div>
 
                                                                             <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                                <input type="hidden" name="model_impact_type[]" id="impact_type" value="{{$key->impact_type}}">
-
-                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
-                                                                                <label style="margin: 0;" class="switch">
-                                                                                    <input class="impact_type" type="checkbox" {{$key->impact_type ? 'checked' : null}}>
-                                                                                    <span class="slider round"></span>
-                                                                                </label>
-                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+                                                                                <select class="form-control" id="impact_type" name="model_impact_type[]">
+                                                                                    <option {{$key->impact_type == 0 ? 'selected' : null}} value="0">€</option>
+                                                                                    <option {{$key->impact_type == 1 ? 'selected' : null}} value="1">%</option>
+                                                                                </select>
 
                                                                             </div>
 
-                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                                <input type="hidden" name="model_m2_impact[]" id="m2_impact" value="{{$key->m2_impact}}">
-
-                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                <label style="margin: 0;" class="switch">
-                                                                                    <input class="m2_impact" type="checkbox" {{$key->m2_impact ? 'checked' : null}}>
-                                                                                    <span class="slider round"></span>
-                                                                                </label>
-                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                            </div>
-
-                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                                <input type="hidden" name="model_width_impact[]" id="width_impact" value="{{$key->m1_impact}}">
-
-                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                <label style="margin: 0;" class="switch">
-                                                                                    <input class="width_impact" type="checkbox" {{$key->m1_impact ? 'checked' : null}}>
-                                                                                    <span class="slider round"></span>
-                                                                                </label>
-                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                            </div>
-
-                                                                            <div style="display: flex;justify-content: space-between;" class="col-sm-1">
+                                                                            <div style="display: flex;justify-content: center;" class="col-sm-2">
 
                                                                                 {{--<button data-id="{{$m+1}}" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>--}}
-                                                                                <span class="ui-close select-feature-btn" data-id="{{$m+1}}" style="margin:0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
-                                                                                <span class="ui-close remove-model" data-id="{{$key->id}}" style="margin:0;position: relative;right:0;top: 0;">X</span>
+                                                                                <span class="ui-close select-feature-btn" data-id="{{$m+1}}" style="margin: 0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
+                                                                                <span class="ui-close remove-model" data-id="{{$key->id}}" style="margin: 0;position: relative;right: -5px;top: 0;">X</span>
 
                                                                             </div>
 
@@ -1792,13 +1748,13 @@
 
                                                                     <div data-id="1" class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                        <div class="col-sm-2">
+                                                                        <div class="col-sm-3">
 
                                                                             <input type="text" placeholder="Model" name="models[]" class="form-control validate models">
 
                                                                         </div>
 
-                                                                        <div class="col-sm-1">
+                                                                        <div class="col-sm-3">
 
                                                                             <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
 
@@ -1806,61 +1762,29 @@
 
                                                                         <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                            <input type="hidden" name="model_price_impact[]" id="price_impact" value="0">
-
-                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                            <label style="margin: 0;" class="switch">
-                                                                                <input class="price_impact" type="checkbox">
-                                                                                <span class="slider round"></span>
-                                                                            </label>
-                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
+                                                                            <select class="form-control" id="price_impact" name="model_price_impact[]">
+                                                                                <option value="0">No</option>
+                                                                                <option value="1">Fixed</option>
+                                                                                <option value="2">m¹ Impact</option>
+                                                                                <option value="3">m² Impact</option>
+                                                                            </select>
 
                                                                         </div>
 
                                                                         <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                            <input type="hidden" name="model_impact_type[]" id="impact_type" value="0">
-
-                                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
-                                                                            <label style="margin: 0;" class="switch">
-                                                                                <input class="impact_type" type="checkbox">
-                                                                                <span class="slider round"></span>
-                                                                            </label>
-                                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
+                                                                            <select class="form-control" id="impact_type" name="model_impact_type[]">
+                                                                                <option value="0">€</option>
+                                                                                <option value="1">%</option>
+                                                                            </select>
 
                                                                         </div>
 
-                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                            <input type="hidden" name="model_m2_impact[]" id="m2_impact" value="0">
-
-                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                            <label style="margin: 0;" class="switch">
-                                                                                <input class="m2_impact" type="checkbox">
-                                                                                <span class="slider round"></span>
-                                                                            </label>
-                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                        </div>
-
-                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                            <input type="hidden" name="model_width_impact[]" id="width_impact" value="0">
-
-                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                            <label style="margin: 0;" class="switch">
-                                                                                <input class="width_impact" type="checkbox">
-                                                                                <span class="slider round"></span>
-                                                                            </label>
-                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                        </div>
-
-                                                                        <div style="display: flex;justify-content: space-between;" class="col-sm-1">
+                                                                        <div style="display: flex;justify-content: center;" class="col-sm-2">
 
                                                                             {{--<button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>--}}
-                                                                            <span class="ui-close select-feature-btn" data-id="1" style="margin:0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
-                                                                            <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>
+                                                                            <span class="ui-close select-feature-btn" data-id="1" style="margin: 0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
+                                                                            <span class="ui-close remove-model" data-id="" style="margin: 0;position: relative;right: -5px;top: 0;">X</span>
 
                                                                         </div>
 
@@ -2144,7 +2068,7 @@
 
                                                             @endif
 
-                                                        </div>.
+                                                        </div>
 
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-3" for=""></label>
@@ -2268,13 +2192,13 @@
 
             $(".model_box").append('<div data-id="'+model_row+'" class="form-group" style="margin: 0 0 20px 0;">\n' +
                 '\n' +
-                '                                                                   <div class="col-sm-2">\n' +
+                '                                                                   <div class="col-sm-3">\n' +
                 '\n' +
                 '                                                                        <input type="text" placeholder="Model" name="models[]" class="form-control validate models">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
-                '                                                                    <div class="col-sm-1">\n' +
+                '                                                                    <div class="col-sm-3">\n' +
                 '\n' +
                 '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '\n' +
@@ -2282,61 +2206,33 @@
                 '\n' +
                 '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                 '\n' +
-                '                                                                        <input type="hidden" name="model_price_impact[]" id="price_impact" value="0">\n' +
+                '                                                                        <select class="form-control" id="price_impact" name="model_price_impact[]">\n' +
                 '\n' +
-                '                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
-                '                                                                        <label style="margin: 0;" class="switch">\n' +
-                '                                                                            <input class="price_impact" type="checkbox">\n' +
-                '                                                                            <span class="slider round"></span>\n' +
-                '                                                                        </label>\n' +
-                '                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                '                                                                           <option value="0">No</option>\n' +
+                '                                                                           <option value="1">Fixed</option>\n' +
+                '                                                                           <option value="2">m¹ Impact</option>\n' +
+                '                                                                           <option value="3">m² Impact</option>\n' +
                 '\n' +
-                '                                                                    </div>\n' +
-                '\n' +
-                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                '\n' +
-                '                                                                        <input type="hidden" name="model_impact_type[]" id="impact_type" value="0">\n' +
-                '\n' +
-                '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
-                '                                                                        <label style="margin: 0;" class="switch">\n' +
-                '                                                                            <input class="impact_type" type="checkbox">\n' +
-                '                                                                            <span class="slider round"></span>\n' +
-                '                                                                        </label>\n' +
-                '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '                                                                        </select>\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
                 '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                 '\n' +
-                '                                                                        <input type="hidden" name="model_m2_impact[]" id="m2_impact" value="0">\n' +
+                '                                                                        <select class="form-control" id="impact_type" name="model_impact_type[]">\n' +
                 '\n' +
-                '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
-                '                                                                        <label style="margin: 0;" class="switch">\n' +
-                '                                                                            <input class="m2_impact" type="checkbox">\n' +
-                '                                                                            <span class="slider round"></span>\n' +
-                '                                                                        </label>\n' +
-                '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                '                                                                           <option value="0">€</option>\n' +
+                '                                                                           <option value="1">%</option>\n' +
+                '\n' +
+                '                                                                        </select>\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
-                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                '\n' +
-                '                                                                        <input type="hidden" name="model_width_impact[]" id="width_impact" value="0">\n' +
-                '\n' +
-                '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
-                '                                                                        <label style="margin: 0;" class="switch">\n' +
-                '                                                                            <input class="width_impact" type="checkbox">\n' +
-                '                                                                            <span class="slider round"></span>\n' +
-                '                                                                        </label>\n' +
-                '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
-                '\n' +
-                '                                                                    </div>\n' +
-                '\n' +
-                '                                                                    <div style="display: flex;justify-content: space-between;" class="col-sm-1">\n' +
+                '                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">\n' +
                 '\n' +
                 /*'                                                                        <button data-id="'+model_row+'" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +*/
-                '                                                                        <span class="ui-close select-feature-btn" data-id="'+model_row+'" style="margin:0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
-                '                                                                        <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
+                '                                                                        <span class="ui-close select-feature-btn" data-id="'+model_row+'" style="margin: 0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
+                '                                                                        <span class="ui-close remove-model" data-id="" style="margin: 0;position: relative;right: -5px;top: 0;">X</span>\n' +
                 '\n' +
                 '                                                                    </div>' +
                 '\n' +
@@ -2447,13 +2343,13 @@
 
                 $(".model_box").append('<div data-id="1" class="form-group" style="margin: 0 0 20px 0;">\n' +
                     '\n' +
-                    '                                                                   <div class="col-sm-2">\n' +
+                    '                                                                   <div class="col-sm-3">\n' +
                     '\n' +
                     '                                                                        <input type="text" placeholder="Model" name="models[]" class="form-control validate models">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
-                    '                                                                    <div class="col-sm-1">\n' +
+                    '                                                                    <div class="col-sm-3">\n' +
                     '\n' +
                     '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '\n' +
@@ -2461,61 +2357,33 @@
                     '\n' +
                     '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                        <input type="hidden" name="model_price_impact[]" id="price_impact" value="0">\n' +
+                    '                                                                        <select class="form-control" id="price_impact" name="model_price_impact[]">\n' +
                     '\n' +
-                    '                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
-                    '                                                                        <label style="margin: 0;" class="switch">\n' +
-                    '                                                                            <input class="price_impact" type="checkbox">\n' +
-                    '                                                                            <span class="slider round"></span>\n' +
-                    '                                                                        </label>\n' +
-                    '                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                    '                                                                           <option value="0">No</option>\n' +
+                    '                                                                           <option value="1">Fixed</option>\n' +
+                    '                                                                           <option value="2">m¹ Impact</option>\n' +
+                    '                                                                           <option value="3">m² Impact</option>\n' +
                     '\n' +
-                    '                                                                    </div>\n' +
-                    '\n' +
-                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                    '\n' +
-                    '                                                                        <input type="hidden" name="model_impact_type[]" id="impact_type" value="0">\n' +
-                    '\n' +
-                    '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
-                    '                                                                        <label style="margin: 0;" class="switch">\n' +
-                    '                                                                            <input class="impact_type" type="checkbox">\n' +
-                    '                                                                            <span class="slider round"></span>\n' +
-                    '                                                                        </label>\n' +
-                    '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '                                                                        </select>\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
                     '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                        <input type="hidden" name="model_m2_impact[]" id="m2_impact" value="0">\n' +
+                    '                                                                        <select class="form-control" id="impact_type" name="model_impact_type[]">\n' +
                     '\n' +
-                    '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
-                    '                                                                        <label style="margin: 0;" class="switch">\n' +
-                    '                                                                            <input class="m2_impact" type="checkbox">\n' +
-                    '                                                                            <span class="slider round"></span>\n' +
-                    '                                                                        </label>\n' +
-                    '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                    '                                                                           <option value="0">€</option>\n' +
+                    '                                                                           <option value="1">%</option>\n' +
+                    '\n' +
+                    '                                                                        </select>\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
-                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                    '\n' +
-                    '                                                                        <input type="hidden" name="model_width_impact[]" id="width_impact" value="0">\n' +
-                    '\n' +
-                    '                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
-                    '                                                                        <label style="margin: 0;" class="switch">\n' +
-                    '                                                                            <input class="width_impact" type="checkbox">\n' +
-                    '                                                                            <span class="slider round"></span>\n' +
-                    '                                                                        </label>\n' +
-                    '                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
-                    '\n' +
-                    '                                                                    </div>\n' +
-                    '\n' +
-                    '                                                                    <div style="display: flex;justify-content: space-between;" class="col-sm-1">\n' +
+                    '                                                                    <div style="display: flex;justify-content: center;" class="col-sm-2">\n' +
                     '\n' +
                     /*'                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success select-feature-btn" type="button">Select Features</button>\n' +*/
-                    '                                                                        <span class="ui-close select-feature-btn" data-id="1" style="margin:0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
-                    '                                                                        <span class="ui-close remove-model" data-id="" style="margin:0;position: relative;right:0;top: 0;">X</span>\n' +
+                    '                                                                        <span class="ui-close select-feature-btn" data-id="1" style="margin: 0;position: relative;right: auto;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
+                    '                                                                        <span class="ui-close remove-model" data-id="" style="margin: 0;position: relative;right: -5px;top: 0;">X</span>\n' +
                     '\n' +
                     '                                                                    </div>' +
                     '\n' +

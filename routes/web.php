@@ -290,12 +290,6 @@
   Route::get('/my-category/edit/{id}', 'CategoryController@MyCategoryEdit')->name('admin-my-cat-edit');
   Route::get('/my-category/delete/{id}', 'CategoryController@MyCategoryDestroy')->name('admin-my-cat-delete');
 
-  Route::get('/attributes', 'AttributeController@index')->name('admin-attribute-index');
-  Route::get('/attribute/create', 'AttributeController@create')->name('admin-attribute-create');
-  Route::post('/attribute/create', 'AttributeController@store')->name('admin-attribute-store');
-  Route::get('/attribute/edit/{id}', 'AttributeController@edit')->name('admin-attribute-edit');
-  Route::get('/attribute/delete/{id}', 'AttributeController@destroy')->name('admin-attribute-delete');
-
   Route::get('/brands', 'BrandController@index')->name('admin-brand-index');
   Route::get('/brand/create', 'BrandController@create')->name('admin-brand-create');
   Route::post('/brand/create', 'BrandController@store')->name('admin-brand-store');

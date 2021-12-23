@@ -741,10 +741,10 @@ class ProductController extends Controller
                         $model_check->model = $temp;
                         $model_check->value = $request->model_values[$m];
                         $model_check->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
-                        $model_check->price_impact = $request->model_price_impact[$m];
+                        $model_check->price_impact = ($request->model_price_impact[$m] == 0 || $request->model_price_impact[$m] == 1) ? $request->model_price_impact[$m] : 0;
                         $model_check->impact_type = $request->model_impact_type[$m];
-                        $model_check->m2_impact = $request->model_m2_impact[$m];
-                        $model_check->m1_impact = $request->model_width_impact[$m];
+                        $model_check->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
+                        $model_check->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
                         $model_check->childsafe = $request->childsafe[$m];
                         $model_check->save();
                     }
@@ -782,10 +782,10 @@ class ProductController extends Controller
                         $model->model = $temp;
                         $model->value = $request->model_values[$m];
                         $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
-                        $model->price_impact = $request->model_price_impact[$m];
+                        $model->price_impact = ($request->model_price_impact[$m] == 0 || $request->model_price_impact[$m] == 1) ? $request->model_price_impact[$m] : 0;
                         $model->impact_type = $request->model_impact_type[$m];
-                        $model->m2_impact = $request->model_m2_impact[$m];
-                        $model->m1_impact = $request->model_width_impact[$m];
+                        $model->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
+                        $model->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
                         $model->childsafe = $request->childsafe[$m];
                         $model->save();
 
