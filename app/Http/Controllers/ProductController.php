@@ -1222,15 +1222,30 @@ class ProductController extends Controller
             $user_id = $main_id;
         }
 
-        $features = features::with(['feature_details' => function($query)
+        if($request->heading_id)
         {
-            $query->where('features_details.sub_feature',0);
+            $features = features::with(['feature_details' => function($query)
+            {
+                $query->where('features_details.sub_feature',0);
 
-        }])->with(['sub_features' => function($query)
+            }])->with(['sub_features' => function($query)
+            {
+                $query->where('features_details.sub_feature',1);
+
+            }])->whereRaw("find_in_set('$id',category_ids)")->where('id',$request->heading_id)->where('user_id',$user_id)->get();
+        }
+        else
         {
-            $query->where('features_details.sub_feature',1);
+            $features = features::with(['feature_details' => function($query)
+            {
+                $query->where('features_details.sub_feature',0);
 
-        }])->whereRaw("find_in_set('$id',category_ids)")->where('user_id',$user_id)->get();
+            }])->with(['sub_features' => function($query)
+            {
+                $query->where('features_details.sub_feature',1);
+
+            }])->whereRaw("find_in_set('$id',category_ids)")->where('user_id',$user_id)->get();
+        }
 
         return $features;
     }

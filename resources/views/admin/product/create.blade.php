@@ -2417,7 +2417,7 @@
                             width: '100%',
                             height: '200px',
                             placeholder: "Select Feature Heading",
-                            allowClear: true,
+                            allowClear: false,
                         });
 
 
@@ -2435,7 +2435,7 @@
                             heading_row = heading_row + 1;
                         }
 
-                        var features_options = '';
+                        /*var features_options = '';
 
                         for(var i=0; i<data.length; i++)
                         {
@@ -2447,7 +2447,7 @@
                             {
                                 features_options = features_options + '<option value="'+data[i].id+'">'+data[i].title+'</option>';
                             }
-                        }
+                        }*/
 
                         $(".feature_box").append('<div data-id="' + heading_row + '" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
                             '\n' +
@@ -2457,7 +2457,11 @@
                             '\n' +
                             '                                                                                <option value="">Select Feature Heading</option>\n' +
                             '\n' +
-                            features_options +
+                            '                                                                                @foreach($features_headings as $feature)\n' +
+                            '\n' +
+                            '                                                                                    <option value="{{$feature->id}}">{{$feature->title}}</option>\n' +
+                            '\n' +
+                            '                                                                                @endforeach\n' +
                             '\n' +
                             '                                                                            </select>\n' +
                             '\n' +
@@ -2978,17 +2982,19 @@
                             '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
                             '                                                                                    </div></div>');
 
+                        $('.js-data-example-ajax5').select2({
+                            width: '100%',
+                            height: '200px',
+                            placeholder: "Select Feature Heading",
+                            allowClear: false,
+                        });
+
+                        $(".feature_box").find(".feature-row[data-id='" + heading_row + "']").find('.js-data-example-ajax5').val(value.id).trigger('change.select2');
+
                         $('.feature_title').each(function (index,value) {
 
                             $(this).trigger('input');
 
-                        });
-
-                        $(".js-data-example-ajax5").select2({
-                            width: '100%',
-                            height: '200px',
-                            placeholder: "Select Feature Heading",
-                            allowClear: true,
                         });
 
                     });
@@ -3329,6 +3335,7 @@
 
         var $selects = $('body').on('change', '.js-data-example-ajax5', function()
         {
+            var feature_category = $('.js-data-example-ajax8').val();
             var id = $(this).parent().parent().attr("data-id");
             var heading = $(this).find("option:selected").text();
             var heading_id = $(this).val();
@@ -3354,66 +3361,823 @@
                     heading = '';
                 }
 
-                $('#primary-features').find(".feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
+                if(feature_category)
+                {
+                    $.ajax({
+                        type:"GET",
+                        data: "id=" + feature_category + '&heading_id=' + heading_id,
+                        url: "<?php echo url('/aanbieder/product/get-features-data')?>",
+                        success: function(data) {
 
-                    $(this).find('.feature_heading').val(heading_id);
-                    var title = $(this).find('.feature_title').val();
-                    var f_row = $(this).find('.f_row').val();
+                            $('.feature_box').find(".feature-row[data-id='" + id + "']").find('.remove-feature').each(function() {
 
-                    $('#models-features-tables').find('table', this).each(function (index) {
+                                var id = $(this).data('id');
+                                var row_id = $(this).parent().parent().data('id');
 
-                        if($(this).find('tbody').find("[data-id='" + f_row + "']").length > 0)
-                        {
-                            if(!title || !heading)
-                            {
-                                $(this).find('tbody').find("[data-id='" + f_row + "']").hide();
-                            }
-                            else
-                            {
-                                $(this).find('tbody').find("[data-id='" + f_row + "']").find('td', this).each(function (index) {
+                                $('#primary-features').find(".feature-table-container[data-id='" + row_id + "']").find('table tbody tr').each(function (index) {
 
-                                    if(index == 1)
+                                    var row = $(this).find('.f_row').val();
+
+                                    if($(this).find('.remove-primary-feature').data('id'))
                                     {
-                                        $(this).text(heading);
+                                        rem_arr.push($(this).find('.remove-primary-feature').data('id'));
                                     }
 
-                                    if(index == 2)
-                                    {
-                                        $(this).text(title);
-                                    }
+                                    $('#models-features-tables table tbody').find("[data-id='" + row + "']").remove();
+
+                                    $('#sub-features').find(".sub-feature-table-container[data-id='" + row + "']").find('table tbody tr').each(function (index) {
+
+                                        if($(this).find('.remove-sub-feature').data('id'))
+                                        {
+                                            rem_arr.push($(this).find('.remove-sub-feature').data('id'));
+                                        }
+
+                                    });
+
+                                    $('#sub-features').find(".sub-feature-table-container[data-id='" + row + "']").remove();
 
                                 });
 
-                                $(this).find('tbody').find("[data-id='" + f_row + "']").show();
-                            }
-                        }
-                        else
-                        {
-                            if(title && heading)
+                                $('#primary-features').find(".feature-table-container[data-id='" + row_id + "']").remove();
+
+
+                                if(id)
+                                {
+                                    $('#removed_rows').val(rem_arr);
+                                }
+
+                            });
+
+                            if(data.length == 0)
                             {
-                                $(this).find('tbody').append('<tr data-id="'+f_row+'">' +
-                                    '                                                                                 <td>\n' +
-                                    '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
-                                    '                                                                                <input type="hidden" name="selected_model_feature'+f_row+'[]" id="price_impact" value="0">\n' +
-                                    '                                                                                <label style="margin: 0;" class="switch">\n' +
-                                    '                                                                                    <input class="price_impact" type="checkbox">\n' +
-                                    '                                                                                    <span class="slider round"></span>\n' +
-                                    '                                                                                </label>\n' +
-                                    '                                                                                </div>\n' +
-                                    '                                                                                </td>' +
-                                    '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>');
+                                var f_row = null;
 
-                                var $wrapper = $(this).find('tbody');
+                                $('#primary-features').find(".feature-table-container").each(function() {
 
-                                $wrapper.find('tr').sort(function(a, b) {
-                                    return +$(a).data('id') - +$(b).data('id');
-                                }).appendTo($wrapper);
+                                    $(this).find('table tbody tr').each(function() {
+
+                                        var value = parseInt($(this).find('.f_row').val());
+                                        value = isNaN(value) ? 0 : value;
+                                        f_row = (value > f_row) ? value : f_row;
+
+                                    });
+                                });
+
+                                f_row = f_row + 1;
+
+                                $('#primary-features').append('<div data-id="'+id+'" class="feature-table-container">\n' +
+                                    '\n' +
+                                    '                                                                                    <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                                    '                                                                                        <thead>\n' +
+                                    '                                                                                        <tr>\n' +
+                                    '                                                                                            <th>Feature</th>\n' +
+                                    '                                                                                            <th>Value</th>\n' +
+                                    '                                                                                            <th>Sub Features</th>\n' +
+                                    '                                                                                            <th>Price Impact</th>\n' +
+                                    '                                                                                            <th>Impact Type</th>\n' +
+                                    '                                                                                            <th>m¹ Impact</th>\n' +
+                                    '                                                                                            <th>Remove</th>\n' +
+                                    '                                                                                        </tr>\n' +
+                                    '                                                                                        </thead>\n' +
+                                    '\n' +
+                                    '                                                                                        <tbody>' +
+                                    '                                                                                   <tr data-id="'+f_row+'">\n' +
+                                    '\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
+                                    '                                                                                            <input value="'+heading_id+'" type="hidden" class="feature_heading" name="feature_headings[]">\n' +
+                                    '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                    '\n' +
+                                    '                                                                                                <input type="hidden" name="price_impact[]" id="price_impact" value="0">\n' +
+                                    '\n' +
+                                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                    '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                    '                                                                                                </label>\n' +
+                                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                    '\n' +
+                                    '                                                                                            </div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                    '\n' +
+                                    '                                                                                                <input type="hidden" name="impact_type[]" id="impact_type" value="0">\n' +
+                                    '\n' +
+                                    '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                    '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                    '                                                                                                </label>\n' +
+                                    '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                                    '\n' +
+                                    '                                                                                            </div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                    '\n' +
+                                    '                                                                                                <input type="hidden" name="variable[]" id="variable" value="0">\n' +
+                                    '\n' +
+                                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                    '                                                                                                    <input class="variable" type="checkbox">\n' +
+                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                    '                                                                                                </label>\n' +
+                                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                    '\n' +
+                                    '                                                                                            </div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                    </tr></tbody></table>' +
+                                    '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                                    '                                                                                        <button data-id="'+id+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                                    '                                                                                    </div></div>');
+
+                                var sub_row = null;
+
+                                $('#sub-features').find(".sub-feature-table-container").each(function () {
+
+                                    $(this).find('table tbody tr').each(function () {
+
+                                        var value = parseInt($(this).find('.f_row1').val());
+                                        value = isNaN(value) ? 0 : value;
+                                        sub_row = (value > sub_row) ? value : sub_row;
+
+                                    });
+                                });
+
+                                sub_row = sub_row + 1;
+
+
+                                $('#sub-features').append('<div data-id="'+f_row+'" class="sub-feature-table-container">\n' +
+                                    '\n' +
+                                    '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                                    '                                                                                            <thead>\n' +
+                                    '                                                                                            <tr>\n' +
+                                    '                                                                                                <th>Feature</th>\n' +
+                                    '                                                                                                <th>Value</th>\n' +
+                                    '                                                                                                <th>Price Impact</th>\n' +
+                                    '                                                                                                <th>Impact Type</th>\n' +
+                                    '                                                                                                <th>m¹ Impact</th>\n' +
+                                    '                                                                                                <th>Remove</th>\n' +
+                                    '                                                                                            </tr>\n' +
+                                    '                                                                                            </thead>\n' +
+                                    '\n' +
+                                    '                                                                                            <tbody>' +
+                                    '                                                                                        <tr data-id="'+sub_row+'">\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <input type="hidden" name="f_rows'+f_row+'[]" class="f_row1" value="'+sub_row+'">' +
+                                    '                                                                                            <input class="form-control feature_title1" name="features'+f_row+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <input class="form-control feature_value1" name="feature_values'+f_row+'[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                    '\n' +
+                                    '                                                                                                <input type="hidden" name="price_impact'+f_row+'[]" id="price_impact" value="0">\n' +
+                                    '\n' +
+                                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                    '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                    '                                                                                                </label>\n' +
+                                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                    '\n' +
+                                    '                                                                                            </div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                    '\n' +
+                                    '                                                                                                <input type="hidden" name="impact_type'+f_row+'[]" id="impact_type" value="0">\n' +
+                                    '\n' +
+                                    '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                    '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                    '                                                                                                </label>\n' +
+                                    '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                                    '\n' +
+                                    '                                                                                            </div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                    '\n' +
+                                    '                                                                                                <input type="hidden" name="variable'+f_row+'[]" id="variable" value="0">\n' +
+                                    '\n' +
+                                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                    '                                                                                                    <input class="variable" type="checkbox">\n' +
+                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                    '                                                                                                </label>\n' +
+                                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                    '\n' +
+                                    '                                                                                            </div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                    </tr></tbody></table>' +
+                                    '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
+                                    '                                                                                        </div></div>');
+
+
                             }
+
+                            $.each(data, function(index, value) {
+
+                                var features = '';
+
+                                if(value.feature_details.length == 0)
+                                {
+                                    var f_row = null;
+
+                                    $('#primary-features').find(".feature-table-container").each(function() {
+
+                                        $(this).find('table tbody tr').each(function() {
+
+                                            var value = parseInt($(this).find('.f_row').val());
+                                            value = isNaN(value) ? 0 : value;
+                                            f_row = (value > f_row) ? value : f_row;
+
+                                        });
+                                    });
+
+                                    f_row = f_row + 1;
+
+                                    features = features + '<tr data-id="'+f_row+'">\n' +
+                                        '\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
+                                        '                                                                                            <input value="'+value.id+'" type="hidden" class="feature_heading" name="feature_headings[]">\n' +
+                                        '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                        '\n' +
+                                        '                                                                                                <input type="hidden" name="price_impact[]" id="price_impact" value="0">\n' +
+                                        '\n' +
+                                        '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                        '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                        '                                                                                                </label>\n' +
+                                        '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                        '\n' +
+                                        '                                                                                            </div>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                        '\n' +
+                                        '                                                                                                <input type="hidden" name="impact_type[]" id="impact_type" value="0">\n' +
+                                        '\n' +
+                                        '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                        '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                        '                                                                                                </label>\n' +
+                                        '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                                        '\n' +
+                                        '                                                                                            </div>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                        '\n' +
+                                        '                                                                                                <input type="hidden" name="variable[]" id="variable" value="0">\n' +
+                                        '\n' +
+                                        '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                        '                                                                                                    <input class="variable" type="checkbox">\n' +
+                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                        '                                                                                                </label>\n' +
+                                        '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                        '\n' +
+                                        '                                                                                            </div>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                    </tr>';
+
+                                    var sub_features = '';
+
+                                    var feature_row1 = null;
+
+                                    $('#sub-features').find(".sub-feature-table-container").each(function () {
+
+                                        $(this).find('table tbody tr').each(function () {
+
+                                            var value = parseInt($(this).find('.f_row1').val());
+                                            value = isNaN(value) ? 0 : value;
+                                            feature_row1 = (value > feature_row1) ? value : feature_row1;
+
+                                        });
+                                    });
+
+                                    feature_row1 = feature_row1 + 1;
+
+                                    sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
+                                        '                                                                                            <input class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <input class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                        '\n' +
+                                        '                                                                                                <input type="hidden" name="price_impact' + f_row + '[]" id="price_impact" value="0">\n' +
+                                        '\n' +
+                                        '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                        '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                        '                                                                                                </label>\n' +
+                                        '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                        '\n' +
+                                        '                                                                                            </div>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                        '\n' +
+                                        '                                                                                                <input type="hidden" name="impact_type' + f_row + '[]" id="impact_type" value="0">\n' +
+                                        '\n' +
+                                        '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                        '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                        '                                                                                                </label>\n' +
+                                        '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                                        '\n' +
+                                        '                                                                                            </div>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                        '\n' +
+                                        '                                                                                                <input type="hidden" name="variable' + f_row + '[]" id="variable" value="0">\n' +
+                                        '\n' +
+                                        '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                        '                                                                                                    <input class="variable" type="checkbox">\n' +
+                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                        '                                                                                                </label>\n' +
+                                        '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                        '\n' +
+                                        '                                                                                            </div>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                        <td>\n' +
+                                        '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                        '                                                                                        </td>\n' +
+                                        '                                                                                    </tr>';
+
+                                    $('#sub-features').append('<div data-id="'+f_row+'" class="sub-feature-table-container">\n' +
+                                        '\n' +
+                                        '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                                        '                                                                                            <thead>\n' +
+                                        '                                                                                            <tr>\n' +
+                                        '                                                                                                <th>Feature</th>\n' +
+                                        '                                                                                                <th>Value</th>\n' +
+                                        '                                                                                                <th>Price Impact</th>\n' +
+                                        '                                                                                                <th>Impact Type</th>\n' +
+                                        '                                                                                                <th>m¹ Impact</th>\n' +
+                                        '                                                                                                <th>Remove</th>\n' +
+                                        '                                                                                            </tr>\n' +
+                                        '                                                                                            </thead>\n' +
+                                        '\n' +
+                                        '                                                                                            <tbody>' +
+                                        sub_features +
+                                        '                                                                                    </tbody></table>' +
+                                        '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
+                                        '                                                                                        </div></div>');
+                                }
+                                else
+                                {
+                                    var f_row = null;
+
+                                    $('#primary-features').find(".feature-table-container").each(function() {
+
+                                        $(this).find('table tbody tr').each(function() {
+
+                                            var value = parseInt($(this).find('.f_row').val());
+                                            value = isNaN(value) ? 0 : value;
+                                            f_row = (value > f_row) ? value : f_row;
+
+                                        });
+                                    });
+
+                                    var feature_row1 = null;
+
+                                    $('#sub-features').find(".sub-feature-table-container").each(function () {
+
+                                        $(this).find('table tbody tr').each(function () {
+
+                                            var value = parseInt($(this).find('.f_row1').val());
+                                            value = isNaN(value) ? 0 : value;
+                                            feature_row1 = (value > feature_row1) ? value : feature_row1;
+
+                                        });
+                                    });
+
+                                    $.each(value.feature_details, function(index1, value1) {
+
+                                        f_row = f_row + 1;
+
+                                        features = features + '<tr data-id="'+f_row+'">\n' +
+                                            '\n' +
+                                            '                                                                                        <td>\n' +
+                                            '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
+                                            '                                                                                            <input value="'+value.id+'" type="hidden" class="feature_heading" name="feature_headings[]">\n' +
+                                            '                                                                                            <input value="'+value1.title+'" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                            '                                                                                        </td>\n' +
+                                            '                                                                                        <td>\n' +
+                                            '                                                                                            <input value="'+value1.value+'" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                            '                                                                                        </td>\n' +
+                                            '                                                                                        <td>\n' +
+                                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                                            '                                                                                        </td>\n' +
+                                            '                                                                                        <td>\n' +
+                                            '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                            '\n' +
+                                            (value1.price_impact == 0 || value1.price_impact == 1 ? '<input type="hidden" name="price_impact[]" id="price_impact" value="'+value1.price_impact+'">' : '<input type="hidden" name="price_impact[]" id="price_impact" value="0">') +
+                                            '\n' +
+                                            '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                            '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                            (value1.price_impact != 1 ? '<input class="price_impact" type="checkbox">': '<input class="price_impact" checked type="checkbox">') +
+                                            '                                                                                                    <span class="slider round"></span>\n' +
+                                            '                                                                                                </label>\n' +
+                                            '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                            '\n' +
+                                            '                                                                                            </div>\n' +
+                                            '                                                                                        </td>\n' +
+                                            '                                                                                        <td>\n' +
+                                            '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                            '\n' +
+                                            '                                                                                                <input type="hidden" name="impact_type[]" id="impact_type" value="'+value1.impact_type+'">\n' +
+                                            '\n' +
+                                            '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                                            '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                            (value1.impact_type == 0 ? '<input class="impact_type" type="checkbox">' : '<input class="impact_type" checked type="checkbox">') +
+                                            '                                                                                                    <span class="slider round"></span>\n' +
+                                            '                                                                                                </label>\n' +
+                                            '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                                            '\n' +
+                                            '                                                                                            </div>\n' +
+                                            '                                                                                        </td>\n' +
+                                            '                                                                                        <td>\n' +
+                                            '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                            '\n' +
+                                            (value1.price_impact == 2 ? '<input type="hidden" name="variable[]" id="variable" value="1">' : '<input type="hidden" name="variable[]" id="variable" value="0">') +
+                                            '\n' +
+                                            '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                            '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                            (value1.price_impact != 2 ? '<input class="variable" type="checkbox">' : '<input checked class="variable" type="checkbox">') +
+                                            '                                                                                                    <span class="slider round"></span>\n' +
+                                            '                                                                                                </label>\n' +
+                                            '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                            '\n' +
+                                            '                                                                                            </div>\n' +
+                                            '                                                                                        </td>\n' +
+                                            '                                                                                        <td>\n' +
+                                            '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                            '                                                                                        </td>\n' +
+                                            '                                                                                    </tr>';
+
+
+                                        var sub_features = '';
+
+                                        if(value.sub_features.length == 0) {
+
+                                            feature_row1 = feature_row1 + 1;
+
+                                            sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
+                                                '                                                                                        <td>\n' +
+                                                '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
+                                                '                                                                                            <input class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                                '                                                                                        </td>\n' +
+                                                '                                                                                        <td>\n' +
+                                                '                                                                                            <input class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                                '                                                                                        </td>\n' +
+                                                '                                                                                        <td>\n' +
+                                                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                '\n' +
+                                                '                                                                                                <input type="hidden" name="price_impact' + f_row + '[]" id="price_impact" value="0">\n' +
+                                                '\n' +
+                                                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                                '                                                                                                    <span class="slider round"></span>\n' +
+                                                '                                                                                                </label>\n' +
+                                                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                                '\n' +
+                                                '                                                                                            </div>\n' +
+                                                '                                                                                        </td>\n' +
+                                                '                                                                                        <td>\n' +
+                                                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                '\n' +
+                                                '                                                                                                <input type="hidden" name="impact_type' + f_row + '[]" id="impact_type" value="0">\n' +
+                                                '\n' +
+                                                '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                                                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                                                '                                                                                                    <span class="slider round"></span>\n' +
+                                                '                                                                                                </label>\n' +
+                                                '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                                                '\n' +
+                                                '                                                                                            </div>\n' +
+                                                '                                                                                        </td>\n' +
+                                                '                                                                                        <td>\n' +
+                                                '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                '\n' +
+                                                '                                                                                                <input type="hidden" name="variable' + f_row + '[]" id="variable" value="0">\n' +
+                                                '\n' +
+                                                '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                                '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                '                                                                                                    <input class="variable" type="checkbox">\n' +
+                                                '                                                                                                    <span class="slider round"></span>\n' +
+                                                '                                                                                                </label>\n' +
+                                                '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                                '\n' +
+                                                '                                                                                            </div>\n' +
+                                                '                                                                                        </td>\n' +
+                                                '                                                                                        <td>\n' +
+                                                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                                '                                                                                        </td>\n' +
+                                                '                                                                                    </tr>';
+                                        }
+                                        else
+                                        {
+
+                                            var flag = 0;
+
+                                            $.each(value.sub_features, function(index2, value2) {
+
+                                                if(value1.id == value2.main_id)
+                                                {
+                                                    feature_row1 = feature_row1 + 1;
+
+                                                    sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
+                                                        '                                                                                        <td>\n' +
+                                                        '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
+                                                        '                                                                                            <input value="'+value2.title+'" class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                                        '                                                                                        </td>\n' +
+                                                        '                                                                                        <td>\n' +
+                                                        '                                                                                            <input value="'+value2.value+'" class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                                        '                                                                                        </td>\n' +
+                                                        '                                                                                        <td>\n' +
+                                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                        '\n' +
+                                                        (value2.price_impact == 0 || value2.price_impact == 1 ? '<input type="hidden" name="price_impact' + f_row + '[]" id="price_impact" value="'+value2.price_impact+'">' : '<input type="hidden" name="price_impact' + f_row + '[]" id="price_impact" value="0">') +
+                                                        '\n' +
+                                                        '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                        (value2.price_impact != 1 ? '<input class="price_impact" type="checkbox">' : '<input class="price_impact" checked type="checkbox">') +
+                                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                                        '                                                                                                </label>\n' +
+                                                        '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                                        '\n' +
+                                                        '                                                                                            </div>\n' +
+                                                        '                                                                                        </td>\n' +
+                                                        '                                                                                        <td>\n' +
+                                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                        '\n' +
+                                                        '                                                                                                <input value="'+value2.impact_type+'" type="hidden" name="impact_type' + f_row + '[]" id="impact_type">\n' +
+                                                        '\n' +
+                                                        '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                        (value2.impact_type != 1 ? '<input class="impact_type" type="checkbox">' : '<input class="impact_type" checked type="checkbox">') +
+                                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                                        '                                                                                                </label>\n' +
+                                                        '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                                                        '\n' +
+                                                        '                                                                                            </div>\n' +
+                                                        '                                                                                        </td>\n' +
+                                                        '                                                                                        <td>\n' +
+                                                        '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                        '\n' +
+                                                        (value2.price_impact != 2 ? '<input type="hidden" name="variable' + f_row + '[]" id="variable" value="0">' : '<input type="hidden" name="variable' + f_row + '[]" id="variable" value="1">') +
+                                                        '\n' +
+                                                        '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                                        '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                        (value2.price_impact != 2 ? '<input class="variable" type="checkbox">' : '<input class="variable" checked type="checkbox">') +
+                                                        '                                                                                                    <span class="slider round"></span>\n' +
+                                                        '                                                                                                </label>\n' +
+                                                        '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                                        '\n' +
+                                                        '                                                                                            </div>\n' +
+                                                        '                                                                                        </td>\n' +
+                                                        '                                                                                        <td>\n' +
+                                                        '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                                        '                                                                                        </td>\n' +
+                                                        '                                                                                    </tr>';
+
+                                                    flag = 1;
+                                                }
+
+                                            });
+
+                                            if(flag == 0)
+                                            {
+                                                feature_row1 = feature_row1 + 1;
+
+                                                sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
+                                                    '                                                                                        <td>\n' +
+                                                    '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
+                                                    '                                                                                            <input class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                                    '                                                                                        </td>\n' +
+                                                    '                                                                                        <td>\n' +
+                                                    '                                                                                            <input class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                                    '                                                                                        </td>\n' +
+                                                    '                                                                                        <td>\n' +
+                                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                    '\n' +
+                                                    '                                                                                                <input type="hidden" name="price_impact' + f_row + '[]" id="price_impact" value="0">\n' +
+                                                    '\n' +
+                                                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                    '                                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                                    '                                                                                                </label>\n' +
+                                                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                                    '\n' +
+                                                    '                                                                                            </div>\n' +
+                                                    '                                                                                        </td>\n' +
+                                                    '                                                                                        <td>\n' +
+                                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                    '\n' +
+                                                    '                                                                                                <input type="hidden" name="impact_type' + f_row + '[]" id="impact_type" value="0">\n' +
+                                                    '\n' +
+                                                    '                                                                                                <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>\n' +
+                                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                    '                                                                                                    <input class="impact_type" type="checkbox">\n' +
+                                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                                    '                                                                                                </label>\n' +
+                                                    '                                                                                                <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>\n' +
+                                                    '\n' +
+                                                    '                                                                                            </div>\n' +
+                                                    '                                                                                        </td>\n' +
+                                                    '                                                                                        <td>\n' +
+                                                    '                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">\n' +
+                                                    '\n' +
+                                                    '                                                                                                <input type="hidden" name="variable' + f_row + '[]" id="variable" value="0">\n' +
+                                                    '\n' +
+                                                    '                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>\n' +
+                                                    '                                                                                                <label style="margin: 0;" class="switch">\n' +
+                                                    '                                                                                                    <input class="variable" type="checkbox">\n' +
+                                                    '                                                                                                    <span class="slider round"></span>\n' +
+                                                    '                                                                                                </label>\n' +
+                                                    '                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>\n' +
+                                                    '\n' +
+                                                    '                                                                                            </div>\n' +
+                                                    '                                                                                        </td>\n' +
+                                                    '                                                                                        <td>\n' +
+                                                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                                    '                                                                                        </td>\n' +
+                                                    '                                                                                    </tr>';
+                                            }
+
+                                        }
+
+                                        $('#sub-features').append('<div data-id="'+f_row+'" class="sub-feature-table-container">\n' +
+                                            '\n' +
+                                            '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                                            '                                                                                            <thead>\n' +
+                                            '                                                                                            <tr>\n' +
+                                            '                                                                                                <th>Feature</th>\n' +
+                                            '                                                                                                <th>Value</th>\n' +
+                                            '                                                                                                <th>Price Impact</th>\n' +
+                                            '                                                                                                <th>Impact Type</th>\n' +
+                                            '                                                                                                <th>m¹ Impact</th>\n' +
+                                            '                                                                                                <th>Remove</th>\n' +
+                                            '                                                                                            </tr>\n' +
+                                            '                                                                                            </thead>\n' +
+                                            '\n' +
+                                            '                                                                                            <tbody>' +
+                                            sub_features +
+                                            '                                                                                    </tbody></table>' +
+                                            '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
+                                            '                                                                                        </div></div>');
+
+                                    });
+
+                                }
+
+                                $('#primary-features').append('<div data-id="'+id+'" class="feature-table-container">\n' +
+                                    '\n' +
+                                    '                                                                                    <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                                    '                                                                                        <thead>\n' +
+                                    '                                                                                        <tr>\n' +
+                                    '                                                                                            <th>Feature</th>\n' +
+                                    '                                                                                            <th>Value</th>\n' +
+                                    '                                                                                            <th>Sub Features</th>\n' +
+                                    '                                                                                            <th>Price Impact</th>\n' +
+                                    '                                                                                            <th>Impact Type</th>\n' +
+                                    '                                                                                            <th>m¹ Impact</th>\n' +
+                                    '                                                                                            <th>Remove</th>\n' +
+                                    '                                                                                        </tr>\n' +
+                                    '                                                                                        </thead>\n' +
+                                    '\n' +
+                                    '                                                                                        <tbody>' +
+                                    features +
+                                    '                                                                                    </tbody></table>' +
+                                    '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                                    '                                                                                        <button data-id="'+id+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                                    '                                                                                    </div></div>');
+
+                                $('.feature_title').each(function (index,value) {
+
+                                    $(this).trigger('input');
+
+                                });
+
+                            });
+
                         }
+                    });
+                }
+                else
+                {
+                    $('#primary-features').find(".feature-table-container[data-id='" + id + "']").find('table tbody tr').each(function (index) {
+
+                        $(this).find('.feature_heading').val(heading_id);
+                        var title = $(this).find('.feature_title').val();
+                        var f_row = $(this).find('.f_row').val();
+
+                        $('#models-features-tables').find('table', this).each(function (index) {
+
+                            if($(this).find('tbody').find("[data-id='" + f_row + "']").length > 0)
+                            {
+                                if(!title || !heading)
+                                {
+                                    $(this).find('tbody').find("[data-id='" + f_row + "']").hide();
+                                }
+                                else
+                                {
+                                    $(this).find('tbody').find("[data-id='" + f_row + "']").find('td', this).each(function (index) {
+
+                                        if(index == 1)
+                                        {
+                                            $(this).text(heading);
+                                        }
+
+                                        if(index == 2)
+                                        {
+                                            $(this).text(title);
+                                        }
+
+                                    });
+
+                                    $(this).find('tbody').find("[data-id='" + f_row + "']").show();
+                                }
+                            }
+                            else
+                            {
+                                if(title && heading)
+                                {
+                                    $(this).find('tbody').append('<tr data-id="'+f_row+'">' +
+                                        '                                                                                 <td>\n' +
+                                        '                                                                                <div style="display: flex;justify-content: center;align-items: center;">\n' +
+                                        '                                                                                <input type="hidden" name="selected_model_feature'+f_row+'[]" id="price_impact" value="0">\n' +
+                                        '                                                                                <label style="margin: 0;" class="switch">\n' +
+                                        '                                                                                    <input class="price_impact" type="checkbox">\n' +
+                                        '                                                                                    <span class="slider round"></span>\n' +
+                                        '                                                                                </label>\n' +
+                                        '                                                                                </div>\n' +
+                                        '                                                                                </td>' +
+                                        '                                                                                <td>'+heading+'</td><td>'+title+'</td></tr>');
+
+                                    var $wrapper = $(this).find('tbody');
+
+                                    $wrapper.find('tr').sort(function(a, b) {
+                                        return +$(a).data('id') - +$(b).data('id');
+                                    }).appendTo($wrapper);
+                                }
+                            }
+
+                        });
 
                     });
-
-                });
+                }
             }
         });
 
@@ -3424,6 +4188,9 @@
             var title = $(this).val();
             var heading = $('.feature_box').find(".feature-row[data-id='" + main + "']").find('.js-data-example-ajax5 option:selected').text();
             var heading_id = $('.feature_box').find(".feature-row[data-id='" + main + "']").find('.js-data-example-ajax5').val();
+
+            console.log(heading);
+            console.log(heading_id);
 
             if(!heading_id)
             {
@@ -4588,7 +5355,7 @@
                 width: '100%',
                 height: '200px',
                 placeholder: "Select Feature Heading",
-                allowClear: true,
+                allowClear: false,
             });
 
 
@@ -4627,7 +5394,7 @@
             width: '100%',
             height: '200px',
             placeholder: "Select Feature Heading",
-            allowClear: true,
+            allowClear: false,
         });
 
         $(".js-data-example-ajax7").select2({
@@ -5327,7 +6094,7 @@
                     width: '100%',
                     height: '200px',
                     placeholder: "Select Feature Heading",
-                    allowClear: true,
+                    allowClear: false,
                 });
 
 
