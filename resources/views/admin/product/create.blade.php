@@ -687,7 +687,7 @@
 
                                                                             @foreach($feature_categories as $key)
 
-                                                                                <option value="{{$key->id}}">{{$key->cat_name}}</option>
+                                                                                <option {{isset($cats) && ($cats->feature_category == $key->id) ? 'selected' : null}} value="{{$key->id}}">{{$key->cat_name}}</option>
 
                                                                             @endforeach
 
