@@ -2872,7 +2872,7 @@
                                     if(flag == 0)
                                     {
                                         feature_row1 = feature_row1 + 1;
-                                        
+
                                         sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
                                             '                                                                                        <td>\n' +
                                             '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
@@ -2977,6 +2977,12 @@
                             '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
                             '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
                             '                                                                                    </div></div>');
+
+                        $('.feature_title').each(function (index,value) {
+
+                            $(this).trigger('input');
+
+                        });
 
                         $(".js-data-example-ajax5").select2({
                             width: '100%',
