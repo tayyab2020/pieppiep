@@ -14,4 +14,14 @@ class features extends Model
     {
         return $this->hasMany('App\product_features','heading_id','id');
     }
+
+    public function feature_details()
+    {
+        return $this->hasMany('App\features_details','feature_id','id');
+    }
+
+    public function sub_features()
+    {
+        return $this->hasMany('App\features_details','feature_id','id');
+    }
 }

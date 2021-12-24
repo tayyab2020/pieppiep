@@ -252,6 +252,7 @@
   Route::get('/product/get-prices-tables', 'ProductController@pricesTables');
   Route::post('/product/store-retailer-margins', 'ProductController@storeRetailerMargins')->name('store-retailer-margins');
   Route::get('/product/reset-supplier-margins', 'ProductController@resetSupplierMargins')->name('reset-supplier-margins');
+  Route::get('/product/get-features-data', 'ProductController@featuresData');
 
   Route::get('/price-tables', 'PriceTablesController@index')->name('admin-price-tables');
   Route::get('/price-tables/create', 'PriceTablesController@create')->name('admin-price-tables-create');
