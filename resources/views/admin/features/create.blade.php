@@ -630,7 +630,7 @@
 	letter-spacing: 1px;
 	position: relative;
 	overflow: hidden;
-	max-height: 800px;
+	max-height: 10000px;
 	opacity: 1;
 	transform: translate(0, 0);
 	margin: 20px 0;
