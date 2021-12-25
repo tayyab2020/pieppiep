@@ -569,9 +569,10 @@ class ProductController extends Controller
                         $fea->product_id = $request->cat_id;
                         $fea->heading_id = $key;
                         $fea->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
-                        $fea->price_impact = $request->price_impact[$f];
+                        $fea->price_impact = ($request->price_impact[$f] == 0 || $request->price_impact[$f] == 1) ? $request->price_impact[$f] : 0;
                         $fea->impact_type = $request->impact_type[$f];
-                        $fea->variable = $request->variable[$f];
+                        $fea->variable = $request->price_impact[$f] == 2 ? 1 : 0;
+                        $fea->m2_impact = $request->price_impact[$f] == 3 ? 1 : 0;
                         $fea->save();
 
                         $s_titles = 'features'.$request->f_rows[$f];
@@ -582,7 +583,6 @@ class ProductController extends Controller
                             $s_value = 'feature_values'.$request->f_rows[$f];
                             $s_price_impact = 'price_impact'.$request->f_rows[$f];
                             $s_impact_type = 'impact_type'.$request->f_rows[$f];
-                            $s_variable = 'variable'.$request->f_rows[$f];
 
                             if($sub != NULL)
                             {
@@ -593,9 +593,10 @@ class ProductController extends Controller
                                 $sub_feature->sub_feature = 1;
                                 $sub_feature->title = $sub;
                                 $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                $sub_feature->price_impact = $request->$s_price_impact[$s];
+                                $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
                                 $sub_feature->impact_type = $request->$s_impact_type[$s];
-                                $sub_feature->variable = $request->$s_variable[$s];
+                                $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
                                 $sub_feature->save();
                             }
                         }
@@ -621,9 +622,10 @@ class ProductController extends Controller
                                 $fea_check->heading_id = $key;
                                 $fea_check->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
                                 $fea_check->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
-                                $fea_check->price_impact = $request->price_impact[$f];
+                                $fea_check->price_impact = ($request->price_impact[$f] == 0 || $request->price_impact[$f] == 1) ? $request->price_impact[$f] : 0;
                                 $fea_check->impact_type = $request->impact_type[$f];
-                                $fea_check->variable = $request->variable[$f];
+                                $fea_check->variable = $request->price_impact[$f] == 2 ? 1 : 0;
+                                $fea_check->m2_impact = $request->price_impact[$f] == 3 ? 1 : 0;
                                 $fea_check->save();
 
                                 $s_titles = 'features'.$request->f_rows[$f];
@@ -636,7 +638,6 @@ class ProductController extends Controller
                                     $s_value = 'feature_values'.$request->f_rows[$f];
                                     $s_price_impact = 'price_impact'.$request->f_rows[$f];
                                     $s_impact_type = 'impact_type'.$request->f_rows[$f];
-                                    $s_variable = 'variable'.$request->f_rows[$f];
 
                                     if($sub_fea_check)
                                     {
@@ -647,9 +648,10 @@ class ProductController extends Controller
                                             $sub_fea_check->sub_feature = 1;
                                             $sub_fea_check->title = $sub;
                                             $sub_fea_check->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                            $sub_fea_check->price_impact = $request->$s_price_impact[$s];
+                                            $sub_fea_check->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
                                             $sub_fea_check->impact_type = $request->$s_impact_type[$s];
-                                            $sub_fea_check->variable = $request->$s_variable[$s];
+                                            $sub_fea_check->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                            $sub_fea_check->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
                                             $sub_fea_check->save();
                                         }
                                     }
@@ -664,9 +666,10 @@ class ProductController extends Controller
                                             $sub_feature->sub_feature = 1;
                                             $sub_feature->title = $sub;
                                             $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                            $sub_feature->price_impact = $request->$s_price_impact[$s];
+                                            $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
                                             $sub_feature->impact_type = $request->$s_impact_type[$s];
-                                            $sub_feature->variable = $request->$s_variable[$s];
+                                            $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                            $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
                                             $sub_feature->save();
                                         }
                                     }
@@ -686,9 +689,10 @@ class ProductController extends Controller
                                 $fea->heading_id = $key;
                                 $fea->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
                                 $fea->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
-                                $fea->price_impact = $request->price_impact[$f];
+                                $fea->price_impact = ($request->price_impact[$f] == 0 || $request->price_impact[$f] == 1) ? $request->price_impact[$f] : 0;
                                 $fea->impact_type = $request->impact_type[$f];
-                                $fea->variable = $request->variable[$f];
+                                $fea->variable = $request->price_impact[$f] == 2 ? 1 : 0;
+                                $fea->m2_impact = $request->price_impact[$f] == 3 ? 1 : 0;
                                 $fea->save();
 
                                 $s_titles = 'features'.$request->f_rows[$f];
@@ -699,7 +703,6 @@ class ProductController extends Controller
                                     $s_value = 'feature_values'.$request->f_rows[$f];
                                     $s_price_impact = 'price_impact'.$request->f_rows[$f];
                                     $s_impact_type = 'impact_type'.$request->f_rows[$f];
-                                    $s_variable = 'variable'.$request->f_rows[$f];
 
                                     if($sub != NULL)
                                     {
@@ -710,9 +713,10 @@ class ProductController extends Controller
                                         $sub_feature->sub_feature = 1;
                                         $sub_feature->title = $sub;
                                         $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                        $sub_feature->price_impact = $request->$s_price_impact[$s];
+                                        $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
                                         $sub_feature->impact_type = $request->$s_impact_type[$s];
-                                        $sub_feature->variable = $request->$s_variable[$s];
+                                        $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                        $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
                                         $sub_feature->save();
                                     }
                                 }
@@ -1003,9 +1007,10 @@ class ProductController extends Controller
                         $feature->heading_id = $key;
                         $feature->value = $request->feature_values[$f] ? $request->feature_values[$f] : 0;
                         $feature->max_size = NULL; /*$request->max_size[$f] ? str_replace(",",".",$request->max_size[$f]) : NULL;*/
-                        $feature->price_impact = $request->price_impact[$f];
+                        $feature->price_impact = ($request->price_impact[$f] == 0 || $request->price_impact[$f] == 1) ? $request->price_impact[$f] : 0;
                         $feature->impact_type = $request->impact_type[$f];
-                        $feature->variable = $request->variable[$f];
+                        $feature->variable = $request->price_impact[$f] == 2 ? 1 : 0;
+                        $feature->m2_impact = $request->price_impact[$f] == 3 ? 1 : 0;
                         $feature->save();
 
                         $s_titles = 'features'.$request->f_rows[$f];
@@ -1016,7 +1021,6 @@ class ProductController extends Controller
                             $s_value = 'feature_values'.$request->f_rows[$f];
                             $s_price_impact = 'price_impact'.$request->f_rows[$f];
                             $s_impact_type = 'impact_type'.$request->f_rows[$f];
-                            $s_variable = 'variable'.$request->f_rows[$f];
 
                             if($sub != NULL)
                             {
@@ -1027,9 +1031,10 @@ class ProductController extends Controller
                                 $sub_feature->sub_feature = 1;
                                 $sub_feature->title = $sub;
                                 $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                $sub_feature->price_impact = $request->$s_price_impact[$s];
+                                $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
                                 $sub_feature->impact_type = $request->$s_impact_type[$s];
-                                $sub_feature->variable = $request->$s_variable[$s];
+                                $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
                                 $sub_feature->save();
                             }
                         }

@@ -1139,7 +1139,6 @@
                                                                                                     <th>Sub Feature</th>
                                                                                                     <th>Price Impact</th>
                                                                                                     <th>Impact Type</th>
-                                                                                                    <th>m¹ Impact</th>
                                                                                                     <th>Remove</th>
                                                                                                 </tr>
                                                                                                 </thead>
@@ -1163,46 +1162,22 @@
                                                                                                                 <button data-id="{{$f1+1}}" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
                                                                                                             </td>
                                                                                                             <td>
-                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+                                                                                                                <select class="form-control" name="price_impact[]">
 
-                                                                                                                    <input type="hidden" name="price_impact[]" id="price_impact" value="{{$key1->price_impact}}">
-
-                                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                                    <label style="margin: 0;" class="switch">
-                                                                                                                        <input class="price_impact" type="checkbox" {{$key1->price_impact ? 'checked' : null}}>
-                                                                                                                        <span class="slider round"></span>
-                                                                                                                    </label>
-                                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                                                </div>
+                                                                                                                    <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">No</option>
+                                                                                                                    <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
+                                                                                                                    <option {{$key1->variable == 1 ? 'selected' : null}} value="2">m¹ Impact</option>
+                                                                                                                    <option {{$key1->m2_impact == 1 ? 'selected' : null}} value="3">m² Impact</option>
+                                                                                                                    
+                                                                                                                </select>
                                                                                                             </td>
                                                                                                             <td>
-                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+                                                                                                                <select class="form-control" name="impact_type[]">
 
-                                                                                                                    <input type="hidden" name="impact_type[]" id="impact_type" value="{{$key1->impact_type}}">
-
-                                                                                                                    <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
-                                                                                                                    <label style="margin: 0;" class="switch">
-                                                                                                                        <input class="impact_type" type="checkbox" {{$key1->impact_type ? 'checked' : null}}>
-                                                                                                                        <span class="slider round"></span>
-                                                                                                                    </label>
-                                                                                                                    <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                            <td>
-                                                                                                                <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
-
-                                                                                                                    <input type="hidden" name="variable[]" id="variable" value="{{$key1->variable}}">
-
-                                                                                                                    <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                                    <label style="margin: 0;" class="switch">
-                                                                                                                        <input class="variable" type="checkbox" {{$key1->variable ? 'checked' : null}}>
-                                                                                                                        <span class="slider round"></span>
-                                                                                                                    </label>
-                                                                                                                    <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                                                </div>
+                                                                                                                    <option {{$key1->impact_type == 0 ? 'selected' : null}} value="0">€</option>
+                                                                                                                    <option {{$key1->impact_type == 1 ? 'selected' : null}} value="1">%</option>
+                                                                                                                    
+                                                                                                                </select>
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="{{$key1->id}}" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
@@ -1258,7 +1233,6 @@
                                                                                                 <th>Sub Features</th>
                                                                                                 <th>Price Impact</th>
                                                                                                 <th>Impact Type</th>
-                                                                                                <th>m¹ Impact</th>
                                                                                                 <th>Remove</th>
                                                                                             </tr>
                                                                                             </thead>
@@ -1278,18 +1252,14 @@
                                                                                                     <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+                                                                                                    <select class="form-control" name="price_impact[]">
 
-                                                                                                        <input type="hidden" name="price_impact[]" id="price_impact" value="0">
-
-                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                        <label style="margin: 0;" class="switch">
-                                                                                                            <input class="price_impact" type="checkbox">
-                                                                                                            <span class="slider round"></span>
-                                                                                                        </label>
-                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                                    </div>
+                                                                                                        <option value="0">No</option>
+                                                                                                        <option value="1">Fixed</option>
+                                                                                                        <option value="2">m¹ Impact</option>
+                                                                                                        <option value="3">m² Impact</option>
+                                                                                                                    
+                                                                                                    </select>
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
@@ -1302,20 +1272,6 @@
                                                                                                             <span class="slider round"></span>
                                                                                                         </label>
                                                                                                         <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                                                    </div>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
-
-                                                                                                        <input type="hidden" name="variable[]" id="variable" value="0">
-
-                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                        <label style="margin: 0;" class="switch">
-                                                                                                            <input class="variable" type="checkbox">
-                                                                                                            <span class="slider round"></span>
-                                                                                                        </label>
-                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                                                     </div>
                                                                                                 </td>
@@ -1372,7 +1328,6 @@
                                                                                                     <th>Value</th>
                                                                                                     <th>Price Impact</th>
                                                                                                     <th>Impact Type</th>
-                                                                                                    <th>m¹ Impact</th>
                                                                                                     <th>Remove</th>
                                                                                                 </tr>
                                                                                                 </thead>
@@ -1394,18 +1349,14 @@
                                                                                                                     <input value="{{$key1->value}}" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
                                                                                                                 </td>
                                                                                                                 <td>
-                                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+                                                                                                                    <select class="form-control" name="price_impact{{$s+1}}[]">
 
-                                                                                                                        <input type="hidden" name="price_impact{{$s+1}}[]" id="price_impact" value="{{$key1->price_impact}}">
-
-                                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                                        <label style="margin: 0;" class="switch">
-                                                                                                                            <input class="price_impact" type="checkbox" {{$key1->price_impact ? 'checked' : null}}>
-                                                                                                                            <span class="slider round"></span>
-                                                                                                                        </label>
-                                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                                                    </div>
+                                                                                                                        <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">No</option>
+                                                                                                                        <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
+                                                                                                                        <option {{$key1->variable == 1 ? 'selected' : null}} value="2">m¹ Impact</option>
+                                                                                                                        <option {{$key1->m2_impact == 1 ? 'selected' : null}} value="3">m² Impact</option>
+                                                                                                                    
+                                                                                                                    </select>
                                                                                                                 </td>
                                                                                                                 <td>
                                                                                                                     <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
@@ -1418,20 +1369,6 @@
                                                                                                                             <span class="slider round"></span>
                                                                                                                         </label>
                                                                                                                         <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                                                                    </div>
-                                                                                                                </td>
-                                                                                                                <td>
-                                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
-
-                                                                                                                        <input type="hidden" name="variable{{$s+1}}[]" id="variable" value="{{$key1->variable}}">
-
-                                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                                        <label style="margin: 0;" class="switch">
-                                                                                                                            <input class="variable" type="checkbox" {{$key1->variable ? 'checked' : null}}>
-                                                                                                                            <span class="slider round"></span>
-                                                                                                                        </label>
-                                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                                                                     </div>
                                                                                                                 </td>
@@ -1457,18 +1394,14 @@
                                                                                                             <input value="" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+                                                                                                            <select class="form-control" name="price_impact{{$s+1}}[]">
 
-                                                                                                                <input type="hidden" name="price_impact{{$s+1}}[]" id="price_impact" value="0">
-
-                                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                                <label style="margin: 0;" class="switch">
-                                                                                                                    <input class="price_impact" type="checkbox">
-                                                                                                                    <span class="slider round"></span>
-                                                                                                                </label>
-                                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                                            </div>
+                                                                                                                <option value="0">No</option>
+                                                                                                                <option value="1">Fixed</option>
+                                                                                                                <option value="2">m¹ Impact</option>
+                                                                                                                <option value="3">m² Impact</option>
+                                                                                                                    
+                                                                                                            </select>
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
@@ -1481,20 +1414,6 @@
                                                                                                                     <span class="slider round"></span>
                                                                                                                 </label>
                                                                                                                 <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                                                            </div>
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
-
-                                                                                                                <input type="hidden" name="variable{{$s+1}}[]" id="variable" value="0">
-
-                                                                                                                <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                                <label style="margin: 0;" class="switch">
-                                                                                                                    <input class="variable" type="checkbox">
-                                                                                                                    <span class="slider round"></span>
-                                                                                                                </label>
-                                                                                                                <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                                                             </div>
                                                                                                         </td>
@@ -1551,7 +1470,6 @@
                                                                                                 <th>Value</th>
                                                                                                 <th>Price Impact</th>
                                                                                                 <th>Impact Type</th>
-                                                                                                <th>m¹ Impact</th>
                                                                                                 <th>Remove</th>
                                                                                             </tr>
                                                                                             </thead>
@@ -1567,18 +1485,14 @@
                                                                                                     <input class="form-control feature_value1" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
+                                                                                                    <select class="form-control" name="price_impact1[]">
 
-                                                                                                        <input type="hidden" name="price_impact1[]" id="price_impact" value="0">
-
-                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                        <label style="margin: 0;" class="switch">
-                                                                                                            <input class="price_impact" type="checkbox">
-                                                                                                            <span class="slider round"></span>
-                                                                                                        </label>
-                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                                    </div>
+                                                                                                        <option value="0">No</option>
+                                                                                                        <option value="1">Fixed</option>
+                                                                                                        <option value="2">m¹ Impact</option>
+                                                                                                        <option value="3">m² Impact</option>
+                                                                                                                    
+                                                                                                    </select>
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
@@ -1591,20 +1505,6 @@
                                                                                                             <span class="slider round"></span>
                                                                                                         </label>
                                                                                                         <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                                                    </div>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;width: 100%;">
-
-                                                                                                        <input type="hidden" name="variable1[]" id="variable" value="0">
-
-                                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                                        <label style="margin: 0;" class="switch">
-                                                                                                            <input class="variable" type="checkbox">
-                                                                                                            <span class="slider round"></span>
-                                                                                                        </label>
-                                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
 
                                                                                                     </div>
                                                                                                 </td>
