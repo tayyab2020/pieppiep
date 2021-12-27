@@ -4089,9 +4089,6 @@
             var heading = $('.feature_box').find(".feature-row[data-id='" + main + "']").find('.js-data-example-ajax5 option:selected').text();
             var heading_id = $('.feature_box').find(".feature-row[data-id='" + main + "']").find('.js-data-example-ajax5').val();
 
-            console.log(heading);
-            console.log(heading_id);
-
             if(!heading_id)
             {
                 heading = '';
