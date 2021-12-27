@@ -1,4 +1,4 @@
-@extends('layouts.handyman')
+@extends('layouts.admin')
 
 @section('styles')
 
@@ -24,7 +24,7 @@
                                     <div class="add-product-box">
                                         <div class="add-product-header">
                                             <h2>{{isset($cats) ? 'Edit Category' : 'Add Category'}}</h2>
-                                            <a href="{{route('admin-cat-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <a href="{{route('admin-my-cat-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-my-cat-store')}}" method="POST" enctype="multipart/form-data">
@@ -37,17 +37,50 @@
                                             <input type="hidden" name="cat_id" value="{{isset($cats) ? $cats->id : null}}" />
 
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">Title*</label>
                                             <div class="col-sm-6">
                                               <input value="{{isset($cats) ? $cats->cat_name : null}}" class="form-control" name="cat_name" id="blood_group_display_name" placeholder="Enter Category title" required="" type="text">
                                             </div>
                                           </div>
+
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_slug">Slug* <span>(In English)</span></label>
+                                            <label class="control-label col-sm-4" for="blood_group_slug">Slug*</label>
                                             <div class="col-sm-6">
                                               <input value="{{isset($cats) ? $cats->cat_slug : null}}" class="form-control" name="cat_slug" id="blood_group_slug" placeholder="Enter Category Slug" required="" type="text">
                                             </div>
                                           </div>
+
+                                          <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_slug">Quotation Layout*</label>
+                                            <div class="col-sm-6">
+
+                                              <select class="form-control" name="quotation_layout">
+                                                <option {{(isset($cats) && $cats->quotation_layout == 1) ? 'selected' : null}} value="1">Old</option>
+                                                <option {{(isset($cats) && $cats->quotation_layout == 2) ? 'selected' : null}} value="2">New</option>
+                                              </select>
+
+                                            </div>
+                                          </div>
+
+                                          <div class="form-group">
+
+                                              <label class="control-label col-sm-4" for="blood_group_slug">Suppliers (Optional)</label>
+
+                                              <div class="col-sm-6">
+
+                                                <select style="height: 100px;" class="form-control" name="suppliers[]" id="suppliers" multiple>
+
+                                                  @foreach($suppliers as $supplier)
+
+                                                    <option {{isset($category_suppliers) ? (in_array($supplier->id, $category_suppliers) ? 'selected' : null) : null}} value="{{$supplier->id}}">{{$supplier->company_name}}</option>
+
+                                                  @endforeach
+
+                                                </select>
+
+                                              </div>
+
+                                            </div>
 
 
                                             <div class="form-group">

@@ -1,4 +1,4 @@
-@extends('layouts.handyman')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -13,17 +13,16 @@
                                 <div class="add-product-box">
 
                                     <div class="add-product-header">
-                                        <h2>{{isset($feature) ? 'Edit Feature' : 'Add Feature'}}</h2>
-                                        <a href="{{route('admin-feature-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <h2>Add Feature</h2>
+                                        <a href="{{route('default-features-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                     </div>
 
-                                    <form class="form-horizontal" action="{{route('admin-feature-store')}}" method="POST" enctype="multipart/form-data">
+                                    <form class="form-horizontal" action="{{route('default-features-store')}}" method="POST" enctype="multipart/form-data">
                                         @include('includes.form-error')
                                         @include('includes.form-success')
 
                                         {{csrf_field()}}
 
-                                        <input type="hidden" name="default_feature" value="{{Route::currentRouteName() == 'admin-feature-edit' ? 0 : 1}}">
                                         <input type="hidden" id="heading_id" name="heading_id" value="{{isset($feature) ? $feature->id : null}}">
 
                                         <div class="accordion-menu">

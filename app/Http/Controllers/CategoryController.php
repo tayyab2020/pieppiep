@@ -16,6 +16,9 @@ use App\service_types;
 use App\sub_services;
 use App\handyman_products;
 use App\carts;
+use App\features;
+use App\supplier_categories;
+use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CategoryController extends Controller
@@ -27,8 +30,6 @@ class CategoryController extends Controller
 
     public function preparePayment()
     {
-
-
         $api_key = Generalsetting::findOrFail(1);
 
         $mollie = new \Mollie\Api\MollieApiClient();
@@ -48,24 +49,20 @@ class CategoryController extends Controller
 
     public function MyCategoriesIndex()
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
+        $user = Auth::guard('admin')->user();
+        $suppliers = User::where('role_id',4)->get();
 
-        if($main_id)
-        {
-            $user_id = $main_id;
-        }
+        //$data = features::leftjoin("my_categories",\DB::raw("FIND_IN_SET(my_categories.id,features.category_ids)"),">",\DB::raw("'0'"))->get();
 
-        if($user->role_id == 4)
+        if($user)
         {
-            $cats = my_categories::where('user_id',$user_id)->orWhere('user_id',0)->orderBy('id','desc')->get();
+            $cats = my_categories::orderBy('id','desc')->get();
 
             return view('admin.category.my_categories_index',compact('cats'));
         }
         else
         {
-            return redirect()->route('user-login');
+            return redirect()->route('front.index');
         }
     }
 
@@ -95,15 +92,16 @@ class CategoryController extends Controller
 
     public function MyCategoryCreate()
     {
-        $user = Auth::guard('user')->user();
+        $user = Auth::guard('admin')->user();
+        $suppliers = User::where('role_id',4)->get();
 
-        if($user->role_id == 4)
+        if($user)
         {
-            return view('admin.category.create_my_category');
+            return view('admin.category.create_my_category',compact('suppliers'));
         }
         else
         {
-            return redirect()->route('user-login');
+            return redirect()->route('front.index');
         }
     }
 
@@ -123,14 +121,7 @@ class CategoryController extends Controller
 
     public function MyCategoryStore(StoreValidationRequest $request)
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
-
-        if($main_id)
-        {
-            $user_id = $main_id;
-        }
+        $user = Auth::guard('admin')->user();
 
         if($request->cat_id)
         {
@@ -144,8 +135,6 @@ class CategoryController extends Controller
         }
 
         $input = $request->all();
-        $input['user_id'] = $user_id;
-
 
         if ($file = $request->file('photo'))
         {
@@ -155,6 +144,38 @@ class CategoryController extends Controller
         }
 
         $cat->fill($input)->save();
+
+        if($request->suppliers)
+        {
+            $supplier_ids = $request->suppliers;
+
+            foreach($supplier_ids as $s => $key)
+            {
+                $check = supplier_categories::where('category_id',$cat->id)->skip($s)->first();
+
+                if($check)
+                {
+                    $check->user_id = $key;
+                    $check->save();
+                }
+                else
+                {
+                    $post = new supplier_categories;
+                    $post->category_id = $cat->id;
+                    $post->user_id = $key;
+                    $post->save();
+                }
+            }
+
+            $s = $s + 1;
+
+            $count = supplier_categories::count();
+            supplier_categories::where('category_id',$cat->id)->take($count)->skip($s)->get()->each(function($row){ $row->delete(); });
+        }
+        else
+        {
+            supplier_categories::where('category_id',$cat->id)->delete();
+        }
 
         return redirect()->route('admin-my-cat-index');
     }
@@ -201,29 +222,24 @@ class CategoryController extends Controller
 
     public function MyCategoryEdit($id)
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
+        $user = Auth::guard('admin')->user();
+        $suppliers = User::where('role_id',4)->get();
 
-        if($main_id)
+        if($user)
         {
-            $user_id = $main_id;
-        }
-
-        if($user->role_id == 4)
-        {
-            $cats = my_categories::where('id','=',$id)->where('user_id',$user_id)->first();
+            $cats = my_categories::where('id','=',$id)->first();
+            $category_suppliers = supplier_categories::where('category_id',$id)->pluck('user_id')->toArray();
 
             if(!$cats)
             {
                 return redirect()->back();
             }
 
-            return view('admin.category.create_my_category',compact('cats'));
+            return view('admin.category.create_my_category',compact('cats','suppliers','category_suppliers'));
         }
         else
         {
-            return redirect()->route('user-login');
+            return redirect()->route('front.index');
         }
     }
 
@@ -324,18 +340,12 @@ class CategoryController extends Controller
 
     public function MyCategoryDestroy($id)
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
+        $user = Auth::guard('admin')->user();
 
-        if($main_id)
+        if($user)
         {
-            $user_id = $main_id;
-        }
-
-        if($user->role_id == 4)
-        {
-            $cat = my_categories::where('id',$id)->where('user_id',$user_id)->first();
+            $cat = my_categories::where('id',$id)->first();
+            supplier_categories::where('category_id',$id)->delete();
 
             if(!$cat)
             {
@@ -355,7 +365,7 @@ class CategoryController extends Controller
         }
         else
         {
-            return redirect()->route('user-login');
+            return redirect()->route('front.index');
         }
     }
 

@@ -1,4 +1,4 @@
-@extends('layouts.handyman')
+@extends('layouts.admin')
 
 @section('content')
     <div class="right-side">
@@ -34,7 +34,7 @@
                                                     <tr role="row">
                                                         <th class="sorting_asc" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
-                                                            colspan="1" style="width: 344px;" aria-sort="ascending"
+                                                            colspan="1" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
                                                             Photo
                                                         </th>
@@ -48,7 +48,13 @@
                                                             aria-controls="product-table_wrapper" rowspan="1"
                                                             colspan="1" style="width: 144px;" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
-                                                            Description
+                                                            Quotation Layout
+                                                        </th>
+                                                        <th class="sorting_asc" tabindex="0"
+                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                            Suppliers
                                                         </th>
                                                         <th class="sorting_asc" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
@@ -73,20 +79,24 @@
                                                                     alt="Category's Photo" style="max-height: 100px;">
                                                             </td>
                                                             <td>{{$cat->cat_name}}</td>
-                                                            <td>{!!$cat->description!!}</td>
-                                                            <td>{{$cat->cat_slug}}</td>
+                                                            <td>{{$cat->quotation_layout == 1 ? 'Old' : 'New'}}</td>
                                                             <td>
-                                                                @if($cat->user_id == 0)
+                                                                @if(count($cat->suppliers) > 0)
 
-                                                                <a href="javascript:void(0)" style="cursor: not-allowed" disabled class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
-                                                                <a href="javascript:void(0)" style="cursor: not-allowed" disabled class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
+                                                                    <select style="width: 80%;" class="form-control">
+                                                                    
+                                                                        @foreach($cat->suppliers as $key)
+                                                                            <option>{{$key->company_name}}</option>
+                                                                        @endforeach
 
-                                                                @else
-
-                                                                <a href="{{route('admin-my-cat-edit',$cat->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
-                                                                <a href="{{route('admin-my-cat-delete',$cat->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
+                                                                    </select>
 
                                                                 @endif
+                                                            </td>
+                                                            <td>{{$cat->cat_slug}}</td>
+                                                            <td>
+                                                                <a href="{{route('admin-my-cat-edit',$cat->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
+                                                                <a href="{{route('admin-my-cat-delete',$cat->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
                                                             </td>
                                                         </tr>
                                                     @endforeach

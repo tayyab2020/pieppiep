@@ -29,6 +29,7 @@
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Email</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Status</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Products</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Categories</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">Actions</th>
 
                                                     </tr>
@@ -78,6 +79,24 @@
                                                                         @foreach($products[$x] as $product)
 
                                                                             <option value="{{$product->title}}">{{$product->title}}</option>
+
+                                                                        @endforeach
+
+                                                                    </select>
+
+                                                                @endif
+
+                                                            </td>
+
+                                                            <td>
+
+                                                                @if(count($categories[$x]) > 0)
+
+                                                                    <select style="padding: 10px;">
+
+                                                                        @foreach($categories[$x] as $category)
+
+                                                                            <option value="{{$category->cat_name}}">{{$category->cat_name}}</option>
 
                                                                         @endforeach
 

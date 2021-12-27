@@ -6,6 +6,8 @@ use App\model_features;
 use App\product_features;
 use App\features;
 use App\features_details;
+use App\default_features;
+use App\default_features_details;
 use App\product_models;
 use App\User;
 use App\users;
@@ -41,8 +43,9 @@ class FeaturesController extends Controller
         if($user->can('user-features'))
         {
             $features = features::where('user_id',$user_id)->orderBy('id','desc')->get();
+            $default_features = default_features::orderBy('id','desc')->get();
 
-            return view('admin.features.index',compact('features'));
+            return view('admin.features.index',compact('features','default_features'));
         }
         else
         {
@@ -61,7 +64,7 @@ class FeaturesController extends Controller
             $user_id = $main_id;
         }
 
-        $cats = my_categories::where('user_id',$user_id)->orWhere('user_id',0)->get();
+        $cats = my_categories::leftjoin('supplier_categories','supplier_categories.category_id','=','my_categories.id')->where('supplier_categories.user_id',$user_id)->select('my_categories.*')->get();
 
         if($user->can('create-feature'))
         {
@@ -95,7 +98,7 @@ class FeaturesController extends Controller
 
         $category_ids = implode(",",$request->feature_category);
 
-        if($request->heading_id)
+        if(!$request->default_feature && $request->heading_id)
         {
             $feature = features::where('id',$request->heading_id)->first();
             Session::flash('success', 'Feature updated successfully.');
@@ -118,6 +121,7 @@ class FeaturesController extends Controller
         $feature->is_unique = $request->feature_unique;
         $feature->category_ids = $category_ids;
         $feature->filter = $request->feature_filter;
+        $feature->default_feature_id = $request->default_feature ? $request->heading_id : NULL;
         $feature->save();
 
         $feature_main_id = $feature->id;
@@ -234,24 +238,49 @@ class FeaturesController extends Controller
             $user_id = $main_id;
         }
 
-        if($user->can('edit-feature'))
+        if(\Request::route()->getName() == 'admin-feature-edit')
         {
-            $feature = features::where('id',$id)->where('user_id',$user_id)->first();
-
-            if(!$feature)
+            if($user->can('edit-feature'))
             {
-                return redirect()->back();
+                $feature = features::where('id',$id)->where('user_id',$user_id)->first();
+
+                if(!$feature)
+                {
+                    return redirect()->back();
+                }
+
+                $cats = my_categories::leftjoin('supplier_categories','supplier_categories.category_id','=','my_categories.id')->where('supplier_categories.user_id',$user_id)->select('my_categories.*')->get();
+                $features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
+                $sub_features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
+
+                return view('admin.features.create',compact('feature','cats','features_data','sub_features_data'));
             }
-
-            $cats = my_categories::where('user_id',$user_id)->orWhere('user_id',0)->get();
-            $features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
-            $sub_features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
-
-            return view('admin.features.create',compact('feature','cats','features_data','sub_features_data'));
+            else
+            {
+                return redirect()->route('user-login');
+            }
         }
         else
         {
-            return redirect()->route('user-login');
+            if($user->can('edit-feature'))
+            {
+                $feature = default_features::where('id',$id)->first();
+
+                if(!$feature)
+                {
+                    return redirect()->back();
+                }
+
+                $cats = my_categories::leftjoin('supplier_categories','supplier_categories.category_id','=','my_categories.id')->where('supplier_categories.user_id',$user_id)->select('my_categories.*')->get();
+                $features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
+                $sub_features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
+
+                return view('admin.features.create',compact('feature','cats','features_data','sub_features_data'));
+            }
+            else
+            {
+                return redirect()->route('user-login');
+            }
         }
     }
 

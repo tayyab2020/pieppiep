@@ -62,6 +62,8 @@ use App\Sociallink;
 use App\sub_services;
 use App\cancelled_invoices;
 use App\handyman_unavailability_hours;
+use App\my_categories;
+use App\supplier_categories;
 use File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -174,6 +176,74 @@ class UserController extends Controller
         $data = Products::where('user_id',$request->id)->get();
 
         return $data;
+    }
+
+    public function SupplierCategories()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->role_id == 4)
+        {
+            $feature_categories = my_categories::all();
+            $my_categories = supplier_categories::where('user_id',$user_id)->pluck('category_id')->toArray();
+
+            return view('user.supplier_categories',compact('feature_categories','my_categories'));
+        }
+    }
+
+    public function SupplierCategoriesStore(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($request->supplier_categories)
+        {
+            $category_ids = $request->supplier_categories;
+
+            foreach($category_ids as $s => $key)
+            {
+                $check = supplier_categories::where('user_id',$user_id)->skip($s)->first();
+
+                if($check)
+                {
+                    $check->category_id = $key;
+                    $check->save();
+                }
+                else
+                {
+                    $post = new supplier_categories;
+                    $post->category_id = $key;
+                    $post->user_id = $user_id;
+                    $post->save();
+                }
+            }
+
+            $s = $s + 1;
+
+            $count = supplier_categories::count();
+            supplier_categories::where('user_id',$user_id)->take($count)->skip($s)->get()->each(function($row){ $row->delete(); });
+        }
+        else
+        {
+            supplier_categories::where('user_id',$user_id)->delete();
+        }
+
+        Session::flash('success', 'List updated successfully!');
+
+        return redirect()->back();
     }
 
     public function GetColors(Request $request)
@@ -589,21 +659,24 @@ class UserController extends Controller
             })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
 
             $products = array();
+            $categories = array();
 
             foreach ($users as $key) {
 
                 if($key->status && $key->active)
                 {
-                    $products[] = Products::leftjoin('users','users.id','=','products.user_id')->where('products.user_id',$key->id)->select('products.title')->get();
+                    $products[] = Products::where('user_id',$key->id)->get();
+                    $categories[] = supplier_categories::leftjoin('my_categories','my_categories.id','=','supplier_categories.category_id')->where('supplier_categories.user_id',$key->id)->orderBy('my_categories.id','desc')->select('my_categories.cat_name')->get();
                 }
                 else
                 {
                     $products[] = array();
+                    $categories[] = array();
                 }
 
             }
 
-            return view('user.suppliers',compact('users','products'));
+            return view('user.suppliers',compact('users','products','categories'));
         }
         else
         {

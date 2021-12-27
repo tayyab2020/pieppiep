@@ -285,11 +285,11 @@
   /*Route::post('/category/update/{id}', 'CategoryController@update')->name('admin-cat-update');*/
   Route::get('/category/delete/{id}', 'CategoryController@destroy')->name('admin-cat-delete');
 
-  Route::get('/my-categories', 'CategoryController@MyCategoriesIndex')->name('admin-my-cat-index');
-  Route::get('/my-category/create', 'CategoryController@MyCategoryCreate')->name('admin-my-cat-create');
-  Route::post('/my-category/create', 'CategoryController@MyCategoryStore')->name('admin-my-cat-store');
-  Route::get('/my-category/edit/{id}', 'CategoryController@MyCategoryEdit')->name('admin-my-cat-edit');
-  Route::get('/my-category/delete/{id}', 'CategoryController@MyCategoryDestroy')->name('admin-my-cat-delete');
+  Route::get('/my-features', 'FeaturesController@MyCategoriesIndex')->name('admin-features');
+  Route::get('/my-features/create', 'FeaturesController@MyCategoryCreate')->name('admin-features-create');
+  Route::post('/my-features/create', 'FeaturesController@MyCategoryStore')->name('admin-features-store');
+  Route::get('/my-features/edit/{id}', 'FeaturesController@MyCategoryEdit')->name('admin-features-edit');
+  Route::get('/my-features/delete/{id}', 'FeaturesController@MyCategoryDestroy')->name('admin-features-delete');
 
   Route::get('/brands', 'BrandController@index')->name('admin-brand-index');
   Route::get('/brand/create', 'BrandController@create')->name('admin-brand-create');
@@ -319,6 +319,8 @@
   Route::post('/features/update/{id}', 'FeaturesController@update')->name('admin-feature-update');
   Route::get('/features/delete/{id}', 'FeaturesController@destroy')->name('admin-feature-delete');
 
+  Route::get('/features/add-default-feature/{id}', 'FeaturesController@edit')->name('add-default-feature');
+
   Route::get('/suppliers', 'UserController@Suppliers')->name('suppliers');
   Route::post('/send-request-supplier', 'UserController@SendRequestSupplier')->name('send-request-supplier');
   Route::get('/suppliers/details/{id}', 'UserController@DetailsSupplier')->name('supplier-details');
@@ -328,6 +330,10 @@
   Route::post('/accept-retailer-request', 'UserController@AcceptRetailerRequest')->name('accept-retailer-request');
   Route::post('/suspend-retailer-request', 'UserController@SuspendRetailerRequest')->name('suspend-retailer-request');
   Route::post('/delete-retailer-request', 'UserController@DeleteRetailerRequest')->name('delete-retailer-request');
+
+  Route::get('/supplier-categories', 'UserController@SupplierCategories')->name('supplier-categories');
+  Route::post('/supplier-categories-store', 'UserController@SupplierCategoriesStore')->name('supplier-categories-store');
+
   });
 
   Route::get('finalize', 'FrontendController@finalize');
@@ -337,6 +343,18 @@
   Route::post('/stripe-submit', 'StripeController@store')->name('stripe.submit');
 
   Route::prefix('logstof')->group(function() {
+
+  Route::get('/my-categories', 'CategoryController@MyCategoriesIndex')->name('admin-my-cat-index');
+  Route::get('/my-category/create', 'CategoryController@MyCategoryCreate')->name('admin-my-cat-create');
+  Route::post('/my-category/create', 'CategoryController@MyCategoryStore')->name('admin-my-cat-store');
+  Route::get('/my-category/edit/{id}', 'CategoryController@MyCategoryEdit')->name('admin-my-cat-edit');
+  Route::get('/my-category/delete/{id}', 'CategoryController@MyCategoryDestroy')->name('admin-my-cat-delete');
+
+  Route::get('/features', 'DefaultFeaturesController@index')->name('default-features-index');
+  Route::get('/features/create', 'DefaultFeaturesController@create')->name('default-features-create');
+  Route::post('/features/create', 'DefaultFeaturesController@store')->name('default-features-store');
+  Route::get('/features/edit/{id}', 'DefaultFeaturesController@edit')->name('default-features-edit');
+  Route::get('/features/delete/{id}', 'DefaultFeaturesController@destroy')->name('default-features-delete');
 
   Route::get('/mark-delivered/{id}', 'AdminUserController@MarkDelivered');
   Route::get('/mark-received/{id}', 'AdminUserController@MarkReceived');
