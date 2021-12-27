@@ -579,8 +579,18 @@ class ProductController extends Controller
                         $s_titles = 'features'.$request->f_rows[$f];
                         $sub_features = $request->$s_titles;
 
-                        var_dump('features'.$request->f_rows[$f]);
-                        var_dump($sub_features);
+                        try {
+
+                            foreach($sub_features as $s => $sub)
+                            {
+
+                            }
+                          
+                          } catch (\Exception $e) {
+                          
+                            var_dump('features'.$request->f_rows[$f]);
+                            var_dump($sub_features);
+                          }
 
                         foreach($sub_features as $s => $sub)
                         {
