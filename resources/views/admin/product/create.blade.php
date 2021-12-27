@@ -3021,6 +3021,7 @@
 
             var selector = this;
 
+            console.log(heading_id);
             console.log($selects.find('option[value=' + heading_id + ']:selected'));
 
             if ($selects.find('option[value=' + heading_id + ']:selected').length > 1) {
