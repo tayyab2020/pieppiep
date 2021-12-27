@@ -479,9 +479,6 @@ class ProductController extends Controller
         $feature_row = array();
         $feature_id = array();
 
-        var_dump($models);
-        exit();
-
         if($prices)
         {
             $pricesArray = explode(',', $prices);
