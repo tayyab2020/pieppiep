@@ -3021,6 +3021,8 @@
 
             var selector = this;
 
+            console.log($selects.find('option[value=' + heading_id + ']:selected'));
+
             if ($selects.find('option[value=' + heading_id + ']:selected').length > 1) {
 
                 Swal.fire({
