@@ -3021,11 +3021,10 @@
 
             var selector = this;
 
-            console.log($selects);
             console.log(heading_id);
-            console.log($selects.find('option[value=' + heading_id + ']:selected'));
+            console.log($('.js-data-example-ajax5').find('option[value=' + heading_id + ']:selected'));
 
-            if ($selects.find('option[value=' + heading_id + ']:selected').length > 1) {
+            if ($('.js-data-example-ajax5').find('option[value=' + heading_id + ']:selected').length > 1) {
 
                 Swal.fire({
                     icon: 'error',
