@@ -3021,9 +3021,6 @@
 
             var selector = this;
 
-            console.log(heading_id);
-            console.log($('.js-data-example-ajax5').find('option[value=' + heading_id + ']:selected'));
-
             if ($('.js-data-example-ajax5').find('option[value=' + heading_id + ']:selected').length > 1) {
 
                 Swal.fire({
