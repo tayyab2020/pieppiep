@@ -21,7 +21,7 @@ use App\supplier_categories;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CategoryController extends Controller
+class MyCategoryController extends Controller
 {
     public function __construct()
     {
