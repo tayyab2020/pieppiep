@@ -579,40 +579,29 @@ class ProductController extends Controller
                         $s_titles = 'features'.$request->f_rows[$f];
                         $sub_features = $request->$s_titles;
 
-                        try {
-
+                        if($sub_features)
+                        {
                             foreach($sub_features as $s => $sub)
                             {
+                                $s_value = 'feature_values'.$request->f_rows[$f];
+                                $s_price_impact = 'price_impact'.$request->f_rows[$f];
+                                $s_impact_type = 'impact_type'.$request->f_rows[$f];
 
-                            }
-                          
-                          } catch (\Exception $e) {
-                          
-                            var_dump('features'.$request->f_rows[$f]);
-                            var_dump($sub_features);
-                            exit();
-                          }
-
-                        foreach($sub_features as $s => $sub)
-                        {
-                            $s_value = 'feature_values'.$request->f_rows[$f];
-                            $s_price_impact = 'price_impact'.$request->f_rows[$f];
-                            $s_impact_type = 'impact_type'.$request->f_rows[$f];
-
-                            if($sub != NULL)
-                            {
-                                $sub_feature = new product_features;
-                                $sub_feature->product_id = $request->cat_id;
-                                $sub_feature->heading_id = $key;
-                                $sub_feature->main_id = $fea->id;
-                                $sub_feature->sub_feature = 1;
-                                $sub_feature->title = $sub;
-                                $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
-                                $sub_feature->impact_type = $request->$s_impact_type[$s];
-                                $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
-                                $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
-                                $sub_feature->save();
+                                if($sub != NULL)
+                                {
+                                    $sub_feature = new product_features;
+                                    $sub_feature->product_id = $request->cat_id;
+                                    $sub_feature->heading_id = $key;
+                                    $sub_feature->main_id = $fea->id;
+                                    $sub_feature->sub_feature = 1;
+                                    $sub_feature->title = $sub;
+                                    $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                    $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
+                                    $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                    $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                    $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                    $sub_feature->save();
+                                }
                             }
                         }
 
@@ -646,46 +635,49 @@ class ProductController extends Controller
                                 $s_titles = 'features'.$request->f_rows[$f];
                                 $sub_features = $request->$s_titles;
 
-                                foreach($sub_features as $s => $sub)
+                                if($sub_features)
                                 {
-                                    $sub_fea_check = product_features::where('main_id',$fea_check->id)->skip($s)->first();
-
-                                    $s_value = 'feature_values'.$request->f_rows[$f];
-                                    $s_price_impact = 'price_impact'.$request->f_rows[$f];
-                                    $s_impact_type = 'impact_type'.$request->f_rows[$f];
-
-                                    if($sub_fea_check)
+                                    foreach($sub_features as $s => $sub)
                                     {
-                                        if($sub != NULL)
+                                        $sub_fea_check = product_features::where('main_id',$fea_check->id)->skip($s)->first();
+
+                                        $s_value = 'feature_values'.$request->f_rows[$f];
+                                        $s_price_impact = 'price_impact'.$request->f_rows[$f];
+                                        $s_impact_type = 'impact_type'.$request->f_rows[$f];
+
+                                        if($sub_fea_check)
                                         {
-                                            $sub_fea_check->heading_id = $key;
-                                            $sub_fea_check->main_id = $fea_check->id;
-                                            $sub_fea_check->sub_feature = 1;
-                                            $sub_fea_check->title = $sub;
-                                            $sub_fea_check->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                            $sub_fea_check->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
-                                            $sub_fea_check->impact_type = $request->$s_impact_type[$s];
-                                            $sub_fea_check->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
-                                            $sub_fea_check->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
-                                            $sub_fea_check->save();
+                                            if($sub != NULL)
+                                            {
+                                                $sub_fea_check->heading_id = $key;
+                                                $sub_fea_check->main_id = $fea_check->id;
+                                                $sub_fea_check->sub_feature = 1;
+                                                $sub_fea_check->title = $sub;
+                                                $sub_fea_check->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                                $sub_fea_check->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
+                                                $sub_fea_check->impact_type = $request->$s_impact_type[$s];
+                                                $sub_fea_check->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                                $sub_fea_check->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                                $sub_fea_check->save();
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        if($sub != NULL)
+                                        else
                                         {
-                                            $sub_feature = new product_features;
-                                            $sub_feature->product_id = $request->cat_id;
-                                            $sub_feature->heading_id = $key;
-                                            $sub_feature->main_id = $fea_check->id;
-                                            $sub_feature->sub_feature = 1;
-                                            $sub_feature->title = $sub;
-                                            $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                            $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
-                                            $sub_feature->impact_type = $request->$s_impact_type[$s];
-                                            $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
-                                            $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
-                                            $sub_feature->save();
+                                            if($sub != NULL)
+                                            {
+                                                $sub_feature = new product_features;
+                                                $sub_feature->product_id = $request->cat_id;
+                                                $sub_feature->heading_id = $key;
+                                                $sub_feature->main_id = $fea_check->id;
+                                                $sub_feature->sub_feature = 1;
+                                                $sub_feature->title = $sub;
+                                                $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                                $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
+                                                $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                                $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                                $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                                $sub_feature->save();
+                                            }
                                         }
                                     }
                                 }
@@ -713,26 +705,29 @@ class ProductController extends Controller
                                 $s_titles = 'features'.$request->f_rows[$f];
                                 $sub_features = $request->$s_titles;
 
-                                foreach($sub_features as $s => $sub)
+                                if($sub_features)
                                 {
-                                    $s_value = 'feature_values'.$request->f_rows[$f];
-                                    $s_price_impact = 'price_impact'.$request->f_rows[$f];
-                                    $s_impact_type = 'impact_type'.$request->f_rows[$f];
-
-                                    if($sub != NULL)
+                                    foreach($sub_features as $s => $sub)
                                     {
-                                        $sub_feature = new product_features;
-                                        $sub_feature->product_id = $request->cat_id;
-                                        $sub_feature->heading_id = $key;
-                                        $sub_feature->main_id = $fea->id;
-                                        $sub_feature->sub_feature = 1;
-                                        $sub_feature->title = $sub;
-                                        $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                        $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
-                                        $sub_feature->impact_type = $request->$s_impact_type[$s];
-                                        $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
-                                        $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
-                                        $sub_feature->save();
+                                        $s_value = 'feature_values'.$request->f_rows[$f];
+                                        $s_price_impact = 'price_impact'.$request->f_rows[$f];
+                                        $s_impact_type = 'impact_type'.$request->f_rows[$f];
+
+                                        if($sub != NULL)
+                                        {
+                                            $sub_feature = new product_features;
+                                            $sub_feature->product_id = $request->cat_id;
+                                            $sub_feature->heading_id = $key;
+                                            $sub_feature->main_id = $fea->id;
+                                            $sub_feature->sub_feature = 1;
+                                            $sub_feature->title = $sub;
+                                            $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                            $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
+                                            $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                            $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                            $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                            $sub_feature->save();
+                                        }
                                     }
                                 }
 
@@ -1031,26 +1026,29 @@ class ProductController extends Controller
                         $s_titles = 'features'.$request->f_rows[$f];
                         $sub_features = $request->$s_titles;
 
-                        foreach($sub_features as $s => $sub)
+                        if($sub_features)
                         {
-                            $s_value = 'feature_values'.$request->f_rows[$f];
-                            $s_price_impact = 'price_impact'.$request->f_rows[$f];
-                            $s_impact_type = 'impact_type'.$request->f_rows[$f];
-
-                            if($sub != NULL)
+                            foreach($sub_features as $s => $sub)
                             {
-                                $sub_feature = new product_features;
-                                $sub_feature->product_id = $cat->id;
-                                $sub_feature->heading_id = $key;
-                                $sub_feature->main_id = $feature->id;
-                                $sub_feature->sub_feature = 1;
-                                $sub_feature->title = $sub;
-                                $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
-                                $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
-                                $sub_feature->impact_type = $request->$s_impact_type[$s];
-                                $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
-                                $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
-                                $sub_feature->save();
+                                $s_value = 'feature_values'.$request->f_rows[$f];
+                                $s_price_impact = 'price_impact'.$request->f_rows[$f];
+                                $s_impact_type = 'impact_type'.$request->f_rows[$f];
+
+                                if($sub != NULL)
+                                {
+                                    $sub_feature = new product_features;
+                                    $sub_feature->product_id = $cat->id;
+                                    $sub_feature->heading_id = $key;
+                                    $sub_feature->main_id = $feature->id;
+                                    $sub_feature->sub_feature = 1;
+                                    $sub_feature->title = $sub;
+                                    $sub_feature->value = $request->$s_value[$s] ? $request->$s_value[$s] : 0;
+                                    $sub_feature->price_impact = ($request->$s_price_impact[$s] == 0 || $request->$s_price_impact[$s] == 1) ? $request->$s_price_impact[$s] : 0;
+                                    $sub_feature->impact_type = $request->$s_impact_type[$s];
+                                    $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
+                                    $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                    $sub_feature->save();
+                                }
                             }
                         }
 
