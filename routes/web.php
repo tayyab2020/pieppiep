@@ -344,11 +344,11 @@
 
   Route::prefix('logstof')->group(function() {
 
-  Route::get('/my-categories', 'CategoryController@MyCategoriesIndex')->name('admin-my-cat-index');
-  Route::get('/my-category/create', 'CategoryController@MyCategoryCreate')->name('admin-my-cat-create');
-  Route::post('/my-category/create', 'CategoryController@MyCategoryStore')->name('admin-my-cat-store');
-  Route::get('/my-category/edit/{id}', 'CategoryController@MyCategoryEdit')->name('admin-my-cat-edit');
-  Route::get('/my-category/delete/{id}', 'CategoryController@MyCategoryDestroy')->name('admin-my-cat-delete');
+  Route::get('/my-categories', 'MyCategoryController@MyCategoriesIndex')->name('admin-my-cat-index');
+  Route::get('/my-category/create', 'MyCategoryController@MyCategoryCreate')->name('admin-my-cat-create');
+  Route::post('/my-category/create', 'MyCategoryController@MyCategoryStore')->name('admin-my-cat-store');
+  Route::get('/my-category/edit/{id}', 'MyCategoryController@MyCategoryEdit')->name('admin-my-cat-edit');
+  Route::get('/my-category/delete/{id}', 'MyCategoryController@MyCategoryDestroy')->name('admin-my-cat-delete');
 
   Route::get('/features', 'DefaultFeaturesController@index')->name('default-features-index');
   Route::get('/features/create', 'DefaultFeaturesController@create')->name('default-features-create');

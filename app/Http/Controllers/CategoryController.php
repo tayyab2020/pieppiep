@@ -47,25 +47,6 @@ class CategoryController extends Controller
         return redirect($payment->getCheckoutUrl(), 303);
     }
 
-    public function MyCategoriesIndex()
-    {
-        $user = Auth::guard('admin')->user();
-        $suppliers = User::where('role_id',4)->get();
-
-        //$data = features::leftjoin("my_categories",\DB::raw("FIND_IN_SET(my_categories.id,features.category_ids)"),">",\DB::raw("'0'"))->get();
-
-        if($user)
-        {
-            $cats = my_categories::orderBy('id','desc')->get();
-
-            return view('admin.category.my_categories_index',compact('cats'));
-        }
-        else
-        {
-            return redirect()->route('front.index');
-        }
-    }
-
 
     public function index()
     {
@@ -90,21 +71,6 @@ class CategoryController extends Controller
         }
     }
 
-    public function MyCategoryCreate()
-    {
-        $user = Auth::guard('admin')->user();
-        $suppliers = User::where('role_id',4)->get();
-
-        if($user)
-        {
-            return view('admin.category.create_my_category',compact('suppliers'));
-        }
-        else
-        {
-            return redirect()->route('front.index');
-        }
-    }
-
     public function create()
     {
         $user = Auth::guard('user')->user();
@@ -117,67 +83,6 @@ class CategoryController extends Controller
         {
             return redirect()->route('user-login');
         }
-    }
-
-    public function MyCategoryStore(StoreValidationRequest $request)
-    {
-        $user = Auth::guard('admin')->user();
-
-        if($request->cat_id)
-        {
-            $cat = my_categories::where('id',$request->cat_id)->first();
-            Session::flash('success', 'Category edited successfully.');
-        }
-        else
-        {
-            $cat = new my_categories;
-            Session::flash('success', 'New Category added successfully.');
-        }
-
-        $input = $request->all();
-
-        if ($file = $request->file('photo'))
-        {
-            $name = time().$file->getClientOriginalName();
-            $file->move('assets/images',$name);
-            $input['photo'] = $name;
-        }
-
-        $cat->fill($input)->save();
-
-        if($request->suppliers)
-        {
-            $supplier_ids = $request->suppliers;
-
-            foreach($supplier_ids as $s => $key)
-            {
-                $check = supplier_categories::where('category_id',$cat->id)->skip($s)->first();
-
-                if($check)
-                {
-                    $check->user_id = $key;
-                    $check->save();
-                }
-                else
-                {
-                    $post = new supplier_categories;
-                    $post->category_id = $cat->id;
-                    $post->user_id = $key;
-                    $post->save();
-                }
-            }
-
-            $s = $s + 1;
-
-            $count = supplier_categories::count();
-            supplier_categories::where('category_id',$cat->id)->take($count)->skip($s)->get()->each(function($row){ $row->delete(); });
-        }
-        else
-        {
-            supplier_categories::where('category_id',$cat->id)->delete();
-        }
-
-        return redirect()->route('admin-my-cat-index');
     }
 
     public function store(StoreValidationRequest $request)
@@ -218,29 +123,6 @@ class CategoryController extends Controller
         $cat->fill($input)->save();
 
         return redirect()->route('admin-cat-index');
-    }
-
-    public function MyCategoryEdit($id)
-    {
-        $user = Auth::guard('admin')->user();
-        $suppliers = User::where('role_id',4)->get();
-
-        if($user)
-        {
-            $cats = my_categories::where('id','=',$id)->first();
-            $category_suppliers = supplier_categories::where('category_id',$id)->pluck('user_id')->toArray();
-
-            if(!$cats)
-            {
-                return redirect()->back();
-            }
-
-            return view('admin.category.create_my_category',compact('cats','suppliers','category_suppliers'));
-        }
-        else
-        {
-            return redirect()->route('front.index');
-        }
     }
 
     public function edit($id)
@@ -336,37 +218,6 @@ class CategoryController extends Controller
         $cat->update($input);
         Session::flash('success', 'Service updated successfully.');
         return redirect()->route('admin-cat-index');
-    }
-
-    public function MyCategoryDestroy($id)
-    {
-        $user = Auth::guard('admin')->user();
-
-        if($user)
-        {
-            $cat = my_categories::where('id',$id)->first();
-            supplier_categories::where('category_id',$id)->delete();
-
-            if(!$cat)
-            {
-                return redirect()->back();
-            }
-
-            if($cat->photo == null){
-                $cat->delete();
-                Session::flash('success', 'Category deleted successfully.');
-                return redirect()->route('admin-my-cat-index');
-            }
-
-            \File::delete(public_path() .'/assets/images/'.$cat->photo);
-            $cat->delete();
-            Session::flash('success', 'Category deleted successfully.');
-            return redirect()->route('admin-my-cat-index');
-        }
-        else
-        {
-            return redirect()->route('front.index');
-        }
     }
 
     public function destroy($id)
