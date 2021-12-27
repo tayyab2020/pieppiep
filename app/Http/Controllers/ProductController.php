@@ -590,6 +590,7 @@ class ProductController extends Controller
                           
                             var_dump('features'.$request->f_rows[$f]);
                             var_dump($sub_features);
+                            exit();
                           }
 
                         foreach($sub_features as $s => $sub)
