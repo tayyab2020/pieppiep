@@ -211,7 +211,7 @@ class ProductController extends Controller
 
         if($user->can('product-create'))
         {
-            $categories = Category::where('user_id',$user_id)->get();
+            $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
             $brands = Brand::where('user_id',$user_id)->get();
             /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
