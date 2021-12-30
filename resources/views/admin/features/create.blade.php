@@ -173,6 +173,7 @@
                                                                         <tr data-id="{{$f1+1}}">
                                                                             <td>
                                                                                 <input value="{{$f1+1}}" type="hidden" name="f_rows[]" class="f_row">
+                                                                                <input value="{{$key1->id}}" type="hidden" name="feature_ids[]">
                                                                                 <input value="{{$key1->title}}" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
                                                                             </td>
                                                                             <td>
@@ -216,6 +217,7 @@
                                                                     <tr data-id="1">
                                                                         <td>
                                                                             <input type="hidden" name="f_rows[]" class="f_row" value="1">
+                                                                            <input type="hidden" name="feature_ids[]">
                                                                             <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
                                                                         </td>
                                                                         <td>
@@ -424,6 +426,7 @@
                                                                                             <tr data-id="1">
                                                                                                 <td>
                                                                                                     <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
+                                                                                                    <input type="hidden" name="feature_row_ids{{$s+1}}[]" value="{{$key1->id}}">
                                                                                                     <input value="{{$key1->title}}" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Feature Title" type="text">
                                                                                                 </td>
                                                                                                 <td>
@@ -462,6 +465,7 @@
                                                                                     <tr data-id="{{$s1}}">
                                                                                         <td>
                                                                                             <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
+                                                                                            <input type="hidden" name="feature_row_ids{{$s+1}}[]">
                                                                                             <input value="" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Feature Title" type="text">
                                                                                         </td>
                                                                                         <td>
@@ -523,6 +527,7 @@
                                                                         <tr data-id="1">
                                                                             <td>
                                                                                 <input type="hidden" name="f_rows1[]" class="f_row1" value="1">
+                                                                                <input type="hidden" name="feature_row_ids1[]">
                                                                                 <input class="form-control feature_title1" name="features1[]" id="blood_group_slug" placeholder="Feature Title" type="text">
                                                                             </td>
                                                                             <td>
@@ -785,6 +790,7 @@
         $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").find('table').append('<tr data-id="'+feature_row+'">\n' +
             '                                                                                        <td>\n' +
             '                                                                                            <input type="hidden" name="f_rows'+id+'[]" class="f_row1" value="'+feature_row+'">' +
+            '                                                                                            <input type="hidden" name="feature_row_ids'+id+'[]">' +
             '                                                                                            <input class="form-control feature_title1" name="features'+id+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
@@ -839,6 +845,7 @@
             $('#sub-features').find(".sub-feature-table-container[data-id='" + heading_id + "']").find('table').append('<tr data-id="'+f_row+'">\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <input type="hidden" name="f_rows'+heading_id+'[]" class="f_row1" value="'+f_row+'">' +
+                '                                                                                            <input type="hidden" name="feature_row_ids'+heading_id+'[]">' +
                 '                                                                                            <input class="form-control feature_title1" name="features'+heading_id+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
@@ -894,6 +901,7 @@
         $(".options-table table tbody").append('<tr data-id="'+feature_row+'">\n' +
             '                                                                                        <td>\n' +
             '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+feature_row+'">' +
+            '                                                                                            <input type="hidden" name="feature_ids[]">' +
             '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
@@ -965,6 +973,7 @@
             '                                                                                        <tr data-id="'+feature_row1+'">\n' +
             '                                                                                        <td>\n' +
             '                                                                                            <input type="hidden" name="f_rows'+feature_row+'[]" class="f_row1" value="'+feature_row1+'">' +
+            '                                                                                            <input type="hidden" name="feature_row_ids'+feature_row+'[]">' +
             '                                                                                            <input class="form-control feature_title1" name="features'+feature_row+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
@@ -1017,6 +1026,7 @@
             $('.options-table').find("table").append('<tr data-id="'+f_row+'">\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
+                '                                                                                            <input type="hidden" name="feature_ids[]">' +
                 '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
@@ -1088,6 +1098,7 @@
                 '                                                                                        <tr data-id="'+f_row1+'">\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <input type="hidden" name="f_rows'+f_row+'[]" class="f_row1" value="'+f_row1+'">' +
+                '                                                                                            <input type="hidden" name="feature_row_ids'+f_row+'[]">' +
                 '                                                                                            <input class="form-control feature_title1" name="features'+f_row+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +

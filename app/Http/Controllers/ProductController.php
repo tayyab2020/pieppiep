@@ -11,7 +11,6 @@ use App\features;
 use App\Imports\ProductsImport;
 use App\Model1;
 use App\model_features;
-use App\my_categories;
 use App\supplier_categories;
 use App\price_tables;
 use App\product;
@@ -217,9 +216,8 @@ class ProductController extends Controller
             /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
-            $feature_categories = my_categories::leftjoin('supplier_categories','supplier_categories.category_id','=','my_categories.id')->where('supplier_categories.user_id',$user_id)->select('my_categories.*')->get();
 
-            return view('admin.product.create',compact('categories','brands','tables','features_headings','feature_categories'));
+            return view('admin.product.create',compact('categories','brands','tables','features_headings'));
         }
         else
         {
@@ -1159,7 +1157,7 @@ class ProductController extends Controller
             $features_data = product_features::where('product_id',$id)->where('sub_feature',0)->get();
             $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
-            $categories = Category::where('user_id',$user_id)->get();
+            $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
             $brands = Brand::where('user_id',$user_id)->get();
             /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
@@ -1171,9 +1169,8 @@ class ProductController extends Controller
                     ->select('model_features.*','features.title as heading','product_features.title as feature_title');
 
             }])->where('product_id',$id)->get();
-            $feature_categories = my_categories::leftjoin('supplier_categories','supplier_categories.category_id','=','my_categories.id')->where('supplier_categories.user_id',$user_id)->select('my_categories.*')->get();
 
-            return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings','feature_categories'));
+            return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
         }
         else
         {

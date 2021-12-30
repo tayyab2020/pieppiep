@@ -1224,7 +1224,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->hasAnyPermission(['user-products', 'user-colors', 'user-price-tables', 'my-services', 'user-categories', 'user-brands', 'user-models', 'user-items', 'user-features']))
 
-                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-cat-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index' || Route::currentRouteName() == 'supplier-products' || Route::currentRouteName() == 'supplier-categories') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Products</span></a>
+                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'admin-feature-index' || Route::currentRouteName() == 'supplier-products' || Route::currentRouteName() == 'supplier-categories') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Products</span></a>
 
                     <ul class="hide">
 
@@ -1262,7 +1262,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('user-categories'))
 
-                                    <li><a href="{{route('admin-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
+                                    <li><a href="{{route('supplier-categories')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
 
                                 @endif
 
@@ -1289,8 +1289,6 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                                     <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
 
                                 @endif
-
-                                <li><a href="{{route('supplier-categories')}}"><i class="fa fa-angle-right"></i> My Feature Categories</a></li>
 
                             @endif
 

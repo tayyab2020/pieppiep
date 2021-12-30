@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\vats;
 use Illuminate\Http\Request;
 use App\Category;
-use App\my_categories;
+use App\sub_categories;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreValidationRequest;
 use App\Http\Requests\UpdateValidationRequest;
@@ -32,9 +32,9 @@ class MyCategoryController extends Controller
     {
         $suppliers = User::where('role_id',4)->get();
 
-        //$data = features::leftjoin("my_categories",\DB::raw("FIND_IN_SET(my_categories.id,features.category_ids)"),">",\DB::raw("'0'"))->get();
+        //$data = features::leftjoin("categories",\DB::raw("FIND_IN_SET(categories.id,features.category_ids)"),">",\DB::raw("'0'"))->get();
 
-        $cats = my_categories::orderBy('id','desc')->get();
+        $cats = Category::orderBy('id','desc')->get();
         return view('admin.category.my_categories_index',compact('cats'));
     }
 
@@ -48,12 +48,12 @@ class MyCategoryController extends Controller
     {
         if($request->cat_id)
         {
-            $cat = my_categories::where('id',$request->cat_id)->first();
+            $cat = Category::where('id',$request->cat_id)->first();
             Session::flash('success', 'Category edited successfully.');
         }
         else
         {
-            $cat = new my_categories;
+            $cat = new Category;
             Session::flash('success', 'New Category added successfully.');
         }
 
@@ -67,6 +67,54 @@ class MyCategoryController extends Controller
         }
 
         $cat->fill($input)->save();
+
+        if($request->sub_category_title)
+        {
+            $sub_categories = $request->sub_category_title;
+            $sub_category_ids = $request->sub_category_id;
+            $id_array = [];
+
+            foreach($sub_categories as $x => $key1)
+            {
+                $check1 = sub_categories::where('id',$sub_category_ids[$x])->first();
+
+                if(!$check1)
+                {
+                    if($key1 && $request->sub_category_slug[$x])
+                    {
+                        $check1 = new sub_categories;
+                        $check1->main_id = $cat->id;
+                        $check1->cat_name = $key1;
+                        $check1->cat_slug = $request->sub_category_slug[$x];
+                        $check1->description = $request->sub_category_description[$x];
+                        $check1->save();
+
+                        $id_array[] = $check1->id;
+                    }
+                }
+                else
+                {
+                    if($key1 && $request->sub_category_slug[$x])
+                    {
+                        $check1->main_id = $cat->id;
+                        $check1->cat_name = $key1;
+                        $check1->cat_slug = $request->sub_category_slug[$x];
+                        $check1->description = $request->sub_category_description[$x];
+                        $check1->save();
+                    }
+
+                    $id_array[] = $check1->id;
+                }
+
+            }
+
+            sub_categories::whereNotIn('id',$id_array)->delete();
+        }
+        else
+        {
+            sub_categories::where('main_id',$cat->id)->delete();
+        }
+
 
         if($request->suppliers)
         {
@@ -107,7 +155,8 @@ class MyCategoryController extends Controller
     {
         $suppliers = User::where('role_id',4)->get();
 
-        $cats = my_categories::where('id','=',$id)->first();
+        $cats = Category::with('sub_categories')->where('id','=',$id)->first();
+
         $category_suppliers = supplier_categories::where('category_id',$id)->pluck('user_id')->toArray();
 
         if(!$cats)
@@ -120,7 +169,7 @@ class MyCategoryController extends Controller
 
     public function MyCategoryDestroy($id)
     {
-        $cat = my_categories::where('id',$id)->first();
+        $cat = Category::where('id',$id)->first();
         supplier_categories::where('category_id',$id)->delete();
 
         if(!$cat)

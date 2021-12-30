@@ -15,7 +15,7 @@ use App\Http\Requests\StoreValidationRequest;
 use App\Http\Requests\UpdateValidationRequest;
 use Auth;
 use App\Generalsetting;
-use App\my_categories;;
+use App\Category;;
 use Mollie\Laravel\Facades\Mollie;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,7 +36,7 @@ class DefaultFeaturesController extends Controller
 
     public function create()
     {
-        $cats = my_categories::get();
+        $cats = Category::get();
 
         return view('admin.default_features.create',compact('cats'));
     }
@@ -65,8 +65,6 @@ class DefaultFeaturesController extends Controller
             Session::flash('success', 'New Feature added successfully.');
         }
 
-        $count = default_features_details::count();
-
         $feature->title = $request->title;
         $feature->comment_box = $comment_box;
         $feature->order_no = $request->order_no;
@@ -83,10 +81,12 @@ class DefaultFeaturesController extends Controller
         if($request->feature_type == 'Select' || $request->feature_type == 'Multiselect' || $request->feature_type == 'Checkbox')
         {
             $features = $request->features;
+            $feature_ids = $request->feature_ids;
+            $id_array = [];
 
             foreach($features as $x => $key)
             {
-                $feature_check = default_features_details::where('feature_id',$feature_main_id)->where('sub_feature',0)->skip($x)->first();
+                $feature_check = default_features_details::where('id',$feature_ids[$x])->first();
                 $f_rows = $request->f_rows;
 
                 if($feature_check)
@@ -106,6 +106,8 @@ class DefaultFeaturesController extends Controller
                     {
                         $main_id = NULL;
                     }
+
+                    $id_array[] = $feature_check->id;
                 }
                 else
                 {
@@ -120,6 +122,7 @@ class DefaultFeaturesController extends Controller
                         $details->save();
 
                         $main_id = $details->id;
+                        $id_array[] = $details->id;
                     }
                     else
                     {
@@ -134,10 +137,12 @@ class DefaultFeaturesController extends Controller
 
                     foreach ($sub_features as $s => $sub)
                     {
-                        $sub_feature_check = default_features_details::where('main_id',$main_id)->skip($s)->first();
                         $sub_values = 'feature_values'.$f_rows[$x];
                         $sub_price_impact = 'price_impact'.$f_rows[$x];
-                        $sub__impact_type = 'impact_type'.$f_rows[$x];
+                        $sub_impact_type = 'impact_type'.$f_rows[$x];
+                        $sub_id = 'feature_row_ids'.$f_rows[$x];
+
+                        $sub_feature_check = default_features_details::where('id',$sub_id[$s])->first();
 
                         if($sub_feature_check)
                         {
@@ -146,9 +151,11 @@ class DefaultFeaturesController extends Controller
                                 $sub_feature_check->title = $sub;
                                 $sub_feature_check->value = $request->$sub_values[$s] ? $request->$sub_values[$s] : 0;
                                 $sub_feature_check->price_impact = $request->$sub_price_impact[$s];
-                                $sub_feature_check->impact_type = $request->$sub__impact_type[$s];
+                                $sub_feature_check->impact_type = $request->$sub_impact_type[$s];
                                 $sub_feature_check->save();
                             }
+
+                            $id_array[] = $sub_feature_check->id;
                         }
                         else
                         {
@@ -161,21 +168,20 @@ class DefaultFeaturesController extends Controller
                                 $sub_feature->title = $sub;
                                 $sub_feature->value = $request->$sub_values[$s] ? $request->$sub_values[$s] : 0;
                                 $sub_feature->price_impact = $request->$sub_price_impact[$s];
-                                $sub_feature->impact_type = $request->$sub__impact_type[$s];
+                                $sub_feature->impact_type = $request->$sub_impact_type[$s];
                                 $sub_feature->save();
+
+                                $id_array[] = $sub_feature->id;
                             }
                         }
 
-                        $s = $s + 1;
                     }
 
-                    default_features_details::where('main_id',$main_id)->take($count)->skip($s)->get()->each(function($row){ $row->delete(); });
                 }
 
             }
 
-            $x = $x + 1;
-            default_features_details::where('feature_id',$feature_main_id)->where('sub_feature',0)->take($count)->skip($x)->get()->each(function($row){ $row->delete(); });
+            default_features_details::whereNotIn('id',$id_array)->delete();
         }
 
         return redirect()->route('default-features-index');
@@ -190,7 +196,7 @@ class DefaultFeaturesController extends Controller
             return redirect()->back();
         }
 
-        $cats = my_categories::get();
+        $cats = Category::get();
         $features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
         $sub_features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
 

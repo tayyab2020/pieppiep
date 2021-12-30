@@ -78,7 +78,7 @@
                                         <li><a href="{{route('handyman-commission-invoices')}}"><i class="fa fa-angle-right"></i> Commission Invoices</a></li>
                                         <li><a href="{{route('quotation-questions')}}"><i class="fa fa-angle-right"></i> Categories Quotation Questions</a></li>
                                         <li><a href="{{route('services-quotation-questions')}}"><i class="fa fa-angle-right"></i> Services Quotation Questions</a></li>
-                                        <li><a href="{{route('admin-my-cat-index')}}"><i class="fa fa-angle-right"></i> Features Categories</a></li>
+                                        <li><a href="{{route('admin-my-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
                                         <li><a href="{{route('default-features-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
                                     </ul>
                                 </li>

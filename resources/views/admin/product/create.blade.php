@@ -175,7 +175,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Category*</label>
                                                             <div class="col-sm-6">
-                                                                <select class="js-data-example-ajax form-control" style="height: 40px;" name="category_id" id="blood_grp" required>
+                                                                <select class="js-data-example-ajax8 form-control" style="height: 40px;" name="category_id" id="blood_grp" required>
 
                                                                     <option value="">Select Category</option>
 
@@ -672,32 +672,6 @@
                                                     <div id="menu5" class="tab-pane fade">
 
                                                         <div class="row" style="margin: 0;margin-bottom: 35px;">
-
-                                                            <div class="form-group">
-
-                                                                <div class="row" style="margin: 0;">
-
-                                                                    <div style="display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Feature Category*:</label>
-
-                                                                        <select class="js-data-example-ajax8 form-control" style="height: 40px;" id="feature_category" name="feature_category" id="blood_grp" required>
-
-                                                                            <option value="">Select Feature Category</option>
-
-                                                                            @foreach($feature_categories as $key)
-
-                                                                                <option {{isset($cats) && ($cats->feature_category == $key->id) ? 'selected' : null}} value="{{$key->id}}">{{$key->cat_name}}</option>
-
-                                                                            @endforeach
-
-                                                                        </select>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
 
                                                             <div class="form-group">
 
@@ -3772,7 +3746,7 @@
                     text: 'Slug should not be empty!',
                 });
             }
-            else if(!$(".js-data-example-ajax").val())
+            else if(!$(".js-data-example-ajax8").val())
             {
                 flag = 1;
                 Swal.fire({
@@ -3788,15 +3762,6 @@
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Brand should not be empty!',
-                });
-            }
-            else if(!$(".js-data-example-ajax8").val())
-            {
-                flag = 1;
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Feature Category should not be empty!',
                 });
             }
             /*else if(!$(".js-data-example-ajax2").val())
@@ -4717,7 +4682,7 @@
 
         });
 
-        $(".js-data-example-ajax").select2({
+        $(".js-data-example-ajax8").select2({
             width: '100%',
             height: '200px',
             placeholder: "Select Category",
@@ -4757,13 +4722,6 @@
             width: '100%',
             height: '200px',
             placeholder: "Select Feature",
-            allowClear: true,
-        });
-
-        $(".js-data-example-ajax8").select2({
-            width: 'auto',
-            height: '200px',
-            placeholder: "Select Feature Category",
             allowClear: true,
         });
 

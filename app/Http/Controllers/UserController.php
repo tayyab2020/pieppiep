@@ -62,7 +62,6 @@ use App\Sociallink;
 use App\sub_services;
 use App\cancelled_invoices;
 use App\handyman_unavailability_hours;
-use App\my_categories;
 use App\supplier_categories;
 use File;
 use Illuminate\Support\Str;
@@ -191,7 +190,7 @@ class UserController extends Controller
 
         if($user->role_id == 4)
         {
-            $feature_categories = my_categories::all();
+            $feature_categories = Category::all();
             $my_categories = supplier_categories::where('user_id',$user_id)->pluck('category_id')->toArray();
 
             return view('user.supplier_categories',compact('feature_categories','my_categories'));
@@ -666,7 +665,7 @@ class UserController extends Controller
                 if($key->status && $key->active)
                 {
                     $products[] = Products::where('user_id',$key->id)->get();
-                    $categories[] = supplier_categories::leftjoin('my_categories','my_categories.id','=','supplier_categories.category_id')->where('supplier_categories.user_id',$key->id)->orderBy('my_categories.id','desc')->select('my_categories.cat_name')->get();
+                    $categories[] = supplier_categories::leftjoin('categories','categories.id','=','supplier_categories.category_id')->where('supplier_categories.user_id',$key->id)->orderBy('categories.id','desc')->select('categories.cat_name')->get();
                 }
                 else
                 {

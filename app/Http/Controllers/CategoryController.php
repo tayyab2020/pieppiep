@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\vats;
 use Illuminate\Http\Request;
 use App\Category;
-use App\my_categories;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreValidationRequest;
 use App\Http\Requests\UpdateValidationRequest;
