@@ -6450,7 +6450,7 @@ class UserController extends Controller
 
         // $sub_cats = Category::leftjoin('handyman_products','handyman_products.product_id','=','categories.id')->leftjoin('sub_services','sub_services.sub_id','=','handyman_products.product_id')->where('handyman_products.handyman_id',$user_id)->where('categories.main_service',0)->select('categories.id','categories.cat_name','sub_services.cat_id','sub_services.sub_id','handyman_products.rate','handyman_products.description')->get();
 
-        $main_cats_selected = Category::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'categories.id')->where('handyman_products.handyman_id', $user_id)->where('categories.main_service', 1)->select('categories.id', 'categories.cat_name', 'handyman_products.product_id')->get();
+        $main_cats_selected = Category::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'categories.id')->where('handyman_products.handyman_id', $user_id)->select('categories.id', 'categories.cat_name', 'handyman_products.product_id')->get();
 
         foreach ($main_cats_selected as $key => $value) {
 

@@ -61,14 +61,14 @@ class AdminUserController extends Controller
 
     public function CreateQuestion()
     {
-        $services = Category::where('main_service',1)->get();
+        $services = Category::get();
 
         return view('admin.user.create_question',compact('services'));
     }
 
     public function EditQuestion($id)
     {
-        $services = Category::where('main_service',1)->get();
+        $services = Category::get();
 
         $data = quotation_questions::where('id',$id)->with('answers')->with('services')->first();
 
@@ -346,7 +346,7 @@ class AdminUserController extends Controller
 
         $q_a = requests_q_a::where('request_id',$id)->get();
 
-        $categories = Category::where('main_service',1)->get();
+        $categories = Category::get();
         $services = Service::all();
         $brands = Brand::all();
         $models = Model1::all();

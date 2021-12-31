@@ -956,7 +956,7 @@ class FrontendController extends Controller
 
         }
 
-        $services = Category::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'categories.id')->where('handyman_products.handyman_id', '=', $id)->where('categories.main_service', 1)->leftjoin('service_types', 'service_types.id', '=', 'categories.service_type')->Select('categories.id as id', 'categories.variable_questions', 'categories.cat_name as cat_name', 'categories.cat_slug as cat_slug', 'categories.photo as cat_photo', 'service_types.type as service_type', 'service_types.text as service_text', 'handyman_products.rate', 'handyman_products.description', 'handyman_products.vat_percentage', 'handyman_products.sell_rate', 'service_types.id as service_id')->get();
+        $services = Category::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'categories.id')->where('handyman_products.handyman_id', '=', $id)->leftjoin('service_types', 'service_types.id', '=', 'categories.service_type')->Select('categories.id as id', 'categories.variable_questions', 'categories.cat_name as cat_name', 'categories.cat_slug as cat_slug', 'categories.photo as cat_photo', 'service_types.type as service_type', 'service_types.text as service_text', 'handyman_products.rate', 'handyman_products.description', 'handyman_products.vat_percentage', 'handyman_products.sell_rate', 'service_types.id as service_id')->get();
 
         if ($user1 != "") {
             $user_id = Auth::guard('user')->user()->id;

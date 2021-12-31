@@ -92,7 +92,7 @@ class AppServiceProvider extends ServiceProvider
 
             if(\Route::currentRouteName() == 'front.index' || \Route::currentRouteName() == 'front.products' || \Route::currentRouteName() == 'front.product' || \Route::currentRouteName() == 'front.services' || \Route::currentRouteName() == 'front.service')
             {
-                $quote_cats = Category::where('main_service', '=', 1)->get();
+                $quote_cats = Category::get();
                 $quote_products = Products::leftjoin('categories','categories.id','=','products.category_id')->select('products.id','products.title','categories.cat_name')->get();
                 $quote_services = Service::all();
                 $quote_data = terms_conditions::where("role",2)->first();
