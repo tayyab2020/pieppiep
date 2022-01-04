@@ -108,7 +108,7 @@ class MyCategoryController extends Controller
 
             }
 
-            sub_categories::whereNotIn('id',$id_array)->delete();
+            sub_categories::whereNotIn('id',$id_array)->where('main_id',$cat->id)->delete();
         }
         else
         {
@@ -170,7 +170,6 @@ class MyCategoryController extends Controller
     public function MyCategoryDestroy($id)
     {
         $cat = Category::where('id',$id)->first();
-        supplier_categories::where('category_id',$id)->delete();
 
         if(!$cat)
         {
@@ -179,12 +178,16 @@ class MyCategoryController extends Controller
 
         if($cat->photo == null){
             $cat->delete();
+            sub_categories::where('main_id',$id)->delete();
+            supplier_categories::where('category_id',$id)->delete();
             Session::flash('success', 'Category deleted successfully.');
             return redirect()->route('admin-my-cat-index');
         }
 
         \File::delete(public_path() .'/assets/images/'.$cat->photo);
         $cat->delete();
+        sub_categories::where('main_id',$id)->delete();
+        supplier_categories::where('category_id',$id)->delete();
         Session::flash('success', 'Category deleted successfully.');
         return redirect()->route('admin-my-cat-index');
     }
