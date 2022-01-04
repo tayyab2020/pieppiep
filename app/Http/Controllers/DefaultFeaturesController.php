@@ -181,7 +181,7 @@ class DefaultFeaturesController extends Controller
 
             }
 
-            default_features_details::whereNotIn('id',$id_array)->delete();
+            default_features_details::whereNotIn('id',$id_array)->where('feature_id',$feature_main_id)->delete();
         }
 
         return redirect()->route('default-features-index');

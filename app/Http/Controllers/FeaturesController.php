@@ -225,7 +225,7 @@ class FeaturesController extends Controller
 
             }
 
-            features_details::whereNotIn('id',$id_array)->delete();
+            features_details::whereNotIn('id',$id_array)->where('feature_id',$feature_main_id)->delete();
         }
 
         return redirect()->route('admin-feature-index');
