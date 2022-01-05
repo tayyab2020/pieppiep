@@ -60,7 +60,7 @@
 
                                                             @foreach($prices[$org_heights[$i]] as $key)
 
-                                                                <td>{{$key['value']}}</td>
+                                                                <td>{{round($key['value'], 0)}}</td>
 
                                                             @endforeach
 
