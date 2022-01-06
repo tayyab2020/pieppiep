@@ -15,7 +15,8 @@ use App\Http\Requests\StoreValidationRequest;
 use App\Http\Requests\UpdateValidationRequest;
 use Auth;
 use App\Generalsetting;
-use App\Category;;
+use App\Category;
+use App\sub_categories;
 use Mollie\Laravel\Facades\Mollie;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -37,8 +38,9 @@ class DefaultFeaturesController extends Controller
     public function create()
     {
         $cats = Category::get();
+        $sub_categories = sub_categories::leftjoin('categories','categories.id','=','sub_categories.main_id')->select('sub_categories.*','categories.cat_name as title')->get();
 
-        return view('admin.default_features.create',compact('cats'));
+        return view('admin.default_features.create',compact('cats','sub_categories'));
     }
 
     public function store(Request $request)
@@ -88,6 +90,24 @@ class DefaultFeaturesController extends Controller
             {
                 $feature_check = default_features_details::where('id',$feature_ids[$x])->first();
                 $f_rows = $request->f_rows;
+                $sub_categories = 'sub_category_link'.$f_rows[$x];
+                $sub_category_ids = [];
+
+                foreach($request->$sub_categories as $y => $sub_cat)
+                {
+                    if($sub_cat == 1)
+                    {
+                        $sub_category_id = 'sub_category_id'.$f_rows[$x];
+                        $sub_category_ids[] = $request->$sub_category_id[$y];
+                    }
+                }
+
+                $sub_categories = implode(',', $sub_category_ids);
+
+                if(!$sub_categories)
+                {
+                    $sub_categories = NULL;
+                }
 
                 if($feature_check)
                 {
@@ -98,6 +118,7 @@ class DefaultFeaturesController extends Controller
                         $feature_check->value = $request->feature_values[$x] ? $request->feature_values[$x] : 0;
                         $feature_check->price_impact = $request->price_impact[$x];
                         $feature_check->impact_type = $request->impact_type[$x];
+                        $feature_check->sub_category_ids = $sub_categories;
                         $feature_check->save();
 
                         $main_id = $feature_check->id;
@@ -119,6 +140,7 @@ class DefaultFeaturesController extends Controller
                         $details->value = $request->feature_values[$x] ? $request->feature_values[$x] : 0;
                         $details->price_impact = $request->price_impact[$x];
                         $details->impact_type = $request->impact_type[$x];
+                        $details->sub_category_ids = $sub_categories;
                         $details->save();
 
                         $main_id = $details->id;
@@ -199,8 +221,9 @@ class DefaultFeaturesController extends Controller
         $cats = Category::get();
         $features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
         $sub_features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
+        $sub_categories = sub_categories::leftjoin('categories','categories.id','=','sub_categories.main_id')->select('sub_categories.*','categories.cat_name as title')->get();
 
-        return view('admin.default_features.create',compact('feature','cats','features_data','sub_features_data'));
+        return view('admin.default_features.create',compact('feature','cats','features_data','sub_features_data','sub_categories'));
     }
 
     public function destroy($id)
