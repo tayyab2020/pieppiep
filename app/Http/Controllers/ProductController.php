@@ -1175,6 +1175,7 @@ class ProductController extends Controller
             $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
+            $sub_categories = sub_categories::where('main_id',$cats->category_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();
             /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
@@ -1187,7 +1188,7 @@ class ProductController extends Controller
 
             }])->where('product_id',$id)->get();
 
-            return view('admin.product.create',compact('ladderband_data','cats','categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
+            return view('admin.product.create',compact('ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
         }
         else
         {

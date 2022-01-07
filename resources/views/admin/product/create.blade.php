@@ -194,6 +194,16 @@
 
                                                                     <option value="">Select Sub Category</option>
 
+                                                                    @if(isset($sub_categories))
+
+                                                                        @foreach($sub_categories as $sub_cat)
+
+                                                                            <option @if(isset($cats)) @if($cats->sub_category_id == $sub_cat->id) selected @endif @endif value="{{$sub_cat->id}}">{{$sub_cat->cat_name}}</option>
+
+                                                                        @endforeach
+
+                                                                    @endif
+
                                                                 </select>
                                                             </div>
                                                         </div>
