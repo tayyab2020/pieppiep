@@ -160,7 +160,7 @@
                                                                     <th style="width: 10%;">Sub Feature</th>
                                                                     <th>Price Impact</th>
                                                                     <th>Impact Type</th>
-                                                                    <th style="width: 10%;border-top-right-radius: 9px;"></th>
+                                                                    <th style="width: 12%;border-top-right-radius: 9px;"></th>
                                                                 </tr>
                                                                 </thead>
 
@@ -200,6 +200,11 @@
                                                                                 </select>
                                                                             </td>
                                                                             <td style="text-align: center;">
+
+                                                                                <span data-id="{{$f1+1}}" id="next-row-span" class="tooltip1 sub-category-row" style="cursor: pointer;font-size: 20px;">
+                                                                                    <i id="next-row-icon" class="fa fa-fw fa-shield"></i>
+                                                                                </span>
+
                                                                                 <span id="next-row-span" class="tooltip1 add-row" data-id="" style="cursor: pointer;font-size: 20px;">
                                                                                     <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
                                                                                 </span>
@@ -244,9 +249,14 @@
                                                                             </select>
                                                                         </td>
                                                                         <td style="text-align: center;">
-                                                                        <span id="next-row-span" class="tooltip1 add-row" data-id="" style="cursor: pointer;font-size: 20px;">
-                                                                            <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																		</span>
+
+                                                                            <span id="next-row-span" class="tooltip1 sub-category-row" data-id="1" style="cursor: pointer;font-size: 20px;">
+                                                                                <i id="next-row-icon" class="fa fa-fw fa-shield"></i>
+																		    </span>
+
+                                                                            <span id="next-row-span" class="tooltip1 add-row" data-id="" style="cursor: pointer;font-size: 20px;">
+                                                                                <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+                                                                            </span>
 
                                                                             <span data-id="" id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
 																			<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
@@ -574,6 +584,119 @@
                                             </div>
                                         </div>
 
+                                        <div id="myModal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div style="width: 70%;" class="modal-dialog">
+
+                                                <div class="modal-content">
+
+                                                    <div class="modal-header">
+                                                        <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <h3 id="myModalLabel">Sub Categories</h3>
+                                                    </div>
+
+                                                    <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
+
+                                                        <div id="sub-categories">
+
+                                                            @if(isset($features_data) && count($features_data) > 0)
+
+                                                                @foreach($features_data as $f2 => $key2)
+
+                                                                    <?php
+                                                                    $sub_categories1 = explode(',',$key2->sub_category_ids);
+                                                                    ?>
+
+                                                                    <div data-id="{{$f2+1}}" class="sub-category-table-container table1">
+
+                                                                        <table style="margin: auto;width: 95%;">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Main Category</th>
+                                                                                <th>Sub Category</th>
+                                                                                <th>Linked</th>
+                                                                            </tr>
+                                                                            </thead>
+
+                                                                            <tbody>
+
+                                                                            @foreach($sub_categories as $x => $key)
+
+                                                                                <tr>
+                                                                                    <td>{{$key->title}}</td>
+                                                                                    <td>
+                                                                                        {{$key->cat_name}}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="hidden" name="sub_category_id{{$f2+1}}[]" value="{{$key->id}}">
+                                                                                        <select class="form-control" name="sub_category_link{{$f2+1}}[]">
+
+                                                                                            <option value="0">No</option>
+                                                                                            <option {{in_array($key->id, $sub_categories1) ? 'selected' : null}} value="1">Yes</option>
+
+                                                                                        </select>
+                                                                                    </td>
+                                                                                </tr>
+
+                                                                            @endforeach
+
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+
+                                                                @endforeach
+
+                                                            @else
+
+                                                                <div data-id="1" class="sub-category-table-container table1">
+
+                                                                    <table style="margin: auto;width: 95%;">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>Main Category</th>
+                                                                            <th>Sub Category</th>
+                                                                            <th>Linked</th>
+                                                                        </tr>
+                                                                        </thead>
+
+                                                                        <tbody>
+
+                                                                        @foreach($sub_categories as $x => $key)
+
+                                                                            <tr>
+                                                                                <td>{{$key->title}}</td>
+                                                                                <td>
+                                                                                    {{$key->cat_name}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="hidden" name="sub_category_id1[]" value="{{$key->id}}">
+                                                                                    <select class="form-control" name="sub_category_link1[]">
+
+                                                                                        <option value="0">No</option>
+                                                                                        <option selected value="1">Yes</option>
+
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+
+                                                                        @endforeach
+
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </div>
+
+                                                            @endif
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
                                     </form>
 
                                 </div>
@@ -613,6 +736,10 @@
 .table table thead th{font-weight: 700;padding: 12px 10px;background: #f8f9fa;color: #3a3a3a;}
 .table table tbody td{padding: 10px;border-bottom: 1px solid #d3d3d3;color: #3a3a3a;vertical-align: middle;}
 .table table tbody tr:last-child td{ border-bottom: none; }
+
+.table1 table{ border-collapse: separate; }
+.table1 th, .table1 td{ padding: 10px;border: 1px solid #c2c2c2; }
+.table1 td{ border-top: 0; }
 
 .accordion-menu h2 {
 	font-size: 18px;
@@ -764,8 +891,18 @@
         $('#sub-features').children().not(".sub-feature-table-container[data-id='" + id + "']").hide();
         $('#sub-features').find(".sub-feature-table-container[data-id='" + id + "']").show();
 
-        $('#myModal1').modal('toggle');
         $('#myModal2').modal('toggle');
+        $('.modal-backdrop').hide();
+
+    });
+
+    $('body').on('click', '.sub-category-row' ,function(){
+
+        var id = $(this).data('id');
+        $('#sub-categories').children().not(".sub-category-table-container[data-id='" + id + "']").hide();
+        $('#sub-categories').find(".sub-category-table-container[data-id='" + id + "']").show();
+
+        $('#myModal3').modal('toggle');
         $('.modal-backdrop').hide();
 
     });
@@ -1004,6 +1141,37 @@
             '                                                                                            <button data-id="'+feature_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
             '                                                                                        </div></div>');
 
+        $('#sub-categories').append('<div data-id="'+feature_row+'" class="sub-category-table-container table1">\n' +
+            '\n' +
+            '                                                                                        <table style="margin: auto;width: 95%;">\n' +
+            '                                                                                            <thead>\n' +
+            '                                                                                            <tr>\n' +
+            '                                                                                                <th>Main Category</th>\n' +
+            '                                                                                                <th>Sub Category</th>\n' +
+            '                                                                                                <th>Linked</th>\n' +
+            '                                                                                            </tr>\n' +
+            '                                                                                            </thead>\n' +
+            '\n' +
+            '                                                                                            <tbody>' +
+            '                                                                                    @foreach($sub_categories as $x => $key)\n' +
+            '\n' +
+            '                                                                                       <tr>\n' +
+            '                                                                                           <td>{{$key->title}}</td>\n' +
+            '                                                                                           <td>{{$key->cat_name}}</td>\n' +
+            '                                                                                           <td>\n' +
+            '                                                                                               <input type="hidden" name="sub_category_id'+feature_row+'[]" value="{{$key->id}}">\n' +
+            '                                                                                               <select class="form-control" name="sub_category_link'+feature_row+'[]">\n' +
+            '\n' +
+            '                                                                                                   <option value="0">No</option>\n' +
+            '                                                                                                   <option selected value="1">Yes</option>\n' +
+            '\n' +
+            '                                                                                               </select>\n' +
+            '                                                                                           </td>\n' +
+            '                                                                                       </tr>\n' +
+            '                                                                                    @endforeach\n' +
+            '                                                                                    </tbody></table>\n' +
+            '                                                                                        </div>');
+
 	});
 
     $(document).on('click', '.remove-row', function () {
@@ -1019,6 +1187,7 @@
 
         $(this).parents('tr').remove();
         $('#sub-features').find(".sub-feature-table-container[data-id='" + row_id + "']").remove();
+        $('#sub-categories').find(".sub-category-table-container[data-id='" + row_id + "']").remove();
 
         if($('.options-table').find("table tbody tr").length == 0)
         {
@@ -1057,6 +1226,11 @@
                 '\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td style="text-align: center;">\n' +
+                '\n' +
+                '                                                                                           <span data-id="'+f_row+'" id="next-row-span" class="tooltip1 sub-category-row" style="cursor: pointer;font-size: 20px;">\n' +
+                '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-shield"></i>\n' +
+                '                                                                                           </span>\n' +
+                '\n' +
                 '                                                                                           <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">\n' +
                 '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
                 '                                                                                           </span>\n' +
@@ -1064,6 +1238,7 @@
                 '                                                                                           <span data-id="" id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">\n' +
                 '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
                 '                                                                                           </span>\n' +
+                '\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr>');
 
@@ -1128,6 +1303,37 @@
                 '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
                 '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
                 '                                                                                        </div></div>');
+
+            $('#sub-categories').append('<div data-id="'+f_row+'" class="sub-category-table-container table1">\n' +
+                '\n' +
+                '                                                                                        <table style="margin: auto;width: 95%;">\n' +
+                '                                                                                            <thead>\n' +
+                '                                                                                            <tr>\n' +
+                '                                                                                                <th>Main Category</th>\n' +
+                '                                                                                                <th>Sub Category</th>\n' +
+                '                                                                                                <th>Linked</th>\n' +
+                '                                                                                            </tr>\n' +
+                '                                                                                            </thead>\n' +
+                '\n' +
+                '                                                                                            <tbody>' +
+                '                                                                                    @foreach($sub_categories as $x => $key)\n' +
+                '\n' +
+                '                                                                                       <tr>\n' +
+                '                                                                                           <td>{{$key->title}}</td>\n' +
+                '                                                                                           <td>{{$key->cat_name}}</td>\n' +
+                '                                                                                           <td>\n' +
+                '                                                                                               <input type="hidden" name="sub_category_id'+f_row+'[]" value="{{$key->id}}">\n' +
+                '                                                                                               <select class="form-control" name="sub_category_link'+f_row+'[]">\n' +
+                '\n' +
+                '                                                                                                   <option value="0">No</option>\n' +
+                '                                                                                                   <option selected value="1">Yes</option>\n' +
+                '\n' +
+                '                                                                                               </select>\n' +
+                '                                                                                           </td>\n' +
+                '                                                                                       </tr>\n' +
+                '                                                                                    @endforeach\n' +
+                '                                                                                    </tbody></table>\n' +
+                '                                                                                        </div>');
 
         }
 

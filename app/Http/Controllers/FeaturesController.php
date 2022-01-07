@@ -18,6 +18,7 @@ use App\Http\Requests\UpdateValidationRequest;
 use Auth;
 use App\Generalsetting;
 use App\Category;
+use App\sub_categories;
 use Mollie\Laravel\Facades\Mollie;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -65,10 +66,11 @@ class FeaturesController extends Controller
         }
 
         $cats = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
+        $sub_categories = sub_categories::leftjoin('categories','categories.id','=','sub_categories.main_id')->leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('sub_categories.*','categories.cat_name as title')->get();
 
         if($user->can('create-feature'))
         {
-            return view('admin.features.create',compact('cats'));
+            return view('admin.features.create',compact('cats','sub_categories'));
         }
         else
         {
@@ -134,6 +136,27 @@ class FeaturesController extends Controller
             {
                 $feature_check = features_details::where('id',$feature_ids[$x])->first();
                 $f_rows = $request->f_rows;
+                $sub_categories = 'sub_category_link'.$f_rows[$x];
+                $sub_category_ids = [];
+
+                if($request->$sub_categories)
+                {
+                    foreach($request->$sub_categories as $y => $sub_cat)
+                    {
+                        if($sub_cat == 1)
+                        {
+                            $sub_category_id = 'sub_category_id'.$f_rows[$x];
+                            $sub_category_ids[] = $request->$sub_category_id[$y];
+                        }
+                    }
+                }
+
+                $sub_categories = implode(',', $sub_category_ids);
+
+                if(!$sub_categories)
+                {
+                    $sub_categories = NULL;
+                }
 
                 if($feature_check)
                 {
@@ -144,6 +167,7 @@ class FeaturesController extends Controller
                         $feature_check->value = $request->feature_values[$x] ? $request->feature_values[$x] : 0;
                         $feature_check->price_impact = $request->price_impact[$x];
                         $feature_check->impact_type = $request->impact_type[$x];
+                        $feature_check->sub_category_ids = $sub_categories;
                         $feature_check->save();
 
                         $main_id = $feature_check->id;
@@ -165,6 +189,7 @@ class FeaturesController extends Controller
                         $details->value = $request->feature_values[$x] ? $request->feature_values[$x] : 0;
                         $details->price_impact = $request->price_impact[$x];
                         $details->impact_type = $request->impact_type[$x];
+                        $details->sub_category_ids = $sub_categories;
                         $details->save();
 
                         $main_id = $details->id;
@@ -188,7 +213,7 @@ class FeaturesController extends Controller
                         $sub_impact_type = 'impact_type'.$f_rows[$x];
                         $sub_id = 'feature_row_ids'.$f_rows[$x];
 
-                        $sub_feature_check = features_details::where('id',$sub_id[$s])->first();
+                        $sub_feature_check = features_details::where('id',$request->$sub_id[$s])->first();
 
                         if($sub_feature_check)
                         {
@@ -256,8 +281,9 @@ class FeaturesController extends Controller
                 $cats = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
                 $features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
                 $sub_features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
+                $sub_categories = sub_categories::leftjoin('categories','categories.id','=','sub_categories.main_id')->leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('sub_categories.*','categories.cat_name as title')->get();
 
-                return view('admin.features.create',compact('feature','cats','features_data','sub_features_data'));
+                return view('admin.features.create',compact('feature','cats','features_data','sub_features_data','sub_categories'));
             }
             else
             {

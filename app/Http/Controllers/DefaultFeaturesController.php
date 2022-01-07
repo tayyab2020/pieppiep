@@ -163,8 +163,8 @@ class DefaultFeaturesController extends Controller
                         $sub_price_impact = 'price_impact'.$f_rows[$x];
                         $sub_impact_type = 'impact_type'.$f_rows[$x];
                         $sub_id = 'feature_row_ids'.$f_rows[$x];
-
-                        $sub_feature_check = default_features_details::where('id',$sub_id[$s])->first();
+                        
+                        $sub_feature_check = default_features_details::where('id',$request->$sub_id[$s])->first();
 
                         if($sub_feature_check)
                         {
