@@ -304,8 +304,9 @@ class FeaturesController extends Controller
                 $cats = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
                 $features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
                 $sub_features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
+                $sub_categories = sub_categories::leftjoin('categories','categories.id','=','sub_categories.main_id')->leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('sub_categories.*','categories.cat_name as title')->get();
 
-                return view('admin.features.create',compact('feature','cats','features_data','sub_features_data'));
+                return view('admin.features.create',compact('feature','cats','features_data','sub_features_data','sub_categories'));
             }
             else
             {

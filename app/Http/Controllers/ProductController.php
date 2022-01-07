@@ -26,6 +26,7 @@ use App\vats;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Category;
+use App\sub_categories;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreValidationRequest3;
 use App\Http\Requests\UpdateValidationRequest;
@@ -45,6 +46,22 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth:user');
+    }
+
+    public function getSubCategoriesByCategory(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $sub_categories = sub_categories::where('main_id','=',$request->id)->get();
+
+        return $sub_categories;
     }
 
     public function productsModelsByBrands(Request $request)
@@ -1228,6 +1245,7 @@ class ProductController extends Controller
     public function featuresData(Request $request)
     {
         $id = $request->id;
+        $sub_id = $request->sub_id;
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
@@ -1239,27 +1257,41 @@ class ProductController extends Controller
 
         if($request->heading_id)
         {
-            $features = features::with(['feature_details' => function($query)
+            if($sub_id)
             {
-                $query->where('features_details.sub_feature',0);
+                $features = features::with(['feature_details' => function($query) use($sub_id)
+                {
+                    $query->whereRaw("find_in_set('$sub_id',sub_category_ids)");
 
-            }])->with(['sub_features' => function($query)
+                }])->whereHas('feature_details', function($query) use($sub_id)
+                {
+                    $query->whereRaw("find_in_set('$sub_id',sub_category_ids)");
+
+                }, '>', 0)->with('sub_features')->where('id',$request->heading_id)->where('user_id',$user_id)->get();
+            }
+            else
             {
-                $query->where('features_details.sub_feature',1);
-
-            }])->whereRaw("find_in_set('$id',category_ids)")->where('id',$request->heading_id)->where('user_id',$user_id)->get();
+                $features = features::with('feature_details')->with('sub_features')->whereRaw("find_in_set('$id',category_ids)")->where('id',$request->heading_id)->where('user_id',$user_id)->get();
+            }
         }
         else
         {
-            $features = features::with(['feature_details' => function($query)
+            if($sub_id)
             {
-                $query->where('features_details.sub_feature',0);
+                $features = features::with(['feature_details' => function($query) use($sub_id)
+                {
+                    $query->whereRaw("find_in_set('$sub_id',sub_category_ids)");
 
-            }])->with(['sub_features' => function($query)
+                }])->whereHas('feature_details', function($query) use($sub_id)
+                {
+                    $query->whereRaw("find_in_set('$sub_id',sub_category_ids)");
+
+                }, '>', 0)->with('sub_features')->where('user_id',$user_id)->get();
+            }
+            else
             {
-                $query->where('features_details.sub_feature',1);
-
-            }])->whereRaw("find_in_set('$id',category_ids)")->where('user_id',$user_id)->get();
+                $features = features::with('feature_details')->with('sub_features')->whereRaw("find_in_set('$id',category_ids)")->where('user_id',$user_id)->get();
+            }
         }
 
         return $features;

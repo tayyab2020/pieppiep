@@ -17,11 +17,11 @@ class features extends Model
 
     public function feature_details()
     {
-        return $this->hasMany('App\features_details','feature_id','id');
+        return $this->hasMany('App\features_details','feature_id','id')->where('features_details.sub_feature',0);
     }
 
     public function sub_features()
     {
-        return $this->hasMany('App\features_details','feature_id','id');
+        return $this->hasMany('App\features_details','feature_id','id')->where('features_details.sub_feature',1);
     }
 }

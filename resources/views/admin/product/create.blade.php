@@ -188,6 +188,17 @@
                                                         </div>
 
                                                         <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id" id="blood_grp">
+
+                                                                    <option value="">Select Sub Category</option>
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Brand*</label>
                                                             <div class="col-sm-6">
                                                                 <select class="js-data-example-ajax1 form-control" style="height: 40px;" name="brand_id" id="blood_grp" required>
@@ -2020,331 +2031,448 @@
 
     $(document).ready(function() {
 
-        var rem_index = 0;
         var rem_arr = [];
         var rem_col_arr = [];
         var rem_lad_arr = [];
 
-        $('body').on('change', '.js-data-example-ajax8' ,function(){
+        function fetch_features(data)
+        {
 
-            var id = $(this).val();
+            $('.feature_box').find(".feature-row").find('.remove-feature').each(function() {
 
-            $.ajax({
-                type:"GET",
-                data: "id=" + id ,
-                url: "<?php echo url('/aanbieder/product/get-features-data')?>",
-                success: function(data) {
+                var id = $(this).data('id');
+                var row_id = $(this).parent().parent().data('id');
 
-                    $('.feature_box').find(".feature-row").find('.remove-feature').each(function() {
+                $('#primary-features').find(".feature-table-container[data-id='" + row_id + "']").find('table tbody tr').each(function (index) {
 
-                        var id = $(this).data('id');
-                        var row_id = $(this).parent().parent().data('id');
+                    var row = $(this).find('.f_row').val();
 
-                        $('#primary-features').find(".feature-table-container[data-id='" + row_id + "']").find('table tbody tr').each(function (index) {
+                    if($(this).find('.remove-primary-feature').data('id'))
+                    {
+                        rem_arr.push($(this).find('.remove-primary-feature').data('id'));
+                    }
 
-                            var row = $(this).find('.f_row').val();
+                    $('#models-features-tables table tbody').find("[data-id='" + row + "']").remove();
 
-                            if($(this).find('.remove-primary-feature').data('id'))
-                            {
-                                rem_arr.push($(this).find('.remove-primary-feature').data('id'));
-                            }
+                    $('#sub-features').find(".sub-feature-table-container[data-id='" + row + "']").find('table tbody tr').each(function (index) {
 
-                            $('#models-features-tables table tbody').find("[data-id='" + row + "']").remove();
-
-                            $('#sub-features').find(".sub-feature-table-container[data-id='" + row + "']").find('table tbody tr').each(function (index) {
-
-                                if($(this).find('.remove-sub-feature').data('id'))
-                                {
-                                    rem_arr.push($(this).find('.remove-sub-feature').data('id'));
-                                }
-
-                            });
-
-                            $('#sub-features').find(".sub-feature-table-container[data-id='" + row + "']").remove();
-
-                        });
-
-                        $('#primary-features').find(".feature-table-container[data-id='" + row_id + "']").remove();
-
-
-                        if(id)
+                        if($(this).find('.remove-sub-feature').data('id'))
                         {
-                            $('#removed_rows').val(rem_arr);
+                            rem_arr.push($(this).find('.remove-sub-feature').data('id'));
                         }
-
-                        var parent = this.parentNode.parentNode;
-
-                        $(parent).hide();
-                        $(parent).remove();
 
                     });
 
-                    if(data.length == 0)
-                    {
-                        $(".feature_box").append('<div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
-                            '\n' +
-                            '                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="1">\n' +
-                            '\n' +
-                            '                                                                            <div class="col-sm-5">\n' +
-                            '\n' +
-                            '                                                                            <select class="form-control validate js-data-example-ajax5">\n' +
-                            '\n' +
-                            '                                                                                <option value="">Select Feature Heading</option>\n' +
-                            '\n' +
-                            '                                                                                @foreach($features_headings as $feature)\n' +
-                            '\n' +
-                            '                                                                                    <option value="{{$feature->id}}">{{$feature->title}}</option>\n' +
-                            '\n' +
-                            '                                                                                @endforeach\n' +
-                            '\n' +
-                            '                                                                            </select>\n' +
-                            '\n' +
-                            '                                                                        </div>\n'+
-                            '\n' +
-                            '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
-                            '\n' +
-                            '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
-                            '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
-                            '\n' +
-                            '                                                                    </div>\n' +
-                            '\n' +
-                            '                </div>');
+                    $('#sub-features').find(".sub-feature-table-container[data-id='" + row + "']").remove();
 
-                        $('#primary-features').append('<select data-id="1" class="feature-table-container">\n' +
-                            '\n' +
-                            '                                                                                    <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
-                            '                                                                                        <thead>\n' +
-                            '                                                                                        <tr>\n' +
-                            '                                                                                            <th>Feature</th>\n' +
-                            '                                                                                            <th>Value</th>\n' +
-                            '                                                                                            <th>Sub Features</th>\n' +
-                            '                                                                                            <th>Price Impact</th>\n' +
-                            '                                                                                            <th>Impact Type</th>\n' +
-                            '                                                                                            <th>Remove</th>\n' +
-                            '                                                                                        </tr>\n' +
-                            '                                                                                        </thead>\n' +
-                            '\n' +
-                            '                                                                                        <tbody>' +
-                            '                                                                                   <tr data-id="1">\n' +
+                });
+
+                $('#primary-features').find(".feature-table-container[data-id='" + row_id + "']").remove();
+
+
+                if(id)
+                {
+                    $('#removed_rows').val(rem_arr);
+                }
+
+                var parent = this.parentNode.parentNode;
+
+                $(parent).hide();
+                $(parent).remove();
+
+            });
+
+            if(data.length == 0)
+            {
+                $(".feature_box").append('<div data-id="1" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+                    '\n' +
+                    '                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="1">\n' +
+                    '\n' +
+                    '                                                                            <div class="col-sm-5">\n' +
+                    '\n' +
+                    '                                                                            <select class="form-control validate js-data-example-ajax5">\n' +
+                    '\n' +
+                    '                                                                                <option value="">Select Feature Heading</option>\n' +
+                    '\n' +
+                    '                                                                                @foreach($features_headings as $feature)\n' +
+                    '\n' +
+                    '                                                                                    <option value="{{$feature->id}}">{{$feature->title}}</option>\n' +
+                    '\n' +
+                    '                                                                                @endforeach\n' +
+                    '\n' +
+                    '                                                                            </select>\n' +
+                    '\n' +
+                    '                                                                        </div>\n'+
+                    '\n' +
+                    '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
+                    '\n' +
+                    '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
+                    '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                </div>');
+
+                $('#primary-features').append('<select data-id="1" class="feature-table-container">\n' +
+                    '\n' +
+                    '                                                                                    <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                    '                                                                                        <thead>\n' +
+                    '                                                                                        <tr>\n' +
+                    '                                                                                            <th>Feature</th>\n' +
+                    '                                                                                            <th>Value</th>\n' +
+                    '                                                                                            <th>Sub Features</th>\n' +
+                    '                                                                                            <th>Price Impact</th>\n' +
+                    '                                                                                            <th>Impact Type</th>\n' +
+                    '                                                                                            <th>Remove</th>\n' +
+                    '                                                                                        </tr>\n' +
+                    '                                                                                        </thead>\n' +
+                    '\n' +
+                    '                                                                                        <tbody>' +
+                    '                                                                                   <tr data-id="1">\n' +
+                    '\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="1">' +
+                    '                                                                                            <input type="hidden" class="feature_heading" name="feature_headings[]">\n' +
+                    '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
+                    '\n' +
+                    '                                                                                                <option value="0">No</option>\n' +
+                    '                                                                                                <option value="1">Fixed</option>\n' +
+                    '                                                                                                <option value="2">m¹ Impact</option>\n' +
+                    '                                                                                                <option value="3">m² Impact</option>\n' +
+                    '\n' +
+                    '                                                                                            </select>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <select class="form-control" name="impact_type[]">\n\n' +
+                    '\n' +
+                    '                                                                                                <option value="0">€</option>\n' +
+                    '                                                                                                <option value="1">%</option>\n' +
+                    '\n' +
+                    '                                                                                            </select>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                    </tr></tbody></table>' +
+                    '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                    '                                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                    '                                                                                    </div></div>');
+
+
+                $('#sub-features').append('<div data-id="1" class="sub-feature-table-container">\n' +
+                    '\n' +
+                    '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                    '                                                                                            <thead>\n' +
+                    '                                                                                            <tr>\n' +
+                    '                                                                                                <th>Feature</th>\n' +
+                    '                                                                                                <th>Value</th>\n' +
+                    '                                                                                                <th>Price Impact</th>\n' +
+                    '                                                                                                <th>Impact Type</th>\n' +
+                    '                                                                                                <th>Remove</th>\n' +
+                    '                                                                                            </tr>\n' +
+                    '                                                                                            </thead>\n' +
+                    '\n' +
+                    '                                                                                            <tbody>' +
+                    '                                                                                        <tr data-id="1">\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <input type="hidden" name="f_rows1[]" class="f_row1" value="1">' +
+                    '                                                                                            <input class="form-control feature_title1" name="features1[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <input class="form-control feature_value1" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <select class="form-control" name="price_impact1[]">\n\n' +
+                    '\n' +
+                    '                                                                                                <option value="0">No</option>\n' +
+                    '                                                                                                <option value="1">Fixed</option>\n' +
+                    '                                                                                                <option value="2">m¹ Impact</option>\n' +
+                    '                                                                                                <option value="3">m² Impact</option>\n' +
+                    '\n' +
+                    '                                                                                            </select>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <select class="form-control" name="impact_type1[]">\n\n' +
+                    '\n' +
+                    '                                                                                                <option value="0">€</option>\n' +
+                    '                                                                                                <option value="1">%</option>\n' +
+                    '\n' +
+                    '                                                                                            </select>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                    </tr></tbody></table>' +
+                    '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                    '                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
+                    '                                                                                        </div></div>');
+
+                $(".js-data-example-ajax5").select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "Select Feature Heading",
+                    allowClear: false,
+                });
+
+            }
+
+            $.each(data, function(index, value) {
+
+                if(index == 0)
+                {
+                    var heading_row = 1;
+                }
+                else
+                {
+                    var heading_row = $('.feature_box').find('.feature-row').last().data('id');
+                    heading_row = heading_row + 1;
+                }
+
+                /*var features_options = '';
+
+                for(var i=0; i<data.length; i++)
+                {
+                    if(i == index)
+                    {
+                        features_options = features_options + '<option selected value="'+data[i].id+'">'+data[i].title+'</option>';
+                    }
+                    else
+                    {
+                        features_options = features_options + '<option value="'+data[i].id+'">'+data[i].title+'</option>';
+                    }
+                }*/
+
+                $(".feature_box").append('<div data-id="' + heading_row + '" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
+                    '\n' +
+                    '                                                                            <div class="col-sm-5">\n' +
+                    '\n' +
+                    '                                                                            <select class="form-control validate js-data-example-ajax5">\n' +
+                    '\n' +
+                    '                                                                                <option value="">Select Feature Heading</option>\n' +
+                    '\n' +
+                    '                                                                                @foreach($features_headings as $feature)\n' +
+                    '\n' +
+                    '                                                                                    <option value="{{$feature->id}}">{{$feature->title}}</option>\n' +
+                    '\n' +
+                    '                                                                                @endforeach\n' +
+                    '\n' +
+                    '                                                                            </select>\n' +
+                    '\n' +
+                    '                                                                        </div>\n' +
+                    '\n' +
+                    '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
+                    '\n' +
+                    '                                                                        <button data-id="' + heading_row + '" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
+                    '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
+                    '\n' +
+                    '                                                                    </div>\n' +
+                    '\n' +
+                    '                </div>');
+
+                var features = '';
+
+                if(value.feature_details.length == 0)
+                {
+                    var f_row = null;
+
+                    $('#primary-features').find(".feature-table-container").each(function() {
+
+                        $(this).find('table tbody tr').each(function() {
+
+                            var value = parseInt($(this).find('.f_row').val());
+                            value = isNaN(value) ? 0 : value;
+                            f_row = (value > f_row) ? value : f_row;
+
+                        });
+                    });
+
+                    f_row = f_row + 1;
+
+                    features = features + '<tr data-id="'+f_row+'">\n' +
+                        '\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
+                        '                                                                                            <input value="'+value.id+'" type="hidden" class="feature_heading" name="feature_headings[]">\n' +
+                        '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
+                        '\n' +
+                        '                                                                                                <option value="0">No</option>\n' +
+                        '                                                                                                <option value="1">Fixed</option>\n' +
+                        '                                                                                                <option value="2">m¹ Impact</option>\n' +
+                        '                                                                                                <option value="3">m² Impact</option>\n' +
+                        '\n' +
+                        '                                                                                            </select>\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <select class="form-control" name="impact_type[]">\n\n' +
+                        '\n' +
+                        '                                                                                                <option value="0">€</option>\n' +
+                        '                                                                                                <option value="1">%</option>\n' +
+                        '\n' +
+                        '                                                                                            </select>\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                    </tr>';
+
+                    var sub_features = '';
+
+                    var feature_row1 = null;
+
+                    $('#sub-features').find(".sub-feature-table-container").each(function () {
+
+                        $(this).find('table tbody tr').each(function () {
+
+                            var value = parseInt($(this).find('.f_row1').val());
+                            value = isNaN(value) ? 0 : value;
+                            feature_row1 = (value > feature_row1) ? value : feature_row1;
+
+                        });
+                    });
+
+                    feature_row1 = feature_row1 + 1;
+
+                    sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
+                        '                                                                                            <input class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <input class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <select class="form-control" name="price_impact' + f_row + '[]">\n\n' +
+                        '\n' +
+                        '                                                                                                <option value="0">No</option>\n' +
+                        '                                                                                                <option value="1">Fixed</option>\n' +
+                        '                                                                                                <option value="2">m¹ Impact</option>\n' +
+                        '                                                                                                <option value="3">m² Impact</option>\n' +
+                        '\n' +
+                        '                                                                                            </select>\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <select class="form-control" name="impact_type' + f_row + '[]">\n\n' +
+                        '\n' +
+                        '                                                                                                <option value="0">€</option>\n' +
+                        '                                                                                                <option value="1">%</option>\n' +
+                        '\n' +
+                        '                                                                                            </select>\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                        <td>\n' +
+                        '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                        '                                                                                        </td>\n' +
+                        '                                                                                    </tr>';
+
+                    $('#sub-features').append('<div data-id="'+f_row+'" class="sub-feature-table-container">\n' +
+                        '\n' +
+                        '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                        '                                                                                            <thead>\n' +
+                        '                                                                                            <tr>\n' +
+                        '                                                                                                <th>Feature</th>\n' +
+                        '                                                                                                <th>Value</th>\n' +
+                        '                                                                                                <th>Price Impact</th>\n' +
+                        '                                                                                                <th>Impact Type</th>\n' +
+                        '                                                                                                <th>Remove</th>\n' +
+                        '                                                                                            </tr>\n' +
+                        '                                                                                            </thead>\n' +
+                        '\n' +
+                        '                                                                                            <tbody>' +
+                        sub_features +
+                        '                                                                                    </tbody></table>' +
+                        '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
+                        '                                                                                        </div></div>');
+                }
+                else
+                {
+                    var f_row = null;
+
+                    $('#primary-features').find(".feature-table-container").each(function() {
+
+                        $(this).find('table tbody tr').each(function() {
+
+                            var value = parseInt($(this).find('.f_row').val());
+                            value = isNaN(value) ? 0 : value;
+                            f_row = (value > f_row) ? value : f_row;
+
+                        });
+                    });
+
+                    var feature_row1 = null;
+
+                    $('#sub-features').find(".sub-feature-table-container").each(function () {
+
+                        $(this).find('table tbody tr').each(function () {
+
+                            var value = parseInt($(this).find('.f_row1').val());
+                            value = isNaN(value) ? 0 : value;
+                            feature_row1 = (value > feature_row1) ? value : feature_row1;
+
+                        });
+                    });
+
+                    $.each(value.feature_details, function(index1, value1) {
+
+                        f_row = f_row + 1;
+
+                        features = features + '<tr data-id="'+f_row+'">\n' +
                             '\n' +
                             '                                                                                        <td>\n' +
-                            '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="1">' +
-                            '                                                                                            <input type="hidden" class="feature_heading" name="feature_headings[]">\n' +
-                            '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                            '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
+                            '                                                                                            <input value="'+value.id+'" type="hidden" class="feature_heading" name="feature_headings[]">\n' +
+                            '                                                                                            <input value="'+value1.title+'" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                             '                                                                                        </td>\n' +
                             '                                                                                        <td>\n' +
-                            '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                            '                                                                                            <input value="'+value1.value+'" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                             '                                                                                        </td>\n' +
                             '                                                                                        <td>\n' +
-                            '                                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
                             '                                                                                        </td>\n' +
                             '                                                                                        <td>\n' +
                             '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
                             '\n' +
-                            '                                                                                                <option value="0">No</option>\n' +
-                            '                                                                                                <option value="1">Fixed</option>\n' +
-                            '                                                                                                <option value="2">m¹ Impact</option>\n' +
-                            '                                                                                                <option value="3">m² Impact</option>\n' +
+                            (value1.price_impact == 0 ? '<option selected value="0">No</option>' : '<option value="0">No</option>') +
+                            (value1.price_impact == 1 ? '<option selected value="1">No</option>' : '<option value="1">Fixed</option>') +
+                            (value1.price_impact == 2 ? '<option selected value="2">m¹ Impact</option>' : '<option value="2">m¹ Impact</option>') +
+                            (value1.price_impact == 3 ? '<option selected value="3">m² Impact</option>' : '<option value="3">m² Impact</option>') +
                             '\n' +
                             '                                                                                            </select>\n' +
                             '                                                                                        </td>\n' +
                             '                                                                                        <td>\n' +
                             '                                                                                            <select class="form-control" name="impact_type[]">\n\n' +
                             '\n' +
-                            '                                                                                                <option value="0">€</option>\n' +
-                            '                                                                                                <option value="1">%</option>\n' +
+                            (value1.impact_type == 0 ? '<option selected value="0">€</option>' : '<option value="0">€</option>') +
+                            (value1.impact_type == 1 ? '<option selected value="1">%</option>' : '<option value="1">%</option>') +
                             '\n' +
                             '                                                                                            </select>\n' +
                             '                                                                                        </td>\n' +
                             '                                                                                        <td>\n' +
                             '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                             '                                                                                        </td>\n' +
-                            '                                                                                    </tr></tbody></table>' +
-                            '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                            '                                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
-                            '                                                                                    </div></div>');
+                            '                                                                                    </tr>';
 
 
-                        $('#sub-features').append('<div data-id="1" class="sub-feature-table-container">\n' +
-                            '\n' +
-                            '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
-                            '                                                                                            <thead>\n' +
-                            '                                                                                            <tr>\n' +
-                            '                                                                                                <th>Feature</th>\n' +
-                            '                                                                                                <th>Value</th>\n' +
-                            '                                                                                                <th>Price Impact</th>\n' +
-                            '                                                                                                <th>Impact Type</th>\n' +
-                            '                                                                                                <th>Remove</th>\n' +
-                            '                                                                                            </tr>\n' +
-                            '                                                                                            </thead>\n' +
-                            '\n' +
-                            '                                                                                            <tbody>' +
-                            '                                                                                        <tr data-id="1">\n' +
-                            '                                                                                        <td>\n' +
-                            '                                                                                            <input type="hidden" name="f_rows1[]" class="f_row1" value="1">' +
-                            '                                                                                            <input class="form-control feature_title1" name="features1[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
-                            '                                                                                        </td>\n' +
-                            '                                                                                        <td>\n' +
-                            '                                                                                            <input class="form-control feature_value1" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                            '                                                                                        </td>\n' +
-                            '                                                                                        <td>\n' +
-                            '                                                                                            <select class="form-control" name="price_impact1[]">\n\n' +
-                            '\n' +
-                            '                                                                                                <option value="0">No</option>\n' +
-                            '                                                                                                <option value="1">Fixed</option>\n' +
-                            '                                                                                                <option value="2">m¹ Impact</option>\n' +
-                            '                                                                                                <option value="3">m² Impact</option>\n' +
-                            '\n' +
-                            '                                                                                            </select>\n' +
-                            '                                                                                        </td>\n' +
-                            '                                                                                        <td>\n' +
-                            '                                                                                            <select class="form-control" name="impact_type1[]">\n\n' +
-                            '\n' +
-                            '                                                                                                <option value="0">€</option>\n' +
-                            '                                                                                                <option value="1">%</option>\n' +
-                            '\n' +
-                            '                                                                                            </select>\n' +
-                            '                                                                                        </td>\n' +
-                            '                                                                                        <td>\n' +
-                            '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
-                            '                                                                                        </td>\n' +
-                            '                                                                                    </tr></tbody></table>' +
-                            '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                            '                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
-                            '                                                                                        </div></div>');
+                        var sub_features = '';
 
-                        $(".js-data-example-ajax5").select2({
-                            width: '100%',
-                            height: '200px',
-                            placeholder: "Select Feature Heading",
-                            allowClear: false,
-                        });
-
-
-                    }
-
-                    $.each(data, function(index, value) {
-
-                        if(index == 0)
-                        {
-                            var heading_row = 1;
-                        }
-                        else
-                        {
-                            var heading_row = $('.feature_box').find('.feature-row').last().data('id');
-                            heading_row = heading_row + 1;
-                        }
-
-                        /*var features_options = '';
-
-                        for(var i=0; i<data.length; i++)
-                        {
-                            if(i == index)
-                            {
-                                features_options = features_options + '<option selected value="'+data[i].id+'">'+data[i].title+'</option>';
-                            }
-                            else
-                            {
-                                features_options = features_options + '<option value="'+data[i].id+'">'+data[i].title+'</option>';
-                            }
-                        }*/
-
-                        $(".feature_box").append('<div data-id="' + heading_row + '" class="form-group feature-row" style="margin: 0 0 20px 0;display: flex;justify-content: center;">\n' +
-                            '\n' +
-                            '                                                                            <div class="col-sm-5">\n' +
-                            '\n' +
-                            '                                                                            <select class="form-control validate js-data-example-ajax5">\n' +
-                            '\n' +
-                            '                                                                                <option value="">Select Feature Heading</option>\n' +
-                            '\n' +
-                            '                                                                                @foreach($features_headings as $feature)\n' +
-                            '\n' +
-                            '                                                                                    <option value="{{$feature->id}}">{{$feature->title}}</option>\n' +
-                            '\n' +
-                            '                                                                                @endforeach\n' +
-                            '\n' +
-                            '                                                                            </select>\n' +
-                            '\n' +
-                            '                                                                        </div>\n' +
-                            '\n' +
-                            '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
-                            '\n' +
-                            '                                                                        <button data-id="' + heading_row + '" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
-                            '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
-                            '\n' +
-                            '                                                                    </div>\n' +
-                            '\n' +
-                            '                </div>');
-
-                        var features = '';
-
-                        if(value.feature_details.length == 0)
-                        {
-                            var f_row = null;
-
-                            $('#primary-features').find(".feature-table-container").each(function() {
-
-                                $(this).find('table tbody tr').each(function() {
-
-                                    var value = parseInt($(this).find('.f_row').val());
-                                    value = isNaN(value) ? 0 : value;
-                                    f_row = (value > f_row) ? value : f_row;
-
-                                });
-                            });
-
-                            f_row = f_row + 1;
-
-                            features = features + '<tr data-id="'+f_row+'">\n' +
-                                '\n' +
-                                '                                                                                        <td>\n' +
-                                '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
-                                '                                                                                            <input value="'+value.id+'" type="hidden" class="feature_heading" name="feature_headings[]">\n' +
-                                '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
-                                '                                                                                        </td>\n' +
-                                '                                                                                        <td>\n' +
-                                '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                                '                                                                                        </td>\n' +
-                                '                                                                                        <td>\n' +
-                                '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
-                                '                                                                                        </td>\n' +
-                                '                                                                                        <td>\n' +
-                                '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
-                                '\n' +
-                                '                                                                                                <option value="0">No</option>\n' +
-                                '                                                                                                <option value="1">Fixed</option>\n' +
-                                '                                                                                                <option value="2">m¹ Impact</option>\n' +
-                                '                                                                                                <option value="3">m² Impact</option>\n' +
-                                '\n' +
-                                '                                                                                            </select>\n' +
-                                '                                                                                        </td>\n' +
-                                '                                                                                        <td>\n' +
-                                '                                                                                            <select class="form-control" name="impact_type[]">\n\n' +
-                                '\n' +
-                                '                                                                                                <option value="0">€</option>\n' +
-                                '                                                                                                <option value="1">%</option>\n' +
-                                '\n' +
-                                '                                                                                            </select>\n' +
-                                '                                                                                        </td>\n' +
-                                '                                                                                        <td>\n' +
-                                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
-                                '                                                                                        </td>\n' +
-                                '                                                                                    </tr>';
-
-                            var sub_features = '';
-
-                            var feature_row1 = null;
-
-                            $('#sub-features').find(".sub-feature-table-container").each(function () {
-
-                                $(this).find('table tbody tr').each(function () {
-
-                                    var value = parseInt($(this).find('.f_row1').val());
-                                    value = isNaN(value) ? 0 : value;
-                                    feature_row1 = (value > feature_row1) ? value : feature_row1;
-
-                                });
-                            });
+                        if(value.sub_features.length == 0) {
 
                             feature_row1 = feature_row1 + 1;
 
@@ -2378,125 +2506,41 @@
                                 '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                                 '                                                                                        </td>\n' +
                                 '                                                                                    </tr>';
-
-                            $('#sub-features').append('<div data-id="'+f_row+'" class="sub-feature-table-container">\n' +
-                                '\n' +
-                                '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
-                                '                                                                                            <thead>\n' +
-                                '                                                                                            <tr>\n' +
-                                '                                                                                                <th>Feature</th>\n' +
-                                '                                                                                                <th>Value</th>\n' +
-                                '                                                                                                <th>Price Impact</th>\n' +
-                                '                                                                                                <th>Impact Type</th>\n' +
-                                '                                                                                                <th>Remove</th>\n' +
-                                '                                                                                            </tr>\n' +
-                                '                                                                                            </thead>\n' +
-                                '\n' +
-                                '                                                                                            <tbody>' +
-                                sub_features +
-                                '                                                                                    </tbody></table>' +
-                                '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                                '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
-                                '                                                                                        </div></div>');
                         }
                         else
                         {
-                            var f_row = null;
 
-                            $('#primary-features').find(".feature-table-container").each(function() {
+                            var flag = 0;
 
-                                $(this).find('table tbody tr').each(function() {
+                            $.each(value.sub_features, function(index2, value2) {
 
-                                    var value = parseInt($(this).find('.f_row').val());
-                                    value = isNaN(value) ? 0 : value;
-                                    f_row = (value > f_row) ? value : f_row;
-
-                                });
-                            });
-
-                            var feature_row1 = null;
-
-                            $('#sub-features').find(".sub-feature-table-container").each(function () {
-
-                                $(this).find('table tbody tr').each(function () {
-
-                                    var value = parseInt($(this).find('.f_row1').val());
-                                    value = isNaN(value) ? 0 : value;
-                                    feature_row1 = (value > feature_row1) ? value : feature_row1;
-
-                                });
-                            });
-
-                            $.each(value.feature_details, function(index1, value1) {
-
-                                f_row = f_row + 1;
-
-                                features = features + '<tr data-id="'+f_row+'">\n' +
-                                    '\n' +
-                                    '                                                                                        <td>\n' +
-                                    '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
-                                    '                                                                                            <input value="'+value.id+'" type="hidden" class="feature_heading" name="feature_headings[]">\n' +
-                                    '                                                                                            <input value="'+value1.title+'" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
-                                    '                                                                                        </td>\n' +
-                                    '                                                                                        <td>\n' +
-                                    '                                                                                            <input value="'+value1.value+'" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                                    '                                                                                        </td>\n' +
-                                    '                                                                                        <td>\n' +
-                                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
-                                    '                                                                                        </td>\n' +
-                                    '                                                                                        <td>\n' +
-                                    '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
-                                    '\n' +
-                                    (value1.price_impact == 0 ? '<option selected value="0">No</option>' : '<option value="0">No</option>') +
-                                    (value1.price_impact == 1 ? '<option selected value="1">No</option>' : '<option value="1">Fixed</option>') +
-                                    (value1.price_impact == 2 ? '<option selected value="2">m¹ Impact</option>' : '<option value="2">m¹ Impact</option>') +
-                                    (value1.price_impact == 3 ? '<option selected value="3">m² Impact</option>' : '<option value="3">m² Impact</option>') +
-                                    '\n' +
-                                    '                                                                                            </select>\n' +
-                                    '                                                                                        </td>\n' +
-                                    '                                                                                        <td>\n' +
-                                    '                                                                                            <select class="form-control" name="impact_type[]">\n\n' +
-                                    '\n' +
-                                    (value1.impact_type == 0 ? '<option selected value="0">€</option>' : '<option value="0">€</option>') +
-                                    (value1.impact_type == 1 ? '<option selected value="1">%</option>' : '<option value="1">%</option>') +
-                                    '\n' +
-                                    '                                                                                            </select>\n' +
-                                    '                                                                                        </td>\n' +
-                                    '                                                                                        <td>\n' +
-                                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-primary-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
-                                    '                                                                                        </td>\n' +
-                                    '                                                                                    </tr>';
-
-
-                                var sub_features = '';
-
-                                if(value.sub_features.length == 0) {
-
+                                if(value1.id == value2.main_id)
+                                {
                                     feature_row1 = feature_row1 + 1;
 
                                     sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
                                         '                                                                                        <td>\n' +
                                         '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
-                                        '                                                                                            <input class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                        '                                                                                            <input value="'+value2.title+'" class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
                                         '                                                                                        </td>\n' +
                                         '                                                                                        <td>\n' +
-                                        '                                                                                            <input class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                        '                                                                                            <input value="'+value2.value+'" class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                                         '                                                                                        </td>\n' +
                                         '                                                                                        <td>\n' +
                                         '                                                                                            <select class="form-control" name="price_impact' + f_row + '[]">\n\n' +
                                         '\n' +
-                                        '                                                                                                <option value="0">No</option>\n' +
-                                        '                                                                                                <option value="1">Fixed</option>\n' +
-                                        '                                                                                                <option value="2">m¹ Impact</option>\n' +
-                                        '                                                                                                <option value="3">m² Impact</option>\n' +
+                                        (value2.price_impact == 0 ? '<option selected value="0">No</option>' : '<option value="0">No</option>') +
+                                        (value2.price_impact == 1 ? '<option selected value="1">No</option>' : '<option value="1">Fixed</option>') +
+                                        (value2.price_impact == 2 ? '<option selected value="2">m¹ Impact</option>' : '<option value="2">m¹ Impact</option>') +
+                                        (value2.price_impact == 3 ? '<option selected value="3">m² Impact</option>' : '<option value="3">m² Impact</option>') +
                                         '\n' +
                                         '                                                                                            </select>\n' +
                                         '                                                                                        </td>\n' +
                                         '                                                                                        <td>\n' +
                                         '                                                                                            <select class="form-control" name="impact_type' + f_row + '[]">\n\n' +
                                         '\n' +
-                                        '                                                                                                <option value="0">€</option>\n' +
-                                        '                                                                                                <option value="1">%</option>\n' +
+                                        (value2.impact_type == 0 ? '<option selected value="0">€</option>' : '<option value="0">€</option>') +
+                                        (value2.impact_type == 1 ? '<option selected value="1">%</option>' : '<option value="1">%</option>') +
                                         '\n' +
                                         '                                                                                            </select>\n' +
                                         '                                                                                        </td>\n' +
@@ -2504,153 +2548,166 @@
                                         '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
                                         '                                                                                        </td>\n' +
                                         '                                                                                    </tr>';
+
+                                    flag = 1;
                                 }
-                                else
-                                {
-
-                                    var flag = 0;
-
-                                    $.each(value.sub_features, function(index2, value2) {
-
-                                        if(value1.id == value2.main_id)
-                                        {
-                                            feature_row1 = feature_row1 + 1;
-
-                                            sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
-                                                '                                                                                        <td>\n' +
-                                                '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
-                                                '                                                                                            <input value="'+value2.title+'" class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
-                                                '                                                                                        </td>\n' +
-                                                '                                                                                        <td>\n' +
-                                                '                                                                                            <input value="'+value2.value+'" class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                                                '                                                                                        </td>\n' +
-                                                '                                                                                        <td>\n' +
-                                                '                                                                                            <select class="form-control" name="price_impact' + f_row + '[]">\n\n' +
-                                                '\n' +
-                                                (value2.price_impact == 0 ? '<option selected value="0">No</option>' : '<option value="0">No</option>') +
-                                                (value2.price_impact == 1 ? '<option selected value="1">No</option>' : '<option value="1">Fixed</option>') +
-                                                (value2.price_impact == 2 ? '<option selected value="2">m¹ Impact</option>' : '<option value="2">m¹ Impact</option>') +
-                                                (value2.price_impact == 3 ? '<option selected value="3">m² Impact</option>' : '<option value="3">m² Impact</option>') +
-                                                '\n' +
-                                                '                                                                                            </select>\n' +
-                                                '                                                                                        </td>\n' +
-                                                '                                                                                        <td>\n' +
-                                                '                                                                                            <select class="form-control" name="impact_type' + f_row + '[]">\n\n' +
-                                                '\n' +
-                                                (value2.impact_type == 0 ? '<option selected value="0">€</option>' : '<option value="0">€</option>') +
-                                                (value2.impact_type == 1 ? '<option selected value="1">%</option>' : '<option value="1">%</option>') +
-                                                '\n' +
-                                                '                                                                                            </select>\n' +
-                                                '                                                                                        </td>\n' +
-                                                '                                                                                        <td>\n' +
-                                                '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
-                                                '                                                                                        </td>\n' +
-                                                '                                                                                    </tr>';
-
-                                            flag = 1;
-                                        }
-
-                                    });
-
-                                    if(flag == 0)
-                                    {
-                                        feature_row1 = feature_row1 + 1;
-
-                                        sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
-                                            '                                                                                        <td>\n' +
-                                            '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
-                                            '                                                                                            <input class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
-                                            '                                                                                        </td>\n' +
-                                            '                                                                                        <td>\n' +
-                                            '                                                                                            <input class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                                            '                                                                                        </td>\n' +
-                                            '                                                                                        <td>\n' +
-                                            '                                                                                            <select class="form-control" name="price_impact' + f_row + '[]">\n\n' +
-                                            '\n' +
-                                            '                                                                                                <option value="0">No</option>\n' +
-                                            '                                                                                                <option value="1">Fixed</option>\n' +
-                                            '                                                                                                <option value="2">m¹ Impact</option>\n' +
-                                            '                                                                                                <option value="3">m² Impact</option>\n' +
-                                            '\n' +
-                                            '                                                                                            </select>\n' +
-                                            '                                                                                        </td>\n' +
-                                            '                                                                                        <td>\n' +
-                                            '                                                                                            <select class="form-control" name="impact_type' + f_row + '[]">\n\n' +
-                                            '\n' +
-                                            '                                                                                                <option value="0">€</option>\n' +
-                                            '                                                                                                <option value="1">%</option>\n' +
-                                            '\n' +
-                                            '                                                                                            </select>\n' +
-                                            '                                                                                        </td>\n' +
-                                            '                                                                                        <td>\n' +
-                                            '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
-                                            '                                                                                        </td>\n' +
-                                            '                                                                                    </tr>';
-                                    }
-
-                                }
-
-                                $('#sub-features').append('<div data-id="'+f_row+'" class="sub-feature-table-container">\n' +
-                                    '\n' +
-                                    '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
-                                    '                                                                                            <thead>\n' +
-                                    '                                                                                            <tr>\n' +
-                                    '                                                                                                <th>Feature</th>\n' +
-                                    '                                                                                                <th>Value</th>\n' +
-                                    '                                                                                                <th>Price Impact</th>\n' +
-                                    '                                                                                                <th>Impact Type</th>\n' +
-                                    '                                                                                                <th>Remove</th>\n' +
-                                    '                                                                                            </tr>\n' +
-                                    '                                                                                            </thead>\n' +
-                                    '\n' +
-                                    '                                                                                            <tbody>' +
-                                    sub_features +
-                                    '                                                                                    </tbody></table>' +
-                                    '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
-                                    '                                                                                        </div></div>');
 
                             });
 
+                            if(flag == 0)
+                            {
+                                feature_row1 = feature_row1 + 1;
+
+                                sub_features = sub_features + '<tr data-id="' + feature_row1 + '">\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <input type="hidden" name="f_rows' + f_row + '[]" class="f_row1" value="' + feature_row1 + '">' +
+                                    '                                                                                            <input class="form-control feature_title1" name="features' + f_row + '[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <input class="form-control feature_value1" name="feature_values' + f_row + '[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <select class="form-control" name="price_impact' + f_row + '[]">\n\n' +
+                                    '\n' +
+                                    '                                                                                                <option value="0">No</option>\n' +
+                                    '                                                                                                <option value="1">Fixed</option>\n' +
+                                    '                                                                                                <option value="2">m¹ Impact</option>\n' +
+                                    '                                                                                                <option value="3">m² Impact</option>\n' +
+                                    '\n' +
+                                    '                                                                                            </select>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <select class="form-control" name="impact_type' + f_row + '[]">\n\n' +
+                                    '\n' +
+                                    '                                                                                                <option value="0">€</option>\n' +
+                                    '                                                                                                <option value="1">%</option>\n' +
+                                    '\n' +
+                                    '                                                                                            </select>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                        <td>\n' +
+                                    '                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>\n' +
+                                    '                                                                                        </td>\n' +
+                                    '                                                                                    </tr>';
+                            }
+
                         }
 
-                        $('#primary-features').append('<div data-id="'+heading_row+'" class="feature-table-container">\n' +
+                        $('#sub-features').append('<div data-id="'+f_row+'" class="sub-feature-table-container">\n' +
                             '\n' +
-                            '                                                                                    <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
-                            '                                                                                        <thead>\n' +
-                            '                                                                                        <tr>\n' +
-                            '                                                                                            <th>Feature</th>\n' +
-                            '                                                                                            <th>Value</th>\n' +
-                            '                                                                                            <th>Sub Features</th>\n' +
-                            '                                                                                            <th>Price Impact</th>\n' +
-                            '                                                                                            <th>Impact Type</th>\n' +
-                            '                                                                                            <th>Remove</th>\n' +
-                            '                                                                                        </tr>\n' +
-                            '                                                                                        </thead>\n' +
+                            '                                                                                        <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                            '                                                                                            <thead>\n' +
+                            '                                                                                            <tr>\n' +
+                            '                                                                                                <th>Feature</th>\n' +
+                            '                                                                                                <th>Value</th>\n' +
+                            '                                                                                                <th>Price Impact</th>\n' +
+                            '                                                                                                <th>Impact Type</th>\n' +
+                            '                                                                                                <th>Remove</th>\n' +
+                            '                                                                                            </tr>\n' +
+                            '                                                                                            </thead>\n' +
                             '\n' +
-                            '                                                                                        <tbody>' +
-                            features +
+                            '                                                                                            <tbody>' +
+                            sub_features +
                             '                                                                                    </tbody></table>' +
-                            '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                            '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
-                            '                                                                                    </div></div>');
-
-                        $('.js-data-example-ajax5').select2({
-                            width: '100%',
-                            height: '200px',
-                            placeholder: "Select Feature Heading",
-                            allowClear: false,
-                        });
-
-                        $(".feature_box").find(".feature-row[data-id='" + heading_row + "']").find('.js-data-example-ajax5').val(value.id).trigger('change.select2');
-
-                        $('.feature_title').each(function (index,value) {
-
-                            $(this).trigger('input');
-
-                        });
+                            '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
+                            '                                                                                        </div></div>');
 
                     });
+
+                }
+
+                $('#primary-features').append('<div data-id="'+heading_row+'" class="feature-table-container">\n' +
+                    '\n' +
+                    '                                                                                    <table style="margin: auto;width: 95%;border-collapse: separate;">\n' +
+                    '                                                                                        <thead>\n' +
+                    '                                                                                        <tr>\n' +
+                    '                                                                                            <th>Feature</th>\n' +
+                    '                                                                                            <th>Value</th>\n' +
+                    '                                                                                            <th>Sub Features</th>\n' +
+                    '                                                                                            <th>Price Impact</th>\n' +
+                    '                                                                                            <th>Impact Type</th>\n' +
+                    '                                                                                            <th>Remove</th>\n' +
+                    '                                                                                        </tr>\n' +
+                    '                                                                                        </thead>\n' +
+                    '\n' +
+                    '                                                                                        <tbody>' +
+                    features +
+                    '                                                                                    </tbody></table>' +
+                    '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
+                    '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                    '                                                                                    </div></div>');
+
+                $('.js-data-example-ajax5').select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "Select Feature Heading",
+                    allowClear: false,
+                });
+
+                $(".feature_box").find(".feature-row[data-id='" + heading_row + "']").find('.js-data-example-ajax5').val(value.id).trigger('change.select2');
+
+                $('.feature_title').each(function (index,value) {
+
+                    $(this).trigger('input');
+
+                });
+
+            });
+
+        }
+
+        $('body').on('change', '.js-data-example-ajax8' ,function(){
+
+            var id = $(this).val();
+            var options = '';
+
+            $.ajax({
+                type:"GET",
+                data: "id=" + id ,
+                url: "<?php echo url('/aanbieder/product/get-sub-categories-by-category')?>",
+                success: function(data) {
+
+                    $.each(data, function(index, value) {
+
+                        var opt = '<option value="'+value.id+'" >'+value.cat_name+'</option>';
+
+                        options = options + opt;
+
+                    });
+
+                    $('.js-data-example-ajax9').find('option')
+                        .remove()
+                        .end()
+                        .append('<option value="">Select Sub Category</option>'+options);
+
+                }
+            });
+
+            $.ajax({
+                type:"GET",
+                data: "id=" + id,
+                url: "<?php echo url('/aanbieder/product/get-features-data')?>",
+                success: function(data) {
+
+                    fetch_features(data);
+
+                }
+            });
+
+        });
+
+        $('body').on('change', '.js-data-example-ajax9' ,function(){
+
+            var sub_id = $(this).val();
+            var cat_id = $('.js-data-example-ajax8').val();
+
+            $.ajax({
+                type:"GET",
+                data: "id=" + cat_id + "&sub_id=" + sub_id,
+                url: "<?php echo url('/aanbieder/product/get-features-data')?>",
+                success: function(data) {
+
+                    fetch_features(data);
 
                 }
             });
@@ -2989,6 +3046,7 @@
         var $selects = $('body').on('change', '.js-data-example-ajax5', function()
         {
             var feature_category = $('.js-data-example-ajax8').val();
+            var feature_sub_category = $('.js-data-example-ajax9').val();
             var id = $(this).parent().parent().attr("data-id");
             var heading = $(this).find("option:selected").text();
             var heading_id = $(this).val();
@@ -3018,7 +3076,7 @@
                 {
                     $.ajax({
                         type:"GET",
-                        data: "id=" + feature_category + '&heading_id=' + heading_id,
+                        data: "id=" + feature_category + "&sub_id=" + feature_sub_category + '&heading_id=' + heading_id,
                         url: "<?php echo url('/aanbieder/product/get-features-data')?>",
                         success: function(data) {
 
@@ -4689,6 +4747,13 @@
             allowClear: true,
         });
 
+        $(".js-data-example-ajax9").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Sub Category",
+            allowClear: true,
+        });
+
         $(".js-data-example-ajax1").select2({
             width: '100%',
             height: '200px',
@@ -4725,8 +4790,7 @@
             allowClear: true,
         });
 
-
-        $('.js-data-example-ajax1').on('change', function() {
+        /*$('.js-data-example-ajax1').on('change', function() {
 
             var brand_id = $(this).val();
             var options = '';
@@ -4745,15 +4809,15 @@
 
                     });
 
-                    /*$('.js-data-example-ajax2').find('option')
+                    $('.js-data-example-ajax2').find('option')
                         .remove()
                         .end()
-                        .append('<option value="">Select Model</option>'+options);*/
+                        .append('<option value="">Select Model</option>'+options);
 
                 }
             });
 
-        });
+        });*/
 
         function uploadclick(){
             $("#uploadFile").click();
