@@ -101,6 +101,27 @@
 
                                                         </div>
 
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Feature Category*</label>
+
+                                                            <div class="col-sm-6">
+
+                                                                <?php if(isset($feature)) $category_ids = explode(',',$feature->category_ids); ?>
+
+                                                                <select style="height: 100px;" class="form-control" name="feature_category[]" id="feature_category" required multiple>
+
+                                                                    @foreach($cats as $cat)
+
+                                                                        <option {{isset($feature) ? (in_array($cat->id, $category_ids) ? 'selected' : null) : null}} value="{{$cat->id}}">{{$cat->cat_name}}</option>
+
+                                                                    @endforeach
+
+                                                                </select>
+
+                                                            </div>
+
+                                                        </div>
+
                                                     </div>
                                                 </li>
 
@@ -173,7 +194,7 @@
                                                                         <tr data-id="{{$f1+1}}">
                                                                             <td>
                                                                                 <input value="{{$f1+1}}" type="hidden" name="f_rows[]" class="f_row">
-                                                                                <input value="{{$key1->id}}" type="hidden" name="feature_ids[]">
+                                                                                <input value="{{ Route::currentRouteName() == 'admin-feature-edit' ? $key1->id : null }}" type="hidden" name="feature_ids[]">
                                                                                 <input value="{{$key1->title}}" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
                                                                             </td>
                                                                             <td>
@@ -279,27 +300,6 @@
                                                     <input type="checkbox">
                                                     <h2>Configurations <i class="arrow"></i></h2>
                                                     <div class="accordion-content">
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Feature Category*</label>
-
-                                                            <div class="col-sm-6">
-
-                                                                <?php if(isset($feature)) $category_ids = explode(',',$feature->category_ids); ?>
-
-                                                                <select style="height: 100px;" class="form-control" name="feature_category[]" id="feature_category" required multiple>
-
-                                                                    @foreach($cats as $cat)
-
-                                                                        <option {{isset($feature) ? (in_array($cat->id, $category_ids) ? 'selected' : null) : null}} value="{{$cat->id}}">{{$cat->cat_name}}</option>
-
-                                                                    @endforeach
-
-                                                                </select>
-
-                                                            </div>
-
-                                                        </div>
 
                                                         {{--<div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Price Impact</label>
@@ -436,7 +436,7 @@
                                                                                             <tr data-id="1">
                                                                                                 <td>
                                                                                                     <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
-                                                                                                    <input type="hidden" name="feature_row_ids{{$s+1}}[]" value="{{$key1->id}}">
+                                                                                                    <input type="hidden" name="feature_row_ids{{$s+1}}[]" value="{{ Route::currentRouteName() == 'admin-feature-edit' ? $key1->id : null }}">
                                                                                                     <input value="{{$key1->title}}" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Feature Title" type="text">
                                                                                                 </td>
                                                                                                 <td>
@@ -621,21 +621,25 @@
 
                                                                             @foreach($sub_categories as $x => $key)
 
-                                                                                <tr>
-                                                                                    <td>{{$key->title}}</td>
-                                                                                    <td>
-                                                                                        {{$key->cat_name}}
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <input type="hidden" name="sub_category_id{{$f2+1}}[]" value="{{$key->id}}">
-                                                                                        <select class="form-control" name="sub_category_link{{$f2+1}}[]">
+                                                                                @if($key->id)
 
-                                                                                            <option value="0">No</option>
-                                                                                            <option {{in_array($key->id, $sub_categories1) ? 'selected' : null}} value="1">Yes</option>
+                                                                                    <tr data-id="{{$key->id}}">
+                                                                                        <td>{{$key->title}}</td>
+                                                                                        <td>
+                                                                                            {{$key->cat_name}}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <input type="hidden" name="sub_category_id{{$f2+1}}[]" value="{{$key->id}}">
+                                                                                            <select class="form-control" name="sub_category_link{{$f2+1}}[]">
 
-                                                                                        </select>
-                                                                                    </td>
-                                                                                </tr>
+                                                                                                <option value="0">No</option>
+                                                                                                <option {{in_array($key->id, $sub_categories1) ? 'selected' : null}} value="1">Yes</option>
+
+                                                                                            </select>
+                                                                                        </td>
+                                                                                    </tr>
+
+                                                                                @endif
 
                                                                             @endforeach
 
@@ -660,26 +664,6 @@
                                                                         </thead>
 
                                                                         <tbody>
-
-                                                                        @foreach($sub_categories as $x => $key)
-
-                                                                            <tr>
-                                                                                <td>{{$key->title}}</td>
-                                                                                <td>
-                                                                                    {{$key->cat_name}}
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input type="hidden" name="sub_category_id1[]" value="{{$key->id}}">
-                                                                                    <select class="form-control" name="sub_category_link1[]">
-
-                                                                                        <option value="0">No</option>
-                                                                                        <option selected value="1">Yes</option>
-
-                                                                                    </select>
-                                                                                </td>
-                                                                            </tr>
-
-                                                                        @endforeach
 
                                                                         </tbody>
                                                                     </table>
@@ -884,6 +868,78 @@
     </script>
 
 <script type="text/javascript">
+
+    function fetch_sub_categories()
+    {
+        var id = $("#feature_category").val();
+
+        $.ajax({
+
+            type:"GET",
+            data: "id=" + id + "&type=multiple",
+            url: "<?php echo url('/aanbieder/product/get-sub-categories-by-category')?>",
+            success: function(data) {
+
+                if(data.length == 0)
+                {
+                    $('#sub-categories').find(".sub-category-table-container").find("table tbody tr").remove();
+                }
+                else{
+
+                    var a = [];
+
+                    $.each(data, function(index, value) {
+
+                        $('#sub-categories').find(".sub-category-table-container").each(function() {
+
+                            var row_id = $(this).data('id');
+                            a.push(value.id);
+
+                            if($(this).find("table tbody tr[data-id='" + value.id + "']").length == 0)
+                            {
+                                $(this).find("table tbody").append('<tr data-id="'+value.id+'">\n' +
+                                    '                                                                                           <td>'+value.title+'</td>\n' +
+                                    '                                                                                           <td>'+value.cat_name+'</td>\n' +
+                                    '                                                                                           <td>\n' +
+                                    '                                                                                               <input type="hidden" name="sub_category_id'+row_id+'[]" value="'+value.id+'">\n' +
+                                    '                                                                                               <select class="form-control" name="sub_category_link'+row_id+'[]">\n' +
+                                    '\n' +
+                                    '                                                                                                   <option value="0">No</option>\n' +
+                                    '                                                                                                   <option selected value="1">Yes</option>\n' +
+                                    '\n' +
+                                    '                                                                                               </select>\n' +
+                                    '                                                                                           </td>\n' +
+                                    '                                                                                       </tr>');
+                            }
+
+                        });
+
+                    });
+
+                    $('#sub-categories').find(".sub-category-table-container").each(function() {
+
+                        $(this).find("table tbody tr").each(function() {
+
+                            if($.inArray($(this).data('id'), a) == -1)
+                            {
+                                $(this).remove();
+                            }
+
+                        });
+
+                    });
+
+                }
+
+            }
+        });
+    }
+
+    $("#feature_category").change(function(event) {
+
+        fetch_sub_categories();
+
+    });
 
     $('body').on('click', '.create-sub-feature-btn' ,function(){
 
@@ -1153,24 +1209,10 @@
             '                                                                                            </thead>\n' +
             '\n' +
             '                                                                                            <tbody>' +
-            '                                                                                    @foreach($sub_categories as $x => $key)\n' +
-            '\n' +
-            '                                                                                       <tr>\n' +
-            '                                                                                           <td>{{$key->title}}</td>\n' +
-            '                                                                                           <td>{{$key->cat_name}}</td>\n' +
-            '                                                                                           <td>\n' +
-            '                                                                                               <input type="hidden" name="sub_category_id'+feature_row+'[]" value="{{$key->id}}">\n' +
-            '                                                                                               <select class="form-control" name="sub_category_link'+feature_row+'[]">\n' +
-            '\n' +
-            '                                                                                                   <option value="0">No</option>\n' +
-            '                                                                                                   <option selected value="1">Yes</option>\n' +
-            '\n' +
-            '                                                                                               </select>\n' +
-            '                                                                                           </td>\n' +
-            '                                                                                       </tr>\n' +
-            '                                                                                    @endforeach\n' +
             '                                                                                    </tbody></table>\n' +
             '                                                                                        </div>');
+
+            fetch_sub_categories();
 
 	});
 
@@ -1316,24 +1358,10 @@
                 '                                                                                            </thead>\n' +
                 '\n' +
                 '                                                                                            <tbody>' +
-                '                                                                                    @foreach($sub_categories as $x => $key)\n' +
-                '\n' +
-                '                                                                                       <tr>\n' +
-                '                                                                                           <td>{{$key->title}}</td>\n' +
-                '                                                                                           <td>{{$key->cat_name}}</td>\n' +
-                '                                                                                           <td>\n' +
-                '                                                                                               <input type="hidden" name="sub_category_id'+f_row+'[]" value="{{$key->id}}">\n' +
-                '                                                                                               <select class="form-control" name="sub_category_link'+f_row+'[]">\n' +
-                '\n' +
-                '                                                                                                   <option value="0">No</option>\n' +
-                '                                                                                                   <option selected value="1">Yes</option>\n' +
-                '\n' +
-                '                                                                                               </select>\n' +
-                '                                                                                           </td>\n' +
-                '                                                                                       </tr>\n' +
-                '                                                                                    @endforeach\n' +
                 '                                                                                    </tbody></table>\n' +
                 '                                                                                        </div>');
+
+            fetch_sub_categories();
 
         }
 

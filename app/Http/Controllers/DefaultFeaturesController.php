@@ -27,7 +27,6 @@ class DefaultFeaturesController extends Controller
         $this->middleware('auth:admin');
     }
 
-
     public function index()
     {
         $features = default_features::orderBy('id','desc')->get();
@@ -38,9 +37,8 @@ class DefaultFeaturesController extends Controller
     public function create()
     {
         $cats = Category::get();
-        $sub_categories = sub_categories::leftjoin('categories','categories.id','=','sub_categories.main_id')->select('sub_categories.*','categories.cat_name as title')->get();
 
-        return view('admin.default_features.create',compact('cats','sub_categories'));
+        return view('admin.default_features.create',compact('cats'));
     }
 
     public function store(Request $request)
@@ -163,7 +161,7 @@ class DefaultFeaturesController extends Controller
                         $sub_price_impact = 'price_impact'.$f_rows[$x];
                         $sub_impact_type = 'impact_type'.$f_rows[$x];
                         $sub_id = 'feature_row_ids'.$f_rows[$x];
-                        
+
                         $sub_feature_check = default_features_details::where('id',$request->$sub_id[$s])->first();
 
                         if($sub_feature_check)
@@ -221,7 +219,7 @@ class DefaultFeaturesController extends Controller
         $cats = Category::get();
         $features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
         $sub_features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
-        $sub_categories = sub_categories::leftjoin('categories','categories.id','=','sub_categories.main_id')->select('sub_categories.*','categories.cat_name as title')->get();
+        $sub_categories = default_features::leftjoin("categories",\DB::raw("FIND_IN_SET(categories.id,default_features.category_ids)"),">",\DB::raw("'0'"))->leftjoin('sub_categories','sub_categories.main_id','=','categories.id')->where('default_features.id',$feature->id)->select('sub_categories.*','categories.cat_name as title')->get();
 
         return view('admin.default_features.create',compact('feature','cats','features_data','sub_features_data','sub_categories'));
     }

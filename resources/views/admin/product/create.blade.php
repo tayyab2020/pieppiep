@@ -55,6 +55,56 @@
 
                                                     <div id="menu1" class="tab-pane fade in active">
 
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Category*</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="js-data-example-ajax8 form-control" style="height: 40px;" name="category_id" id="blood_grp" required>
+
+                                                                    <option value="">Select Category</option>
+
+                                                                    @foreach($categories as $key)
+                                                                        <option @if(isset($cats)) @if($cats->category_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->cat_name}}</option>
+                                                                    @endforeach
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id" id="blood_grp">
+
+                                                                    <option value="">Select Sub Category</option>
+
+                                                                    @if(isset($sub_categories))
+
+                                                                        @foreach($sub_categories as $sub_cat)
+
+                                                                            <option @if(isset($cats)) @if($cats->sub_category_id == $sub_cat->id) selected @endif @endif value="{{$sub_cat->id}}">{{$sub_cat->cat_name}}</option>
+
+                                                                        @endforeach
+
+                                                                    @endif
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Brand*</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="js-data-example-ajax1 form-control" style="height: 40px;" name="brand_id" id="blood_grp" required>
+
+                                                                    <option value="">Select Brand</option>
+
+                                                                    @foreach($brands as $key)
+                                                                        <option @if(isset($cats)) @if($cats->brand_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->cat_name}}</option>
+                                                                    @endforeach
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_display_name">Margin (%)*</label>
@@ -167,57 +217,6 @@
                                                                     <option @if(isset($cats)) @if($cats->delivery_days == 19) selected @endif @endif value="19">19</option>
                                                                     <option @if(isset($cats)) @if($cats->delivery_days == 20) selected @endif @endif value="20">20</option>
                                                                     <option @if(isset($cats)) @if($cats->delivery_days == 21) selected @endif @endif value="21">21</option>
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Category*</label>
-                                                            <div class="col-sm-6">
-                                                                <select class="js-data-example-ajax8 form-control" style="height: 40px;" name="category_id" id="blood_grp" required>
-
-                                                                    <option value="">Select Category</option>
-
-                                                                    @foreach($categories as $key)
-                                                                        <option @if(isset($cats)) @if($cats->category_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->cat_name}}</option>
-                                                                    @endforeach
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
-                                                            <div class="col-sm-6">
-                                                                <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id" id="blood_grp">
-
-                                                                    <option value="">Select Sub Category</option>
-
-                                                                    @if(isset($sub_categories))
-
-                                                                        @foreach($sub_categories as $sub_cat)
-
-                                                                            <option @if(isset($cats)) @if($cats->sub_category_id == $sub_cat->id) selected @endif @endif value="{{$sub_cat->id}}">{{$sub_cat->cat_name}}</option>
-
-                                                                        @endforeach
-
-                                                                    @endif
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Brand*</label>
-                                                            <div class="col-sm-6">
-                                                                <select class="js-data-example-ajax1 form-control" style="height: 40px;" name="brand_id" id="blood_grp" required>
-
-                                                                    <option value="">Select Brand</option>
-
-                                                                    @foreach($brands as $key)
-                                                                        <option @if(isset($cats)) @if($cats->brand_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->cat_name}}</option>
-                                                                    @endforeach
 
                                                                 </select>
                                                             </div>
@@ -1729,8 +1728,22 @@
 
                                                                                                 <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>
-                                                                                                    <input value="{{str_replace(".",",",$mod->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>
+                                                                                                    <input value="{{str_replace(".",",",$mod->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>
+                                                                                                    <input value="{{str_replace(".",",",$mod->max_width)}}" class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>
+                                                                                                    <input value="{{str_replace(".",",",$mod->max_height)}}" class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
 
                                                                                                 </div>
 
@@ -1825,8 +1838,22 @@
 
                                                                                                 <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>
-                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>
+                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>
+                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>
+                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
 
                                                                                                 </div>
 
@@ -1925,8 +1952,22 @@
 
                                                                                                 <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>
-                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>
+                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>
+                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>
+                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
 
                                                                                                 </div>
 
@@ -2673,7 +2714,7 @@
 
             $.ajax({
                 type:"GET",
-                data: "id=" + id ,
+                data: "id=" + id + "&type=single",
                 url: "<?php echo url('/aanbieder/product/get-sub-categories-by-category')?>",
                 success: function(data) {
 
@@ -2875,8 +2916,22 @@
                 '\n' +
                 '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                 '\n' +
-                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>\n' +
-                '                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>\n' +
+                '                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">\n' +
+                '\n' +
+                '                                                                                                </div>\n' +
+                '\n' +
+                '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>\n' +
+                '                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">\n' +
+                '\n' +
+                '                                                                                                </div>\n' +
+                '\n' +
+                '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>\n' +
+                '                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
                 '\n' +
                 '                                                                                                </div>\n' +
                 '\n' +
@@ -3027,8 +3082,22 @@
                     '\n' +
                     '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
-                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;white-space: nowrap;" class="control-label">Max Size:</label>\n' +
-                    '                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Size" type="text">\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>\n' +
+                    '                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">\n' +
+                    '\n' +
+                    '                                                                                                </div>\n' +
+                    '\n' +
+                    '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>\n' +
+                    '                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">\n' +
+                    '\n' +
+                    '                                                                                                </div>\n' +
+                    '\n' +
+                    '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>\n' +
+                    '                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
                     '\n' +
                     '                                                                                                </div>\n' +
                     '\n' +
@@ -4004,7 +4073,7 @@
 
         });
 
-        $(document).on('keypress', ".max_size, .model_max_size", function(e){
+        $(document).on('keypress', ".max_size, .model_max_size, .model_max_width, .model_max_height", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -4033,7 +4102,7 @@
 
         });
 
-        $(document).on('focusout', ".max_size, .model_max_size", function(e){
+        $(document).on('focusout', ".max_size, .model_max_size, .model_max_width, .model_max_height", function(e){
 
             if($(this).val().slice($(this).val().length - 1) == ',')
             {
