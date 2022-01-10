@@ -69,6 +69,74 @@
                             <div class="row p-5" style="font-size: 15px;padding: 2rem !important;border-bottom: 2px solid black !important;">
                                 <div class="col-md-12" style="padding: 0 !important;">
 
+                                    <?php
+                                    $arb_qty = (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
+                                    $arb_price = str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
+                                    $arb_price = number_format((float)($arb_price), 2, ',', '.');
+                                    $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
+                                    $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i]/100);
+                                    $arb = $request->rate[$i] - $arb_discount;
+                                    $arb = number_format((float)($arb), 2, ',', '.');
+                                    $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
+                                    $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i]/100);
+                                    $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
+                                    $art = number_format((float)($art), 2, ',', '.');
+                                    $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
+                                    ?>
+
+                                    <table style="display: table;width: 100%;">
+
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
+                                            <th style="width: 10% !important;font-size: 20px;">{{__('text.Qty')}}</th>
+                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
+                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                        <tr>
+                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
+                                            <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
+                                        </tr>
+
+                                        @if($arb_discount != 0)
+
+                                            <tr>
+                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
+                                                <td style="font-size: 20px;padding: 5px;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                            </tr>
+
+                                        @endif
+
+                                        <tr>
+                                            <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
+                                            <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
+                                        </tr>
+
+                                        @if($art_labor_discount != 0)
+
+                                            <tr>
+                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
+                                                <td style="font-size: 20px;padding: 5px;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                            </tr>
+
+                                        @endif
+
+                                        </tbody>
+
+                                    </table>
+
                                     <table class="table table1">
 
                                         <tbody>
@@ -98,7 +166,7 @@
                                         $cols = array_chunk($feature_sub_titles[$i], 3);
                                         ?>
 
-                                        <tr>
+                                        <!--<tr>
                                             <td style="border: 0 !important;"><p class="text-muted" style="font-size: 20px;width: auto !important;padding: 10px !important;font-weight: bold;">{{$product_titles[$i]}}</p></td>
                                         </tr>
 
@@ -106,7 +174,7 @@
                                             <td style="text-align: left !important;">{{__('text.Color Number')}}: {{$color_titles[$i]}}</td>
                                             <td style="text-align: left !important;">{{__('text.Width')}}: {{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
                                             <td style="text-align: left !important;">{{__('text.Height')}}: {{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
-                                        </tr>
+                                        </tr>-->
 
                                         <?php $d = 1; ?>
 
@@ -208,74 +276,6 @@
                                         @endforeach
 
                                         </tbody>
-                                    </table>
-
-                                    <?php
-                                    $arb_qty = (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
-                                    $arb_price = str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
-                                    $arb_price = number_format((float)($arb_price), 2, ',', '.');
-                                    $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
-                                    $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i]/100);
-                                    $arb = $request->rate[$i] - $arb_discount;
-                                    $arb = number_format((float)($arb), 2, ',', '.');
-                                    $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
-                                    $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i]/100);
-                                    $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
-                                    $art = number_format((float)($art), 2, ',', '.');
-                                    $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
-                                    ?>
-
-                                    <table style="display: table;width: 100%;">
-
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 60% !important;font-size: 22px;font-weight: 500;">Product</th>
-                                            <th style="width: 10% !important;font-size: 22px;">{{__('text.Qty')}}</th>
-                                            <th style="width: 15% !important;font-size: 22px;text-align: center;font-weight: 500;">Prijs</th>
-                                            <th style="width: 15% !important;font-size: 22px;text-align: center;font-weight: 500;">Totaal</th>
-                                        </tr>
-                                        </thead>
-
-                                        <tbody>
-
-                                        <tr>
-                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
-                                            <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
-                                        </tr>
-
-                                        @if($arb_discount != 0)
-
-                                            <tr>
-                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
-                                                <td style="font-size: 20px;padding: 5px;"></td>
-                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                            </tr>
-
-                                        @endif
-
-                                        <tr>
-                                            <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
-                                            <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
-                                        </tr>
-
-                                        @if($art_labor_discount != 0)
-
-                                            <tr>
-                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
-                                                <td style="font-size: 20px;padding: 5px;"></td>
-                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                            </tr>
-
-                                        @endif
-
-                                        </tbody>
-
                                     </table>
 
                                     <table style="display: table;width: 100%;margin-top: 30px;">
