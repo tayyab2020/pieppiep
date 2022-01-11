@@ -599,15 +599,63 @@
 
                                                         <div id="sub-categories">
 
-                                                            @if(isset($features_data) && count($features_data) > 0)
+                                                            @if(isset($features_data))
 
-                                                                @foreach($features_data as $f2 => $key2)
+                                                                @if(count($features_data) > 0)
 
-                                                                    <?php
-                                                                    $sub_categories1 = explode(',',$key2->sub_category_ids);
-                                                                    ?>
+                                                                    @foreach($features_data as $f2 => $key2)
 
-                                                                    <div data-id="{{$f2+1}}" class="sub-category-table-container table1">
+                                                                        <?php
+                                                                        $sub_categories1 = explode(',',$key2->sub_category_ids);
+                                                                        ?>
+
+                                                                        <div data-id="{{$f2+1}}" class="sub-category-table-container table1">
+
+                                                                            <table style="margin: auto;width: 95%;">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th>Main Category</th>
+                                                                                    <th>Sub Category</th>
+                                                                                    <th>Linked</th>
+                                                                                </tr>
+                                                                                </thead>
+
+                                                                                <tbody>
+
+                                                                                @foreach($sub_categories as $x => $key)
+
+                                                                                    @if($key->id)
+
+                                                                                        <tr data-id="{{$key->id}}">
+                                                                                            <td>{{$key->title}}</td>
+                                                                                            <td>
+                                                                                                {{$key->cat_name}}
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <input type="hidden" name="sub_category_id{{$f2+1}}[]" value="{{$key->id}}">
+                                                                                                <select class="form-control" name="sub_category_link{{$f2+1}}[]">
+
+                                                                                                    <option value="0">No</option>
+                                                                                                    <option {{in_array($key->id, $sub_categories1) ? 'selected' : null}} value="1">Yes</option>
+
+                                                                                                </select>
+                                                                                            </td>
+                                                                                        </tr>
+
+                                                                                    @endif
+
+                                                                                @endforeach
+
+                                                                                </tbody>
+                                                                            </table>
+
+                                                                        </div>
+
+                                                                    @endforeach
+
+                                                                @else
+
+                                                                    <div data-id="1" class="sub-category-table-container table1">
 
                                                                         <table style="margin: auto;width: 95%;">
                                                                             <thead>
@@ -630,11 +678,11 @@
                                                                                             {{$key->cat_name}}
                                                                                         </td>
                                                                                         <td>
-                                                                                            <input type="hidden" name="sub_category_id{{$f2+1}}[]" value="{{$key->id}}">
-                                                                                            <select class="form-control" name="sub_category_link{{$f2+1}}[]">
+                                                                                            <input type="hidden" name="sub_category_id1[]" value="{{$key->id}}">
+                                                                                            <select class="form-control" name="sub_category_link1[]">
 
                                                                                                 <option value="0">No</option>
-                                                                                                <option {{in_array($key->id, $sub_categories1) ? 'selected' : null}} value="1">Yes</option>
+                                                                                                <option selected value="1">Yes</option>
 
                                                                                             </select>
                                                                                         </td>
@@ -649,7 +697,7 @@
 
                                                                     </div>
 
-                                                                @endforeach
+                                                                @endif
 
                                                             @else
 
