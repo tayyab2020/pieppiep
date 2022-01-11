@@ -281,6 +281,9 @@ class FeaturesController extends Controller
                 $sub_features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
                 $sub_categories = features::leftjoin("categories",\DB::raw("FIND_IN_SET(categories.id,features.category_ids)"),">",\DB::raw("'0'"))->leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->leftjoin('sub_categories','sub_categories.main_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('features.id',$feature->id)->select('sub_categories.*','categories.cat_name as title')->get();
 
+                var_dump('<pre>'.$sub_categories.'</pre>');
+                exit();
+
                 return view('admin.features.create',compact('feature','cats','features_data','sub_features_data','sub_categories'));
             }
             else

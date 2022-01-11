@@ -2984,7 +2984,7 @@ class UserController extends Controller
                 }])->get();
 
             if (!$invoice) {
-                return redirect()->route('new-quotations');
+                return redirect()->back();
             }
 
             $supplier_products = array();
@@ -3026,7 +3026,7 @@ class UserController extends Controller
         }
         else
         {
-            return redirect()->route('new-quotations');
+            return redirect()->back();
         }
     }
 
@@ -3045,7 +3045,7 @@ class UserController extends Controller
         $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
 
         if (!$invoice) {
-            return redirect()->route('new-quotations');
+            return redirect()->back();
         }
 
         $quotation_invoice_number = $invoice->quotation_invoice_number;
@@ -3107,7 +3107,7 @@ class UserController extends Controller
         }
 
         if (!$check) {
-            return redirect()->route('new-quotations');
+            return redirect()->back();
         }
 
         $order_number = $check->order_number;
@@ -3138,7 +3138,7 @@ class UserController extends Controller
         }
 
         if (!$check) {
-            return redirect()->route('new-quotations');
+            return redirect()->back();
         }
 
         $order_number = $check->order_number;
@@ -3411,7 +3411,7 @@ class UserController extends Controller
 
         $pdf->save($file);
 
-        return redirect()->route('new-quotations');
+        return redirect()->back();
     }
 
     public function EmailTemplates()
@@ -3989,7 +3989,7 @@ class UserController extends Controller
 
 
             Session::flash('success', __('text.Quotation has been sent to customer'));
-            return redirect()->route('new-quotations');
+            return redirect()->back();
         }
         else
         {
@@ -4019,7 +4019,7 @@ class UserController extends Controller
             SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1);
 
             Session::flash('success', 'Order will be sent to supplier(s) soon...');
-            return redirect()->route('new-quotations');
+            return redirect()->back();
         }
         else
         {
@@ -4065,7 +4065,7 @@ class UserController extends Controller
         UpdateDates::dispatch($request->all(),$user);
 
         Session::flash('success', 'Processing...');
-        return redirect()->route('new-quotations');
+        return redirect()->route('customer-quotations');
     }
 
     public function SupplierOrderDelivered($id)
@@ -4178,7 +4178,7 @@ class UserController extends Controller
         $check = new_quotations::where('new_quotations.id',$request->quotation_id2)->where('new_quotations.creator_id',$user_id)->where('new_quotations.invoice',1)->where('new_quotations.invoice_sent',0)->first();
 
         if (!$check) {
-            return redirect()->route('new-quotations');
+            return redirect()->back();
         }
 
         $check->invoice_sent = 1;

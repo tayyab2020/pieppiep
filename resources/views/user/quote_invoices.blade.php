@@ -185,10 +185,6 @@
 
                                                                             <span class="btn btn-success">Order Delivered</span>
 
-                                                                        @elseif($sup->delivered)
-
-                                                                            <span class="btn btn-success">Order Delivered</span>
-
                                                                         @elseif($sup->approved)
 
                                                                             <span class="btn btn-success">Order Confirmed</span>
