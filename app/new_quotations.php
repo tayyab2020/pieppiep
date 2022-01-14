@@ -13,4 +13,9 @@ class new_quotations extends Model
         return $this->hasMany(new_quotations_data::class, 'quotation_id','id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(new_orders::class, 'quotation_id','id');
+    }
+
 }

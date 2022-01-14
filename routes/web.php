@@ -74,6 +74,7 @@
   Route::get('/new-orders', 'UserController@NewOrders')->name('new-orders');
   Route::get('/new-invoices', 'UserController@NewInvoices')->name('new-invoices');
   Route::get('/edit-new-quotation/{id}', 'UserController@EditNewQuotation');
+  Route::get('/edit-order/{id}', 'UserController@EditOrder');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
   Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadInvoicePDF');
   Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');
@@ -82,6 +83,7 @@
   Route::get('/facturen-type', 'UserController@SelectInvoicesType')->name('select-invoices-type');
   Route::get('/offerte/binnen-zonwering', 'UserController@CreateNewQuotation')->name('create-new-quotation');
   Route::post('/store-new-quotation', 'UserController@StoreNewQuotation')->name('store-new-quotation');
+  Route::post('/store-new-order', 'UserController@StoreNewOrder')->name('store-new-order');
   Route::get('/get-supplier-products', 'UserController@GetSupplierProducts');
   Route::get('/get-colors', 'UserController@GetColors');
   Route::get('/get-price', 'UserController@GetPrice');

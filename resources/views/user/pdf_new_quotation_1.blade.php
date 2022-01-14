@@ -70,15 +70,15 @@
                                 <div class="col-md-12" style="padding: 0 !important;">
 
                                     <?php
-                                    $arb_qty = (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
-                                    $arb_price = str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
+                                    $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
+                                    $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
                                     $arb_price = number_format((float)($arb_price), 2, ',', '.');
                                     $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
-                                    $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i]/100);
+                                    $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
                                     $arb = $request->rate[$i] - $arb_discount;
                                     $arb = number_format((float)($arb), 2, ',', '.');
                                     $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
-                                    $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i]/100);
+                                    $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
                                     $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
                                     $art = number_format((float)($art), 2, ',', '.');
                                     $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');

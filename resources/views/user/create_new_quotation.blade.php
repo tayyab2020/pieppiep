@@ -95,7 +95,7 @@
 																<span class="tooltiptext">Save</span>
 															</span>
 
-															<a href="{{Request::url()}}" class="tooltip1"
+															<a href="{{route('customer-quotations')}}" class="tooltip1"
 																style="cursor: pointer;font-size: 20px;margin-right: 10px;">
 																<i class="fa fa-fw fa-close"></i>
 																<span class="tooltiptext">Close</span>
@@ -3584,6 +3584,18 @@
 
 
 			$("[name='colors[]']").each(function (i, obj) {
+
+				if (!obj.value) {
+					flag = 1;
+					$(obj).next().find('.select2-selection').css('border', '1px solid red');
+				}
+				else {
+					$(obj).next().find('.select2-selection').css('border', '0');
+				}
+
+			});
+
+			$("[name='models[]']").each(function (i, obj) {
 
 				if (!obj.value) {
 					flag = 1;

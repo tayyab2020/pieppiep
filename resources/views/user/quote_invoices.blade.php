@@ -73,7 +73,7 @@
 
                                                         <tr role="row">
 
-                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Order ID</th>
+                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">ID</th>
 
                                                             <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">{{__('text.Quotation Number')}}</th>
 
@@ -165,13 +165,13 @@
 
                                                         @if(Route::currentRouteName() == 'new-orders')
 
-                                                            <?php $sup_data = $key->data->unique('supplier_id'); ?>
+                                                            <?php $sup_data = $key->orders->unique('supplier_id'); $t = 1; ?>
 
                                                             @foreach($sup_data as $sup)
 
                                                                 <tr role="row" class="odd">
 
-                                                                    <td>{{$sup->id}}</td>
+                                                                    <td>{{$t}}</td>
 
                                                                     <td><a href="">OF# {{$key->quotation_invoice_number}}</a></td>
 
@@ -188,6 +188,10 @@
                                                                         @elseif($sup->approved)
 
                                                                             <span class="btn btn-success">Order Confirmed</span>
+
+                                                                        @elseif($sup->order_sent)
+
+                                                                            <span class="btn btn-success">Order Sent</span>
 
                                                                         @else
 
@@ -216,10 +220,18 @@
 
                                                                                 <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
+                                                                                @if(!$sup->order_sent)
+
+                                                                                    <li><a href="{{ url('/aanbieder/edit-order/'.$sup->id) }}">Edit Order</a></li>
+
+                                                                                @endif
+
                                                                             </ul>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
+
+                                                                <?php $t = $t + 1; ?>
 
                                                             @endforeach
 

@@ -11,12 +11,12 @@ class new_quotations_data extends Model
 
     public function features()
     {
-        return $this->hasMany(new_quotations_features::class, 'quotation_data_id','id');
+        return $this->hasMany(new_quotations_features::class, 'quotation_data_id','id')->where('new_quotations_features.sub_feature',0);
     }
 
     public function sub_features()
     {
-        return $this->hasMany(new_quotations_features::class, 'quotation_data_id','id');
+        return $this->hasMany(new_quotations_features::class, 'quotation_data_id','id')->where('new_quotations_features.sub_feature',1);
     }
 
     public function quotation()
