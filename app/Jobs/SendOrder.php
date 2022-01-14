@@ -80,6 +80,7 @@ class SendOrder implements ShouldQueue
             $supplier_name = $supplier_data->name . ' ' . $supplier_data->family_name;
             $supplier_email = $supplier_data->email;
 
+            $request = new_quotations::where('id',$id)->first();
             $quotation_invoice_number = $request->quotation_invoice_number;
             $order_number = new_orders::where('quotation_id',$id)->where('supplier_id',$key)->first();
             $order_number = $order_number->order_number;
