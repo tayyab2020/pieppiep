@@ -3536,6 +3536,9 @@ class UserController extends Controller
 
             $pdf = PDF::loadView('user.pdf_new_quotation', compact('suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
             $pdf->save($file);
+
+            Session::flash('success', 'Order has been updated successfully!');
+            return redirect()->route('customer-quotations');
         }
         else{
             $quotation_id = $request->quotation_id;
