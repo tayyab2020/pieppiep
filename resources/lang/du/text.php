@@ -274,4 +274,5 @@ return [
     'Color Number' => 'Kleurnummer',
     'Width' => 'Breedte',
     'Height' => 'Hoogte',
+    'Select Supplier' => 'Select Supplier'
 ];

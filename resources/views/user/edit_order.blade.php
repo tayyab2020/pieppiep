@@ -11,11 +11,17 @@
 				method="POST" enctype="multipart/form-data">
 				{{csrf_field()}}
 
+                @if(Route::currentRouteName() == 'edit-order')
+
+                    <input type="hidden" name="supplier_id" value="{{$invoice[0]->supplier_id}}">
+
+                @endif
+
                 <input type="hidden" name="quotation_id" value="{{$invoice[0]->quotation_id}}">
-                <input type="hidden" name="supplier_id" value="{{$invoice[0]->supplier_id}}">
                 <input type="hidden" name="customer" value="{{$customer_details_id}}">
                 <input type="hidden" name="quotation_invoice_number" value="{{$quotation_invoice_number}}">
                 <input type="hidden" name="created_at" value="{{$created_at}}">
+                <input type="hidden" id="form_type" name="form_type" value="{{Route::currentRouteName() == 'view-order' ? 1 : 2}}">
 
 				<div style="margin: 0;" class="row">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -27,7 +33,15 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">Edit Order</h2>
+                                            @if(Route::currentRouteName() == 'edit-order')
+
+                                                <h2 style="margin-top: 0;">Edit Order</h2>
+
+                                            @else
+
+                                                <h2 style="margin-top: 0;">View Order</h2>
+
+                                            @endif
 
 											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
 
@@ -62,13 +76,26 @@
                                                         <section id="products_table" style="width: 100%;">
 
                                                             <div class="header-div">
+
                                                                 <div class="headings" style="width: 2%;"></div>
-																<div class="headings" style="width: 22%;">Product</div>
+
+                                                                @if(Route::currentRouteName() == 'view-order')
+
+                                                                    <div class="headings" style="width: 11%;">Supplier</div>
+                                                                    <div class="headings" style="width: 11%;">Product</div>
+
+                                                                @else
+
+                                                                    <div class="headings" style="width: 22%;">Product</div>
+
+                                                                @endif
+
                                                                 <div class="headings" style="width: 15%;">Color</div>
                                                                 <div class="headings" style="width: 15%;">Model</div>
-																<div class="headings" style="width: 15%;">Width</div>
-																<div class="headings" style="width: 15%;">Height</div>
-																<div class="headings" style="width: 16%;"></div>
+                                                                <div class="headings" style="width: 15%;">Width</div>
+                                                                <div class="headings" style="width: 15%;">Height</div>
+                                                                <div class="headings" style="width: 16%;"></div>
+
                                                             </div>
 
                                                             @foreach($invoice as $i => $item)
@@ -80,7 +107,8 @@
                                                                         <div style="padding: 0 5px;" class="sr-res">{{$i+1}}</div>
                                                                     </div>
 
-                                                                    <input type="hidden" value="{{$i+1}}" value="1" id="row_id" name="row_id[]">
+                                                                    <input type="hidden" value="{{$item->order_number}}" id="order_number" name="order_number[]">
+                                                                    <input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
                                                                     <input type="hidden" value="{{$item->childsafe ? 1 : 0}}" id="childsafe" name="childsafe[]">
                                                                     <input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
                                                                     <input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
@@ -90,23 +118,65 @@
                                                                     <input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
                                                                     <input type="hidden" value="{{$item->price_based_option}}" id="price_based_option" name="price_based_option[]">
 
-                                                                    <div style="width: 22%;" class="products content item3 full-res">
+                                                                    @if(Route::currentRouteName() == 'view-order')
 
-                                                                        <label class="content-label">Product</label>
+                                                                        <div style="width: 11%;" class="suppliers content item16 full-res">
 
-                                                                        <select name="products[]" class="js-data-example-ajax">
+                                                                            <label class="content-label">Supplier</label>
 
-                                                                            <option value=""></option>
+                                                                            <select name="suppliers[]" class="js-data-example-ajax4">
 
-                                                                            @foreach($products as $key)
+                                                                                <option value=""></option>
 
-                                                                                <option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+                                                                                @foreach($suppliers as $key)
 
-                                                                            @endforeach
+                                                                                    <option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
 
-                                                                        </select>
+                                                                                @endforeach
 
-                                                                    </div>
+                                                                            </select>
+
+                                                                        </div>
+
+                                                                        <div style="width: 11%;" class="products content item3 full-res">
+
+                                                                            <label class="content-label">Product</label>
+
+                                                                            <select name="products[]" class="js-data-example-ajax">
+
+                                                                                <option value=""></option>
+
+                                                                                @foreach($supplier_products[$i] as $key)
+
+                                                                                    <option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+
+                                                                                @endforeach
+
+                                                                            </select>
+
+                                                                        </div>
+
+                                                                    @else
+
+                                                                        <div style="width: 22%;" class="products content item3 full-res">
+
+                                                                            <label class="content-label">Product</label>
+
+                                                                            <select name="products[]" class="js-data-example-ajax">
+
+                                                                                <option value=""></option>
+
+                                                                                @foreach($products as $key)
+
+                                                                                    <option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+
+                                                                                @endforeach
+
+                                                                            </select>
+
+                                                                        </div>
+
+                                                                    @endif
 
 
                                                                     <div style="width: 15%;" class="color content item12">
@@ -780,8 +850,8 @@
 			display: grid !important;
   			grid-template-areas:'item1 item1 item1 item1 item1 item1'
     		'item2 item2 item2 item2 item2 item2'
+            'item16 item16 item16 item16 item16 item16'
     		'item3 item3 item3 item3 item3 item3'
-			'item16 item16 item16 item16 item16 item16'
 			'item12 item12 item12 item12 item12 item12'
 			'item13 item13 item13 item13 item13 item13'
 			'item14 item14 item14 item14 item14 item14'
@@ -1346,6 +1416,80 @@
 			},
 		});
 
+        $(".js-data-example-ajax4").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "{{__('text.Select Supplier')}}",
+            allowClear: true,
+            "language": {
+                "noResults": function () {
+                    return '{{__('text.No results found')}}';
+                }
+            },
+        });
+
+        $(document).on('change', ".js-data-example-ajax4", function (e) {
+
+            var current = $(this);
+
+            var id = current.val();
+            var row_id = current.parents(".content-div").data('id');
+            var options = '';
+            $('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+
+            $.ajax({
+                type: "GET",
+                data: "id=" + id,
+                url: "<?php echo url('/aanbieder/get-supplier-products')?>",
+                success: function (data) {
+
+                    $('#menu1').find(`[data-id='${row_id}']`).remove();
+
+                    $('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(0);
+                    $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(0);
+                    $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(0);
+                    $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(0);
+                    $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(0);
+                    $('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+
+                    $.each(data, function (index, value) {
+
+                        if (value.title) {
+                            var opt = '<option value="' + value.id + '" >' + value.title + '</option>';
+
+                            options = options + opt;
+                        }
+
+                    });
+
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.products').children('select').find('option')
+                        .remove()
+                        .end()
+                        .append('<option value="">Select Product</option>' + options);
+
+
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
+                        .remove()
+                        .end()
+                        .append('<option value="">Select Color</option>');
+
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
+                        .remove()
+                        .end()
+                        .append('<option value="">Select Model</option>');
+
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
+
+                }
+            });
+
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+
+        });
+
 		$(document).on('change', ".js-data-example-ajax", function (e) {
 
 			var current = $(this);
@@ -1372,6 +1516,7 @@
 						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(data.ladderband_price_impact);
 						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
 						$('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val(data.price_based_option);
+						$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 						var price_based_option = data.price_based_option;
 
@@ -1492,6 +1637,8 @@
 					success: function (data) {
 
 						if (typeof data[0].value !== 'undefined') {
+
+							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 							if (data[0].value === 'both') {
 								Swal.fire({
@@ -1699,6 +1846,8 @@
 
 						if (typeof data[0].value !== 'undefined') {
 
+							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+
 							var color_max_height = data[0].max_height;
 
 							if (data[0].value === 'both') {
@@ -1898,8 +2047,9 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, products = null, product = null, colors = null, color = null, models = null, model = null, width = null, width_unit = null, height = null, height_unit = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, width_readonly = null, height_readonly = null, last_column = null) {
+		function add_row(copy = false, order_number, suppliers = null, supplier = null, products = null, product = null, colors = null, color = null, models = null, model = null, width = null, width_unit = null, height = null, height_unit = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, width_readonly = null, height_readonly = null, last_column = null) {
 
+		    var form_type = $('#form_type').val();
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
 
@@ -1908,13 +2058,70 @@
 
 			if (!copy) {
 
+			    if(form_type == 1)
+                {
+                    var sup_prod = '                                                 <div style="width: 11%;" class="suppliers content item16 full-res">\n' +
+                        '\n' +
+                        '                       									 	<label class="content-label">Supplier</label>\n' +
+                        '\n' +
+                        '                                                                <select name="suppliers[]" class="js-data-example-ajax4">\n' +
+                        '\n' +
+                        '                                                                    <option value=""></option>\n' +
+                        '\n' +
+                        '                                                                    @foreach($suppliers as $key)\n' +
+                        '\n' +
+                        '                                                                        <option value="{{$key->id}}">{{$key->company_name}}</option>\n' +
+                        '\n' +
+                        '                                                                    @endforeach\n' +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </div>\n' +
+                        '\n' +
+                        '                                                            <div style="width: 11%;" class="products content item3 full-res">\n' +
+                        '\n' +
+                        '                       									 	<label class="content-label">Product</label>\n' +
+                        '\n' +
+                        '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
+                        '\n' +
+                        '                                                                    <option value=""></option>\n' +
+                        '\n' +
+                        '                                                                    @foreach($products as $key)\n' +
+                        '\n' +
+                        '                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+                        '\n' +
+                        '                                                                    @endforeach\n' +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </div>\n';
+                }
+			    else
+                {
+                    var sup_prod = '                                                 <div style="width: 22%;" class="products content item3 full-res">\n' +
+                        '\n' +
+                        '                       									 	<label class="content-label">Product</label>\n' +
+                        '\n' +
+                        '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
+                        '\n' +
+                        '                                                                    <option value=""></option>\n' +
+                        '\n' +
+                        '                                                                    @foreach($products as $key)\n' +
+                        '\n' +
+                        '                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+                        '\n' +
+                        '                                                                    @endforeach\n' +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </div>\n';
+                }
+
 				$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
 					'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
                     '                       									 	<label class="content-label">Sr. No</label>\n' +
 					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
-					'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
+                    '                                                            <input type="hidden" value="" id="order_number" name="order_number[]">\n' +
+                    '                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
 					'                                                            <input type="hidden" value="0" id="childsafe" name="childsafe[]">\n' +
 					'                                                            <input type="hidden" value="0" id="ladderband" name="ladderband[]">\n' +
 					'                                                            <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">\n' +
@@ -1924,22 +2131,7 @@
 					'                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
 					'                                                            <input type="hidden" id="price_based_option" name="price_based_option[]">\n' +
 					'\n' +
-					'                                                            <div style="width: 22%;" class="products content item3 full-res">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Product</label>\n' +
-					'\n' +
-					'                                                                <select name="products[]" class="js-data-example-ajax">\n' +
-					'\n' +
-					'                                                                    <option value=""></option>\n' +
-					'\n' +
-					'                                                                    @foreach($products as $key)\n' +
-					'\n' +
-					'                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
-					'\n' +
-					'                                                                    @endforeach\n' +
-					'\n' +
-					'                                                                </select>\n' +
-					'                                                            </div>\n' +
+					sup_prod +
                     '\n' +
 					'                                                            <div style="width: 15%;" class="color content item12">\n' +
 					'\n' +
@@ -2041,6 +2233,18 @@
 					},
 				});
 
+                last_row.find(".js-data-example-ajax4").select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "{{__('text.Select Supplier')}}",
+                    allowClear: true,
+                    "language": {
+                        "noResults": function () {
+                            return '{{__('text.No results found')}}';
+                        }
+                    },
+                });
+
 				last_row.find(".js-data-example-ajax2").select2({
 					width: '100%',
 					height: '200px',
@@ -2067,12 +2271,51 @@
 			}
 			else {
 
+                if(form_type == 1)
+                {
+                    var sup_prod = '                                                 <div style="width: 11%;" class="suppliers content item16 full-res">\n' +
+                        '\n' +
+                        '                       									 	<label class="content-label">Supplier</label>\n' +
+                        '\n' +
+                        '                                                                <select name="suppliers[]" class="js-data-example-ajax4">\n' +
+                        '\n' +
+                        suppliers +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </div>\n' +
+                        '\n' +
+                        '                                                            <div style="width: 11%;" class="products content item3 full-res">\n' +
+                        '\n' +
+                        '                       									 	<label class="content-label">Product</label>\n' +
+                        '\n' +
+                        '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
+                        '\n' +
+                        products +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </div>\n';
+                }
+                else
+                {
+                    var sup_prod = '                                                 <div style="width: 22%;" class="products content item3 full-res">\n' +
+                        '\n' +
+                        '                       									 	<label class="content-label">Product</label>\n' +
+                        '\n' +
+                        '                                                                <select name="products[]" class="js-data-example-ajax">\n' +
+                        '\n' +
+                        products +
+                        '\n' +
+                        '                                                                </select>\n' +
+                        '                                                            </div>\n';
+                }
+
 				$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
 					'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
                     '                       									 	<label class="content-label">Sr. No</label>\n' +
 					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
+                    '                                                            <input type="hidden" value="' + order_number +'" id="order_number" name="order_number[]">\n' +
 					'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
 					'                                                            <input type="hidden" value="' + childsafe + '" id="childsafe" name="childsafe[]">\n' +
 					'                                                            <input type="hidden" value="' + ladderband + '" id="ladderband" name="ladderband[]">\n' +
@@ -2083,17 +2326,7 @@
 					'                                                            <input type="hidden" value="' + delivery_days + '" id="delivery_days" name="delivery_days[]">\n' +
 					'                                                            <input type="hidden" value="' + price_based_option + '" id="price_based_option" name="price_based_option[]">\n' +
 					'\n' +
-					'                                                            <div style="width: 22%;" class="products content item3 full-res">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Product</label>\n' +
-					'\n' +
-					'                                                                <select name="products[]" class="js-data-example-ajax">\n' +
-					'\n' +
-					products +
-					'\n' +
-					'                                                                </select>\n' +
-					'\n' +
-					'                                                            </div>\n' +
+                    sup_prod +
                     '\n' +
                     '                       									 	<div style="width: 15%;" class="color content item12">\n' +
 					'\n' +
@@ -2152,6 +2385,7 @@
 				var last_row = $('#products_table .content-div:last');
 
 				last_row.find('.js-data-example-ajax').val(product);
+                last_row.find('.js-data-example-ajax4').val(supplier);
 				last_row.find('.js-data-example-ajax2').val(color);
 				last_row.find('.js-data-example-ajax3').val(model);
 
@@ -2235,6 +2469,18 @@
 						}
 					},
 				});
+
+                last_row.find(".js-data-example-ajax4").select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "{{__('text.Select Supplier')}}",
+                    allowClear: true,
+                    "language": {
+                        "noResults": function () {
+                            return '{{__('text.No results found')}}';
+                        }
+                    },
+                });
 
 				last_row.find(".js-data-example-ajax2").select2({
 					width: '100%',
@@ -2470,6 +2716,7 @@
 
 			var current = $('#products_table .content-div.active');
 			var id = current.data('id');
+            var order_number = current.find('#order_number').val();
 			var childsafe = current.find('#childsafe').val();
 			var ladderband = current.find('#ladderband').val();
 			var ladderband_value = current.find('#ladderband_value').val();
@@ -2477,6 +2724,8 @@
 			var ladderband_impact_type = current.find('#ladderband_impact_type').val();
 			var area_conflict = current.find('#area_conflict').val();
 			var delivery_days = current.find('#delivery_days').val();
+            var suppliers = current.find('.js-data-example-ajax4').html();
+            var supplier = current.find('.js-data-example-ajax4').val();
 			var products = current.find('.js-data-example-ajax').html();
 			var product = current.find('.js-data-example-ajax').val();
 			var colors = current.find('.js-data-example-ajax2').html();
@@ -2508,7 +2757,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, products, product, colors, color, models, model, width, width_unit, height, height_unit, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, width_readonly, height_readonly, last_column);
+			add_row(true, order_number, suppliers, supplier, products, product, colors, color, models, model, width, width_unit, height, height_unit, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, width_readonly, height_readonly, last_column);
 
 		});
 
@@ -2662,6 +2911,8 @@
 					success: function (data) {
 
 						if (typeof data[0].value !== 'undefined') {
+
+							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 							if (data[0].value === 'both') {
 
@@ -2870,6 +3121,8 @@
 					success: function (data) {
 
 						if (typeof data[0].value !== 'undefined') {
+
+							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 							if (data[0].value === 'both') {
 

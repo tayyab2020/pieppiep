@@ -29,7 +29,11 @@
                                     <p style="margin: 0">{{$user->email}}</p>
                                     <br>
                                     @if($role != 'retailer') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
+
+                                    @if($role != 'supplier2')
+                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
+                                    @endif
+
                                     <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 
                                 </div>
@@ -59,6 +63,12 @@
                                     <tr>
                                         <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Qty')}}</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Product</th>
+                                        @if($role == 'supplier2')
+
+                                            <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">Order Number</th>
+
+                                        @endif
                                         <th class="border-0 text-uppercase small font-weight-bold">Kleur - nummer</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Breedte</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Hoogte</th>
@@ -95,11 +105,17 @@
                                         <tr>
                                             <td>{{$request->qty[$i]}}</td>
                                             <td>{{$product_titles[$i]}}</td>
+                                            @if($role == 'supplier2')
+
+                                                <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                <td>{{$order_numbers[$i]}}</td>
+
+                                            @endif
                                             <td>{{$color_titles[$i]}}</td>
                                             <td>{{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
                                             <td>{{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
 
-                                            @if($role == 'retailer')
+                                            @if($role == 'retailer' || $role == 'supplier2')
 
                                                 <td><?php $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 1){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
@@ -108,7 +124,12 @@
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 4){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 5){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 6){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = $request->$comment ? ', '.$request->$comment : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
-                                                <td>{{round($request->rate[$i])}}</td>
+
+                                                @if($role == 'retailer')
+
+                                                    <td>{{round($request->rate[$i])}}</td>
+
+                                                @endif
 
                                             @else
 
@@ -126,7 +147,7 @@
 
                                                 @endif
 
-                                                @if($role == 'supplier' || $role == 'invoice')
+                                                @if($role == 'supplier' || $role == 'supplier2' || $role == 'invoice')
 
                                                     <td>{{$request->delivery_date[$i]}}</td>
 

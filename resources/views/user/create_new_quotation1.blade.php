@@ -111,7 +111,7 @@
 																	<input type="hidden" value="{{$item->basic_price}}" id="basic_price" name="basic_price[]">
 																	<input type="hidden" value="{{$item->rate}}" id="rate" name="rate[]">
 																	<input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
-																	<input type="hidden" value="{{$i+1}}" value="1" id="row_id" name="row_id[]">
+																	<input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
 																	<input type="hidden" value="{{$item->childsafe ? 1 : 0}}" id="childsafe" name="childsafe[]">
 																	<input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
 																	<input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
@@ -2283,6 +2283,7 @@
 					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
 					$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
 					$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+					$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 					$.each(data, function (index, value) {
 
@@ -2304,6 +2305,11 @@
 						.remove()
 						.end()
 						.append('<option value="">Select Color</option>');
+
+                    $('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
+                        .remove()
+                        .end()
+                        .append('<option value="">Select Model</option>');
 
 					$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
 					$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
@@ -2359,6 +2365,7 @@
 						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+						$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 						var price_based_option = data.price_based_option;
 
@@ -2514,6 +2521,8 @@
 					success: function (data) {
 
 						if (typeof data[0].value !== 'undefined') {
+
+							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 							if (data[0].value === 'both') {
 								Swal.fire({
@@ -2876,6 +2885,8 @@
 					success: function (data) {
 
 						if (typeof data[0].value !== 'undefined') {
+
+							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 							var color_max_height = data[0].max_height;
 
@@ -4277,6 +4288,8 @@
 
 						if (typeof data[0].value !== 'undefined') {
 
+							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+
 							if (data[0].value === 'both') {
 
 								Swal.fire({
@@ -4639,6 +4652,8 @@
 					success: function (data) {
 
 						if (typeof data[0].value !== 'undefined') {
+
+							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 							if (data[0].value === 'both') {
 

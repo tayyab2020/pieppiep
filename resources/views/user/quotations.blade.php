@@ -15,7 +15,11 @@
 
                                         <h2 style="display: inline-block;">{{__('text.Quotations')}}</h2>
 
-                                        <a style="float: right;" href="{{route('select-quotations-type')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create Quotation')}}</a>
+                                        @if(Auth::guard('user')->user()->role_id == 2)
+
+                                            <a style="float: right;" href="{{route('select-quotations-type')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create Quotation')}}</a>
+
+                                        @endif
 
                                     </div>
                                     <hr>
@@ -124,7 +128,7 @@
 
                                                                 $date1 = date('d-m-Y',$date); ?>
 
-                                                                <td><span style="display: none;">{{date('m-d-Y',$date)}}</span>{{$date1}}</td>
+                                                                <td data-sort="{{$date}}">{{$date1}}</td>
 
                                                                 <td>
                                                                     <div class="dropdown">
@@ -355,7 +359,7 @@
 
                                                                 $date1 = date('d-m-Y',$date); ?>
 
-                                                                <td><span style="display: none;">{{date('m-d-Y',$date)}}</span>{{$date1}}</td>
+                                                                <td data-sort="{{$date}}">{{$date1}}</td>
 
                                                                 <td>
                                                                     <div class="dropdown">
@@ -400,6 +404,12 @@
                                                                                 @if($key->status == 0 || $key->ask_customization)
 
                                                                                     <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+
+                                                                                        @if(!$key->order_sent)
+
+                                                                                            <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
+
+                                                                                        @endif
 
                                                                                 @endif
 
@@ -476,6 +486,7 @@
                                                                             @else
 
                                                                                 <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/download-full-order-pdf/'.$key->invoice_id) }}">Download Full Order PDF</a></li>
 
                                                                             @endif
 
@@ -1128,19 +1139,48 @@
             $('#myModal1').modal('toggle');
         }
 
-        $('#example').DataTable({
-            order: [[5, 'desc']],
-            "oLanguage": {
-                "sLengthMenu": "<?php echo __('text.Show') . ' _MENU_ ' . __('text.records'); ?>",
-                "sSearch": "<?php echo __('text.Search') . ':' ?>",
-                "sInfo": "<?php echo __('text.Showing') . ' _START_ ' . __('text.to') . ' _END_ ' . __('text.of') . ' _TOTAL_ ' . __('text.items'); ?>",
-                "oPaginate": {
-                    "sPrevious": "<?php echo __('text.Previous'); ?>",
-                    "sNext": "<?php echo __('text.Next'); ?>"
-                },
-                "sEmptyTable": '<?php echo __('text.No data available in table'); ?>'
-            }
-        });
     </script>
+
+    @if(Auth::guard('user')->user()->role_id == 2)
+
+        <script>
+
+            $('#example').DataTable({
+                order: [[5, 'desc']],
+                "oLanguage": {
+                    "sLengthMenu": "<?php echo __('text.Show') . ' _MENU_ ' . __('text.records'); ?>",
+                    "sSearch": "<?php echo __('text.Search') . ':' ?>",
+                    "sInfo": "<?php echo __('text.Showing') . ' _START_ ' . __('text.to') . ' _END_ ' . __('text.of') . ' _TOTAL_ ' . __('text.items'); ?>",
+                    "oPaginate": {
+                        "sPrevious": "<?php echo __('text.Previous'); ?>",
+                        "sNext": "<?php echo __('text.Next'); ?>"
+                    },
+                    "sEmptyTable": '<?php echo __('text.No data available in table'); ?>'
+                }
+            });
+
+        </script>
+
+    @else
+
+        <script>
+
+            $('#example').DataTable({
+                order: [[4, 'desc']],
+                "oLanguage": {
+                    "sLengthMenu": "<?php echo __('text.Show') . ' _MENU_ ' . __('text.records'); ?>",
+                    "sSearch": "<?php echo __('text.Search') . ':' ?>",
+                    "sInfo": "<?php echo __('text.Showing') . ' _START_ ' . __('text.to') . ' _END_ ' . __('text.of') . ' _TOTAL_ ' . __('text.items'); ?>",
+                    "oPaginate": {
+                        "sPrevious": "<?php echo __('text.Previous'); ?>",
+                        "sNext": "<?php echo __('text.Next'); ?>"
+                    },
+                    "sEmptyTable": '<?php echo __('text.No data available in table'); ?>'
+                }
+            });
+
+        </script>
+
+    @endif
 
 @endsection

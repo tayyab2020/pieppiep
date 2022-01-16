@@ -74,10 +74,12 @@
   Route::get('/new-orders', 'UserController@NewOrders')->name('new-orders');
   Route::get('/new-invoices', 'UserController@NewInvoices')->name('new-invoices');
   Route::get('/edit-new-quotation/{id}', 'UserController@EditNewQuotation');
-  Route::get('/edit-order/{id}', 'UserController@EditOrder');
+  Route::get('/edit-order/{id}', 'UserController@EditOrder')->name('edit-order');
+  Route::get('/view-order/{id}', 'UserController@EditOrder')->name('view-order');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
   Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadInvoicePDF');
   Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');
+  Route::get('/download-full-order-pdf/{id}', 'UserController@DownloadFullOrderPDF');
   Route::get('/download-order-confirmation-pdf/{id}', 'UserController@DownloadOrderConfirmationPDF');
   Route::get('/offerte-type', 'UserController@SelectQuotationsType')->name('select-quotations-type');
   Route::get('/facturen-type', 'UserController@SelectInvoicesType')->name('select-invoices-type');

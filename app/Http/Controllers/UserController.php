@@ -822,7 +822,7 @@ class UserController extends Controller
             }
             else
             {
-                $new_invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
+                $new_invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.order_sent', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
                 $new_invoices = $new_invoices->unique('invoice_id');
             }
         }
@@ -3045,38 +3045,69 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+        if(\Route::currentRouteName() == 'edit-order')
+        {
+            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+        }
+        else
+        {
+            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+        }
 
         if($check && !$check->order_sent)
         {
-
             $supplier_id = $check->supplier_id;
             $quotation_id = $check->quotation_id;
             $customer_details_id = $check->customer_details;
             $quotation_invoice_number = $check->quotation_invoice_number;
             $created_at = $check->created_at;
 
-            $orders = new_orders::where('quotation_id',$quotation_id)->where('supplier_id',$supplier_id)->get();
-            $products = Products::where('user_id',$supplier_id)->get();
+            if(\Route::currentRouteName() == 'edit-order')
+            {
+                $products = Products::where('user_id',$supplier_id)->get();
+                $suppliers = array();
 
-            $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->where('new_orders.supplier_id',$supplier_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
-                ->with(['features' => function($query)
-                {
-                    $query->leftjoin('features','features.id','=','new_orders_features.feature_id')
-                        ->select('new_orders_features.*','features.title','features.comment_box');
+                $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->where('new_orders.supplier_id',$supplier_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+                    ->with(['features' => function($query)
+                    {
+                        $query->leftjoin('features','features.id','=','new_orders_features.feature_id')
+                            ->select('new_orders_features.*','features.title','features.comment_box');
 
-                }])
-                ->with(['sub_features' => function($query)
-                {
-                    $query->leftjoin('product_features','product_features.id','=','new_orders_features.feature_id')
-                        ->select('new_orders_features.*','product_features.title');
+                    }])
+                    ->with(['sub_features' => function($query)
+                    {
+                        $query->leftjoin('product_features','product_features.id','=','new_orders_features.feature_id')
+                            ->select('new_orders_features.*','product_features.title');
 
-                }])->get();
+                    }])->get();
+            }
+            else
+            {
+                $products = array();
+                $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+                $suppliers = User::whereIn('id',$suppliers)->get();
+
+                $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+                    ->with(['features' => function($query)
+                    {
+                        $query->leftjoin('features','features.id','=','new_orders_features.feature_id')
+                            ->select('new_orders_features.*','features.title','features.comment_box');
+
+                    }])
+                    ->with(['sub_features' => function($query)
+                    {
+                        $query->leftjoin('product_features','product_features.id','=','new_orders_features.feature_id')
+                            ->select('new_orders_features.*','product_features.title');
+
+                    }])->get();
+
+            }
 
             if (!$invoice) {
                 return redirect()->back();
             }
 
+            $supplier_products = array();
             $sub_products = array();
             $colors = array();
             $models = array();
@@ -3088,6 +3119,11 @@ class UserController extends Controller
 
             foreach ($invoice as $i => $item)
             {
+                if(\Route::currentRouteName() == 'view-order')
+                {
+                    $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->get();
+                }
+
                 $colors[$i] = colors::where('product_id',$item->product_id)->get();
                 $models[$i] = product_models::where('product_id',$item->product_id)->get();
 
@@ -3110,7 +3146,7 @@ class UserController extends Controller
                 }
             }
 
-            return view('user.edit_order', compact('customer_details_id', 'quotation_invoice_number', 'created_at', 'products','colors','models','features','sub_features','invoice','sub_products'));
+            return view('user.edit_order', compact('suppliers','supplier_products','customer_details_id', 'quotation_invoice_number', 'created_at', 'products','colors','models','features','sub_features','invoice','sub_products'));
         }
         else
         {
@@ -3173,6 +3209,39 @@ class UserController extends Controller
         return response()->download(public_path("assets/newInvoices/{$filename}"));
     }
 
+    public function DownloadFullOrderPDF($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user_role == 2)
+        {
+            $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
+        }
+        else
+        {
+            $check = '';
+
+        }
+
+        if (!$check) {
+            return redirect()->back();
+        }
+
+        $order_number = $check->quotation_invoice_number;
+        $filename = $order_number . '.pdf';
+
+        return response()->download(public_path("assets/Orders/{$filename}"));
+
+    }
+
     public function DownloadOrderPDF($id)
     {
         $user = Auth::guard('user')->user();
@@ -3192,6 +3261,7 @@ class UserController extends Controller
         else
         {
             $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations_data.supplier_id',$user_id)->where('new_quotations.finished',1)->first();
+
         }
 
         if (!$check) {
@@ -3202,6 +3272,7 @@ class UserController extends Controller
         $filename = $order_number . '.pdf';
 
         return response()->download(public_path("assets/supplierQuotations/{$filename}"));
+
     }
 
     public function DownloadOrderConfirmationPDF($id)
@@ -3267,17 +3338,31 @@ class UserController extends Controller
         }
 
         $products = $request->products;
-
         $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email')->first();
-        $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->first();
-        $order_number = $order_number->order_number;
 
-        $order_ids = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->pluck('id');
-        $order_feature_ids = new_orders_features::whereIn('order_data_id',$order_ids)->pluck('id');
+        if($request->form_type == 2)
+        {
+            $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->first();
+            $order_number = $order_number->order_number;
 
-        new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->delete();
-        new_orders_features::whereIn('order_data_id',$order_ids)->delete();
-        new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
+            $order_ids = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->pluck('id');
+            $order_feature_ids = new_orders_features::whereIn('order_data_id',$order_ids)->pluck('id');
+
+            new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->delete();
+            new_orders_features::whereIn('order_data_id',$order_ids)->delete();
+            new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
+        }
+        else
+        {
+            $order_ids = new_orders::where('quotation_id',$request->quotation_id)->pluck('id');
+            $order_feature_ids = new_orders_features::whereIn('order_data_id',$order_ids)->pluck('id');
+
+            new_orders::where('quotation_id',$request->quotation_id)->delete();
+            new_orders_features::whereIn('order_data_id',$order_ids)->delete();
+            new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
+
+            $order_numbers = array();
+        }
 
         foreach ($products as $i => $key) {
 
@@ -3298,9 +3383,9 @@ class UserController extends Controller
             }
 
             $order = new new_orders;
-            $order->order_number = $order_number;
+            $order->order_number = $request->form_type == 1 ? $request->order_number[$i] : $order_number;
             $order->quotation_id = $request->quotation_id;
-            $order->supplier_id = $request->supplier_id;
+            $order->supplier_id = $request->form_type == 1 ? $request->suppliers[$i] : $request->supplier_id;
             $order->product_id = (int)$key;
             $order->row_id = $row_id;
             $order->model_id = $request->models[$i];
@@ -3396,6 +3481,20 @@ class UserController extends Controller
                                 $post_orders_sub_products->size1_value = $size1_value[$s];
                                 $post_orders_sub_products->size2_value = $size2_value[$s];
                                 $post_orders_sub_products->save();
+
+                                if($size1_value[$s] == 1 || $size2_value[$s] == 1)
+                                {
+                                    $sub_titles[$i] = product_ladderbands::where('product_id',$key)->where('id',$key2)->first();
+
+                                    if($size1_value[$s] == 1)
+                                    {
+                                        $sub_titles[$i]->size = '38mm';
+                                    }
+                                    else
+                                    {
+                                        $sub_titles[$i]->size = '25mm';
+                                    }
+                                }
                             }
                         }
                     }
@@ -3411,118 +3510,141 @@ class UserController extends Controller
                         $post_order_features->save();
                     }
 
+                    $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.id',$key1)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+
                 }
+            }
+
+            if($request->form_type == 1)
+            {
+                $suppliers[] = User::where('id',$request->suppliers[$i])->first();
+                $order_number = new_orders::where('quotation_id',$request->quotation_id)->pluck('order_number')->first();
+                $order_numbers[$i] = $order_number;
             }
 
         }
 
-        $quotation_id = $request->quotation_id;
-        $request->products = new_orders::where('quotation_id',$quotation_id)->where('supplier_id',$request->supplier_id)->get();
-
-        $product_titles = array();
-        $color_titles = array();
-        $model_titles = array();
-        $sub_titles = array();
-        $qty = array();
-        $width = array();
-        $width_unit = array();
-        $height = array();
-        $height_unit = array();
-        $comments = array();
-        $delivery = array();
-        $labor_impact = array();
-        $price_before_labor = array();
-        $discount = array();
-        $rate = array();
-        $labor_discount = array();
-        $total = array();
-        $total_discount = array();
-        $feature_sub_titles = array();
-
-        foreach ($request->products as $x => $temp)
+        if($request->form_type == 1)
         {
-            /*$feature_sub_titles[$x][] = 'empty';*/
-            $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
-            $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
-            $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
-            $qty[] = $temp->qty;
-            $width[] = $temp->width;
-            $width_unit[] = $temp->width_unit;
-            $height[] = $temp->height;
-            $height_unit[] = $temp->height_unit;
-            $delivery[] = $temp->delivery_date;
-            $labor_impact[] = $temp->labor_impact;
-            $price_before_labor[] = $temp->price_before_labor;
-            $discount[] = $temp->discount;
-            $rate[] = $temp->rate;
-            $labor_discount[] = $temp->labor_discount;
-            $total[] = $temp->amount;
-            $total_discount[] = $temp->total_discount;
+            $quotation_invoice_number = $request->quotation_invoice_number;
+            $filename = $quotation_invoice_number . '.pdf';
+            ini_set('max_execution_time', 180);
 
-            $features = new_orders_features::where('order_data_id',$temp->id)->get();
+            $date = $request->created_at;
+            $role = 'supplier2';
+            $file = public_path() . '/assets/Orders/' . $filename;
 
-            foreach ($features as $f => $feature)
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            $pdf->save($file);
+        }
+        else{
+            $quotation_id = $request->quotation_id;
+            $request->products = new_orders::where('quotation_id',$quotation_id)->where('supplier_id',$request->supplier_id)->get();
+            $product_titles = array();
+            $color_titles = array();
+            $model_titles = array();
+            $sub_titles = array();
+            $qty = array();
+            $width = array();
+            $width_unit = array();
+            $height = array();
+            $height_unit = array();
+            $comments = array();
+            $delivery = array();
+            $labor_impact = array();
+            $price_before_labor = array();
+            $discount = array();
+            $rate = array();
+            $labor_discount = array();
+            $total = array();
+            $total_discount = array();
+            $feature_sub_titles = array();
+
+            foreach ($request->products as $x => $temp)
             {
-                if($feature->feature_id == 0)
+                /*$feature_sub_titles[$x][] = 'empty';*/
+                $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
+                $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
+                $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
+                $qty[] = $temp->qty;
+                $width[] = $temp->width;
+                $width_unit[] = $temp->width_unit;
+                $height[] = $temp->height;
+                $height_unit[] = $temp->height_unit;
+                $delivery[] = $temp->delivery_date;
+                $labor_impact[] = $temp->labor_impact;
+                $price_before_labor[] = $temp->price_before_labor;
+                $discount[] = $temp->discount;
+                $rate[] = $temp->rate;
+                $labor_discount[] = $temp->labor_discount;
+                $total[] = $temp->amount;
+                $total_discount[] = $temp->total_discount;
+
+                $features = new_orders_features::where('order_data_id',$temp->id)->get();
+
+                foreach ($features as $f => $feature)
                 {
-                    if($feature->ladderband)
+                    if($feature->feature_id == 0)
                     {
-                        $sub_product = new_orders_sub_products::where('feature_row_id',$feature->id)->get();
-
-                        foreach ($sub_product as $sub)
+                        if($feature->ladderband)
                         {
-                            if($sub->size1_value == 1 || $sub->size2_value == 1)
-                            {
-                                $sub_titles[$x] = product_ladderbands::where('product_id',$temp->product_id)->where('id',$sub->sub_product_id)->first();
+                            $sub_product = new_orders_sub_products::where('feature_row_id',$feature->id)->get();
 
-                                if($sub->size1_value == 1)
+                            foreach ($sub_product as $sub)
+                            {
+                                if($sub->size1_value == 1 || $sub->size2_value == 1)
                                 {
-                                    $sub_titles[$x]->size = '38mm';
-                                }
-                                else
-                                {
-                                    $sub_titles[$x]->size = '25mm';
+                                    $sub_titles[$x] = product_ladderbands::where('product_id',$temp->product_id)->where('id',$sub->sub_product_id)->first();
+
+                                    if($sub->size1_value == 1)
+                                    {
+                                        $sub_titles[$x]->size = '38mm';
+                                    }
+                                    else
+                                    {
+                                        $sub_titles[$x]->size = '25mm';
+                                    }
                                 }
                             }
                         }
                     }
+
+                    $feature_sub_titles[$x][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$temp->product_id)->where('product_features.heading_id',$feature->feature_id)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                    $comments[$x][] = $feature->comment;
                 }
-
-                $feature_sub_titles[$x][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$temp->product_id)->where('product_features.heading_id',$feature->feature_id)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
-                $comments[$x][] = $feature->comment;
             }
+
+            $request->qty = $qty;
+            $request->width = $width;
+            $request->width_unit = $width_unit;
+            $request->height = $height;
+            $request->height_unit = $height_unit;
+            $request->delivery_date = $delivery;
+            $request->labor_impact = $labor_impact;
+            $request->price_before_labor = $price_before_labor;
+            $request->discount = $discount;
+            $request->rate = $rate;
+            $request->labor_discount = $labor_discount;
+            $request->total = $total;
+            $request->total_discount = $total_discount;
+
+            $quotation_invoice_number = $request->quotation_invoice_number;
+            $filename = $order_number . '.pdf';
+            $file = public_path() . '/assets/supplierQuotations/' . $filename;
+
+            ini_set('max_execution_time', 180);
+
+            $date = $request->created_at;
+            $role = 'supplier1';
+
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            /*$pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);*/
+
+            $pdf->save($file);
+
+            Session::flash('success', 'Order has been updated successfully!');
+            return redirect()->route('new-orders');
         }
-
-        $request->qty = $qty;
-        $request->width = $width;
-        $request->width_unit = $width_unit;
-        $request->height = $height;
-        $request->height_unit = $height_unit;
-        $request->delivery_date = $delivery;
-        $request->labor_impact = $labor_impact;
-        $request->price_before_labor = $price_before_labor;
-        $request->discount = $discount;
-        $request->rate = $rate;
-        $request->labor_discount = $labor_discount;
-        $request->total = $total;
-        $request->total_discount = $total_discount;
-
-        $quotation_invoice_number = $request->quotation_invoice_number;
-        $filename = $order_number . '.pdf';
-        $file = public_path() . '/assets/supplierQuotations/' . $filename;
-
-        ini_set('max_execution_time', 180);
-
-        $date = $request->created_at;
-        $role = 'supplier1';
-
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
-        /*$pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);*/
-
-        $pdf->save($file);
-
-        Session::flash('success', 'Order has been updated successfully!');
-        return redirect()->route('new-orders');
 
     }
 
@@ -3588,6 +3710,8 @@ class UserController extends Controller
             $invoice->save();
         }
 
+        $order_numbers = array();
+
         foreach ($products as $i => $key) {
 
             /*$feature_titles[$i][] = 'empty';*/
@@ -3597,6 +3721,7 @@ class UserController extends Controller
             $product_titles[] = product::where('id',$key)->pluck('title')->first();
             $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
             $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
+            $suppliers[] = User::where('id',$request->suppliers[$i])->first();
 
             date_default_timezone_set('Europe/Amsterdam');
             $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
@@ -3799,6 +3924,25 @@ class UserController extends Controller
                 }
             }
 
+            if($request->quotation_id)
+            {
+                $order_number = new_orders::where('quotation_id',$request->quotation_id)->pluck('order_number')->first();
+            }
+            else
+            {
+                $counter_order = $suppliers[$i]->counter_order;
+                $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
+
+                new_quotations_data::where('quotation_id',$invoice->id)->where('supplier_id',$suppliers[$i]->id)->update(['order_number' => $order_number]);
+                new_orders::where('quotation_id',$invoice->id)->where('supplier_id',$suppliers[$i]->id)->update(['order_number' => $order_number]);
+
+                $counter_order = $counter_order + 1;
+
+                User::where('id',$suppliers[$i]->id)->update(['counter_order' => $counter_order]);
+            }
+
+            $order_numbers[$i] = $order_number;
+
         }
 
         $filename = $quotation_invoice_number . '.pdf';
@@ -3831,132 +3975,17 @@ class UserController extends Controller
         $date = $invoice->created_at;
         $role = 'retailer';
 
-        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
 
         $file = public_path() . '/assets/newQuotations/' . $filename;
 
         $pdf->save($file);
 
-        $quotation_id = $request->quotation_id;
-        $suppliers = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations.id',$quotation_id)->where('new_quotations.creator_id',$user_id)->pluck('new_quotations_data.supplier_id');
-        $suppliers = $suppliers->unique();
+        $role = 'supplier2';
+        $file = public_path() . '/assets/Orders/' . $filename;
 
-        foreach ($suppliers as $i => $key)
-        {
-            $supplier_data = User::where('id',$key)->first();
-            $supplier_name = $supplier_data->name . ' ' . $supplier_data->family_name;
-            $supplier_email = $supplier_data->email;
-            $counter = $supplier_data->counter_order;
-
-            $request = new_quotations::where('id',$quotation_id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
-            $request->products = new_quotations_data::where('quotation_id',$quotation_id)->where('supplier_id',$key)->get();
-
-            $product_titles = array();
-            $color_titles = array();
-            $model_titles = array();
-            $sub_titles = array();
-            $qty = array();
-            $width = array();
-            $width_unit = array();
-            $height = array();
-            $height_unit = array();
-            $comments = array();
-            $delivery = array();
-            $labor_impact = array();
-            $price_before_labor = array();
-            $discount = array();
-            $rate = array();
-            $labor_discount = array();
-            $total = array();
-            $total_discount = array();
-            $feature_sub_titles = array();
-
-            foreach ($request->products as $x => $temp)
-            {
-                /*$feature_sub_titles[$x][] = 'empty';*/
-                $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
-                $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
-                $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
-                $qty[] = $temp->qty;
-                $width[] = $temp->width;
-                $width_unit[] = $temp->width_unit;
-                $height[] = $temp->height;
-                $height_unit[] = $temp->height_unit;
-                $delivery[] = $temp->delivery_date;
-                $labor_impact[] = $temp->labor_impact;
-                $price_before_labor[] = $temp->price_before_labor;
-                $discount[] = $temp->discount;
-                $rate[] = $temp->rate;
-                $labor_discount[] = $temp->labor_discount;
-                $total[] = $temp->amount;
-                $total_discount[] = $temp->total_discount;
-
-                $features = new_quotations_features::where('quotation_data_id',$temp->id)->get();
-
-                foreach ($features as $f => $feature)
-                {
-                    if($feature->feature_id == 0)
-                    {
-                        if($feature->ladderband)
-                        {
-                            $sub_product = new_quotations_sub_products::where('feature_row_id',$feature->id)->get();
-
-                            foreach ($sub_product as $sub)
-                            {
-                                if($sub->size1_value == 1 || $sub->size2_value == 1)
-                                {
-                                    $sub_titles[$x] = product_ladderbands::where('product_id',$temp->product_id)->where('id',$sub->sub_product_id)->first();
-
-                                    if($sub->size1_value == 1)
-                                    {
-                                        $sub_titles[$x]->size = '38mm';
-                                    }
-                                    else
-                                    {
-                                        $sub_titles[$x]->size = '25mm';
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    $feature_sub_titles[$x][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$temp->product_id)->where('product_features.heading_id',$feature->feature_id)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
-                    $comments[$x][] = $feature->comment;
-                }
-            }
-
-            $request->qty = $qty;
-            $request->width = $width;
-            $request->width_unit = $width_unit;
-            $request->height = $height;
-            $request->height_unit = $height_unit;
-            $request->delivery_date = $delivery;
-            $request->labor_impact = $labor_impact;
-            $request->price_before_labor = $price_before_labor;
-            $request->discount = $discount;
-            $request->rate = $rate;
-            $request->labor_discount = $labor_discount;
-            $request->total = $total;
-            $request->total_discount = $total_discount;
-
-            $quotation_invoice_number = $request->quotation_invoice_number;
-            $order_number = date("Y") . "-" . sprintf('%04u', $key) . '-' . sprintf('%04u', $counter);
-            $filename = $order_number . '.pdf';
-            $file = public_path() . '/assets/supplierQuotations/' . $filename;
-
-            new_quotations_data::where('quotation_id',$quotation_id)->where('supplier_id',$key)->update(['order_number' => $order_number]);
-            new_orders::where('quotation_id',$quotation_id)->where('supplier_id',$key)->update(['order_number' => $order_number]);
-
-            ini_set('max_execution_time', 180);
-
-            $date = $request->created_at;
-            $role = 'supplier1';
-
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
-            /*$pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);*/
-
-            $pdf->save($file);
-        }
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        $pdf->save($file);
 
         return redirect()->route('customer-quotations');
     }
