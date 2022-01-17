@@ -401,17 +401,17 @@
 
                                                                                 @endif
 
-                                                                                @if($key->status == 0 || $key->ask_customization)
+                                                                                @if($key->status == 0 || $key->status == 1 || $key->ask_customization)
 
                                                                                     <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
 
-                                                                                        @if(!$key->order_sent)
-
-                                                                                            <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
-
-                                                                                        @endif
-
                                                                                 @endif
+
+                                                                            @endif
+
+                                                                            @if(!$key->order_sent && !$key->processing && !$key->finished)
+
+                                                                                <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
 
                                                                             @endif
 

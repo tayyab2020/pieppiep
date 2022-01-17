@@ -17,10 +17,10 @@
 
                 @endif
 
-                <input type="hidden" name="quotation_id" value="{{$invoice[0]->quotation_id}}">
-                <input type="hidden" name="customer" value="{{$customer_details_id}}">
-                <input type="hidden" name="quotation_invoice_number" value="{{$quotation_invoice_number}}">
-                <input type="hidden" name="created_at" value="{{$created_at}}">
+                <input type="hidden" id="quotation_id" name="quotation_id" value="{{$check->quotation_id}}">
+                <input type="hidden" name="customer" value="{{$check->customer_details}}">
+                <input type="hidden" name="quotation_invoice_number" value="{{$check->quotation_invoice_number}}">
+                <input type="hidden" name="created_at" value="{{$check->created_at}}">
                 <input type="hidden" id="form_type" name="form_type" value="{{Route::currentRouteName() == 'view-order' ? 1 : 2}}">
 
 				<div style="margin: 0;" class="row">
@@ -43,19 +43,30 @@
 
                                             @endif
 
-											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
+											<div style="display: flex;">
 
-												<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-													<i class="fa fa-fw fa-save"></i>
-													<span class="tooltiptext">Save</span>
-												</span>
+												@if($check->accepted && !$check->processing && !$check->finished)
 
-												<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
-													<i class="fa fa-fw fa-close"></i>
-													<span class="tooltiptext">Close</span>
-												</a>
+													<button type="button" class="btn btn-success send-order" style="margin-right: 10px;">Send Order</button>
+
+												@endif
+												
+												<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
+
+													<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+														<i class="fa fa-fw fa-save"></i>
+														<span class="tooltiptext">Save</span>
+													</span>
+
+													<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
+														<i class="fa fa-fw fa-close"></i>
+														<span class="tooltiptext">Close</span>
+													</a>
+
+												</div>
 
 											</div>
+
 
 										</div>
 
@@ -726,6 +737,48 @@
 
 	</div>
 
+</div>
+
+<div id="myModal3" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<form id="send-order-form" action="{{route('send-new-order')}}" method="POST" enctype="multipart/form-data">
+			{{csrf_field()}}
+
+			<input type="hidden" name="quotation_id1" id="quotation_id1">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Order Mail Body</h4>
+				</div>
+				<div class="modal-body">
+
+					<div style="margin: 20px 0;" class="row">
+						<div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<label>Subject:</label>
+							<input type="text" name="mail_subject1" class="form-control">
+						</div>
+					</div>
+
+					<div style="margin: 20px 0;" class="row">
+						<div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<label>Text:</label>
+							<input type="hidden" name="mail_body1">
+							<div class="summernote"></div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form1">Submit</button>
+				</div>
+			</div>
+
+		</form>
+
+	</div>
 </div>
 
 <div id="cover"></div>
@@ -1404,6 +1457,100 @@
 
 	$(document).ready(function () {
 
+		$('.summernote').summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['fontsize', ['fontsize']],
+                /*['color', ['color']],*/
+                ['fontname', ['fontname']],
+                ['forecolor', ['forecolor']],
+            ],
+            height: 200,   //set editable area's height
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            },
+            callbacks: {
+                onChange: function(contents, $editable) {
+                    $(this).prev('input').val(contents);
+                }
+            }
+        });
+
+		$(".send-order").on('click', function (e) {
+
+            var id = $('#quotation_id').val();
+
+            $.ajax({
+
+                type: "GET",
+                data: "id=" + id + '&type=order',
+                url: "<?php echo url('/aanbieder/get-customer-email')?>",
+
+                success: function (data) {
+
+                    $('#quotation_id1').val(id);
+                    $("[name='mail_subject1']").val(data[1]);
+                    $("[name='mail_body1']").val(data[2]);
+                    $('#myModal3').find(".note-editable").html(data[2]);
+                    $('#myModal3').modal('toggle');
+                    $('.modal-backdrop').hide();
+
+                },
+                error: function (data) {
+
+
+                }
+
+            });
+
+        });
+
+		$(document).on('click', '.submit-form1', function () {
+
+            var flag = 0;
+
+            if(!$("[name='mail_subject1']").val())
+            {
+                $("[name='mail_subject1']").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $("[name='mail_subject1']").css('border','');
+            }
+
+            if(!$("[name='mail_body1']").val())
+            {
+                $('#myModal3').find(".note-editable").css('border','1px solid red');
+                flag = 1;
+            }
+            else{
+                $('#myModal3').find(".note-editable").css('border','');
+            }
+
+            if(!flag)
+            {
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "Make sure to save your changes first before sending the order!",
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes!',
+					cancelButtonText: 'Cancel',
+				}).then((result) => {
+					if (result.value) {
+		
+						$('#send-order-form').submit();
+		
+					}
+				});
+            }
+
+        });
+
 		$(".js-data-example-ajax").select2({
 			width: '100%',
 			height: '200px',
@@ -2047,7 +2194,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, order_number, suppliers = null, supplier = null, products = null, product = null, colors = null, color = null, models = null, model = null, width = null, width_unit = null, height = null, height_unit = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, width_readonly = null, height_readonly = null, last_column = null) {
+		function add_row(copy = false, suppliers = null, supplier = null, products = null, product = null, colors = null, color = null, models = null, model = null, width = null, width_unit = null, height = null, height_unit = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, width_readonly = null, height_readonly = null, last_column = null) {
 
 		    var form_type = $('#form_type').val();
 			var rowCount = $('#products_table .content-div:last').data('id');
@@ -2315,7 +2462,7 @@
 					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
-                    '                                                            <input type="hidden" value="' + order_number +'" id="order_number" name="order_number[]">\n' +
+                    '                                                            <input type="hidden" value="" id="order_number" name="order_number[]">\n' +
 					'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
 					'                                                            <input type="hidden" value="' + childsafe + '" id="childsafe" name="childsafe[]">\n' +
 					'                                                            <input type="hidden" value="' + ladderband + '" id="ladderband" name="ladderband[]">\n' +
@@ -2538,7 +2685,7 @@
 
 			var rowCount = $('#products_table .content-div').length;
 
-			var current = $('#products_table .content-div.active');
+			var current = $(this).parents('.content-div');
 
 			var id = current.data('id');
 
@@ -2714,10 +2861,9 @@
 
 		$(document).on('click', '.copy-row', function () {
 
-			var current = $('#products_table .content-div.active');
+			var current = $(this).parents('.content-div');
 			var id = current.data('id');
-            var order_number = current.find('#order_number').val();
-			var childsafe = current.find('#childsafe').val();
+            var childsafe = current.find('#childsafe').val();
 			var ladderband = current.find('#ladderband').val();
 			var ladderband_value = current.find('#ladderband_value').val();
 			var ladderband_price_impact = current.find('#ladderband_price_impact').val();
@@ -2757,7 +2903,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, order_number, suppliers, supplier, products, product, colors, color, models, model, width, width_unit, height, height_unit, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, width_readonly, height_readonly, last_column);
+			add_row(true, suppliers, supplier, products, product, colors, color, models, model, width, width_unit, height, height_unit, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, width_readonly, height_readonly, last_column);
 
 		});
 

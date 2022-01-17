@@ -2954,7 +2954,7 @@ class UserController extends Controller
 
         $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
 
-        if($check && ($check->status == 0 || $check->ask_customization))
+        if($check && ($check->status == 0 || $check->status == 1 || $check->ask_customization))
         {
             $customers = customers_details::where('retailer_id', $user_id)->get();
 
@@ -2970,7 +2970,7 @@ class UserController extends Controller
                 $suppliers = array();
             }
 
-            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
                 ->with(['features' => function($query)
                 {
                     $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
@@ -3058,10 +3058,7 @@ class UserController extends Controller
         {
             $supplier_id = $check->supplier_id;
             $quotation_id = $check->quotation_id;
-            $customer_details_id = $check->customer_details;
-            $quotation_invoice_number = $check->quotation_invoice_number;
-            $created_at = $check->created_at;
-
+            
             if(\Route::currentRouteName() == 'edit-order')
             {
                 $products = Products::where('user_id',$supplier_id)->get();
@@ -3146,7 +3143,7 @@ class UserController extends Controller
                 }
             }
 
-            return view('user.edit_order', compact('suppliers','supplier_products','customer_details_id', 'quotation_invoice_number', 'created_at', 'products','colors','models','features','sub_features','invoice','sub_products'));
+            return view('user.edit_order', compact('check','suppliers','supplier_products','products','colors','models','features','sub_features','invoice','sub_products'));
         }
         else
         {
@@ -3382,8 +3379,32 @@ class UserController extends Controller
                 $is_weekend = date('N', strtotime($delivery_date)) >= 6;
             }
 
+            if($request->form_type == 1)
+            {
+                $suppliers[] = User::where('id',$request->suppliers[$i])->first();
+
+                if($request->order_number[$i])
+                {
+                    $order_number = $request->order_number[$i];
+                }
+                else
+                {
+                    $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
+
+                    if(!$order_number)
+                    {
+                        $counter_order = $suppliers[$i]->counter_order;
+                        $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
+                        $counter_order = $counter_order + 1;
+                        User::where('id',$request->suppliers[$i])->update(['counter_order' => $counter_order]);
+                    }
+                }
+
+                $order_numbers[$i] = $order_number;
+            }
+
             $order = new new_orders;
-            $order->order_number = $request->form_type == 1 ? $request->order_number[$i] : $order_number;
+            $order->order_number = $order_number;
             $order->quotation_id = $request->quotation_id;
             $order->supplier_id = $request->form_type == 1 ? $request->suppliers[$i] : $request->supplier_id;
             $order->product_id = (int)$key;
@@ -3513,13 +3534,6 @@ class UserController extends Controller
                     $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.id',$key1)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
 
                 }
-            }
-
-            if($request->form_type == 1)
-            {
-                $suppliers[] = User::where('id',$request->suppliers[$i])->first();
-                $order_number = new_orders::where('quotation_id',$request->quotation_id)->pluck('order_number')->first();
-                $order_numbers[$i] = $order_number;
             }
 
         }
@@ -3736,7 +3750,27 @@ class UserController extends Controller
                 $is_weekend = date('N', strtotime($delivery_date)) >= 6;
             }
 
+            if(!$request->order_number[$i])
+            {
+                $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
+
+                if(!$order_number)
+                {
+                    $counter_order = $suppliers[$i]->counter_order;
+                    $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
+                    $counter_order = $counter_order + 1;
+                    User::where('id',$suppliers[$i]->id)->update(['counter_order' => $counter_order]);
+                }
+            }
+            else
+            {
+                $order_number = $request->order_number[$i];
+            }
+
+            $order_numbers[$i] = $order_number;
+
             $invoice_items = new new_quotations_data;
+            $invoice_items->order_number = $order_number;
             $invoice_items->quotation_id = $invoice->id;
             $invoice_items->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
             $invoice_items->product_id = (int)$key;
@@ -3765,6 +3799,7 @@ class UserController extends Controller
             $invoice_items->retailer_margin = $request->retailer_margin[$i] ? $request->retailer_margin[$i] : 0;
 
             $order = new new_orders;
+            $order->order_number = $order_number;
             $order->quotation_id = $invoice->id;
             $order->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
             $order->product_id = (int)$key;
@@ -3926,25 +3961,6 @@ class UserController extends Controller
                     $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.id',$key1)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
                 }
             }
-
-            if($request->quotation_id)
-            {
-                $order_number = new_orders::where('quotation_id',$request->quotation_id)->pluck('order_number')->first();
-            }
-            else
-            {
-                $counter_order = $suppliers[$i]->counter_order;
-                $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
-
-                new_quotations_data::where('quotation_id',$invoice->id)->where('supplier_id',$suppliers[$i]->id)->update(['order_number' => $order_number]);
-                new_orders::where('quotation_id',$invoice->id)->where('supplier_id',$suppliers[$i]->id)->update(['order_number' => $order_number]);
-
-                $counter_order = $counter_order + 1;
-
-                User::where('id',$suppliers[$i]->id)->update(['counter_order' => $counter_order]);
-            }
-
-            $order_numbers[$i] = $order_number;
 
         }
 
@@ -4598,7 +4614,7 @@ class UserController extends Controller
             SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1);
 
             Session::flash('success', 'Order will be sent to supplier(s) soon...');
-            return redirect()->back();
+            return redirect()->route('customer-quotations');
         }
         else
         {

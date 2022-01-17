@@ -108,6 +108,7 @@
 																		<div style="padding: 0 5px;" class="sr-res">{{$i+1}}</div>
 																	</div>
 
+																	<input type="hidden" value="{{$item->order_number}}" id="order_number" name="order_number[]">
 																	<input type="hidden" value="{{$item->basic_price}}" id="basic_price" name="basic_price[]">
 																	<input type="hidden" value="{{$item->rate}}" id="rate" name="rate[]">
 																	<input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
@@ -323,6 +324,7 @@
 																		<div style="padding: 0 5px;" class="sr-res">1</div>
 																	</div>
 
+																	<input type="hidden" id="order_number" name="order_number[]">
 																	<input type="hidden" id="basic_price" name="basic_price[]">
 																	<input type="hidden" id="rate" name="rate[]">
 																	<input type="hidden" id="row_total" name="total[]">
@@ -3251,6 +3253,7 @@
 					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
+					'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
 					'                                                            <input type="hidden" id="basic_price" name="basic_price[]">\n' +
 					'                                                            <input type="hidden" id="rate" name="rate[]">\n' +
 					'                                                            <input type="hidden" id="row_total" name="total[]">\n' +
@@ -3509,6 +3512,7 @@
 					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
+					'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
 					'                                                            <input value="' + basic_price + '" type="hidden" id="basic_price" name="basic_price[]">\n' +
 					'                                                            <input value="' + rate + '" type="hidden" id="rate" name="rate[]">\n' +
 					'                                                            <input value="' + price + '" type="hidden" id="row_total" name="total[]">\n' +
@@ -3822,7 +3826,7 @@
 
 			var rowCount = $('#products_table .content-div').length;
 
-			var current = $('#products_table .content-div.active');
+			var current = $(this).parents('.content-div');
 
 			var id = current.data('id');
 
@@ -4023,7 +4027,7 @@
 
 		$(document).on('click', '.copy-row', function () {
 
-			var current = $('#products_table .content-div.active');
+			var current = $(this).parents('.content-div');
 			var id = current.data('id');
 			var childsafe = current.find('#childsafe').val();
 			var ladderband = current.find('#ladderband').val();

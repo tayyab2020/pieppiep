@@ -6,6 +6,7 @@ use App\colors;
 use App\customers_details;
 use App\new_quotations;
 use App\new_quotations_data;
+use App\new_orders;
 use App\new_quotations_features;
 use App\new_quotations_sub_products;
 use App\product;
@@ -79,7 +80,7 @@ class SendOrder implements ShouldQueue
             $supplier_data = User::where('id',$key)->first();
             $supplier_name = $supplier_data->name . ' ' . $supplier_data->family_name;
             $supplier_email = $supplier_data->email;
-            $counter = $supplier_data->counter_order;
+            // $counter = $supplier_data->counter_order;
 
             $request = new_quotations::where('id',$id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
             $request->products = new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->get();
@@ -173,11 +174,13 @@ class SendOrder implements ShouldQueue
             $request->total_discount = $total_discount;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
-            $order_number = date("Y") . "-" . sprintf('%04u', $key) . '-' . sprintf('%04u', $counter);
+            $order_number = new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->first();
+            $order_number = $order_number->order_number;
             $filename = $order_number . '.pdf';
             $file = public_path() . '/assets/supplierQuotations/' . $filename;
 
-            new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_number' => $order_number,'order_sent' => 1,'order_date' => date('Y-m-d')]);
+            new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d')]);
+            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1]);
 
             ini_set('max_execution_time', 180);
 
@@ -189,11 +192,11 @@ class SendOrder implements ShouldQueue
 
             $pdf->save($file);
 
-            if($this->attempts() == 1)
-            {
-                $supplier_data->counter_order = $counter + 1;
-                $supplier_data->save();
-            }
+            // if($this->attempts() == 1)
+            // {
+            //     $supplier_data->counter_order = $counter + 1;
+            //     $supplier_data->save();
+            // }
 
             $sup_mail[] = array('email' => $supplier_email,'name' => $supplier_name,'file' => $file,'file_name' => $filename,'order_number' => $order_number);
         }
