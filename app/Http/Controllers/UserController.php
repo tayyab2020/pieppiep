@@ -3047,20 +3047,27 @@ class UserController extends Controller
 
         if(\Route::currentRouteName() == 'edit-order')
         {
-            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            if($user_role == 2)
+            {
+                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            }
+            else
+            {
+                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_orders.supplier_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            }
         }
         else
         {
-            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();            
         }
 
-        if($check && !$check->order_sent)
-        {
-            $supplier_id = $check->supplier_id;
+        if($check)
+        {            
             $quotation_id = $check->quotation_id;
             
             if(\Route::currentRouteName() == 'edit-order')
             {
+                $supplier_id = $check->supplier_id;
                 $products = Products::where('user_id',$supplier_id)->get();
                 $suppliers = array();
 

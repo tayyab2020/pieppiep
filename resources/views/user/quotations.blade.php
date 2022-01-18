@@ -409,11 +409,21 @@
 
                                                                             @endif
 
-                                                                            @if(!$key->order_sent && !$key->processing && !$key->finished)
+                                                                            @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                                <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
+                                                                                @if(!$key->processing && !$key->finished)
+
+                                                                                    <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
+
+                                                                                @endif
+
+                                                                            @else
+
+                                                                                <li><a href="{{ url('/aanbieder/edit-order/'.$key->invoice_id) }}">View Order</a></li>
 
                                                                             @endif
+
+                                                                            
 
                                                                             @if($key->accepted && !$key->processing && !$key->finished)
 
