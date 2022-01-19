@@ -290,7 +290,7 @@
 
                                                                                         @elseif($filteredData->count() == 0)
 
-                                                                                            <span class="btn btn-warning">Confirmation Pending {{$filteredData->count()}}</span>
+                                                                                            <span class="btn btn-warning">Confirmation Pending {{$key->data}}</span>
 
                                                                                         @else
 
