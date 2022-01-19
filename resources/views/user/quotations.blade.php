@@ -257,7 +257,7 @@
                                                                                     @else
 
                                                                                         <?php $data = $key->data->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
-                                                                                            return $value['approved'] !== 1;
+                                                                                            var_dump($value['approved']); return $value['approved'] !== 1;
                                                                                         }); ?>
 
                                                                                         @if($filteredData->count() === $data->count())
@@ -290,7 +290,7 @@
 
                                                                                         @elseif($filteredData->count() == 0)
 
-                                                                                            <span class="btn btn-warning">Confirmation Pending {{$key->data}}</span>
+                                                                                            <span class="btn btn-warning">Confirmation Pending</span>
 
                                                                                         @else
 
