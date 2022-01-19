@@ -413,11 +413,7 @@
 
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                                @if(!$key->processing && !$key->finished)
-
-                                                                                    <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
-
-                                                                                @endif
+                                                                                <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
 
                                                                             @else
 
