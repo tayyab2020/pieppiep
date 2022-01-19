@@ -257,7 +257,7 @@
                                                                                     @else
 
                                                                                         <?php $data = $key->data->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
-                                                                                            var_dump($value['approved'] !== 1); return $value['approved'] !== 1;
+                                                                                            var_dump($value['approved'] != 1); return $value['approved'] !== 1;
                                                                                         }); ?>
 
                                                                                         @if($filteredData->count() === $data->count())
