@@ -23,14 +23,18 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">{{isset($invoice) ? __('text.Edit Quotation') : __('text.Create Quotation')}}</h2>
+											<h2 style="margin-top: 0;">{{isset($invoice) ? __('text.View Quotation') : __('text.Create Quotation')}}</h2>
 
 											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
 
-												<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-													<i class="fa fa-fw fa-save"></i>
-													<span class="tooltiptext">Save</span>
-												</span>
+												@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+
+													<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+														<i class="fa fa-fw fa-save"></i>
+														<span class="tooltiptext">Save</span>
+													</span>
+
+												@endif
 
 												<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
 													<i class="fa fa-fw fa-close"></i>
@@ -217,36 +221,43 @@
 																	</div>
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
-                                                                        <div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
-																			<div style="display: none;" class="green-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
-                                                                            </div>
-                                                                            <div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
-                                                                            </div>
+																		@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
 
-																			<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																				<span class="tooltiptext">Add</span>
-																			</span>
+																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
-																			<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																				<span class="tooltiptext">Remove</span>
-																			</span>
+																				<div style="display: none;" class="green-circle tooltip1">
+                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+                                                                            	</div>
+                                                                            	
+																				<div style="visibility: hidden;" class="yellow-circle tooltip1">
+                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
+                                                                            	</div>
 
-																			<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																				<span class="tooltiptext">Copy</span>
-																			</span>
+																				<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																					<span class="tooltiptext">Add</span>
+																				</span>
 
-																			<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-																				<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-																				<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																			</span>-->
+																				<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																					<span class="tooltiptext">Remove</span>
+																				</span>
 
-                                                                        </div>
+																				<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
+																					<span class="tooltiptext">Copy</span>
+																				</span>
+
+																				<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+																					<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+																					<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
+																				</span>-->
+
+                                                                        	</div>
+
+																		@endif
+                                                                        
                                                                     </div>
 
                                                                     <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">

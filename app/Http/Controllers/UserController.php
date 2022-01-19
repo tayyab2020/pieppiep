@@ -2954,7 +2954,7 @@ class UserController extends Controller
 
         $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
 
-        if($check && ($check->status == 0 || $check->status == 1 || $check->ask_customization))
+        if($check)
         {
             $customers = customers_details::where('retailer_id', $user_id)->get();
 

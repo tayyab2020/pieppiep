@@ -369,6 +369,8 @@
 
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
+                                                                                <li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>
+
                                                                                 @if(!$key->invoice)
 
                                                                                     <li><a href="{{ url('/aanbieder/create-new-invoice/'.$key->invoice_id) }}">Create Invoice</a></li>
@@ -403,7 +405,7 @@
 
                                                                                 @if($key->status == 0 || $key->status == 1 || $key->ask_customization)
 
-                                                                                    <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+                                                                                    <li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>
 
                                                                                 @endif
 

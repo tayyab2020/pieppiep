@@ -271,7 +271,7 @@
 
                                                                             @if(Route::currentRouteName() == 'client-new-quotations')
 
-                                                                                {{--<li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>--}}
+                                                                                {{--<li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>--}}
                                                                                 <li><a href="{{ url('/aanbieder/download-client-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
                                                                                 @if($key->invoice_sent)

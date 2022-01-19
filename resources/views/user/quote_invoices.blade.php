@@ -614,7 +614,7 @@
 
                                                                                             @if($key->status == 0 || $key->ask_customization)
 
-                                                                                                <li><a href="{{ url('/aanbieder/edit-new-quotation/'.$key->invoice_id) }}">{{__('text.Edit Quotation')}}</a></li>
+                                                                                                <li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>
 
                                                                                             @endif
 

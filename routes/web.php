@@ -73,7 +73,7 @@
   Route::get('/new-quotations', 'UserController@NewQuotations')->name('new-quotations');
   Route::get('/new-orders', 'UserController@NewOrders')->name('new-orders');
   Route::get('/new-invoices', 'UserController@NewInvoices')->name('new-invoices');
-  Route::get('/edit-new-quotation/{id}', 'UserController@EditNewQuotation');
+  Route::get('/view-new-quotation/{id}', 'UserController@EditNewQuotation');
   Route::get('/edit-order/{id}', 'UserController@EditOrder')->name('edit-order');
   Route::get('/view-order/{id}', 'UserController@EditOrder')->name('view-order');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
