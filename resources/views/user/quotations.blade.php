@@ -377,6 +377,8 @@
 
                                                                                 @else
 
+                                                                                    <li><a href="{{ url('/aanbieder/view-new-invoice/'.$key->invoice_id) }}">{{__('text.View Invoice')}}</a></li>
+
                                                                                     <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
 
                                                                                     @if(!$key->invoice_sent)
@@ -400,12 +402,6 @@
                                                                                 @if($key->status == 1)
 
                                                                                     <li><a href="{{ url('/aanbieder/accept-new-quotation/'.$key->invoice_id) }}">{{__('text.Accept')}}</a></li>
-
-                                                                                @endif
-
-                                                                                @if($key->status == 0 || $key->status == 1 || $key->ask_customization)
-
-                                                                                    <li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>
 
                                                                                 @endif
 

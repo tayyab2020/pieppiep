@@ -23,7 +23,7 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">{{isset($invoice) ? __('text.View Quotation') : __('text.Create Quotation')}}</h2>
+											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : __('text.View Invoice')) : __('text.Create Quotation')}}</h2>
 
 											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
 
@@ -49,6 +49,15 @@
 
 											<div class="col-md-5">
 												<div class="form-group" style="margin: 0;">
+
+												@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+
+												@else
+
+													<label>Customer</label>
+
+												@endif
+
 													<div id="cus-box" style="display: flex;">
 														<select class="customer-select form-control" name="customer"
 															required>
@@ -65,9 +74,13 @@
 															@endforeach
 
 														</select>
-														<button type="button" href="#myModal1" role="button"
-															data-toggle="modal" style="outline: none;margin-left: 10px;"
-															class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+
+														@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+
+															<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+
+														@endif
+
 													</div>
 												</div>
 											</div>
