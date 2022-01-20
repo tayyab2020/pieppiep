@@ -373,7 +373,7 @@ class UserController extends Controller
                 $no = $no + 1;
             }
 
-            $orders = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_quotations_data.supplier_id')->where('new_quotations.finished',1)->orderBy('new_quotations_data.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_quotations_data.delivery_date','new_quotations_data.order_date','new_quotations_data.approved','new_quotations.*')->get();
+            $orders = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_orders.supplier_id')->where('new_quotations.finished',1)->orderBy('new_orders.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_orders.delivery_date','new_orders.order_date','new_orders.approved','new_quotations.*')->get();
 
             $start = strtotime(date('Y-m-01', strtotime('0 month')));
             $end = strtotime(date('Y-m-01', strtotime('-5 month')));
@@ -818,11 +818,11 @@ class UserController extends Controller
 
             if($user_role == 2)
             {
-                $new_invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+                $new_invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('orders')->get();
             }
             else
             {
-                $new_invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations_data.order_sent', 'new_quotations_data.id as data_id', 'new_quotations.created_at as invoice_date', 'new_quotations_data.order_number','new_quotations_data.approved as data_approved','new_quotations_data.processing as data_processing','new_quotations_data.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
+                $new_invoices = new_quotations::leftjoin('new_orders', 'new_orders.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_orders.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_orders.order_sent', 'new_orders.id as data_id', 'new_quotations.created_at as invoice_date', 'new_orders.order_number','new_orders.approved as data_approved','new_orders.processing as data_processing','new_orders.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
                 $new_invoices = $new_invoices->unique('invoice_id');
             }
         }
@@ -4643,11 +4643,11 @@ class UserController extends Controller
             $user_id = $user->id;
         }
 
-        $data = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations_data.processing','!=',1)->where('new_quotations_data.delivered','!=',1)->first();
+        $data = new_quotations::leftjoin('new_orders', 'new_orders.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_orders.supplier_id', $user_id)->where('new_orders.processing','!=',1)->where('new_orders.delivered','!=',1)->first();
 
         if($data)
         {
-            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->leftjoin('colors','colors.id','=','new_quotations_data.color')->where('new_quotations.id', $id)->where('new_quotations_data.supplier_id', $user_id)->select('colors.title as color_title','new_quotations.*','new_quotations.id as invoice_id', 'new_quotations_data.approved','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','products.title as product_title')->get();
+            $invoice = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('products','products.id','=','new_orders.product_id')->leftjoin('colors','colors.id','=','new_orders.color')->where('new_quotations.id', $id)->where('new_orders.supplier_id', $user_id)->select('colors.title as color_title','new_quotations.*','new_quotations.id as invoice_id', 'new_orders.approved','new_orders.delivery_days','new_orders.delivery_date','new_orders.id','new_orders.supplier_id','new_orders.product_id','new_orders.color','new_orders.width','new_orders.width_unit','new_orders.height','new_orders.height_unit','products.title as product_title')->get();
 
             return view('user.change_delivery_date',compact('data','invoice'));
         }
@@ -4662,7 +4662,7 @@ class UserController extends Controller
         $rows = $request->data_id;
         $user = Auth::guard('user')->user();
 
-        new_quotations_data::whereIn('id',$rows)->update(['processing' => 1]);
+        new_orders::whereIn('id',$rows)->update(['processing' => 1]);
 
         UpdateDates::dispatch($request->all(),$user);
 
@@ -4683,13 +4683,13 @@ class UserController extends Controller
         $user_id = $user->id;
         $supplier_name = $user->name . ' ' . $user->family_name;
 
-        $data = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_quotations_data.supplier_id', $user_id)->where('new_quotations_data.processing','!=',1)->where('new_quotations_data.approved',1)->where('new_quotations_data.delivered','!=',1)->select('new_quotations.*','new_quotations_data.order_number')->first();
+        $data = new_quotations::leftjoin('new_orders', 'new_orders.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_orders.supplier_id', $user_id)->where('new_orders.processing','!=',1)->where('new_orders.approved',1)->where('new_orders.delivered','!=',1)->select('new_quotations.*','new_orders.order_number')->first();
 
         if($data)
         {
-            new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations.id', $id)->where('new_quotations_data.supplier_id', $user_id)->update(['new_quotations_data.delivered' => 1]);
+            new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_quotations.id', $id)->where('new_orders.supplier_id', $user_id)->update(['new_orders.delivered' => 1]);
 
-            $delivered = new_quotations_data::where('quotation_id',$id)->get();
+            $delivered = new_orders::where('quotation_id',$id)->get();
             $flag = 0;
 
             foreach ($delivered as $key)

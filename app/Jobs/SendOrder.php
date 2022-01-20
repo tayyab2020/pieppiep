@@ -7,6 +7,8 @@ use App\customers_details;
 use App\new_quotations;
 use App\new_quotations_data;
 use App\new_orders;
+use App\new_orders_features;
+use App\new_orders_sub_products;
 use App\new_quotations_features;
 use App\new_quotations_sub_products;
 use App\product;
@@ -72,7 +74,7 @@ class SendOrder implements ShouldQueue
         $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
 
         $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
-        $suppliers = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations.id',$id)->where('new_quotations.creator_id',$user_id)->pluck('new_quotations_data.supplier_id');
+        $suppliers = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_quotations.id',$id)->where('new_quotations.creator_id',$user_id)->pluck('new_orders.supplier_id');
         $suppliers = $suppliers->unique();
 
         foreach ($suppliers as $i => $key)
@@ -83,7 +85,7 @@ class SendOrder implements ShouldQueue
             // $counter = $supplier_data->counter_order;
 
             $request = new_quotations::where('id',$id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
-            $request->products = new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->get();
+            $request->products = new_orders::where('quotation_id',$id)->where('supplier_id',$key)->get();
 
             $product_titles = array();
             $color_titles = array();
@@ -125,7 +127,7 @@ class SendOrder implements ShouldQueue
                 $total[] = $temp->amount;
                 $total_discount[] = $temp->total_discount;
 
-                $features = new_quotations_features::where('quotation_data_id',$temp->id)->get();
+                $features = new_orders_features::where('order_data_id',$temp->id)->get();
 
                 foreach ($features as $f => $feature)
                 {
@@ -133,7 +135,7 @@ class SendOrder implements ShouldQueue
                     {
                         if($feature->ladderband)
                         {
-                            $sub_product = new_quotations_sub_products::where('feature_row_id',$feature->id)->get();
+                            $sub_product = new_orders_sub_products::where('feature_row_id',$feature->id)->get();
 
                             foreach ($sub_product as $sub)
                             {
@@ -174,13 +176,13 @@ class SendOrder implements ShouldQueue
             $request->total_discount = $total_discount;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
-            $order_number = new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->first();
+            $order_number = new_orders::where('quotation_id',$id)->where('supplier_id',$key)->first();
             $order_number = $order_number->order_number;
             $filename = $order_number . '.pdf';
             $file = public_path() . '/assets/supplierQuotations/' . $filename;
 
-            new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d')]);
-            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1]);
+            // new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d')]);
+            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d')]);
 
             ini_set('max_execution_time', 180);
 

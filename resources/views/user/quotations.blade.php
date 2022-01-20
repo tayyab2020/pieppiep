@@ -256,7 +256,7 @@
 
                                                                                     @else
 
-                                                                                        <?php $data = $key->data->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
+                                                                                        <?php $data = $key->orders->unique('supplier_id'); $filteredData = $data->reject(function ($value, $key) {
                                                                                             return $value['approved'] != 1;
                                                                                         }); ?>
 
@@ -391,6 +391,7 @@
 
                                                                             @endif
 
+                                                                            
                                                                             @if($key->status != 2 && $key->status != 3)
 
                                                                                 @if($key->ask_customization)
@@ -407,6 +408,7 @@
 
                                                                             @endif
 
+
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
                                                                                 <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
@@ -416,7 +418,6 @@
                                                                                 <li><a href="{{ url('/aanbieder/edit-order/'.$key->invoice_id) }}">View Order</a></li>
 
                                                                             @endif
-
                                                                             
 
                                                                             @if($key->accepted && !$key->processing && !$key->finished)
@@ -451,7 +452,7 @@
 
                                                                                     @if($key->finished)
 
-                                                                                        <?php $data = $key->data->unique('supplier_id'); ?>
+                                                                                        <?php $data = $key->orders->unique('supplier_id'); ?>
 
                                                                                         @foreach($data as $d => $data1)
 
@@ -461,7 +462,7 @@
 
                                                                                     @endif
 
-                                                                                    <?php $data = $key->data->unique('supplier_id'); ?>
+                                                                                    <?php $data = $key->orders->unique('supplier_id'); ?>
 
                                                                                     @foreach($data as $d => $data1)
 
