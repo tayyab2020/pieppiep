@@ -89,7 +89,7 @@
                                         <thead>
                                         <tr>
                                             <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
-                                            <th style="width: 10% !important;font-size: 20px;">{{__('text.Qty')}}</th>
+                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
                                             <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
                                             <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
                                         </tr>
@@ -282,10 +282,10 @@
 
                                         <thead>
                                         <tr>
-                                            <th style="width: 20% !important;font-size: 16px;">Totaal korting</th>
-                                            <th style="width: 20% !important;font-size: 16px;font-weight: 500;text-align: center;">Exclusief BTW</th>
-                                            <th style="width: 25% !important;font-size: 16px;text-align: center;font-weight: 500;">BTW</th>
-                                            <th style="width: 35% !important;font-size: 16px;text-align: right;">Bedrag inc. btw</th>
+                                            <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
+                                            <th style="width: 20% !important;font-size: 20px;font-weight: 500;text-align: center;">Exclusief BTW</th>
+                                            <th style="width: 25% !important;font-size: 20px;text-align: center;font-weight: 500;">BTW</th>
+                                            <th style="width: 35% !important;font-size: 20px;text-align: right;">Bedrag inc. btw</th>
                                         </tr>
                                         </thead>
 
