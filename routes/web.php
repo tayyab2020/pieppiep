@@ -243,6 +243,7 @@
   Route::get('/custom-mark-delivered/{id}', 'UserController@CustomMarkDelivered');
   Route::get('/custom-mark-received/{id}', 'UserController@CustomMarkReceived');
 
+  Route::get('/select-product-category', 'ProductController@SelectProductCategory')->name('select-product-category');
   Route::get('/products', 'ProductController@index')->name('admin-product-index');
   Route::get('/product/create', 'ProductController@create')->name('admin-product-create');
   Route::get('/product/import', 'ProductController@import')->name('admin-product-import');

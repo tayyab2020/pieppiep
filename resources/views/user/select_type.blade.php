@@ -5,22 +5,52 @@
     <input type="radio" value="{{route('create-custom-quotation')}}" class="select-form" name="select" id="option-1">
     <input type="radio" value="{{route('create-new-quotation')}}" class="select-form" name="select" id="option-2">
 
-  @else
+  @elseif($type == 2)
 
     <input type="radio" value="{{route('customer-invoices')}}" class="select-form" name="select" id="option-1">
     <input type="radio" value="{{route('new-invoices')}}" class="select-form" name="select" id="option-2">
 
+    @else
+
+    <input type="radio" value="{{route('admin-product-create',['id' => $is_floor])}}" class="select-form" name="select" id="option-1">
+    <input type="radio" value="{{route('admin-product-create',['id' => $is_blind])}}" class="select-form" name="select" id="option-2">
+
   @endif
  
-  <label for="option-1" class="option option-1">
-    <div class="dot"></div>
-     <span>Vloeren</span>
-  </label>
+  @if($type == 3)
 
-   <label for="option-2" class="option option-2">
-     <div class="dot"></div>
+    @if($is_floor)
+
+      <label for="option-1" class="option option-1">
+        <div class="dot"></div>
+        <span>Vloeren</span>
+      </label>
+
+    @endif  
+
+    @if($is_blind)
+
+      <label for="option-2" class="option option-2">
+        <div class="dot"></div>
+        <span>Binnen zonwering</span>
+      </label>
+
+    @endif    
+
+  @else
+
+    <label for="option-1" class="option option-1">
+      <div class="dot"></div>
+      <span>Vloeren</span>
+    </label>
+
+    <label for="option-2" class="option option-2">
+      <div class="dot"></div>
       <span>Binnen zonwering</span>
-   </label>
+    </label>
+
+  @endif
+  
 </div>
 
 <style>

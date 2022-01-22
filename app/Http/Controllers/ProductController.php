@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Brand;
 use App\color;
 use App\colors;
+use App\color_images;
 use App\estimated_prices;
 use App\Exports\ProductsExport;
 use App\features;
@@ -46,6 +47,29 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth:user', ['except' => ['getSubCategoriesByCategory']]);
+    }
+
+    public function SelectProductCategory()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $is_floor = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where(function($query) {
+            $query->where('categories.cat_name','LIKE', '%Floors%')->orWhere('categories.cat_name','LIKE', '%Vloeren%');
+        })->select('categories.id')->first();
+
+        $is_blind = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where(function($query) {
+            $query->where('categories.cat_name','LIKE', '%Blinds%')->orWhere('categories.cat_name','LIKE', '%Binnen zonwering%');
+        })->select('categories.id')->first();
+
+        $type = 3;
+        return view('user.select_type', compact('type','is_floor','is_blind'));
     }
 
     public function getSubCategoriesByCategory(Request $request)
@@ -222,7 +246,7 @@ class ProductController extends Controller
     }
 
 
-    public function create()
+    public function create(Request $request)
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
@@ -233,15 +257,23 @@ class ProductController extends Controller
             $user_id = $main_id;
         }
 
-        if($user->can('product-create'))
+        if($request->id && $user->can('product-create'))
         {
-            $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
+            $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.id',$request->id)->select('categories.*')->get();
             $brands = Brand::where('user_id',$user_id)->get();
             /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
 
-            return view('admin.product.create',compact('categories','brands','tables','features_headings'));
+            if($categories[0]->cat_name == 'Blinds' || $categories[0]->cat_name == 'Binnen zonwering')
+            {
+                return view('admin.product.create',compact('categories','brands','tables','features_headings'));
+            }
+            else
+            {
+                return view('admin.product.create_for_floors',compact('categories','brands','tables','features_headings'));
+            }
+
         }
         else
         {
@@ -510,11 +542,19 @@ class ProductController extends Controller
             $pricesArray = [];
         }
 
-        if($input['ladderband'])
+        if($request->form_type == 1)
         {
-            if(!$input['ladderband_value'])
+            $input['ladderband'] = 0;
+            $input['ladderband_value'] = 0;
+        }
+        else
+        {
+            if($input['ladderband'])
             {
-                $input['ladderband_value'] = 0;
+                if(!$input['ladderband_value'])
+                {
+                    $input['ladderband_value'] = 0;
+                }
             }
         }
 
@@ -561,6 +601,17 @@ class ProductController extends Controller
             product_features::whereIn('id',$removed)->delete();
             product_ladderbands::whereIn('id',$removed_ladderband)->delete();
             colors::whereIn('id',$removed_colors)->delete();
+            if($request->form_type == 1)
+            {
+                $color_images = color_images::whereIn('color_id',$removed_colors)->get();
+
+                foreach($color_images as $key)
+                {
+                    \File::delete(public_path() .'/assets/colorImages/'.$key->image);
+                }
+
+                color_images::whereIn('color_id',$removed_colors)->delete();
+            }
             product_models::whereIn('id',$removed1)->delete();
             model_features::whereIn('model_id',$removed1)->delete();
             $model_ids = product_models::where('product_id',$request->cat_id)->pluck('id');
@@ -846,159 +897,304 @@ class ProductController extends Controller
                 }
             }
 
-            $sub_pro = product_ladderbands::where('product_id',$request->cat_id)->get();
+            if($request->form_type == 2)
+            {
+                $sub_pro = product_ladderbands::where('product_id',$request->cat_id)->get();
 
-            if(count($sub_pro) == 0)
-            {
-                foreach ($sub_products as $s => $key)
+                if(count($sub_pro) == 0)
                 {
-                    if($key != NULL && $request->sub_product_titles[$s] != NULL)
-                    {
-                        $sub_pro = new product_ladderbands;
-                        $sub_pro->title = $request->sub_product_titles[$s];
-                        $sub_pro->product_id = $request->cat_id;
-                        $sub_pro->code = $key;
-                        $sub_pro->size1_value = $request->size1_value[$s];
-                        $sub_pro->size2_value = $request->size2_value[$s];
-                        $sub_pro->save();
-                    }
-                }
-            }
-            else
-            {
-                if(count($sub_products) > 0)
-                {
+                
                     foreach ($sub_products as $s => $key)
                     {
-                        $sub_check = product_ladderbands::where('product_id',$request->cat_id)->skip($s)->first();
-
-                        if($sub_check)
+                    
+                        if($key != NULL && $request->sub_product_titles[$s] != NULL)
                         {
-                            if($key != NULL && $request->sub_product_titles[$s] != NULL)
-                            {
-                                $sub_check->title = $request->sub_product_titles[$s];
-                                $sub_check->code = $key;
-                                $sub_check->size1_value = $request->size1_value[$s];
-                                $sub_check->size2_value = $request->size2_value[$s];
-                                $sub_check->save();
-                            }
-                        }
-                        else
-                        {
-                            if($key != NULL && $request->sub_product_titles[$s] != NULL)
-                            {
-                                $sub_pro = new product_ladderbands;
-                                $sub_pro->title = $request->sub_product_titles[$s];
-                                $sub_pro->product_id = $request->cat_id;
-                                $sub_pro->code = $key;
-                                $sub_pro->size1_value = $request->size1_value[$s];
-                                $sub_pro->size2_value = $request->size2_value[$s];
-                                $sub_pro->save();
-                            }
+                            $sub_pro = new product_ladderbands;
+                            $sub_pro->title = $request->sub_product_titles[$s];
+                            $sub_pro->product_id = $request->cat_id;
+                            $sub_pro->code = $key;
+                            $sub_pro->size1_value = $request->size1_value[$s];
+                            $sub_pro->size2_value = $request->size2_value[$s];
+                            $sub_pro->save();
                         }
                     }
                 }
                 else
                 {
-                    product_ladderbands::where('product_id',$request->cat_id)->delete();
-                }
-            }
-
-            $col = colors::where('product_id',$request->cat_id)->get();
-
-            if(count($col) == 0)
-            {
-                foreach ($colors as $c => $key)
-                {
-                    if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                
+                    if(count($sub_products) > 0)
                     {
-                        $col = new colors;
-                        $col->title = $key;
-                        $col->color_code = $request->color_codes[$c];
-                        $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                        $col->product_id = $request->cat_id;
-                        $col->table_id = $request->price_tables[$c];
-                        $col->save();
+                    
+                        foreach ($sub_products as $s => $key)
+                        {
+                            $sub_check = product_ladderbands::where('product_id',$request->cat_id)->skip($s)->first();
+
+                            if($sub_check)
+                            {
+                            
+                                if($key != NULL && $request->sub_product_titles[$s] != NULL)
+                                {
+                                    $sub_check->title = $request->sub_product_titles[$s];
+                                    $sub_check->code = $key;
+                                    $sub_check->size1_value = $request->size1_value[$s];
+                                    $sub_check->size2_value = $request->size2_value[$s];
+                                    $sub_check->save();
+                                }
+                            }
+                            else
+                            {
+                            
+                                if($key != NULL && $request->sub_product_titles[$s] != NULL)
+                                {
+                                    $sub_pro = new product_ladderbands;
+                                    $sub_pro->title = $request->sub_product_titles[$s];
+                                    $sub_pro->product_id = $request->cat_id;
+                                    $sub_pro->code = $key;
+                                    $sub_pro->size1_value = $request->size1_value[$s];
+                                    $sub_pro->size2_value = $request->size2_value[$s];
+                                    $sub_pro->save();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        product_ladderbands::where('product_id',$request->cat_id)->delete();
+                    }
+                }
+
+                $col = colors::where('product_id',$request->cat_id)->get();
+
+                if(count($col) == 0)
+                {
+                
+                    foreach ($colors as $c => $key)
+                    {
+                    
+                        if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                        {
+                            $col = new colors;
+                            $col->title = $key;
+                            $col->color_code = $request->color_codes[$c];
+                            $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
+                            $col->product_id = $request->cat_id;
+                            $col->table_id = $request->price_tables[$c];
+                            $col->save();
+                        }
+                    }
+                }
+                else
+                {
+                
+                    if(count($colors) > 0)
+                    {
+                    
+                        foreach ($colors as $c => $key)
+                        {
+                            $col_check = colors::where('product_id',$request->cat_id)->skip($c)->first();
+
+                            if($col_check)
+                            {
+                            
+                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                                {
+                                    $col_check->title = $key;
+                                    $col_check->color_code = $request->color_codes[$c];
+                                    $col_check->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
+                                    $col_check->table_id = $request->price_tables[$c];
+                                    $col_check->save();
+                                }
+                            }
+                            else
+                            {
+                            
+                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                                {
+                                    $col = new colors;
+                                    $col->title = $key;
+                                    $col->color_code = $request->color_codes[$c];
+                                    $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
+                                    $col->product_id = $request->cat_id;
+                                    $col->table_id = $request->price_tables[$c];
+                                    $col->save();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        colors::where('product_id',$request->cat_id)->delete();
                     }
                 }
             }
             else
             {
-                if(count($colors) > 0)
+                $col = colors::where('product_id',$request->cat_id)->get();
+
+                if(count($col) == 0)
                 {
                     foreach ($colors as $c => $key)
                     {
-                        $col_check = colors::where('product_id',$request->cat_id)->skip($c)->first();
+                    
+                        if($key != NULL && $request->color_codes[$c] != NULL)
+                        {
+                            $col = new colors;
+                            $col->title = $key;
+                            $col->color_code = $request->color_codes[$c];
+                            $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
+                            $col->product_id = $request->cat_id;
+                            $col->table_id = NULL;
+                            $col->save();
 
-                        if($col_check)
-                        {
-                            if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                            $color_images = 'color_images'.$request->color_row[$c];
+
+                            if($file = $request->file($color_images))
                             {
-                                $col_check->title = $key;
-                                $col_check->color_code = $request->color_codes[$c];
-                                $col_check->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                                $col_check->table_id = $request->price_tables[$c];
-                                $col_check->save();
-                            }
-                        }
-                        else
-                        {
-                            if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
-                            {
-                                $col = new colors;
-                                $col->title = $key;
-                                $col->color_code = $request->color_codes[$c];
-                                $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                                $col->product_id = $request->cat_id;
-                                $col->table_id = $request->price_tables[$c];
-                                $col->save();
+                                foreach($file as $temp)
+                                {
+                                    $name = time().'-'.$col->id.'-'.$temp->getClientOriginalName();
+                                    $temp->move('assets/colorImages',$name);
+                                    $color_image = new color_images;
+                                    $color_image->product_id = $request->cat_id;
+                                    $color_image->color_id = $col->id;
+                                    $color_image->image = $name;
+                                    $color_image->save();
+                                }                                
                             }
                         }
                     }
                 }
                 else
                 {
-                    colors::where('product_id',$request->cat_id)->delete();
-                }
-            }
-
-            $est = estimated_prices::where('product_id',$request->cat_id)->get();
-
-            if(count($est) == 0)
-            {
-                foreach ($pricesArray as $price)
-                {
-                    $est = new estimated_prices;
-                    $est->product_id = $request->cat_id;
-                    $est->price = $price;
-                    $est->save();
-                }
-            }
-            else
-            {
-                if(count($pricesArray) > 0)
-                {
-                    foreach ($pricesArray as $x => $price)
+                    if(count($colors) > 0)
                     {
-                        $est_check = estimated_prices::where('product_id',$request->cat_id)->skip($x)->first();
+                    
+                        foreach ($colors as $c => $key)
+                        {
+                            $col_check = colors::where('product_id',$request->cat_id)->skip($c)->first();
 
-                        if($est_check)
-                        {
-                            $est_check->price = $pricesArray[$x];
-                            $est_check->save();
+                            if($col_check)
+                            {
+                            
+                                if($key != NULL && $request->color_codes[$c] != NULL)
+                                {
+                                    $col_check->title = $key;
+                                    $col_check->color_code = $request->color_codes[$c];
+                                    $col_check->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
+                                    $col_check->table_id = NULL;
+                                    $col_check->save();
+
+                                    $color_images = 'color_images'.$request->color_row[$c];
+
+                                    if($file = $request->file($color_images))
+                                    {
+                                        $c_images = color_images::where('color_id',$col_check->id)->get();
+
+                                        foreach($c_images as $c_i1)
+                                        {
+                                            \File::delete(public_path() .'/assets/colorImages/'.$c_i1->image);
+                                        }
+                                        
+                                        color_images::where('color_id',$col_check->id)->delete();
+                                        
+                                        foreach($file as $temp)
+                                        {
+                                            $name = time().'-'.$col_check->id.'-'.$temp->getClientOriginalName();
+                                            $temp->move('assets/colorImages',$name);
+                                            $color_image = new color_images;
+                                            $color_image->product_id = $request->cat_id;
+                                            $color_image->color_id = $col_check->id;
+                                            $color_image->image = $name;
+                                            $color_image->save();
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                            
+                                if($key != NULL && $request->color_codes[$c] != NULL)
+                                {
+                                    $col = new colors;
+                                    $col->title = $key;
+                                    $col->color_code = $request->color_codes[$c];
+                                    $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
+                                    $col->product_id = $request->cat_id;
+                                    $col->table_id = NULL;
+                                    $col->save();
+
+                                    $color_images = 'color_images'.$request->color_row[$c];
+
+                                    if($file = $request->file($color_images))
+                                    {                                        
+                                        foreach($file as $temp)
+                                        {
+                                            $name = time().'-'.$col->id.'-'.$temp->getClientOriginalName();
+                                            $temp->move('assets/colorImages',$name);
+                                            $color_image = new color_images;
+                                            $color_image->product_id = $request->cat_id;
+                                            $color_image->color_id = $col->id;
+                                            $color_image->image = $name;
+                                            $color_image->save();
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        else
+                    }
+                    else
+                    {
+                        colors::where('product_id',$request->cat_id)->delete();
+
+                        $c_images = color_images::where('product_id',$request->cat_id)->get();
+                                        
+                        foreach($c_images as $c_i1)
                         {
-                            $temp = new estimated_prices;
-                            $temp->product_id = $request->cat_id;
-                            $temp->price = $pricesArray[$x];
-                            $temp->save();
+                            \File::delete(public_path() .'/assets/colorImages/'.$c_i1->image);
                         }
+
+                        color_images::where('product_id',$request->cat_id)->delete();
+                    }
+                }
+
+                $est = estimated_prices::where('product_id',$request->cat_id)->get();
+
+                if(count($est) == 0)
+                {
+                    foreach ($pricesArray as $price)
+                    {
+                        $est = new estimated_prices;
+                        $est->product_id = $request->cat_id;
+                        $est->price = $price;
+                        $est->save();
                     }
                 }
                 else
                 {
-                    estimated_prices::where('product_id',$request->cat_id)->delete();
+                    if(count($pricesArray) > 0)
+                    {
+                        foreach ($pricesArray as $x => $price)
+                        {
+                            $est_check = estimated_prices::where('product_id',$request->cat_id)->skip($x)->first();
+
+                            if($est_check)
+                            {
+                                $est_check->price = $pricesArray[$x];
+                                $est_check->save();
+                            }
+                            else
+                            {
+                                $temp = new estimated_prices;
+                                $temp->product_id = $request->cat_id;
+                                $temp->price = $pricesArray[$x];
+                                $temp->save();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        estimated_prices::where('product_id',$request->cat_id)->delete();
+                    }
                 }
             }
 
@@ -1115,41 +1311,76 @@ class ProductController extends Controller
                     }
                 }
 
-                foreach ($sub_products as $s => $key)
+                if($request->form_type == 2)
                 {
-                    if($key != NULL && $request->sub_product_titles[$s] != NULL)
+                    foreach ($sub_products as $s => $key)
                     {
-                        $sub_pro = new product_ladderbands;
-                        $sub_pro->title = $request->sub_product_titles[$s];
-                        $sub_pro->product_id = $cat->id;
-                        $sub_pro->code = $key;
-                        $sub_pro->size1_value = $request->size1_value[$s];
-                        $sub_pro->size2_value = $request->size2_value[$s];
-                        $sub_pro->save();
+                        if($key != NULL && $request->sub_product_titles[$s] != NULL)
+                        {
+                            $sub_pro = new product_ladderbands;
+                            $sub_pro->title = $request->sub_product_titles[$s];
+                            $sub_pro->product_id = $cat->id;
+                            $sub_pro->code = $key;
+                            $sub_pro->size1_value = $request->size1_value[$s];
+                            $sub_pro->size2_value = $request->size2_value[$s];
+                            $sub_pro->save();
+                        }
+                    }
+
+                    foreach ($colors as $c => $key)
+                    {
+                        if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                        {
+                            $col = new colors;
+                            $col->title = $key;
+                            $col->color_code = $request->color_codes[$c];
+                            $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
+                            $col->product_id = $cat->id;
+                            $col->table_id = $request->price_tables[$c];
+                            $col->save();
+                        }
+                    }
+
+                    foreach ($pricesArray as $x => $price)
+                    {
+                        $est = new estimated_prices;
+                        $est->product_id = $cat->id;
+                        $est->price = $price;
+                        $est->save();
                     }
                 }
-
-                foreach ($colors as $c => $key)
+                else
                 {
-                    if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                    foreach ($colors as $c => $key)
                     {
-                        $col = new colors;
-                        $col->title = $key;
-                        $col->color_code = $request->color_codes[$c];
-                        $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                        $col->product_id = $cat->id;
-                        $col->table_id = $request->price_tables[$c];
-                        $col->save();
-                    }
-                }
+                        if($key != NULL && $request->color_codes[$c] != NULL)
+                        {
+                            $col = new colors;
+                            $col->title = $key;
+                            $col->color_code = $request->color_codes[$c];
+                            $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
+                            $col->product_id = $cat->id;
+                            $col->table_id = NULL;
+                            $col->save();
 
-                foreach ($pricesArray as $x => $price)
-                {
-                    $est = new estimated_prices;
-                    $est->product_id = $cat->id;
-                    $est->price = $price;
-                    $est->save();
-                }
+                            $color_images = 'color_images'.$request->color_row[$c];
+
+                            if($file = $request->file($color_images))
+                            {                                        
+                                foreach($file as $temp)
+                                {
+                                    $name = time().'-'.$col->id.'-'.$temp->getClientOriginalName();
+                                    $temp->move('assets/colorImages',$name);
+                                    $color_image = new color_images;
+                                    $color_image->product_id = $cat->id;
+                                    $color_image->color_id = $col->id;
+                                    $color_image->image = $name;
+                                    $color_image->save();
+                                }
+                            }
+                        }
+                    }
+                }                
 
                 Session::flash('success', 'New Product added successfully.');
                 return redirect()->route('admin-product-index');
@@ -1183,11 +1414,11 @@ class ProductController extends Controller
                 return redirect()->back();
             }
 
-            $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','colors.max_height','price_tables.title as table')->get();
+            $colors_data = colors::leftjoin('price_tables','price_tables.id','=','colors.table_id')->where('colors.product_id','=',$id)->select('colors.id','colors.title as color','colors.color_code','colors.table_id','colors.max_height','price_tables.title as table')->with('images')->get();
             $features_data = product_features::where('product_id',$id)->where('sub_feature',0)->get();
             $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
-            $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
+            $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.id',$cats->category_id)->select('categories.*')->get();
             $sub_categories = sub_categories::where('main_id',$cats->category_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();
             /*$models = Model1::get();*/
@@ -1201,7 +1432,15 @@ class ProductController extends Controller
 
             }])->where('product_id',$id)->get();
 
-            return view('admin.product.create',compact('ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
+            if($categories[0]->cat_name == 'Blinds' || $categories[0]->cat_name == 'Binnen zonwering')
+            {
+                return view('admin.product.create',compact('ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
+            }
+            else
+            {
+                return view('admin.product.create_for_floors',compact('ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
+            }
+
         }
         else
         {
@@ -1232,6 +1471,15 @@ class ProductController extends Controller
             product_features::where('product_id',$id)->delete();
             product_ladderbands::where('product_id',$id)->delete();
             colors::where('product_id',$id)->delete();
+
+            $c_images = color_images::where('product_id',$id)->get();
+                                        
+            foreach($c_images as $c_i1)
+            {
+                \File::delete(public_path() .'/assets/colorImages/'.$c_i1->image);
+            }
+
+            color_images::where('product_id',$id)->delete();
             estimated_prices::where('product_id',$id)->delete();
             $model_ids = product_models::where('product_id',$id)->pluck('id');
             product_models::where('product_id',$id)->delete();

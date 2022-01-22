@@ -21,9 +21,9 @@
 
                                         @if(auth()->user()->role_id == 4)
 
-                                            @if(auth()->user()->can('product-create'))
+                                            @if(auth()->user()->can('product-create'))                                                
 
-                                                <a style="margin-right: 10px;" href="{{route('admin-product-create')}}" class="btn add-newProduct-btn">
+                                                <a style="margin-right: 10px;" href="{{route('select-product-category')}}" class="btn add-newProduct-btn">
                                                     <i style="font-size: 12px;" class="fa fa-plus"></i> Add New Product</a>
 
                                             @endif

@@ -12,4 +12,9 @@ class colors extends Model
     {
         return $this->belongsTo('App\Products');
     }
+
+    public function images()
+    {
+        return $this->hasMany(color_images::class, 'color_id','id');
+    }
 }

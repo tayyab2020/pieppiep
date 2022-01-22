@@ -39,7 +39,6 @@
                                                 <li style="margin-bottom: 0;" class="active"><a data-toggle="tab" href="#menu1">General Information</a></li>
                                                 {{--<li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu2">General Options</a></li>--}}
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu3">Colors Options</a></li>
-                                                <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu4">Price Tables</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu5">Features</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu6">Price Control</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu7">Models</a></li>
@@ -51,7 +50,7 @@
 
                                                 <input type="hidden" id="submit_check" value="0">
                                                 <input type="hidden" name="cat_id" value="{{isset($cats) ? $cats->id : null}}" />
-                                                <input type="hidden" name="form_type" id="form_type" value="2" />
+                                                <input type="hidden" name="form_type" id="form_type" value="1" />
 
                                                 <div style="padding: 40px 15px 20px 15px;border: 1px solid #24232329;" class="tab-content">
 
@@ -131,12 +130,62 @@
                                                         </div>
 
                                                         <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Model Number</label>
+                                                            <div class="col-sm-6">
+                                                                <input value="{{isset($cats) ? $cats->model_number : null}}" class="form-control" name="model_number" id="blood_group_slug" placeholder="Enter Model Number" type="text">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Size</label>
+                                                            <div class="col-sm-6">
+                                                                <input value="{{isset($cats) ? $cats->size : null}}" class="form-control" name="size" id="blood_group_slug" placeholder="Enter Size" type="number">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Measure</label>
+                                                            <div class="col-sm-6">
+                                                                
+                                                                <select class="js-data-example-ajax3 form-control" style="height: 40px;" name="measure" id="measure">
+
+                                                                    <option value="">Select Measure</option>
+                                                                    <option @if(isset($cats)) @if($cats->measure == 'M1') selected @endif @endif value="M1">M1</option>
+                                                                    <option @if(isset($cats)) @if($cats->measure == 'M2') selected @endif @endif value="M2">M2</option>
+                                                                    <option @if(isset($cats)) @if($cats->measure == 'Custom Sized') selected @endif @endif value="Custom Sized">Custom Sized</option>
+
+                                                                </select>
+                                                                
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Advice Price</label>
+                                                            <div class="col-sm-6">
+                                                                <input value="{{isset($cats) ? $cats->estimated_price : null}}" class="form-control" name="estimated_price" id="blood_group_slug" placeholder="Advice Price" type="text">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Floor Type</label>
+                                                            <div class="col-sm-6">
+                                                                <input value="{{isset($cats) ? $cats->floor_type : null}}" class="form-control" name="floor_type" id="blood_group_slug" placeholder="Enter Floor Type" type="text">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Floor Type 2</label>
+                                                             <div class="col-sm-6">
+                                                                <input value="{{isset($cats) ? $cats->floor_type2 : null}}" class="form-control" name="floor_type2" id="blood_group_slug" placeholder="Enter Floor Type 2" type="text">
+                                                            </div>
+                                                        </div>
+`
+                                                        <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Additional Info</label>
                                                             <div class="col-sm-6">
                                                                 <input value="{{isset($cats) ? $cats->additional_info : null}}" class="form-control" name="additional_info" id="blood_group_slug" placeholder="Enter Additional Info" type="text">
                                                             </div>
                                                         </div>
-                                                        
 
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Delivery Time (In Days)*</label>
@@ -265,7 +314,7 @@
 
                                                         <script>
 
-                                                            var ExcelToJSON = function() {                                                                
+                                                            var ExcelToJSON = function() {
 
                                                                 this.parseExcel = function(file) {
 
@@ -307,38 +356,14 @@
                                                                                     max_height = '';
                                                                                 }
 
-                                                                                var price_table = data[i]['Price Table'];
-
-                                                                                if(!price_table)
-                                                                                {
-                                                                                    price_table = '';
-                                                                                }
-
-                                                                                <?php
-                                                                                $js_array = json_encode($tables);
-                                                                                echo "var tables_array = ". $js_array . ";\n";
-                                                                                ?>
-
-                                                                                var options = "";
-
-                                                                                for (x = 0; x < tables_array.length; ++x)
-                                                                                {
-                                                                                    if(tables_array[x]['title'] == data[i]['Price Table'])
-                                                                                    {
-                                                                                        options = options + '<option selected value="'+tables_array[x]['id']+'">'+tables_array[x]['title']+'</option>';
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        options = options + '<option value="'+tables_array[x]['id']+'">'+tables_array[x]['title']+'</option>';
-                                                                                    }
-                                                                                }
-
                                                                                 var color_row = $('.color_box').find('.form-group').last().data('id');
                                                                                 color_row = color_row + 1;
 
                                                                                 $(".color_box").append('<div class="form-group" data-id="'+color_row+'">\n' +
                                                                                     '\n' +
                                                                                     '                                                                <div class="col-sm-3">\n' +
+                                                                                    '\n' +
+                                                                                    '                                                                    <input name="color_row[]" value="'+color_row+'" type="hidden">\n' +
                                                                                     '\n' +
                                                                                     '                                                                    <input class="form-control color_title" name="colors[]" value="'+color_title+'" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
                                                                                     '\n' +
@@ -357,13 +382,7 @@
                                                                                     '                                                                </div>\n' +
                                                                                     '\n' +
                                                                                     '                                                                <div class="col-sm-3">\n' +
-                                                                                    '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
-                                                                                    '\n' +
-                                                                                    '                                                                        <option value="">Select Price Table</option>\n' +
-                                                                                    '\n' +
-                                                                                                                                                              options +
-                                                                                    '\n' +
-                                                                                    '                                                                    </select>\n' +
+                                                                                    '                                                                   <input type="file" name="color_images'+color_row+'[]" multiple />\n' +
                                                                                     '                                                                </div>\n'+
                                                                                     '\n' +
                                                                                     '                <div class="col-xs-1 col-sm-1">\n' +
@@ -372,18 +391,10 @@
                                                                                     '\n' +
                                                                                     '                </div>');
 
-                                                                                $(".js-data-example-ajax4").select2({
-                                                                                    width: '100%',
-                                                                                    height: '200px',
-                                                                                    placeholder: "Select Price Table",
-                                                                                    allowClear: true,
-                                                                                });
-
                                                                             }
 
                                                                         });
 
-                                                                        $('.js-data-example-ajax4').trigger('change');
                                                                     };
 
                                                                     reader.onerror = function(ex) {
@@ -465,6 +476,8 @@
 
                                                                     <div class="form-group" data-id="{{$i+1}}">
 
+                                                                        <input type="hidden" name="color_row[]" value="{{$i+1}}">
+
                                                                         <div class="col-sm-3">
 
                                                                             <input value="{{$key->color}}" class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">
@@ -485,17 +498,22 @@
 
                                                                         <div class="col-sm-3">
 
-                                                                            <select class="form-control validate js-data-example-ajax4" name="price_tables[]">
-
-                                                                                <option value="">Select Price Table</option>
-
-                                                                                @foreach($tables as $table)
-
-                                                                                    <option @if($table->id == $key->table_id) selected @endif value="{{$table->id}}">{{$table->title}}</option>
+                                                                            <ul class="images-list">
+                                                                                @foreach($key->images as $image)
+                                                                                    
+                                                                                    <li><a style="color: #337ab7;" href="{{asset('/assets/colorImages/'.$image->image)}}" target="_blank">{{$image->image}}</a></li>
 
                                                                                 @endforeach
+                                                                            </ul>
 
-                                                                            </select>
+                                                                            <style>
+
+                                                                                .images-list{height:200px; width:100%; border: 1px solid #bdbdbd;}
+                                                                                .images-list{overflow:hidden; overflow-y:auto;}
+
+                                                                            </style>
+
+                                                                            <input type="file" multiple name="color_images{{$i+1}}[]">
 
                                                                         </div>
 
@@ -510,6 +528,8 @@
                                                             @else
 
                                                                 <div class="form-group" data-id="1">
+
+                                                                    <input type="hidden" name="color_row[]" value="1">
 
                                                                     <div class="col-sm-3">
 
@@ -531,17 +551,7 @@
 
                                                                     <div class="col-sm-3">
 
-                                                                        <select class="form-control validate js-data-example-ajax4" name="price_tables[]">
-
-                                                                            <option value="">Select Price Table</option>
-
-                                                                            @foreach($tables as $table)
-
-                                                                                <option value="{{$table->id}}">{{$table->title}}</option>
-
-                                                                            @endforeach
-
-                                                                        </select>
+                                                                        <input type="file" multiple name="color_images1[]">
 
                                                                     </div>
 
@@ -565,299 +575,8 @@
 
                                                     </div>
 
-                                                    <div id="menu4" class="tab-pane fade">
-
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
-
-                                                                <table id="example1"
-                                                                       class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline"
-                                                                       role="grid" aria-describedby="product-table_wrapper_info"
-                                                                       style="width: 100%;display: inline-table;overflow-x: auto;" width="100%" cellspacing="0">
-                                                                    <thead>
-
-                                                                    <tr role="row">
-
-                                                                        <th tabindex="0"
-                                                                            aria-controls="product-table_wrapper" rowspan="1"
-                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
-                                                                            aria-label="Blood Group Name: activate to sort column descending">
-                                                                            ID
-                                                                        </th>
-
-                                                                        <th tabindex="0"
-                                                                            aria-controls="product-table_wrapper" rowspan="1"
-                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
-                                                                            aria-label="Blood Group Name: activate to sort column descending">
-                                                                            Table
-                                                                        </th>
-
-                                                                        <th tabindex="0"
-                                                                            aria-controls="product-table_wrapper" rowspan="1"
-                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
-                                                                            aria-label="Blood Group Name: activate to sort column descending">
-                                                                            Color
-                                                                        </th>
-
-                                                                        <th tabindex="0"
-                                                                            aria-controls="product-table_wrapper" rowspan="1"
-                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
-                                                                            aria-label="Blood Group Name: activate to sort column descending">
-                                                                            Code
-                                                                        </th>
-
-                                                                        <th tabindex="0"
-                                                                            aria-controls="product-table_wrapper" rowspan="1"
-                                                                            colspan="1" style="padding: 0 25px;border: 1px solid #e7e7e7;text-align: center;" aria-sort="ascending"
-                                                                            aria-label="Blood Group Name: activate to sort column descending">
-                                                                            Action
-                                                                        </th>
-
-                                                                    </tr>
-                                                                    </thead>
-
-                                                                    <tbody>
-
-                                                                    @if(isset($colors_data))
-
-                                                                        @foreach($colors_data as $i => $key)
-
-                                                                            <tr data-id="{{$i+1}}">
-                                                                                <td>{{$key->table_id}}</td>
-                                                                                <td>{{$key->table}}</td>
-                                                                                <td>{{$key->color}}</td>
-                                                                                <td>{{$key->color_code}}</td>
-                                                                                <td><a href="/aanbieder/price-tables/prices/view/{{$key->table_id}}">View</a></td>
-                                                                            </tr>
-
-                                                                        @endforeach
-
-                                                                    @endif
-
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
 
                                                     <div id="menu5" class="tab-pane fade">
-
-                                                        <div class="row" style="margin: 0;margin-bottom: 35px;">
-
-                                                            <div class="form-group">
-
-                                                                <div class="row" style="margin: 0;">
-
-                                                                    <div style="display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Ladderband:</label>
-
-                                                                        <input type="hidden" name="ladderband" id="ladderband" value="{{isset($cats) ? $cats->ladderband : 0}}">
-
-                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                        <label style="margin: 0;" class="switch">
-                                                                            <input class="ladderband" type="checkbox" {{isset($cats) ? ($cats->ladderband ? 'checked' : null) : null}}>
-                                                                            <span class="slider round"></span>
-                                                                        </label>
-                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                            <div @if(isset($cats)) @if(!$cats->ladderband) style='display: none;' @endif @else style='display: none;' @endif id="ladderband_box" class="form-group">
-
-                                                                <div class="row" style="margin: 0;">
-
-                                                                    <div style="margin: 15px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;" class="control-label">Ladderband Value:</label>
-                                                                        <input style="width: auto;border-radius: 10px;" class="form-control ladderband_value" value="{{isset($cats) ? $cats->ladderband_value : null}}" name="ladderband_value" id="blood_group_slug" placeholder="Ladderband Value" type="text">
-                                                                    </div>
-
-                                                                    <div style="margin: 15px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;" class="control-label">Ladderband Price Impact:</label>
-
-                                                                        <input type="hidden" name="ladderband_price_impact" id="ladderband_price_impact" value="{{isset($cats) ? $cats->ladderband_price_impact : 0}}">
-
-                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                        <label style="margin: 0;" class="switch">
-                                                                            <input class="ladderband_price_impact" type="checkbox" {{isset($cats) ? ($cats->ladderband_price_impact ? 'checked' : null) : null}}>
-                                                                            <span class="slider round"></span>
-                                                                        </label>
-                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                    </div>
-
-                                                                    <div style="margin: 15px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;" class="control-label">Ladderband Impact Type:</label>
-
-                                                                        <input type="hidden" name="ladderband_impact_type" id="ladderband_impact_type" value="{{isset($cats) ? $cats->ladderband_impact_type : 0}}">
-
-                                                                        <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;">€</span>
-                                                                        <label style="margin: 0;" class="switch">
-                                                                            <input class="ladderband_impact_type" type="checkbox" {{isset($cats) ? ($cats->ladderband_impact_type ? 'checked' : null) : null}}>
-                                                                            <span class="slider round"></span>
-                                                                        </label>
-                                                                        <span style="font-size: 15px;padding-left: 10px;font-weight: 1000;font-family: revert;">%</span>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                                <div class="form-group" style="margin: 50px 0px 20px 0;display: flex;justify-content: center;">
-
-                                                                    <div style="border: 1px solid #e1e1e1;padding: 25px;" class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
-
-                                                                        <h4 style="text-align: center;margin-bottom: 50px;">Ladderband Sub Product(s)</h4>
-
-                                                                        <div class="row" style="margin: 0;">
-
-                                                                            <div style="font-family: monospace;" class="col-sm-2">
-                                                                                <h4>ID</h4>
-                                                                            </div>
-
-                                                                            <div style="font-family: monospace;" class="col-sm-3">
-                                                                                <h4>Title</h4>
-                                                                            </div>
-
-                                                                            <div style="font-family: monospace;text-align: center;" class="col-sm-3">
-                                                                                <h4>Size 38mm</h4>
-                                                                            </div>
-
-                                                                            <div style="font-family: monospace;text-align: center;" class="col-sm-3">
-                                                                                <h4>Size 25mm</h4>
-                                                                            </div>
-
-                                                                        </div>
-
-                                                                        <div class="row ladderband_products_box" style="margin: 15px 0;">
-
-                                                                            <input type="hidden" name="removed_ladderband" id="removed_ladderband_rows">
-
-                                                                            @if(isset($ladderband_data) && count($ladderband_data) > 0)
-
-                                                                                @foreach($ladderband_data as $f => $key)
-
-                                                                                    <div class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">
-
-                                                                                        <div class="col-sm-2">
-
-                                                                                            <input value="{{$key->code}}" class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product ID" type="text">
-
-                                                                                        </div>
-
-                                                                                        <div class="col-sm-3">
-
-                                                                                            <input value="{{$key->title}}" class="form-control sub_product_title" name="sub_product_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">
-
-                                                                                        </div>
-
-                                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
-
-                                                                                            <input type="hidden" name="size1_value[]" id="size1_value" value="{{$key->size1_value}}">
-
-                                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                            <label style="margin: 0;" class="switch">
-                                                                                                <input {{$key->size1_value ? 'checked' : null}} class="size1_value" type="checkbox">
-                                                                                                <span class="slider round"></span>
-                                                                                            </label>
-                                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                        </div>
-
-                                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
-
-                                                                                            <input type="hidden" name="size2_value[]" id="size2_value" value="{{$key->size2_value}}">
-
-                                                                                            <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                            <label style="margin: 0;" class="switch">
-                                                                                                <input {{$key->size2_value ? 'checked' : null}} class="size2_value" type="checkbox">
-                                                                                                <span class="slider round"></span>
-                                                                                            </label>
-                                                                                            <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                        </div>
-
-                                                                                        <div class="col-xs-1 col-sm-1">
-                                                                                            <span class="ui-close remove-ladderband" data-id="{{$key->id}}" style="margin:0;right:70%;">X</span>
-                                                                                        </div>
-
-                                                                                    </div>
-
-                                                                                @endforeach
-
-                                                                            @else
-
-                                                                                <div class="form-group" style="margin: 0 0 20px 0;display: flex;justify-content: center;">
-
-                                                                                    <div class="col-sm-2">
-
-                                                                                        <input class="form-control sub_code" name="sub_codes[]" id="blood_group_slug" placeholder="Sub Product ID" type="text">
-
-                                                                                    </div>
-
-                                                                                    <div class="col-sm-3">
-
-                                                                                        <input class="form-control sub_product_title" name="sub_product_titles[]" id="blood_group_slug" placeholder="Sub Product Title" type="text">
-
-                                                                                    </div>
-
-                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
-
-                                                                                        <input type="hidden" name="size1_value[]" id="size1_value" value="0">
-
-                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                        <label style="margin: 0;" class="switch">
-                                                                                            <input class="size1_value" type="checkbox">
-                                                                                            <span class="slider round"></span>
-                                                                                        </label>
-                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                    </div>
-
-                                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-3">
-
-                                                                                        <input type="hidden" name="size2_value[]" id="size2_value" value="0">
-
-                                                                                        <span style="font-size: 13px;padding-right: 10px;font-weight: 600;font-family: monospace;">No</span>
-                                                                                        <label style="margin: 0;" class="switch">
-                                                                                            <input class="size2_value" type="checkbox">
-                                                                                            <span class="slider round"></span>
-                                                                                        </label>
-                                                                                        <span style="font-size: 13px;padding-left: 10px;font-weight: 600;font-family: monospace;">Yes</span>
-
-                                                                                    </div>
-
-                                                                                    <div class="col-xs-1 col-sm-1">
-                                                                                        <span class="ui-close remove-ladderband" data-id="" style="margin:0;right:70%;">X</span>
-                                                                                    </div>
-
-                                                                                </div>
-
-                                                                            @endif
-
-                                                                        </div>
-
-                                                                        <div class="form-group add-color">
-                                                                            <label class="control-label col-sm-3" for=""></label>
-
-                                                                            <div class="col-sm-12 text-center">
-                                                                                <button class="btn btn-default featured-btn" type="button" id="add-ladderband-btn"><i class="fa fa-plus"></i> Add Ladderband Sub Products</button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
 
                                                         <div class="form-group" style="margin-bottom: 20px;">
 
@@ -4333,13 +4052,15 @@
         });
 
         $("#add-color-btn").on('click',function() {
-            
+
             var color_row = $('.color_box').find('.form-group').last().data('id');
             color_row = color_row + 1;
 
             $(".color_box").append('<div class="form-group" data-id="'+color_row+'">\n' +
                 '\n' +
                 '                                                                <div class="col-sm-3">\n' +
+                '\n' +
+                '                                                                    <input name="color_row[]" value="'+color_row+'" type="hidden">\n' +
                 '\n' +
                 '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
                 '\n' +
@@ -4358,17 +4079,7 @@
                 '                                                                </div>\n' +
                 '\n' +
                 '                                                                <div class="col-sm-3">\n' +
-                '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
-                '\n' +
-                '                                                                        <option value="">Select Price Table</option>\n' +
-                '\n' +
-                '                                                                        @foreach($tables as $table)\n' +
-                '\n' +
-                '                                                                            <option value="{{$table->id}}">{{$table->title}}</option>\n' +
-                '\n' +
-                '                                                                        @endforeach\n' +
-                '\n' +
-                '                                                                    </select>\n' +
+                '                                                                   <input type="file" name="color_images'+color_row+'[]" multiple />\n' +
                 '                                                                </div>\n'+
                 '\n' +
                 '                <div class="col-xs-1 col-sm-1">\n' +
@@ -4376,16 +4087,6 @@
                 '                </div>\n' +
                 '\n' +
                 '                </div>');
-
-
-
-            $(".js-data-example-ajax4").select2({
-                width: '100%',
-                height: '200px',
-                placeholder: "Select Price Table",
-                allowClear: true,
-            });
-
 
         });
 
@@ -4904,6 +4605,8 @@
                     '\n' +
                     '                                                                <div class="col-sm-3">\n' +
                     '\n' +
+                    '                                                                    <input name="color_row[]" value="1" type="hidden">\n' +
+                    '\n' +
                     '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
                     '\n' +
                     '                                                                </div>\n' +
@@ -4921,17 +4624,7 @@
                     '                                                                </div>\n' +
                     '\n' +
                     '                                                                <div class="col-sm-3">\n' +
-                    '                                                                    <select class="form-control validate js-data-example-ajax4" name="price_tables[]">\n' +
-                    '\n' +
-                    '                                                                        <option value="">Select Price Table</option>\n' +
-                    '\n' +
-                    '                                                                        @foreach($tables as $table)\n' +
-                    '\n' +
-                    '                                                                            <option value="{{$table->id}}">{{$table->title}}</option>\n' +
-                    '\n' +
-                    '                                                                        @endforeach\n' +
-                    '\n' +
-                    '                                                                    </select>\n' +
+                    '                                                                   <input type="file" name="color_images1[]" multiple />\n' +
                     '                                                                </div>\n'+
                     '\n' +
                     '                <div class="col-xs-1 col-sm-1">\n' +
@@ -4939,14 +4632,6 @@
                     '                </div>\n' +
                     '\n' +
                     '                </div>');
-
-
-                $(".js-data-example-ajax4").select2({
-                    width: '100%',
-                    height: '200px',
-                    placeholder: "Select Price Table",
-                    allowClear: true,
-                });
 
 
             }
