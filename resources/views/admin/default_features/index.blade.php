@@ -23,11 +23,28 @@
                                         <div class="row">
                                             <div class="col-sm-12">
 
+                                            <div style="display: flex;justify-content: flex-end;padding-right: 10px;margin-bottom: 10px;">
+
+                                                <select class="form-control" style="border: 1px solid #c5c3c3;border-radius: 5px;padding: 7px;width: auto;" id="dropdown1">
+                                                    
+                                                    <option value="">Select Category to filter</option>
+
+                                                    @foreach($categories as $key)
+
+                                                        <option value="{{$key->cat_name}}">{{$key->cat_name}}</option>
+
+                                                    @endforeach
+
+                                                </select>
+
+                                            </div>
+
                                                 <table id="example" class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline" role="grid" aria-describedby="product-table_wrapper_info" style="width: 100%;" width="100%" cellspacing="0">
                                                     <thead>
                                                     <tr role="row">
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 344px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">ID</th>
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Title</th>
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Category(s)</th>
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Comment Box</th>
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">PDF Order No</th>
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Quote Order No</th>
@@ -40,6 +57,10 @@
                                                         <tr role="row" class="odd">
                                                             <td>{{$item->id}}</td>
                                                             <td>{{$item->title}}</td>
+                                                            
+                                                            <?php $item_categories = ''; foreach($item->getCategoriesAttribute() as $temp){ $item_categories = $item_categories.', '.$temp->cat_name; } ?>
+                                                            
+                                                            <td>{{ltrim($item_categories,', ')}}</td>
                                                             <td>{{$item->comment_box ? 'Yes' : 'No'}}</td>
                                                             <td>{{$item->order_no + 1}}</td>
                                                             <td>{{$item->quote_order_no}}</td>
@@ -69,7 +90,11 @@
 @section('scripts')
 
     <script type="text/javascript">
-        $('#example').DataTable();
+        var table = $('#example').DataTable();
+
+        $('#dropdown1').on('change', function () {
+            table.columns(2).search( this.value ).draw();
+        } );
     </script>
 
 @endsection

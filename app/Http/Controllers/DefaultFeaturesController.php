@@ -31,7 +31,9 @@ class DefaultFeaturesController extends Controller
     {
         $features = default_features::orderBy('id','desc')->get();
 
-        return view('admin.default_features.index',compact('features'));
+        $categories = Category::get();
+
+        return view('admin.default_features.index',compact('features','categories'));
     }
 
     public function create()
