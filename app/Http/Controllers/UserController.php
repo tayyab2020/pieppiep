@@ -1703,7 +1703,8 @@ class UserController extends Controller
 
         if($main_id)
         {
-            $user_id = $main_id;
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
         }
 
         if(\Route::currentRouteName() == 'create-custom-quotation')
@@ -1726,17 +1727,22 @@ class UserController extends Controller
         {
             if ($user_role == 2) {
 
-                $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where('handyman_products.handyman_id', $user_id)->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
-                $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where('handyman_services.handyman_id', $user_id)->select('services.*','handyman_services.sell_rate as rate')->get();
-                $items = items::where('user_id',$user_id)->get();
+                // $all_products = Products::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'products.id')->leftjoin('categories', 'categories.id', '=', 'products.category_id')->where('handyman_products.handyman_id', $user_id)->select('products.*','categories.cat_name','handyman_products.sell_rate as rate')->get();
+                // $all_services = Service::leftjoin('handyman_services', 'handyman_services.service_id', '=', 'services.id')->where('handyman_services.handyman_id', $user_id)->select('services.*','handyman_services.sell_rate as rate')->get();
+                // $items = items::where('user_id',$user_id)->get();
 
-                $settings = Generalsetting::findOrFail(1);
+                // $settings = Generalsetting::findOrFail(1);
 
-                $vat_percentage = $settings->vat;
+                // $vat_percentage = $settings->vat;
+                // $customers = User::where('parent_id', $user_id)->get();
 
-                $customers = User::where('parent_id', $user_id)->get();
+                $customers = customers_details::where('retailer_id', $user_id)->get();
 
-                return view('user.create_custom_quote', compact('all_products','all_services', 'items', 'settings', 'vat_percentage', 'customers', 'user'));
+                $products = array();
+                $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+                $suppliers = User::whereIn('id',$suppliers)->get();
+
+                return view('user.create_custom_quote1', compact('products','customers','suppliers','user'));
             } else {
                 return redirect()->back();
             }
