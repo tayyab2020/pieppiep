@@ -9,7 +9,7 @@ class Products extends Model
 {
     use SoftDeletes;
     protected $table = 'products';
-    protected $fillable = ['delivery_days','margin','retailer_margin','user_id','excel_id','title','slug','model_number','size','measure','estimated_price','additional_info','floor_type','floor_type2','supplier','color','category_id','sub_category_id','brand_id','model_id','photo','description','ladderband','ladderband_value','ladderband_price_impact','ladderband_impact_type','price_based_option','base_price'];
+    protected $fillable = ['delivery_days','margin','retailer_margin','user_id','excel_id','title','slug','model_number','size','measure','estimated_price_per_box','estimated_price_quantity','estimated_price','additional_info','floor_type','floor_type2','supplier','color','category_id','sub_category_id','brand_id','model_id','photo','description','ladderband','ladderband_value','ladderband_price_impact','ladderband_impact_type','price_based_option','base_price'];
     public $timestamps = false;
     protected $dates = ['deleted_at'];
 

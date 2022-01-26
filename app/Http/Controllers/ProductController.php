@@ -558,6 +558,9 @@ class ProductController extends Controller
             }
         }
 
+        $input['estimated_price_per_box'] = str_replace(',', '.',$input['estimated_price_per_box']);
+        $input['estimated_price_quantity'] = str_replace(',', '.',$input['estimated_price_quantity']);
+        $input['estimated_price'] = str_replace(',', '.',$input['estimated_price']);
         $input['margin'] = is_numeric($input['margin']) ? $input['margin'] : NULL;
 
         if($request->cat_id)

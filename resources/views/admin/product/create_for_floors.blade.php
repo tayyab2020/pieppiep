@@ -160,9 +160,23 @@
                                                         </div>
 
                                                         <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Advice Price Per Box</label>
+                                                            <div class="col-sm-6">
+                                                                <input value="{{isset($cats) ? str_replace('.', ',', floatval($cats->estimated_price_per_box)) : null}}" maskedformat="9,1" class="form-control" name="estimated_price_per_box" id="estimated_price_per_box" placeholder="Advice Price Per Box" type="text">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Advice Price Quantity</label>
+                                                            <div class="col-sm-6">
+                                                                <input value="{{isset($cats) ? str_replace('.', ',', floatval($cats->estimated_price_quantity)) : null}}" maskedformat="9,1" class="form-control" name="estimated_price_quantity" id="estimated_price_quantity" placeholder="Advice Price Quantity" type="text">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Advice Price</label>
                                                             <div class="col-sm-6">
-                                                                <input value="{{isset($cats) ? $cats->estimated_price : null}}" class="form-control" name="estimated_price" id="blood_group_slug" placeholder="Advice Price" type="text">
+                                                                <input style="background: white;" value="{{isset($cats) ? str_replace('.', ',', floatval($cats->estimated_price)) : null}}" readonly class="form-control" name="estimated_price" id="estimated_price" placeholder="Advice Price" type="text">
                                                             </div>
                                                         </div>
 
@@ -3740,6 +3754,66 @@
             else
             {
                 $(this).parent().parent().find('#size2_value').val(0);
+            }
+
+        });
+
+        $(document).on('keypress', "#estimated_price_per_box, #estimated_price_quantity", function(e){
+
+            e = e || window.event;
+            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+            var val = String.fromCharCode(charCode);
+
+            if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+            {
+                e.preventDefault();
+                return false;
+            }
+
+            if(e.which == 44)
+            {
+                if(this.value.indexOf(',') > -1)
+                {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+
+            var num = $(this).attr("maskedFormat").toString().split(',');
+            var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+            if (!regex.test(this.value)) {
+                this.value = this.value.substring(0, this.value.length - 1);
+            }
+
+        });
+
+        $(document).on('input', "#estimated_price_per_box, #estimated_price_quantity", function(e){
+
+            var id = $(this).attr('id');
+
+            if(id == 'estimated_price_per_box')
+            {
+                var estimated_price_per_box = $(this).val();
+                var estimated_price_quantity = $('#estimated_price_quantity').val();
+            }
+            else
+            {
+                var estimated_price_quantity = $(this).val();
+                var estimated_price_per_box = $('#estimated_price_per_box').val();
+            }
+
+            var estimated_price_per_box = estimated_price_per_box.replace(/\,/g, '.');
+            var estimated_price_quantity = estimated_price_quantity.replace(/\,/g, '.');
+            var estimated_price = estimated_price_per_box/estimated_price_quantity;
+
+            if (!isNaN(estimated_price) && estimated_price !== Infinity) {
+                estimated_price = parseFloat(estimated_price).toFixed(2);
+                estimated_price = estimated_price.replace(/\./g, ',');
+                $('#estimated_price').val(estimated_price);
+            }
+            else
+            {
+                $('#estimated_price').val(0);
             }
 
         });

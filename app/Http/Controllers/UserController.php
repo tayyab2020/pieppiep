@@ -175,7 +175,18 @@ class UserController extends Controller
 
     public function GetSupplierProducts(Request $request)
     {
-        $data = Products::where('user_id',$request->id)->get();
+        $type = $request->type;
+
+        if($type == 'floors')
+        {
+            $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
+            $data = Products::where('user_id',$request->id)->where('category_id',$floor_category_id)->get();
+        }
+        else
+        {
+            $blind_category_id = Category::where('cat_name','LIKE', '%Blinds%')->orWhere('cat_name','LIKE', '%Binnen zonwering%')->pluck('id')->first();
+            $data = Products::where('user_id',$request->id)->where('category_id',$blind_category_id)->get();
+        }
 
         return $data;
     }
@@ -1739,7 +1750,8 @@ class UserController extends Controller
                 $customers = customers_details::where('retailer_id', $user_id)->get();
 
                 $products = array();
-                $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+                $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
+                $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->leftjoin('supplier_categories','supplier_categories.user_id','=','retailers_requests.supplier_id')->where('supplier_categories.category_id',$floor_category_id)->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
                 $suppliers = User::whereIn('id',$suppliers)->get();
 
                 return view('user.create_custom_quote1', compact('products','customers','suppliers','user'));

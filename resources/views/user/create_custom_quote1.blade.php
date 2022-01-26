@@ -127,8 +127,8 @@
 																<div class="headings" style="width: 22%;">Product</div>
 																<div class="headings" style="width: 10%;">Width</div>
 																<div class="headings" style="width: 10%;">Height</div>
+																<div class="headings" style="width: 7%;">Qty</div>
 																<div class="headings" style="width: 7%;">€ Art.</div>
-																<div class="headings" style="width: 7%;">€ Arb.</div>
 																<div class="headings" style="width: 10%;">Discount</div>
 																<div class="headings" style="width: 7%;">€ Total</div>
 																<div class="headings" style="width: 13%;"></div>
@@ -220,21 +220,20 @@
 
 																	<div class="content item6" style="width: 7%;">
 
+																		<label class="content-label">Qty</label>
+
+																		<div style="display: flex;align-items: center;">
+																			<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																		</div>
+                                                                    </div>
+																	
+																	<div class="content item6" style="width: 7%;">
+
 																		<label class="content-label">€ Art.</label>
 
 																		<div style="display: flex;align-items: center;">
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																			<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
-																		</div>
-                                                                    </div>
-
-																	<div class="content item7" style="width: 7%;">
-
-																		<label class="content-label">€ Arb.</label>
-
-																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="{{str_replace('.', ',',floatval($item->labor_impact))}}" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
-																			<input type="hidden" value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
 																		</div>
                                                                     </div>
 
@@ -443,21 +442,20 @@
 
 																	<div class="content item6" style="width: 7%;">
 
+																		<label class="content-label">Qty</label>
+
+																		<div style="display: flex;align-items: center;">
+																			<input type="text" value="1" name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																		</div>
+                                                                    </div>
+
+																	<div class="content item6" style="width: 7%;">
+
 																		<label class="content-label">€ Art.</label>
 
 																		<div style="display: flex;align-items: center;">
 																			<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																			<input type="hidden" value="0" class="price_before_labor_old">
-																		</div>
-                                                                    </div>
-
-																	<div class="content item7" style="width: 7%;">
-
-																		<label class="content-label">€ Arb.</label>
-
-																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="0" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
-																			<input type="hidden" value="0" class="labor_impact_old">
 																		</div>
                                                                     </div>
 
@@ -569,7 +567,7 @@
 
 															<div style="display: flex;justify-content: center;">
 
-																<div class="headings1" style="width: 56%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
+																<div class="headings1" style="width: 63%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
 																<div class="headings1" style="width: 7%;">
 																	<div style="display: flex;align-items: center;justify-content: center;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
@@ -580,16 +578,7 @@
 																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
 																	</div>
 																</div>
-																<div class="headings1" style="width: 7%;">
-																	<div style="display: flex;align-items: center;justify-content: center;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
-																		<input name="labor_cost_total"
-																			id="labor_cost_total"
-																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->labor_cost_total)) : 0}}">
-																	</div>
-																</div>
+																
 																<div class="headings2" style="width: 30%;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">Te betalen: €</span>
@@ -2159,13 +2148,12 @@
 
 			var total = 0;
 			var price_before_labor_total = 0;
-			var labor_cost_total = 0;
 
 			$("input[name='total[]']").each(function (i, obj) {
 
 				var rate = 0;
 				var row_id = $(this).parent().data('id');
-				var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+				var qty = $('#products_table').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
 				if (!qty) {
 					qty = 0;
@@ -2180,20 +2168,18 @@
 
 				rate = rate * qty;
 
-				var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
-				labor_impact = labor_impact * qty;
-				labor_impact = parseFloat(labor_impact).toFixed(2);
-				/*labor_impact = Math.round(labor_impact);*/
+				// var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
+				// labor_impact = labor_impact * qty;
+				// labor_impact = parseFloat(labor_impact).toFixed(2);
 
-				if(labor_changed == 0)
-				{
-					$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact.replace(/\./g, ','));
-				}
+				// if(labor_changed == 0)
+				// {
+				// 	$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact.replace(/\./g, ','));
+				// }
 
 				var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
 				price_before_labor = price_before_labor * qty;
 				price_before_labor = parseFloat(price_before_labor).toFixed(2);
-				/*price_before_labor = Math.round(price_before_labor);*/
 				$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 
 				if(qty_changed == 0)
@@ -2205,7 +2191,7 @@
 					rate = rate - old_discount;
 
 					var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
-					var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
+					// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
 
 
 					if(!discount)
@@ -2214,17 +2200,16 @@
 					}
 
 
-					if(!labor_discount)
-					{
-						labor_discount = 0;
-					}
+					// if(!labor_discount)
+					// {
+					// 	labor_discount = 0;
+					// }
 
 					var discount_val = parseFloat(price_before_labor) * (discount/100);
-					/*discount_val = Math.round(discount_val);*/
-					var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
-					/*labor_discount_val = Math.round(labor_discount_val);*/
+					// var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
 
-					var total_discount = discount_val + labor_discount_val;
+					// var total_discount = discount_val + labor_discount_val;
+					var total_discount = discount_val;
 					total_discount = parseFloat(total_discount).toFixed(2);
 					var old_discount = total_discount / qty;
 					old_discount = parseFloat(old_discount).toFixed(2);
@@ -2233,20 +2218,16 @@
 
 					rate = parseFloat(rate) - parseFloat(total_discount);
 					var price = rate / qty;
-					/*price = Math.round(price);*/
 
-					/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
 					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
 
 				}
 				else
 				{
 					var price = rate / qty;
-					/*price = Math.round(price);*/
 
 					if(qty != 0)
 					{
-						/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
 						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
 					}
 
@@ -2259,37 +2240,33 @@
 
 				rate = parseFloat(rate);
 				rate = rate.toFixed(2);
-				/*rate = Math.round(rate);*/
 
 				total = parseFloat(total) + parseFloat(rate);
 				total = total.toFixed(2);
-				/*total = Math.round(total);*/
 
 				$(this).parent().find('#rate').val(rate);
 				$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate.replace(/\./g, ','));
-				/*$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate);*/
 
 
 				var art = price_before_labor;
 				price_before_labor_total = parseFloat(price_before_labor_total) + parseFloat(art);
 				price_before_labor_total = parseFloat(price_before_labor_total).toFixed(2);
 
-				var arb = labor_impact;
-				labor_cost_total = parseFloat(labor_cost_total) + parseFloat(arb);
-				labor_cost_total = parseFloat(labor_cost_total).toFixed(2);
+				// var arb = labor_impact;
+				// labor_cost_total = parseFloat(labor_cost_total) + parseFloat(arb);
+				// labor_cost_total = parseFloat(labor_cost_total).toFixed(2);
 
 			});
 
 			var net_amount = (total / 121) * 100;
 			net_amount = parseFloat(net_amount).toFixed(2);
-			//net_amount = Math.round(net_amount);
 
 			var tax_amount = total - net_amount;
 			tax_amount = parseFloat(tax_amount).toFixed(2);
 
 			$('#total_amount').val(total.replace(/\./g, ','));
 			$('#price_before_labor_total').val(price_before_labor_total.replace(/\./g, ','));
-			$('#labor_cost_total').val(labor_cost_total.replace(/\./g, ','));
+			// $('#labor_cost_total').val(labor_cost_total.replace(/\./g, ','));
 			$('#net_amount').val(net_amount.replace(/\./g, ','));
 			$('#tax_amount').val(tax_amount.replace(/\./g, ','));
 		}
@@ -2305,7 +2282,7 @@
 
 			$.ajax({
 				type: "GET",
-				data: "id=" + id,
+				data: "id=" + id + '&type=floors',
 				url: "<?php echo url('/aanbieder/get-supplier-products')?>",
 				success: function (data) {
 
@@ -2322,8 +2299,8 @@
 					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
 					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
 					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+					// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+					// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 					$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -2391,14 +2368,27 @@
 
 					if (data != '') {
 
+						if(data.estimated_price_per_box)
+						{
+							var estimated_price_per_box = data.estimated_price_per_box;
+							estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
+							estimated_price_per_box_old = data.estimated_price_per_box;
+						}
+						else
+						{
+							var estimated_price_per_box = 0;
+							estimated_price_per_box_old = 0;
+						}
+
 						$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-						$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-						$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(1);
+						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
+						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
+						// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+						// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
 						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
@@ -2468,9 +2458,13 @@
 							$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
 						}
-					}
 
-					/*calculate_total();*/
+						$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(estimated_price_per_box_old);
+
+						calculate_total();
+					}
 
 					var windowsize = $(window).width();
 
@@ -2577,10 +2571,10 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -2595,10 +2589,10 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -2614,10 +2608,10 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -2847,10 +2841,10 @@
 									labor = parseFloat(labor).toFixed(2);
 								}
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
 								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
@@ -2861,10 +2855,10 @@
 							}
 						}
 						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -2945,10 +2939,10 @@
 								});
 
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -2964,10 +2958,10 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -2983,10 +2977,10 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -3216,10 +3210,10 @@
 									labor = parseFloat(labor).toFixed(2);
 								}
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
 								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
@@ -3229,10 +3223,10 @@
 							}
 						}
 						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -3281,7 +3275,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, discount = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -3348,7 +3342,7 @@
 					'                                                                </select>\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="width item4 content" style="width: 10%;">\n' +
+					'                                                            <div class="width item4 content" style="width: 13%;">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">Width</label>\n' +
 					'\n' +
@@ -3358,7 +3352,7 @@
 					'                                                                </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="height item5 content" style="width: 10%;">\n' +
+					'                                                            <div class="height item5 content" style="width: 13%;">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">Height</label>\n' +
 					'\n' +
@@ -3370,21 +3364,20 @@
 					'\n' +
 					'                                                            <div class="content item6" style="width: 7%;">\n' +
 					'\n' +
+					'                       									 	<label class="content-label">Qty</label>\n' +
+					'\n' +
+					'																 <div style="display: flex;align-items: center;">\n' +
+					'																 	<input type="text" name="qty[]" maskedFormat="9,1" class="form-control qty res-white">\n' +
+					'																 </div>\n' +
+					'                                                            </div>\n' +
+					'\n' +
+					'                                                            <div class="content item7" style="width: 8%;">\n' +
+					'\n' +
 					'                       									 	<label class="content-label">€ Art.</label>\n' +
 					'\n' +
 					'																 <div style="display: flex;align-items: center;">\n' +
 					'																 	<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
 					'																	<input type="hidden" class="price_before_labor_old">\n' +
-					'																 </div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item7" style="width: 7%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Arb.</label>\n' +
-					'\n' +
-					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">\n' +
-					'                                                                	<input type="hidden" class="labor_impact_old">\n' +
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -3621,21 +3614,20 @@
 					'\n' +
 					'                                                            <div class="content item6" style="width: 7%;">\n' +
 					'\n' +
-					'                       									 	<label class="content-label">€ Art.</label>\n' +
+					'                       									 	<label class="content-label">Qty</label>\n' +
 					'\n' +
 					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
-					'																	<input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
+					'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" class="form-control qty res-white">\n' +
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
 					'                                                            <div class="content item7" style="width: 7%;">\n' +
 					'\n' +
-					'                       									 	<label class="content-label">€ Arb.</label>\n' +
+					'                       									 	<label class="content-label">€ Art.</label>\n' +
 					'\n' +
 					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input value="' + labor_impact + '" type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">\n' +
-					'                                                                	<input value="' + labor_impact_old + '" type="hidden" class="labor_impact_old">\n' +
+					'																 	<input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
+					'																	<input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -4111,8 +4103,6 @@
             var retailer_margin = current.find('#retailer_margin').val();
 			var price_before_labor = current.find('.price_before_labor').val();
 			var price_before_labor_old = current.find('.price_before_labor_old').val();
-			var labor_impact = current.find('.labor_impact').val();
-			var labor_impact_old = current.find('.labor_impact_old').val();
 			var discount = current.find('.discount-box').find('.discount_values').val();
 			var labor_discount = current.find('.labor-discount-box').find('.labor_discount_values').val();
 			var total_discount = current.find('.total_discount').val();
@@ -4129,7 +4119,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount, labor_discount, total_discount, total_discount_old, last_column);
+			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, discount, labor_discount, total_discount, total_discount_old, last_column);
 
 		});
 
@@ -4346,10 +4336,10 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -4365,10 +4355,10 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -4384,10 +4374,10 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -4617,10 +4607,10 @@
 									labor = parseFloat(labor).toFixed(2);
 								}
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
 								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
@@ -4631,10 +4621,10 @@
 						}
 						else {
 
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -4711,10 +4701,10 @@
 									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -4730,10 +4720,10 @@
 									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -4749,10 +4739,10 @@
 									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -4984,10 +4974,10 @@
 									labor = parseFloat(labor).toFixed(2);
 								}
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
 								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
@@ -4997,10 +4987,10 @@
 							}
 						}
 						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
@@ -5025,41 +5015,41 @@
 
 		});
 
-		$(document).on('input', '.labor_impact', function () {
+		// $(document).on('input', '.labor_impact', function () {
 
-			var value = $(this).val();
-			value = value.replace(/\,/g, '.');
-			var row_id = $(this).parents(".content-div").data('id');
-			var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
-			price_before_labor = price_before_labor.replace(/\,/g, '.');
-			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
-			var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-			total_discount = total_discount.replace(/\,/g, '.');
+		// 	var value = $(this).val();
+		// 	value = value.replace(/\,/g, '.');
+		// 	var row_id = $(this).parents(".content-div").data('id');
+		// 	var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
+		// 	price_before_labor = price_before_labor.replace(/\,/g, '.');
+		// 	var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+		// 	var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
+		// 	total_discount = total_discount.replace(/\,/g, '.');
 
-			if (!value) {
-				value = 0;
-			}
+		// 	if (!value) {
+		// 		value = 0;
+		// 	}
 
-			var total = parseFloat(price_before_labor) + parseFloat(value);
-			total = total + parseFloat(total_discount);
-			total = parseFloat(total);
-			total = total.toFixed(2);
-			var price = total;
-			total = total / qty;
-			total = parseFloat(total).toFixed(2);
-			//total = Math.round(total);
+		// 	var total = parseFloat(price_before_labor) + parseFloat(value);
+		// 	total = total + parseFloat(total_discount);
+		// 	total = parseFloat(total);
+		// 	total = total.toFixed(2);
+		// 	var price = total;
+		// 	total = total / qty;
+		// 	total = parseFloat(total).toFixed(2);
+		// 	//total = Math.round(total);
 
-			var new_old_value = value / qty;
-			new_old_value = parseFloat(new_old_value).toFixed(2);
+		// 	var new_old_value = value / qty;
+		// 	new_old_value = parseFloat(new_old_value).toFixed(2);
 
-			$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(new_old_value);
-			$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
-			$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-			$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+		// 	$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(new_old_value);
+		// 	$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
+		// 	$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
+		// 	$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
-			calculate_total(0,1);
+		// 	calculate_total(0,1);
 
-		});
+		// });
 
 		$(document).on('input', '#childsafe_x, #childsafe_y', function () {
 
