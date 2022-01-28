@@ -169,7 +169,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Advice Price Quantity</label>
                                                             <div class="col-sm-6">
-                                                                <input value="{{isset($cats) ? str_replace('.', ',', floatval($cats->estimated_price_quantity)) : null}}" maskedformat="9,1" class="form-control" name="estimated_price_quantity" id="estimated_price_quantity" placeholder="Advice Price Quantity" type="text">
+                                                                <input value="{{isset($cats) ? $cats->estimated_price_quantity : null}}" class="form-control" maskedformat="9,1" name="estimated_price_quantity" id="estimated_price_quantity" placeholder="Advice Price Quantity" type="text">
                                                             </div>
                                                         </div>
                                                         
@@ -3758,7 +3758,21 @@
 
         });
 
-        $(document).on('keypress', "#estimated_price_per_box, #estimated_price_quantity", function(e){
+        $(document).on('keypress', "#estimated_price_quantity", function(e){
+
+            e = e || window.event;
+            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+            var val = String.fromCharCode(charCode);
+
+            if (!val.match(/^[0-9]+$/))  // For characters validation
+            {
+                e.preventDefault();
+                return false;
+            }
+
+        });
+
+        $(document).on('keypress', "#estimated_price_per_box", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -3803,7 +3817,6 @@
             }
 
             var estimated_price_per_box = estimated_price_per_box.replace(/\,/g, '.');
-            var estimated_price_quantity = estimated_price_quantity.replace(/\,/g, '.');
             var estimated_price = estimated_price_per_box/estimated_price_quantity;
 
             if (!isNaN(estimated_price) && estimated_price !== Infinity) {
