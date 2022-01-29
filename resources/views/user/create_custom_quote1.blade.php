@@ -162,8 +162,6 @@
                                                                     <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
 																	<input type="hidden" value="" id="estimated_price_quantity" name="estimated_price_quantity[]">
-																	<input type="hidden" value="" id="width_unit" name="width_unit[]">
-																	<input type="hidden" value="" id="height_unit" name="height_unit[]">
 
 																	<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
 
@@ -379,8 +377,6 @@
                                                                     <input type="hidden" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" id="retailer_margin" name="retailer_margin[]">
 																	<input type="hidden" id="estimated_price_quantity" name="estimated_price_quantity[]">
-																	<input type="hidden" id="width_unit" name="width_unit[]">
-																	<input type="hidden" id="height_unit" name="height_unit[]">
 
 																	<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
 
@@ -936,7 +932,7 @@
 
 																			<div class="m-box">
 																				<input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
-																				<input style="border: 0;outline: none;" readonly="" type="text" name="width_unit1[]" class="measure-unit">
+																				<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
 																			</div>
 
 																		</div>
@@ -945,7 +941,7 @@
 
 																			<div class="m-box">
 																				<input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
-																				<input style="border: 0;outline: none;" readonly="" type="text" name="height_unit1[]" class="measure-unit">
+																				<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
 																			</div>
 
 																		</div>
@@ -954,7 +950,7 @@
 
 																			<div class="m-box">
 																				<input class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
-																				<input style="border: 0;outline: none;" value="%" readonly="" type="text" class="measure-unit">
+																				<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																			</div>
 
 																		</div>
@@ -963,7 +959,7 @@
 
 																			<div class="m-box">
 																				<input style="border: 1px solid #ccc;" class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
-																				<input style="border: 0;outline: none;" value="m2" readonly="" type="text" class="measure-unit">
+																				<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																			</div>
 
 																		</div>
@@ -972,7 +968,7 @@
 
 																			<div class="m-box">
 																				<input class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;" readonly autocomplete="off" name="box_quantity_supplier1[]" type="number">
-																				<input style="border: 0;outline: none;" value="m2" readonly="" type="text" class="measure-unit">
+																				<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																			</div>
 
 																		</div>
@@ -2289,6 +2285,12 @@
 				var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
 				price_before_labor = price_before_labor * qty;
 				price_before_labor = parseFloat(price_before_labor).toFixed(2);
+
+				if(isNaN(price_before_labor))
+				{
+					price_before_labor = 0;
+				}
+
 				$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 
 				if(qty_changed == 0)
@@ -2320,13 +2322,30 @@
 					// var total_discount = discount_val + labor_discount_val;
 					var total_discount = discount_val;
 					total_discount = parseFloat(total_discount).toFixed(2);
+
+					if(isNaN(total_discount))
+					{
+						total_discount = 0;
+					}
+
 					var old_discount = total_discount / qty;
 					old_discount = parseFloat(old_discount).toFixed(2);
+
+					if(isNaN(old_discount))
+					{
+						old_discount = 0;
+					}
+
 					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val('-' + total_discount.replace(/\./g, ','));
 					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val('-' + old_discount);
 
 					rate = parseFloat(rate) - parseFloat(total_discount);
 					var price = rate / qty;
+
+					if(isNaN(price))
+					{
+						price = 0;
+					}
 
 					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
 
@@ -2334,6 +2353,11 @@
 				else
 				{
 					var price = rate / qty;
+
+					if(isNaN(price))
+					{
+						price = 0;
+					}
 
 					if(qty != 0)
 					{
@@ -2344,6 +2368,11 @@
 					old_discount = old_discount * qty;
 					old_discount = parseFloat(old_discount).toFixed(2);
 
+					if(isNaN(old_discount))
+					{
+						old_discount = 0;
+					}
+
 					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(old_discount.replace(/\./g, ','));
 				}
 
@@ -2352,6 +2381,11 @@
 
 				total = parseFloat(total) + parseFloat(rate);
 				total = total.toFixed(2);
+
+				if(isNaN(rate))
+				{
+					rate = 0;
+				}
 
 				$(this).parent().find('#rate').val(rate);
 				$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate.replace(/\./g, ','));
@@ -2366,6 +2400,12 @@
 				// labor_cost_total = parseFloat(labor_cost_total).toFixed(2);
 
 			});
+
+
+			if(isNaN(total))
+			{
+				total = 0;
+			}
 
 			var net_amount = (total / 121) * 100;
 			net_amount = parseFloat(net_amount).toFixed(2);
@@ -2561,30 +2601,30 @@
 							.end()
 							.append('<option value="">Select Model</option>' + options1);
 
-						if ((typeof (data) != "undefined") && data.measure) {
+						// if ((typeof (data) != "undefined") && data.measure) {
 							
-							if(data.measure == 'M2')
-							{
-								data.measure = 'm²';
-							}
-							else if(data.measure == 'M1')
-							{
-								data.measure = 'm';
-							}
+						// 	if(data.measure == 'M2')
+						// 	{
+						// 		data.measure = 'm²';
+						// 	}
+						// 	else if(data.measure == 'M1')
+						// 	{
+						// 		data.measure = 'm';
+						// 	}
 
-							$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val(data.measure);
-							$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val(data.measure);
+						// 	$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val(data.measure);
+						// 	$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val(data.measure);
 
-							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val(data.measure);
-							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val(data.measure);
-						}
-						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val('');
+						// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val(data.measure);
+						// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val(data.measure);
+						// }
+						// else {
+						// 	$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val('');
+						// 	$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val('');
 
-							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val('');
-							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val('');
-						}
+						// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val('');
+						// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val('');
+						// }
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
 						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
@@ -3404,7 +3444,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, height = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -3437,8 +3477,6 @@
                     '                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
                     '                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
 					'                                                            <input type="hidden" value="" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
-					'                                                            <input type="hidden" value="" id="width_unit" name="width_unit[]">\n' +
-					'                                                            <input type="hidden" value="" id="height_unit" name="height_unit[]">\n' +
 					'\n' +
 					'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
 					'\n' +
@@ -3706,9 +3744,7 @@
 					'                                                            <input type="hidden" value="' + base_price + '" id="base_price" name="base_price[]">\n' +
                     '                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
                     '                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
-					'                                                            <input type="hidden" value=" '+ estimated_price_quantity +' " id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
-					'                                                            <input type="hidden" value=" '+ width_unit +' " id="width_unit" name="width_unit[]">\n' +
-					'                                                            <input type="hidden" value=" '+ height_unit +' " id="height_unit" name="height_unit[]">\n' +
+					'                                                            <input type="hidden" value="' + estimated_price_quantity + '" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
 					'\n' +
 					'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
 					'\n' +
@@ -3740,7 +3776,7 @@
 					'\n' +
 					'                                                                <div class="m-box">\n' +
 					'                                                                	<input ' + width_readonly + ' value="' + width + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
-					'                                                                   <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="' + width_unit + '">\n' +
+					'                                                                   <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit">\n' +
 					'                                                                </div>\n' +
 					'\n' +
 					'                                                            </div>\n' +
@@ -3751,7 +3787,7 @@
 					'\n' +
 					'                                                                <div class="m-box">\n' +
 					'                                                                	<input ' + height_readonly + ' value="' + height + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
-					'                                                                	<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="' + height_unit + '">\n' +
+					'                                                                	<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit">\n' +
 					'                                                                </div>\n' +
 					'\n' +
 					'                                                            </div>\n' +
@@ -4006,7 +4042,6 @@
 			if (!copy) {
 
 				var box_quantity = $('#products_table').find(`[data-id='${product_row}']`).find('#estimated_price_quantity').val();
-				var measure_unit = $('#products_table').find(`[data-id='${product_row}']`).find('#width_unit').val();
 
 				$(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="' + rowCount + '">\n' +
 					'\n' +
@@ -4020,7 +4055,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width'+product_row+'[]" type="text">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" value="'+measure_unit+'" readonly="" type="text" name="width_unit'+product_row+'[]" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit'+product_row+'[]" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4032,7 +4067,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height'+product_row+'[]" type="text">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" value="'+measure_unit+'" readonly="" type="text" name="height_unit'+product_row+'[]" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit'+product_row+'[]" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4044,7 +4079,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" id="cutting_lose_percentage" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly value="%" type="text" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4056,7 +4091,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" class="form-control total_boxes m-input" readonly autocomplete="off" name="total_boxes'+product_row+'[]" type="number">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly value="m2" type="text" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4068,7 +4103,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" value="'+box_quantity+'" class="form-control box_quantity_supplier m-input" readonly autocomplete="off" name="box_quantity_supplier'+product_row+'[]" type="number">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly value="m2" type="text" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4156,7 +4191,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" id="cutting_lose_percentage" value="'+cutting_lose_percentage+'" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly value="%" type="text" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4168,7 +4203,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" value="'+total_boxes+'" class="form-control total_boxes m-input" readonly autocomplete="off" name="total_boxes'+product_row+'[]" type="number">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly value="m2" type="text" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4180,7 +4215,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" value="'+box_quantity_supplier+'" class="form-control box_quantity_supplier m-input" readonly autocomplete="off" name="box_quantity_supplier'+product_row+'[]" type="number">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly value="m2" type="text" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4229,6 +4264,8 @@
 					'                                                            </div>\n' +
 					'\n' +
 					'                                                        </div>');
+
+					calculate_qty(product_row);
 			}
 		}
 
@@ -4299,12 +4336,14 @@
 		$(document).on('click', '.remove-attribute-row', function () {
 
 			var rowCount = $('.attributes_table .attribute-content-div').length;
+			var product_row = $(this).parents('.attributes_table').data('id');
 
 			var current = $(this).parents('.attribute-content-div');
 
 			if (rowCount != 1) {
 
 				current.remove();
+				calculate_qty(product_row);
 
 			}
 
@@ -4507,15 +4546,13 @@
 			var model = current.find('.js-data-example-ajax3').val();
 			var model_impact_value = current.find('.model_impact_value').val();
 			var width = current.find('.width').find('.m-input').val();
-			var width_unit = current.find('#width_unit').val();
 			var height = current.find('.height').find('.m-input').val();
-			var height_unit = current.find('#height_unit').val();
 			var price_text = current.find('.price').text();
 			var features = $('#menu1').find(`[data-id='${id}']`).html();
 			var childsafe_question = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-select').val();
 			var childsafe_answer = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-answer').val();
 			var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
-			var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
+			var qty = current.find('.qty').val();
 			var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
 			var childsafe_x = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_x').val();
 			var childsafe_y = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_y').val();
@@ -4543,7 +4580,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity);
+			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, height, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity);
 
 		});
 
@@ -4755,9 +4792,9 @@
 			if (width && height && cutting_lose_percentage && box_quantity) {
 
 				var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
-				total_quantity = parseFloat(total_quantity).toFixed(2);
+				total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
 				var total_boxes = total_quantity/box_quantity;
-				total_boxes = parseFloat(total_boxes).toFixed(2);
+				total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
 
 				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
 				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity);
@@ -4769,7 +4806,31 @@
 				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
             }
 
+			calculate_qty(product_row);
+
 		});
+
+		function calculate_qty(product_row)
+		{
+			var total_qty = 0;
+			
+			$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find('.box_quantity').each(function (i, obj) {
+
+				var qty = 0;
+
+				if($(obj).val())
+				{
+					qty = parseFloat($(obj).val());
+				}
+
+				total_qty = total_qty + qty;
+
+			});
+
+			$("#products_table").find(`.content-div[data-id='${product_row}']`).find('.qty').val(total_qty);
+
+			calculate_total(1,0);
+		}
 
 		// $(document).on('input', '.labor_impact', function () {
 
