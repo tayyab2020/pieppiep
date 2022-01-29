@@ -935,7 +935,7 @@
 																		<div class="attribute item2 width-box" style="width: 10%;">
 
 																			<div class="m-box">
-																				<input style="border: 1px solid #ccc;" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
+																				<input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
 																				<input style="border: 0;outline: none;" readonly="" type="text" name="width_unit1[]" class="measure-unit">
 																			</div>
 
@@ -944,7 +944,7 @@
 																		<div class="attribute item3 height-box" style="width: 10%;">
 
 																			<div class="m-box">
-																				<input style="border: 1px solid #ccc;" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
+																				<input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
 																				<input style="border: 0;outline: none;" readonly="" type="text" name="height_unit1[]" class="measure-unit">
 																			</div>
 
@@ -953,7 +953,7 @@
 																		<div class="attribute item4" style="width: 10%;">
 
 																			<div class="m-box">
-																				<input class="form-control cutting_lose_percentage m-input" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
+																				<input class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
 																				<input style="border: 0;outline: none;" value="%" readonly="" type="text" class="measure-unit">
 																			</div>
 
@@ -3404,7 +3404,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -3436,6 +3436,9 @@
 					'                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
                     '                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
                     '                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
+					'                                                            <input type="hidden" value="" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
+					'                                                            <input type="hidden" value="" id="width_unit" name="width_unit[]">\n' +
+					'                                                            <input type="hidden" value="" id="height_unit" name="height_unit[]">\n' +
 					'\n' +
 					'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
 					'\n' +
@@ -3703,6 +3706,9 @@
 					'                                                            <input type="hidden" value="' + base_price + '" id="base_price" name="base_price[]">\n' +
                     '                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
                     '                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
+					'                                                            <input type="hidden" value=" '+ estimated_price_quantity +' " id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
+					'                                                            <input type="hidden" value=" '+ width_unit +' " id="width_unit" name="width_unit[]">\n' +
+					'                                                            <input type="hidden" value=" '+ height_unit +' " id="height_unit" name="height_unit[]">\n' +
 					'\n' +
 					'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
 					'\n' +
@@ -4012,7 +4018,7 @@
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width'+product_row+'[]" type="text">\n' +
+					'                                                                <input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width'+product_row+'[]" type="text">\n' +
 					'\n' +
 					'                                                                <input style="border: 0;outline: none;" value="'+measure_unit+'" readonly="" type="text" name="width_unit'+product_row+'[]" class="measure-unit">\n' +
 					'\n' +
@@ -4024,7 +4030,7 @@
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height'+product_row+'[]" type="text">\n' +
+					'                                                                <input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height'+product_row+'[]" type="text">\n' +
 					'\n' +
 					'                                                                <input style="border: 0;outline: none;" value="'+measure_unit+'" readonly="" type="text" name="height_unit'+product_row+'[]" class="measure-unit">\n' +
 					'\n' +
@@ -4036,7 +4042,7 @@
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' +
+					'                                                                <input style="border: 1px solid #ccc;" id="cutting_lose_percentage" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' +
 					'\n' +
 					'                                                                <input style="border: 0;outline: none;" readonly value="%" type="text" class="measure-unit">\n' +
 					'\n' +
@@ -4124,7 +4130,7 @@
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" value="'+width+'" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width'+product_row+'[]" type="text">\n' +
+					'                                                                <input style="border: 1px solid #ccc;" id="width" value="'+width+'" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width'+product_row+'[]" type="text">\n' +
 					'\n' +
 					'                                                                <input style="border: 0;outline: none;" value="'+width_unit+'" readonly="" type="text" name="width_unit'+product_row+'[]" class="measure-unit">\n' +
 					'\n' +
@@ -4136,7 +4142,7 @@
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" value="'+height+'" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height'+product_row+'[]" type="text">\n' +
+					'                                                                <input style="border: 1px solid #ccc;" id="height" value="'+height+'" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height'+product_row+'[]" type="text">\n' +
 					'\n' +
 					'                                                                <input style="border: 0;outline: none;" value="'+height_unit+'" readonly="" type="text" name="height_unit'+product_row+'[]" class="measure-unit">\n' +
 					'\n' +
@@ -4148,7 +4154,7 @@
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" value="'+cutting_lose_percentage+'" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' +
+					'                                                                <input style="border: 1px solid #ccc;" id="cutting_lose_percentage" value="'+cutting_lose_percentage+'" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' +
 					'\n' +
 					'                                                                <input style="border: 0;outline: none;" readonly value="%" type="text" class="measure-unit">\n' +
 					'\n' +
@@ -4501,9 +4507,9 @@
 			var model = current.find('.js-data-example-ajax3').val();
 			var model_impact_value = current.find('.model_impact_value').val();
 			var width = current.find('.width').find('.m-input').val();
-			var width_unit = current.find('.width').find('.measure-unit').val();
+			var width_unit = current.find('#width_unit').val();
 			var height = current.find('.height').find('.m-input').val();
-			var height_unit = current.find('.height').find('.measure-unit').val();
+			var height_unit = current.find('#height_unit').val();
 			var price_text = current.find('.price').text();
 			var features = $('#menu1').find(`[data-id='${id}']`).html();
 			var childsafe_question = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-select').val();
@@ -4525,6 +4531,7 @@
 			var total_discount_old = current.find('.total_discount_old').val();
 			var last_column = current.find('#next-row-td').html();
 			var menu2 = $('#menu2').find(`.attributes_table[data-id='${id}']`).children().clone();
+			var estimated_price_quantity = current.find('#estimated_price_quantity').val();
 
 			var width_readonly = '';
 			var height_readonly = '';
@@ -4536,7 +4543,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2);
+			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity);
 
 		});
 
@@ -4697,7 +4704,7 @@
 
 		});
 
-		$(document).on('focusout', "input[name='width[]'], input[name='height[]']", function (e) {
+		$(document).on('focusout', ".width, .height", function (e) {
 
 			if ($(this).val().slice($(this).val().length - 1) == ',') {
 				var val = $(this).val();
@@ -4706,733 +4713,60 @@
 			}
 		});
 
-		$(document).on('input', "input[name='width[]']", function (e) {
+		$(document).on('input', ".width, .height, .cutting_lose_percentage", function (e) {
 
 			var current = $(this);
-			var row_id = current.parents(".content-div").data('id');
+			var product_row = current.parents(".attributes_table").data('id');
+			var row_id = current.parents(".attribute-content-div").data('id');
+
+			if(current.attr('id') == 'width')
+			{
+				var width = current.val();
+				width = width.replace(/\,/g, '.');
+
+				var height = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.height').val();
+				height = height.replace(/\,/g, '.');
+
+				var cutting_lose_percentage = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.cutting_lose_percentage').val();
+			}
+			else if(current.attr('id') == 'height')
+			{
+				var height = current.val();
+				height = height.replace(/\,/g, '.');
+				
+				var width = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.width').val();
+				width = width.replace(/\,/g, '.');
+
+				var cutting_lose_percentage = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.cutting_lose_percentage').val();
+			}
+			else
+			{
+				var cutting_lose_percentage = current.val();
+
+				var width = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.width').val();
+				width = width.replace(/\,/g, '.');
+
+				var height = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.height').val();
+				height = height.replace(/\,/g, '.');
+			}
+			
+			var box_quantity = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity_supplier').val();
+
+			if (width && height && cutting_lose_percentage && box_quantity) {
+
+				var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
+				total_quantity = parseFloat(total_quantity).toFixed(2);
+				var total_boxes = total_quantity/box_quantity;
+				total_boxes = parseFloat(total_boxes).toFixed(2);
+
+				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
+				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity);
 
-			var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
-			var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
-
-			var width = current.val();
-			width = width.replace(/\,/g, '.');
-
-			var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
-			height = height.replace(/\,/g, '.');
-
-			var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
-			var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
-			var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-			var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
-			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-
-			if (width && height && color && model && product) {
-
-				if ($(this).parents(".content-div").find('.suppliers').hasClass('hide')) {
-					var margin = 0;
-				}
-				else {
-					var margin = 1;
-				}
-
-				$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-				// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-
-				$.ajax({
-					type: "GET",
-					data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
-					url: "<?php echo url('/aanbieder/get-price')?>",
-					success: function (data) {
-
-						if (typeof data[0].value !== 'undefined') {
-
-							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-							if (data[0].value === 'both') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
-								});
-
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
-							}
-							else if (data[0].value === 'x_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
-								});
-
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
-							}
-							else if (data[0].value === 'y_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
-								});
-
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
-							}
-							else {
-								$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
-								var childsafe = data[3].childsafe;
-
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-
-								if (price_based_option == 1) {
-									var price = data[0].value;
-									var org = data[0].value;
-								}
-								else {
-									var price = base_price;
-									var org = base_price;
-								}
-
-								var basic_price = price;
-
-								/*if (margin == 1) {
-									if (data[2]) {
-										price = parseFloat(price);
-										var supplier_margin = data[2].margin;
-										var retailer_margin = data[2].retailer_margin;
-
-                                        $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val(supplier_margin);
-                                        $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val(retailer_margin);
-
-										if (supplier_margin && retailer_margin) {
-											price = (price / supplier_margin) * retailer_margin;
-											price = price.toFixed(2);
-										}
-									}
-								}*/
-
-								var features = '';
-								var count_features = 0;
-								var f_value = 0;
-                                var m1_impact = data[3].m1_impact;
-                                var m2_impact = data[3].m2_impact;
-                                var m1_impact_value = 0;
-                                var m2_impact_value = 0;
-
-								if (childsafe == 1) {
-
-								    count_features = count_features + 1;
-
-									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div></div>\n';
-
-									features = features + content;
-
-								}
-
-								if (ladderband == 1) {
-
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
-
-									features = features + content;
-
-								}
-
-								$.each(data[1], function (index, value) {
-
-                                    count_features = count_features + 1;
-
-									var opt = '<option value="0">Select Feature</option>';
-
-									$.each(value.features, function (index1, value1) {
-
-										opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
-
-									});
-
-									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
-									}
-									else {
-										var icon = '';
-									}
-
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-										'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div>' + icon + '</div>\n';
-
-									features = features + content;
-
-								});
-
-                                if(count_features > 0)
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-                                }
-                                else
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-                                }
-
-								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-									$('#menu1').find(`[data-id='${row_id}']`).remove();
-								}
-
-								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-									'\n' +
-									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-									'</div></div>' + features +
-									'</div>');
-
-								if (data[3].max_size) {
-
-									var sq = (width * height) / 10000;
-									var max_size = data[3].max_size;
-
-									if (sq > max_size) {
-										Swal.fire({
-											icon: 'error',
-											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
-										});
-
-										current.parent().find('.f_area').val(1);
-									}
-								}
-								else {
-									current.parent().find('.f_area').val(0);
-								}
-
-                                var model_impact_value = data[3].value;
-
-                                if (m1_impact == 1) {
-
-                                    m1_impact_value = model_impact_value * (width / 100);
-
-                                }
-
-                                if (m2_impact == 1) {
-
-                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
-
-                                }
-
-                                if (data[3].price_impact == 1) {
-
-                                    if (data[3].impact_type == 0) {
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-                                        price = price.toFixed(2);
-
-                                    }
-                                    else {
-
-                                        var per = (model_impact_value) / 100;
-                                        model_impact_value = basic_price * per;
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-                                        price = price.toFixed(2);
-                                    }
-
-                                }
-
-                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
-
-                                if(margin == 1)
-                                {
-                                    if (data[2]) {
-
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if (supplier_margin && retailer_margin) {
-                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
-                                        }
-                                    }
-                                }
-
-                                price = parseFloat(price).toFixed(2);
-
-								var price_before_labor = parseFloat(price).toFixed(2);
-								var labor = 0;
-
-								if (data[4]) {
-									labor = data[4].labor;
-									labor = labor * (width / 100);
-									//labor = Math.round(labor);
-									price = parseFloat(price) + parseFloat(labor);
-									price = price.toFixed(2);
-									labor = parseFloat(labor).toFixed(2);
-								}
-
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
-								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-							}
-						}
-						else {
-
-							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-						}
-
-						calculate_total();
-					}
-				});
 			}
 			else
             {
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-            }
-
-		});
-
-		$(document).on('input', "input[name='height[]']", function (e) {
-
-			var current = $(this);
-			var row_id = current.parents(".content-div").data('id');
-
-			var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
-			var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
-
-			var height = current.val();
-			height = height.replace(/\,/g, '.');
-
-			var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
-			width = width.replace(/\,/g, '.');
-
-			var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
-			var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
-			var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-			var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
-			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-
-			if (width && height && color && model && product) {
-
-				if ($(this).parents(".content-div").find('.suppliers').hasClass('hide')) {
-					var margin = 0;
-				}
-				else {
-					var margin = 1;
-				}
-
-				$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-				// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-
-				$.ajax({
-					type: "GET",
-					data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
-					url: "<?php echo url('/aanbieder/get-price')?>",
-					success: function (data) {
-
-						if (typeof data[0].value !== 'undefined') {
-
-							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-							if (data[0].value === 'both') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
-								});
-
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
-							}
-							else if (data[0].value === 'x_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
-								});
-
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
-							}
-							else if (data[0].value === 'y_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
-								});
-
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
-							}
-							else {
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
-								var childsafe = data[3].childsafe;
-
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-
-								if (price_based_option == 1) {
-									var price = data[0].value;
-									var org = data[0].value;
-								}
-								else {
-									var price = base_price;
-									var org = base_price;
-								}
-
-								var basic_price = price;
-
-								/*if (margin == 1) {
-									if (data[2]) {
-										price = parseFloat(price);
-										var supplier_margin = data[2].margin;
-										var retailer_margin = data[2].retailer_margin;
-
-                                        $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val(supplier_margin);
-                                        $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val(retailer_margin);
-
-										if (supplier_margin && retailer_margin) {
-											price = (price / supplier_margin) * retailer_margin;
-											price = price.toFixed(2);
-										}
-									}
-								}*/
-
-								var features = '';
-								var count_features = 0;
-								var f_value = 0;
-                                var m1_impact = data[3].m1_impact;
-                                var m2_impact = data[3].m2_impact;
-                                var m1_impact_value = 0;
-                                var m2_impact_value = 0;
-
-								if (childsafe == 1) {
-
-								    count_features = count_features + 1;
-
-									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div></div>\n';
-
-									features = features + content;
-
-								}
-
-								if (ladderband == 1) {
-
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
-
-									features = features + content;
-
-								}
-
-								$.each(data[1], function (index, value) {
-
-                                    count_features = count_features + 1;
-
-									var opt = '<option value="0">Select Feature</option>';
-
-									$.each(value.features, function (index1, value1) {
-
-										opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
-
-									});
-
-									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
-									}
-									else {
-										var icon = '';
-									}
-
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-										'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div>' + icon + '</div>\n';
-
-									features = features + content;
-
-								});
-
-                                if(count_features > 0)
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-                                }
-                                else
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-                                }
-
-								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-									$('#menu1').find(`[data-id='${row_id}']`).remove();
-								}
-
-								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-									'\n' +
-									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-									'</div></div>' + features +
-									'</div>');
-
-								if (data[3].max_size) {
-
-									var sq = (width * height) / 10000;
-									var max_size = data[3].max_size;
-
-									if (sq > max_size) {
-										Swal.fire({
-											icon: 'error',
-											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
-										});
-
-										current.parent().find('.f_area').val(1);
-									}
-
-								}
-								else {
-									current.parent().find('.f_area').val(0);
-								}
-
-                                var model_impact_value = data[3].value;
-
-                                if (m1_impact == 1) {
-
-                                    m1_impact_value = model_impact_value * (width / 100);
-
-                                }
-
-                                if (m2_impact == 1) {
-
-                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
-
-                                }
-
-								if (data[3].price_impact == 1) {
-
-									if (data[3].impact_type == 0) {
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-										price = price.toFixed(2);
-
-									}
-									else {
-
-										var per = (model_impact_value) / 100;
-                                        model_impact_value = basic_price * per;
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-										price = price.toFixed(2);
-									}
-
-								}
-
-                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
-
-                                if(margin == 1)
-                                {
-                                    if (data[2]) {
-
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if (supplier_margin && retailer_margin) {
-                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
-                                        }
-                                    }
-                                }
-
-                                price = parseFloat(price).toFixed(2);
-
-								var price_before_labor = parseFloat(price).toFixed(2);
-								var labor = 0;
-
-								if (data[4]) {
-									labor = data[4].labor;
-									labor = labor * (width / 100);
-									//labor = Math.round(labor);
-									price = parseFloat(price) + parseFloat(labor);
-									price = price.toFixed(2);
-									labor = parseFloat(labor).toFixed(2);
-								}
-
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
-								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-							}
-						}
-						else {
-							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-						}
-
-						calculate_total();
-					}
-				});
-			}
-			else
-            {
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+                $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
             }
 
 		});
