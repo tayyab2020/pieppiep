@@ -2630,7 +2630,8 @@
 						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
 						$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(estimated_price_per_box_old);
 
-						calculate_total();
+						// calculate_total();
+						calculate_qty(row_id);
 					}
 
 					var windowsize = $(window).width();
