@@ -161,6 +161,9 @@
 																	<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
                                                                     <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
+																	<input type="hidden" value="" id="estimated_price_quantity" name="estimated_price_quantity[]">
+																	<input type="hidden" value="" id="width_unit" name="width_unit[]">
+																	<input type="hidden" value="" id="height_unit" name="height_unit[]">
 
 																	<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
 
@@ -375,6 +378,9 @@
 																	<input type="hidden" id="base_price" name="base_price[]">
                                                                     <input type="hidden" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" id="retailer_margin" name="retailer_margin[]">
+																	<input type="hidden" id="estimated_price_quantity" name="estimated_price_quantity[]">
+																	<input type="hidden" id="width_unit" name="width_unit[]">
+																	<input type="hidden" id="height_unit" name="height_unit[]">
 
 																	<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
 
@@ -2500,6 +2506,8 @@
 						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
 						$('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val(data.price_based_option);
 						$('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#estimated_price_quantity').val(data.estimated_price_quantity);
+						$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.box_quantity_supplier').val(data.estimated_price_quantity);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
@@ -2554,12 +2562,28 @@
 							.append('<option value="">Select Model</option>' + options1);
 
 						if ((typeof (data) != "undefined") && data.measure) {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val(data.measure);
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val(data.measure);
+							
+							if(data.measure == 'M2')
+							{
+								data.measure = 'm²';
+							}
+							else if(data.measure == 'M1')
+							{
+								data.measure = 'm';
+							}
+
+							$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val(data.measure);
+							$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val(data.measure);
+
+							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val(data.measure);
+							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val(data.measure);
 						}
 						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val('');
+
+							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val('');
+							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val('');
 						}
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
@@ -3975,6 +3999,9 @@
 
 			if (!copy) {
 
+				var box_quantity = $('#products_table').find(`[data-id='${product_row}']`).find('#estimated_price_quantity').val();
+				var measure_unit = $('#products_table').find(`[data-id='${product_row}']`).find('#width_unit').val();
+
 				$(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="' + rowCount + '">\n' +
 					'\n' +
 					'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
@@ -3987,7 +4014,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width'+product_row+'[]" type="text">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly="" type="text" name="width_unit'+product_row+'[]" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" value="'+measure_unit+'" readonly="" type="text" name="width_unit'+product_row+'[]" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -3999,7 +4026,7 @@
 					'\n' +
 					'                                                                <input style="border: 1px solid #ccc;" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height'+product_row+'[]" type="text">\n' +
 					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly="" type="text" name="height_unit'+product_row+'[]" class="measure-unit">\n' +
+					'                                                                <input style="border: 0;outline: none;" value="'+measure_unit+'" readonly="" type="text" name="height_unit'+product_row+'[]" class="measure-unit">\n' +
 					'\n' +
 					'                                                               </div>\n' +
 					'\n' +
@@ -4033,7 +4060,7 @@
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" class="form-control box_quantity_supplier m-input" readonly autocomplete="off" name="box_quantity_supplier'+product_row+'[]" type="number">\n' +
+					'                                                                <input style="border: 1px solid #ccc;" value="'+box_quantity+'" class="form-control box_quantity_supplier m-input" readonly autocomplete="off" name="box_quantity_supplier'+product_row+'[]" type="number">\n' +
 					'\n' +
 					'                                                                <input style="border: 0;outline: none;" readonly value="m2" type="text" class="measure-unit">\n' +
 					'\n' +
@@ -4243,6 +4270,7 @@
 			if (rowCount != 1) {
 
 				$('#menu1').find(`[data-id='${id}']`).remove();
+				$('#menu2').find(`.attributes_table[data-id='${id}']`).remove();
 				$('#myModal').find('.modal-body').find(`[data-id='${id}']`).remove();
 				$('#myModal2').find('.modal-body').find(`[data-id='${id}']`).remove();
 
