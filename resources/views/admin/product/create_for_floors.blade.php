@@ -512,6 +512,8 @@
 
                                                                         <div class="col-sm-3">
 
+                                                                        @if(count($key->images) > 0)
+
                                                                             <ul class="images-list">
                                                                                 @foreach($key->images as $image)
                                                                                     
@@ -519,6 +521,8 @@
 
                                                                                 @endforeach
                                                                             </ul>
+
+                                                                        @endif
 
                                                                             <style>
 

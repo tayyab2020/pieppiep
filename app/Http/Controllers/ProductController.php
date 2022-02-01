@@ -604,6 +604,7 @@ class ProductController extends Controller
             product_features::whereIn('id',$removed)->delete();
             product_ladderbands::whereIn('id',$removed_ladderband)->delete();
             colors::whereIn('id',$removed_colors)->delete();
+
             if($request->form_type == 1)
             {
                 $color_images = color_images::whereIn('color_id',$removed_colors)->get();
@@ -615,6 +616,7 @@ class ProductController extends Controller
 
                 color_images::whereIn('color_id',$removed_colors)->delete();
             }
+            
             product_models::whereIn('id',$removed1)->delete();
             model_features::whereIn('model_id',$removed1)->delete();
             $model_ids = product_models::where('product_id',$request->cat_id)->pluck('id');
