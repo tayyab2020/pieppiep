@@ -158,7 +158,9 @@
 																	<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
                                                                     <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
-																	<input type="hidden" value="" id="estimated_price_quantity" name="estimated_price_quantity[]">
+																	<input type="hidden" value="{{$item->estimated_price_quantity}}" id="estimated_price_quantity" name="estimated_price_quantity[]">
+																	<input type="hidden" value="{{$item->measure}}" id="measure" name="measure[]">
+																	<input type="hidden" value="{{$item->max_width}}" id="max_width" name="max_width[]">
 
 																	<div style="width: 34%;" class="products content item3 full-res">
 
@@ -304,6 +306,8 @@
                                                                     <input type="hidden" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" id="retailer_margin" name="retailer_margin[]">
 																	<input type="hidden" id="estimated_price_quantity" name="estimated_price_quantity[]">
+																	<input type="hidden" id="measure" name="measure[]">
+																	<input type="hidden" id="max_width" name="max_width[]">
 
 																	<div style="width: 34%;" class="products content item3 full-res">
 
@@ -794,9 +798,12 @@
 																		<div class="headings" style="width: 10%;">Width</div>
 																		<div class="headings" style="width: 10%;">Height</div>
 																		<div class="headings" style="width: 10%;">Cutting lose %</div>
-																		<div class="headings" style="width: 10%;">Total</div>
-																		<div class="headings" style="width: 10%;">Box quantity</div>
-																		<div class="headings" style="width: 10%;">Total boxes</div>
+																		<div class="headings m2_box" style="width: 10%;">Total</div>
+																		<div class="headings m1_box" style="width: 10%;display: none;">Turn</div>
+																		<div class="headings m1_box" style="width: 10%;display: none;">Max Width</div>
+																		<div class="headings m2_box" style="width: 10%;">Box quantity</div>
+																		<div class="headings m1_box" style="width: 10%;display: none;">Total</div>
+																		<div class="headings m2_box" style="width: 10%;">Total boxes</div>
 																		<div class="headings" style="width: 18%;"></div>
 																	</div>
 
@@ -834,7 +841,7 @@
 
 																		</div>
 
-																		<div class="attribute item5" style="width: 10%;">
+																		<div class="attribute item5 m2_box" style="width: 10%;">
 
 																			<div class="m-box">
 																				<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
@@ -843,7 +850,26 @@
 
 																		</div>
 
-																		<div class="attribute item6" style="width: 10%;">
+																		<div class="attribute item5 m1_box" style="width: 10%;display: none;">
+
+																			<div style="display: flex;align-items: center;">
+																				<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" name="turn1[]">
+																					<option value="0">No</option>
+																					<option value="1">Yes</option>	
+																				</select>
+																			</div>
+
+																		</div>
+
+																		<div class="attribute item6 m1_box" style="width: 10%;display: none;">
+
+																			<div style="display: flex;align-items: center;">
+																				<input type="number" name="max_width1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">
+																			</div>
+
+																		</div>
+
+																		<div class="attribute item6 m2_box" style="width: 10%;">
 
 																			<div class="m-box">
 																				<input class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;background: transparent;" readonly autocomplete="off" name="box_quantity_supplier1[]" type="number">
@@ -3397,7 +3423,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, product_text = null, supplier = null, color = null, model = null, model_impact_value = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, product_text = null, supplier = null, color = null, model = null, model_impact_value = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -3429,7 +3455,9 @@
 					'                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
                     '                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
                     '                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
-					'                                                            <input type="hidden" value="" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
+					'                                                            <input type="hidden" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
+					'                                                            <input type="hidden" id="measure" name="measure[]">\n' +
+					'                                                            <input type="hidden" id="max_width" name="max_width[]">\n' +
 					'\n' +
 					'                                                            <div style="width: 34%;" class="products content item3 full-res">\n' +
 					'\n' +
@@ -3621,6 +3649,8 @@
                     '                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
                     '                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
 					'                                                            <input type="hidden" value="' + estimated_price_quantity + '" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
+					'                                                            <input type="hidden" value="' + measure + '" id="measure" name="measure[]">\n' +
+					'                                                            <input type="hidden" value="' + max_width + '" id="max_width" name="max_width[]">\n' +
 					'\n' +
 					'                                                            <div style="width: 34%;" class="products content item3 full-res">\n' +
 					'\n' +
@@ -3798,6 +3828,14 @@
 						$(obj).find('.total_boxes').attr('name', 'total_boxes' + rowCount + '[]');
 						$(obj).find('.box_quantity_supplier').attr('name', 'box_quantity_supplier' + rowCount + '[]');
 						$(obj).find('.box_quantity').attr('name', 'box_quantity' + rowCount + '[]');
+						$(obj).find('.max_width').attr('name', 'max_width' + rowCount + '[]');
+						$(obj).find('.turn').attr('name', 'turn' + rowCount + '[]');
+
+					});
+
+					turns.each(function (index, select) {
+
+						$('#menu2').find(`.attributes_table[data-id='${rowCount}']`).find('.turn').eq(index).val($(this).val());
 
 					});
 				}
@@ -3821,7 +3859,7 @@
 			calculate_total();
 		}
 
-		function add_attribute_row(copy = false, product_row, description = null, width = null, width_unit = null, height = null, height_unit = null, cutting_lose_percentage = null, total_boxes = null, box_quantity_supplier = null, box_quantity = null) {
+		function add_attribute_row(copy = false, product_row, menu2 = null, turn = 0) {
 
 			var check_length = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div').length;
 
@@ -3838,6 +3876,7 @@
 			if (!copy) {
 
 				var box_quantity = $('#products_table').find(`[data-id='${product_row}']`).find('#estimated_price_quantity').val();
+				var measure = $('#products_table').find(`[data-id='${product_row}']`).find('#measure').val();
 
 				$(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="' + rowCount + '">\n' +
 					'\n' +
@@ -3881,7 +3920,7 @@
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="attribute item5" style="width: 10%;">\n' +
+					(measure == "M1" ? '<div class="attribute item5 m2_box" style="width: 10%;display: none;">\n' : '<div class="attribute item5 m2_box" style="width: 10%;">\n') +
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
@@ -3893,7 +3932,32 @@
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="attribute item6" style="width: 10%;">\n' +
+					(measure == "M1" ? '<div class="attribute item5 m1_box" style="width: 10%;">\n' : '<div class="attribute item5 m1_box" style="width: 10%;display: none;">\n') +
+					'\n' +
+					'                       									 	<div style="display: flex;align-items: center;">\n' +
+					'\n' +
+					'                                                                <select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" name="turn'+product_row+'[]">\n' +
+					'\n' +
+					'                                                                	<option value="0">No</option>\n' +
+					'                                                                	<option value="1">Yes</option>\n' +
+					'\n' +
+					'                                                                </select>\n' +
+					'\n' +
+					'                                                               </div>\n' +
+					'\n' +
+					'                                                            </div>\n' +
+					'\n' +
+					(measure == "M1" ? '<div class="attribute item6 m1_box" style="width: 10%;">\n' : '<div class="attribute item6 m1_box" style="width: 10%;display: none;">\n') +
+					'\n' +
+					'                       									 	<div style="display: flex;align-items: center;">\n' +
+					'\n' +
+					'                                                                <input type="number" name="max_width'+product_row+'[]" readonly="" style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">\n' +
+					'\n' +
+					'                                                               </div>\n' +
+					'\n' +
+					'                                                            </div>\n' +
+					'\n' +
+					(measure == "M1" ? '<div class="attribute item6 m2_box" style="width: 10%;display: none;">\n' : '<div class="attribute item6 m2_box" style="width: 10%;">\n') +
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
@@ -3951,115 +4015,9 @@
 			}
 			else {
 
-				$(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="' + rowCount + '">\n' +
-					'\n' +
-					'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
-					'                       									 	<textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+description+'</textarea>\n' +
-					'                       									 </div>\n' +
-					'\n' +
-					'                                                            <div class="attribute item2 width-box" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<div class="m-box">\n' +
-					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" id="width" value="'+width+'" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width'+product_row+'[]" type="text">\n' +
-					'\n' +
-					'                                                                <input style="border: 0;outline: none;" value="'+width_unit+'" readonly="" type="text" name="width_unit'+product_row+'[]" class="measure-unit">\n' +
-					'\n' +
-					'                                                               </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="attribute item3 height-box" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<div class="m-box">\n' +
-					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" id="height" value="'+height+'" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height'+product_row+'[]" type="text">\n' +
-					'\n' +
-					'                                                                <input style="border: 0;outline: none;" value="'+height_unit+'" readonly="" type="text" name="height_unit'+product_row+'[]" class="measure-unit">\n' +
-					'\n' +
-					'                                                               </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="attribute item4" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<div class="m-box">\n' +
-					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;" id="cutting_lose_percentage" value="'+cutting_lose_percentage+'" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' +
-					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
-					'\n' +
-					'                                                               </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="attribute item5" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<div class="m-box">\n' +
-					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;background: transparent;" value="'+total_boxes+'" class="form-control total_boxes m-input" readonly autocomplete="off" name="total_boxes'+product_row+'[]" type="number">\n' +
-					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
-					'\n' +
-					'                                                               </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="attribute item6" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<div class="m-box">\n' +
-					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;background: transparent;" value="'+box_quantity_supplier+'" class="form-control box_quantity_supplier m-input" readonly autocomplete="off" name="box_quantity_supplier'+product_row+'[]" type="number">\n' +
-					'\n' +
-					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
-					'\n' +
-					'                                                               </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="attribute item7" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<div style="display: flex;align-items: center;">\n' +
-					'\n' +
-					'                                                                <input type="number" value="'+box_quantity+'" name="box_quantity'+product_row+'[]" readonly="" style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">\n' +
-					'\n' +
-					'                                                               </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="attribute item8 last-content" style="padding: 0;width: 18%;">\n' +
-					'\n' +
-					'                       									 	<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">\n' +
-					'\n' +
-					'																	<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-					'\n' +
-					'																		<i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
-					'\n' +
-					'																		<span class="tooltiptext">Add</span>\n' +
-					'\n' +
-					'																	</span>\n' +
-					'\n' +
-					'																	<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-					'\n' +
-					'																		<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
-					'\n' +
-					'																		<span class="tooltiptext">Remove</span>\n' +
-					'\n' +
-					'																	</span>\n' +
-					'\n' +
-					'																	<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-					'\n' +
-					'																		<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
-					'\n' +
-					'																		<span class="tooltiptext">Copy</span>\n' +
-					'\n' +
-					'																	</span>\n' +
-					'\n' +
-					'                                                            	</div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                        </div>');
+					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="'+rowCount+'"></div>\n');
+					menu2.appendTo(`#menu2 .attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`);
+					$('#menu2').find(`.attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`).find('.turn').val(turn);
 
 					calculate_qty(product_row);
 			}
@@ -4130,9 +4088,9 @@
 		});
 
 		$(document).on('click', '.remove-attribute-row', function () {
-
-			var rowCount = $('.attributes_table .attribute-content-div').length;
+	
 			var product_row = $(this).parents('.attributes_table').data('id');
+			var rowCount = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div').length;
 
 			var current = $(this).parents('.attribute-content-div');
 
@@ -4360,7 +4318,10 @@
 			var total_discount_old = current.find('.total_discount_old').val();
 			var last_column = current.find('#next-row-td').html();
 			var menu2 = $('#menu2').find(`.attributes_table[data-id='${id}']`).children().clone();
+			var turns = $('#menu2').find(`.attributes_table[data-id='${id}']`).find('.turn');
 			var estimated_price_quantity = current.find('#estimated_price_quantity').val();
+			var measure = current.find('#measure').val();
+			var max_width = current.find('#max_width').val();
 
 			var width_readonly = '';
 			var height_readonly = '';
@@ -4372,7 +4333,7 @@
 				width_readonly = 'readonly';
 			}
 
-			add_row(true, rate, basic_price, price, products, product, product_text, supplier, color, model, model_impact_value, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity);
+			add_row(true, rate, basic_price, price, products, product, product_text, supplier, color, model, model_impact_value, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
 
 		});
 
@@ -4380,17 +4341,10 @@
 
 			var current = $(this).parents('.attribute-content-div');
 			var product_row = current.parents('.attributes_table').data('id');
-			var description = current.find('.attribute_description').val();
-			var width = current.find('.width-box').find('.width').val();
-			var width_unit = current.find('.width-box').find('.measure-unit').val();
-			var height = current.find('.height-box').find('.height').val();
-			var height_unit = current.find('.height-box').find('.measure-unit').val();
-			var cutting_lose_percentage = current.find('.cutting_lose_percentage').val();
-			var total_boxes = current.find('.total_boxes').val();
-			var box_quantity_supplier = current.find('.box_quantity_supplier').val();
-			var box_quantity = current.find('.box_quantity').val();
+			var turn = current.find(".turn").val();
+			var menu2 = current.children().clone();
 
-			add_attribute_row(true, product_row, description, width, width_unit, height, height_unit, cutting_lose_percentage, total_boxes, box_quantity_supplier, box_quantity);
+			add_attribute_row(true, product_row, menu2, turn);
 
 		});
 
@@ -4547,6 +4501,7 @@
 			var current = $(this);
 			var product_row = current.parents(".attributes_table").data('id');
 			var row_id = current.parents(".attribute-content-div").data('id');
+			var measure = $("#products_table").find(`.content-div[data-id='${product_row}']`).find('#measure').val();
 
 			if(current.attr('id') == 'width')
 			{
@@ -4578,25 +4533,67 @@
 				var height = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.height').val();
 				height = height.replace(/\,/g, '.');
 			}
-			
-			var box_quantity = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity_supplier').val();
 
-			if (width && height && cutting_lose_percentage && box_quantity) {
+			if(measure == "M1")
+			{
+				var turn = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.turn').val();
+				var max_width = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.max_width').val();
 
-				var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
-				total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
-				var total_boxes = total_quantity/box_quantity;
-				total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+				if(!max_width)
+				{
+					max_width = 0;
+				}
 
-				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
-				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity);
+				if (width && height && cutting_lose_percentage) {
 
+					if(turn == 0)
+					{
+						if(max_width > width)
+						{
+							var total_boxes = (height/100) + (cutting_lose_percentage/100);
+							total_boxes = parseInt(total_boxes);
+						}
+					}
+					else
+					{
+						if(max_width > width)
+						{
+							var total_boxes = (width/100) + (cutting_lose_percentage/100);
+							total_boxes = parseInt(total_boxes);
+						}
+					}
+
+					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
+
+				}
+				else
+            	{
+                	$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+            	}
 			}
 			else
-            {
-                $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
-				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
-            }
+			{
+				var box_quantity = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity_supplier').val();
+
+				if (width && height && cutting_lose_percentage && box_quantity) {
+
+					var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
+					total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
+					var total_boxes = total_quantity/box_quantity;
+					total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+					total_quantity = total_boxes * box_quantity;
+					total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
+
+					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
+					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity);
+
+				}
+				else
+            	{
+                	$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
+            	}
+			}
 
 			calculate_qty(product_row);
 
@@ -5292,7 +5289,7 @@
 
 							$.ajax({
 								type: "GET",
-								data: "id=" + product_id,
+								data: "id=" + product_id + "&model=" + model_id,
 								url: "<?php echo url('/aanbieder/get-colors')?>",
 								success: function (data) {
 
@@ -5304,6 +5301,17 @@
 									$('#menu1').find(`[data-id='${row_id}']`).remove();
 
 									if (data != '') {
+
+										if(data.measure == 'M2')
+										{
+											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m1_box').hide();
+											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m2_box').show();
+										}
+										else
+										{
+											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m2_box').hide();
+											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m1_box').show();
+										}
 
 										if(data.estimated_price_per_box)
 										{
@@ -5317,6 +5325,8 @@
 											var estimated_price_per_box_old = 0;
 										}
 
+										$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val(data.max_width);
+										$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val(data.measure);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
 										// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
@@ -5336,6 +5346,7 @@
 										$('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#estimated_price_quantity').val(data.estimated_price_quantity);
 										$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.box_quantity_supplier').val(data.estimated_price_quantity);
+										$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.max_width').val(data.max_width);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 										$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
 										$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');

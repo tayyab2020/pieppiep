@@ -175,18 +175,8 @@ class UserController extends Controller
 
     public function GetSupplierProducts(Request $request)
     {
-        $type = $request->type;
-
-        if($type == 'floors')
-        {
-            $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
-            $data = Products::where('user_id',$request->id)->where('category_id',$floor_category_id)->get();
-        }
-        else
-        {
-            $blind_category_id = Category::where('cat_name','LIKE', '%Blinds%')->orWhere('cat_name','LIKE', '%Binnen zonwering%')->pluck('id')->first();
-            $data = Products::where('user_id',$request->id)->where('category_id',$blind_category_id)->get();
-        }
+        $blind_category_id = Category::where('cat_name','LIKE', '%Blinds%')->orWhere('cat_name','LIKE', '%Binnen zonwering%')->pluck('id')->first();
+        $data = Products::where('user_id',$request->id)->where('category_id',$blind_category_id)->get();
 
         return $data;
     }
@@ -261,7 +251,14 @@ class UserController extends Controller
 
     public function GetColors(Request $request)
     {
-        $data = Products::where('id',$request->id)->with('colors')->with('models')->first();
+        if($request->model)
+        {
+            $data = Products::leftjoin('product_models','product_models.product_id','=','products.id')->where('product_models.id',$request->model)->where('products.id',$request->id)->select('products.*','product_models.max_width')->first();
+        }
+        else
+        {
+            $data = Products::where('id',$request->id)->with('colors')->with('models')->first();
+        }
 
         return $data;
     }
@@ -1750,7 +1747,7 @@ class UserController extends Controller
                 $customers = customers_details::where('retailer_id', $user_id)->get();
                 $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
                 $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->leftjoin('supplier_categories','supplier_categories.user_id','=','retailers_requests.supplier_id')->where('supplier_categories.category_id',$floor_category_id)->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
-                $products = products::leftjoin('users','users.id','=','products.user_id')->whereIn('products.user_id',$suppliers)->with('colors')->with('models')->select('products.*','users.name','users.family_name','users.company_name')->get();
+                $products = products::leftjoin('users','users.id','=','products.user_id')->whereIn('products.user_id',$suppliers)->where('products.category_id',$floor_category_id)->with('colors')->with('models')->select('products.*','users.name','users.family_name','users.company_name')->get();
 
                 return view('user.create_custom_quote1', compact('products','customers','suppliers','user'));
             } else {
