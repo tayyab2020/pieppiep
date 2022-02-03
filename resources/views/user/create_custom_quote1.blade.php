@@ -4579,6 +4579,16 @@
 
 		});
 
+		$(document).on('change', ".turn", function (e) {
+
+			var current = $(this);
+			var product_row = current.parents(".attributes_table").data('id');
+			var row_id = current.parents(".attribute-content-div").data('id');
+
+			calculator(product_row,row_id);
+
+		});
+
 		function calculate_qty(product_row)
 		{
 			var total_qty = 0;
