@@ -4496,43 +4496,14 @@
 			}
 		});
 
-		$(document).on('input', ".width, .height, .cutting_lose_percentage", function (e) {
-
-			var current = $(this);
-			var product_row = current.parents(".attributes_table").data('id');
-			var row_id = current.parents(".attribute-content-div").data('id');
+		function calculator(product_row,row_id)
+		{
 			var measure = $("#products_table").find(`.content-div[data-id='${product_row}']`).find('#measure').val();
-
-			if(current.attr('id') == 'width')
-			{
-				var width = current.val();
-				width = width.replace(/\,/g, '.');
-
-				var height = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.height').val();
-				height = height.replace(/\,/g, '.');
-
-				var cutting_lose_percentage = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.cutting_lose_percentage').val();
-			}
-			else if(current.attr('id') == 'height')
-			{
-				var height = current.val();
-				height = height.replace(/\,/g, '.');
-				
-				var width = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.width').val();
-				width = width.replace(/\,/g, '.');
-
-				var cutting_lose_percentage = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.cutting_lose_percentage').val();
-			}
-			else
-			{
-				var cutting_lose_percentage = current.val();
-
-				var width = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.width').val();
-				width = width.replace(/\,/g, '.');
-
-				var height = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.height').val();
-				height = height.replace(/\,/g, '.');
-			}
+			var width = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.width').val();
+			width = width.replace(/\,/g, '.');
+			var height = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.height').val();
+			height = height.replace(/\,/g, '.');
+			var cutting_lose_percentage = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.cutting_lose_percentage').val();
 
 			if(measure == "M1")
 			{
@@ -4596,6 +4567,15 @@
 			}
 
 			calculate_qty(product_row);
+		}
+
+		$(document).on('input', ".width, .height, .cutting_lose_percentage", function (e) {
+
+			var current = $(this);
+			var product_row = current.parents(".attributes_table").data('id');
+			var row_id = current.parents(".attribute-content-div").data('id');
+
+			calculator(product_row,row_id);
 
 		});
 
@@ -5398,6 +5378,13 @@
 										$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(estimated_price_per_box_old);
+
+										$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').each(function (i, obj) {
+											
+											var row_id1 = $(this).data('id');
+											calculator(row_id,row_id1);
+											
+										});
 
 										// calculate_total();
 										calculate_qty(row_id);
