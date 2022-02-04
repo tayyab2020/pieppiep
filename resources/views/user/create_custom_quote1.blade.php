@@ -4522,7 +4522,8 @@
 						if(max_width > width)
 						{
 							var total_boxes = (height/100) + (cutting_lose_percentage/100);
-							total_boxes = parseInt(total_boxes);
+							total_boxes = (Math.round(total_boxes * 10)) / 10;
+							total_boxes = parseFloat(total_boxes).toFixed(2);
 						}
 					}
 					else
@@ -4530,7 +4531,8 @@
 						if(max_width > width)
 						{
 							var total_boxes = (width/100) + (cutting_lose_percentage/100);
-							total_boxes = parseInt(total_boxes);
+							total_boxes = (Math.round(total_boxes * 10)) / 10;
+							total_boxes = parseFloat(total_boxes).toFixed(2);
 						}
 					}
 
