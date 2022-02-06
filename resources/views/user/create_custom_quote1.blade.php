@@ -5422,27 +5422,25 @@
 
 											$.ajax({
 												type: "GET",
-												data: "product=" + product + "&color=" + color + "&model=" + model + "&margin=" + margin,
+												data: "product=" + product + "&color=" + color + "&model=" + model + "&margin=" + margin + "&type=floors",
 												url: "<?php echo url('/aanbieder/get-price')?>",
 												success: function (data) {
 
-													if (typeof data[0].value !== 'undefined') {
-
-														$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+													$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 														$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
 														var childsafe = data[3].childsafe;
 
-														if (price_based_option == 1) {
-															var price = data[0].value;
-															var org = data[0].value;
-														}
-														else {
-															var price = base_price;
-															var org = base_price;
-														}
+														// if (price_based_option == 1) {
+														// 	var price = data[0].value;
+														// 	var org = data[0].value;
+														// }
+														// else {
+														// 	var price = base_price;
+														// 	var org = base_price;
+														// }
 
-														var basic_price = price;
+														// var basic_price = price;
 
 														/*if (margin == 1) {
                                                             if (data[2]) {
@@ -5572,70 +5570,54 @@
 
 														current.parents('.content-div').find('.f_area').val(0);
 
-														var model_impact_value = data[3].value;
+														// var model_impact_value = data[3].value;
 
-														if (data[3].price_impact == 1) {
+														// if (data[3].price_impact == 1) {
 
-															if (data[3].impact_type == 0) {
+														// 	if (data[3].impact_type == 0) {
 
-																price = parseFloat(price) + parseFloat(model_impact_value);
-																price = price.toFixed(2);
+														// 		price = parseFloat(price) + parseFloat(model_impact_value);
+														// 		price = price.toFixed(2);
 
-															}
-															else {
+														// 	}
+														// 	else {
 
-																var per = (model_impact_value) / 100;
-																model_impact_value = basic_price * per;
+														// 		var per = (model_impact_value) / 100;
+														// 		model_impact_value = basic_price * per;
 
-																price = parseFloat(price) + parseFloat(model_impact_value);
-																price = price.toFixed(2);
-															}
+														// 		price = parseFloat(price) + parseFloat(model_impact_value);
+														// 		price = price.toFixed(2);
+														// 	}
 
-														}
+														// }
 
-														if(margin == 1)
-														{
-															if (data[2]) {
+														// if(margin == 1)
+														// {
+														// 	if (data[2]) {
 
-																var supplier_margin = data[2].margin;
-																var retailer_margin = data[2].retailer_margin;
+														// 		var supplier_margin = data[2].margin;
+														// 		var retailer_margin = data[2].retailer_margin;
 
-																if (supplier_margin && retailer_margin) {
-																	price = (parseFloat(price) / supplier_margin) * retailer_margin;
-																}
-															}
-														}
+														// 		if (supplier_margin && retailer_margin) {
+														// 			price = (parseFloat(price) / supplier_margin) * retailer_margin;
+														// 		}
+														// 	}
+														// }
 
-														price = parseFloat(price).toFixed(2);
+														// price = parseFloat(price).toFixed(2);
 
 														// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 														// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
 														// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
 														// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-														$('#products_table').find(`[data-id='${row_id}']`).find('.model_impact_value').val(model_impact_value);
+														// $('#products_table').find(`[data-id='${row_id}']`).find('.model_impact_value').val(model_impact_value);
 														//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-														$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-														$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-														$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-														$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-													}
-													else {
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-														$('#products_table').find(`[data-id='${row_id}']`).find('.model_impact_value').val('');
-														$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-														$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-														$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-														$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+														// $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
+														// $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+														// $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
+														// $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
 
-														$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-														$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-														$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-													}
-
-													calculate_total();
+													// calculate_total();
 												}
 											});
 										}

@@ -273,64 +273,96 @@ class UserController extends Controller
         {
             $user_id = $main_id;
         }
-        $request->width = (int)$request->width;
-        $request->height = (int)$request->height;
-        $max_x_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.x_axis');
-        $max_y_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.y_axis');
 
-        if($max_x_axis >= $request->width && $max_y_axis >= $request->height)
+        if($request->type != 'floors')
         {
-            $price = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('colors.max_height','prices.value')->first();
+            $request->width = (int)$request->width;
+            $request->height = (int)$request->height;
+            $max_x_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.x_axis');
+            $max_y_axis = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->max('prices.y_axis');
 
-            if($price->max_height && ($request->height >= $price->max_height))
+            if($max_x_axis >= $request->width && $max_y_axis >= $request->height)
             {
-                $data[0] = ['value' => 'y_axis', 'max_height' => $price->max_height];
-            }
-            else
-            {
-                $features = features::whereHas('features', function($query) use($request)
+                $price = colors::leftjoin('prices','prices.table_id','=','colors.table_id')->where('colors.id',$request->color)->where('colors.product_id',$request->product)->where('prices.x_axis','>=',$request->width)->where('prices.y_axis','>=',$request->height)->select('colors.max_height','prices.value')->first();
+
+                if($price->max_height && ($request->height >= $price->max_height))
                 {
-                    $query->leftjoin('model_features','model_features.product_feature_id','=','product_features.id')
-                        ->where('model_features.model_id',$request->model)->where('model_features.linked',1)
-                        ->where('product_features.product_id','=',$request->product)
-                        ->select('product_features.*');
-
-                })->with(['features' => function($query) use($request)
-                {
-                    $query->leftjoin('model_features','model_features.product_feature_id','=','product_features.id')
-                        ->where('model_features.model_id',$request->model)->where('model_features.linked',1)
-                        ->where('product_features.product_id','=',$request->product)
-                        ->select('product_features.*');
-
-                }])->orderBy('features.quote_order_no','ASC')->get();
-
-                $model = product_models::where('id',$request->model)->first();
-
-                if($request->margin)
-                {
-                    $margin = Products::leftJoin('retailer_margins','retailer_margins.product_id','=','products.id')->where('products.id',$request->product)->where('retailer_margins.retailer_id', '=', $user_id)->select('products.margin','retailer_margins.margin as retailer_margin')->first();
+                    $data[0] = ['value' => 'y_axis', 'max_height' => $price->max_height];
                 }
                 else
                 {
-                    $margin = '';
+                    $features = features::whereHas('features', function($query) use($request)
+                    {
+                        $query->leftjoin('model_features','model_features.product_feature_id','=','product_features.id')
+                            ->where('model_features.model_id',$request->model)->where('model_features.linked',1)
+                            ->where('product_features.product_id','=',$request->product)
+                            ->select('product_features.*');
+
+                    })->with(['features' => function($query) use($request)
+                    {
+                        $query->leftjoin('model_features','model_features.product_feature_id','=','product_features.id')
+                            ->where('model_features.model_id',$request->model)->where('model_features.linked',1)
+                            ->where('product_features.product_id','=',$request->product)
+                            ->select('product_features.*');
+
+                    }])->orderBy('features.quote_order_no','ASC')->get();
+
+                    $model = product_models::where('id',$request->model)->first();
+
+                    if($request->margin)
+                    {
+                        $margin = Products::leftJoin('retailer_margins','retailer_margins.product_id','=','products.id')->where('products.id',$request->product)->where('retailer_margins.retailer_id', '=', $user_id)->select('products.margin','retailer_margins.margin as retailer_margin')->first();
+                    }
+                    else
+                    {
+                        $margin = '';
+                    }
+
+                    $labor = retailer_labor_costs::where('product_id',$request->product)->where('retailer_id', '=', $user_id)->first();
+
+                    $data = array($price,$features,$margin,$model,$labor);
                 }
-
-                $labor = retailer_labor_costs::where('product_id',$request->product)->where('retailer_id', '=', $user_id)->first();
-
-                $data = array($price,$features,$margin,$model,$labor);
             }
-        }
-        else if($max_x_axis < $request->width && $max_y_axis < $request->height)
-        {
-            $data[0] = ['value' => 'both', 'max_width' => $max_x_axis, 'max_height' => $max_y_axis];
-        }
-        else if($max_x_axis < $request->width)
-        {
-            $data[0] = ['value' => 'x_axis', 'max_width' => $max_x_axis];
+            else if($max_x_axis < $request->width && $max_y_axis < $request->height)
+            {
+                $data[0] = ['value' => 'both', 'max_width' => $max_x_axis, 'max_height' => $max_y_axis];
+            }
+            else if($max_x_axis < $request->width)
+            {
+                $data[0] = ['value' => 'x_axis', 'max_width' => $max_x_axis];
+            }
+            else
+            {
+                $data[0] = ['value' => 'y_axis', 'max_height' => $max_y_axis];
+            }
         }
         else
         {
-            $data[0] = ['value' => 'y_axis', 'max_height' => $max_y_axis];
+            $price = '';
+
+            $features = features::whereHas('features', function($query) use($request)
+            {
+                $query->leftjoin('model_features','model_features.product_feature_id','=','product_features.id')
+                    ->where('model_features.model_id',$request->model)->where('model_features.linked',1)
+                    ->where('product_features.product_id','=',$request->product)
+                    ->select('product_features.*');
+
+            })->with(['features' => function($query) use($request)
+            {
+                $query->leftjoin('model_features','model_features.product_feature_id','=','product_features.id')
+                    ->where('model_features.model_id',$request->model)->where('model_features.linked',1)
+                    ->where('product_features.product_id','=',$request->product)
+                    ->select('product_features.*');
+
+            }])->orderBy('features.quote_order_no','ASC')->get();
+
+            $model = product_models::where('id',$request->model)->first();
+
+            $margin = Products::leftJoin('retailer_margins','retailer_margins.product_id','=','products.id')->where('products.id',$request->product)->where('retailer_margins.retailer_id', '=', $user_id)->select('products.margin','retailer_margins.margin as retailer_margin')->first();
+
+            $labor = retailer_labor_costs::where('product_id',$request->product)->where('retailer_id', '=', $user_id)->first();
+
+            $data = array($price,$features,$margin,$model,$labor);
         }
 
         return $data;
