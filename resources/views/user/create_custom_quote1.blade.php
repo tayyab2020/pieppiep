@@ -4630,7 +4630,7 @@
 										'                                                                <select style="border-radius: 5px;width: 70%;height: 35px;" readonly class="form-control turn" name="turn'+product_row+'[]">\n' +
 										'\n' +
 										'                                                                	<option value="0">No</option>\n' +
-										'                                                                	<option value="1">Yes</option>\n' +
+										'                                                                	<option disabled value="1">Yes</option>\n' +
 										'\n' +
 										'                                                                </select>\n' +
 										'\n' +
@@ -4690,13 +4690,13 @@
 										'\n' +
 										'																	</span>\n' +
 										'\n' +
-										'																	<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-										'\n' +
-										'																		<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
-										'\n' +
-										'																		<span class="tooltiptext">Copy</span>\n' +
-										'\n' +
-										'																	</span>\n' +
+										// '																	<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
+										// '\n' +
+										// '																		<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
+										// '\n' +
+										// '																		<span class="tooltiptext">Copy</span>\n' +
+										// '\n' +
+										// '																	</span>\n' +
 										'\n' +
 										'                                                            	</div>\n' +
 										'\n' +
