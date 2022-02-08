@@ -4094,21 +4094,13 @@
 		$(document).on('click', '.remove-attribute-row', function () {
 	
 			var product_row = $(this).parents('.attributes_table').data('id');
+			var row_id = $(this).parents('.attribute-content-div').data('id');
 			var rowCount = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div[data-main-id="0"]').length;
 			var current = $(this).parents('.attribute-content-div');
-			var is_sub = current.data('main-id');
-
-			if(is_sub)
-			{
-
-			}
-			else
-			{
-
-			}
 
 			if (rowCount != 1) {
 
+				$(this).parents('.attributes_table').find('.attribute-content-div[data-main-id="'+row_id+'"]').remove();
 				current.remove();
 				calculate_qty(product_row);
 
