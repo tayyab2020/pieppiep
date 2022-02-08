@@ -808,10 +808,13 @@
 																	</div>
 
 
-																	<div class="attribute-content-div" data-id="1">
+																	<div class="attribute-content-div" data-id="1" data-main-id="0">
 
 																		<div class="attribute full-res item1" style="width: 22%;">
-																			<textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]"></textarea>
+																			<div style="display: flex;align-items: center;">
+																				<span style="width: 10%">1</span>
+																				<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]"></textarea></div>
+																			</div>
 																		</div>
 
 																		<div class="attribute item2 width-box" style="width: 10%;">
@@ -3861,7 +3864,7 @@
 
 		function add_attribute_row(copy = false, product_row, menu2 = null, turn = 0) {
 
-			var check_length = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div').length;
+			var check_length = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div[data-main-id="0"]').length;
 
 			if(check_length == 0)
 			{
@@ -3869,7 +3872,7 @@
 			}
 			else
 			{
-				var rowCount = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div:last').data('id');
+				var rowCount = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div[data-main-id="0"]:last').data('id');
 				rowCount = rowCount + 1;
 			}
 
@@ -3879,10 +3882,10 @@
 				var max_width = $('#products_table').find(`[data-id='${product_row}']`).find('#max_width').val();
 				var measure = $('#products_table').find(`[data-id='${product_row}']`).find('#measure').val();
 
-				$(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="' + rowCount + '">\n' +
+				$(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="' + rowCount + '" data-main-id="0">\n' +
 					'\n' +
 					'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
-					'                       									 	<textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]"></textarea>\n' +
+					'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+rowCount+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]"></textarea></div></div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
 					'                                                            <div class="attribute item2 width-box" style="width: 10%;">\n' +
@@ -4016,7 +4019,7 @@
 			}
 			else {
 
-					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="'+rowCount+'"></div>\n');
+					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="'+rowCount+'" data-main-id="0"></div>\n');
 					menu2.appendTo(`#menu2 .attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`);
 					$('#menu2').find(`.attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`).find('.turn').val(turn);
 
@@ -4091,7 +4094,7 @@
 		$(document).on('click', '.remove-attribute-row', function () {
 	
 			var product_row = $(this).parents('.attributes_table').data('id');
-			var rowCount = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div').length;
+			var rowCount = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div[data-main-id="0"]').length;
 			var current = $(this).parents('.attribute-content-div');
 			var is_sub = current.data('main-id');
 
@@ -4520,6 +4523,7 @@
 				$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-main-id='${row_id}']`).remove();
 				calculate_qty(product_row);
 				var org_width = width;
+				var retailer_width = width;
 				var turn = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.turn').val();
 				var max_width = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.max_width').val();
 				var description = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.attribute_description').val();
@@ -4553,23 +4557,50 @@
 								total_rows = Math.ceil(total_rows);
 							}
 							
-							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(parseInt(total_rows));
+							// $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(parseInt(total_rows));
 							var content = '';
+							var width_array = [];
 
-							for(i = 0; i < total_rows; i++)
+							for(i = 0; i <= total_rows; i++)
 							{
-								var total = (parseFloat(height) + parseInt(cutting_lose_percentage))/100;
-								total = Math.round(parseFloat(total).toFixed(2));
+								if(i != total_rows)
+								{
+									var total = (parseFloat(height) + parseInt(cutting_lose_percentage))/100;
+									total = Math.round(parseFloat(total).toFixed(2));
+								}
+								else
+								{
+									var total = 0;
+								}
 
 								if(i == 0)
 								{
 									width = max_width;
+									width_array[i] = width;
 								}
 								else
 								{
-									var org1 = parseFloat(width);
-									width = parseFloat(org_width) - parseFloat(width);
-									org_width = org1;
+									width = parseFloat(org_width) - parseFloat(width_array[width_array.length-1]);
+
+									if(width > max_width)
+									{
+										width = max_width
+									}
+									else if(width == 0)
+									{
+										var sum = 0;
+
+										for (j = 0; j < width_array.length; j++) {
+
+											sum = sum + parseFloat(width_array[j]);
+
+										}
+
+										width = parseFloat(retailer_width) - parseFloat(sum);
+									}
+
+									org_width = width_array[width_array.length-1];
+									width_array[i] = width;
 								}
 
 								width = parseFloat(width).toFixed(2);
@@ -4577,13 +4608,13 @@
 								height = parseFloat(height).toFixed(2);
 								height = height.replace(/\./g, ',');
 
-								var rowCount = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div:last').data('id');
-								rowCount = rowCount + 1;
+								// var rowCount = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div:last').data('id');
+								// rowCount = rowCount + 1;
 								
-								content =  content + '<div class="attribute-content-div" data-id="' + rowCount + '" data-main-id="' + row_id +'">\n' +
+								content =  content + '<div class="attribute-content-div" data-id="'+row_id+'.'+(i+1)+'" data-main-id="'+ row_id +'">\n' +
 										'\n' +
 										'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
-										'                       									 	<textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ description +'</textarea>\n' +
+										'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ description +'</textarea></div></div>\n' +
 										'                       									 </div>\n' +
 										'\n' +
 										'                                                            <div class="attribute item2 width-box" style="width: 10%;">\n' +
@@ -4614,7 +4645,7 @@
 										'\n' +
 										'                       									 	<div class="m-box">\n' +
 										'\n' +
-										'                                                                <input style="border: 1px solid #ccc;" readonly value="'+ cutting_lose_percentage +'" id="cutting_lose_percentage" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' +
+										(i != total_rows ? '<input style="border: 1px solid #ccc;" readonly value="'+ cutting_lose_percentage +'" id="cutting_lose_percentage" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n' : '<input style="border: 1px solid #ccc;" readonly id="cutting_lose_percentage" class="form-control cutting_lose_percentage m-input" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage'+product_row+'[]" type="text">\n') +
 										'\n' +
 										'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 										'\n' +
@@ -4653,7 +4684,7 @@
 										'\n' +
 										'                       									 	<div style="display: flex;align-items: center;">\n' +
 										'\n' +
-										'                                                                <input type="number" value="'+ max_width +'" name="max_width'+product_row+'[]" readonly="" style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">\n' +
+										(i != total_rows ? '<input type="number" value="'+ max_width +'" name="max_width'+product_row+'[]" readonly="" style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">\n' : '<input type="number" name="max_width'+product_row+'[]" readonly="" style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">\n') +
 										'\n' +
 										'                                                               </div>\n' +
 										'\n' +
@@ -4682,35 +4713,6 @@
 										'                                                            </div>\n' +
 										'\n' +
 										'                                                            <div class="attribute item8 last-content" style="padding: 0;width: 18%;">\n' +
-										'\n' +
-										'                       									 	<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">\n' +
-										'\n' +
-										'																	<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-										'\n' +
-										'																		<i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
-										'\n' +
-										'																		<span class="tooltiptext">Add</span>\n' +
-										'\n' +
-										'																	</span>\n' +
-										'\n' +
-										'																	<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-										'\n' +
-										'																		<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
-										'\n' +
-										'																		<span class="tooltiptext">Remove</span>\n' +
-										'\n' +
-										'																	</span>\n' +
-										'\n' +
-										// '																	<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-										// '\n' +
-										// '																		<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
-										// '\n' +
-										// '																		<span class="tooltiptext">Copy</span>\n' +
-										// '\n' +
-										// '																	</span>\n' +
-										'\n' +
-										'                                                            	</div>\n' +
-										'\n' +
 										'                                                            </div>\n' +
 										'\n' +
 										'                                                        </div>';
