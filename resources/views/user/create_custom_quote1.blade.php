@@ -4092,8 +4092,17 @@
 	
 			var product_row = $(this).parents('.attributes_table').data('id');
 			var rowCount = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div').length;
-
 			var current = $(this).parents('.attribute-content-div');
+			var is_sub = current.data('main-id');
+
+			if(is_sub)
+			{
+
+			}
+			else
+			{
+
+			}
 
 			if (rowCount != 1) {
 
@@ -4526,9 +4535,11 @@
 					{
 						if(max_width > width)
 						{
-							var total_boxes = (height/100) + cutting_lose_percentage;
+							var total_boxes = (parseFloat(height)/100) + parseInt(cutting_lose_percentage);
 							total_boxes = (Math.round(total_boxes * 10)) / 10;
 							total_boxes = parseFloat(total_boxes).toFixed(2);
+
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
 						}
 						else
 						{
@@ -4547,9 +4558,7 @@
 
 							for(i = 0; i < total_rows; i++)
 							{
-								var float_height = parseFloat(height);
-								cutting_lose_percentage = parseInt(cutting_lose_percentage);
-								var total = (float_height + cutting_lose_percentage)/100;
+								var total = (parseFloat(height) + parseInt(cutting_lose_percentage))/100;
 								total = Math.round(parseFloat(total).toFixed(2));
 
 								if(i == 0)
@@ -4715,14 +4724,13 @@
 					{
 						if(max_width > width)
 						{
-							var total_boxes = (width/100) + cutting_lose_percentage;
+							var total_boxes = (parseFloat(width)/100) + parseInt(cutting_lose_percentage);
 							total_boxes = (Math.round(total_boxes * 10)) / 10;
 							total_boxes = parseFloat(total_boxes).toFixed(2);
 
 							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
 						}
 					}
-
 				}
 				else
             	{
