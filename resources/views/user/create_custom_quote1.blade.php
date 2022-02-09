@@ -4547,6 +4547,8 @@
 							total_boxes = parseFloat(total_boxes).toFixed(2);
 
 							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#width').css('background-color','');
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#height').css('background-color','#90ee90');
 						}
 						else
 						{
@@ -4561,6 +4563,8 @@
 							}
 							
 							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#width').css('background-color','');
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#height').css('background-color','#90ee90');
 							var content = '';
 							var width_array = [];
 
@@ -4735,6 +4739,8 @@
 							total_boxes = parseFloat(total_boxes).toFixed(2);
 
 							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#height').css('background-color','');
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#width').css('background-color','#90ee90');
 						}
 						else
 						{
@@ -4749,6 +4755,8 @@
 							}
 							
 							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#height').css('background-color','');
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#width').css('background-color','#90ee90');
 							var content = '';
 							var height_array = [];
 
