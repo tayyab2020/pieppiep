@@ -4532,7 +4532,7 @@
 
 					if(turn == 0)
 					{
-						if(max_width > width)
+						if(max_width > parseFloat(width))
 						{
 							var total_boxes = (parseFloat(height) + parseInt(cutting_lose_percentage))/100;
 							total_boxes = (Math.round(total_boxes * 10)) / 10;
@@ -4548,7 +4548,7 @@
 							}
 							else
 							{
-								var total_rows = width/max_width;
+								var total_rows = parseFloat(width)/max_width;
 								total_rows = Math.ceil(total_rows);
 							}
 							
@@ -4720,7 +4720,7 @@
 					}
 					else
 					{
-						if(max_width > width)
+						if(max_width > parseFloat(width))
 						{
 							var total_boxes = (parseFloat(width) + parseInt(cutting_lose_percentage))/100;
 							total_boxes = (Math.round(total_boxes * 10)) / 10;
@@ -4759,7 +4759,7 @@
 
 								if(i == 0)
 								{
-									if(retailer_height < max_width)
+									if(parseFloat(retailer_height) < max_width)
 									{
 										height = retailer_height;
 									}
