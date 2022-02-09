@@ -3862,7 +3862,7 @@
 			calculate_total();
 		}
 
-		function add_attribute_row(copy = false, product_row, menu2 = null, turn = 0) {
+		function add_attribute_row(copy = false, product_row, menu2 = null, turn = 0, row_id = null) {
 
 			var check_length = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div[data-main-id="0"]').length;
 
@@ -4024,7 +4024,14 @@
 					$('#menu2').find(`.attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`).find('.item1 span').text(rowCount);
 					$('#menu2').find(`.attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`).find('.turn').val(turn);
 
-					calculate_qty(product_row);
+					if($('#menu2').find(`.attributes_table[data-id='${product_row}'] .attribute-content-div[data-main-id='${row_id}']`).length > 0)
+					{
+						calculator(product_row,rowCount);
+					}
+					else
+					{
+						calculate_qty(product_row);
+					}
 			}
 		}
 
@@ -4347,10 +4354,11 @@
 
 			var current = $(this).parents('.attribute-content-div');
 			var product_row = current.parents('.attributes_table').data('id');
+			var row_id = current.data('id');
 			var turn = current.find(".turn").val();
 			var menu2 = current.children().clone();
 
-			add_attribute_row(true, product_row, menu2, turn);
+			add_attribute_row(true, product_row, menu2, turn, row_id);
 
 		});
 
