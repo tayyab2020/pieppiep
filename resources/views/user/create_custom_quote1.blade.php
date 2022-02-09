@@ -4618,7 +4618,7 @@
 								content =  content + '<div class="attribute-content-div" data-id="'+row_id+'.'+(i+1)+'" data-main-id="'+ row_id +'">\n' +
 										'\n' +
 										'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
-										'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ description +'</textarea></div></div>\n' +
+										'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ (i != total_rows ? description : 'Restant rol') +'</textarea></div></div>\n' +
 										'                       									 </div>\n' +
 										'\n' +
 										'                                                            <div class="attribute item2 width-box" style="width: 10%;">\n' +
@@ -4820,7 +4820,7 @@
 								content =  content + '<div class="attribute-content-div" data-id="'+row_id+'.'+(i+1)+'" data-main-id="'+ row_id +'">\n' +
 										'\n' +
 										'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
-										'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ description +'</textarea></div></div>\n' +
+										'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ (i != total_rows ? description : 'Restant rol') +'</textarea></div></div>\n' +
 										'                       									 </div>\n' +
 										'\n' +
 										'                                                            <div class="attribute item2 width-box" style="width: 10%;">\n' +
