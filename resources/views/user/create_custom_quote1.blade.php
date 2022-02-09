@@ -5668,6 +5668,9 @@
 							var supplier_id = this.getElementsByTagName("input")[4].value;
 							var row_id = current.parents(".content-div").data('id');
 							$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
+							// calculate_qty(row_id);
+							add_attribute_row(false, row_id);
 
 							$.ajax({
 								type: "GET",
@@ -5786,15 +5789,15 @@
 										$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(estimated_price_per_box_old);
 
-										$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').each(function (i, obj) {
+										// $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').each(function (i, obj) {
 											
-											var row_id1 = $(this).data('id');
-											calculator(row_id,row_id1);
+										// 	var row_id1 = $(this).data('id');
+										// 	calculator(row_id,row_id1);
 											
-										});
+										// });
 
-										// calculate_total();
-										calculate_qty(row_id);
+										// // calculate_total();
+										// calculate_qty(row_id);
 
 										var model = model_id;
 										var color = color_id;
