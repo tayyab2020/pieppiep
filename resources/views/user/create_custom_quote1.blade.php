@@ -503,16 +503,16 @@
 
 														<ul style="border: 0;" class="nav nav-tabs feature-tab">
 															
-															<li style="margin-bottom: 0;" class="active"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
-																
-															<li style="margin-bottom: 0;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu2" aria-expanded="false">Calculator</a></li>
+															<li style="margin-bottom: 0;" class="active"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu2" aria-expanded="false">Calculator</a></li>
+
+															<li style="margin-bottom: 0;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">Features</a></li>
 														
 														</ul>
 
 														<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;"
 															class="tab-content">
 
-															<div id="menu1" class="tab-pane fade active in">
+															<div id="menu1" class="tab-pane">
 
 																@if(isset($invoice))
 
@@ -789,7 +789,7 @@
 
 															</div>
 
-															<div id="menu2" class="tab-pane">
+															<div id="menu2" class="tab-pane fade active in">
 
 																<section class="attributes_table active" data-id="1" style="width: 100%;">
 
