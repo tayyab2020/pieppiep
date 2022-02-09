@@ -4552,7 +4552,7 @@
 								total_rows = Math.ceil(total_rows);
 							}
 							
-							// $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(parseInt(total_rows));
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
 							var content = '';
 							var width_array = [];
 
@@ -4740,7 +4740,7 @@
 								total_rows = Math.ceil(total_rows);
 							}
 							
-							// $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(parseInt(total_rows));
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
 							var content = '';
 							var height_array = [];
 
@@ -4771,9 +4771,9 @@
 								}
 								else
 								{
-									if(retailer_height < max_width)
+									if(i == total_rows)
 									{
-										height = retailer_height;
+										height = max_width - parseFloat(height_array[height_array.length-1]);
 									}
 									else
 									{
