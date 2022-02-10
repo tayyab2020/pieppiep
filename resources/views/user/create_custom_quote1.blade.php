@@ -4732,7 +4732,7 @@
 					}
 					else
 					{
-						if(max_width > parseFloat(width))
+						if(max_width > parseFloat(height))
 						{
 							var total_boxes = (parseFloat(width) + parseInt(cutting_lose_percentage))/100;
 							total_boxes = (Math.round(total_boxes * 10)) / 10;
