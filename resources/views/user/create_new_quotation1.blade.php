@@ -4408,7 +4408,7 @@
 									}
 								}*/
 
-								var features = '';
+								// var features = '';
 								var count_features = 0;
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
@@ -4416,80 +4416,80 @@
                                 var m1_impact_value = 0;
                                 var m2_impact_value = 0;
 
-								if (childsafe == 1) {
+								// if (childsafe == 1) {
 
-								    count_features = count_features + 1;
+								//     count_features = count_features + 1;
 
-									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div></div>\n';
+								// 	var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+								// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+								// 		'</div></div>\n' +
+								// 		'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+								// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+								// 		'</div></div>\n' +
+								// 		'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
+								// 		'<option value="">Select any option</option>\n' +
+								// 		'<option value="2">Add childsafety clip</option>\n' +
+								// 		'</select>\n' +
+								// 		'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
+								// 		'</div></div>\n';
 
-									features = features + content;
+								// 	features = features + content;
 
-								}
+								// }
 
-								if (ladderband == 1) {
+								// if (ladderband == 1) {
 
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+								// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
+								// 		'<option value="0">No</option>\n' +
+								// 		'<option value="1">Yes</option>\n' +
+								// 		'</select>\n' +
+								// 		'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+								// 		'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+								// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+								// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+								// 		'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
 
-									features = features + content;
+								// 	features = features + content;
 
-								}
+								// }
 
-								$.each(data[1], function (index, value) {
+								// $.each(data[1], function (index, value) {
 
-                                    count_features = count_features + 1;
+                                //     count_features = count_features + 1;
 
-									var opt = '<option value="0">Select Feature</option>';
+								// 	var opt = '<option value="0">Select Feature</option>';
 
-									$.each(value.features, function (index1, value1) {
+								// 	$.each(value.features, function (index1, value1) {
 
-										opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+								// 		opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
 
-									});
+								// 	});
 
-									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
-									}
-									else {
-										var icon = '';
-									}
+								// 	if (value.comment_box == 1) {
+								// 		var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+								// 	}
+								// 	else {
+								// 		var icon = '';
+								// 	}
 
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-										'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div>' + icon + '</div>\n';
+								// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
+								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+								// 		'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+								// 		'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+								// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+								// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+								// 		'</div>' + icon + '</div>\n';
 
-									features = features + content;
+								// 	features = features + content;
 
-								});
+								// });
 
                                 if(count_features > 0)
                                 {
@@ -4504,17 +4504,17 @@
                                     $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
                                 }
 
-								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-									$('#menu1').find(`[data-id='${row_id}']`).remove();
-								}
+								// if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
+								// 	$('#menu1').find(`[data-id='${row_id}']`).remove();
+								// }
 
-								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-									'\n' +
-									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-									'</div></div>' + features +
-									'</div>');
+								// $('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
+								// 	'\n' +
+								// 	'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 	'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+								// 	'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+								// 	'</div></div>' + features +
+								// 	'</div>');
 
 								if (data[3].max_size) {
 
@@ -4774,7 +4774,7 @@
 									}
 								}*/
 
-								var features = '';
+								// var features = '';
 								var count_features = 0;
 								var f_value = 0;
                                 var m1_impact = data[3].m1_impact;
@@ -4782,80 +4782,80 @@
                                 var m1_impact_value = 0;
                                 var m2_impact_value = 0;
 
-								if (childsafe == 1) {
+								// if (childsafe == 1) {
 
-								    count_features = count_features + 1;
+								//     count_features = count_features + 1;
 
-									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div></div>\n';
+								// 	var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+								// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+								// 		'</div></div>\n' +
+								// 		'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+								// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+								// 		'</div></div>\n' +
+								// 		'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
+								// 		'<option value="">Select any option</option>\n' +
+								// 		'<option value="2">Add childsafety clip</option>\n' +
+								// 		'</select>\n' +
+								// 		'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
+								// 		'</div></div>\n';
 
-									features = features + content;
+								// 	features = features + content;
 
-								}
+								// }
 
-								if (ladderband == 1) {
+								// if (ladderband == 1) {
 
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+								// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
+								// 		'<option value="0">No</option>\n' +
+								// 		'<option value="1">Yes</option>\n' +
+								// 		'</select>\n' +
+								// 		'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+								// 		'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+								// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+								// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+								// 		'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
 
-									features = features + content;
+								// 	features = features + content;
 
-								}
+								// }
 
-								$.each(data[1], function (index, value) {
+								// $.each(data[1], function (index, value) {
 
-                                    count_features = count_features + 1;
+                                //     count_features = count_features + 1;
 
-									var opt = '<option value="0">Select Feature</option>';
+								// 	var opt = '<option value="0">Select Feature</option>';
 
-									$.each(value.features, function (index1, value1) {
+								// 	$.each(value.features, function (index1, value1) {
 
-										opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+								// 		opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
 
-									});
+								// 	});
 
-									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
-									}
-									else {
-										var icon = '';
-									}
+								// 	if (value.comment_box == 1) {
+								// 		var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+								// 	}
+								// 	else {
+								// 		var icon = '';
+								// 	}
 
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-										'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div>' + icon + '</div>\n';
+								// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 		'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
+								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+								// 		'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+								// 		'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+								// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+								// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+								// 		'</div>' + icon + '</div>\n';
 
-									features = features + content;
+								// 	features = features + content;
 
-								});
+								// });
 
                                 if(count_features > 0)
                                 {
@@ -4870,17 +4870,17 @@
                                     $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
                                 }
 
-								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-									$('#menu1').find(`[data-id='${row_id}']`).remove();
-								}
+								// if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
+								// 	$('#menu1').find(`[data-id='${row_id}']`).remove();
+								// }
 
-								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-									'\n' +
-									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-									'</div></div>' + features +
-									'</div>');
+								// $('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
+								// 	'\n' +
+								// 	'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								// 	'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+								// 	'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+								// 	'</div></div>' + features +
+								// 	'</div>');
 
 								if (data[3].max_size) {
 
