@@ -47,26 +47,6 @@
 
 										<hr>
 
-                                        <div class="row" style="margin: 20px 0px;border-bottom: 1px solid #f1f1f1;padding-bottom: 20px;">
-
-                                            <div class="col-md-4 col-sm-4 col-xs-12 customer-details" style="float: left;text-align: left">
-
-                                            </div>
-
-                                            <div class="col-md-4 col-sm-4 col-xs-12" style="float: right;text-align: right;">
-
-                                                <img class="img-fluid" src="{{ asset('assets/images/'.$user->photo) }}" style="width:50%; height:100%;margin-bottom: 30px;">
-
-                                                <p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>
-                                                <p style="margin: 0">{{$user->company_name}}</p>
-                                                <p style="margin: 0">{{$user->address}}<?php if($user->city){ echo ', '.$user->city; } ?></p>
-                                                <p style="margin: 0">TEL: {{$user->phone}}</p>
-                                                <p style="margin: 0">{{$user->email}}</p>
-
-                                            </div>
-
-                                        </div>
-
 											<div class="col-md-5">
 												<div class="form-group" style="margin: 0;">
 
