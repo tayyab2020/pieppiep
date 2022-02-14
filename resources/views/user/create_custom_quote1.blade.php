@@ -7,10 +7,10 @@
 	<div class="container-fluid">
 		<div class="row">
 
-			<form id="form-quote" style="padding: 0;" class="form-horizontal" action=""
-				method="POST" enctype="multipart/form-data">
+			<form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}" method="POST" enctype="multipart/form-data">
 				{{csrf_field()}}
 
+				<input type="hidden" name="form_type" value="1">
 				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
 
 				<div style="margin: 0;" class="row">
@@ -812,6 +812,7 @@
 
 																		<div class="attribute full-res item1" style="width: 22%;">
 																			<div style="display: flex;align-items: center;">
+																				<input type="hidden" class="calculator_row" name="calculator_row1[]" value="1">
 																				<span style="width: 10%">1</span>
 																				<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]"></textarea></div>
 																			</div>
@@ -2792,6 +2793,7 @@
 
 					$('#menu2').find(`.attributes_table[data-id='${rowCount}']`).each(function (i, obj) {
 
+						$(obj).find('.calculator_row').attr('name', 'calculator_row' + rowCount + '[]');
 						$(obj).find('.attribute_description').attr('name', 'attribute_description' + rowCount + '[]');
 						$(obj).find('.width-box').find('.width').attr('name', 'width' + rowCount + '[]');
 						$(obj).find('.width-box').find('.measure-unit').attr('name', 'width_unit' + rowCount + '[]');
@@ -2843,7 +2845,7 @@
 				$(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="' + rowCount + '" data-main-id="0">\n' +
 					'\n' +
 					'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
-					'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+rowCount+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]"></textarea></div></div>\n' +
+					'                       									 	<div style="display: flex;align-items: center;"><input type="hidden" class="calculator_row" name="calculator_row'+product_row+'[]" value="'+rowCount+'"><span style="width: 10%">'+rowCount+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]"></textarea></div></div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
 					'                                                            <div class="attribute item2 width-box" style="width: 10%;">\n' +
@@ -2979,6 +2981,7 @@
 
 					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="'+rowCount+'" data-main-id="0"></div>\n');
 					menu2.appendTo(`#menu2 .attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`);
+					$('#menu2').find(`.attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`).find('.calculator_row').val(rowCount);
 					$('#menu2').find(`.attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`).find('.item1 span').text(rowCount);
 					$('#menu2').find(`.attributes_table[data-id='${product_row}'] .attribute-content-div[data-id='${rowCount}']`).find('.turn').val(turn);
 
@@ -3087,55 +3090,38 @@
 				$('#cus-box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
 			}
 
-
-			$("[name='suppliers[]']").each(function (i, obj) {
-
-				if (!$(this).parent().hasClass('hide')) {
-					if (!obj.value) {
-						flag = 1;
-						$(obj).next().find('.select2-selection').css('border', '1px solid red');
-					}
-					else {
-						$(obj).next().find('.select2-selection').css('border', '0');
-					}
-				}
-
-			});
-
 			$("[name='products[]']").each(function (i, obj) {
 
 				if (!obj.value) {
 					flag = 1;
-					$(obj).next().find('.select2-selection').css('border', '1px solid red');
+					$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
 				}
 				else {
-					$(obj).next().find('.select2-selection').css('border', '0');
+					$(obj).parents('.products').find('#productInput').css('border', '0');
 				}
 
 			});
-
 
 			$("[name='colors[]']").each(function (i, obj) {
 
 				if (!obj.value) {
 					flag = 1;
-					$(obj).next().find('.select2-selection').css('border', '1px solid red');
+					$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
 				}
 				else {
-					$(obj).next().find('.select2-selection').css('border', '0');
+					$(obj).parents('.products').find('#productInput').css('border', '0');
 				}
 
 			});
-
 
 			$("[name='models[]']").each(function (i, obj) {
 
 				if (!obj.value) {
 					flag = 1;
-					$(obj).next().find('.select2-selection').css('border', '1px solid red');
+					$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
 				}
 				else {
-					$(obj).next().find('.select2-selection').css('border', '0');
+					$(obj).parents('.products').find('#productInput').css('border', '0');
 				}
 
 			});
@@ -3145,7 +3131,6 @@
 			$("[name='row_id[]']").each(function () {
 
 				var id = $(this).val();
-				var conflict_flag = 0;
 
 				var childsafe = $("[name='childsafe_option" + id + "']").val();
 
@@ -3176,58 +3161,50 @@
 
 				});
 
-				$("[name='f_area" + id + "[]']").each(function () {
+				$("[name='width" + id + "[]']").each(function (i, obj) {
 
-					var conflict = $(this).val();
+					var value = $(this).val();
 
-					if (conflict == 1) {
-						conflict_flag = 1;
+					if (value == "") {
+						flag = 1;
+						$(this).css('border', '1px solid red');
+					}
+					else 
+					{
+						$(this).css('border', '1px solid #ccc');
 					}
 
 				});
 
+				$("[name='height" + id + "[]']").each(function (i, obj) {
 
-				if (conflict_flag == 1) {
-					flag = 1;
-					$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
-					$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
-				}
-				else {
-					var area_conflict = $('#products_table').find(`[data-id='${id}']`).find('#area_conflict').val();
+					var value = $(this).val();
 
-					if (area_conflict == 3) {
+					if (value == "") {
 						flag = 1;
-						$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
-						$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
+						$(this).css('border', '1px solid red');
 					}
-					else if (area_conflict == 2) {
-						flag = 1;
-						$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '0');
-						$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
+					else 
+					{
+						$(this).css('border', '1px solid #ccc');
 					}
-					else if (area_conflict == 1) {
-						flag = 1;
-						$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
-						$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '0');
-					}
-					else {
-						if (!$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').val()) {
-							flag = 1;
-							$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
-						}
-						else {
-							$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '0');
-						}
 
-						if (!$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').val()) {
-							flag = 1;
-							$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
-						}
-						else {
-							$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '0');
-						}
+				});
+
+				$("[name='cutting_lose_percentage" + id + "[]']").each(function (i, obj) {
+
+					var value = $(this).val();
+
+					if (value == "") {
+						flag = 1;
+						$(this).css('border', '1px solid red');
 					}
-				}
+					else 
+					{
+						$(this).css('border', '1px solid #ccc');
+					}
+
+				});
 
 			});
 
@@ -3580,7 +3557,7 @@
 								content =  content + '<div class="attribute-content-div" data-id="'+row_id+'.'+(i+1)+'" data-main-id="'+ row_id +'">\n' +
 										'\n' +
 										'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
-										'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ (i != total_rows ? description : 'Restant rol') +'</textarea></div></div>\n' +
+										'                       									 	<div style="display: flex;align-items: center;"><input type="hidden" class="calculator_row" name="calculator_row'+product_row+'[]" value="'+row_id+'.'+(i+1)+'"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ (i != total_rows ? description : 'Restant rol') +'</textarea></div></div>\n' +
 										'                       									 </div>\n' +
 										'\n' +
 										'                                                            <div class="attribute item2 width-box" style="width: 10%;">\n' +
@@ -3786,7 +3763,7 @@
 								content =  content + '<div class="attribute-content-div" data-id="'+row_id+'.'+(i+1)+'" data-main-id="'+ row_id +'">\n' +
 										'\n' +
 										'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
-										'                       									 	<div style="display: flex;align-items: center;"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ (i != total_rows ? description : 'Restant rol') +'</textarea></div></div>\n' +
+										'                       									 	<div style="display: flex;align-items: center;"><input type="hidden" class="calculator_row" name="calculator_row'+product_row+'[]" value="'+row_id+'.'+(i+1)+'"><span style="width: 10%">'+row_id+'.'+(i+1)+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]">'+ (i != total_rows ? description : 'Restant rol') +'</textarea></div></div>\n' +
 										'                       									 </div>\n' +
 										'\n' +
 										'                                                            <div class="attribute item2 width-box" style="width: 10%;">\n' +
@@ -4169,10 +4146,6 @@
 			var row_id = current.parent().parent().parent().data('id');
 			var feature_select = current.val();
 			var id = current.parent().find('.f_id').val();
-			var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
-			width = width.replace(/\,/g, '.');
-			var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
-			height = height.replace(/\,/g, '.');
 			var product_id = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
 			var ladderband_value = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val();
 			var ladderband_price_impact = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val();
@@ -4181,8 +4154,7 @@
 			var impact_value = current.next('input').val();
 			var total = $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val();
 			var basic_price = $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val();
-			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
-			var margin = $('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide');
+			var margin = 1;
 			var supplier_margin = $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val();
             var retailer_margin = $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val();
 
@@ -4197,17 +4169,6 @@
 					if (ladderband_price_impact == 1) {
 						if (ladderband_impact_type == 0) {
 							impact_value = ladderband_value;
-
-                            if(!margin)
-                            {
-                                if (supplier_margin && retailer_margin) {
-                                    if(supplier_margin != 0)
-                                    {
-                                        impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                    }
-                                }
-                            }
-
 							impact_value = parseFloat(impact_value).toFixed(2);
 							total = parseFloat(total) + parseFloat(impact_value);
 							total = total.toFixed(2);
@@ -4216,17 +4177,6 @@
 							impact_value = ladderband_value;
 							var per = (impact_value) / 100;
 							impact_value = basic_price * per;
-
-                            if(!margin)
-                            {
-                                if (supplier_margin && retailer_margin) {
-                                    if(supplier_margin != 0)
-                                    {
-                                        impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                    }
-                                }
-                            }
-
 							impact_value = parseFloat(impact_value).toFixed(2);
 							total = parseFloat(total) + parseFloat(impact_value);
 							total = total.toFixed(2);
@@ -4376,88 +4326,11 @@
 								'</div></div>');
 						}
 
-						if (data[0] && data[0].max_size) {
-							var sq = (width * height) / 10000;
-							var max_size = data[0].max_size;
+						current.parent().find('.f_area').val(0);
 
-							if (sq > max_size) {
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									text: 'Area is greater than max size: ' + max_size,
-								});
-
-								current.parent().find('.f_area').val(1);
-							}
-						}
-						else {
-							current.parent().find('.f_area').val(0);
-						}
-
-						if (data[0] && data[0].price_impact == 1) {
-
-							if (data[0].variable == 1) {
-								impact_value = data[0].value;
-								impact_value = impact_value * (width / 100);
-
-                                if(!margin)
-                                {
-                                    if (supplier_margin && retailer_margin) {
-                                        if(supplier_margin != 0)
-                                        {
-                                            impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                        }
-                                    }
-                                }
-
-								impact_value = parseFloat(impact_value).toFixed(2);
-								total = parseFloat(total) + parseFloat(impact_value);
-								total = total.toFixed(2);
-							}
-							else {
-								if (data[0].impact_type == 0) {
-									impact_value = data[0].value;
-
-                                    if(!margin)
-                                    {
-                                        if (supplier_margin && retailer_margin) {
-                                            if(supplier_margin != 0)
-                                            {
-                                                impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                            }
-                                        }
-                                    }
-
-									impact_value = parseFloat(impact_value).toFixed(2);
-									total = parseFloat(total) + parseFloat(impact_value);
-									total = total.toFixed(2);
-								}
-								else {
-									impact_value = data[0].value;
-									var per = (impact_value) / 100;
-									impact_value = basic_price * per;
-
-                                    if(!margin)
-                                    {
-                                        if (supplier_margin && retailer_margin) {
-                                            if(supplier_margin != 0)
-                                            {
-                                                impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                            }
-                                        }
-                                    }
-
-									impact_value = parseFloat(impact_value).toFixed(2);
-									total = parseFloat(total) + parseFloat(impact_value);
-									total = total.toFixed(2);
-								}
-							}
-						}
-						else {
-							impact_value = 0;
-							total = parseFloat(total) + parseFloat(impact_value);
-							total = total.toFixed(2);
-						}
+						impact_value = 0;
+						total = parseFloat(total) + parseFloat(impact_value);
+						total = total.toFixed(2);
 
 						//total = Math.round(total);
 						price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);

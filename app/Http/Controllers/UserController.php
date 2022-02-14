@@ -3719,6 +3719,11 @@ class UserController extends Controller
 
     public function StoreNewQuotation(Request $request)
     {
+        if($request->form_type == 1)
+        {
+            return redirect()->back();
+        }
+        
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;

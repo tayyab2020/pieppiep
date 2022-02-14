@@ -11,6 +11,7 @@
 				method="POST" enctype="multipart/form-data">
 				{{csrf_field()}}
 
+				<input type="hidden" name="form_type" value="2">
 				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
 
 				<div style="margin: 0;" class="row">
