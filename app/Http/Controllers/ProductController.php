@@ -525,7 +525,7 @@ class ProductController extends Controller
     {
         $input = $request->all();
 
-        $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
+        // $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
         $colors = $request->colors;
         $features = $request->feature_headings;
         $models = $request->models;
@@ -533,14 +533,14 @@ class ProductController extends Controller
         $feature_row = array();
         $feature_id = array();
 
-        if($prices)
-        {
-            $pricesArray = explode(',', $prices);
-        }
-        else
-        {
-            $pricesArray = [];
-        }
+        // if($prices)
+        // {
+        //     $pricesArray = explode(',', $prices);
+        // }
+        // else
+        // {
+        //     $pricesArray = [];
+        // }
 
         if($request->form_type == 1)
         {
@@ -558,9 +558,6 @@ class ProductController extends Controller
             }
         }
 
-        $input['estimated_price_per_box'] = str_replace(',', '.',$input['estimated_price_per_box']);
-        $input['estimated_price_quantity'] = str_replace(',', '.',$input['estimated_price_quantity']);
-        $input['estimated_price'] = str_replace(',', '.',$input['estimated_price']);
         $input['margin'] = is_numeric($input['margin']) ? $input['margin'] : NULL;
 
         if($request->cat_id)
@@ -842,6 +839,14 @@ class ProductController extends Controller
                         $model_check->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
                         $model_check->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
                         $model_check->childsafe = $request->childsafe[$m];
+                        
+                        if($request->form_type == 1)
+                        {
+                            $model_check->estimated_price_per_box = str_replace(',', '.',$request->estimated_price_per_box[$m]);
+                            $model_check->estimated_price_quantity = str_replace(',', '.',$request->estimated_price_quantity[$m]);
+                            $model_check->estimated_price = str_replace(',', '.',$request->estimated_price[$m]);
+                        }
+                        
                         $model_check->save();
                     }
 
@@ -885,6 +890,14 @@ class ProductController extends Controller
                         $model->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
                         $model->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
                         $model->childsafe = $request->childsafe[$m];
+
+                        if($request->form_type == 1)
+                        {
+                            $model->estimated_price_per_box = str_replace(',', '.',$request->estimated_price_per_box[$m]);
+                            $model->estimated_price_quantity = str_replace(',', '.',$request->estimated_price_quantity[$m]);
+                            $model->estimated_price = str_replace(',', '.',$request->estimated_price[$m]);
+                        }
+
                         $model->save();
 
                         foreach ($feature_row as $a => $abc)
@@ -926,7 +939,6 @@ class ProductController extends Controller
                 }
                 else
                 {
-                
                     if(count($sub_products) > 0)
                     {
                     
@@ -1073,14 +1085,12 @@ class ProductController extends Controller
                 {
                     if(count($colors) > 0)
                     {
-                    
                         foreach ($colors as $c => $key)
                         {
                             $col_check = colors::where('product_id',$request->cat_id)->skip($c)->first();
 
                             if($col_check)
                             {
-                            
                                 if($key != NULL && $request->color_codes[$c] != NULL)
                                 {
                                     $col_check->title = $key;
@@ -1117,7 +1127,6 @@ class ProductController extends Controller
                             }
                             else
                             {
-                            
                                 if($key != NULL && $request->color_codes[$c] != NULL)
                                 {
                                     $col = new colors;
@@ -1162,45 +1171,45 @@ class ProductController extends Controller
                     }
                 }
 
-                $est = estimated_prices::where('product_id',$request->cat_id)->get();
+                // $est = estimated_prices::where('product_id',$request->cat_id)->get();
 
-                if(count($est) == 0)
-                {
-                    foreach ($pricesArray as $price)
-                    {
-                        $est = new estimated_prices;
-                        $est->product_id = $request->cat_id;
-                        $est->price = $price;
-                        $est->save();
-                    }
-                }
-                else
-                {
-                    if(count($pricesArray) > 0)
-                    {
-                        foreach ($pricesArray as $x => $price)
-                        {
-                            $est_check = estimated_prices::where('product_id',$request->cat_id)->skip($x)->first();
+                // if(count($est) == 0)
+                // {
+                //     foreach ($pricesArray as $price)
+                //     {
+                //         $est = new estimated_prices;
+                //         $est->product_id = $request->cat_id;
+                //         $est->price = $price;
+                //         $est->save();
+                //     }
+                // }
+                // else
+                // {
+                //     if(count($pricesArray) > 0)
+                //     {
+                //         foreach ($pricesArray as $x => $price)
+                //         {
+                //             $est_check = estimated_prices::where('product_id',$request->cat_id)->skip($x)->first();
 
-                            if($est_check)
-                            {
-                                $est_check->price = $pricesArray[$x];
-                                $est_check->save();
-                            }
-                            else
-                            {
-                                $temp = new estimated_prices;
-                                $temp->product_id = $request->cat_id;
-                                $temp->price = $pricesArray[$x];
-                                $temp->save();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        estimated_prices::where('product_id',$request->cat_id)->delete();
-                    }
-                }
+                //             if($est_check)
+                //             {
+                //                 $est_check->price = $pricesArray[$x];
+                //                 $est_check->save();
+                //             }
+                //             else
+                //             {
+                //                 $temp = new estimated_prices;
+                //                 $temp->product_id = $request->cat_id;
+                //                 $temp->price = $pricesArray[$x];
+                //                 $temp->save();
+                //             }
+                //         }
+                //     }
+                //     else
+                //     {
+                //         estimated_prices::where('product_id',$request->cat_id)->delete();
+                //     }
+                // }
             }
 
             Session::flash('success', 'Product edited successfully.');
@@ -1219,7 +1228,7 @@ class ProductController extends Controller
             $input['user_id'] = $user_id;
 
             $check = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->where('products.user_id',$user_id)->where('products.title', 'LIKE', '%'.$request->title.'%')->where('products.model_number',$request->model_number)->where('categories.id',$request->category_id)->where('brands.id',$request->brand_id)->select('products.*')->first();
-
+            
             if(!$check)
             {
                 $cat = new Products();
@@ -1297,9 +1306,17 @@ class ProductController extends Controller
                         $model->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
                         $model->price_impact = $request->model_price_impact[$m];
                         $model->impact_type = $request->model_impact_type[$m];
-                        $model->m2_impact = $request->model_m2_impact[$m];
-                        $model->m1_impact = $request->model_width_impact[$m];
+                        $model->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
+                        $model->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
                         $model->childsafe = $request->childsafe[$m];
+
+                        if($request->form_type == 1)
+                        {
+                            $model->estimated_price_per_box = str_replace(',', '.',$request->estimated_price_per_box[$m]);
+                            $model->estimated_price_quantity = str_replace(',', '.',$request->estimated_price_quantity[$m]);
+                            $model->estimated_price = str_replace(',', '.',$request->estimated_price[$m]);
+                        }
+                        
                         $model->save();
 
                         foreach ($feature_row as $a => $abc)
@@ -1346,13 +1363,13 @@ class ProductController extends Controller
                         }
                     }
 
-                    foreach ($pricesArray as $x => $price)
-                    {
-                        $est = new estimated_prices;
-                        $est->product_id = $cat->id;
-                        $est->price = $price;
-                        $est->save();
-                    }
+                    // foreach ($pricesArray as $x => $price)
+                    // {
+                    //     $est = new estimated_prices;
+                    //     $est->product_id = $cat->id;
+                    //     $est->price = $price;
+                    //     $est->save();
+                    // }
                 }
                 else
                 {

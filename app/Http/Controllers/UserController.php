@@ -253,7 +253,7 @@ class UserController extends Controller
     {
         if($request->model)
         {
-            $data = Products::leftjoin('product_models','product_models.product_id','=','products.id')->where('product_models.id',$request->model)->where('products.id',$request->id)->select('products.*','product_models.max_width')->first();
+            $data = Products::leftjoin('product_models','product_models.product_id','=','products.id')->where('product_models.id',$request->model)->where('products.id',$request->id)->select('products.*','product_models.estimated_price_per_box','product_models.estimated_price_quantity','product_models.estimated_price','product_models.max_width')->first();
         }
         else
         {

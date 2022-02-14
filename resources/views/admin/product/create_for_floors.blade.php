@@ -160,27 +160,6 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Advice Price Per Box</label>
-                                                            <div class="col-sm-6">
-                                                                <input value="{{isset($cats) ? str_replace('.', ',', floatval($cats->estimated_price_per_box)) : null}}" maskedformat="9,1" class="form-control" name="estimated_price_per_box" id="estimated_price_per_box" placeholder="Advice Price Per Box" type="text">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Advice Price Quantity</label>
-                                                            <div class="col-sm-6">
-                                                                <input value="{{isset($cats) ? $cats->estimated_price_quantity : null}}" class="form-control" maskedformat="9,1" name="estimated_price_quantity" id="estimated_price_quantity" placeholder="Advice Price Quantity" type="text">
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Advice Price</label>
-                                                            <div class="col-sm-6">
-                                                                <input style="background: white;" value="{{isset($cats) ? str_replace('.', ',', floatval($cats->estimated_price)) : null}}" readonly class="form-control" name="estimated_price" id="estimated_price" placeholder="Advice Price" type="text">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Floor Type</label>
                                                             <div class="col-sm-6">
                                                                 <input value="{{isset($cats) ? $cats->floor_type : null}}" class="form-control" name="floor_type" id="blood_group_slug" placeholder="Enter Floor Type" type="text">
@@ -1415,24 +1394,45 @@
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>
-                                                                                                    <input value="{{str_replace(".",",",$mod->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
-
-                                                                                                </div>
-
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>
-                                                                                                    <input value="{{str_replace(".",",",$mod->max_width)}}" class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>
+                                                                                                    <input value="{{str_replace('.', ',', floatval($mod->estimated_price_per_box))}}" class="form-control estimated_price_per_box" id="estimated_price_per_box" name="estimated_price_per_box[]" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>
-                                                                                                    <input value="{{str_replace(".",",",$mod->max_height)}}" class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Quantity:</label>
+                                                                                                    <input value="{{$mod->estimated_price_quantity}}" class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="Advice Price Quantity" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price:</label>
+                                                                                                    <input value="{{str_replace('.', ',', floatval($mod->estimated_price))}}" class="form-control estimated_price" id="estimated_price" name="estimated_price[]" readonly maskedformat="9,1" placeholder="Advice Price" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
+                                                                                                    <input value="{{str_replace('.',',',$mod->max_size)}}" class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
+                                                                                                    <input value="{{str_replace('.',',',$mod->max_width)}}" class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
+                                                                                                    <input value="{{str_replace('.',',',$mod->max_height)}}" class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
 
                                                                                                 </div>
 
@@ -1525,23 +1525,44 @@
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>
+                                                                                                    <input class="form-control estimated_price_per_box" id="estimated_price_per_box" name="estimated_price_per_box[]" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Quantity:</label>
+                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="Advice Price Quantity" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price:</label>
+                                                                                                    <input class="form-control estimated_price" id="estimated_price" name="estimated_price[]" readonly maskedformat="9,1" placeholder="Advice Price" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
                                                                                                     <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
                                                                                                     <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
                                                                                                     <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
 
                                                                                                 </div>
@@ -1639,23 +1660,44 @@
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>
+                                                                                                    <input class="form-control estimated_price_per_box" id="estimated_price_per_box" name="estimated_price_per_box[]" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Quantity:</label>
+                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="Advice Price Quantity" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price:</label>
+                                                                                                    <input class="form-control estimated_price" id="estimated_price" name="estimated_price[]" readonly maskedformat="9,1" placeholder="Advice Price" type="text">
+
+                                                                                                </div>
+
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max m²:</label>
                                                                                                     <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
                                                                                                     <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
                                                                                                     <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
 
                                                                                                 </div>
@@ -2603,23 +2645,44 @@
                 '\n' +
                 '                                                                                            </div>\n' +
                 '\n' +
-                '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                 '\n' +
-                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>\n' +
+                '                                                                                                    <input class="form-control estimated_price_per_box" name="estimated_price_per_box[]" id="estimated_price_per_box" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">\n' +
+                '\n' +
+                '                                                                                                </div>\n' +
+                '\n' +
+                '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Quantity:</label>\n' +
+                '                                                                                                    <input class="form-control estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" id="estimated_price_quantity" placeholder="Advice Price Quantity" type="text">\n' +
+                '\n' +
+                '                                                                                                </div>\n' +
+                '\n' +
+                '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price:</label>\n' +
+                '                                                                                                    <input class="form-control estimated_price" name="estimated_price[]" readonly maskedformat="9,1" id="estimated_price" placeholder="Advice Price" type="text">\n' +
+                '\n' +
+                '                                                                                                </div>\n' +
+                '\n' +
+                '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max m²:</label>\n' +
                 '                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">\n' +
                 '\n' +
                 '                                                                                                </div>\n' +
                 '\n' +
-                '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                 '\n' +
-                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Width:</label>\n' +
                 '                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">\n' +
                 '\n' +
                 '                                                                                                </div>\n' +
                 '\n' +
-                '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                 '\n' +
-                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Height:</label>\n' +
                 '                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
                 '\n' +
                 '                                                                                                </div>\n' +
@@ -3762,7 +3825,7 @@
 
         });
 
-        $(document).on('keypress', "#estimated_price_quantity", function(e){
+        $(document).on('keypress', ".estimated_price_quantity", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -3776,7 +3839,7 @@
 
         });
 
-        $(document).on('keypress', "#estimated_price_per_box", function(e){
+        $(document).on('keypress', ".estimated_price_per_box", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -3805,19 +3868,19 @@
 
         });
 
-        $(document).on('input', "#estimated_price_per_box, #estimated_price_quantity", function(e){
+        $(document).on('input', ".estimated_price_per_box, .estimated_price_quantity", function(e){
 
             var id = $(this).attr('id');
 
             if(id == 'estimated_price_per_box')
             {
                 var estimated_price_per_box = $(this).val();
-                var estimated_price_quantity = $('#estimated_price_quantity').val();
+                var estimated_price_quantity = $(this).parent().parent().find('#estimated_price_quantity').val();
             }
             else
             {
                 var estimated_price_quantity = $(this).val();
-                var estimated_price_per_box = $('#estimated_price_per_box').val();
+                var estimated_price_per_box = $(this).parent().parent().find('#estimated_price_per_box').val();
             }
 
             var estimated_price_per_box = estimated_price_per_box.replace(/\,/g, '.');
@@ -3826,11 +3889,11 @@
             if (!isNaN(estimated_price) && estimated_price !== Infinity) {
                 estimated_price = parseFloat(estimated_price).toFixed(2);
                 estimated_price = estimated_price.replace(/\./g, ',');
-                $('#estimated_price').val(estimated_price);
+                $(this).parent().parent().find('#estimated_price').val(estimated_price);
             }
             else
             {
-                $('#estimated_price').val(0);
+                $(this).parent().parent().find('#estimated_price').val(0);
             }
 
         });
