@@ -441,7 +441,7 @@
 
                                 @foreach($request->products as $i => $key)
 
-                                    <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i]}} Calculations</h2>
+                                    <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}} Calculations</h2>
 
                                     <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
 
