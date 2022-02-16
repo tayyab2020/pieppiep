@@ -343,26 +343,41 @@
 
                                                 <thead>
                                                 <tr>
-                                                    <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
+
+                                                    @if($request->total_discount[$i] != 0)
+
+                                                        <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
+
+                                                    @endif
+
                                                     <th style="width: 20% !important;font-size: 20px;font-weight: 500;text-align: center;">Exclusief BTW</th>
                                                     <th style="width: 25% !important;font-size: 20px;text-align: center;font-weight: 500;">BTW</th>
                                                     <th style="width: 35% !important;font-size: 20px;text-align: right;">Bedrag inc. btw</th>
+
                                                 </tr>
                                                 </thead>
 
                                                 <tbody>
 
                                                 <tr>
+
                                                     <?php
                                                     $ex_vat = ($request->rate[$i]/121)*100;
                                                     $vat = $request->rate[$i] - $ex_vat;
                                                     $vat = number_format((float)($vat), 2, ',', '.');
                                                     $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
                                                     ?>
-                                                    <td style="font-size: 20px;padding: 5px;">€ {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
+
+                                                        @if($request->total_discount[$i] != 0)
+
+                                                            <td style="font-size: 20px;padding: 5px;">€ {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
+
+                                                        @endif
+
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
+
                                                 </tr>
 
                                                 </tbody>

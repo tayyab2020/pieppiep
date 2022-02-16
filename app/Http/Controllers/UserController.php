@@ -10,6 +10,7 @@ use App\custom_quotations_data;
 use App\customers_details;
 use App\email_templates;
 use App\Jobs\SendOrder;
+use App\Jobs\CreateOrder;
 use App\Jobs\UpdateDates;
 use App\model_features;
 use App\new_orders;
@@ -4101,7 +4102,10 @@ class UserController extends Controller
                     $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.id',$key1)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
                 }
             }
-
+            else
+            {
+                $feature_sub_titles = array();
+            }
         }
 
         $filename = $quotation_invoice_number . '.pdf';
@@ -4140,6 +4144,10 @@ class UserController extends Controller
 
         if($form_type == 1)
         {
+            // $invoice->processing = 1;
+            // $invoice->save();
+            // CreateOrder::dispatch($form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request,$quotation_invoice_number);
+
             $role = 'order';
             $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
             $file = public_path() . '/assets/Orders/' . $filename;
