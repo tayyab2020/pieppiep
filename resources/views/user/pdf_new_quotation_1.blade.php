@@ -70,186 +70,287 @@
                                 <div class="col-md-12" style="padding: 0 !important;">
 
                                     <?php
-                                    $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
-                                    $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
-                                    $arb_price = number_format((float)($arb_price), 2, ',', '.');
-                                    $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
-                                    $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
-                                    $arb = $request->rate[$i] - $arb_discount;
-                                    $arb = number_format((float)($arb), 2, ',', '.');
-                                    $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
-                                    $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
-                                    $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
-                                    $art = number_format((float)($art), 2, ',', '.');
-                                    $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
+                                    
+                                    if($form_type == 1)
+                                    {
+                                        $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
+                                        $arb = $request->rate[$i] - $arb_discount;
+                                        $arb = number_format((float)($arb), 2, ',', '.');
+                                        $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
+                                    }
+                                    else
+                                    {
+                                        $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
+                                        $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
+                                        $arb_price = number_format((float)($arb_price), 2, ',', '.');
+                                        $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
+                                        $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
+                                        $arb = $request->rate[$i] - $arb_discount;
+                                        $arb = number_format((float)($arb), 2, ',', '.');
+                                        $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
+                                        $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
+                                        $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
+                                        $art = number_format((float)($art), 2, ',', '.');
+                                        $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
+                                    }
+                                    
                                     ?>
 
-                                    <table style="display: table;width: 100%;">
+                                        <table style="display: table;width: 100%;">
 
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
-                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
-                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
-                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
-                                        </tr>
-                                        </thead>
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
+                                                <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
+                                                <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
+                                                <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+                                            </tr>
+                                            </thead>
 
-                                        <tbody>
-
-                                        <tr>
-                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
-                                            <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
-                                        </tr>
-
-                                        @if($arb_discount != 0)
+                                            <tbody>
 
                                             <tr>
-                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
-                                                <td style="font-size: 20px;padding: 5px;"></td>
-                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+
+                                                @if($form_type == 1)
+
+                                                    <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+
+                                                @else
+
+                                                    <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
+
+                                                @endif
+
+                                                <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
                                             </tr>
+
+                                            @if($arb_discount != 0)
+
+                                                <tr>
+                                                    <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
+                                                    <td style="font-size: 20px;padding: 5px;"></td>
+                                                    <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                    <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                </tr>
+
+                                            @endif
+
+                                            @if($form_type == 2)
+
+                                                <tr>
+                                                    <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
+                                                    <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
+                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
+                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
+                                                </tr>
+
+                                                @if($art_labor_discount != 0)
+
+                                                    <tr>
+                                                        <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
+                                                        <td style="font-size: 20px;padding: 5px;"></td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                    </tr>
+
+                                                @endif
+
+                                            @endif
+
+                                            </tbody>
+
+                                        </table>
+
+                                        @if($form_type == 1)
+
+                                            <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">Calculations</h2>
+
+                                            <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
+
+                                                <tbody>
+
+                                                <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
+
+                                                @if($request->measure[$i] == 'M1')
+
+                                                    <tr class="header">
+                                                        <td class="headings" style="width: 22%;">Description</td>
+                                                        <td class="headings" style="width: 13%;">Width</td>
+                                                        <td class="headings" style="width: 13%;">Height</td>
+                                                        <td class="headings" style="width: 13%;">Cutting lose</td>
+                                                        <td class="headings" style="width: 13%;">Turn</td>
+                                                        <td class="headings" style="width: 13%;">Max Width</td>
+                                                        <td class="headings" style="width: 13%;">Total</td>
+                                                    </tr>
+
+                                                @else
+
+                                                    <tr class="header">
+                                                        <td class="headings" style="width: 22%;">Description</td>
+                                                        <td class="headings" style="width: 13%;">Width</td>
+                                                        <td class="headings" style="width: 13%;">Height</td>
+                                                        <td class="headings" style="width: 13%;">Cutting lose</td>
+                                                        <td class="headings" style="width: 13%;">Total</td>
+                                                        <td class="headings" style="width: 13%;">Box quantity</td>
+                                                        <td class="headings" style="width: 13%;">Total boxes</td>
+                                                    </tr>
+
+                                                @endif
+
+                                                @foreach($calculator_row as $c => $cal)
+
+                                                    <?php
+
+                                                    $description = 'attribute_description'.$request->row_id[$i];
+                                                    $width = 'width'.$request->row_id[$i];
+                                                    $height = 'height'.$request->row_id[$i];
+                                                    $cutting_lose = 'cutting_lose_percentage'.$request->row_id[$i];
+                                                    $box_quantity_supplier = 'box_quantity_supplier'.$request->row_id[$i];
+                                                    $box_quantity = 'box_quantity'.$request->row_id[$i];
+                                                    $total_boxes = 'total_boxes'.$request->row_id[$i];
+                                                    $max_width = 'max_width'.$request->row_id[$i];
+                                                    $turn = 'turn'.$request->row_id[$i];
+
+                                                    ?>
+
+                                                    <tr>
+
+                                                        <td>{{$request->$description[$c]}}</td>
+                                                        <td>{{$request->$width[$c]}}</td>
+                                                        <td>{{$request->$height[$c]}}</td>
+                                                        <td>{{$request->$cutting_lose[$c]}}</td>
+
+                                                        @if($request->measure[$i] == 'M1')
+
+                                                            <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
+                                                            <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
+
+                                                        @else
+
+                                                            <td>{{str_replace('.', ',',$request->$total_boxes[$c])}}</td>
+                                                            <td>{{str_replace('.', ',',$request->$box_quantity_supplier[$c])}}</td>
+
+                                                        @endif
+
+                                                        <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+
+                                                    </tr>
+
+                                                @endforeach
+
+                                                </tbody>
+                                            </table>
 
                                         @endif
 
-                                        <tr>
-                                            <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
-                                            <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
-                                        </tr>
 
-                                        @if($art_labor_discount != 0)
+                                        <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">Features</h2>
 
-                                            <tr>
-                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
-                                                <td style="font-size: 20px;padding: 5px;"></td>
-                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                            </tr>
+                                        <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
 
-                                        @endif
+                                            <tbody>
 
-                                        </tbody>
+                                            <?php
 
-                                    </table>
+                                            if($role == 'retailer') {
 
-                                    <table class="table table1">
+                                                $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
 
-                                        <tbody>
+                                            }
+                                            else {
 
-                                        <?php
+                                                $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
 
-                                        if($role == 'retailer') {
+                                            }
 
-                                            $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+                                            if($childsafe_answer)
+                                            {
+                                                $data = array (
+                                                    'childsafe' => 1,
+                                                    'childsafe_answer' => $childsafe_answer,
+                                                );
+                                                array_push($feature_sub_titles[$i],$data);
+                                            }
 
-                                        }
-                                        else {
+                                            $cols = array_chunk($feature_sub_titles[$i], 3);
+                                            ?>
 
-                                            $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+                                            <?php $d = 1; ?>
 
-                                        }
+                                            @foreach($cols as $f => $col)
 
-                                        if($childsafe_answer)
-                                        {
-                                            $data = array (
-                                                'childsafe' => 1,
-                                                'childsafe_answer' => $childsafe_answer,
-                                            );
-                                            array_push($feature_sub_titles[$i],$data);
-                                        }
+                                                <tr>
 
-                                        $cols = array_chunk($feature_sub_titles[$i], 3);
-                                        ?>
+                                                    @foreach($col as $x => $feature)
 
-                                        <!--<tr>
-                                            <td style="border: 0 !important;"><p class="text-muted" style="font-size: 20px;width: auto !important;padding: 10px !important;font-weight: bold;">{{$product_titles[$i]}}</p></td>
-                                        </tr>
+                                                        @if($role == 'retailer')
 
-                                        <tr>
-                                            <td style="text-align: left !important;">{{__('text.Color Number')}}: {{$color_titles[$i]}}</td>
-                                            <td style="text-align: left !important;">{{__('text.Width')}}: {{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
-                                            <td style="text-align: left !important;">{{__('text.Height')}}: {{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
-                                        </tr>-->
+                                                            <?php
 
-                                        <?php $d = 1; ?>
-
-                                        @foreach($cols as $f => $col)
-
-                                            <tr>
-
-                                                @foreach($col as $x => $feature)
-
-                                                    @if($role == 'retailer')
-
-                                                        <?php
-
-                                                        if(!$feature)
-                                                        {
-                                                            if(isset($sub_titles[$i]->code))
+                                                            if(!$feature)
                                                             {
-                                                                $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                if(isset($sub_titles[$i]->code))
+                                                                {
+                                                                    $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                }
+                                                                else
+                                                                {
+                                                                    $string = 'Ladderband: No';
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                                $string = 'Ladderband: No';
+                                                                if($feature['childsafe'])
+                                                                {
+                                                                    $string = 'Childsafe: ' . $feature['childsafe_answer'];
+                                                                }
+                                                                else {
+                                                                    $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
+                                                                    $comment = $request->$comment ? ', '.$request->$comment : null;
+                                                                    $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
+                                                                    /*$string = substr($string, 4);*/
+                                                                }
                                                             }
-                                                        }
-                                                        else
-                                                        {
-                                                            if($feature['childsafe'])
+
+                                                            ?>
+
+                                                        @else
+
+                                                            <?php
+
+                                                            if(!$feature)
                                                             {
-                                                                $string = 'Childsafe: ' . $feature['childsafe_answer'];
-                                                            }
-                                                            else {
-                                                                $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
-                                                                $comment = $request->$comment ? ', '.$request->$comment : null;
-                                                                $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
-                                                                /*$string = substr($string, 4);*/
-                                                            }
-                                                        }
-
-                                                        ?>
-
-                                                    @else
-
-                                                        <?php
-
-                                                        if(!$feature)
-                                                        {
-                                                            if(isset($sub_titles[$i]->code))
-                                                            {
-                                                                $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                if(isset($sub_titles[$i]->code))
+                                                                {
+                                                                    $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                }
+                                                                else
+                                                                {
+                                                                    $string = 'Ladderband: No';
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                                $string = 'Ladderband: No';
+                                                                if($feature['childsafe'])
+                                                                {
+                                                                    $string = 'Childsafe: ' . $feature['childsafe_answer'];
+                                                                }
+                                                                else {
+
+                                                                    $comment = $comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null;
+                                                                    $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
+                                                                    /*$string = substr($string, 4);*/
+
+                                                                }
                                                             }
-                                                        }
-                                                        else
-                                                        {
-                                                            if($feature['childsafe'])
-                                                            {
-                                                                $string = 'Childsafe: ' . $feature['childsafe_answer'];
-                                                            }
-                                                            else {
 
-                                                                $comment = $comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null;
-                                                                $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
-                                                                /*$string = substr($string, 4);*/
+                                                            ?>
 
-                                                            }
-                                                        }
+                                                        @endif
 
-                                                        ?>
-
-                                                    @endif
-
-                                                    <td style="text-align: left !important;">{!! $string !!}</td>
+                                                        <td style="text-align: left !important;">{!! $string !!}</td>
 
                                                         @if(count($feature_sub_titles[$i]) == $d)
 
@@ -269,44 +370,44 @@
 
                                                         <?php $d = $d + 1; ?>
 
-                                                @endforeach
+                                                    @endforeach
 
+                                                </tr>
+
+                                            @endforeach
+
+                                            </tbody>
+                                        </table>
+
+                                        <table style="display: table;width: 100%;margin-top: 30px;">
+
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
+                                                <th style="width: 20% !important;font-size: 20px;font-weight: 500;text-align: center;">Exclusief BTW</th>
+                                                <th style="width: 25% !important;font-size: 20px;text-align: center;font-weight: 500;">BTW</th>
+                                                <th style="width: 35% !important;font-size: 20px;text-align: right;">Bedrag inc. btw</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                            <tr>
+                                                <?php
+                                                $ex_vat = ($request->rate[$i]/121)*100;
+                                                $vat = $request->rate[$i] - $ex_vat;
+                                                $vat = number_format((float)($vat), 2, ',', '.');
+                                                $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
+                                                ?>
+                                                <td style="font-size: 20px;padding: 5px;">€ {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
                                             </tr>
 
-                                        @endforeach
+                                            </tbody>
 
-                                        </tbody>
-                                    </table>
-
-                                    <table style="display: table;width: 100%;margin-top: 30px;">
-
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
-                                            <th style="width: 20% !important;font-size: 20px;font-weight: 500;text-align: center;">Exclusief BTW</th>
-                                            <th style="width: 25% !important;font-size: 20px;text-align: center;font-weight: 500;">BTW</th>
-                                            <th style="width: 35% !important;font-size: 20px;text-align: right;">Bedrag inc. btw</th>
-                                        </tr>
-                                        </thead>
-
-                                        <tbody>
-
-                                        <tr>
-                                            <?php
-                                            $ex_vat = ($request->rate[$i]/121)*100;
-                                            $vat = $request->rate[$i] - $ex_vat;
-                                            $vat = number_format((float)($vat), 2, ',', '.');
-                                            $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
-                                            ?>
-                                            <td style="font-size: 20px;padding: 5px;">€ {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
-                                        </tr>
-
-                                        </tbody>
-
-                                    </table>
+                                        </table>
 
                                 </div>
                             </div>

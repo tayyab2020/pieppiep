@@ -70,8 +70,10 @@
 
                                         @endif
                                         <th class="border-0 text-uppercase small font-weight-bold">Kleur - nummer</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Breedte</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Hoogte</th>
+                                        @if($form_type == 2)
+                                            <th class="border-0 text-uppercase small font-weight-bold">Breedte</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">Hoogte</th>
+                                        @endif
                                         <th class="border-0 text-uppercase small font-weight-bold">Montage hoogte</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Type/uitvoering</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">Bediening-zijde</th>
@@ -112,8 +114,13 @@
 
                                             @endif
                                             <td>{{$color_titles[$i]}}</td>
-                                            <td>{{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
-                                            <td>{{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
+
+                                            @if($form_type == 2)
+
+                                                <td>{{$request->width[$i]}} {{$request->width_unit[$i]}}</td>
+                                                <td>{{$request->height[$i]}} {{$request->height_unit[$i]}}</td>
+
+                                            @endif
 
                                             @if($role == 'retailer' || $role == 'supplier2')
 
@@ -163,6 +170,92 @@
                                 </table>
                             </div>
                         </div>
+
+                        @if($form_type == 1)
+
+                            @foreach($request->products as $i => $key)
+
+                                <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i]}} Calculations</h2>
+
+                                <table style="border: 1px solid #dee2e6;" class="table table1">
+
+                                    <tbody>
+
+                                    <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
+
+                                    @if($request->measure[$i] == 'M1')
+
+                                        <tr class="header">
+                                            <td class="headings" style="width: 22%;">Description</td>
+                                            <td class="headings" style="width: 13%;">Width</td>
+                                            <td class="headings" style="width: 13%;">Height</td>
+                                            <td class="headings" style="width: 13%;">Cutting lose</td>
+                                            <td class="headings" style="width: 13%;">Turn</td>
+                                            <td class="headings" style="width: 13%;">Max Width</td>
+                                            <td class="headings" style="width: 13%;">Total</td>
+                                        </tr>
+
+                                    @else
+
+                                        <tr class="header">
+                                            <td class="headings" style="width: 22%;">Description</td>
+                                            <td class="headings" style="width: 13%;">Width</td>
+                                            <td class="headings" style="width: 13%;">Height</td>
+                                            <td class="headings" style="width: 13%;">Cutting lose</td>
+                                            <td class="headings" style="width: 13%;">Total</td>
+                                            <td class="headings" style="width: 13%;">Box quantity</td>
+                                            <td class="headings" style="width: 13%;">Total boxes</td>
+                                        </tr>
+
+                                    @endif
+
+                                    @foreach($calculator_row as $c => $cal)
+
+                                        <?php
+
+                                        $description = 'attribute_description'.$request->row_id[$i];
+                                        $width = 'width'.$request->row_id[$i];
+                                        $height = 'height'.$request->row_id[$i];
+                                        $cutting_lose = 'cutting_lose_percentage'.$request->row_id[$i];
+                                        $box_quantity_supplier = 'box_quantity_supplier'.$request->row_id[$i];
+                                        $box_quantity = 'box_quantity'.$request->row_id[$i];
+                                        $total_boxes = 'total_boxes'.$request->row_id[$i];
+                                        $max_width = 'max_width'.$request->row_id[$i];
+                                        $turn = 'turn'.$request->row_id[$i];
+
+                                        ?>
+
+                                        <tr>
+
+                                            <td>{{$request->$description[$c]}}</td>
+                                            <td>{{$request->$width[$c]}}</td>
+                                            <td>{{$request->$height[$c]}}</td>
+                                            <td>{{$request->$cutting_lose[$c]}}</td>
+
+                                            @if($request->measure[$i] == 'M1')
+
+                                                <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
+                                                <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
+
+                                            @else
+
+                                                <td>{{str_replace('.', ',',$request->$total_boxes[$c])}}</td>
+                                                <td>{{str_replace('.', ',',$request->$box_quantity_supplier[$c])}}</td>
+
+                                            @endif
+
+                                            <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+
+                                        </tr>
+
+                                    @endforeach
+
+                                    </tbody>
+                                </table>
+
+                            @endforeach
+
+                        @endif
 
                         <style type="text/css">
 

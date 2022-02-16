@@ -134,7 +134,6 @@
 																	<input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
 																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
 																	<input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
-																	<input type="hidden" value="{{$item->price_based_option}}" id="price_based_option" name="price_based_option[]">
 																	<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
                                                                     <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
@@ -162,7 +161,6 @@
 																		<input type="hidden" name="suppliers[]" id="supplier_id" value="{{$item->supplier_id}}">
 																		<input type="hidden" name="colors[]" id="color_id" value="{{$item->color}}">
 																		<input type="hidden" name="models[]" id="model_id" value="{{$item->model_id}}">
-																		<input type="hidden" class="model_impact_value" name="model_impact_value[]" value="{{$item->model_impact_value}}">
 
                                                                     </div>
 
@@ -281,7 +279,6 @@
 																	<input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
 																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
 																	<input type="hidden" id="delivery_days" name="delivery_days[]">
-																	<input type="hidden" id="price_based_option" name="price_based_option[]">
 																	<input type="hidden" id="base_price" name="base_price[]">
                                                                     <input type="hidden" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" id="retailer_margin" name="retailer_margin[]">
@@ -319,7 +316,6 @@
 																		<input type="hidden" name="suppliers[]" id="supplier_id">
 																		<input type="hidden" name="colors[]" id="color_id">
 																		<input type="hidden" name="models[]" id="model_id">
-																		<input type="hidden" class="model_impact_value" name="model_impact_value[]">
 
                                                                     </div>
 
@@ -503,20 +499,6 @@
 																<div data-id="{{$x + 1}}" @if($x==0) style="margin: 0;"
 																	@else style="margin: 0;display: none;" @endif
 																	class="form-group">
-
-																	<div class="row"
-																		style="margin: 0;display: flex;align-items: center;">
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Quantity</label>
-																			<input value="{{$key1->qty}}"
-																				style="border: none;border-bottom: 1px solid lightgrey;"
-																				maskedformat="9,1" name="qty[]"
-																				class="form-control"
-																				type="text"><span>pcs</span>
-																		</div>
-																	</div>
 
 																	@if($key1->childsafe)
 
@@ -777,7 +759,7 @@
 																		<div class="headings" style="width: 22%;">Description</div>
 																		<div class="headings" style="width: 10%;">Width</div>
 																		<div class="headings" style="width: 10%;">Height</div>
-																		<div class="headings" style="width: 10%;">Cutting lose %</div>
+																		<div class="headings" style="width: 10%;">Cutting lose</div>
 																		<div class="headings m2_box" style="width: 10%;">Total</div>
 																		<div class="headings m1_box" style="width: 10%;display: none;">Turn</div>
 																		<div class="headings m1_box" style="width: 10%;display: none;">Max Width</div>
@@ -2394,7 +2376,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, product_text = null, supplier = null, color = null, model = null, model_impact_value = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
+		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, product_text = null, supplier = null, color = null, model = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, base_price = null, supplier_margin = null, retailer_margin = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -2422,7 +2404,6 @@
 					'                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
 					'                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
 					'                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
-					'                                                            <input type="hidden" id="price_based_option" name="price_based_option[]">\n' +
 					'                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
                     '                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
                     '                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
@@ -2462,7 +2443,6 @@
 					'																<input type="hidden" name="suppliers[]" id="supplier_id">\n' +
 					'																<input type="hidden" name="colors[]" id="color_id">\n' +
 					'																<input type="hidden" name="models[]" id="model_id">\n' +
-					'																<input type="hidden" class="model_impact_value" name="model_impact_value[]">\n' +
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -2566,10 +2546,13 @@
                     '                       									 	<div class="headings" style="width: 22%;">Description</div>\n' +
 					'                       									 	<div class="headings" style="width: 10%;">Width</div>\n' +
 					'																<div class="headings" style="width: 10%;">Height</div>\n' +
-					'																<div class="headings" style="width: 10%;">Cutting lose %</div>\n' +
-					'																<div class="headings" style="width: 10%;">Total</div>\n' +
-					'																<div class="headings" style="width: 10%;">Box quantity</div>\n' +
-					'																<div class="headings" style="width: 10%;">Total boxes</div>\n' +
+					'																<div class="headings" style="width: 10%;">Cutting lose</div>\n' +
+					'																<div class="headings m2_box" style="width: 10%;">Total</div>\n' +
+					'																<div class="headings m1_box" style="width: 10%;display: none;">Turn</div>\n' +
+					'																<div class="headings m1_box" style="width: 10%;display: none;">Max Width</div>\n' +
+					'																<div class="headings m2_box" style="width: 10%;">Box quantity</div>\n' +
+					'																<div class="headings m1_box" style="width: 10%;display: none;">Total</div>\n' +
+					'																<div class="headings m2_box" style="width: 10%;">Total boxes</div>\n' +
 					'																<div class="headings" style="width: 18%;"></div>\n' +
 					'                       									 </div>\n'
 					);
@@ -2603,7 +2586,6 @@
 					'                                                            <input type="hidden" value="' + ladderband_impact_type + '" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
 					'                                                            <input type="hidden" value="' + area_conflict + '" id="area_conflict" name="area_conflict[]">\n' +
 					'                                                            <input type="hidden" value="' + delivery_days + '" id="delivery_days" name="delivery_days[]">\n' +
-					'                                                            <input type="hidden" value="' + price_based_option + '" id="price_based_option" name="price_based_option[]">\n' +
 					'                                                            <input type="hidden" value="' + base_price + '" id="base_price" name="base_price[]">\n' +
                     '                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
                     '                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
@@ -2631,7 +2613,6 @@
 					'																<input type="hidden" name="suppliers[]" id="supplier_id" value="'+supplier+'">\n' +
 					'																<input type="hidden" name="colors[]" id="color_id" value="'+color+'">\n' +
 					'																<input type="hidden" name="models[]" id="model_id" value="'+model+'">\n' +
-					'																<input type="hidden" class="model_impact_value" name="model_impact_value[]" value="' + model_impact_value + '">\n' +
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -2702,8 +2683,6 @@
 				if (features) {
 
 					$('#menu1').append('<div data-id="' + rowCount + '" style="margin: 0;" class="form-group">\n' + features + '</div>');
-
-					$('#menu1').find(`[data-id='${rowCount}']`).find('input[name="qty[]"]').val(qty);
 
 					if (childsafe == 1) {
 						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').attr('name', 'childsafe_option' + rowCount);
@@ -3171,20 +3150,20 @@
 
 				});
 
-				$("[name='cutting_lose_percentage" + id + "[]']").each(function (i, obj) {
+				// $("[name='cutting_lose_percentage" + id + "[]']").each(function (i, obj) {
 
-					var value = $(this).val();
+				// 	var value = $(this).val();
 
-					if (value == "") {
-						flag = 1;
-						$(this).css('border', '1px solid red');
-					}
-					else 
-					{
-						$(this).css('border', '1px solid #ccc');
-					}
+				// 	if (value == "") {
+				// 		flag = 1;
+				// 		$(this).css('border', '1px solid red');
+				// 	}
+				// 	else 
+				// 	{
+				// 		$(this).css('border', '1px solid #ccc');
+				// 	}
 
-				});
+				// });
 
 			});
 
@@ -3224,7 +3203,6 @@
 			var supplier = current.find('#supplier_id').val();
 			var color = current.find('#color_id').val();
 			var model = current.find('#model_id').val();
-			var model_impact_value = current.find('.model_impact_value').val();
 			var price_text = current.find('.price').text();
 			var features = $('#menu1').find(`[data-id='${id}']`).html();
 			var childsafe_question = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-select').val();
@@ -3234,7 +3212,6 @@
 			var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
 			var childsafe_x = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_x').val();
 			var childsafe_y = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_y').val();
-			var price_based_option = current.find('#price_based_option').val();
 			var base_price = current.find('#base_price').val();
             var supplier_margin = current.find('#supplier_margin').val();
             var retailer_margin = current.find('#retailer_margin').val();
@@ -3251,17 +3228,7 @@
 			var measure = current.find('#measure').val();
 			var max_width = current.find('#max_width').val();
 
-			var width_readonly = '';
-			var height_readonly = '';
-
-			if (price_based_option == 2) {
-				height_readonly = 'readonly';
-			}
-			else if (price_based_option == 3) {
-				width_readonly = 'readonly';
-			}
-
-			add_row(true, rate, basic_price, price, products, product, product_text, supplier, color, model, model_impact_value, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
+			add_row(true, rate, basic_price, price, products, product, product_text, supplier, color, model, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, base_price, supplier_margin, retailer_margin, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
 
 		});
 
@@ -4545,13 +4512,11 @@
 										$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
 										// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
 										// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-										$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
 										$('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(data.ladderband_value);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(data.ladderband_price_impact);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
-										$('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val(data.price_based_option);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#estimated_price_quantity').val(data.estimated_price_quantity);
 										$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.box_quantity_supplier').val(data.estimated_price_quantity);
@@ -4561,23 +4526,6 @@
 										$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
 										$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
 										$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-										var price_based_option = data.price_based_option;
-
-										if (price_based_option == 1) {
-											$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', false);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', false);
-										}
-										else if (price_based_option == 2) {
-											$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', false);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', true);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').val(0);
-										}
-										else {
-											$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', true);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').val(0);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', false);
-										}
 
 										// if ((typeof (data) != "undefined") && data.measure) {
 
@@ -4620,8 +4568,6 @@
 
 										var model = model_id;
 										var color = color_id;
-
-										var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
 										var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
 
 										var product = product_id;
@@ -4777,13 +4723,7 @@
 															$('#menu1').find(`[data-id='${row_id}']`).remove();
 														}
 
-														$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-																'\n' +
-																'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-																'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-																'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-																'</div></div>' + features +
-																'</div>');
+														$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' + features + '</div>');
 
 														current.parents('.content-div').find('.f_area').val(0);
 

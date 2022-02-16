@@ -24,6 +24,7 @@ use App\items;
 use App\Model1;
 use App\new_quotations;
 use App\new_quotations_data;
+use App\new_quotations_data_calculations;
 use App\new_quotations_features;
 use App\new_quotations_sub_products;
 use App\product;
@@ -3718,15 +3719,11 @@ class UserController extends Controller
     }
 
     public function StoreNewQuotation(Request $request)
-    {
-        if($request->form_type == 1)
-        {
-            return redirect()->back();
-        }
-        
+    {   
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
+        $form_type = $request->form_type;
 
         if($main_id)
         {
@@ -3755,6 +3752,12 @@ class UserController extends Controller
             $order_feature_ids = new_orders_features::whereIn('order_data_id',$order_ids)->pluck('id');
 
             new_quotations_data::where('quotation_id',$request->quotation_id)->delete();
+
+            if($form_type == 1)
+            {
+                new_quotations_data_calculations::whereIn('quotation_data_id',$data_ids)->delete();
+            }
+
             new_quotations_features::whereIn('quotation_data_id',$data_ids)->delete();
             new_quotations_sub_products::whereIn('feature_row_id',$feature_ids)->delete();
 
@@ -3770,6 +3773,7 @@ class UserController extends Controller
             $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
 
             $invoice = new new_quotations();
+            $invoice->form_type = $form_type;
             $invoice->quotation_invoice_number = $quotation_invoice_number;
             $invoice->creator_id = $user_id;
             $invoice->user_id = $client->user_id;
@@ -3778,7 +3782,16 @@ class UserController extends Controller
             $invoice->subtotal = str_replace(',', '.',$request->total_amount);
             $invoice->grand_total = str_replace(',', '.',$request->total_amount);
             $invoice->price_before_labor_total = str_replace(',', '.',$request->price_before_labor_total);
-            $invoice->labor_cost_total = str_replace(',', '.',$request->labor_cost_total);
+
+            if($form_type == 2)
+            {
+                $invoice->labor_cost_total = str_replace(',', '.',$request->labor_cost_total);
+            }
+            else
+            {
+                $invoice->labor_cost_total = 0;
+            }
+            
             $invoice->net_amount = str_replace(',', '.',$request->net_amount);
             $invoice->tax_amount = str_replace(',', '.',$request->tax_amount);
             $invoice->save();
@@ -3833,27 +3846,46 @@ class UserController extends Controller
             $invoice_items->product_id = (int)$key;
             $invoice_items->row_id = $row_id;
             $invoice_items->model_id = $request->models[$i];
-            $invoice_items->model_impact_value = $request->model_impact_value[$i];
+
+            if($form_type == 2)
+            {
+                $invoice_items->model_impact_value = $request->model_impact_value[$i];
+                $invoice_items->width = str_replace(',', '.',$request->width[$i]);
+                $invoice_items->width_unit = $request->width_unit[$i];
+                $invoice_items->height = str_replace(',', '.',$request->height[$i]);
+                $invoice_items->height_unit = $request->height_unit[$i];
+                $invoice_items->price_based_option = $request->price_based_option[$i];
+                $invoice_items->labor_impact = $request->labor_impact[$i] ? str_replace(',', '.',$request->labor_impact[$i]) : 0;
+                $invoice_items->supplier_margin = $request->supplier_margin[$i] ? $request->supplier_margin[$i] : 0;
+                $invoice_items->retailer_margin = $request->retailer_margin[$i] ? $request->retailer_margin[$i] : 0;
+                $invoice_items->labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
+                $invoice_items->basic_price = $request->basic_price[$i];
+            }
+            else
+            {
+                $invoice_items->model_impact_value = 0;
+                $invoice_items->width = 0;
+                $invoice_items->width_unit = "";
+                $invoice_items->height = 0;
+                $invoice_items->height_unit = "";
+                $invoice_items->price_based_option = 0;
+                $invoice_items->labor_impact = 0;
+                $invoice_items->supplier_margin = 0;
+                $invoice_items->retailer_margin = 0;
+                $invoice_items->labor_discount = 0;
+                $invoice_items->basic_price = 0;
+            }
+
             $invoice_items->color = $request->colors[$i];
             $invoice_items->rate = $request->rate[$i];
-            $invoice_items->basic_price = $request->basic_price[$i];
             $invoice_items->qty = $request->qty[$i];
             $invoice_items->amount = $request->total[$i];
-            $invoice_items->width = str_replace(',', '.',$request->width[$i]);
-            $invoice_items->width_unit = $request->width_unit[$i];
-            $invoice_items->height = str_replace(',', '.',$request->height[$i]);
-            $invoice_items->height_unit = $request->height_unit[$i];
             $invoice_items->delivery_days = $request->delivery_days[$i];
             $invoice_items->delivery_date = $delivery_date;
-            $invoice_items->price_based_option = $request->price_based_option[$i];
             $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
-            $invoice_items->labor_impact = $request->labor_impact[$i] ? str_replace(',', '.',$request->labor_impact[$i]) : 0;
             $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
-            $invoice_items->labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
             $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
             $invoice_items->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
-            $invoice_items->supplier_margin = $request->supplier_margin[$i] ? $request->supplier_margin[$i] : 0;
-            $invoice_items->retailer_margin = $request->retailer_margin[$i] ? $request->retailer_margin[$i] : 0;
 
             $order = new new_orders;
             $order->order_number = $order_number;
@@ -3862,27 +3894,16 @@ class UserController extends Controller
             $order->product_id = (int)$key;
             $order->row_id = $row_id;
             $order->model_id = $request->models[$i];
-            $order->model_impact_value = $request->model_impact_value[$i];
             $order->color = $request->colors[$i];
             $order->rate = $request->rate[$i];
-            $order->basic_price = $request->basic_price[$i];
             $order->qty = $request->qty[$i];
             $order->amount = $request->total[$i];
-            $order->width = str_replace(',', '.',$request->width[$i]);
-            $order->width_unit = $request->width_unit[$i];
-            $order->height = str_replace(',', '.',$request->height[$i]);
-            $order->height_unit = $request->height_unit[$i];
             $order->delivery_days = $request->delivery_days[$i];
             $order->delivery_date = $delivery_date;
-            $order->price_based_option = $request->price_based_option[$i];
             $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
-            $order->labor_impact = $request->labor_impact[$i] ? str_replace(',', '.',$request->labor_impact[$i]) : 0;
             $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
-            $order->labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
             $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
             $order->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
-            $order->supplier_margin = $request->supplier_margin[$i] ? $request->supplier_margin[$i] : 0;
-            $order->retailer_margin = $request->retailer_margin[$i] ? $request->retailer_margin[$i] : 0;
 
             if($request->childsafe[$i])
             {
@@ -3910,8 +3931,70 @@ class UserController extends Controller
                 $order->childsafe_y = $request->$childsafe_y;
             }
 
+            if($form_type == 2)
+            {
+                $order->model_impact_value = $request->model_impact_value[$i];
+                $order->width = str_replace(',', '.',$request->width[$i]);
+                $order->width_unit = $request->width_unit[$i];
+                $order->height = str_replace(',', '.',$request->height[$i]);
+                $order->height_unit = $request->height_unit[$i];
+                $order->price_based_option = $request->price_based_option[$i];
+                $order->labor_impact = $request->labor_impact[$i] ? str_replace(',', '.',$request->labor_impact[$i]) : 0;
+                $order->labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
+                $order->supplier_margin = $request->supplier_margin[$i] ? $request->supplier_margin[$i] : 0;
+                $order->retailer_margin = $request->retailer_margin[$i] ? $request->retailer_margin[$i] : 0;
+                $order->basic_price = $request->basic_price[$i];
+            }
+            else
+            {
+                $order->model_impact_value = 0;
+                $order->width = 0;
+                $order->width_unit = "";
+                $order->height = 0;
+                $order->height_unit = "";
+                $order->price_based_option = 0;
+                $order->labor_impact = 0;
+                $order->labor_discount = 0;
+                $order->supplier_margin = 0;
+                $order->retailer_margin = 0;
+                $order->basic_price = 0;
+            }
+
             $invoice_items->save();
             $order->save();
+
+            if($form_type == 1)
+            {
+                $calculator_row = 'calculator_row'.$row_id;
+                $calculator_row = $request->$calculator_row;
+
+                foreach($calculator_row as $c => $cal)
+                {
+                    $description = 'attribute_description'.$row_id;
+                    $width = 'width'.$row_id;
+                    $height = 'height'.$row_id;
+                    $cutting_lose = 'cutting_lose_percentage'.$row_id;
+                    $box_quantity_supplier = 'box_quantity_supplier'.$row_id;
+                    $box_quantity = 'box_quantity'.$row_id;
+                    $total_boxes = 'total_boxes'.$row_id;
+                    $max_width = 'max_width'.$row_id;
+                    $turn = 'turn'.$row_id;
+
+                    $calculations = new new_quotations_data_calculations;
+                    $calculations->quotation_data_id = $invoice_items->id;
+                    $calculations->calculator_row = $cal;
+                    $calculations->description = $request->$description[$c];
+                    $calculations->width = str_replace(',', '.',$request->$width[$c]);
+                    $calculations->height = str_replace(',', '.',$request->$height[$c]);
+                    $calculations->cutting_lose = $request->$cutting_lose[$c];
+                    $calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
+                    $calculations->box_quantity = $request->$box_quantity[$c];
+                    $calculations->total_boxes = $request->$total_boxes[$c];
+                    $calculations->max_width = $request->$max_width[$c];
+                    $calculations->turn = $request->$turn[$c];
+                    $calculations->save();
+                }
+            }
 
             $feature_row = 'features'.$row_id;
             $features = $request->$feature_row;
@@ -4051,7 +4134,7 @@ class UserController extends Controller
         $date = $invoice->created_at;
         $role = 'retailer';
 
-        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
 
         $file = public_path() . '/assets/newQuotations/' . $filename;
 
@@ -4060,7 +4143,7 @@ class UserController extends Controller
         $role = 'supplier2';
         $file = public_path() . '/assets/Orders/' . $filename;
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
         $pdf->save($file);
 
         return redirect()->route('customer-quotations');
