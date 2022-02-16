@@ -4135,16 +4135,23 @@ class UserController extends Controller
         $role = 'retailer';
 
         $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
-
         $file = public_path() . '/assets/newQuotations/' . $filename;
-
         $pdf->save($file);
 
-        $role = 'supplier2';
-        $file = public_path() . '/assets/Orders/' . $filename;
-
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
-        $pdf->save($file);
+        if($form_type == 1)
+        {
+            $role = 'order';
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+            $file = public_path() . '/assets/Orders/' . $filename;
+            $pdf->save($file);
+        }
+        else
+        {
+            $role = 'supplier2';
+            $file = public_path() . '/assets/Orders/' . $filename;
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            $pdf->save($file);
+        }
 
         return redirect()->route('customer-quotations');
     }

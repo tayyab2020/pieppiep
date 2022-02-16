@@ -186,25 +186,27 @@
                                     @if($request->measure[$i] == 'M1')
 
                                         <tr class="header">
+                                            <td class="headings" style="width: 3%;">Sr.No</td>
                                             <td class="headings" style="width: 22%;">Description</td>
                                             <td class="headings" style="width: 13%;">Width</td>
                                             <td class="headings" style="width: 13%;">Height</td>
                                             <td class="headings" style="width: 13%;">Cutting lose</td>
                                             <td class="headings" style="width: 13%;">Turn</td>
                                             <td class="headings" style="width: 13%;">Max Width</td>
-                                            <td class="headings" style="width: 13%;">Total</td>
+                                            <td class="headings" style="width: 10%;">Total</td>
                                         </tr>
 
                                     @else
 
                                         <tr class="header">
+                                            <td class="headings" style="width: 3%;">Sr.No</td>
                                             <td class="headings" style="width: 22%;">Description</td>
                                             <td class="headings" style="width: 13%;">Width</td>
                                             <td class="headings" style="width: 13%;">Height</td>
                                             <td class="headings" style="width: 13%;">Cutting lose</td>
                                             <td class="headings" style="width: 13%;">Total</td>
                                             <td class="headings" style="width: 13%;">Box quantity</td>
-                                            <td class="headings" style="width: 13%;">Total boxes</td>
+                                            <td class="headings" style="width: 10%;">Total boxes</td>
                                         </tr>
 
                                     @endif
@@ -227,6 +229,7 @@
 
                                         <tr>
 
+                                            <td>{{$cal}}</td>
                                             <td>{{$request->$description[$c]}}</td>
                                             <td>{{$request->$width[$c]}}</td>
                                             <td>{{$request->$height[$c]}}</td>
