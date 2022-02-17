@@ -263,7 +263,7 @@
                                                                     }
                                                                     else {
                                                                         $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
-                                                                        $comment = $request->$comment ? ', '.$request->$comment : null;
+                                                                        $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null;
                                                                         $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
                                                                         /*$string = substr($string, 4);*/
                                                                     }
@@ -294,7 +294,7 @@
                                                                     }
                                                                     else {
 
-                                                                        $comment = $comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null;
+                                                                        $comment = isset($comments[$i][$d-1]) ? $comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null) : null;
                                                                         $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
                                                                         /*$string = substr($string, 4);*/
 
