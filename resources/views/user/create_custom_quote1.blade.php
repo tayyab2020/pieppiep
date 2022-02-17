@@ -137,7 +137,7 @@
 																	<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
                                                                     <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
                                                                     <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
-																	<input type="hidden" value="{{$item->estimated_price_quantity}}" id="estimated_price_quantity" name="estimated_price_quantity[]">
+																	<input type="hidden" value="{{$item->box_quantity}}" id="estimated_price_quantity" name="estimated_price_quantity[]">
 																	<input type="hidden" value="{{$item->measure}}" id="measure" name="measure[]">
 																	<input type="hidden" value="{{$item->max_width}}" id="max_width" name="max_width[]">
 
@@ -145,31 +145,41 @@
 
 																		<label class="content-label">Product</label>
 
-																		<select name="products[]" class="js-data-example-ajax">
+																		<div class="autocomplete" style="width:100%;">
+																			<input value="{{$product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')'}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																		</div>
 
-																			<option value=""></option>
+																		<select style="display: none;" class="form-control all-products" id="blood_grp">
 
-																			@foreach($supplier_products[$i] as $key)
+																			@foreach($products as $key)
 
-																			<option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+																				@foreach($key->models as $key1)
+
+																					@foreach($key->colors as $key2)
+
+																						<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
+
+																					@endforeach
+
+																				@endforeach
 
 																			@endforeach
 
 																		</select>
 
-																		<input type="hidden" name="products[]" id="product_id" value="{{$item->product_id}}">
-																		<input type="hidden" name="suppliers[]" id="supplier_id" value="{{$item->supplier_id}}">
-																		<input type="hidden" name="colors[]" id="color_id" value="{{$item->color}}">
-																		<input type="hidden" name="models[]" id="model_id" value="{{$item->model_id}}">
+																		<input type="hidden" value="{{$item->product_id}}" name="products[]" id="product_id">
+																		<input type="hidden" value="{{$item->supplier_id}}" name="suppliers[]" id="supplier_id">
+																		<input type="hidden" value="{{$item->color}}" name="colors[]" id="color_id">
+																		<input type="hidden" value="{{$item->model_id}}" name="models[]" id="model_id">
 
-                                                                    </div>
+																	</div>
 
 																	<div class="content item6" style="width: 17%;">
 
 																		<label class="content-label">Qty</label>
 
 																		<div style="display: flex;align-items: center;">
-																			<input type="text" readonly value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																			<input type="text" readonly value="{{$item->qty}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
 																		</div>
                                                                     </div>
 																	
@@ -474,8 +484,7 @@
 
 													</div>
 
-													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
-														style="background: white;padding: 15px 0 0 0;">
+													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: white;padding: 15px 0 0 0;">
 
 														<ul style="border: 0;" class="nav nav-tabs feature-tab">
 															
@@ -485,267 +494,202 @@
 														
 														</ul>
 
-														<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;"
-															class="tab-content">
+														<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
 
 															<div id="menu1" class="tab-pane">
 
 																@if(isset($invoice))
 
-																<?php $f = 0; $s = 0; ?>
+																	<?php $f = 0; $s = 0; ?>
 
-																@foreach($invoice as $x => $key1)
+																		@foreach($invoice as $x => $key1)
 
-																<div data-id="{{$x + 1}}" @if($x==0) style="margin: 0;"
-																	@else style="margin: 0;display: none;" @endif
-																	class="form-group">
+																			<div data-id="{{$x + 1}}" @if($x==0) style="margin: 0;" @else style="margin: 0;display: none;" @endif class="form-group">
 
-																	@if($key1->childsafe)
+																				@if($key1->childsafe)
 
-																	<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;">
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>
-																			<input value="{{$key1->childsafe_x}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
-																		</div>
-																	</div>
+																					<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;">
+																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																							<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>
+																							<input value="{{$key1->childsafe_x}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
+																						</div>
+																					</div>
 
-																	<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;">
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>
-																			<input value="{{$key1->childsafe_y}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
-																		</div>
-																	</div>
+																					<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;">
+																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																							<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>
+																							<input value="{{$key1->childsafe_y}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
+																						</div>
+																					</div>
 
-																	<div class="row childsafe-question-box"
-																		style="margin: 0;display: flex;align-items: center;">
+																					<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;">
 
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control childsafe-select"
-																				name="childsafe_option{{$x+1}}">
+																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 
-																				<option value="">Select any option
-																				</option>
+																							<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>
 
-																				@if($key1->childsafe_diff <= 150)
-																					<option {{$key1->childsafe_question
-																					== 1 ? 'selected' : null}}
-																					value="1">Please note not childsafe
-																					</option>
-																					<option {{$key1->childsafe_question
-																						== 2 ? 'selected' : null}}
-																						value="2">Add childsafety clip
-																					</option>
+																							<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option{{$x+1}}">
 
-																					@else
+																								<option value="">Select any option</option>
 
-																					<option {{$key1->childsafe_question
-																						== 2 ? 'selected' : null}}
-																						value="2">Add childsafety clip
-																					</option>
-																					<option {{$key1->childsafe_question
-																						== 3 ? 'selected' : null}}
-																						value="3">Yes childsafe</option>
+																								@if($key1->childsafe_diff <= 150)
 
-																					@endif
+																									<option {{$key1->childsafe_question == 1 ? 'selected' : null}} value="1">Please note not childsafe</option>
+																									<option {{$key1->childsafe_question == 2 ? 'selected' : null}} value="2">Add childsafety clip</option>
 
-																			</select>
-																			<input value="{{$key1->childsafe_diff}}"
-																				name="childsafe_diff{{$x + 1}}"
-																				class="childsafe_diff" type="hidden">
-																		</div>
+																								@else
 
-																	</div>
+																									<option {{$key1->childsafe_question == 2 ? 'selected' : null}} value="2">Add childsafety clip</option>
+																									<option {{$key1->childsafe_question == 3 ? 'selected' : null}} value="3">Yes childsafe</option>
 
-																	<div class="row childsafe-answer-box"
-																		style="margin: 0;display: flex;align-items: center;">
+																								@endif
 
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Childsafe
-																				Answer</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control childsafe-answer"
-																				name="childsafe_answer{{$x+1}}">
-																				@if($key1->childsafe_question == 1)
-																				<option {{$key1->childsafe_answer == 1 ?
-																					'selected' : null}} value="1">Make
-																					it childsafe</option>
-																				<option {{$key1->childsafe_answer == 2 ?
-																					'selected' : null}} value="2">Yes i
-																					agree</option>
-																				@else
-																				<option selected value="3">Is childsafe
-																				</option>
+																							</select>
+
+																							<input value="{{$key1->childsafe_diff}}" name="childsafe_diff{{$x + 1}}" class="childsafe_diff" type="hidden">
+
+																						</div>
+
+																					</div>
+
+																					<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">
+
+																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+
+																							<label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>
+																							<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer{{$x+1}}">
+
+																								@if($key1->childsafe_question == 1)
+
+																									<option {{$key1->childsafe_answer == 1 ? 'selected' : null}} value="1">Make it childsafe</option>
+																									<option {{$key1->childsafe_answer == 2 ? 'selected' : null}} value="2">Yes i agree</option>
+
+																								@else
+
+																									<option selected value="3">Is childsafe</option>
+																								@endif
+
+																							</select>
+																						</div>
+
+																					</div>
+
 																				@endif
-																			</select>
-																		</div>
 
-																	</div>
+																					@foreach($key1->features as $feature)
 
-																	@endif
+																						@if($feature->feature_id == 0 && $feature->feature_sub_id == 0)
 
-																	@foreach($key1->features as $feature)
+																							<div class="row" style="margin: 0;display: flex;align-items: center;">
 
-																	@if($feature->feature_id == 0 &&
-																	$feature->feature_sub_id == 0)
+																								<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 
-																	<div class="row"
-																		style="margin: 0;display: flex;align-items: center;">
+																									<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>
 
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control feature-select"
-																				name="features{{$x+1}}[]">
-																				<option {{$feature->ladderband == 0 ?
-																					'selected' : null}} value="0">No
-																				</option>
-																				<option {{$feature->ladderband == 1 ?
-																					'selected' : null}} value="1">Yes
-																				</option>
-																			</select>
-																			<input value="{{$feature->price}}"
-																				name="f_price{{$x + 1}}[]"
-																				class="f_price" type="hidden">
-																			<input value="0" name="f_id{{$x + 1}}[]"
-																				class="f_id" type="hidden">
-																			<input value="0" name="f_area{{$x + 1}}[]"
-																				class="f_area" type="hidden">
-																			<input value="0"
-																				name="sub_feature{{$x + 1}}[]"
-																				class="sub_feature" type="hidden">
-																		</div>
+																									<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
 
-																		@if($feature->ladderband)
+																										<option {{$feature->ladderband == 0 ? 'selected' : null}} value="0">No</option>
+																										<option {{$feature->ladderband == 1 ? 'selected' : null}} value="1">Yes</option>
 
-																		<a data-id="{{$x + 1}}"
-																			class="info ladderband-btn">Info</a>
+																									</select>
 
-																		@endif
+																									<input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
+																									<input value="0" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
+																									<input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+																									<input value="0" name="sub_feature{{$x + 1}}[]" class="sub_feature" type="hidden">
 
-																	</div>
+																								</div>
 
-																	@else
 
-																	<div class="row"
-																		style="margin: 0;display: flex;align-items: center;">
+																								@if($feature->ladderband)
 
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">{{$feature->title}}</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control feature-select"
-																				name="features{{$x+1}}[]">
+																									<a data-id="{{$x + 1}}" class="info ladderband-btn">Info</a>
 
-																				<option value="0">Select Feature
-																				</option>
+																								@endif
 
-																				@foreach($features[$f] as $temp)
+																							</div>
 
-																				<option {{$temp->id ==
-																					$feature->feature_sub_id ?
-																					'selected' : null}}
-																					value="{{$temp->id}}">{{$temp->title}}
-																				</option>
+																						@else
 
-																				@endforeach
+																							<div class="row" style="margin: 0;display: flex;align-items: center;">
 
-																			</select>
-																			<input value="{{$feature->price}}"
-																				name="f_price{{$x + 1}}[]"
-																				class="f_price" type="hidden">
-																			<input value="{{$feature->feature_id}}"
-																				name="f_id{{$x + 1}}[]" class="f_id"
-																				type="hidden">
-																			<input value="0" name="f_area{{$x + 1}}[]"
-																				class="f_area" type="hidden">
-																			<input value="0"
-																				name="sub_feature{{$x + 1}}[]"
-																				class="sub_feature" type="hidden">
-																		</div>
+																								<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 
-																		@if($feature->comment_box)
+																									<label style="margin-right: 10px;margin-bottom: 0;">{{$feature->title}}</label>
 
-																		<a data-feature="{{$feature->feature_id}}"
-																			class="info comment-btn">Info</a>
+																									<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
 
-																		@endif
+																										<option value="0">Select Feature</option>
 
-																	</div>
+																										@foreach($features[$f] as $temp)
 
-																	@foreach($key1->sub_features as $sub_feature)
+																											<option {{$temp->id == $feature->feature_sub_id ? 'selected' : null}} value="{{$temp->id}}">{{$temp->title}}</option>
 
-																	@if($sub_feature->feature_id ==
-																	$feature->feature_sub_id)
+																										@endforeach
 
-																	<div class="row sub-features"
-																		style="margin: 0;display: flex;align-items: center;">
+																									</select>
 
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">{{$sub_feature->title}}</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control feature-select"
-																				name="features{{$x+1}}[]">
+																									<input value="{{$feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
+																									<input value="{{$feature->feature_id}}" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
+																									<input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+																									<input value="0" name="sub_feature{{$x + 1}}[]" class="sub_feature" type="hidden">
 
-																				<option value="0">Select Feature
-																				</option>
+																								</div>
 
-																				@foreach($sub_features[$s] as $temp)
+																								@if($feature->comment_box)
 
-                                                                                    <option {{$temp->id ==
-																					$sub_feature->feature_sub_id ?
-																					'selected' : null}}
-                                                                                            value="{{$temp->id}}">{{$temp->title}}
-                                                                                    </option>
+																									<a data-feature="{{$feature->feature_id}}" class="info comment-btn">Info</a>
 
-																				@endforeach
+																								@endif
 
-																			</select>
-																			<input value="{{$sub_feature->price}}"
-																				name="f_price{{$x + 1}}[]"
-																				class="f_price" type="hidden">
-																			<input value="{{$sub_feature->feature_id}}"
-																				name="f_id{{$x + 1}}[]" class="f_id"
-																				type="hidden">
-																			<input value="0" name="f_area{{$x + 1}}[]"
-																				class="f_area" type="hidden">
-																			<input value="1"
-																				name="sub_feature{{$x + 1}}[]"
-																				class="sub_feature" type="hidden">
-																		</div>
+																							</div>
 
-																	</div>
+																							@foreach($key1->sub_features as $sub_feature)
 
-                                                                                    <?php $s = $s + 1; ?>
+																								@if($sub_feature->feature_id == $feature->feature_sub_id)
 
-																	@endif
+																									<div class="row sub-features" style="margin: 0;display: flex;align-items: center;">
 
-																	@endforeach
+																										<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 
-																	@endif
+																											<label style="margin-right: 10px;margin-bottom: 0;">{{$sub_feature->title}}</label>
 
-																	<?php $f = $f + 1; ?>
+																											<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features{{$x+1}}[]">
 
-																	@endforeach
+																												<option value="0">Select Feature</option>
 
-																</div>
+																												@foreach($sub_features[$s] as $temp)
 
-																@endforeach
+																													<option {{$temp->id == $sub_feature->feature_sub_id ? 'selected' : null}} value="{{$temp->id}}">{{$temp->title}}</option>
+
+																												@endforeach
+
+																											</select>
+
+																											<input value="{{$sub_feature->price}}" name="f_price{{$x + 1}}[]" class="f_price" type="hidden">
+																											<input value="{{$sub_feature->feature_id}}" name="f_id{{$x + 1}}[]" class="f_id" type="hidden">
+																											<input value="0" name="f_area{{$x + 1}}[]" class="f_area" type="hidden">
+																											<input value="1" name="sub_feature{{$x + 1}}[]" class="sub_feature" type="hidden">
+
+																										</div>
+
+																									</div>
+
+																									<?php $s = $s + 1; ?>
+
+																								@endif
+
+																							@endforeach
+
+																						@endif
+
+																						<?php $f = $f + 1; ?>
+
+																					@endforeach
+
+																			</div>
+
+																		@endforeach
 
 																@endif
 
@@ -753,130 +697,286 @@
 
 															<div id="menu2" class="tab-pane fade active in">
 
-																<section class="attributes_table active" data-id="1" style="width: 100%;">
+																@if(isset($invoice))
 
-																	<div class="header-div">
-																		<div class="headings" style="width: 22%;">Description</div>
-																		<div class="headings" style="width: 10%;">Width</div>
-																		<div class="headings" style="width: 10%;">Height</div>
-																		<div class="headings" style="width: 10%;">Cutting lose</div>
-																		<div class="headings m2_box" style="width: 10%;">Total</div>
-																		<div class="headings m1_box" style="width: 10%;display: none;">Turn</div>
-																		<div class="headings m1_box" style="width: 10%;display: none;">Max Width</div>
-																		<div class="headings m2_box" style="width: 10%;">Box quantity</div>
-																		<div class="headings m1_box" style="width: 10%;display: none;">Total</div>
-																		<div class="headings m2_box" style="width: 10%;">Total boxes</div>
-																		<div class="headings" style="width: 18%;"></div>
-																	</div>
+																	@foreach($invoice as $i => $key)
 
+																		<section @if($i == 0) class="attributes_table active" @else class="attributes_table" @endif data-id="{{$i+1}}" style="width: 100%;">
 
-																	<div class="attribute-content-div" data-id="1" data-main-id="0">
+																			@if($key->measure == 'M1')
 
-																		<div class="attribute full-res item1" style="width: 22%;">
-																			<div style="display: flex;align-items: center;">
-																				<input type="hidden" class="calculator_row" name="calculator_row1[]" value="1">
-																				<span style="width: 10%">1</span>
-																				<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]"></textarea></div>
-																			</div>
+																				<div class="header-div">
+																					<div class="headings" style="width: 22%;">Description</div>
+																					<div class="headings" style="width: 10%;">Width</div>
+																					<div class="headings" style="width: 10%;">Height</div>
+																					<div class="headings" style="width: 10%;">Cutting lose</div>
+																					<div class="headings m2_box" style="width: 10%;display: none;">Total</div>
+																					<div class="headings m1_box" style="width: 10%;">Turn</div>
+																					<div class="headings m1_box" style="width: 10%;">Max Width</div>
+																					<div class="headings m2_box" style="width: 10%;display: none;">Box quantity</div>
+																					<div class="headings m1_box" style="width: 10%;">Total</div>
+																					<div class="headings m2_box" style="width: 10%;display: none;">Total boxes</div>
+																					<div class="headings" style="width: 18%;"></div>
+																				</div>
+
+																			@else
+
+																				<div class="header-div">
+																					<div class="headings" style="width: 22%;">Description</div>
+																					<div class="headings" style="width: 10%;">Width</div>
+																					<div class="headings" style="width: 10%;">Height</div>
+																					<div class="headings" style="width: 10%;">Cutting lose</div>
+																					<div class="headings m2_box" style="width: 10%;">Total</div>
+																					<div class="headings m1_box" style="width: 10%;display: none;">Turn</div>
+																					<div class="headings m1_box" style="width: 10%;display: none;">Max Width</div>
+																					<div class="headings m2_box" style="width: 10%;">Box quantity</div>
+																					<div class="headings m1_box" style="width: 10%;display: none;">Total</div>
+																					<div class="headings m2_box" style="width: 10%;">Total boxes</div>
+																					<div class="headings" style="width: 18%;"></div>
+																				</div>
+
+																			@endif
+
+																				@foreach($key->calculations as $c => $temp)
+
+																					<div class="attribute-content-div" data-id="{{$c+1}}" data-main-id="{{$temp->parent_row ? $temp->parent_row : 0}}">
+
+																						<div class="attribute full-res item1" style="width: 22%;">
+																							<div style="display: flex;align-items: center;">
+																								<input type="hidden" class="calculator_row" name="calculator_row{{$i+1}}[]" value="{{$temp->calculator_row}}">
+																								<span style="width: 10%">{{$temp->calculator_row}}</span>
+																								<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description{{$i+1}}[]">{{$temp->description}}</textarea></div>
+																							</div>
+																						</div>
+
+																						<div class="attribute item2 width-box" style="width: 10%;">
+
+																							<div class="m-box">
+																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 1) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{str_replace('.', ',',floatval($temp->width))}}" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width{{$i+1}}[]" type="text">
+																								<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
+																							</div>
+
+																						</div>
+
+																						<div class="attribute item3 height-box" style="width: 10%;">
+
+																							<div class="m-box">
+																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 0) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{str_replace('.', ',',floatval($temp->height))}}" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height{{$i+1}}[]" type="text">
+																								<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
+																							</div>
+
+																						</div>
+
+																						<div class="attribute item4" style="width: 10%;">
+
+																							<div class="m-box">
+																								<input {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->cutting_lose}}" class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage{{$i+1}}[]" type="text">
+																								<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																							</div>
+
+																						</div>
+
+																						<div class="attribute item5 m2_box" @if($key->measure == 'M1') style="width: 10%;display: none;" @else style="width: 10%;" @endif>
+
+																							<div class="m-box">
+																								<input value="{{$temp->total_boxes}}" class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes{{$i+1}}[]" type="number">
+																								<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																							</div>
+
+																						</div>
+
+																						<div class="attribute item5 m1_box" @if($key->measure == 'M1') style="width: 10%;" @else style="width: 10%;display: none;" @endif>
+
+																							<div style="display: flex;align-items: center;">
+																								<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" {{$temp->parent_row != NULL ? 'readonly' : null}} name="turn{{$i+1}}[]">
+																									<option {{$temp->turn == 0 ? 'selected' : null}} {{$temp->parent_row != NULL && $temp->turn == 1 ? 'disabled' : null}} value="0">No</option>
+																									<option {{$temp->turn == 1 ? 'selected' : null}} {{$temp->parent_row != NULL && $temp->turn == 0 ? 'disabled' : null}} value="1">Yes</option>
+																								</select>
+																							</div>
+
+																						</div>
+
+																						<div class="attribute item6 m1_box" @if($key->measure == 'M1') style="width: 10%;" @else style="width: 10%;display: none;" @endif>
+
+																							<div style="display: flex;align-items: center;">
+																								<input type="number" value="{{$temp->max_width}}" name="max_width{{$i+1}}[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">
+																							</div>
+
+																						</div>
+
+																						<div class="attribute item6 m2_box" @if($key->measure == 'M1') style="width: 10%;display: none;" @else style="width: 10%;" @endif>
+
+																							<div class="m-box">
+																								<input value="{{$temp->box_quantity_supplier}}" class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;background: transparent;" readonly autocomplete="off" name="box_quantity_supplier{{$i+1}}[]" type="number">
+																								<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																							</div>
+
+																						</div>
+
+																						<div class="attribute item7" style="width: 10%;">
+
+																							<div style="display: flex;align-items: center;">
+																								<input value="{{$temp->box_quantity}}" type="number" name="box_quantity{{$i+1}}[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">
+																							</div>
+
+																						</div>
+
+																						<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
+																							<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
+
+																								<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																									<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																									<span class="tooltiptext">Add</span>
+																								</span>
+
+																								<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																									<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																									<span class="tooltiptext">Remove</span>
+																								</span>
+
+																								<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																									<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
+																									<span class="tooltiptext">Copy</span>
+																								</span>
+
+																							</div>
+																						</div>
+
+																					</div>
+
+																				@endforeach
+
+																		</section>
+
+																	@endforeach
+
+																@else
+
+																	<section class="attributes_table active" data-id="1" style="width: 100%;">
+
+																		<div class="header-div">
+																			<div class="headings" style="width: 22%;">Description</div>
+																			<div class="headings" style="width: 10%;">Width</div>
+																			<div class="headings" style="width: 10%;">Height</div>
+																			<div class="headings" style="width: 10%;">Cutting lose</div>
+																			<div class="headings m2_box" style="width: 10%;">Total</div>
+																			<div class="headings m1_box" style="width: 10%;display: none;">Turn</div>
+																			<div class="headings m1_box" style="width: 10%;display: none;">Max Width</div>
+																			<div class="headings m2_box" style="width: 10%;">Box quantity</div>
+																			<div class="headings m1_box" style="width: 10%;display: none;">Total</div>
+																			<div class="headings m2_box" style="width: 10%;">Total boxes</div>
+																			<div class="headings" style="width: 18%;"></div>
 																		</div>
 
-																		<div class="attribute item2 width-box" style="width: 10%;">
+																		<div class="attribute-content-div" data-id="1" data-main-id="0">
 
-																			<div class="m-box">
-																				<input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
-																				<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
+																			<div class="attribute full-res item1" style="width: 22%;">
+																				<div style="display: flex;align-items: center;">
+																					<input type="hidden" class="calculator_row" name="calculator_row1[]" value="1">
+																					<span style="width: 10%">1</span>
+																					<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]"></textarea></div>
+																				</div>
 																			</div>
 
-																		</div>
+																			<div class="attribute item2 width-box" style="width: 10%;">
 
-																		<div class="attribute item3 height-box" style="width: 10%;">
+																				<div class="m-box">
+																					<input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
+																					<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
+																				</div>
 
-																			<div class="m-box">
-																				<input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
-																				<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
 																			</div>
 
-																		</div>
+																			<div class="attribute item3 height-box" style="width: 10%;">
 
-																		<div class="attribute item4" style="width: 10%;">
+																				<div class="m-box">
+																					<input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
+																					<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
+																				</div>
 
-																			<div class="m-box">
-																				<input class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
-																				<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																			</div>
 
-																		</div>
+																			<div class="attribute item4" style="width: 10%;">
 
-																		<div class="attribute item5 m2_box" style="width: 10%;">
+																				<div class="m-box">
+																					<input class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
+																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																				</div>
 
-																			<div class="m-box">
-																				<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
-																				<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																			</div>
 
-																		</div>
+																			<div class="attribute item5 m2_box" style="width: 10%;">
 
-																		<div class="attribute item5 m1_box" style="width: 10%;display: none;">
+																				<div class="m-box">
+																					<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
+																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																				</div>
 
-																			<div style="display: flex;align-items: center;">
-																				<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" name="turn1[]">
-																					<option value="0">No</option>
-																					<option value="1">Yes</option>	
-																				</select>
 																			</div>
 
-																		</div>
+																			<div class="attribute item5 m1_box" style="width: 10%;display: none;">
 
-																		<div class="attribute item6 m1_box" style="width: 10%;display: none;">
+																				<div style="display: flex;align-items: center;">
+																					<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" name="turn1[]">
+																						<option value="0">No</option>
+																						<option value="1">Yes</option>
+																					</select>
+																				</div>
 
-																			<div style="display: flex;align-items: center;">
-																				<input type="number" name="max_width1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">
 																			</div>
 
-																		</div>
+																			<div class="attribute item6 m1_box" style="width: 10%;display: none;">
 
-																		<div class="attribute item6 m2_box" style="width: 10%;">
+																				<div style="display: flex;align-items: center;">
+																					<input type="number" name="max_width1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">
+																				</div>
 
-																			<div class="m-box">
-																				<input class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;background: transparent;" readonly autocomplete="off" name="box_quantity_supplier1[]" type="number">
-																				<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																			</div>
 
-																		</div>
+																			<div class="attribute item6 m2_box" style="width: 10%;">
 
-																		<div class="attribute item7" style="width: 10%;">
+																				<div class="m-box">
+																					<input class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;background: transparent;" readonly autocomplete="off" name="box_quantity_supplier1[]" type="number">
+																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																				</div>
 
-																			<div style="display: flex;align-items: center;">
-																				<input type="number" name="box_quantity1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">
 																			</div>
 
-																		</div>
+																			<div class="attribute item7" style="width: 10%;">
 
-																		<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
-																			<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
+																				<div style="display: flex;align-items: center;">
+																					<input type="number" name="box_quantity1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">
+																				</div>
+
+																			</div>
+
+																			<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
+																				<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
 
 																				<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
 																					<span class="tooltiptext">Add</span>
 																				</span>
 
-																				<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																					<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
 																					<span class="tooltiptext">Remove</span>
 																				</span>
 
-																				<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																					<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
 																					<span class="tooltiptext">Copy</span>
 																				</span>
 
+																				</div>
 																			</div>
+
 																		</div>
 
-																	</div>
 
+																	</section>
 
-																</section>
+																@endif
 
 															</div>
 
