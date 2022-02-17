@@ -4114,7 +4114,7 @@ class UserController extends Controller
             }
             else
             {
-                $feature_sub_titles = array();
+                $feature_sub_titles[$i] = array();
             }
         }
 
