@@ -294,7 +294,7 @@
                                                                     }
                                                                     else {
 
-                                                                        $comment = isset($comments[$i][$d-1]) ? $comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null) : null;
+                                                                        $comment = isset($comments[$i][$d-1]) ? ($comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null) : null;
                                                                         $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
                                                                         /*$string = substr($string, 4);*/
 
