@@ -346,7 +346,15 @@
 
                                                                         @else
 
-                                                                            <span class="btn btn-warning">{{__('text.Pending')}}</span>
+                                                                            @if($key->processing)
+
+                                                                                <span class="btn btn-success">Order Processing</span>
+
+                                                                            @else
+
+                                                                                <span class="btn btn-warning">{{__('text.Pending')}}</span>
+
+                                                                            @endif
 
                                                                         @endif
 
@@ -491,7 +499,12 @@
                                                                             @else
 
                                                                                 <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
-                                                                                <li><a href="{{ url('/aanbieder/download-full-order-pdf/'.$key->invoice_id) }}">Download Full Order PDF</a></li>
+
+                                                                                @if(!$key->processing)
+
+                                                                                    <li><a href="{{ url('/aanbieder/download-full-order-pdf/'.$key->invoice_id) }}">Download Full Order PDF</a></li>
+
+                                                                                @endif
 
                                                                             @endif
 

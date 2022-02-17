@@ -275,5 +275,7 @@ return [
     'Width' => 'Width',
     'Height' => 'Height',
     'Select Supplier' => 'Select Supplier',
-    'View Invoice' => 'View Invoice'
+    'View Invoice' => 'View Invoice',
+    'Quotation has been created successfully. Order will be created soon in background process.' => 'Quotation has been created successfully. Order will be created soon in background process.',
+    'Quotation has been updated successfully. Order will be updated soon in background process.' => 'Quotation has been updated successfully. Order will be updated soon in background process.',
 ];

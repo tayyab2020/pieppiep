@@ -3981,9 +3981,19 @@ class UserController extends Controller
                     $max_width = 'max_width'.$row_id;
                     $turn = 'turn'.$row_id;
 
+                    if(is_numeric( $cal ) && floor( $cal ) != $cal)
+                    {
+                        $parent_row = floor($cal);
+                    }
+                    else
+                    {
+                        $parent_row = NULL;
+                    }
+
                     $calculations = new new_quotations_data_calculations;
                     $calculations->quotation_data_id = $invoice_items->id;
                     $calculations->calculator_row = $cal;
+                    $calculations->parent_row = $parent_row;
                     $calculations->description = $request->$description[$c];
                     $calculations->width = str_replace(',', '.',$request->$width[$c]);
                     $calculations->height = str_replace(',', '.',$request->$height[$c]);
@@ -4122,7 +4132,7 @@ class UserController extends Controller
                 });
             }
 
-            Session::flash('success','Quotation has been updated successfully!');
+            Session::flash('success',__('text.Quotation has been updated successfully. Order will be updated soon in background process.'));
         }
         else
         {
@@ -4130,7 +4140,7 @@ class UserController extends Controller
 
             User::where('id',$user_id)->update(['counter' => $counter]);
 
-            Session::flash('success', __('text.Quotation has been created successfully!'));
+            Session::flash('success', __('text.Quotation has been created successfully. Order will be created soon in background process.'));
         }
 
         ini_set('max_execution_time', 180);
@@ -4142,23 +4152,19 @@ class UserController extends Controller
         $file = public_path() . '/assets/newQuotations/' . $filename;
         $pdf->save($file);
 
+        $invoice->processing = 1;
+        $invoice->save();
+        $quotation_id = $invoice->id;
+
         if($form_type == 1)
         {
-            // $invoice->processing = 1;
-            // $invoice->save();
-            // CreateOrder::dispatch($form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request,$quotation_invoice_number);
-
             $role = 'order';
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
-            $file = public_path() . '/assets/Orders/' . $filename;
-            $pdf->save($file);
+            CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,NULL,NULL);
         }
         else
         {
             $role = 'supplier2';
-            $file = public_path() . '/assets/Orders/' . $filename;
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
-            $pdf->save($file);
+            CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
         }
 
         return redirect()->route('customer-quotations');
