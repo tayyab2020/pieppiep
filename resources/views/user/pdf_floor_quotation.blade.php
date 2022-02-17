@@ -19,26 +19,26 @@
                             $date = date('d-m-Y',strtotime($date));
                             ?>
 
-                                <div class="row p-5">
+                            <div class="row p-5">
 
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-{{--                                        <img class="img-fluid" src="{{ $user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:40%;height:100%;margin-bottom: 30px;">--}}
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
-                                        {{--<p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>--}}
-                                        <p style="margin: 0">{{$user->company_name}}</p>
-                                        <p style="margin: 0">{{$address}}</p>
-                                        <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
-                                        <p style="margin: 0">TEL: {{$user->phone}}</p>
-                                        <p style="margin: 0">{{$user->email}}</p>
-                                    </div>
-
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <img class="img-fluid" src="{{ $user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:40%;height:100%;margin-bottom: 30px;">
                                 </div>
 
-                                <div class="row p-5">
+                                <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
+                                    {{--<p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>--}}
+                                    <p style="margin: 0">{{$user->company_name}}</p>
+                                    <p style="margin: 0">{{$address}}</p>
+                                    <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
+                                    <p style="margin: 0">TEL: {{$user->phone}}</p>
+                                    <p style="margin: 0">{{$user->email}}</p>
+                                </div>
 
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                            </div>
+
+                            <div class="row p-5">
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
 
                                     <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">Customer Details</p>
                                     <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
@@ -50,15 +50,15 @@
                                     @if($role != 'retailer' && $role != 'order') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
                                     <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer' || $role == 'order') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
 
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
-                                        <br><br><br><br><br>
-                                        <p class="text-muted" style="font-size: 15px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
-                                        {{--<p class="text-muted" style="font-size: 15px;margin: 0;">Client ID {{sprintf('%04u', $client->id)}}</p>--}}
-                                    </div>
-
                                 </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
+                                    <br><br><br><br><br>
+                                    <p class="text-muted" style="font-size: 15px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
+                                    {{--<p class="text-muted" style="font-size: 15px;margin: 0;">Client ID {{sprintf('%04u', $client->id)}}</p>--}}
+                                </div>
+
+                            </div>
 
                         </div>
 
@@ -70,7 +70,7 @@
                                 <div class="col-md-12" style="padding: 0 !important;">
 
                                     <?php
-                                    
+
                                     if($form_type == 1)
                                     {
                                         $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
@@ -93,79 +93,99 @@
                                         $art = number_format((float)($art), 2, ',', '.');
                                         $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
                                     }
-                                    
+
                                     ?>
 
-                                        <table style="display: table;width: 100%;">
+                                    <table style="display: table;width: 100%;">
 
-                                            <thead>
-                                            <tr>
-                                                <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
-                                                <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
+                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
-                                                @if($role != 'order')
+                                            @if($role != 'order')
 
-                                                    <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
-                                                    <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
-
-                                                @endif
-
-                                            </tr>
-                                            </thead>
-
-                                            <tbody>
-
-                                            @if($role == 'order')
-
-                                                <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
-
-                                                @foreach($calculator_row as $c => $cal)
-
-                                                    <?php
-
-                                                    $box_quantity = 'box_quantity'.$request->row_id[$i];
-
-                                                    ?>
-
-                                                    @if($request->$box_quantity[$c])
-
-                                                        <tr>
-
-                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
-                                                            <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
-
-                                                        </tr>
-
-                                                    @endif
-
-                                                @endforeach
-
-                                            @else
-
-                                                <tr>
-
-                                                    @if($form_type == 1)
-
-                                                        <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
-
-                                                    @else
-
-                                                        <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
-
-                                                    @endif
-
-                                                    <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
-
-                                                </tr>
+                                                <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
+                                                <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
 
                                             @endif
 
-                                            @if($arb_discount != 0)
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                        @if($role == 'order')
+
+                                            <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
+
+                                            @foreach($calculator_row as $c => $cal)
+
+                                                <?php
+
+                                                $box_quantity = 'box_quantity'.$request->row_id[$i];
+
+                                                ?>
+
+                                                @if($request->$box_quantity[$c])
+
+                                                    <tr>
+
+                                                        <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                        <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+
+                                                    </tr>
+
+                                                @endif
+
+                                            @endforeach
+
+                                        @else
+
+                                            <tr>
+
+                                                @if($form_type == 1)
+
+                                                    <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+
+                                                @else
+
+                                                    <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
+
+                                                @endif
+
+                                                <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
+
+                                            </tr>
+
+                                        @endif
+
+                                        @if($arb_discount != 0)
+
+                                            <tr>
+                                                <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
+                                                <td style="font-size: 20px;padding: 5px;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                            </tr>
+
+                                        @endif
+
+                                        @if($form_type == 2)
+
+                                            <tr>
+                                                <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
+                                                <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
+                                            </tr>
+
+                                            @if($art_labor_discount != 0)
 
                                                 <tr>
-                                                    <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
+                                                    <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
                                                     <td style="font-size: 20px;padding: 5px;"></td>
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
@@ -173,218 +193,198 @@
 
                                             @endif
 
-                                            @if($form_type == 2)
+                                        @endif
+
+                                        </tbody>
+
+                                    </table>
+
+                                    @if($form_type == 2)
+
+                                        <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">Features</h2>
+
+                                        <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
+
+                                            <tbody>
+
+                                            <?php
+
+                                            if($role == 'retailer' || $role == 'order') {
+
+                                                $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+
+                                            }
+                                            else {
+
+                                                $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+
+                                            }
+
+                                            if($childsafe_answer)
+                                            {
+                                                $data = array (
+                                                    'childsafe' => 1,
+                                                    'childsafe_answer' => $childsafe_answer,
+                                                );
+                                                array_push($feature_sub_titles[$i],$data);
+                                            }
+
+                                            $cols = array_chunk($feature_sub_titles[$i], 3);
+                                            ?>
+
+                                            <?php $d = 1; ?>
+
+                                            @foreach($cols as $f => $col)
 
                                                 <tr>
-                                                    <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
-                                                    <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
+
+                                                    @foreach($col as $x => $feature)
+
+                                                        @if($role == 'retailer' || $role == 'order')
+
+                                                            <?php
+
+                                                            if(!$feature)
+                                                            {
+                                                                if(isset($sub_titles[$i]->code))
+                                                                {
+                                                                    $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                }
+                                                                else
+                                                                {
+                                                                    $string = 'Ladderband: No';
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if($feature['childsafe'])
+                                                                {
+                                                                    $string = 'Childsafe: ' . $feature['childsafe_answer'];
+                                                                }
+                                                                else {
+                                                                    $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
+                                                                    $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null;
+                                                                    $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
+                                                                    /*$string = substr($string, 4);*/
+                                                                }
+                                                            }
+
+                                                            ?>
+
+                                                        @else
+
+                                                            <?php
+
+                                                            if(!$feature)
+                                                            {
+                                                                if(isset($sub_titles[$i]->code))
+                                                                {
+                                                                    $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                }
+                                                                else
+                                                                {
+                                                                    $string = 'Ladderband: No';
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if($feature['childsafe'])
+                                                                {
+                                                                    $string = 'Childsafe: ' . $feature['childsafe_answer'];
+                                                                }
+                                                                else {
+
+                                                                    $comment = isset($comments[$i][$d-1]) ? ($comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null) : null;
+                                                                    $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
+                                                                    /*$string = substr($string, 4);*/
+
+                                                                }
+                                                            }
+
+                                                            ?>
+
+                                                        @endif
+
+                                                        <td style="text-align: left !important;">{!! $string !!}</td>
+
+                                                        @if(count($feature_sub_titles[$i]) == $d)
+
+                                                            <?php $rem = 3 - ($x+1); ?>
+
+                                                        @else
+
+                                                            <?php $rem = 0; ?>
+
+                                                        @endif
+
+                                                        @for($p = 0;$p < $rem;$p++)
+
+                                                            <td></td>
+
+                                                        @endfor
+
+                                                        <?php $d = $d + 1; ?>
+
+                                                    @endforeach
+
                                                 </tr>
 
-                                                @if($art_labor_discount != 0)
+                                            @endforeach
 
-                                                    <tr>
-                                                        <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
-                                                        <td style="font-size: 20px;padding: 5px;"></td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                    </tr>
+                                            </tbody>
+                                        </table>
+
+                                    @endif
+
+
+                                    @if($role != 'order')
+
+                                        <table style="display: table;width: 100%;margin-top: 30px;">
+
+                                            <thead>
+                                            <tr>
+
+                                                @if($request->total_discount[$i] != 0)
+
+                                                    <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
 
                                                 @endif
 
-                                            @endif
+                                                <th style="width: 20% !important;font-size: 20px;font-weight: 500;text-align: center;">Exclusief BTW</th>
+                                                <th style="width: 25% !important;font-size: 20px;text-align: center;font-weight: 500;">BTW</th>
+                                                <th style="width: 35% !important;font-size: 20px;text-align: right;">Bedrag inc. btw</th>
+
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                            <tr>
+
+                                                <?php
+                                                $ex_vat = ($request->rate[$i]/121)*100;
+                                                $vat = $request->rate[$i] - $ex_vat;
+                                                $vat = number_format((float)($vat), 2, ',', '.');
+                                                $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
+                                                ?>
+
+                                                @if($request->total_discount[$i] != 0)
+
+                                                    <td style="font-size: 20px;padding: 5px;">€ {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
+
+                                                @endif
+
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
+                                                <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
+
+                                            </tr>
 
                                             </tbody>
 
                                         </table>
 
-                                        @if($form_type == 2)
-
-                                            <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">Features</h2>
-
-                                            <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
-
-                                                <tbody>
-
-                                                <?php
-
-                                                if($role == 'retailer' || $role == 'order') {
-
-                                                    $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
-
-                                                }
-                                                else {
-
-                                                    $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
-
-                                                }
-
-                                                if($childsafe_answer)
-                                                {
-                                                    $data = array (
-                                                        'childsafe' => 1,
-                                                        'childsafe_answer' => $childsafe_answer,
-                                                    );
-                                                    array_push($feature_sub_titles[$i],$data);
-                                                }
-
-                                                $cols = array_chunk($feature_sub_titles[$i], 3);
-                                                ?>
-
-                                                <?php $d = 1; ?>
-
-                                                @foreach($cols as $f => $col)
-
-                                                    <tr>
-
-                                                        @foreach($col as $x => $feature)
-
-                                                            @if($role == 'retailer' || $role == 'order')
-
-                                                                <?php
-
-                                                                if(!$feature)
-                                                                {
-                                                                    if(isset($sub_titles[$i]->code))
-                                                                    {
-                                                                        $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        $string = 'Ladderband: No';
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    if($feature['childsafe'])
-                                                                    {
-                                                                        $string = 'Childsafe: ' . $feature['childsafe_answer'];
-                                                                    }
-                                                                    else {
-                                                                        $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
-                                                                        $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null;
-                                                                        $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
-                                                                        /*$string = substr($string, 4);*/
-                                                                    }
-                                                                }
-
-                                                                ?>
-
-                                                            @else
-
-                                                                <?php
-
-                                                                if(!$feature)
-                                                                {
-                                                                    if(isset($sub_titles[$i]->code))
-                                                                    {
-                                                                        $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        $string = 'Ladderband: No';
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    if($feature['childsafe'])
-                                                                    {
-                                                                        $string = 'Childsafe: ' . $feature['childsafe_answer'];
-                                                                    }
-                                                                    else {
-
-                                                                        $comment = isset($comments[$i][$d-1]) ? ($comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null) : null;
-                                                                        $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
-                                                                        /*$string = substr($string, 4);*/
-
-                                                                    }
-                                                                }
-
-                                                                ?>
-
-                                                            @endif
-
-                                                            <td style="text-align: left !important;">{!! $string !!}</td>
-
-                                                            @if(count($feature_sub_titles[$i]) == $d)
-
-                                                                <?php $rem = 3 - ($x+1); ?>
-
-                                                            @else
-
-                                                                <?php $rem = 0; ?>
-
-                                                            @endif
-
-                                                            @for($p = 0;$p < $rem;$p++)
-
-                                                                <td></td>
-
-                                                            @endfor
-
-                                                            <?php $d = $d + 1; ?>
-
-                                                        @endforeach
-
-                                                    </tr>
-
-                                                @endforeach
-
-                                                </tbody>
-                                            </table>
-
-                                        @endif
-
-
-                                        @if($role != 'order')
-
-                                            <table style="display: table;width: 100%;margin-top: 30px;">
-
-                                                <thead>
-                                                <tr>
-
-                                                    @if($request->total_discount[$i] != 0)
-
-                                                        <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
-
-                                                    @endif
-
-                                                    <th style="width: 20% !important;font-size: 20px;font-weight: 500;text-align: center;">Exclusief BTW</th>
-                                                    <th style="width: 25% !important;font-size: 20px;text-align: center;font-weight: 500;">BTW</th>
-                                                    <th style="width: 35% !important;font-size: 20px;text-align: right;">Bedrag inc. btw</th>
-
-                                                </tr>
-                                                </thead>
-
-                                                <tbody>
-
-                                                <tr>
-
-                                                    <?php
-                                                    $ex_vat = ($request->rate[$i]/121)*100;
-                                                    $vat = $request->rate[$i] - $ex_vat;
-                                                    $vat = number_format((float)($vat), 2, ',', '.');
-                                                    $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
-                                                    ?>
-
-                                                        @if($request->total_discount[$i] != 0)
-
-                                                            <td style="font-size: 20px;padding: 5px;">€ {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
-
-                                                        @endif
-
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
-
-                                                </tr>
-
-                                                </tbody>
-
-                                            </table>
-
-                                        @endif
+                                    @endif
 
                                 </div>
                             </div>
