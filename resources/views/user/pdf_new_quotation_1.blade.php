@@ -22,7 +22,7 @@
                                 <div class="row p-5">
 
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-{{--                                        <img class="img-fluid" src="{{ $user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:40%;height:100%;margin-bottom: 30px;">--}}
+                                        <img class="img-fluid" src="{{ $user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:40%;height:100%;margin-bottom: 30px;">
                                     </div>
 
                                     <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
