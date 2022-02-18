@@ -3981,10 +3981,11 @@
 
 				if($(obj).val())
 				{
-					qty = parseFloat($(obj).val());
+					qty = $(obj).val();
 				}
 
-				total_qty = total_qty + qty;
+				total_qty = parseFloat(total_qty) + parseFloat(qty);
+				total_qty = total_qty.toFixed(2);
 
 			});
 
