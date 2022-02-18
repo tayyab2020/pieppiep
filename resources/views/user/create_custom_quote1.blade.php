@@ -739,7 +739,7 @@
 
 																				@foreach($key->calculations as $c => $temp)
 
-																					<div class="attribute-content-div" data-id="{{$c+1}}" data-main-id="{{$temp->parent_row ? $temp->parent_row : 0}}">
+																					<div class="attribute-content-div" data-id="{{$temp->calculator_row}}" data-main-id="{{$temp->parent_row ? $temp->parent_row : 0}}">
 
 																						<div class="attribute full-res item1" style="width: 22%;">
 																							<div style="display: flex;align-items: center;">
