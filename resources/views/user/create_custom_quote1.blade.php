@@ -4548,16 +4548,15 @@
 
 							/*insert the value for the autocomplete text field:*/
 							inp.value = this.getElementsByTagName("input")[0].value;
-
 							var product_id = this.getElementsByTagName("input")[1].value;
 							var model_id = this.getElementsByTagName("input")[2].value;
 							var color_id = this.getElementsByTagName("input")[3].value;
 							var supplier_id = this.getElementsByTagName("input")[4].value;
 							var row_id = current.parents(".content-div").data('id');
+							var measure = current.parents(".content-div").find('#measure').val();
+							var box_quantity = current.parents(".content-div").find('#estimated_price_quantity').val();
+							var max_width = current.parents(".content-div").find('#max_width').val();
 							$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-							$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
-							// calculate_qty(row_id);
-							add_attribute_row(false, row_id);
 
 							$.ajax({
 								type: "GET",
@@ -4608,7 +4607,6 @@
 										// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-										$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(1);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
 										// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
@@ -4885,6 +4883,42 @@
 											$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
 											$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
 										}
+
+										if(data.measure != measure)
+										{
+											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
+											add_attribute_row(false, row_id);
+											$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(1);
+										}
+										else
+										{
+											if(measure == 'M1')
+											{
+												if(max_width != data.max_width)
+												{
+													$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
+
+														$(this).find('.max_width').val(data.max_width);
+														var row = $(this).data('id');
+														calculator(row_id,row);
+													
+													});
+												}
+											}
+											else
+											{
+												if(box_quantity != data.estimated_price_quantity)
+												{
+													$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
+
+														$(this).find('.box_quantity_supplier').val(data.estimated_price_quantity);
+														var row = $(this).data('id');
+														calculator(row_id,row);
+													
+													});
+												}
+											}
+										}
 									}
 
 									var windowsize = $(window).width();
@@ -4976,12 +5010,14 @@
 		var sel = $(".all-products");
 		var length = sel.children('option').length;
 
-		$(".all-products > option").each(function() {
+		$(".all-products:first > option").each(function() {
 			if (this.value) product_ids.push(this.value); product_titles.push(this.text); model_ids.push(this.getAttribute('data-model-id')); color_ids.push(this.getAttribute('data-color-id')); supplier_ids.push(this.getAttribute('data-supplier-id'));
 		});
 
-		autocomplete(document.getElementById("productInput"), product_titles, product_ids, model_ids, color_ids, supplier_ids);
-
+		var cls = document.getElementsByClassName("quote-product"); 
+        for (n=0, length = cls.length; n < length; n++) {
+            autocomplete(cls[n], product_titles, product_ids, model_ids, color_ids, supplier_ids);
+        }
 
 	});
 </script>
