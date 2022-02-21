@@ -18,4 +18,9 @@ class new_orders extends Model
         return $this->hasMany(new_orders_features::class, 'order_data_id','id')->where('new_orders_features.sub_feature',1);
     }
 
+    public function calculations()
+    {
+        return $this->hasMany(new_orders_calculations::class, 'order_id','id');
+    }
+
 }

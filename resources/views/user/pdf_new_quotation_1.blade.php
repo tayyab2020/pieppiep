@@ -48,7 +48,12 @@
                                     <br>
                                     <br>
                                     @if($role != 'retailer' && $role != 'order') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer' || $role == 'order') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
+
+                                        @if($role != 'supplier2')
+
+                                            <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer' || $role == 'order') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
+
+                                        @endif
 
                                     </div>
 
@@ -69,8 +74,10 @@
                             <div class="row p-5" style="font-size: 15px;padding: 2rem !important;border-bottom: 2px solid black !important;">
                                 <div class="col-md-12" style="padding: 0 !important;">
 
+                                    @if($role != 'supplier2')
+
                                     <?php
-                                    
+
                                     if($form_type == 1)
                                     {
                                         $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
@@ -93,8 +100,10 @@
                                         $art = number_format((float)($art), 2, ',', '.');
                                         $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
                                     }
-                                    
+
                                     ?>
+
+                                    @endif
 
                                         <table style="display: table;width: 100%;">
 
@@ -103,7 +112,14 @@
                                                 <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
                                                 <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
-                                                @if($role != 'order')
+                                                @if($role == 'supplier2')
+
+                                                    <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
+                                                    <th class="border-0 text-uppercase small font-weight-bold">Order Number</th>
+
+                                                @endif
+
+                                                @if($role != 'order' && $role != 'supplier2')
 
                                                     <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
                                                     <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
@@ -115,7 +131,7 @@
 
                                             <tbody>
 
-                                            @if($role == 'order')
+                                            @if($role == 'order' || $role == 'supplier2')
 
                                                 <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
 
@@ -133,6 +149,13 @@
 
                                                             <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
                                                             <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+
+                                                            @if($role == 'supplier2')
+
+                                                                <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                                <td>{{$order_numbers[$i]}}</td>
+
+                                                            @endif
 
                                                         </tr>
 
@@ -155,6 +178,12 @@
                                                     @endif
 
                                                     <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
+                                                        @if($role == 'supplier2')
+
+                                                            <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                            <td>{{$order_numbers[$i]}}</td>
+
+                                                        @endif
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
 
@@ -162,15 +191,19 @@
 
                                             @endif
 
-                                            @if($arb_discount != 0)
+                                            @if($role != 'supplier2')
 
-                                                <tr>
-                                                    <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
-                                                    <td style="font-size: 20px;padding: 5px;"></td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                </tr>
+                                                @if($arb_discount != 0)
 
+                                                    <tr>
+                                                        <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
+                                                        <td style="font-size: 20px;padding: 5px;"></td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
+                                                    </tr>
+
+                                                @endif
+                                                
                                             @endif
 
                                             @if($form_type == 2)
@@ -211,7 +244,7 @@
 
                                                 if($role == 'retailer' || $role == 'order') {
 
-                                                    $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+                                                    $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = isset($request->$childsafe_answer) ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
 
                                                 }
                                                 else {
@@ -336,8 +369,7 @@
 
                                         @endif
 
-
-                                        @if($role != 'order')
+                                        @if($role != 'order' && $role != 'supplier2')
 
                                             <table style="display: table;width: 100%;margin-top: 30px;">
 
@@ -391,7 +423,7 @@
 
                         @endforeach
 
-                        @if($role != 'order')
+                        @if($role != 'order' && $role != 'supplier2')
 
                             <div class="row p-5" style="padding: 2rem !important;">
                                 <div class="col-md-12" style="padding: 0 !important;">

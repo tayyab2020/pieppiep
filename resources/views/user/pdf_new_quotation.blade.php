@@ -124,7 +124,7 @@
 
                                             @if($role == 'retailer' || $role == 'supplier2')
 
-                                                <td><?php $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = $request->$childsafe_answer ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = isset($request->$childsafe_answer) ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 1){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 2){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
@@ -154,7 +154,7 @@
 
                                                 @endif
 
-                                                @if($role == 'supplier' || $role == 'supplier2' || $role == 'invoice')
+                                                @if($role == 'supplier' || $role == 'invoice')
 
                                                     <td>{{$request->delivery_date[$i]}}</td>
 

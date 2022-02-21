@@ -7,11 +7,21 @@
 	<div class="container-fluid">
 		<div class="row">
 
-			<form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}" method="POST" enctype="multipart/form-data">
+			<form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-order')}}" method="POST" enctype="multipart/form-data">
 				{{csrf_field()}}
 
-				<input type="hidden" name="form_type" value="1">
-				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
+                @if(Route::currentRouteName() == 'edit-order')
+
+                    <input type="hidden" name="supplier_id" value="{{$invoice[0]->supplier_id}}">
+
+                @endif
+
+                <input type="hidden" id="quotation_id" name="quotation_id" value="{{$check->quotation_id}}">
+                <input type="hidden" name="customer" value="{{$check->customer_details}}">
+                <input type="hidden" name="quotation_invoice_number" value="{{$check->quotation_invoice_number}}">
+                <input type="hidden" name="created_at" value="{{$check->created_at}}">
+                <input type="hidden" id="form_type" name="form_type" value="{{Route::currentRouteName() == 'view-order' ? 1 : 2}}">
+                <input type="hidden" id="category" name="category" value="{{$check->form_type}}">
 
 				<div style="margin: 0;" class="row">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -23,67 +33,50 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : __('text.View Invoice')) : __('text.Create Quotation')}}</h2>
+											@if(Route::currentRouteName() == 'edit-order')
 
-											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
+												<h2 style="margin-top: 0;">Edit Order</h2>
 
-												@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+											@else
 
-													<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-														<i class="fa fa-fw fa-save"></i>
-														<span class="tooltiptext">Save</span>
-													</span>
+												<h2 style="margin-top: 0;">View Order</h2>
 
-												@endif
+											@endif
 
-												<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
-													<i class="fa fa-fw fa-close"></i>
-													<span class="tooltiptext">Close</span>
-												</a>
+												@if(Auth::guard('user')->user()->role_id == 2)
 
-											</div>
+													<div style="display: flex;">
 
-										</div>
+														@if(Route::currentRouteName() == 'view-order' && !$check->order_sent && $check->accepted && !$check->processing && !$check->finished)
 
-										<hr>
-
-											<div class="col-md-5">
-												<div class="form-group" style="margin: 0;">
-
-												@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
-
-												@else
-
-													<label>Customer</label>
-
-												@endif
-
-													<div id="cus-box" style="display: flex;">
-														<select class="customer-select form-control" name="customer"
-															required>
-
-															<option value="">{{__('text.Select Customer')}}</option>
-
-															@foreach($customers as $key)
-
-															<option {{isset($invoice) ? ($invoice[0]->user_id ==
-																$key->user_id ? 'selected' : null) : null}}
-																value="{{$key->id}}">{{$key->name}}
-																{{$key->family_name}}</option>
-
-															@endforeach
-
-														</select>
-
-														@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
-
-															<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+															<button type="button" class="btn btn-success send-order" style="margin-right: 10px;">Send Order</button>
 
 														@endif
 
+															<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
+
+																@if(!$check->order_sent && !$check->processing && !$check->finished)
+
+																	<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+																		<i class="fa fa-fw fa-save"></i>
+																		<span class="tooltiptext">Save</span>
+																	</span>
+
+																@endif
+
+
+																	<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
+																		<i class="fa fa-fw fa-close"></i>
+																		<span class="tooltiptext">Close</span>
+																	</a>
+
+															</div>
+
 													</div>
-												</div>
-											</div>
+
+												@endif
+
+										</div>
 
 										<div style="display: inline-block;width: 100%;">
 
@@ -102,30 +95,24 @@
                                                         <section id="products_table" style="width: 100%;">
 
                                                             <div class="header-div">
-                                                                <div class="headings" style="width: 2%;"></div>
-																<div class="headings" style="width: 34%;">Product</div>
-																<div class="headings" style="width: 17%;">Qty</div>
-																<div class="headings" style="width: 17%;">€ Art.</div>
-																<div class="headings" style="width: 10%;">Discount</div>
-																<div class="headings" style="width: 7%;">€ Total</div>
+                                                                <div class="headings" style="width: 3%;"></div>
+																<div class="headings" style="width: 35%;">Product</div>
+																<div class="headings" style="width: 18%;">Qty</div>
+																<div class="headings" style="width: 18%;">€ Art.</div>
+																<div class="headings" style="width: 13%;">Discount</div>
 																<div class="headings" style="width: 13%;"></div>
                                                             </div>
 
-															@if(isset($invoice))
-
-																@foreach($invoice as $i => $item)
+															@foreach($invoice as $i => $item)
 
 																<div @if($i==0) class="content-div active" @else class="content-div" @endif data-id="{{$i+1}}">
 
-                                                                    <div class="content full-res item1" style="width: 2%;">
+																	<div class="content full-res item1" style="width: 3%;">
 																		<label class="content-label">Sr. No</label>
 																		<div style="padding: 0 5px;" class="sr-res">{{$i+1}}</div>
 																	</div>
 
 																	<input type="hidden" value="{{$item->order_number}}" id="order_number" name="order_number[]">
-																	<input type="hidden" value="{{$item->basic_price}}" id="basic_price" name="basic_price[]">
-																	<input type="hidden" value="{{$item->rate}}" id="rate" name="rate[]">
-																	<input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
 																	<input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
 																	<input type="hidden" value="{{$item->childsafe ? 1 : 0}}" id="childsafe" name="childsafe[]">
 																	<input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
@@ -134,14 +121,11 @@
 																	<input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
 																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
 																	<input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
-																	<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
-                                                                    <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
-                                                                    <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
-																	<input type="hidden" value="{{$item->box_quantity}}" id="estimated_price_quantity" name="estimated_price_quantity[]">
+                                                                    <input type="hidden" value="{{$item->box_quantity}}" id="estimated_price_quantity" name="estimated_price_quantity[]">
 																	<input type="hidden" value="{{$item->measure}}" id="measure" name="measure[]">
 																	<input type="hidden" value="{{$item->max_width}}" id="max_width" name="max_width[]">
 
-																	<div style="width: 34%;" class="products content item3 full-res">
+																	<div style="width: 35%;" class="products content item3 full-res">
 
 																		<label class="content-label">Product</label>
 
@@ -174,16 +158,16 @@
 
 																	</div>
 
-																	<div class="content item6" style="width: 17%;">
+																	<div class="content item6" style="width: 18%;">
 
 																		<label class="content-label">Qty</label>
 
 																		<div style="display: flex;align-items: center;">
 																			<input type="text" readonly value="{{$item->qty}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
 																		</div>
-                                                                    </div>
-																	
-																	<div class="content item6" style="width: 17%;">
+																	</div>
+
+																	<div class="content item6" style="width: 18%;">
 
 																		<label class="content-label">€ Art.</label>
 
@@ -191,36 +175,29 @@
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																			<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
 																		</div>
-                                                                    </div>
+																	</div>
 
-																	<div class="content item8" style="width: 10%;">
+																	<div class="content item8" style="width: 13%;">
 
 																		<label class="content-label">Discount</label>
 
 																		<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
 																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
-                                                                    </div>
-
-																	<div style="width: 7%;" class="content item9">
-
-																		<label class="content-label">€ Total</label>
-																		<div class="price res-white">€ {{str_replace('.', ',',floatval($item->rate))}}</div>
-
 																	</div>
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
 
-																		@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+																		@if(Auth::guard('user')->user()->role_id == 2 && !$check->order_sent && !$check->processing && !$check->finished)
 
 																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
 																				<div style="display: none;" class="green-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
-                                                                            	</div>
-                                                                            	
+																					<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+																				</div>
+
 																				<div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
-                                                                            	</div>
+																					<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
+																				</div>
 
 																				<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
@@ -238,249 +215,21 @@
 																				</span>
 
 																				<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-																					<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-																					<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																				</span>-->
+                                                                                    <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+                                                                                    <span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
+                                                                                </span>-->
 
-                                                                        	</div>
+																			</div>
 
 																		@endif
-                                                                        
-                                                                    </div>
-
-                                                                    <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
-                                                                        <button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo{{$i+1}}"></button>
-                                                                    </div>
-
-                                                                    <div style="width: 100%;" id="demo{{$i+1}}" class="item16 collapse">
-
-                                                                        <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
-
-                                                                            <label>Discount % </label>
-
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                            	</div>
-
-																@endforeach
-
-															@else
-
-															<div class="content-div active" data-id="1">
-
-                                                                    <div class="content full-res item1" style="width: 2%;">
-																		<label class="content-label">Sr. No</label>
-																		<div style="padding: 0 5px;" class="sr-res">1</div>
-																	</div>
-
-																	<input type="hidden" id="order_number" name="order_number[]">
-																	<input type="hidden" id="basic_price" name="basic_price[]">
-																	<input type="hidden" id="rate" name="rate[]">
-																	<input type="hidden" id="row_total" name="total[]">
-																	<input type="hidden" value="1" id="row_id" name="row_id[]">
-																	<input type="hidden" value="0" id="childsafe" name="childsafe[]">
-																	<input type="hidden" value="0" id="ladderband" name="ladderband[]">
-																	<input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
-																	<input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
-																	<input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
-																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
-																	<input type="hidden" id="delivery_days" name="delivery_days[]">
-																	<input type="hidden" id="base_price" name="base_price[]">
-                                                                    <input type="hidden" id="supplier_margin" name="supplier_margin[]">
-                                                                    <input type="hidden" id="retailer_margin" name="retailer_margin[]">
-																	<input type="hidden" id="estimated_price_quantity" name="estimated_price_quantity[]">
-																	<input type="hidden" id="measure" name="measure[]">
-																	<input type="hidden" id="max_width" name="max_width[]">
-
-																	<div style="width: 34%;" class="products content item3 full-res">
-
-																		<label class="content-label">Product</label>
-
-																		<div class="autocomplete" style="width:100%;">
-																			<input id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
-																		</div>
-
-																		<select style="display: none;" class="form-control all-products" id="blood_grp">
-
-																			@foreach($products as $key)
-																		
-																				@foreach($key->models as $key1)
-																			
-																					@foreach($key->colors as $key2)
-
-																						<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
-
-																					@endforeach
-
-																				@endforeach
-
-																			@endforeach
-
-																		</select>
-
-																		<input type="hidden" name="products[]" id="product_id">
-																		<input type="hidden" name="suppliers[]" id="supplier_id">
-																		<input type="hidden" name="colors[]" id="color_id">
-																		<input type="hidden" name="models[]" id="model_id">
-
-                                                                    </div>
-
-																	<div class="content item6" style="width: 17%;">
-
-																		<label class="content-label">Qty</label>
-
-																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="1" readonly name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
-																		</div>
-                                                                    </div>
-
-																	<div class="content item6" style="width: 17%;">
-
-																		<label class="content-label">€ Art.</label>
-
-																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																			<input type="hidden" value="0" class="price_before_labor_old">
-																		</div>
-                                                                    </div>
-
-																	<div class="content item8" style="width: 10%;">
-
-																		<label class="content-label">Discount</label>
-
-																		<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
-																		<input type="hidden" value="0" class="total_discount_old">
-                                                                    </div>
-
-																	<div style="width: 7%;" class="content item9">
-
-																		<label class="content-label">€ Total</label>
-																		<div class="price res-white"></div>
 
 																	</div>
 
-																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
-                                                                        <div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+																</div>
 
-																			<div style="display: none;" class="green-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
-                                                                            </div>
-
-                                                                            <div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
-                                                                            </div>
-
-																			<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																				<span class="tooltiptext">Add</span>
-																			</span>
-
-																			<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																				<span class="tooltiptext">Remove</span>
-																			</span>
-
-																			<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																				<span class="tooltiptext">Copy</span>
-																			</span>
-
-                                                                            <!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-																			<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-																			<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																			</span>-->
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
-                                                                        <button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo"></button>
-                                                                    </div>
-
-                                                                    <div style="width: 100%;" id="demo" class="item16 collapse">
-
-                                                                        <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
-
-                                                                            <label>Discount % </label>
-
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                            </div>
-
-															@endif
+															@endforeach
 
                                                         </section>
-
-														<div style="width: 100%;margin-top: 10px;">
-
-															<div style="display: flex;justify-content: center;">
-
-																<div class="headings1" style="width: 63%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
-																<div class="headings1" style="width: 7%;">
-																	<div style="display: flex;align-items: center;justify-content: center;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
-																		<input name="price_before_labor_total"
-																			id="price_before_labor_total"
-																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
-																	</div>
-																</div>
-																
-																<div class="headings2" style="width: 30%;">
-																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">Te betalen: €</span>
-																		<input name="total_amount" id="total_amount"
-																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->grand_total)) : 0}}">
-																	</div>
-																</div>
-
-															</div>
-
-															<div style="display: flex;justify-content: flex-end;">
-
-																<div class="headings1" style="width: 56%;"></div>
-																<div class="headings1" style="width: 7%;"></div>
-																<div class="headings1" style="width: 7%;"></div>
-																<div class="headings2" style="width: 30%;">
-																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: €</span>
-																			<input name="net_amount" id="net_amount"
-																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																				type="text" readonly
-																				value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->net_amount)) : 0}}">
-																	</div>
-																</div>
-
-															</div>
-
-															<div style="display: flex;justify-content: flex-end;">
-
-																<div class="headings1" style="width: 56%;"></div>
-																<div class="headings1" style="width: 7%;"></div>
-																<div class="headings1" style="width: 7%;"></div>
-																<div class="headings2" style="width: 30%;">
-																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): €</span>
-																		<input name="tax_amount" id="tax_amount"
-																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->tax_amount)) : 0}}">
-																	</div>
-																</div>
-
-															</div>
-
-														</div>
 
 													</div>
 
@@ -824,24 +573,24 @@
 																						<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
 																							<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
 
-																								@if($temp->parent_row == NULL)
+                                                                                                @if($temp->parent_row == NULL)
 
-																									<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																										<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																										<span class="tooltiptext">Add</span>
-																									</span>
+                                                                                                    <span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																									    <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																									    <span class="tooltiptext">Add</span>
+																								    </span>
 
-																									<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																										<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																										<span class="tooltiptext">Remove</span>
-																									</span>
+                                                                                                    <span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																									    <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																									    <span class="tooltiptext">Remove</span>
+																								    </span>
 
-																									<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
-																										<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																										<span class="tooltiptext">Copy</span>
-																									</span>
+                                                                                                    <span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																									    <i id="next-row-icon" class="fa fa-fw fa-copy"></i>
+																									    <span class="tooltiptext">Copy</span>
+																								    </span>
 
-																								@endif
+                                                                                                @endif
 
 																							</div>
 																						</div>
@@ -1145,118 +894,49 @@
 
 </div>
 
-<div id="cover"></div>
-
-<div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModal3" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 
-		<div class="modal-content">
+		<form id="send-order-form" action="{{route('send-new-order')}}" method="POST" enctype="multipart/form-data">
+			{{csrf_field()}}
 
-			<div class="modal-header">
-				<button style="background-color: white !important;color: black !important;" type="button" class="close"
-					data-dismiss="modal" aria-hidden="true">×</button>
-				<h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
+			<input type="hidden" name="quotation_id1" id="quotation_id1">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Order Mail Body</h4>
+				</div>
+				<div class="modal-body">
+
+					<div style="margin: 20px 0;" class="row">
+						<div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<label>Subject:</label>
+							<input type="text" name="mail_subject1" class="form-control">
+						</div>
+					</div>
+
+					<div style="margin: 20px 0;" class="row">
+						<div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<label>Text:</label>
+							<input type="hidden" name="mail_body1">
+							<div class="summernote"></div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form1">Submit</button>
+				</div>
 			</div>
 
-			<div class="modal-body" id="myWizard" style="display: inline-block;">
-
-				<input type="hidden" id="token" name="token" value="{{csrf_token()}}">
-				<input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
-				<input type="hidden" id="handyman_name" name="handyman_name"
-					value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}"
-							type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="family_name" name="family_name" class="form-control validation"
-							placeholder="{{$lang->fn}}" type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}"
-							type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="address" name="address" class="form-control" placeholder="{{$lang->ad}}" type="text">
-						<input type="hidden" id="check_address" value="0">
-					</div>
-				</div>
-
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="postcode" name="postcode" class="form-control" readonly placeholder="{{$lang->pc}}"
-							type="text">
-					</div>
-				</div>
-
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="city" name="city" class="form-control" placeholder="{{$lang->ct}}" readonly
-							type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="phone" name="phone" class="form-control" placeholder="{{$lang->pn}}" type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-envelope"></i>
-						</div>
-						<input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}"
-							type="email">
-					</div>
-				</div>
-
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;"
-					class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
-			</div>
-
-		</div>
+		</form>
 
 	</div>
 </div>
+
+<div id="cover"></div>
 
 <style>
 
@@ -2016,443 +1696,105 @@
 
 @section('scripts')
 
-<script
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap"
-	defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
 
-	function initMap() {
-
-		var input = document.getElementById('address');
-
-		var options = {
-			componentRestrictions: { country: "nl" }
-		};
-
-		var autocomplete = new google.maps.places.Autocomplete(input, options);
-
-		// Set the data fields to return when the user selects a place.
-		autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
-
-		autocomplete.addListener('place_changed', function () {
-
-			var flag = 0;
-
-			var place = autocomplete.getPlace();
-
-			if (!place.geometry) {
-
-				// User entered the name of a Place that was not suggested and
-				// pressed the Enter key, or the Place Details request failed.
-				window.alert("{{__('text.No details available for input: ')}}" + place.name);
-				return;
-			}
-			else {
-				var string = $('#address').val().substring(0, $('#address').val().indexOf(',')); //first string before comma
-
-				if (string) {
-					var is_number = $('#address').val().match(/\d+/);
-
-					if (is_number === null) {
-						flag = 1;
-					}
-				}
-			}
-
-			var city = '';
-			var postal_code = '';
-
-			for (var i = 0; i < place.address_components.length; i++) {
-				if (place.address_components[i].types[0] == 'postal_code') {
-					postal_code = place.address_components[i].long_name;
-				}
-
-				if (place.address_components[i].types[0] == 'locality') {
-					city = place.address_components[i].long_name;
-				}
-			}
-
-			if (city == '') {
-				for (var i = 0; i < place.address_components.length; i++) {
-					if (place.address_components[i].types[0] == 'administrative_area_level_2') {
-						city = place.address_components[i].long_name;
-
-					}
-				}
-			}
-
-			if (postal_code == '' || city == '') {
-				flag = 1;
-			}
-
-			if (!flag) {
-				$('#check_address').val(1);
-				$("#address-error").remove();
-				$('#postcode').val(postal_code);
-				$("#city").val(city);
-			}
-			else {
-				$('#address').val('');
-				$('#postcode').val('');
-				$("#city").val('');
-
-				$("#address-error").remove();
-				$('#address').parent().parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;">{{__('text.Kindly write your full address with house / building number so system can detect postal code and city from it!')}}</small>');
-
-			}
-
-
-		});
-
-	}
-
-	$("#address").on('input', function (e) {
-		$(this).next('input').val(0);
-	});
-
-	$("#address").focusout(function () {
-
-		var check = $(this).next('input').val();
-
-		if (check == 0) {
-			$(this).val('');
-			$('#postcode').val('');
-			$("#city").val('');
-		}
-	});
-
 	$(document).ready(function () {
 
-		$(".submit-customer").click(function () {
+		$('.summernote').summernote({
+			toolbar: [
+				// [groupName, [list of button]]
+				['style', ['style']],
+				['style', ['bold', 'italic', 'underline', 'clear']],
+				['fontsize', ['fontsize']],
+				/*['color', ['color']],*/
+				['fontname', ['fontname']],
+				['forecolor', ['forecolor']],
+			],
+			height: 200,   //set editable area's height
+			codemirror: { // codemirror options
+				theme: 'monokai'
+			},
+			callbacks: {
+				onChange: function(contents, $editable) {
+					$(this).prev('input').val(contents);
+				}
+			}
+		});
 
-			var name = $('#name').val();
-			var family_name = $('#family_name').val();
-			var business_name = $('#business_name').val();
-			var postcode = $('#postcode').val();
-			var address = $('#address').val();
-			var city = $('#city').val();
-			var phone = $('#phone').val();
-			var email = $('#email').val();
-			var handyman_id = $('#handyman_id').val();
-			var handyman_name = $('#handyman_name').val();
-			var token = $('#token').val();
+		$(".send-order").on('click', function (e) {
 
-			var validation = $('.modal-body').find('.validation');
+			var id = $('#quotation_id').val();
+
+			$.ajax({
+
+				type: "GET",
+				data: "id=" + id + '&type=order',
+				url: "<?php echo url('/aanbieder/get-customer-email')?>",
+
+				success: function (data) {
+
+					$('#quotation_id1').val(id);
+					$("[name='mail_subject1']").val(data[1]);
+					$("[name='mail_body1']").val(data[2]);
+					$('#myModal3').find(".note-editable").html(data[2]);
+					$('#myModal3').modal('toggle');
+					$('.modal-backdrop').hide();
+
+				},
+				error: function (data) {
+
+
+				}
+
+			});
+
+		});
+
+		$(document).on('click', '.submit-form1', function () {
 
 			var flag = 0;
 
-			$(validation).each(function () {
-
-				if (!$(this).val()) {
-					$(this).css('border', '1px solid red');
-					flag = 1;
-				}
-				else {
-					$(this).css('border', '');
-				}
-
-			});
-
-			if (!flag) {
-				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
-				if (!regex.test(email)) {
-					$('#email').css('border', '1px solid red');
-
-					$('.alert-box').html('<div class="alert alert-danger">\n' +
-						'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-						'                                            <p class="text-left">Email address is not valid...</p>\n' +
-						'                                        </div>');
-					$('.alert-box').show();
-					$('.alert-box').delay(5000).fadeOut(400);
-				}
-				else {
-					$('#email').css('border', '');
-
-					$('#cover').show();
-
-					$.ajax({
-
-						type: "POST",
-						data: "handyman_id=" + handyman_id + "&handyman_name=" + handyman_name + "&name=" + name + "&family_name=" + family_name + "&business_name=" + business_name + "&postcode=" + postcode + "&address=" + address + "&city=" + city + "&phone=" + phone + "&email=" + email + "&_token=" + token,
-						url: "<?php echo url('/aanbieder/create-customer')?>",
-
-						success: function (data) {
-
-							$('#cover').hide();
-
-							var newStateVal = data.data.id;
-							var newName = data.data.name + " " + data.data.family_name;
-
-							// Set the value, creating a new option if necessary
-							if ($(".customer-select").find("option[value=" + newStateVal + "]").length) {
-								$(".customer-select").val(newStateVal).trigger("change");
-							} else {
-								// Create the DOM option that is pre-selected by default
-								var newState = new Option(newName, newStateVal, true, true);
-								// Append it to the select
-								$(".customer-select").append(newState).trigger('change');
-							}
-
-							$('.alert-box').html('<div class="alert alert-success">\n' +
-								'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-								'                                            <p class="text-left">' + data.message + '</p>\n' +
-								'                                        </div>');
-							$('.alert-box').show();
-							$('.alert-box').delay(5000).fadeOut(400);
-
-							$('#myModal1').modal('toggle');
-							window.scrollTo({ top: 0, behavior: 'smooth' });
-						},
-						error: function (data) {
-
-							$('#cover').hide();
-
-							/*if (data.status == 422) {
-								$.each(data.responseJSON.errors, function (i, error) {
-									$('.alert-box').html('<div class="alert alert-danger">\n' +
-										'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-										'                                            <p class="text-left">'+error[0]+'</p>\n' +
-										'                                        </div>');
-								});
-								$('.alert-box').show();
-								$('.alert-box').delay(5000).fadeOut(400);
-							}*/
-
-							$('.alert-box').html('<div class="alert alert-danger">\n' +
-								'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-								'                                            <p class="text-left">Something went wrong!</p>\n' +
-								'                                        </div>');
-							$('.alert-box').show();
-							$('.alert-box').delay(5000).fadeOut(400);
-
-							$('#myModal1').modal('toggle');
-							window.scrollTo({ top: 0, behavior: 'smooth' });
-						}
-
-					});
-				}
-			}
-
-		});
-
-		$(".customer-select").select2({
-			width: '100%',
-			height: '200px',
-			placeholder: "{{__('text.Select Customer')}}",
-			allowClear: true,
-			"language": {
-				"noResults": function () {
-					return '{{__('text.No results found')}}';
-				}
-			},
-		});
-
-		var current_desc = '';
-
-		$(".add-desc").click(function () {
-			current_desc = $(this);
-			var d = current_desc.prev('input').val();
-			$('#description-text').val(d);
-			$("#myModal").modal('show');
-		});
-
-		$(".submit-desc").click(function () {
-			var desc = $('#description-text').val();
-			current_desc.prev('input').val(desc);
-			$('#description-text').val('');
-			$("#myModal").modal('hide');
-		});
-
-		$('.estimate_date').datepicker({
-
-			format: 'dd-mm-yyyy',
-			startDate: new Date(),
-
-		});
-
-		function calculate_total(qty_changed = 0,labor_changed = 0) {
-
-			var total = 0;
-			var price_before_labor_total = 0;
-
-			$("input[name='total[]']").each(function (i, obj) {
-
-				var rate = 0;
-				var row_id = $(this).parent().data('id');
-				var qty = $('#products_table').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
-
-				if (!qty) {
-					qty = 0;
-				}
-
-				if (!obj.value) {
-					rate = 0;
-				}
-				else {
-					rate = obj.value;
-				}
-
-				rate = rate * qty;
-
-				// var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
-				// labor_impact = labor_impact * qty;
-				// labor_impact = parseFloat(labor_impact).toFixed(2);
-
-				// if(labor_changed == 0)
-				// {
-				// 	$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact.replace(/\./g, ','));
-				// }
-
-				var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
-				// price_before_labor = price_before_labor * qty;
-				// price_before_labor = parseFloat(price_before_labor).toFixed(2);
-
-				if(isNaN(price_before_labor))
-				{
-					price_before_labor = 0;
-					// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor);
-				}
-				// else
-				// {
-				// 	$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-				// }
-
-				if(qty_changed == 0)
-				{
-					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-
-					if(isNaN(old_discount))
-					{
-						old_discount = 0;
-					}
-					else
-					{
-						old_discount = old_discount.replace(/\,/g, '.');
-					}
-
-					old_discount = parseFloat(old_discount).toFixed(2);
-
-					rate = rate - old_discount;
-
-					var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
-					// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
-
-					if(!discount)
-					{
-						discount = 0;
-					}
-
-					// if(!labor_discount)
-					// {
-					// 	labor_discount = 0;
-					// }
-
-					var discount_val = parseFloat(rate) * (discount/100);
-					// var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
-
-					// var total_discount = discount_val + labor_discount_val;
-					var total_discount = discount_val;
-					total_discount = parseFloat(total_discount).toFixed(2);
-
-					if(isNaN(total_discount))
-					{
-						total_discount = 0;
-					}
-
-					var old_discount = total_discount / qty;
-					old_discount = parseFloat(old_discount).toFixed(2);
-
-					if(isNaN(old_discount))
-					{
-						old_discount = 0;
-					}
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val('-' + total_discount.replace(/\./g, ','));
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val('-' + old_discount);
-
-					rate = parseFloat(rate) - parseFloat(total_discount);
-					var price = rate / qty;
-
-					if(isNaN(price))
-					{
-						price = 0;
-					}
-
-					// $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-
-				}
-				else
-				{
-					var price = rate / qty;
-
-					if(isNaN(price))
-					{
-						price = 0;
-					}
-
-					if(qty != 0)
-					{
-						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-					}
-
-					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
-					old_discount = old_discount * qty;
-					old_discount = parseFloat(old_discount).toFixed(2);
-
-					if(isNaN(old_discount))
-					{
-						old_discount = 0;
-					}
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(old_discount.replace(/\./g, ','));
-				}
-
-				rate = parseFloat(rate);
-				rate = rate.toFixed(2);
-
-				total = parseFloat(total) + parseFloat(rate);
-				total = total.toFixed(2);
-
-				if(isNaN(rate))
-				{
-					rate = 0;
-				}
-
-				$(this).parent().find('#rate').val(rate);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate.replace(/\./g, ','));
-
-
-				var art = price_before_labor;
-				price_before_labor_total = parseFloat(price_before_labor_total) + parseFloat(art);
-				price_before_labor_total = parseFloat(price_before_labor_total).toFixed(2);
-
-				// var arb = labor_impact;
-				// labor_cost_total = parseFloat(labor_cost_total) + parseFloat(arb);
-				// labor_cost_total = parseFloat(labor_cost_total).toFixed(2);
-
-			});
-
-
-			if(isNaN(total))
+			if(!$("[name='mail_subject1']").val())
 			{
-				total = 0;
+				$("[name='mail_subject1']").css('border','1px solid red');
+				flag = 1;
+			}
+			else{
+				$("[name='mail_subject1']").css('border','');
 			}
 
-			var net_amount = (total / 121) * 100;
-			net_amount = parseFloat(net_amount).toFixed(2);
+			if(!$("[name='mail_body1']").val())
+			{
+				$('#myModal3').find(".note-editable").css('border','1px solid red');
+				flag = 1;
+			}
+			else{
+				$('#myModal3').find(".note-editable").css('border','');
+			}
 
-			var tax_amount = total - net_amount;
-			tax_amount = parseFloat(tax_amount).toFixed(2);
+			if(!flag)
+			{
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "Make sure to save your changes first before sending the order!",
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes!',
+					cancelButtonText: 'Cancel',
+				}).then((result) => {
+					if (result.value) {
 
-			$('#total_amount').val(total.replace(/\./g, ','));
-			$('#price_before_labor_total').val(price_before_labor_total.replace(/\./g, ','));
-			// $('#labor_cost_total').val(labor_cost_total.replace(/\./g, ','));
-			$('#net_amount').val(net_amount.replace(/\./g, ','));
-			$('#tax_amount').val(tax_amount.replace(/\./g, ','));
-		}
+						$('#send-order-form').submit();
+
+					}
+				});
+			}
+
+		});
 
 		function focus_row(last_row) {
 
@@ -2480,7 +1822,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, product_text = null, supplier = null, color = null, model = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, base_price = null, supplier_margin = null, retailer_margin = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
+		function add_row(copy = false, products = null, product = null, product_text = null, supplier = null, color = null, model = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_before_labor = null, price_before_labor_old = null, total_discount = null, total_discount_old= null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -2491,15 +1833,12 @@
 			if (!copy) {
 
 				$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
-					'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
+					'                                                            <div class="content full-res item1" style="width: 3%;">\n' +
                     '                       									 	<label class="content-label">Sr. No</label>\n' +
 					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
 					'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
-					'                                                            <input type="hidden" id="basic_price" name="basic_price[]">\n' +
-					'                                                            <input type="hidden" id="rate" name="rate[]">\n' +
-					'                                                            <input type="hidden" id="row_total" name="total[]">\n' +
 					'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
 					'                                                            <input type="hidden" value="0" id="childsafe" name="childsafe[]">\n' +
 					'                                                            <input type="hidden" value="0" id="ladderband" name="ladderband[]">\n' +
@@ -2508,14 +1847,11 @@
 					'                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
 					'                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
 					'                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
-					'                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
-                    '                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
-                    '                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
 					'                                                            <input type="hidden" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
 					'                                                            <input type="hidden" id="measure" name="measure[]">\n' +
 					'                                                            <input type="hidden" id="max_width" name="max_width[]">\n' +
 					'\n' +
-					'                                                            <div style="width: 34%;" class="products content item3 full-res">\n' +
+					'                                                            <div style="width: 35%;" class="products content item3 full-res">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">Product</label>\n' +
 					'\n' +
@@ -2550,7 +1886,7 @@
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="content item6" style="width: 17%;">\n' +
+					'                                                            <div class="content item6" style="width: 18%;">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">Qty</label>\n' +
 					'\n' +
@@ -2559,7 +1895,7 @@
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="content item7" style="width: 17%;">\n' +
+					'                                                            <div class="content item7" style="width: 18%;">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">€ Art.</label>\n' +
 					'\n' +
@@ -2569,19 +1905,12 @@
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="content item8" style="width: 10%;">\n' +
+					'                                                            <div class="content item8" style="width: 13%;">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">Discount</label>\n' +
 					'\n' +
 					'																<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
 					'																<input type="hidden" value="0" class="total_discount_old">\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div style="width: 7%;" class="content item9">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Total</label>\n' +
-					'\n' +
-					'																<div class="price res-white"></div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
 					'                                                            <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">\n' +
@@ -2624,24 +1953,6 @@
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
-					'\n' +
-					'                       									 	<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse">\n' +
-					'\n' +
-					'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
-					'\n' +
-					'																	<label>Discount %</label>\n' +
-					'\n' +
-					'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
 					'                                                        </div>');
 
 
@@ -2673,15 +1984,12 @@
 			else {
 
 				$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
-					'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
+					'                                                            <div class="content full-res item1" style="width: 3%;">\n' +
                     '                       									 	<label class="content-label">Sr. No</label>\n' +
 					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
 					'                       									 </div>\n' +
 					'\n' +
 					'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
-					'                                                            <input value="' + basic_price + '" type="hidden" id="basic_price" name="basic_price[]">\n' +
-					'                                                            <input value="' + rate + '" type="hidden" id="rate" name="rate[]">\n' +
-					'                                                            <input value="' + price + '" type="hidden" id="row_total" name="total[]">\n' +
 					'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
 					'                                                            <input type="hidden" value="' + childsafe + '" id="childsafe" name="childsafe[]">\n' +
 					'                                                            <input type="hidden" value="' + ladderband + '" id="ladderband" name="ladderband[]">\n' +
@@ -2690,14 +1998,11 @@
 					'                                                            <input type="hidden" value="' + ladderband_impact_type + '" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
 					'                                                            <input type="hidden" value="' + area_conflict + '" id="area_conflict" name="area_conflict[]">\n' +
 					'                                                            <input type="hidden" value="' + delivery_days + '" id="delivery_days" name="delivery_days[]">\n' +
-					'                                                            <input type="hidden" value="' + base_price + '" id="base_price" name="base_price[]">\n' +
-                    '                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
-                    '                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
 					'                                                            <input type="hidden" value="' + estimated_price_quantity + '" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
 					'                                                            <input type="hidden" value="' + measure + '" id="measure" name="measure[]">\n' +
 					'                                                            <input type="hidden" value="' + max_width + '" id="max_width" name="max_width[]">\n' +
 					'\n' +
-					'                                                            <div style="width: 34%;" class="products content item3 full-res">\n' +
+					'                                                            <div style="width: 35%;" class="products content item3 full-res">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">Product</label>\n' +
 					'\n' +
@@ -2720,7 +2025,7 @@
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="content item6" style="width: 17%;">\n' +
+					'                                                            <div class="content item6" style="width: 18%;">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">Qty</label>\n' +
 					'\n' +
@@ -2729,7 +2034,7 @@
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="content item7" style="width: 17%;">\n' +
+					'                                                            <div class="content item7" style="width: 18%;">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">€ Art.</label>\n' +
 					'\n' +
@@ -2739,7 +2044,7 @@
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div class="content item8" style="width: 10%;">\n' +
+					'                                                            <div class="content item8" style="width: 13%;">\n' +
 					'\n' +
 					'                       									 	<label class="content-label">Discount</label>\n' +
 					'\n' +
@@ -2747,34 +2052,9 @@
 					'																<input type="hidden" value="' + total_discount_old + '" class="total_discount_old">\n' +
 					'                                                            </div>\n' +
 					'\n' +
-					'                                                            <div style="width: 7%;" class="content item9">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Total</label>\n' +
-					'\n' +
-					'																<div class="price res-white">' + price_text + '</div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
 					'                                                            <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">\n' +
 					'\n' +
 					last_column +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
-					'\n' +
-					'																<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" aria-expanded="true" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse">\n' +
-					'\n' +
-					'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
-					'\n' +
-					'																	<label>Discount %</label>\n' +
-					'\n' +
-					'																	<input value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" name="discount[]">\n' +
-					'\n' +
-					'																</div>\n' +
 					'\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -2881,8 +2161,6 @@
 				focus_row(last_row);
 
 			}
-
-			calculate_total();
 		}
 
 		function add_attribute_row(copy = false, product_row, menu2 = null, turn = 0, row_id = null) {
@@ -3118,7 +2396,6 @@
 				current.remove();
 
 				numbering();
-				calculate_total();
 			}
 
 		});
@@ -3142,16 +2419,7 @@
 
 		$(document).on('click', '.save-data', function () {
 
-			var customer = $('.customer-select').val();
 			var flag = 0;
-
-			if (!customer) {
-				flag = 1;
-				$('#cus-box .select2-container--default .select2-selection--single').css('border-color', 'red');
-			}
-			else {
-				$('#cus-box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
-			}
 
 			$("[name='products[]']").each(function (i, obj) {
 
@@ -3298,16 +2566,12 @@
 			var ladderband_impact_type = current.find('#ladderband_impact_type').val();
 			var area_conflict = current.find('#area_conflict').val();
 			var delivery_days = current.find('#delivery_days').val();
-			var rate = current.find('#rate').val();
-			var basic_price = current.find('#basic_price').val();
-			var price = current.find('#row_total').val();
 			var products = current.find('.all-products').html();
 			var product = current.find('#product_id').val();
 			var product_text = current.find('#productInput').val();
 			var supplier = current.find('#supplier_id').val();
 			var color = current.find('#color_id').val();
 			var model = current.find('#model_id').val();
-			var price_text = current.find('.price').text();
 			var features = $('#menu1').find(`[data-id='${id}']`).html();
 			var childsafe_question = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-select').val();
 			var childsafe_answer = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-answer').val();
@@ -3316,15 +2580,11 @@
 			var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
 			var childsafe_x = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_x').val();
 			var childsafe_y = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_y').val();
-			var base_price = current.find('#base_price').val();
-            var supplier_margin = current.find('#supplier_margin').val();
-            var retailer_margin = current.find('#retailer_margin').val();
 			var price_before_labor = current.find('.price_before_labor').val();
 			var price_before_labor_old = current.find('.price_before_labor_old').val();
-			var discount = current.find('.discount-box').find('.discount_values').val();
 			// var labor_discount = current.find('.labor-discount-box').find('.labor_discount_values').val();
-			var total_discount = current.find('.total_discount').val();
-			var total_discount_old = current.find('.total_discount_old').val();
+            var total_discount = current.find('.total_discount').val();
+            var total_discount_old = current.find('.total_discount_old').val();
 			var last_column = current.find('#next-row-td').html();
 			var menu2 = $('#menu2').find(`.attributes_table[data-id='${id}']`).children().clone();
 			var turns = $('#menu2').find(`.attributes_table[data-id='${id}']`).find('.turn');
@@ -3332,7 +2592,7 @@
 			var measure = current.find('#measure').val();
 			var max_width = current.find('#max_width').val();
 
-			add_row(true, rate, basic_price, price, products, product, product_text, supplier, color, model, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, base_price, supplier_margin, retailer_margin, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
+			add_row(true, products, product, product_text, supplier, color, model, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_before_labor, price_before_labor_old, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
 
 		});
 
@@ -3391,19 +2651,6 @@
 			}
 
 		});
-
-		$(document).on('input', ".discount_values", function (e) {
-
-			calculate_total();
-
-		});
-
-
-		// $(document).on('input', "input[name='qty[]']", function (e) {
-
-		// 	calculate_total(1);
-
-		// });
 
 		$(document).on('keypress', ".width, .height", function (e) {
 
@@ -3967,45 +3214,7 @@
 			});
 
 			$("#products_table").find(`.content-div[data-id='${product_row}']`).find('.qty').val(total_qty);
-
-			calculate_total(1,0);
 		}
-
-		// $(document).on('input', '.labor_impact', function () {
-
-		// 	var value = $(this).val();
-		// 	value = value.replace(/\,/g, '.');
-		// 	var row_id = $(this).parents(".content-div").data('id');
-		// 	var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
-		// 	price_before_labor = price_before_labor.replace(/\,/g, '.');
-		// 	var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
-		// 	var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-		// 	total_discount = total_discount.replace(/\,/g, '.');
-
-		// 	if (!value) {
-		// 		value = 0;
-		// 	}
-
-		// 	var total = parseFloat(price_before_labor) + parseFloat(value);
-		// 	total = total + parseFloat(total_discount);
-		// 	total = parseFloat(total);
-		// 	total = total.toFixed(2);
-		// 	var price = total;
-		// 	total = total / qty;
-		// 	total = parseFloat(total).toFixed(2);
-		// 	//total = Math.round(total);
-
-		// 	var new_old_value = value / qty;
-		// 	new_old_value = parseFloat(new_old_value).toFixed(2);
-
-		// 	$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(new_old_value);
-		// 	$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
-		// 	$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-		// 	$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-		// 	calculate_total(0,1);
-
-		// });
 
 		$(document).on('input', '#childsafe_x, #childsafe_y', function () {
 
@@ -4165,210 +3374,128 @@
 
 		});
 
-		$(document).on('change', '.feature-select', function () {
+        $(document).on('change', '.feature-select', function () {
 
-			var current = $(this);
-			var row_id = current.parent().parent().parent().data('id');
-			var feature_select = current.val();
-			var id = current.parent().find('.f_id').val();
-			var product_id = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-			var ladderband_value = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val();
-			var ladderband_price_impact = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val();
-			var ladderband_impact_type = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val();
+            var current = $(this);
+            var row_id = current.parent().parent().parent().data('id');
+            var feature_select = current.val();
+            var id = current.parent().find('.f_id').val();
+            var product_id = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+            var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
-			var impact_value = current.next('input').val();
-			var total = $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val();
-			var basic_price = $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val();
-			var margin = 1;
-			var supplier_margin = $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val();
-            var retailer_margin = $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val();
+            if (id == 0) {
 
-			total = total - impact_value;
-			var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
-			price_before_labor = price_before_labor - impact_value;
+                if (feature_select == 1) {
 
-			if (id == 0) {
+                    $.ajax({
+                        type: "GET",
+                        data: "product_id=" + product_id,
+                        url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
+                        success: function (data) {
 
-				if (feature_select == 1) {
+                            $('#myModal').find('.modal-body').find('.sub-tables').hide();
 
-					if (ladderband_price_impact == 1) {
-						if (ladderband_impact_type == 0) {
-							impact_value = ladderband_value;
-							impact_value = parseFloat(impact_value).toFixed(2);
-							total = parseFloat(total) + parseFloat(impact_value);
-							total = total.toFixed(2);
-						}
-						else {
-							impact_value = ladderband_value;
-							var per = (impact_value) / 100;
-							impact_value = basic_price * per;
-							impact_value = parseFloat(impact_value).toFixed(2);
-							total = parseFloat(total) + parseFloat(impact_value);
-							total = total.toFixed(2);
-						}
-					}
-					else {
-						impact_value = 0;
-						total = parseFloat(total) + parseFloat(impact_value);
-						total = total.toFixed(2);
-					}
-
-					//total = Math.round(total);
-					price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
-					price_before_labor = parseFloat(price_before_labor).toFixed(2);
-					//price_before_labor = Math.round(price_before_labor);
-
-					current.next('input').val(impact_value);
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
-					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-					calculate_total();
-
-					$.ajax({
-						type: "GET",
-						data: "product_id=" + product_id,
-						url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
-						success: function (data) {
-
-							$('#myModal').find('.modal-body').find('.sub-tables').hide();
-
-							if ($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).length > 0) {
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-							}
+                            if ($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).length > 0) {
+                                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+                            }
 
 
-							$('#myModal').find('.modal-body').append(
-								'<div class="sub-tables" data-id="' + row_id + '">\n' +
-								'<table style="width: 100%;">\n' +
-								'<thead>\n' +
-								'<tr>\n' +
-								'<th>ID</th>\n' +
-								'<th>Title</th>\n' +
-								'<th>Size 38mm</th>\n' +
-								'<th>Size 25mm</th>\n' +
-								'</tr>\n' +
-								'</thead>\n' +
-								'<tbody>\n' +
-								'</tbody>\n' +
-								'</table>\n' +
-								'</div>'
-							);
+                            $('#myModal').find('.modal-body').append(
+                                '<div class="sub-tables" data-id="' + row_id + '">\n' +
+                                '<table style="width: 100%;">\n' +
+                                '<thead>\n' +
+                                '<tr>\n' +
+                                '<th>ID</th>\n' +
+                                '<th>Title</th>\n' +
+                                '<th>Size 38mm</th>\n' +
+                                '<th>Size 25mm</th>\n' +
+                                '</tr>\n' +
+                                '</thead>\n' +
+                                '<tbody>\n' +
+                                '</tbody>\n' +
+                                '</table>\n' +
+                                '</div>'
+                            );
 
-							$.each(data, function (index, value) {
+                            $.each(data, function (index, value) {
 
-								var size1 = value.size1_value;
-								var size2 = value.size2_value;
+                                var size1 = value.size1_value;
+                                var size2 = value.size2_value;
 
-								if (size1 == 1) {
-									size1 = '<input data-id="' + row_id + '" class="cus_radio" name="cus_radio' + row_id + '[]" type="radio"><input class="cus_value sizeA" type="hidden" value="0" name="sizeA' + row_id + '[]">';
-								}
-								else {
-									size1 = 'X' + '<input class="sizeA" name="sizeA' + row_id + '[]" type="hidden" value="x">';
-								}
+                                if (size1 == 1) {
+                                    size1 = '<input data-id="' + row_id + '" class="cus_radio" name="cus_radio' + row_id + '[]" type="radio"><input class="cus_value sizeA" type="hidden" value="0" name="sizeA' + row_id + '[]">';
+                                }
+                                else {
+                                    size1 = 'X' + '<input class="sizeA" name="sizeA' + row_id + '[]" type="hidden" value="x">';
+                                }
 
-								if (size2 == 1) {
-									size2 = '<input data-id="' + row_id + '" class="cus_radio" name="cus_radio' + row_id + '[]" type="radio"><input class="cus_value sizeB" type="hidden" value="0" name="sizeB' + row_id + '[]">';
-								}
-								else {
-									size2 = 'X' + '<input class="sizeB" name="sizeB' + row_id + '[]" type="hidden" value="x">';
-								}
+                                if (size2 == 1) {
+                                    size2 = '<input data-id="' + row_id + '" class="cus_radio" name="cus_radio' + row_id + '[]" type="radio"><input class="cus_value sizeB" type="hidden" value="0" name="sizeB' + row_id + '[]">';
+                                }
+                                else {
+                                    size2 = 'X' + '<input class="sizeB" name="sizeB' + row_id + '[]" type="hidden" value="x">';
+                                }
 
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('table').append(
-									'<tr>\n' +
-									'<td><input class="sub_product_id" type="hidden" name="sub_product_id' + row_id + '[]" value="' + value.id + '">' + value.code + '</td>\n' +
-									'<td>' + value.title + '</td>\n' +
-									'<td>' + size1 + '</td>\n' +
-									'<td>' + size2 + '</td>\n' +
-									'</tr>\n'
-								);
+                                $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('table').append(
+                                    '<tr>\n' +
+                                    '<td><input class="sub_product_id" type="hidden" name="sub_product_id' + row_id + '[]" value="' + value.id + '">' + value.code + '</td>\n' +
+                                    '<td>' + value.title + '</td>\n' +
+                                    '<td>' + size1 + '</td>\n' +
+                                    '<td>' + size2 + '</td>\n' +
+                                    '</tr>\n'
+                                );
 
-							});
+                            });
 
-							$('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').removeClass('hide');
-							/*$('.top-bar').css('z-index','1');*/
-							$('#myModal').modal('toggle');
-							$('.modal-backdrop').hide();
-						}
-					});
-				}
-				else {
+                            $('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').removeClass('hide');
+                            /*$('.top-bar').css('z-index','1');*/
+                            $('#myModal').modal('toggle');
+                            $('.modal-backdrop').hide();
+                        }
+                    });
+                }
+                else {
 
-					$('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').addClass('hide');
-					$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+                    $('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').addClass('hide');
+                    $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
-					impact_value = 0;
-					total = parseFloat(total) + parseFloat(impact_value);
-					total = total.toFixed(2);
-					//total = Math.round(total);
-					price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
-					price_before_labor = parseFloat(price_before_labor).toFixed(2);
-					//price_before_labor = Math.round(price_before_labor);
+                }
+            }
+            else {
+                var heading = current.find("option:selected").text();
+                var heading_id = current.val();
 
-					current.next('input').val(impact_value);
+                $.ajax({
+                    type: "GET",
+                    data: "id=" + feature_select,
+                    url: "<?php echo url('/aanbieder/get-feature-price')?>",
+                    success: function (data) {
 
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
-					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+                        if (current.parent().parent().next('.sub-features').length > 0) {
 
-					calculate_total();
-				}
-			}
-			else {
-				var heading = current.find("option:selected").text();
-				var heading_id = current.val();
+                            current.parent().parent().next('.sub-features').remove();
 
-				$.ajax({
-					type: "GET",
-					data: "id=" + feature_select,
-					url: "<?php echo url('/aanbieder/get-feature-price')?>",
-					success: function (data) {
+                        }
 
-						if (current.parent().parent().next('.sub-features').length > 0) {
-							var sub_impact_value = current.parent().parent().next('.sub-features').find('.f_price').val();
-							total = total - sub_impact_value;
-							price_before_labor = price_before_labor - sub_impact_value;
-							current.parent().parent().next('.sub-features').remove();
-						}
+                        if (data[1].length > 0) {
 
-						if (data[1].length > 0) {
-							var opt = '<option value="0">Select Feature</option>';
+                            var opt = '<option value="0">Select Feature</option>';
 
-							$.each(data[1], function (index, value) {
+                            $.each(data[1], function (index, value) {
 
-								opt = opt + '<option value="' + value.id + '">' + value.title + '</option>';
+                                opt = opt + '<option value="' + value.id + '">' + value.title + '</option>';
 
-							});
+                            });
 
-							current.parent().parent().after('<div class="row sub-features" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								'<label style="margin-right: 10px;margin-bottom: 0;">' + heading + '</label>' +
-								'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-								'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-								'<input value="' + heading_id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-								'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-								'<input value="1" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-								'</div></div>');
-						}
-
-						current.parent().find('.f_area').val(0);
-
-						impact_value = 0;
-						total = parseFloat(total) + parseFloat(impact_value);
-						total = total.toFixed(2);
-
-						//total = Math.round(total);
-						price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
-						price_before_labor = parseFloat(price_before_labor).toFixed(2);
-						//price_before_labor = Math.round(price_before_labor);
-
-						current.next('input').val(impact_value);
-
-						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-						$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
-						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-						calculate_total();
+                            current.parent().parent().after('<div class="row sub-features" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                '<label style="margin-right: 10px;margin-bottom: 0;">' + heading + '</label>' +
+                                '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+                                '<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+                                '<input value="' + heading_id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+                                '<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+                                '<input value="1" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+                                '</div></div>');
+                        }
 
                         var flag = 0;
 
@@ -4403,11 +3530,11 @@
                             $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
                             $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
                         }
-					}
-				});
-			}
+                    }
+                });
+            }
 
-		});
+        });
 
         $(document).on('change', '.childsafe-select', function () {
 
@@ -4581,70 +3708,20 @@
 										$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val(data.max_width);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val(data.measure);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-										// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-										$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-										$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
-										// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-										// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 										$('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(data.ladderband_value);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(data.ladderband_price_impact);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
-										$('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#estimated_price_quantity').val(data.estimated_price_quantity);
 										$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.box_quantity_supplier').val(data.estimated_price_quantity);
 										$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.max_width').val(data.max_width);
-										$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-										$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-										$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-										$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
 										$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-										// if ((typeof (data) != "undefined") && data.measure) {
-
-										// 	if(data.measure == 'M2')
-										// 	{
-										// 		data.measure = 'm²';
-										// 	}
-										// 	else if(data.measure == 'M1')
-										// 	{
-										// 		data.measure = 'm';
-										// 	}
-
-										// 	$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val(data.measure);
-										// 	$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val(data.measure);
-
-										// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val(data.measure);
-										// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val(data.measure);
-										// }
-										// else {
-										// 	$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val('');
-										// 	$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val('');
-
-										// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val('');
-										// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val('');
-										// }
-
-										$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
-										$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
-										$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(estimated_price_per_box_old);
-
-										// $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').each(function (i, obj) {
-											
-										// 	var row_id1 = $(this).data('id');
-										// 	calculator(row_id,row_id1);
-											
-										// });
-
-										// // calculate_total();
-										// calculate_qty(row_id);
 
 										var model = model_id;
 										var color = color_id;
-										var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
 
 										var product = product_id;
 										var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
@@ -4655,9 +3732,6 @@
 											var margin = 1;
 
 											$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-											// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
 
 											$.ajax({
 												type: "GET",
@@ -4668,35 +3742,8 @@
 													$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
 														$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
+
 														var childsafe = data[3].childsafe;
-
-														// if (price_based_option == 1) {
-														// 	var price = data[0].value;
-														// 	var org = data[0].value;
-														// }
-														// else {
-														// 	var price = base_price;
-														// 	var org = base_price;
-														// }
-
-														// var basic_price = price;
-
-														/*if (margin == 1) {
-                                                            if (data[2]) {
-                                                                price = parseFloat(price);
-                                                                var supplier_margin = data[2].margin;
-                                                                var retailer_margin = data[2].retailer_margin;
-
-                                                                current.parent().parent().find('#supplier_margin').val(supplier_margin);
-                                                                current.parent().parent().find('#retailer_margin').val(retailer_margin);
-
-                                                                if (supplier_margin && retailer_margin) {
-                                                                    price = (price / supplier_margin) * retailer_margin;
-                                                                    price = price.toFixed(2);
-                                                                }
-                                                            }
-                                                        }*/
-
 														var features = '';
 														var count_features = 0;
 														var f_value = 0;
@@ -4802,55 +3849,6 @@
 														$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' + features + '</div>');
 
 														current.parents('.content-div').find('.f_area').val(0);
-
-														// var model_impact_value = data[3].value;
-
-														// if (data[3].price_impact == 1) {
-
-														// 	if (data[3].impact_type == 0) {
-
-														// 		price = parseFloat(price) + parseFloat(model_impact_value);
-														// 		price = price.toFixed(2);
-
-														// 	}
-														// 	else {
-
-														// 		var per = (model_impact_value) / 100;
-														// 		model_impact_value = basic_price * per;
-
-														// 		price = parseFloat(price) + parseFloat(model_impact_value);
-														// 		price = price.toFixed(2);
-														// 	}
-
-														// }
-
-														// if(margin == 1)
-														// {
-														// 	if (data[2]) {
-
-														// 		var supplier_margin = data[2].margin;
-														// 		var retailer_margin = data[2].retailer_margin;
-
-														// 		if (supplier_margin && retailer_margin) {
-														// 			price = (parseFloat(price) / supplier_margin) * retailer_margin;
-														// 		}
-														// 	}
-														// }
-
-														// price = parseFloat(price).toFixed(2);
-
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.model_impact_value').val(model_impact_value);
-														//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-														// $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-														// $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-														// $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-
-													// calculate_total();
 												}
 											});
 										}

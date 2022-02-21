@@ -26,6 +26,7 @@ use App\Model1;
 use App\new_quotations;
 use App\new_quotations_data;
 use App\new_quotations_data_calculations;
+use App\new_orders_calculations;
 use App\new_quotations_features;
 use App\new_quotations_sub_products;
 use App\product;
@@ -3005,9 +3006,9 @@ class UserController extends Controller
         {
             $customers = customers_details::where('retailer_id', $user_id)->get();
 
-            if($user_role == 2)
+            if($check->form_type == 1)
             {
-                if($check->form_type == 1)
+                if($user_role == 2)
                 {
                     $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
                     $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->leftjoin('supplier_categories','supplier_categories.user_id','=','retailers_requests.supplier_id')->where('supplier_categories.category_id',$floor_category_id)->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
@@ -3015,15 +3016,24 @@ class UserController extends Controller
                 }
                 else
                 {
-                    $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
-                    $suppliers = User::whereIn('id',$suppliers)->get();
-                    $products = array();
+                    $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
+                    $products = products::where('user_id',$user_id)->where('category_id',$floor_category_id)->with('colors')->with('models')->get();
                 }
             }
             else
             {
-                $products = Products::where('user_id',$user_id)->get();
-                $suppliers = array();
+                if($user_role == 2)
+                {
+                    $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+                    $suppliers = User::whereIn('id',$suppliers)->get();
+                    $products = array();
+                }
+                else
+                {
+                    $blinds_category_id = Category::where('cat_name','LIKE', '%Blinds%')->orWhere('cat_name','LIKE', '%Binnen zonwering%')->pluck('id')->first();
+                    $products = Products::where('user_id',$user_id)->where('category_id',$blinds_category_id)->with('colors')->with('models')->get();
+                    $suppliers = array();
+                }
             }
 
             $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.id as invoice_id','new_quotations_data.box_quantity','new_quotations_data.measure','new_quotations_data.max_width','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
@@ -3064,14 +3074,16 @@ class UserController extends Controller
             {
                 if($check->form_type == 1)
                 {
-                    $product_titles[] = product::where('id',$item->product_id)->pluck('title')->first();
+                    $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
+                    $product_titles[] = product::where('id',$item->product_id)->where('category_id',$floor_category_id)->pluck('title')->first();
                     $color_titles[] = colors::where('id',$item->color)->pluck('title')->first();
                     $model_titles[] = product_models::where('id',$item->model_id)->pluck('model')->first();
                     $product_suppliers[] = User::where('id',$item->supplier_id)->first();
                 }
                 else
                 {
-                    $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->get();
+                    $blinds_category_id = Category::where('cat_name','LIKE', '%Blinds%')->orWhere('cat_name','LIKE', '%Binnen zonwering%')->pluck('id')->first();
+                    $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->where('category_id',$blinds_category_id)->get();
                     $colors[$i] = colors::where('product_id',$item->product_id)->get();
                     $models[$i] = product_models::where('product_id',$item->product_id)->get();
                 }
@@ -3141,11 +3153,21 @@ class UserController extends Controller
         if($check)
         {            
             $quotation_id = $check->quotation_id;
+            $supplier_id = $check->supplier_id;
             
             if(\Route::currentRouteName() == 'edit-order')
             {
-                $supplier_id = $check->supplier_id;
-                $products = Products::where('user_id',$supplier_id)->get();
+                if($check->form_type == 1)
+                {
+                    $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
+                    $products = products::leftjoin('users','users.id','=','products.user_id')->where('user_id',$supplier_id)->where('products.category_id',$floor_category_id)->with('colors')->with('models')->select('products.*','users.name','users.family_name','users.company_name')->get();
+                }
+                else
+                {
+                    $blinds_category_id = Category::where('cat_name','LIKE', '%Blinds%')->orWhere('cat_name','LIKE', '%Binnen zonwering%')->pluck('id')->first();
+                    $products = Products::where('user_id',$supplier_id)->where('category_id',$blinds_category_id)->with('colors')->with('models')->get();
+                }
+
                 $suppliers = array();
 
                 $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->where('new_orders.supplier_id',$supplier_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
@@ -3160,13 +3182,21 @@ class UserController extends Controller
                         $query->leftjoin('product_features','product_features.id','=','new_orders_features.feature_id')
                             ->select('new_orders_features.*','product_features.title');
 
-                    }])->get();
+                    }])->with('calculations')->get();
             }
             else
             {
                 $products = array();
-                $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
-                $suppliers = User::whereIn('id',$suppliers)->get();
+
+                if($check->form_type == 1)
+                {
+                    $suppliers = array();
+                }
+                else
+                {
+                    $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+                    $suppliers = User::whereIn('id',$suppliers)->get();
+                }
 
                 $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
                     ->with(['features' => function($query)
@@ -3180,7 +3210,7 @@ class UserController extends Controller
                         $query->leftjoin('product_features','product_features.id','=','new_orders_features.feature_id')
                             ->select('new_orders_features.*','product_features.title');
 
-                    }])->get();
+                    }])->with('calculations')->get();
 
             }
 
@@ -3200,13 +3230,30 @@ class UserController extends Controller
 
             foreach ($invoice as $i => $item)
             {
-                if(\Route::currentRouteName() == 'view-order')
+                if($check->form_type == 1)
                 {
-                    $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->get();
+                    if(\Route::currentRouteName() == 'view-order')
+                    {
+                        $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
+                        $supplier_products[] = Products::where('user_id',$item->supplier_id)->where('category_id',$floor_category_id)->get();
+                    }
+                    
+                    $product_titles[] = product::where('id',$item->product_id)->pluck('title')->first();
+                    $color_titles[] = colors::where('id',$item->color)->pluck('title')->first();
+                    $model_titles[] = product_models::where('id',$item->model_id)->pluck('model')->first();
+                    $product_suppliers[] = User::where('id',$item->supplier_id)->first();
                 }
-
-                $colors[$i] = colors::where('product_id',$item->product_id)->get();
-                $models[$i] = product_models::where('product_id',$item->product_id)->get();
+                else
+                {
+                    if(\Route::currentRouteName() == 'view-order')
+                    {
+                        $blinds_category_id = Category::where('cat_name','LIKE', '%Blinds%')->orWhere('cat_name','LIKE', '%Binnen zonwering%')->pluck('id')->first();
+                        $supplier_products[$i] = Products::where('user_id',$item->supplier_id)->where('category_id',$blinds_category_id)->get();
+                    }
+                    
+                    $colors[$i] = colors::where('product_id',$item->product_id)->get();
+                    $models[$i] = product_models::where('product_id',$item->product_id)->get();
+                }
 
                 foreach ($item->features as $feature)
                 {
@@ -3227,7 +3274,14 @@ class UserController extends Controller
                 }
             }
 
-            return view('user.edit_order', compact('check','suppliers','supplier_products','products','colors','models','features','sub_features','invoice','sub_products'));
+            if($check->form_type == 1)
+            {
+                return view('user.edit_order1', compact('product_titles','color_titles','model_titles','product_suppliers','check','suppliers','supplier_products','products','colors','models','features','sub_features','invoice','sub_products'));
+            }
+            else
+            {
+                return view('user.edit_order', compact('check','suppliers','supplier_products','products','colors','models','features','sub_features','invoice','sub_products'));
+            }
         }
         else
         {
@@ -3425,24 +3479,24 @@ class UserController extends Controller
         {
             $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->first();
             $order_number = $order_number->order_number;
-
             $order_ids = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->pluck('id');
-            $order_feature_ids = new_orders_features::whereIn('order_data_id',$order_ids)->pluck('id');
-
             new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->delete();
-            new_orders_features::whereIn('order_data_id',$order_ids)->delete();
-            new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
+            
         }
         else
         {
             $order_ids = new_orders::where('quotation_id',$request->quotation_id)->pluck('id');
-            $order_feature_ids = new_orders_features::whereIn('order_data_id',$order_ids)->pluck('id');
-
             new_orders::where('quotation_id',$request->quotation_id)->delete();
-            new_orders_features::whereIn('order_data_id',$order_ids)->delete();
-            new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
-
             $order_numbers = array();
+        }
+
+        $order_feature_ids = new_orders_features::whereIn('order_data_id',$order_ids)->pluck('id');
+        new_orders_features::whereIn('order_data_id',$order_ids)->delete();
+        new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
+
+        if($request->category == 1)
+        {
+            new_orders_calculations::whereIn('order_id',$order_ids)->delete();
         }
 
         foreach ($products as $i => $key) {
@@ -3500,13 +3554,8 @@ class UserController extends Controller
             $order->basic_price = 0;
             $order->qty = $request->qty[$i];
             $order->amount = 0;
-            $order->width = str_replace(',', '.',$request->width[$i]);
-            $order->width_unit = $request->width_unit[$i];
-            $order->height = str_replace(',', '.',$request->height[$i]);
-            $order->height_unit = $request->height_unit[$i];
             $order->delivery_days = $request->delivery_days[$i];
             $order->delivery_date = $delivery_date;
-            $order->price_based_option = $request->price_based_option[$i];
             $order->price_before_labor = 0;
             $order->labor_impact = 0;
             $order->discount = 0;
@@ -3515,6 +3564,27 @@ class UserController extends Controller
             $order->base_price = 0;
             $order->supplier_margin = 0;
             $order->retailer_margin = 0;
+
+            if($request->category == 2)
+            {
+                $order->width = str_replace(',', '.',$request->width[$i]);
+                $order->width_unit = $request->width_unit[$i];
+                $order->height = str_replace(',', '.',$request->height[$i]);
+                $order->height_unit = $request->height_unit[$i];
+                $order->box_quantity = NULL;
+                $order->measure = NULL;
+                $order->max_width = NULL;
+            }
+            else
+            {
+                $order->width = 0;
+                $order->width_unit = "";
+                $order->height = 0;
+                $order->height_unit = "";
+                $order->box_quantity = $request->estimated_price_quantity[$i];
+                $order->measure = $request->measure[$i];
+                $order->max_width = $request->max_width[$i];
+            }
 
             if($request->childsafe[$i])
             {
@@ -3537,6 +3607,49 @@ class UserController extends Controller
             }
 
             $order->save();
+
+            if($request->category == 1)
+            {
+                $calculator_row = 'calculator_row'.$row_id;
+                $calculator_row = $request->$calculator_row;
+
+                foreach($calculator_row as $c => $cal)
+                {
+                    $description = 'attribute_description'.$row_id;
+                    $width = 'width'.$row_id;
+                    $height = 'height'.$row_id;
+                    $cutting_lose = 'cutting_lose_percentage'.$row_id;
+                    $box_quantity_supplier = 'box_quantity_supplier'.$row_id;
+                    $box_quantity = 'box_quantity'.$row_id;
+                    $total_boxes = 'total_boxes'.$row_id;
+                    $max_width = 'max_width'.$row_id;
+                    $turn = 'turn'.$row_id;
+
+                    if(is_numeric( $cal ) && floor( $cal ) != $cal)
+                    {
+                        $parent_row = floor($cal);
+                    }
+                    else
+                    {
+                        $parent_row = NULL;
+                    }
+
+                    $order_calculations = new new_orders_calculations;
+                    $order_calculations->order_id = $order->id;
+                    $order_calculations->calculator_row = $cal;
+                    $order_calculations->parent_row = $parent_row;
+                    $order_calculations->description = $request->$description[$c];
+                    $order_calculations->width = str_replace(',', '.',$request->$width[$c]);
+                    $order_calculations->height = str_replace(',', '.',$request->$height[$c]);
+                    $order_calculations->cutting_lose = $request->$cutting_lose[$c];
+                    $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
+                    $order_calculations->box_quantity = $request->$box_quantity[$c];
+                    $order_calculations->total_boxes = $request->$total_boxes[$c];
+                    $order_calculations->max_width = $request->$max_width[$c];
+                    $order_calculations->turn = $request->$turn[$c];
+                    $order_calculations->save();
+                }
+            }
 
             $feature_row = 'features'.$row_id;
             $features = $request->$feature_row;
@@ -3628,17 +3741,27 @@ class UserController extends Controller
             $filename = $quotation_invoice_number . '.pdf';
             ini_set('max_execution_time', 180);
 
-            $date = $request->created_at;
             $role = 'supplier2';
-            $file = public_path() . '/assets/Orders/' . $filename;
+            $date = $request->created_at;
 
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            if($request->category == 1)
+            {
+                $form_type = 1;
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('suppliers','order_numbers','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+            }
+            else
+            {
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            }
+            
+            $file = public_path() . '/assets/Orders/' . $filename;
             $pdf->save($file);
 
             Session::flash('success', 'Order has been updated successfully!');
             return redirect()->route('customer-quotations');
         }
         else{
+
             $quotation_id = $request->quotation_id;
             $request->products = new_orders::where('quotation_id',$quotation_id)->where('supplier_id',$request->supplier_id)->get();
             $product_titles = array();
@@ -3738,8 +3861,15 @@ class UserController extends Controller
             $date = $request->created_at;
             $role = 'supplier1';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
-            /*$pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);*/
+            if($request->category == 1)
+            {
+                $form_type = 1;
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+            }
+            else
+            {
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            }
 
             $pdf->save($file);
 
@@ -3794,6 +3924,7 @@ class UserController extends Controller
             if($form_type == 1)
             {
                 new_quotations_data_calculations::whereIn('quotation_data_id',$data_ids)->delete();
+                new_orders_calculations::whereIn('order_id',$order_ids)->delete();
             }
 
             new_quotations_features::whereIn('quotation_data_id',$data_ids)->delete();
@@ -4053,6 +4184,21 @@ class UserController extends Controller
                     $calculations->max_width = $request->$max_width[$c];
                     $calculations->turn = $request->$turn[$c];
                     $calculations->save();
+
+                    $order_calculations = new new_orders_calculations;
+                    $order_calculations->order_id = $order->id;
+                    $order_calculations->calculator_row = $cal;
+                    $order_calculations->parent_row = $parent_row;
+                    $order_calculations->description = $request->$description[$c];
+                    $order_calculations->width = str_replace(',', '.',$request->$width[$c]);
+                    $order_calculations->height = str_replace(',', '.',$request->$height[$c]);
+                    $order_calculations->cutting_lose = $request->$cutting_lose[$c];
+                    $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
+                    $order_calculations->box_quantity = $request->$box_quantity[$c];
+                    $order_calculations->total_boxes = $request->$total_boxes[$c];
+                    $order_calculations->max_width = $request->$max_width[$c];
+                    $order_calculations->turn = $request->$turn[$c];
+                    $order_calculations->save();
                 }
             }
 

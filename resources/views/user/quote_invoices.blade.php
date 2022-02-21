@@ -221,7 +221,7 @@
                                                                                 <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
                                                                                 @if(!$sup->order_sent)
-
+                                                                                
                                                                                     <li><a href="{{ url('/aanbieder/edit-order/'.$sup->id) }}">Edit Order</a></li>
 
                                                                                 @endif

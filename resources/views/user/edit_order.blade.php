@@ -22,6 +22,7 @@
                 <input type="hidden" name="quotation_invoice_number" value="{{$check->quotation_invoice_number}}">
                 <input type="hidden" name="created_at" value="{{$check->created_at}}">
                 <input type="hidden" id="form_type" name="form_type" value="{{Route::currentRouteName() == 'view-order' ? 1 : 2}}">
+				<input type="hidden" id="category" name="category" value="{{$check->form_type}}">
 
 				<div style="margin: 0;" class="row">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
