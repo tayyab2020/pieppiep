@@ -3520,29 +3520,26 @@ class UserController extends Controller
                 $is_weekend = date('N', strtotime($delivery_date)) >= 6;
             }
 
-            if($request->form_type == 1)
+            $suppliers[] = User::where('id',$request->suppliers[$i])->first();
+
+            if($request->order_number[$i])
             {
-                $suppliers[] = User::where('id',$request->suppliers[$i])->first();
-
-                if($request->order_number[$i])
-                {
-                    $order_number = $request->order_number[$i];
-                }
-                else
-                {
-                    $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
-
-                    if(!$order_number)
-                    {
-                        $counter_order = $suppliers[$i]->counter_order;
-                        $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
-                        $counter_order = $counter_order + 1;
-                        User::where('id',$request->suppliers[$i])->update(['counter_order' => $counter_order]);
-                    }
-                }
-
-                $order_numbers[$i] = $order_number;
+                $order_number = $request->order_number[$i];
             }
+            else
+            {
+                $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
+
+                if(!$order_number)
+                {
+                    $counter_order = $suppliers[$i]->counter_order;
+                    $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
+                    $counter_order = $counter_order + 1;
+                    User::where('id',$request->suppliers[$i])->update(['counter_order' => $counter_order]);
+                }
+            }
+
+            $order_numbers[$i] = $order_number;
 
             $order = new new_orders;
             $order->order_number = $order_number;
@@ -3867,15 +3864,16 @@ class UserController extends Controller
             ini_set('max_execution_time', 180);
 
             $date = $request->created_at;
-            $role = 'supplier1';
 
             if($request->category == 1)
             {
+                $role = 'supplier2';
                 $form_type = 1;
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('suppliers','order_numbers','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
             }
             else
             {
+                $role = 'supplier1';
                 $form_type = 2;
                 $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
             }
