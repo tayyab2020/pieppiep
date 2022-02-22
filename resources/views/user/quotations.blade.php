@@ -13,7 +13,7 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header products" style="display: block;">
 
-                                        <h2 style="display: inline-block;">{{__('text.Quotations')}}</h2>
+                                        <h2 style="display: inline-block;">@if(Auth::guard('user')->user()->role_id == 2) {{__('text.Quotations')}} @else Orders @endif</h2>
 
                                         @if(Auth::guard('user')->user()->role_id == 2)
 

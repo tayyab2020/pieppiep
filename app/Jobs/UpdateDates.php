@@ -11,9 +11,11 @@ use App\new_quotations_sub_products;
 use App\new_orders;
 use App\new_orders_features;
 use App\new_orders_sub_products;
+use App\new_orders_calculations;
 use App\product;
 use App\product_features;
 use App\product_ladderbands;
+use App\product_models;
 use App\User;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Bus\Queueable;
@@ -77,9 +79,11 @@ class UpdateDates implements ShouldQueue
         $request = new_quotations::where('id',$invoice_id)->first();
         $request->products = new_orders::where('quotation_id',$invoice_id)->where('supplier_id',$supplier_id)->get();
         $order_number = $request->products[0]->order_number;
+        $form_type = $request->form_type;
 
         $product_titles = array();
         $color_titles = array();
+        $model_titles = array();
         $sub_titles = array();
         $qty = array();
         $width = array();
@@ -89,18 +93,25 @@ class UpdateDates implements ShouldQueue
         $comments = array();
         $delivery = array();
         $feature_sub_titles = array();
+        $calculator_rows = array();
 
         foreach ($request->products as $x => $temp)
         {
             /*$feature_sub_titles[$x][] = 'empty';*/
             $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
             $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
+            $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
             $qty[] = $temp->qty;
             $width[] = $temp->width;
             $width_unit[] = $temp->width_unit;
             $height[] = $temp->height;
             $height_unit[] = $temp->height_unit;
             $delivery[] = $temp->delivery_date;
+
+            if($form_type == 1)
+            {
+                $calculator_rows[] = new_orders_calculations::where('order_id',$temp->id)->get();
+            }
 
             $features = new_orders_features::where('order_data_id',$temp->id)->get();
 
@@ -152,7 +163,14 @@ class UpdateDates implements ShouldQueue
         $date = $request->created_at;
         $role = 'supplier';
 
-        $pdf = PDF::loadView('user.pdf_new_quotation', compact('order_number','role','comments','product_titles','color_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        if($form_type == 1)
+        {
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('calculator_rows','form_type','order_number','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        }
+        else
+        {
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','order_number','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+        }
 
         $pdf->save($file);
 

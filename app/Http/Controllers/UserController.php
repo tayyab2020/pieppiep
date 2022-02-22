@@ -3391,12 +3391,13 @@ class UserController extends Controller
 
         if($user_role == 2)
         {
-            $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->first();
+            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->first();
+            // $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->first();
         }
         else
         {
-            $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations_data.supplier_id',$user_id)->where('new_quotations.finished',1)->first();
-
+            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_orders.supplier_id',$user_id)->where('new_quotations.finished',1)->first();
+            // $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations_data.supplier_id',$user_id)->where('new_quotations.finished',1)->first();
         }
 
         if (!$check) {
@@ -3424,11 +3425,13 @@ class UserController extends Controller
 
         if($user_role == 2)
         {
-            $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->first();
+            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->first();
+            // $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->first();
         }
         else
         {
-            $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations_data.supplier_id',$user_id)->where('new_quotations_data.approved',1)->first();
+            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_orders.supplier_id',$user_id)->where('new_orders.approved',1)->first();
+            // $check = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->where('new_quotations_data.id',$id)->where('new_quotations_data.supplier_id',$user_id)->where('new_quotations_data.approved',1)->first();
         }
 
         if (!$check) {
@@ -3732,6 +3735,10 @@ class UserController extends Controller
 
                 }
             }
+            else
+            {
+                $feature_sub_titles[$i] = array();
+            }
 
         }
 
@@ -3751,7 +3758,8 @@ class UserController extends Controller
             }
             else
             {
-                $pdf = PDF::loadView('user.pdf_new_quotation', compact('suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+                $form_type = 2;
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
             }
             
             $file = public_path() . '/assets/Orders/' . $filename;
@@ -3868,7 +3876,8 @@ class UserController extends Controller
             }
             else
             {
-                $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+                $form_type = 2;
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
             }
 
             $pdf->save($file);
@@ -4354,7 +4363,7 @@ class UserController extends Controller
         if($form_type == 1)
         {
             $role = 'order';
-            CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,NULL,NULL);
+            CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
         }
         else
         {

@@ -212,7 +212,7 @@
                                                                                     <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$sup->id) }}">Download Order Confirmation PDF</a></li>
                                                                                     <li><a href="{{ url('/aanbieder/download-order-pdf/'.$sup->id) }}">Download Order PDF</a></li>
 
-                                                                                @else
+                                                                                @elseif($sup->order_sent)
 
                                                                                     <li><a href="{{ url('/aanbieder/download-order-pdf/'.$sup->id) }}">Download Order PDF</a></li>
 

@@ -9,6 +9,7 @@ use App\new_quotations_data;
 use App\new_orders;
 use App\new_orders_features;
 use App\new_orders_sub_products;
+use App\new_orders_calculations;
 use App\new_quotations_features;
 use App\new_quotations_sub_products;
 use App\product;
@@ -87,6 +88,7 @@ class SendOrder implements ShouldQueue
             $request = new_quotations::where('id',$id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
             $request->products = new_orders::where('quotation_id',$id)->where('supplier_id',$key)->get();
 
+            $form_type = $request->form_type;
             $product_titles = array();
             $color_titles = array();
             $model_titles = array();
@@ -106,6 +108,7 @@ class SendOrder implements ShouldQueue
             $total = array();
             $total_discount = array();
             $feature_sub_titles = array();
+            $calculator_rows = array();
 
             foreach ($request->products as $x => $temp)
             {
@@ -126,6 +129,11 @@ class SendOrder implements ShouldQueue
                 $labor_discount[] = $temp->labor_discount;
                 $total[] = $temp->amount;
                 $total_discount[] = $temp->total_discount;
+
+                if($form_type == 1)
+                {
+                    $calculator_rows[] = new_orders_calculations::where('order_id',$temp->id)->get();
+                }
 
                 $features = new_orders_features::where('order_data_id',$temp->id)->get();
 
@@ -189,8 +197,14 @@ class SendOrder implements ShouldQueue
             $date = $request->created_at;
             $role = 'supplier1';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
-            /*$pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);*/
+            if($form_type == 1)
+            {
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('calculator_rows','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+            }
+            else
+            {
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+            }
 
             $pdf->save($file);
 

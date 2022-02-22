@@ -1160,7 +1160,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                             @if(auth()->user()->can('create-new-quotation'))
 
-                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> New Quotations</a></li>
+                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 2) New Quotations @else New Orders @endif</a></li>
 
                             @endif
 

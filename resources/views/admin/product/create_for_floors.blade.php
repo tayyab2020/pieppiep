@@ -149,7 +149,6 @@
                                                                 
                                                                 <select class="js-data-example-ajax3 form-control" style="height: 40px;" name="measure" id="measure">
 
-                                                                    <option value="">Select Measure</option>
                                                                     <option @if(isset($cats)) @if($cats->measure == 'M1') selected @endif @endif value="M1">M1</option>
                                                                     <option @if(isset($cats)) @if($cats->measure == 'M2') selected @endif @endif value="M2">M2</option>
                                                                     <option @if(isset($cats)) @if($cats->measure == 'Custom Sized') selected @endif @endif value="Custom Sized">Custom Sized</option>
