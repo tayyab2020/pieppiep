@@ -109,7 +109,7 @@ class CreateOrder implements ShouldQueue
         $file = public_path() . '/assets/Orders/' . $filename;
         $pdf->save($file);
 
-        new_quotations::where('id',$quotation_id)->update(['processing' => 0,'finished' => 1]);
+        new_quotations::where('id',$quotation_id)->update(['processing' => 0]);
     }
 
     public function failed()
