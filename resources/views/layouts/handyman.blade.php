@@ -80,7 +80,7 @@
 
         <div style="display: flex;justify-content: space-between;" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
 
-                <div class="wrapper1">
+                <div class="wrapper-options">
 
                     @if(Route::currentRouteName() == 'create-custom-quotation' || Route::currentRouteName() == 'create-new-quotation')
 
@@ -98,10 +98,36 @@
                             <span>Binnen zonwering</span>
                         </label>
 
+                    @elseif(Route::currentRouteName() == 'admin-product-create' || Route::currentRouteName() == 'admin-product-edit')
+
+                        @if($supplier_global_categories[0])
+
+                            <input {{$categories[0]->cat_name == $supplier_global_categories[0]->cat_name ? 'checked' : null}} type="radio" value="{{route('admin-product-create',['cat' => $supplier_global_categories[0]->cat_name])}}" class="select-form" name="select" id="option-1">
+
+                            <label for="option-1" class="option option-1">
+                                <div class="dot"></div>
+                                <span>Vloeren</span>
+                            </label>
+
+                        @endif
+
+                         @if($supplier_global_categories[1])
+
+                            <input {{$categories[0]->cat_name == $supplier_global_categories[1]->cat_name ? 'checked' : null}} type="radio" value="{{route('admin-product-create',['cat' => $supplier_global_categories[1]->cat_name])}}" class="select-form" name="select" id="option-2">
+
+                            <label for="option-2" class="option option-2">
+                                <div class="dot"></div>
+                                <span>Binnen zonwering</span>
+                            </label>
+
+                         @endif
+
+                    @endif
+
                         <style>
 
                             @import url('https://fonts.googleapis.com/css?family=Lato:400,500,600,700&display=swap');
-                            .wrapper1{
+                            .wrapper-options{
                                 display: inline-flex;
                                 width: 600px;
                                 align-items: center;
@@ -109,7 +135,7 @@
                                 border-radius: 5px;
                                 padding: 0;
                             }
-                            .wrapper1 .option{
+                            .wrapper-options .option{
                                 background: #fff;
                                 height: 100%;
                                 width: 100%;
@@ -123,14 +149,14 @@
                                 border: 2px solid lightgrey;
                                 transition: all 0.3s ease;
                             }
-                            .wrapper1 .option .dot{
+                            .wrapper-options .option .dot{
                                 height: 20px;
                                 width: 20px;
                                 background: #d9d9d9;
                                 border-radius: 50%;
                                 position: relative;
                             }
-                            .wrapper1 .option .dot::before{
+                            .wrapper-options .option .dot::before{
                                 position: absolute;
                                 content: "";
                                 top: 4px;
@@ -160,7 +186,7 @@
                                 opacity: 1;
                                 transform: scale(1);
                             }
-                            .wrapper1 .option span{
+                            .wrapper-options .option span{
                                 font-size: 20px;
                                 color: #808080;
                                 margin-left: 10px;
@@ -182,8 +208,6 @@
                             });
 
                         </script>
-
-                    @endif
 
                 </div>
 

@@ -257,15 +257,15 @@ class ProductController extends Controller
             $user_id = $main_id;
         }
 
-        if($request->id && $user->can('product-create'))
+        if($request->cat && $user->can('product-create'))
         {
-            $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.id',$request->id)->select('categories.*')->get();
+            $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.cat_name',$request->cat)->select('categories.*')->get();
             $brands = Brand::where('user_id',$user_id)->get();
             /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
 
-            if($categories[0]->cat_name == 'Blinds' || $categories[0]->cat_name == 'Binnen zonwering')
+            if($request->cat == 'Blinds' || $request->cat == 'Binnen zonwering')
             {
                 return view('admin.product.create',compact('categories','brands','tables','features_headings'));
             }
