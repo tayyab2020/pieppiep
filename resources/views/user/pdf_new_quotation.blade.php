@@ -28,11 +28,9 @@
                                     <p style="margin: 0">TEL: {{$user->phone}}</p>
                                     <p style="margin: 0">{{$user->email}}</p>
                                     <br>
-                                    @if($role != 'retailer') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
+                                    @if($role != 'retailer' && $role != 'supplier1' && $role != 'supplier2') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
 
-                                    @if($role != 'supplier2')
-                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}}@endif</p>
-                                    @endif
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @elseif($role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', $order_numbers_string), ','); echo 'OR: ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}}@endif</p>
 
                                     <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 

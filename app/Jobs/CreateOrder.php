@@ -99,7 +99,7 @@ class CreateOrder implements ShouldQueue
 
         if($form_type == 1)
         {
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
         }
         else
         {

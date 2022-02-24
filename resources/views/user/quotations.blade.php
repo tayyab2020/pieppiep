@@ -17,7 +17,7 @@
 
                                         @if(Auth::guard('user')->user()->role_id == 2)
 
-                                            <a style="float: right;" href="{{route('select-quotations-type')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create Quotation')}}</a>
+                                            <a style="float: right;" href="{{route('create-custom-quotation')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create Quotation')}}</a>
 
                                         @endif
 

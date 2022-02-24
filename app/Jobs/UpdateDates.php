@@ -97,7 +97,7 @@ class UpdateDates implements ShouldQueue
 
         foreach ($request->products as $x => $temp)
         {
-            /*$feature_sub_titles[$x][] = 'empty';*/
+            $feature_sub_titles[$x][] = array();
             $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
             $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
             $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();

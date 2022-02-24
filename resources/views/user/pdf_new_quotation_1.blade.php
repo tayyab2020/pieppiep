@@ -47,13 +47,9 @@
                                     <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->email}}</p>
                                     <br>
                                     <br>
-                                    @if($role != 'retailer' && $role != 'order') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif
+                                    <!-- @if($role != 'retailer' && $role != 'order' && $role != 'supplier2' && $role != 'supplier3') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif -->
 
-                                        @if($role != 'supplier2')
-
-                                            <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer' || $role == 'order') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @else OR: {{$order_number}} @endif</p>
-
-                                        @endif
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', $order_numbers_string), ','); echo 'OR: ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
 
                                     </div>
 
@@ -74,7 +70,7 @@
                             <div class="row p-5" style="font-size: 15px;padding: 2rem !important;border-bottom: 2px solid black !important;">
                                 <div class="col-md-12" style="padding: 0 !important;">
 
-                                    @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2')
+                                    @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                                     <?php
 
@@ -119,7 +115,7 @@
 
                                                 @endif
 
-                                                @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2')
+                                                @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                                                     <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
                                                     <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
@@ -131,7 +127,7 @@
 
                                             <tbody>
 
-                                            @if($role == 'order' || $role == 'supplier2')
+                                            @if($role == 'order' || $role == 'supplier2' || $role == 'supplier3')
 
                                                 <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
 
@@ -214,7 +210,7 @@
 
                                             @endif
 
-                                            @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'order')
+                                            @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3' && $role != 'order')
 
                                                 @if($arb_discount != 0)
 
@@ -392,7 +388,7 @@
 
                                         @endif
 
-                                        @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2')
+                                        @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                                             <table style="display: table;width: 100%;margin-top: 30px;">
 
@@ -446,7 +442,7 @@
 
                         @endforeach
 
-                        @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2')
+                        @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                             <div class="row p-5" style="padding: 2rem !important;">
                                 <div class="col-md-12" style="padding: 0 !important;">
@@ -505,7 +501,7 @@
                         @endif
 
 
-                        @if($form_type == 1 && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2')
+                        @if($form_type == 1 && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                             <div class="page_break">
 

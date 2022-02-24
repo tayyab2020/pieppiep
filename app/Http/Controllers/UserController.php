@@ -3520,26 +3520,29 @@ class UserController extends Controller
                 $is_weekend = date('N', strtotime($delivery_date)) >= 6;
             }
 
-            $suppliers[] = User::where('id',$request->suppliers[$i])->first();
-
-            if($request->order_number[$i])
+            if($request->form_type == 1)
             {
-                $order_number = $request->order_number[$i];
-            }
-            else
-            {
-                $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
+                $suppliers[] = User::where('id',$request->suppliers[$i])->first();
 
-                if(!$order_number)
+                if($request->order_number[$i])
                 {
-                    $counter_order = $suppliers[$i]->counter_order;
-                    $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
-                    $counter_order = $counter_order + 1;
-                    User::where('id',$request->suppliers[$i])->update(['counter_order' => $counter_order]);
+                    $order_number = $request->order_number[$i];
                 }
-            }
+                else
+                {
+                    $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
 
-            $order_numbers[$i] = $order_number;
+                    if(!$order_number)
+                    {
+                        $counter_order = $suppliers[$i]->counter_order;
+                        $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
+                        $counter_order = $counter_order + 1;
+                        User::where('id',$request->suppliers[$i])->update(['counter_order' => $counter_order]);
+                    }
+                }
+
+                $order_numbers[$i] = $order_number;
+            }
 
             $order = new new_orders;
             $order->order_number = $order_number;
@@ -3791,7 +3794,7 @@ class UserController extends Controller
 
             foreach ($request->products as $x => $temp)
             {
-                /*$feature_sub_titles[$x][] = 'empty';*/
+                $feature_sub_titles[$x][] = array();
                 $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
                 $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
                 $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
@@ -3838,7 +3841,7 @@ class UserController extends Controller
                         }
                     }
 
-                    $feature_sub_titles[$x][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$temp->product_id)->where('product_features.heading_id',$feature->feature_id)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                    $feature_sub_titles[$x][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$temp->product_id)->where('product_features.id',$feature->feature_sub_id)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
                     $comments[$x][] = $feature->comment;
                 }
             }
@@ -3867,9 +3870,9 @@ class UserController extends Controller
 
             if($request->category == 1)
             {
-                $role = 'supplier2';
+                $role = 'supplier3';
                 $form_type = 1;
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('suppliers','order_numbers','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
             }
             else
             {
@@ -3974,11 +3977,12 @@ class UserController extends Controller
         }
 
         $order_numbers = array();
+        $feature_sub_titles = array();
 
         foreach ($products as $i => $key) {
 
             /*$feature_titles[$i][] = 'empty';*/
-            /*$feature_sub_titles[$i][] = 'empty';*/
+            $feature_sub_titles[$i][] = array();
             $sub_titles[$i] = '';
             $row_id = $request->row_id[$i];
             $product_titles[] = product::where('id',$key)->pluck('title')->first();
@@ -3998,7 +4002,7 @@ class UserController extends Controller
 
             if(!$request->order_number[$i])
             {
-                $order_number = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
+                $order_number = new_orders::where('quotation_id',$invoice->id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
 
                 if(!$order_number)
                 {
@@ -5235,7 +5239,7 @@ class UserController extends Controller
 
             foreach ($request->products as $x => $temp)
             {
-                /*$feature_sub_titles[$x][] = 'empty';*/
+                $feature_sub_titles[$x][] = array();
                 $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
                 $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
                 $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
