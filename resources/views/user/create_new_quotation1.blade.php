@@ -550,8 +550,12 @@
 
 															<div style="display: flex;justify-content: center;">
 
-																<div class="headings1" style="width: 56%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
-																<div class="headings1" style="width: 7%;">
+																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
+																	<label>Delivery Date: </label>
+																	<input value="{{isset($invoice) ? $invoice[0]->retailer_delivery_date : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="delivery_date">
+																</div>
+																<div class="headings1" style="width: 16%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
+																<div class="headings1" style="width: 7%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: center;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
 																		<input name="price_before_labor_total"
@@ -561,7 +565,7 @@
 																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
 																	</div>
 																</div>
-																<div class="headings1" style="width: 7%;">
+																<div class="headings1" style="width: 7%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: center;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
 																		<input name="labor_cost_total"
@@ -571,7 +575,7 @@
 																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->labor_cost_total)) : 0}}">
 																	</div>
 																</div>
-																<div class="headings2" style="width: 30%;">
+																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">Te betalen: €</span>
 																		<input name="total_amount" id="total_amount"
@@ -583,12 +587,16 @@
 
 															</div>
 
-															<div style="display: flex;justify-content: flex-end;">
+															<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
-																<div class="headings1" style="width: 56%;"></div>
-																<div class="headings1" style="width: 7%;"></div>
-																<div class="headings1" style="width: 7%;"></div>
-																<div class="headings2" style="width: 30%;">
+																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
+																	<label>Installation Date: </label>
+																	<input value="{{isset($invoice) ? $invoice[0]->retailer_installation_date : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="installation_date" name="installation_date">
+																</div>
+																<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
+																<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
+																<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
+																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: €</span>
 																			<input name="net_amount" id="net_amount"
@@ -600,7 +608,7 @@
 
 															</div>
 
-															<div style="display: flex;justify-content: flex-end;">
+															<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
 																<div class="headings1" style="width: 56%;"></div>
 																<div class="headings1" style="width: 7%;"></div>
@@ -1861,519 +1869,933 @@
 		padding: 5px 10px;
 	}
 
+	.datepicker {
+		padding: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		direction: ltr;
+	}
+	.datepicker-inline {
+		width: 220px;
+	}
+	.datepicker.datepicker-rtl {
+		direction: rtl;
+	}
+	.datepicker.datepicker-rtl table tr td span {
+		float: right;
+	}
+	.datepicker-dropdown {
+		top: 20% !important;
+		left: 30% !important;;
+		min-width: 30% !important;
+		height: auto;
+		overflow-y: auto;
+		z-index: 10000 !important;
+	}
+
+	.table-condensed{
+		width: 100%;
+	}
+
+	.datepicker td, .datepicker th
+	{
+		font-size: 17px;
+	}
+
+	.datepicker-dropdown:before {
+		content: '';
+		display: inline-block;
+		border-left: 7px solid transparent;
+		border-right: 7px solid transparent;
+		border-bottom: 7px solid #999999;
+		border-top: 0;
+		border-bottom-color: rgba(0, 0, 0, 0.2);
+		position: absolute;
+	}
+	.datepicker-dropdown:after {
+		content: '';
+		display: inline-block;
+		border-left: 6px solid transparent;
+		border-right: 6px solid transparent;
+		border-bottom: 6px solid #ffffff;
+		border-top: 0;
+		position: absolute;
+	}
+	.datepicker-dropdown.datepicker-orient-left:before {
+		left: 6px;
+	}
+	.datepicker-dropdown.datepicker-orient-left:after {
+		left: 7px;
+	}
+	.datepicker-dropdown.datepicker-orient-right:before {
+		right: 6px;
+	}
+	.datepicker-dropdown.datepicker-orient-right:after {
+		right: 7px;
+	}
+	.datepicker-dropdown.datepicker-orient-bottom:before {
+		display: none;
+		top: -7px;
+	}
+	.datepicker-dropdown.datepicker-orient-bottom:after {
+		display: none;
+		top: -6px;
+	}
+	.datepicker-dropdown.datepicker-orient-top:before {
+		display: none;
+		bottom: -7px;
+		border-bottom: 0;
+		border-top: 7px solid #999999;
+	}
+	.datepicker-dropdown.datepicker-orient-top:after {
+		display: none;
+		bottom: -6px;
+		border-bottom: 0;
+		border-top: 6px solid #ffffff;
+	}
+	.datepicker > div {
+		display: none;
+	}
+	.datepicker table {
+		margin: 0;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+	.datepicker td,
+	.datepicker th {
+		text-align: center;
+		width: 20px;
+		height: 20px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		border: none;
+	}
+	.table-striped .datepicker table tr td,
+	.table-striped .datepicker table tr th {
+		background-color: transparent;
+	}
+	.datepicker table tr td.day:hover,
+	.datepicker table tr td.day.focused {
+		background: #eeeeee;
+		cursor: pointer;
+	}
+	.datepicker table tr td.old,
+	.datepicker table tr td.new {
+		color: #999999;
+	}
+	.datepicker table tr td.disabled,
+	.datepicker table tr td.disabled:hover {
+		background: none;
+		color: #999999;
+		cursor: default;
+	}
+	.datepicker table tr td.highlighted {
+		background: #d9edf7;
+		border-radius: 0;
+	}
+	.datepicker table tr td.today,
+	.datepicker table tr td.today:hover,
+	.datepicker table tr td.today.disabled,
+	.datepicker table tr td.today.disabled:hover {
+		background-color: #fde19a;
+		background-image: -moz-linear-gradient(to bottom, #fdd49a, #fdf59a);
+		background-image: -ms-linear-gradient(to bottom, #fdd49a, #fdf59a);
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+		background-image: -webkit-linear-gradient(to bottom, #fdd49a, #fdf59a);
+		background-image: -o-linear-gradient(to bottom, #fdd49a, #fdf59a);
+		background-image: linear-gradient(to bottom, #fdd49a, #fdf59a);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+		border-color: #fdf59a #fdf59a #fbed50;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+		color: #000;
+	}
+	.datepicker table tr td.today:hover,
+	.datepicker table tr td.today:hover:hover,
+	.datepicker table tr td.today.disabled:hover,
+	.datepicker table tr td.today.disabled:hover:hover,
+	.datepicker table tr td.today:active,
+	.datepicker table tr td.today:hover:active,
+	.datepicker table tr td.today.disabled:active,
+	.datepicker table tr td.today.disabled:hover:active,
+	.datepicker table tr td.today.active,
+	.datepicker table tr td.today:hover.active,
+	.datepicker table tr td.today.disabled.active,
+	.datepicker table tr td.today.disabled:hover.active,
+	.datepicker table tr td.today.disabled,
+	.datepicker table tr td.today:hover.disabled,
+	.datepicker table tr td.today.disabled.disabled,
+	.datepicker table tr td.today.disabled:hover.disabled,
+	.datepicker table tr td.today[disabled],
+	.datepicker table tr td.today:hover[disabled],
+	.datepicker table tr td.today.disabled[disabled],
+	.datepicker table tr td.today.disabled:hover[disabled] {
+		background-color: #fdf59a;
+	}
+	.datepicker table tr td.today:active,
+	.datepicker table tr td.today:hover:active,
+	.datepicker table tr td.today.disabled:active,
+	.datepicker table tr td.today.disabled:hover:active,
+	.datepicker table tr td.today.active,
+	.datepicker table tr td.today:hover.active,
+	.datepicker table tr td.today.disabled.active,
+	.datepicker table tr td.today.disabled:hover.active {
+		background-color: #fbf069 \9;
+	}
+	.datepicker table tr td.today:hover:hover {
+		color: #000;
+	}
+	.datepicker table tr td.today.active:hover {
+		color: #fff;
+	}
+	.datepicker table tr td.range,
+	.datepicker table tr td.range:hover,
+	.datepicker table tr td.range.disabled,
+	.datepicker table tr td.range.disabled:hover {
+		background: #eeeeee;
+		-webkit-border-radius: 0;
+		-moz-border-radius: 0;
+		border-radius: 0;
+	}
+	.datepicker table tr td.range.today,
+	.datepicker table tr td.range.today:hover,
+	.datepicker table tr td.range.today.disabled,
+	.datepicker table tr td.range.today.disabled:hover {
+		background-color: #f3d17a;
+		background-image: -moz-linear-gradient(to bottom, #f3c17a, #f3e97a);
+		background-image: -ms-linear-gradient(to bottom, #f3c17a, #f3e97a);
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+		background-image: -webkit-linear-gradient(to bottom, #f3c17a, #f3e97a);
+		background-image: -o-linear-gradient(to bottom, #f3c17a, #f3e97a);
+		background-image: linear-gradient(to bottom, #f3c17a, #f3e97a);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+		border-color: #f3e97a #f3e97a #edde34;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+		-webkit-border-radius: 0;
+		-moz-border-radius: 0;
+		border-radius: 0;
+	}
+	.datepicker table tr td.range.today:hover,
+	.datepicker table tr td.range.today:hover:hover,
+	.datepicker table tr td.range.today.disabled:hover,
+	.datepicker table tr td.range.today.disabled:hover:hover,
+	.datepicker table tr td.range.today:active,
+	.datepicker table tr td.range.today:hover:active,
+	.datepicker table tr td.range.today.disabled:active,
+	.datepicker table tr td.range.today.disabled:hover:active,
+	.datepicker table tr td.range.today.active,
+	.datepicker table tr td.range.today:hover.active,
+	.datepicker table tr td.range.today.disabled.active,
+	.datepicker table tr td.range.today.disabled:hover.active,
+	.datepicker table tr td.range.today.disabled,
+	.datepicker table tr td.range.today:hover.disabled,
+	.datepicker table tr td.range.today.disabled.disabled,
+	.datepicker table tr td.range.today.disabled:hover.disabled,
+	.datepicker table tr td.range.today[disabled],
+	.datepicker table tr td.range.today:hover[disabled],
+	.datepicker table tr td.range.today.disabled[disabled],
+	.datepicker table tr td.range.today.disabled:hover[disabled] {
+		background-color: #f3e97a;
+	}
+	.datepicker table tr td.range.today:active,
+	.datepicker table tr td.range.today:hover:active,
+	.datepicker table tr td.range.today.disabled:active,
+	.datepicker table tr td.range.today.disabled:hover:active,
+	.datepicker table tr td.range.today.active,
+	.datepicker table tr td.range.today:hover.active,
+	.datepicker table tr td.range.today.disabled.active,
+	.datepicker table tr td.range.today.disabled:hover.active {
+		background-color: #efe24b \9;
+	}
+	.datepicker table tr td.selected,
+	.datepicker table tr td.selected:hover,
+	.datepicker table tr td.selected.disabled,
+	.datepicker table tr td.selected.disabled:hover {
+		background-color: #9e9e9e;
+		background-image: -moz-linear-gradient(to bottom, #b3b3b3, #808080);
+		background-image: -ms-linear-gradient(to bottom, #b3b3b3, #808080);
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(#808080));
+		background-image: -webkit-linear-gradient(to bottom, #b3b3b3, #808080);
+		background-image: -o-linear-gradient(to bottom, #b3b3b3, #808080);
+		background-image: linear-gradient(to bottom, #b3b3b3, #808080);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+		border-color: #808080 #808080 #595959;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+		color: #fff;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	}
+	.datepicker table tr td.selected:hover,
+	.datepicker table tr td.selected:hover:hover,
+	.datepicker table tr td.selected.disabled:hover,
+	.datepicker table tr td.selected.disabled:hover:hover,
+	.datepicker table tr td.selected:active,
+	.datepicker table tr td.selected:hover:active,
+	.datepicker table tr td.selected.disabled:active,
+	.datepicker table tr td.selected.disabled:hover:active,
+	.datepicker table tr td.selected.active,
+	.datepicker table tr td.selected:hover.active,
+	.datepicker table tr td.selected.disabled.active,
+	.datepicker table tr td.selected.disabled:hover.active,
+	.datepicker table tr td.selected.disabled,
+	.datepicker table tr td.selected:hover.disabled,
+	.datepicker table tr td.selected.disabled.disabled,
+	.datepicker table tr td.selected.disabled:hover.disabled,
+	.datepicker table tr td.selected[disabled],
+	.datepicker table tr td.selected:hover[disabled],
+	.datepicker table tr td.selected.disabled[disabled],
+	.datepicker table tr td.selected.disabled:hover[disabled] {
+		background-color: #808080;
+	}
+	.datepicker table tr td.selected:active,
+	.datepicker table tr td.selected:hover:active,
+	.datepicker table tr td.selected.disabled:active,
+	.datepicker table tr td.selected.disabled:hover:active,
+	.datepicker table tr td.selected.active,
+	.datepicker table tr td.selected:hover.active,
+	.datepicker table tr td.selected.disabled.active,
+	.datepicker table tr td.selected.disabled:hover.active {
+		background-color: #666666 \9;
+	}
+	.datepicker table tr td.active,
+	.datepicker table tr td.active:hover,
+	.datepicker table tr td.active.disabled,
+	.datepicker table tr td.active.disabled:hover {
+		background-color: #006dcc;
+		background-image: -moz-linear-gradient(to bottom, #0088cc, #0044cc);
+		background-image: -ms-linear-gradient(to bottom, #0088cc, #0044cc);
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+		background-image: -webkit-linear-gradient(to bottom, #0088cc, #0044cc);
+		background-image: -o-linear-gradient(to bottom, #0088cc, #0044cc);
+		background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+		border-color: #0044cc #0044cc #002a80;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+		color: #fff;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	}
+	.datepicker table tr td.active:hover,
+	.datepicker table tr td.active:hover:hover,
+	.datepicker table tr td.active.disabled:hover,
+	.datepicker table tr td.active.disabled:hover:hover,
+	.datepicker table tr td.active:active,
+	.datepicker table tr td.active:hover:active,
+	.datepicker table tr td.active.disabled:active,
+	.datepicker table tr td.active.disabled:hover:active,
+	.datepicker table tr td.active.active,
+	.datepicker table tr td.active:hover.active,
+	.datepicker table tr td.active.disabled.active,
+	.datepicker table tr td.active.disabled:hover.active,
+	.datepicker table tr td.active.disabled,
+	.datepicker table tr td.active:hover.disabled,
+	.datepicker table tr td.active.disabled.disabled,
+	.datepicker table tr td.active.disabled:hover.disabled,
+	.datepicker table tr td.active[disabled],
+	.datepicker table tr td.active:hover[disabled],
+	.datepicker table tr td.active.disabled[disabled],
+	.datepicker table tr td.active.disabled:hover[disabled] {
+		background-color: #0044cc;
+	}
+	.datepicker table tr td.active:active,
+	.datepicker table tr td.active:hover:active,
+	.datepicker table tr td.active.disabled:active,
+	.datepicker table tr td.active.disabled:hover:active,
+	.datepicker table tr td.active.active,
+	.datepicker table tr td.active:hover.active,
+	.datepicker table tr td.active.disabled.active,
+	.datepicker table tr td.active.disabled:hover.active {
+		background-color: #003399 \9;
+	}
+	.datepicker table tr td span {
+		display: block;
+		width: 23%;
+		height: 54px;
+		line-height: 54px;
+		float: left;
+		margin: 1%;
+		cursor: pointer;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+	}
+	.datepicker table tr td span:hover {
+		background: #eeeeee;
+	}
+	.datepicker table tr td span.disabled,
+	.datepicker table tr td span.disabled:hover {
+		background: none;
+		color: #999999;
+		cursor: default;
+	}
+	.datepicker table tr td span.active,
+	.datepicker table tr td span.active:hover,
+	.datepicker table tr td span.active.disabled,
+	.datepicker table tr td span.active.disabled:hover {
+		background-color: #006dcc;
+		background-image: -moz-linear-gradient(to bottom, #0088cc, #0044cc);
+		background-image: -ms-linear-gradient(to bottom, #0088cc, #0044cc);
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+		background-image: -webkit-linear-gradient(to bottom, #0088cc, #0044cc);
+		background-image: -o-linear-gradient(to bottom, #0088cc, #0044cc);
+		background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+		border-color: #0044cc #0044cc #002a80;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+		color: #fff;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	}
+	.datepicker table tr td span.active:hover,
+	.datepicker table tr td span.active:hover:hover,
+	.datepicker table tr td span.active.disabled:hover,
+	.datepicker table tr td span.active.disabled:hover:hover,
+	.datepicker table tr td span.active:active,
+	.datepicker table tr td span.active:hover:active,
+	.datepicker table tr td span.active.disabled:active,
+	.datepicker table tr td span.active.disabled:hover:active,
+	.datepicker table tr td span.active.active,
+	.datepicker table tr td span.active:hover.active,
+	.datepicker table tr td span.active.disabled.active,
+	.datepicker table tr td span.active.disabled:hover.active,
+	.datepicker table tr td span.active.disabled,
+	.datepicker table tr td span.active:hover.disabled,
+	.datepicker table tr td span.active.disabled.disabled,
+	.datepicker table tr td span.active.disabled:hover.disabled,
+	.datepicker table tr td span.active[disabled],
+	.datepicker table tr td span.active:hover[disabled],
+	.datepicker table tr td span.active.disabled[disabled],
+	.datepicker table tr td span.active.disabled:hover[disabled] {
+		background-color: #0044cc;
+	}
+	.datepicker table tr td span.active:active,
+	.datepicker table tr td span.active:hover:active,
+	.datepicker table tr td span.active.disabled:active,
+	.datepicker table tr td span.active.disabled:hover:active,
+	.datepicker table tr td span.active.active,
+	.datepicker table tr td span.active:hover.active,
+	.datepicker table tr td span.active.disabled.active,
+	.datepicker table tr td span.active.disabled:hover.active {
+		background-color: #003399 \9;
+	}
+	.datepicker table tr td span.old,
+	.datepicker table tr td span.new {
+		color: #999999;
+	}
+	.datepicker .datepicker-switch {
+		width: 145px;
+	}
+	.datepicker .datepicker-switch,
+	.datepicker .prev,
+	.datepicker .next,
+	.datepicker tfoot tr th {
+		cursor: pointer;
+	}
+	.datepicker .datepicker-switch:hover,
+	.datepicker .prev:hover,
+	.datepicker .next:hover,
+	.datepicker tfoot tr th:hover {
+		background: #eeeeee;
+	}
+	.datepicker .cw {
+		font-size: 10px;
+		width: 12px;
+		padding: 0 2px 0 5px;
+		vertical-align: middle;
+	}
+	.input-append.date .add-on,
+	.input-prepend.date .add-on {
+		cursor: pointer;
+	}
+	.input-append.date .add-on i,
+	.input-prepend.date .add-on i {
+		margin-top: 3px;
+	}
+	.input-daterange input {
+		text-align: center;
+	}
+	.input-daterange input:first-child {
+		-webkit-border-radius: 3px 0 0 3px;
+		-moz-border-radius: 3px 0 0 3px;
+		border-radius: 3px 0 0 3px;
+	}
+	.input-daterange input:last-child {
+		-webkit-border-radius: 0 3px 3px 0;
+		-moz-border-radius: 0 3px 3px 0;
+		border-radius: 0 3px 3px 0;
+	}
+	.input-daterange .add-on {
+		display: inline-block;
+		width: auto;
+		min-width: 16px;
+		height: 18px;
+		padding: 4px 5px;
+		font-weight: normal;
+		line-height: 18px;
+		text-align: center;
+		text-shadow: 0 1px 0 #ffffff;
+		vertical-align: middle;
+		background-color: #eeeeee;
+		border: 1px solid #ccc;
+		margin-left: -5px;
+		margin-right: -5px;
+	}
+
 </style>
 
 @endsection
 
 @section('scripts')
 
-<script
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap"
-	defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
-	function initMap() {
+		function initMap() {
 
-		var input = document.getElementById('address');
+			var input = document.getElementById('address');
 
-		var options = {
-			componentRestrictions: { country: "nl" }
-		};
+			var options = {
+				componentRestrictions: { country: "nl" }
+			};
 
-		var autocomplete = new google.maps.places.Autocomplete(input, options);
+			var autocomplete = new google.maps.places.Autocomplete(input, options);
 
-		// Set the data fields to return when the user selects a place.
-		autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+			// Set the data fields to return when the user selects a place.
+			autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
 
-		autocomplete.addListener('place_changed', function () {
+			autocomplete.addListener('place_changed', function () {
 
-			var flag = 0;
+				var flag = 0;
 
-			var place = autocomplete.getPlace();
+				var place = autocomplete.getPlace();
 
-			if (!place.geometry) {
+				if (!place.geometry) {
 
-				// User entered the name of a Place that was not suggested and
-				// pressed the Enter key, or the Place Details request failed.
-				window.alert("{{__('text.No details available for input: ')}}" + place.name);
-				return;
-			}
-			else {
-				var string = $('#address').val().substring(0, $('#address').val().indexOf(',')); //first string before comma
+					// User entered the name of a Place that was not suggested and
+					// pressed the Enter key, or the Place Details request failed.
+					window.alert("{{__('text.No details available for input: ')}}" + place.name);
+					return;
+				}
+				else {
+					var string = $('#address').val().substring(0, $('#address').val().indexOf(',')); //first string before comma
 
-				if (string) {
-					var is_number = $('#address').val().match(/\d+/);
+					if (string) {
+						var is_number = $('#address').val().match(/\d+/);
 
-					if (is_number === null) {
-						flag = 1;
+						if (is_number === null) {
+							flag = 1;
+						}
 					}
 				}
-			}
 
-			var city = '';
-			var postal_code = '';
+				var city = '';
+				var postal_code = '';
 
-			for (var i = 0; i < place.address_components.length; i++) {
-				if (place.address_components[i].types[0] == 'postal_code') {
-					postal_code = place.address_components[i].long_name;
-				}
-
-				if (place.address_components[i].types[0] == 'locality') {
-					city = place.address_components[i].long_name;
-				}
-			}
-
-			if (city == '') {
 				for (var i = 0; i < place.address_components.length; i++) {
-					if (place.address_components[i].types[0] == 'administrative_area_level_2') {
-						city = place.address_components[i].long_name;
+					if (place.address_components[i].types[0] == 'postal_code') {
+						postal_code = place.address_components[i].long_name;
+					}
 
+					if (place.address_components[i].types[0] == 'locality') {
+						city = place.address_components[i].long_name;
 					}
 				}
-			}
 
-			if (postal_code == '' || city == '') {
-				flag = 1;
-			}
+				if (city == '') {
+					for (var i = 0; i < place.address_components.length; i++) {
+						if (place.address_components[i].types[0] == 'administrative_area_level_2') {
+							city = place.address_components[i].long_name;
 
-			if (!flag) {
-				$('#check_address').val(1);
-				$("#address-error").remove();
-				$('#postcode').val(postal_code);
-				$("#city").val(city);
-			}
-			else {
-				$('#address').val('');
-				$('#postcode').val('');
-				$("#city").val('');
+						}
+					}
+				}
 
-				$("#address-error").remove();
-				$('#address').parent().parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;">{{__('text.Kindly write your full address with house / building number so system can detect postal code and city from it!')}}</small>');
-
-			}
-
-
-		});
-
-	}
-
-	$("#address").on('input', function (e) {
-		$(this).next('input').val(0);
-	});
-
-	$("#address").focusout(function () {
-
-		var check = $(this).next('input').val();
-
-		if (check == 0) {
-			$(this).val('');
-			$('#postcode').val('');
-			$("#city").val('');
-		}
-	});
-
-	$(document).ready(function () {
-
-		$(".submit-customer").click(function () {
-
-			var name = $('#name').val();
-			var family_name = $('#family_name').val();
-			var business_name = $('#business_name').val();
-			var postcode = $('#postcode').val();
-			var address = $('#address').val();
-			var city = $('#city').val();
-			var phone = $('#phone').val();
-			var email = $('#email').val();
-			var handyman_id = $('#handyman_id').val();
-			var handyman_name = $('#handyman_name').val();
-			var token = $('#token').val();
-
-			var validation = $('.modal-body').find('.validation');
-
-			var flag = 0;
-
-			$(validation).each(function () {
-
-				if (!$(this).val()) {
-					$(this).css('border', '1px solid red');
+				if (postal_code == '' || city == '') {
 					flag = 1;
 				}
-				else {
-					$(this).css('border', '');
+
+				if (!flag) {
+					$('#check_address').val(1);
+					$("#address-error").remove();
+					$('#postcode').val(postal_code);
+					$("#city").val(city);
 				}
+				else {
+					$('#address').val('');
+					$('#postcode').val('');
+					$("#city").val('');
+
+					$("#address-error").remove();
+					$('#address').parent().parent().append('<small id="address-error" style="color: red;display: block;margin-top: 10px;">{{__('text.Kindly write your full address with house / building number so system can detect postal code and city from it!')}}</small>');
+
+				}
+
 
 			});
 
-			if (!flag) {
-				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
-				if (!regex.test(email)) {
-					$('#email').css('border', '1px solid red');
-
-					$('.alert-box').html('<div class="alert alert-danger">\n' +
-						'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-						'                                            <p class="text-left">Email address is not valid...</p>\n' +
-						'                                        </div>');
-					$('.alert-box').show();
-					$('.alert-box').delay(5000).fadeOut(400);
-				}
-				else {
-					$('#email').css('border', '');
-
-					$('#cover').show();
-
-					$.ajax({
-
-						type: "POST",
-						data: "handyman_id=" + handyman_id + "&handyman_name=" + handyman_name + "&name=" + name + "&family_name=" + family_name + "&business_name=" + business_name + "&postcode=" + postcode + "&address=" + address + "&city=" + city + "&phone=" + phone + "&email=" + email + "&_token=" + token,
-						url: "<?php echo url('/aanbieder/create-customer')?>",
-
-						success: function (data) {
-
-							$('#cover').hide();
-
-							var newStateVal = data.data.id;
-							var newName = data.data.name + " " + data.data.family_name;
-
-							// Set the value, creating a new option if necessary
-							if ($(".customer-select").find("option[value=" + newStateVal + "]").length) {
-								$(".customer-select").val(newStateVal).trigger("change");
-							} else {
-								// Create the DOM option that is pre-selected by default
-								var newState = new Option(newName, newStateVal, true, true);
-								// Append it to the select
-								$(".customer-select").append(newState).trigger('change');
-							}
-
-							$('.alert-box').html('<div class="alert alert-success">\n' +
-								'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-								'                                            <p class="text-left">' + data.message + '</p>\n' +
-								'                                        </div>');
-							$('.alert-box').show();
-							$('.alert-box').delay(5000).fadeOut(400);
-
-							$('#myModal1').modal('toggle');
-							window.scrollTo({ top: 0, behavior: 'smooth' });
-						},
-						error: function (data) {
-
-							$('#cover').hide();
-
-							/*if (data.status == 422) {
-								$.each(data.responseJSON.errors, function (i, error) {
-									$('.alert-box').html('<div class="alert alert-danger">\n' +
-										'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-										'                                            <p class="text-left">'+error[0]+'</p>\n' +
-										'                                        </div>');
-								});
-								$('.alert-box').show();
-								$('.alert-box').delay(5000).fadeOut(400);
-							}*/
-
-							$('.alert-box').html('<div class="alert alert-danger">\n' +
-								'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-								'                                            <p class="text-left">Something went wrong!</p>\n' +
-								'                                        </div>');
-							$('.alert-box').show();
-							$('.alert-box').delay(5000).fadeOut(400);
-
-							$('#myModal1').modal('toggle');
-							window.scrollTo({ top: 0, behavior: 'smooth' });
-						}
-
-					});
-				}
-			}
-
-		});
-
-		$(".customer-select").select2({
-			width: '100%',
-			height: '200px',
-			placeholder: "{{__('text.Select Customer')}}",
-			allowClear: true,
-			"language": {
-				"noResults": function () {
-					return '{{__('text.No results found')}}';
-				}
-			},
-		});
-
-		var current_desc = '';
-
-		$(".add-desc").click(function () {
-			current_desc = $(this);
-			var d = current_desc.prev('input').val();
-			$('#description-text').val(d);
-			$("#myModal").modal('show');
-		});
-
-		$(".submit-desc").click(function () {
-			var desc = $('#description-text').val();
-			current_desc.prev('input').val(desc);
-			$('#description-text').val('');
-			$("#myModal").modal('hide');
-		});
-
-		$('.estimate_date').datepicker({
-
-			format: 'dd-mm-yyyy',
-			startDate: new Date(),
-
-		});
-
-		$(".js-data-example-ajax").select2({
-			width: '100%',
-			height: '200px',
-			placeholder: "{{__('text.Select Product')}}",
-			allowClear: true,
-			"language": {
-				"noResults": function () {
-					return '{{__('text.No results found')}}';
-				}
-			},
-		});
-
-		function calculate_total(qty_changed = 0,labor_changed = 0) {
-
-			var total = 0;
-			var price_before_labor_total = 0;
-			var labor_cost_total = 0;
-
-			$("input[name='total[]']").each(function (i, obj) {
-
-				var rate = 0;
-				var row_id = $(this).parent().data('id');
-				var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
-
-				if (!qty) {
-					qty = 0;
-				}
-
-				if (!obj.value) {
-					rate = 0;
-				}
-				else {
-					rate = obj.value;
-				}
-
-				rate = rate * qty;
-
-				var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
-				labor_impact = labor_impact * qty;
-				labor_impact = parseFloat(labor_impact).toFixed(2);
-				/*labor_impact = Math.round(labor_impact);*/
-
-				if(labor_changed == 0)
-				{
-					$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact.replace(/\./g, ','));
-				}
-
-				var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
-				price_before_labor = price_before_labor * qty;
-				price_before_labor = parseFloat(price_before_labor).toFixed(2);
-				/*price_before_labor = Math.round(price_before_labor);*/
-				$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-
-				if(qty_changed == 0)
-				{
-					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-					old_discount = old_discount.replace(/\,/g, '.');
-					old_discount = parseFloat(old_discount).toFixed(2);
-
-					rate = rate - old_discount;
-
-					var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
-					var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
-
-
-					if(!discount)
-					{
-						discount = 0;
-					}
-
-
-					if(!labor_discount)
-					{
-						labor_discount = 0;
-					}
-
-					var discount_val = parseFloat(price_before_labor) * (discount/100);
-					/*discount_val = Math.round(discount_val);*/
-					var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
-					/*labor_discount_val = Math.round(labor_discount_val);*/
-
-					var total_discount = discount_val + labor_discount_val;
-					total_discount = parseFloat(total_discount).toFixed(2);
-					var old_discount = total_discount / qty;
-					old_discount = parseFloat(old_discount).toFixed(2);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val('-' + total_discount.replace(/\./g, ','));
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val('-' + old_discount);
-
-					rate = parseFloat(rate) - parseFloat(total_discount);
-					var price = rate / qty;
-					/*price = Math.round(price);*/
-
-					/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
-					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-
-				}
-				else
-				{
-					var price = rate / qty;
-					/*price = Math.round(price);*/
-
-					if(qty != 0)
-					{
-						/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
-						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-					}
-
-					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
-					old_discount = old_discount * qty;
-					old_discount = parseFloat(old_discount).toFixed(2);
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(old_discount.replace(/\./g, ','));
-				}
-
-				rate = parseFloat(rate);
-				rate = rate.toFixed(2);
-				/*rate = Math.round(rate);*/
-
-				total = parseFloat(total) + parseFloat(rate);
-				total = total.toFixed(2);
-				/*total = Math.round(total);*/
-
-				$(this).parent().find('#rate').val(rate);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate.replace(/\./g, ','));
-				/*$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate);*/
-
-
-				var art = price_before_labor;
-				price_before_labor_total = parseFloat(price_before_labor_total) + parseFloat(art);
-				price_before_labor_total = parseFloat(price_before_labor_total).toFixed(2);
-
-				var arb = labor_impact;
-				labor_cost_total = parseFloat(labor_cost_total) + parseFloat(arb);
-				labor_cost_total = parseFloat(labor_cost_total).toFixed(2);
-
-			});
-
-			var net_amount = (total / 121) * 100;
-			net_amount = parseFloat(net_amount).toFixed(2);
-			//net_amount = Math.round(net_amount);
-
-			var tax_amount = total - net_amount;
-			tax_amount = parseFloat(tax_amount).toFixed(2);
-
-			$('#total_amount').val(total.replace(/\./g, ','));
-			$('#price_before_labor_total').val(price_before_labor_total.replace(/\./g, ','));
-			$('#labor_cost_total').val(labor_cost_total.replace(/\./g, ','));
-			$('#net_amount').val(net_amount.replace(/\./g, ','));
-			$('#tax_amount').val(tax_amount.replace(/\./g, ','));
 		}
 
-		$(document).on('change', ".js-data-example-ajax1", function (e) {
-
-			var current = $(this);
-
-			var id = current.val();
-			var row_id = current.parents(".content-div").data('id');
-			var options = '';
-			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-
-			$.ajax({
-				type: "GET",
-				data: "id=" + id,
-				url: "<?php echo url('/aanbieder/get-supplier-products')?>",
-				success: function (data) {
-
-					$('#menu1').find(`[data-id='${row_id}']`).remove();
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-					$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-					$.each(data, function (index, value) {
-
-						if (value.title) {
-							var opt = '<option value="' + value.id + '" >' + value.title + '</option>';
-
-							options = options + opt;
-						}
-
-					});
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.products').children('select').find('option')
-						.remove()
-						.end()
-						.append('<option value="">Select Product</option>' + options);
-
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
-						.remove()
-						.end()
-						.append('<option value="">Select Color</option>');
-
-                    $('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
-                        .remove()
-                        .end()
-                        .append('<option value="">Select Model</option>');
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
-					$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
-
-					/*calculate_total();*/
-
-				}
-			});
-
-            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-
+		$("#address").on('input', function (e) {
+			$(this).next('input').val(0);
 		});
 
-		$(document).on('change', ".js-data-example-ajax", function (e) {
+		$("#address").focusout(function () {
 
-			var current = $(this);
+			var check = $(this).next('input').val();
 
-			var id = current.val();
-			var row_id = current.parents(".content-div").data('id');
-			var options = '';
-			var options1 = '';
-			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+			if (check == 0) {
+				$(this).val('');
+				$('#postcode').val('');
+				$("#city").val('');
+			}
+		});
 
-			$.ajax({
-				type: "GET",
-				data: "id=" + id,
-				url: "<?php echo url('/aanbieder/get-colors')?>",
-				success: function (data) {
+		$(document).ready(function () {
 
-					$('#menu1').find(`[data-id='${row_id}']`).remove();
+			$(".submit-customer").click(function () {
 
-					if (data != '') {
+				var name = $('#name').val();
+				var family_name = $('#family_name').val();
+				var business_name = $('#business_name').val();
+				var postcode = $('#postcode').val();
+				var address = $('#address').val();
+				var city = $('#city').val();
+				var phone = $('#phone').val();
+				var email = $('#email').val();
+				var handyman_id = $('#handyman_id').val();
+				var handyman_name = $('#handyman_name').val();
+				var token = $('#token').val();
+
+				var validation = $('.modal-body').find('.validation');
+
+				var flag = 0;
+
+				$(validation).each(function () {
+
+					if (!$(this).val()) {
+						$(this).css('border', '1px solid red');
+						flag = 1;
+					}
+					else {
+						$(this).css('border', '');
+					}
+
+				});
+
+				if (!flag) {
+					var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+					if (!regex.test(email)) {
+						$('#email').css('border', '1px solid red');
+
+						$('.alert-box').html('<div class="alert alert-danger">\n' +
+								'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+								'                                            <p class="text-left">Email address is not valid...</p>\n' +
+								'                                        </div>');
+						$('.alert-box').show();
+						$('.alert-box').delay(5000).fadeOut(400);
+					}
+					else {
+						$('#email').css('border', '');
+
+						$('#cover').show();
+
+						$.ajax({
+
+							type: "POST",
+							data: "handyman_id=" + handyman_id + "&handyman_name=" + handyman_name + "&name=" + name + "&family_name=" + family_name + "&business_name=" + business_name + "&postcode=" + postcode + "&address=" + address + "&city=" + city + "&phone=" + phone + "&email=" + email + "&_token=" + token,
+							url: "<?php echo url('/aanbieder/create-customer')?>",
+
+							success: function (data) {
+
+								$('#cover').hide();
+
+								var newStateVal = data.data.id;
+								var newName = data.data.name + " " + data.data.family_name;
+
+								// Set the value, creating a new option if necessary
+								if ($(".customer-select").find("option[value=" + newStateVal + "]").length) {
+									$(".customer-select").val(newStateVal).trigger("change");
+								} else {
+									// Create the DOM option that is pre-selected by default
+									var newState = new Option(newName, newStateVal, true, true);
+									// Append it to the select
+									$(".customer-select").append(newState).trigger('change');
+								}
+
+								$('.alert-box').html('<div class="alert alert-success">\n' +
+										'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+										'                                            <p class="text-left">' + data.message + '</p>\n' +
+										'                                        </div>');
+								$('.alert-box').show();
+								$('.alert-box').delay(5000).fadeOut(400);
+
+								$('#myModal1').modal('toggle');
+								window.scrollTo({ top: 0, behavior: 'smooth' });
+							},
+							error: function (data) {
+
+								$('#cover').hide();
+
+								/*if (data.status == 422) {
+                                    $.each(data.responseJSON.errors, function (i, error) {
+                                        $('.alert-box').html('<div class="alert alert-danger">\n' +
+                                            '                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+                                            '                                            <p class="text-left">'+error[0]+'</p>\n' +
+                                            '                                        </div>');
+                                    });
+                                    $('.alert-box').show();
+                                    $('.alert-box').delay(5000).fadeOut(400);
+                                }*/
+
+								$('.alert-box').html('<div class="alert alert-danger">\n' +
+										'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+										'                                            <p class="text-left">Something went wrong!</p>\n' +
+										'                                        </div>');
+								$('.alert-box').show();
+								$('.alert-box').delay(5000).fadeOut(400);
+
+								$('#myModal1').modal('toggle');
+								window.scrollTo({ top: 0, behavior: 'smooth' });
+							}
+
+						});
+					}
+				}
+
+			});
+
+			$(".customer-select").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Customer')}}",
+				allowClear: true,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
+			// var current_desc = '';
+			//
+			// $(".add-desc").click(function () {
+			// 	current_desc = $(this);
+			// 	var d = current_desc.prev('input').val();
+			// 	$('#description-text').val(d);
+			// 	$("#myModal").modal('show');
+			// });
+			//
+			// $(".submit-desc").click(function () {
+			// 	var desc = $('#description-text').val();
+			// 	current_desc.prev('input').val(desc);
+			// 	$('#description-text').val('');
+			// 	$("#myModal").modal('hide');
+			// });
+
+			$('.delivery_date').datepicker({
+
+				format: 'yyyy-mm-dd',
+				startDate: new Date(),
+
+			});
+
+			$('.installation_date').datepicker({
+
+				format: 'yyyy-mm-dd',
+				startDate: new Date(),
+
+			});
+
+			$(".js-data-example-ajax").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Product')}}",
+				allowClear: true,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
+			function calculate_total(qty_changed = 0,labor_changed = 0) {
+
+				var total = 0;
+				var price_before_labor_total = 0;
+				var labor_cost_total = 0;
+
+				$("input[name='total[]']").each(function (i, obj) {
+
+					var rate = 0;
+					var row_id = $(this).parent().data('id');
+					var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+
+					if (!qty) {
+						qty = 0;
+					}
+
+					if (!obj.value) {
+						rate = 0;
+					}
+					else {
+						rate = obj.value;
+					}
+
+					rate = rate * qty;
+
+					var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
+					labor_impact = labor_impact * qty;
+					labor_impact = parseFloat(labor_impact).toFixed(2);
+					/*labor_impact = Math.round(labor_impact);*/
+
+					if(labor_changed == 0)
+					{
+						$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor_impact.replace(/\./g, ','));
+					}
+
+					var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
+					price_before_labor = price_before_labor * qty;
+					price_before_labor = parseFloat(price_before_labor).toFixed(2);
+					/*price_before_labor = Math.round(price_before_labor);*/
+					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+
+					if(qty_changed == 0)
+					{
+						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
+						old_discount = old_discount.replace(/\,/g, '.');
+						old_discount = parseFloat(old_discount).toFixed(2);
+
+						rate = rate - old_discount;
+
+						var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
+						var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
+
+
+						if(!discount)
+						{
+							discount = 0;
+						}
+
+
+						if(!labor_discount)
+						{
+							labor_discount = 0;
+						}
+
+						var discount_val = parseFloat(price_before_labor) * (discount/100);
+						/*discount_val = Math.round(discount_val);*/
+						var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
+						/*labor_discount_val = Math.round(labor_discount_val);*/
+
+						var total_discount = discount_val + labor_discount_val;
+						total_discount = parseFloat(total_discount).toFixed(2);
+						var old_discount = total_discount / qty;
+						old_discount = parseFloat(old_discount).toFixed(2);
+						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val('-' + total_discount.replace(/\./g, ','));
+						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val('-' + old_discount);
+
+						rate = parseFloat(rate) - parseFloat(total_discount);
+						var price = rate / qty;
+						/*price = Math.round(price);*/
+
+						/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
+						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+
+					}
+					else
+					{
+						var price = rate / qty;
+						/*price = Math.round(price);*/
+
+						if(qty != 0)
+						{
+							/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
+							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+						}
+
+						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
+						old_discount = old_discount * qty;
+						old_discount = parseFloat(old_discount).toFixed(2);
+
+						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(old_discount.replace(/\./g, ','));
+					}
+
+					rate = parseFloat(rate);
+					rate = rate.toFixed(2);
+					/*rate = Math.round(rate);*/
+
+					total = parseFloat(total) + parseFloat(rate);
+					total = total.toFixed(2);
+					/*total = Math.round(total);*/
+
+					$(this).parent().find('#rate').val(rate);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate.replace(/\./g, ','));
+					/*$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate);*/
+
+
+					var art = price_before_labor;
+					price_before_labor_total = parseFloat(price_before_labor_total) + parseFloat(art);
+					price_before_labor_total = parseFloat(price_before_labor_total).toFixed(2);
+
+					var arb = labor_impact;
+					labor_cost_total = parseFloat(labor_cost_total) + parseFloat(arb);
+					labor_cost_total = parseFloat(labor_cost_total).toFixed(2);
+
+				});
+
+				var net_amount = (total / 121) * 100;
+				net_amount = parseFloat(net_amount).toFixed(2);
+				//net_amount = Math.round(net_amount);
+
+				var tax_amount = total - net_amount;
+				tax_amount = parseFloat(tax_amount).toFixed(2);
+
+				$('#total_amount').val(total.replace(/\./g, ','));
+				$('#price_before_labor_total').val(price_before_labor_total.replace(/\./g, ','));
+				$('#labor_cost_total').val(labor_cost_total.replace(/\./g, ','));
+				$('#net_amount').val(net_amount.replace(/\./g, ','));
+				$('#tax_amount').val(tax_amount.replace(/\./g, ','));
+			}
+
+			$(document).on('change', ".js-data-example-ajax1", function (e) {
+
+				var current = $(this);
+
+				var id = current.val();
+				var row_id = current.parents(".content-div").data('id');
+				var options = '';
+				$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+
+				$.ajax({
+					type: "GET",
+					data: "id=" + id,
+					url: "<?php echo url('/aanbieder/get-supplier-products')?>",
+					success: function (data) {
+
+						$('#menu1').find(`[data-id='${row_id}']`).remove();
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(0);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(0);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(0);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(0);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(0);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -2381,37 +2803,13 @@
 						$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-						$('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
-						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
-						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(data.ladderband_value);
-						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(data.ladderband_price_impact);
-						$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
-						$('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val(data.price_based_option);
-						$('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
 						$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
 						$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
-						var price_based_option = data.price_based_option;
-
-						if (price_based_option == 1) {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', false);
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', false);
-						}
-						else if (price_based_option == 2) {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', false);
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', true);
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').val(0);
-						}
-						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', true);
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').val(0);
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', false);
-						}
-
-						$.each(data.colors, function (index, value) {
+						$.each(data, function (index, value) {
 
 							if (value.title) {
 								var opt = '<option value="' + value.id + '" >' + value.title + '</option>';
@@ -2421,1479 +2819,1591 @@
 
 						});
 
-						$.each(data.models, function (index1, value1) {
+						$('#products_table').find(`[data-id='${row_id}']`).find('.products').children('select').find('option')
+								.remove()
+								.end()
+								.append('<option value="">Select Product</option>' + options);
 
-							if (value1.model) {
-								var opt1 = '<option value="' + value1.id + '" >' + value1.model + '</option>';
-
-								options1 = options1 + opt1;
-							}
-
-						});
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
-							.remove()
-							.end()
-							.append('<option value="">Select Color</option>' + options);
+								.remove()
+								.end()
+								.append('<option value="">Select Color</option>');
 
-							$('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
-							.remove()
-							.end()
-							.append('<option value="">Select Model</option>' + options1);
+						$('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
+								.remove()
+								.end()
+								.append('<option value="">Select Model</option>');
 
-						if ((typeof (data) != "undefined") && data.measure) {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val(data.measure);
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val(data.measure);
-						}
-						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
-						}
-					}
+						$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
+						$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
 
-					/*calculate_total();*/
-
-					var windowsize = $(window).width();
-
-					if (windowsize > 992) {
-
-						$('#products_table').find(`[data-id='${row_id}']`).find('.collapse').collapse('show');
+						/*calculate_total();*/
 
 					}
+				});
 
-				}
+				$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+				$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+				$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+
 			});
 
-            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+			$(document).on('change', ".js-data-example-ajax", function (e) {
 
-		});
+				var current = $(this);
 
-		$(".js-data-example-ajax1").select2({
-			width: '100%',
-			height: '200px',
-			placeholder: "Select Supplier",
-			allowClear: true,
-			"language": {
-				"noResults": function () {
-					return '{{__('text.No results found')}}';
-				}
-			},
-		});
-
-		$(".js-data-example-ajax2").select2({
-			width: '100%',
-			height: '200px',
-			placeholder: "Select Color",
-			allowClear: true,
-			"language": {
-				"noResults": function () {
-					return '{{__('text.No results found')}}';
-				}
-			},
-		});
-
-		$(".js-data-example-ajax3").select2({
-			width: '100%',
-			height: '200px',
-			placeholder: "Select Model",
-			allowClear: true,
-			"language": {
-				"noResults": function () {
-					return '{{__('text.No results found')}}';
-				}
-			},
-		});
-
-		$(document).on('change', ".js-data-example-ajax3", function (e) {
-
-			var current = $(this);
-			var row_id = current.parents(".content-div").data('id');
-
-			var model = current.val();
-			var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
-
-			var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
-			var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
-
-			var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
-			width = width.replace(/\,/g, '.');
-
-			var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
-			height = height.replace(/\,/g, '.');
-
-			var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-			var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
-			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-
-			if (width && height && color && model && product) {
-
-				if ($('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide')) {
-					var margin = 0;
-				}
-				else {
-					var margin = 1;
-				}
-
-				$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
+				var id = current.val();
+				var row_id = current.parents(".content-div").data('id');
+				var options = '';
+				var options1 = '';
+				$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
 
 				$.ajax({
 					type: "GET",
-					data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
-					url: "<?php echo url('/aanbieder/get-price')?>",
+					data: "id=" + id,
+					url: "<?php echo url('/aanbieder/get-colors')?>",
 					success: function (data) {
 
-						if (typeof data[0].value !== 'undefined') {
+						$('#menu1').find(`[data-id='${row_id}']`).remove();
 
-							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+						if (data != '') {
 
-							if (data[0].value === 'both') {
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
-							}
-							else if (data[0].value === 'x_axis') {
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
-							}
-							else if (data[0].value === 'y_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
-							}
-							else {
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
-								var childsafe = data[3].childsafe;
-
-								if (price_based_option == 1) {
-									var price = data[0].value;
-									var org = data[0].value;
-								}
-								else {
-									var price = base_price;
-									var org = base_price;
-								}
-
-								var basic_price = price;
-
-								/*if (margin == 1) {
-									if (data[2]) {
-										price = parseFloat(price);
-										var supplier_margin = data[2].margin;
-										var retailer_margin = data[2].retailer_margin;
-
-                                        current.parent().parent().find('#supplier_margin').val(supplier_margin);
-                                        current.parent().parent().find('#retailer_margin').val(retailer_margin);
-
-										if (supplier_margin && retailer_margin) {
-											price = (price / supplier_margin) * retailer_margin;
-											price = price.toFixed(2);
-										}
-									}
-								}*/
-
-								var features = '';
-                                var count_features = 0;
-								var f_value = 0;
-                                var m1_impact = data[3].m1_impact;
-                                var m2_impact = data[3].m2_impact;
-                                var m1_impact_value = 0;
-                                var m2_impact_value = 0;
-
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-
-								if (childsafe == 1) {
-
-                                    count_features = count_features + 1;
-
-									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div></div>\n';
-
-									features = features + content;
-
-								}
-
-								if (ladderband == 1) {
-
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
-
-									features = features + content;
-
-								}
-
-								$.each(data[1], function (index, value) {
-
-                                    count_features = count_features + 1;
-
-									var opt = '<option value="0">Select Feature</option>';
-
-									$.each(value.features, function (index1, value1) {
-
-										opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
-
-									});
-
-									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
-									}
-									else {
-										var icon = '';
-									}
-
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-										'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div>' + icon + '</div>\n';
-
-									features = features + content;
-
-								});
-
-                                if(count_features > 0)
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-                                }
-                                else
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-                                }
-
-								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-									$('#menu1').find(`[data-id='${row_id}']`).remove();
-								}
-
-								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-									'\n' +
-									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-									'</div></div>' + features +
-									'</div>');
-
-								if (data[3].max_size) {
-									var sq = (width * height) / 10000;
-									var max_size = data[3].max_size;
-
-									if (sq > max_size) {
-										Swal.fire({
-											icon: 'error',
-											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
-										});
-
-										current.parent().find('.f_area').val(1);
-									}
-								}
-								else {
-									current.parent().find('.f_area').val(0);
-								}
-
-                                var model_impact_value = data[3].value;
-
-                                if (m1_impact == 1) {
-
-                                    m1_impact_value = model_impact_value * (width / 100);
-
-                                }
-
-                                if (m2_impact == 1) {
-
-                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
-
-                                }
-
-                                if (data[3].price_impact == 1) {
-
-                                    if (data[3].impact_type == 0) {
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-                                        price = price.toFixed(2);
-
-                                    }
-                                    else {
-
-                                        var per = (model_impact_value) / 100;
-                                        model_impact_value = basic_price * per;
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-                                        price = price.toFixed(2);
-                                    }
-
-                                }
-
-                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
-
-                                if(margin == 1)
-                                {
-                                    if (data[2]) {
-
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if (supplier_margin && retailer_margin) {
-                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
-                                        }
-                                    }
-                                }
-
-                                price = parseFloat(price).toFixed(2);
-
-								var price_before_labor = parseFloat(price).toFixed(2);
-								var labor = 0;
-
-								if (data[4]) {
-									labor = data[4].labor;
-									labor = labor * (width / 100);
-									//labor = Math.round(labor);
-									price = parseFloat(price) + parseFloat(labor);
-									price = price.toFixed(2);
-									labor = parseFloat(labor).toFixed(2);
-								}
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
-								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-
-							}
-						}
-						else {
+							$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
 							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+							$('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
+							$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
+							$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(data.ladderband_value);
+							$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(data.ladderband_price_impact);
+							$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
+							$('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val(data.price_based_option);
+							$('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
 							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
 							$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-						}
-
-						calculate_total();
-					}
-				});
-			}
-			else
-            {
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-            }
-
-		});
-
-		$(document).on('change', ".js-data-example-ajax2", function (e) {
-
-			var current = $(this);
-			var row_id = current.parents(".content-div").data('id');
-
-			var color = current.val();
-			var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
-
-			var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
-			var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
-
-			var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
-			width = width.replace(/\,/g, '.');
-
-			var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
-			height = height.replace(/\,/g, '.');
-
-			var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-			var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
-			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-
-			if (width && height && color && model && product) {
-
-				if ($('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide')) {
-					var margin = 0;
-				}
-				else {
-					var margin = 1;
-				}
-
-				$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-
-				$.ajax({
-					type: "GET",
-					data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
-					url: "<?php echo url('/aanbieder/get-price')?>",
-					success: function (data) {
-
-						if (typeof data[0].value !== 'undefined') {
-
 							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
 
-							var color_max_height = data[0].max_height;
+							var price_based_option = data.price_based_option;
 
-							if (data[0].value === 'both') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
-								});
-
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
+							if (price_based_option == 1) {
+								$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', false);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', false);
 							}
-							else if (data[0].value === 'x_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
-							}
-							else if (data[0].value === 'y_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
+							else if (price_based_option == 2) {
+								$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', false);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', true);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').val(0);
 							}
 							else {
-								$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
-								var childsafe = data[3].childsafe;
+								$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').attr('readonly', true);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.width').children('.m-box').children('.m-input').val(0);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.height').children('.m-box').children('.m-input').attr('readonly', false);
+							}
 
-								if (price_based_option == 1) {
-									var price = data[0].value;
-									var org = data[0].value;
+							$.each(data.colors, function (index, value) {
+
+								if (value.title) {
+									var opt = '<option value="' + value.id + '" >' + value.title + '</option>';
+
+									options = options + opt;
+								}
+
+							});
+
+							$.each(data.models, function (index1, value1) {
+
+								if (value1.model) {
+									var opt1 = '<option value="' + value1.id + '" >' + value1.model + '</option>';
+
+									options1 = options1 + opt1;
+								}
+
+							});
+
+							$('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
+									.remove()
+									.end()
+									.append('<option value="">Select Color</option>' + options);
+
+							$('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
+									.remove()
+									.end()
+									.append('<option value="">Select Model</option>' + options1);
+
+							if ((typeof (data) != "undefined") && data.measure) {
+								$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val(data.measure);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val(data.measure);
+							}
+							else {
+								$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
+							}
+						}
+
+						/*calculate_total();*/
+
+						var windowsize = $(window).width();
+
+						if (windowsize > 992) {
+
+							$('#products_table').find(`[data-id='${row_id}']`).find('.collapse').collapse('show');
+
+						}
+
+					}
+				});
+
+				$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+				$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+				$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+
+			});
+
+			$(".js-data-example-ajax1").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "Select Supplier",
+				allowClear: true,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
+			$(".js-data-example-ajax2").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "Select Color",
+				allowClear: true,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
+			$(".js-data-example-ajax3").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "Select Model",
+				allowClear: true,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
+			$(document).on('change', ".js-data-example-ajax3", function (e) {
+
+				var current = $(this);
+				var row_id = current.parents(".content-div").data('id');
+
+				var model = current.val();
+				var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
+
+				var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
+				var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
+
+				var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
+				width = width.replace(/\,/g, '.');
+
+				var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
+				height = height.replace(/\,/g, '.');
+
+				var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+				var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
+				$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+
+				if (width && height && color && model && product) {
+
+					if ($('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide')) {
+						var margin = 0;
+					}
+					else {
+						var margin = 1;
+					}
+
+					$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
+
+					$.ajax({
+						type: "GET",
+						data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
+						url: "<?php echo url('/aanbieder/get-price')?>",
+						success: function (data) {
+
+							if (typeof data[0].value !== 'undefined') {
+
+								$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+
+								if (data[0].value === 'both') {
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
+								}
+								else if (data[0].value === 'x_axis') {
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
+								}
+								else if (data[0].value === 'y_axis') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
 								}
 								else {
-									var price = base_price;
-									var org = base_price;
-								}
 
-								var basic_price = price;
+									$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
+									var childsafe = data[3].childsafe;
 
-								/*if (margin == 1) {
-									if (data[2]) {
-										price = parseFloat(price);
-										var supplier_margin = data[2].margin;
-										var retailer_margin = data[2].retailer_margin;
-
-                                        current.parent().parent().find('#supplier_margin').val(supplier_margin);
-                                        current.parent().parent().find('#retailer_margin').val(retailer_margin);
-
-										if (supplier_margin && retailer_margin) {
-											price = (price / supplier_margin) * retailer_margin;
-											price = price.toFixed(2);
-										}
+									if (price_based_option == 1) {
+										var price = data[0].value;
+										var org = data[0].value;
 									}
-								}*/
+									else {
+										var price = base_price;
+										var org = base_price;
+									}
 
-								var features = '';
-								var count_features = 0;
-								var f_value = 0;
-                                var m1_impact = data[3].m1_impact;
-                                var m2_impact = data[3].m2_impact;
-                                var m1_impact_value = 0;
-                                var m2_impact_value = 0;
+									var basic_price = price;
 
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+									/*if (margin == 1) {
+                                        if (data[2]) {
+                                            price = parseFloat(price);
+                                            var supplier_margin = data[2].margin;
+                                            var retailer_margin = data[2].retailer_margin;
 
-								if (childsafe == 1) {
+                                            current.parent().parent().find('#supplier_margin').val(supplier_margin);
+                                            current.parent().parent().find('#retailer_margin').val(retailer_margin);
 
-								    count_features = count_features + 1;
+                                            if (supplier_margin && retailer_margin) {
+                                                price = (price / supplier_margin) * retailer_margin;
+                                                price = price.toFixed(2);
+                                            }
+                                        }
+                                    }*/
 
-									var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-										'</div></div>\n' +
-										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-										'</div></div>\n';
+									var features = '';
+									var count_features = 0;
+									var f_value = 0;
+									var m1_impact = data[3].m1_impact;
+									var m2_impact = data[3].m2_impact;
+									var m1_impact_value = 0;
+									var m2_impact_value = 0;
 
-									features = features + content;
+									$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
-								}
+									if (childsafe == 1) {
 
-								if (ladderband == 1) {
+										count_features = count_features + 1;
 
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
-										'</select>\n' +
-										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+										var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+												'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+												'</div></div>\n' +
+												'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+												'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+												'</div></div>\n' +
+												'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
+												'<option value="">Select any option</option>\n' +
+												'<option value="2">Add childsafety clip</option>\n' +
+												'</select>\n' +
+												'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
+												'</div></div>\n';
 
-									features = features + content;
+										features = features + content;
 
-								}
+									}
 
-								$.each(data[1], function (index, value) {
+									if (ladderband == 1) {
 
-                                    count_features = count_features + 1;
+										var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
+												'<option value="0">No</option>\n' +
+												'<option value="1">Yes</option>\n' +
+												'</select>\n' +
+												'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+												'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+												'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+												'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+												'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
 
-									var opt = '<option value="0">Select Feature</option>';
+										features = features + content;
 
-									$.each(value.features, function (index1, value1) {
+									}
 
-										opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+									$.each(data[1], function (index, value) {
+
+										count_features = count_features + 1;
+
+										var opt = '<option value="0">Select Feature</option>';
+
+										$.each(value.features, function (index1, value1) {
+
+											opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+
+										});
+
+										if (value.comment_box == 1) {
+											var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+										}
+										else {
+											var icon = '';
+										}
+
+										var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
+												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+												'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+												'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+												'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+												'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+												'</div>' + icon + '</div>\n';
+
+										features = features + content;
 
 									});
 
-									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+									if(count_features > 0)
+									{
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+									}
+									else
+									{
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+									}
+
+									if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
+										$('#menu1').find(`[data-id='${row_id}']`).remove();
+									}
+
+									$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
+											'\n' +
+											'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+											'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+											'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+											'</div></div>' + features +
+											'</div>');
+
+									if (data[3].max_size) {
+										var sq = (width * height) / 10000;
+										var max_size = data[3].max_size;
+
+										if (sq > max_size) {
+											Swal.fire({
+												icon: 'error',
+												title: '{{__('text.Oops...')}}',
+												text: 'Area is greater than max size: ' + max_size,
+											});
+
+											current.parent().find('.f_area').val(1);
+										}
 									}
 									else {
-										var icon = '';
+										current.parent().find('.f_area').val(0);
 									}
 
-									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-										'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-										'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div>' + icon + '</div>\n';
+									var model_impact_value = data[3].value;
 
-									features = features + content;
+									if (m1_impact == 1) {
 
-								});
+										m1_impact_value = model_impact_value * (width / 100);
 
-								if(count_features > 0)
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-                                }
-								else
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-                                }
+									}
 
-								if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-									$('#menu1').find(`[data-id='${row_id}']`).remove();
+									if (m2_impact == 1) {
+
+										m2_impact_value = model_impact_value * ((width/100) * (height/100));
+
+									}
+
+									if (data[3].price_impact == 1) {
+
+										if (data[3].impact_type == 0) {
+
+											price = parseFloat(price) + parseFloat(model_impact_value);
+											price = price.toFixed(2);
+
+										}
+										else {
+
+											var per = (model_impact_value) / 100;
+											model_impact_value = basic_price * per;
+
+											price = parseFloat(price) + parseFloat(model_impact_value);
+											price = price.toFixed(2);
+										}
+
+									}
+
+									price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+
+									if(margin == 1)
+									{
+										if (data[2]) {
+
+											var supplier_margin = data[2].margin;
+											var retailer_margin = data[2].retailer_margin;
+
+											if (supplier_margin && retailer_margin) {
+												price = (parseFloat(price) / supplier_margin) * retailer_margin;
+											}
+										}
+									}
+
+									price = parseFloat(price).toFixed(2);
+
+									var price_before_labor = parseFloat(price).toFixed(2);
+									var labor = 0;
+
+									if (data[4]) {
+										labor = data[4].labor;
+										labor = labor * (width / 100);
+										//labor = Math.round(labor);
+										price = parseFloat(price) + parseFloat(labor);
+										price = price.toFixed(2);
+										labor = parseFloat(labor).toFixed(2);
+									}
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
+									//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
+
 								}
+							}
+							else {
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
 
-								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-									'\n' +
-									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-									'</div></div>' + features +
-									'</div>');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+							}
 
-								if (data[3].max_size) {
-									var sq = (width * height) / 10000;
-									var max_size = data[3].max_size;
+							calculate_total();
+						}
+					});
+				}
+				else
+				{
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+				}
 
-									if (sq > max_size) {
+			});
 
-										Swal.fire({
-											icon: 'error',
-											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
-										});
+			$(document).on('change', ".js-data-example-ajax2", function (e) {
 
-										current.parent().find('.f_area').val(1);
-									}
+				var current = $(this);
+				var row_id = current.parents(".content-div").data('id');
+
+				var color = current.val();
+				var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
+
+				var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
+				var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
+
+				var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
+				width = width.replace(/\,/g, '.');
+
+				var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
+				height = height.replace(/\,/g, '.');
+
+				var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+				var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
+				$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+
+				if (width && height && color && model && product) {
+
+					if ($('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide')) {
+						var margin = 0;
+					}
+					else {
+						var margin = 1;
+					}
+
+					$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
+
+					$.ajax({
+						type: "GET",
+						data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
+						url: "<?php echo url('/aanbieder/get-price')?>",
+						success: function (data) {
+
+							if (typeof data[0].value !== 'undefined') {
+
+								$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+
+								var color_max_height = data[0].max_height;
+
+								if (data[0].value === 'both') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+									});
+
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
+								}
+								else if (data[0].value === 'x_axis') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
+								}
+								else if (data[0].value === 'y_axis') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
 								}
 								else {
-									current.parent().find('.f_area').val(0);
-								}
+									$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
+									var childsafe = data[3].childsafe;
 
-                                var model_impact_value = data[3].value;
+									if (price_based_option == 1) {
+										var price = data[0].value;
+										var org = data[0].value;
+									}
+									else {
+										var price = base_price;
+										var org = base_price;
+									}
 
-                                if (m1_impact == 1) {
+									var basic_price = price;
 
-                                    m1_impact_value = model_impact_value * (width / 100);
+									/*if (margin == 1) {
+                                        if (data[2]) {
+                                            price = parseFloat(price);
+                                            var supplier_margin = data[2].margin;
+                                            var retailer_margin = data[2].retailer_margin;
 
-                                }
+                                            current.parent().parent().find('#supplier_margin').val(supplier_margin);
+                                            current.parent().parent().find('#retailer_margin').val(retailer_margin);
 
-                                if (m2_impact == 1) {
-
-                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
-
-                                }
-
-                                if (data[3].price_impact == 1) {
-
-                                    if (data[3].impact_type == 0) {
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-                                        price = price.toFixed(2);
-
-                                    }
-                                    else {
-
-                                        var per = (model_impact_value) / 100;
-                                        model_impact_value = basic_price * per;
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-                                        price = price.toFixed(2);
-                                    }
-
-                                }
-
-                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
-
-                                if(margin == 1)
-                                {
-                                    if (data[2]) {
-
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if (supplier_margin && retailer_margin) {
-                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
+                                            if (supplier_margin && retailer_margin) {
+                                                price = (price / supplier_margin) * retailer_margin;
+                                                price = price.toFixed(2);
+                                            }
                                         }
-                                    }
-                                }
+                                    }*/
 
-                                price = parseFloat(price).toFixed(2);
+									var features = '';
+									var count_features = 0;
+									var f_value = 0;
+									var m1_impact = data[3].m1_impact;
+									var m2_impact = data[3].m2_impact;
+									var m1_impact_value = 0;
+									var m2_impact_value = 0;
 
-								var price_before_labor = parseFloat(price).toFixed(2);
-								var labor = 0;
+									$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
 
-								if (data[4]) {
-									labor = data[4].labor;
-									labor = labor * (width / 100);
-									//labor = Math.round(labor);
-									price = parseFloat(price) + parseFloat(labor);
-									price = price.toFixed(2);
-									labor = parseFloat(labor).toFixed(2);
+									if (childsafe == 1) {
+
+										count_features = count_features + 1;
+
+										var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+												'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+												'</div></div>\n' +
+												'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+												'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+												'</div></div>\n' +
+												'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
+												'<option value="">Select any option</option>\n' +
+												'<option value="2">Add childsafety clip</option>\n' +
+												'</select>\n' +
+												'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
+												'</div></div>\n';
+
+										features = features + content;
+
+									}
+
+									if (ladderband == 1) {
+
+										var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
+												'<option value="0">No</option>\n' +
+												'<option value="1">Yes</option>\n' +
+												'</select>\n' +
+												'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+												'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+												'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+												'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+												'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+
+										features = features + content;
+
+									}
+
+									$.each(data[1], function (index, value) {
+
+										count_features = count_features + 1;
+
+										var opt = '<option value="0">Select Feature</option>';
+
+										$.each(value.features, function (index1, value1) {
+
+											opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+
+										});
+
+										if (value.comment_box == 1) {
+											var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+										}
+										else {
+											var icon = '';
+										}
+
+										var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
+												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+												'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+												'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+												'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+												'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+												'</div>' + icon + '</div>\n';
+
+										features = features + content;
+
+									});
+
+									if(count_features > 0)
+									{
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+									}
+									else
+									{
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+									}
+
+									if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
+										$('#menu1').find(`[data-id='${row_id}']`).remove();
+									}
+
+									$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
+											'\n' +
+											'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+											'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+											'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+											'</div></div>' + features +
+											'</div>');
+
+									if (data[3].max_size) {
+										var sq = (width * height) / 10000;
+										var max_size = data[3].max_size;
+
+										if (sq > max_size) {
+
+											Swal.fire({
+												icon: 'error',
+												title: '{{__('text.Oops...')}}',
+												text: 'Area is greater than max size: ' + max_size,
+											});
+
+											current.parent().find('.f_area').val(1);
+										}
+									}
+									else {
+										current.parent().find('.f_area').val(0);
+									}
+
+									var model_impact_value = data[3].value;
+
+									if (m1_impact == 1) {
+
+										m1_impact_value = model_impact_value * (width / 100);
+
+									}
+
+									if (m2_impact == 1) {
+
+										m2_impact_value = model_impact_value * ((width/100) * (height/100));
+
+									}
+
+									if (data[3].price_impact == 1) {
+
+										if (data[3].impact_type == 0) {
+
+											price = parseFloat(price) + parseFloat(model_impact_value);
+											price = price.toFixed(2);
+
+										}
+										else {
+
+											var per = (model_impact_value) / 100;
+											model_impact_value = basic_price * per;
+
+											price = parseFloat(price) + parseFloat(model_impact_value);
+											price = price.toFixed(2);
+										}
+
+									}
+
+									price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+
+									if(margin == 1)
+									{
+										if (data[2]) {
+
+											var supplier_margin = data[2].margin;
+											var retailer_margin = data[2].retailer_margin;
+
+											if (supplier_margin && retailer_margin) {
+												price = (parseFloat(price) / supplier_margin) * retailer_margin;
+											}
+										}
+									}
+
+									price = parseFloat(price).toFixed(2);
+
+									var price_before_labor = parseFloat(price).toFixed(2);
+									var labor = 0;
+
+									if (data[4]) {
+										labor = data[4].labor;
+										labor = labor * (width / 100);
+										//labor = Math.round(labor);
+										price = parseFloat(price) + parseFloat(labor);
+										price = price.toFixed(2);
+										labor = parseFloat(labor).toFixed(2);
+									}
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
+									//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
+								}
+							}
+							else {
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+							}
+
+							calculate_total();
+						}
+					});
+				}
+				else
+				{
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+				}
+
+			});
+
+			function focus_row(last_row) {
+
+				var windowsize = $(window).width();
+
+				if (windowsize > 992) {
+
+					$('#products_table .content-div').not(last_row).find('.collapse[aria-expanded]').collapse("hide");
+
+				}
+
+				$('#products_table .content-div.active').removeClass('active');
+				last_row.addClass('active');
+
+				var id = last_row.data('id');
+
+				$('#menu1').children().not(`[data-id='${id}']`).hide();
+				$('#menu1').find(`[data-id='${id}']`).show();
+
+			}
+
+			function numbering() {
+				$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
+			}
+
+			function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null) {
+
+				var rowCount = $('#products_table .content-div:last').data('id');
+				rowCount = rowCount + 1;
+
+				var r_id = $('#products_table .content-div:last').find('.content:eq(0)').find('.sr-res').text();
+				r_id = parseInt(r_id) + 1;
+
+				if (!copy) {
+
+					$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
+							'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
+							'                       									 	<label class="content-label">Sr. No</label>\n' +
+							'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
+							'                       									 </div>\n' +
+							'\n' +
+							'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
+							'                                                            <input type="hidden" id="basic_price" name="basic_price[]">\n' +
+							'                                                            <input type="hidden" id="rate" name="rate[]">\n' +
+							'                                                            <input type="hidden" id="row_total" name="total[]">\n' +
+							'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
+							'                                                            <input type="hidden" value="0" id="childsafe" name="childsafe[]">\n' +
+							'                                                            <input type="hidden" value="0" id="ladderband" name="ladderband[]">\n' +
+							'                                                            <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">\n' +
+							'                                                            <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
+							'                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
+							'                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
+							'                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
+							'                                                            <input type="hidden" id="price_based_option" name="price_based_option[]">\n' +
+							'                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
+							'                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
+							'                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
+							'\n' +
+							'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Supplier</label>\n' +
+							'\n' +
+							'                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
+							'\n' +
+							'                                                                    <option value=""></option>\n' +
+							'\n' +
+							'                                                                    @foreach($suppliers as $key)\n' +
+							'\n' +
+							'                                                                        <option value="{{$key->id}}">{{$key->company_name}}</option>\n' +
+							'\n' +
+							'                                                                     @endforeach\n' +
+							'\n' +
+							'                                                                </select>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div style="width: 22%;" class="products content item3 full-res">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Product</label>\n' +
+							'\n' +
+							'                                                                <select name="products[]" class="js-data-example-ajax">\n' +
+							'\n' +
+							'                                                                    <option value=""></option>\n' +
+							'\n' +
+							'                                                                    @foreach($products as $key)\n' +
+							'\n' +
+							'                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+							'\n' +
+							'                                                                    @endforeach\n' +
+							'\n' +
+							'                                                                </select>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="width item4 content" style="width: 10%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Width</label>\n' +
+							'\n' +
+							'                                                                <div class="m-box">\n' +
+							'                                                                	<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
+							'                                                                   <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">\n' +
+							'                                                                </div>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="height item5 content" style="width: 10%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Height</label>\n' +
+							'\n' +
+							'                                                                <div class="m-box">\n' +
+							'                                                                	<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
+							'                                                                	<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">\n' +
+							'                                                                </div>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="content item6" style="width: 7%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">€ Art.</label>\n' +
+							'\n' +
+							'																 <div style="display: flex;align-items: center;">\n' +
+							'																 	<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
+							'																	<input type="hidden" class="price_before_labor_old">\n' +
+							'																 </div>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="content item7" style="width: 7%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">€ Arb.</label>\n' +
+							'\n' +
+							'																 <div style="display: flex;align-items: center;">\n' +
+							'																 	<input type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">\n' +
+							'                                                                	<input type="hidden" class="labor_impact_old">\n' +
+							'																 </div>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="content item8" style="width: 10%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Discount</label>\n' +
+							'\n' +
+							'																<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
+							'																<input type="hidden" value="0" class="total_discount_old">\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div style="width: 7%;" class="content item9">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">€ Total</label>\n' +
+							'\n' +
+							'																<div class="price res-white"></div>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">\n' +
+							'\n' +
+							'                       									 	<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">\n' +
+							'\n' +
+							'																<div style="display: none;" class="green-circle tooltip1">\n' +
+							'																	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>\n' +
+							'																</div>\n' +
+							'\n' +
+							'																<div style="visibility: hidden;" class="yellow-circle tooltip1">\n' +
+							'																	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>\n' +
+							'																</div>\n' +
+							'\n' +
+							'																<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
+							'\n' +
+							'																	<i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
+							'\n' +
+							'																	<span class="tooltiptext">Add</span>\n' +
+							'\n' +
+							'																</span>\n' +
+							'\n' +
+							'																<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
+							'\n' +
+							'																	<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
+							'\n' +
+							'																	<span class="tooltiptext">Remove</span>\n' +
+							'\n' +
+							'																</span>\n' +
+							'\n' +
+							'																<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
+							'\n' +
+							'																	<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
+							'\n' +
+							'																	<span class="tooltiptext">Copy</span>\n' +
+							'\n' +
+							'																</span>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
+							'\n' +
+							'                       									 	<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse">\n' +
+							'\n' +
+							'                       									 	<div style="width: 25%;" class="color item12">\n' +
+							'\n' +
+							'																	<label>Color</label>\n' +
+							'\n' +
+							'                                                                	<select name="colors[]" class="js-data-example-ajax2">\n' +
+							'\n' +
+							'                                                                    	<option value=""></option>\n' +
+							'\n' +
+							'                                                                	</select>\n' +
+							'\n' +
+							'																</div>\n' +
+							'\n' +
+							'																<div style="width: 25%;margin-left: 10px;" class="model item13">\n' +
+							'\n' +
+							'																	<label>Model</label>\n' +
+							'\n' +
+							'                                                                	<select name="models[]" class="js-data-example-ajax3">\n' +
+							'\n' +
+							'                                                                   	<option value=""></option>\n' +
+							'\n' +
+							'                                                                	</select>\n' +
+							'                                                                   <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="">\n' +
+							'\n' +
+							'																</div>\n' +
+							'\n' +
+							'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
+							'\n' +
+							'																	<label>Discount %</label>\n' +
+							'\n' +
+							'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
+							'\n' +
+							'																</div>\n' +
+							'\n' +
+							'																<div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">\n' +
+							'\n' +
+							'																	<label>Labor Discount %</label>\n' +
+							'\n' +
+							'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" value="0" name="labor_discount[]">\n' +
+							'\n' +
+							'																</div>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                        </div>');
+
+					var last_row = $('#products_table .content-div:last');
+
+					focus_row(last_row);
+
+					last_row.find(".js-data-example-ajax").select2({
+						width: '100%',
+						height: '200px',
+						placeholder: "{{__('text.Select Product')}}",
+						allowClear: true,
+						"language": {
+							"noResults": function () {
+								return '{{__('text.No results found')}}';
+							}
+						},
+					});
+
+					last_row.find(".js-data-example-ajax1").select2({
+						width: '100%',
+						height: '200px',
+						placeholder: "Select Supplier",
+						allowClear: true,
+						"language": {
+							"noResults": function () {
+								return '{{__('text.No results found')}}';
+							}
+						},
+					});
+
+					last_row.find(".js-data-example-ajax2").select2({
+						width: '100%',
+						height: '200px',
+						placeholder: "Select Color",
+						allowClear: true,
+						"language": {
+							"noResults": function () {
+								return '{{__('text.No results found')}}';
+							}
+						},
+					});
+
+					last_row.find(".js-data-example-ajax3").select2({
+						width: '100%',
+						height: '200px',
+						placeholder: "Select Model",
+						allowClear: true,
+						"language": {
+							"noResults": function () {
+								return '{{__('text.No results found')}}';
+							}
+						},
+					});
+				}
+				else {
+
+					$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
+							'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
+							'                       									 	<label class="content-label">Sr. No</label>\n' +
+							'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
+							'                       									 </div>\n' +
+							'\n' +
+							'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
+							'                                                            <input value="' + basic_price + '" type="hidden" id="basic_price" name="basic_price[]">\n' +
+							'                                                            <input value="' + rate + '" type="hidden" id="rate" name="rate[]">\n' +
+							'                                                            <input value="' + price + '" type="hidden" id="row_total" name="total[]">\n' +
+							'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
+							'                                                            <input type="hidden" value="' + childsafe + '" id="childsafe" name="childsafe[]">\n' +
+							'                                                            <input type="hidden" value="' + ladderband + '" id="ladderband" name="ladderband[]">\n' +
+							'                                                            <input type="hidden" value="' + ladderband_value + '" id="ladderband_value" name="ladderband_value[]">\n' +
+							'                                                            <input type="hidden" value="' + ladderband_price_impact + '" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
+							'                                                            <input type="hidden" value="' + ladderband_impact_type + '" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
+							'                                                            <input type="hidden" value="' + area_conflict + '" id="area_conflict" name="area_conflict[]">\n' +
+							'                                                            <input type="hidden" value="' + delivery_days + '" id="delivery_days" name="delivery_days[]">\n' +
+							'                                                            <input type="hidden" value="' + price_based_option + '" id="price_based_option" name="price_based_option[]">\n' +
+							'                                                            <input type="hidden" value="' + base_price + '" id="base_price" name="base_price[]">\n' +
+							'                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
+							'                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
+							'\n' +
+							'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Supplier</label>\n' +
+							'\n' +
+							'                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
+							'\n' +
+							suppliers +
+							'\n' +
+							'                                                                </select>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div style="width: 22%;" class="products content item3 full-res">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Product</label>\n' +
+							'\n' +
+							'                                                                <select name="products[]" class="js-data-example-ajax">\n' +
+							'\n' +
+							products +
+							'\n' +
+							'                                                                </select>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="width item4 content" style="width: 10%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Width</label>\n' +
+							'\n' +
+							'                                                                <div class="m-box">\n' +
+							'                                                                	<input ' + width_readonly + ' value="' + width + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
+							'                                                                   <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="' + width_unit + '">\n' +
+							'                                                                </div>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="height item5 content" style="width: 10%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Height</label>\n' +
+							'\n' +
+							'                                                                <div class="m-box">\n' +
+							'                                                                	<input ' + height_readonly + ' value="' + height + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
+							'                                                                	<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="' + height_unit + '">\n' +
+							'                                                                </div>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="content item6" style="width: 7%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">€ Art.</label>\n' +
+							'\n' +
+							'																 <div style="display: flex;align-items: center;">\n' +
+							'																 	<input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
+							'																	<input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
+							'																 </div>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="content item7" style="width: 7%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">€ Arb.</label>\n' +
+							'\n' +
+							'																 <div style="display: flex;align-items: center;">\n' +
+							'																 	<input value="' + labor_impact + '" type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">\n' +
+							'                                                                	<input value="' + labor_impact_old + '" type="hidden" class="labor_impact_old">\n' +
+							'																 </div>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="content item8" style="width: 10%;">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">Discount</label>\n' +
+							'\n' +
+							'																<input type="text" value="' + total_discount + '" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
+							'																<input type="hidden" value="' + total_discount_old + '" class="total_discount_old">\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div style="width: 7%;" class="content item9">\n' +
+							'\n' +
+							'                       									 	<label class="content-label">€ Total</label>\n' +
+							'\n' +
+							'																<div class="price res-white">' + price_text + '</div>\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">\n' +
+							'\n' +
+							last_column +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
+							'\n' +
+							'																<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" aria-expanded="true" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'															<div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse in" aria-expanded="true">\n' +
+							'\n' +
+							'                       									 	<div style="width: 25%;" class="color item12">\n' +
+							'\n' +
+							'																	<label>Color</label>\n' +
+							'\n' +
+							'                                                                	<select name="colors[]" class="js-data-example-ajax2">\n' +
+							'\n' +
+							colors +
+							'\n' +
+							'                                                                	</select>\n' +
+							'\n' +
+							'																</div>\n' +
+							'\n' +
+							'																<div style="width: 25%;margin-left: 10px;" class="model item13">\n' +
+							'\n' +
+							'																	<label>Model</label>\n' +
+							'\n' +
+							'                                                                	<select name="models[]" class="js-data-example-ajax3">\n' +
+							'\n' +
+							models +
+							'\n' +
+							'                                                                	</select>\n' +
+							'                                                                   <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="' + model_impact_value + '">\n' +
+							'\n' +
+							'																</div>\n' +
+							'\n' +
+							'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
+							'\n' +
+							'																	<label>Discount %</label>\n' +
+							'\n' +
+							'																	<input value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" name="discount[]">\n' +
+							'\n' +
+							'																</div>\n' +
+							'\n' +
+							'																<div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">\n' +
+							'\n' +
+							'																	<label>Labor Discount %</label>\n' +
+							'\n' +
+							'																	<input value="' + labor_discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" name="labor_discount[]">\n' +
+							'\n' +
+							'																</div>\n' +
+							'\n' +
+							'                                                            </div>\n' +
+							'\n' +
+							'                                                        </div>');
+
+					var last_row = $('#products_table .content-div:last');
+
+					last_row.find('.js-data-example-ajax').val(product);
+					last_row.find('.js-data-example-ajax1').val(supplier);
+					last_row.find('.js-data-example-ajax2').val(color);
+					last_row.find('.js-data-example-ajax3').val(model);
+
+					if (features) {
+
+						$('#menu1').append('<div data-id="' + rowCount + '" style="margin: 0;" class="form-group">\n' + features + '</div>');
+
+						$('#menu1').find(`[data-id='${rowCount}']`).find('input[name="qty[]"]').val(qty);
+
+						if (childsafe == 1) {
+							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').attr('name', 'childsafe_option' + rowCount);
+							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe_diff').attr('name', 'childsafe_diff' + rowCount);
+							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').attr('name', 'childsafe_answer' + rowCount);
+							$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_x').val(childsafe_x);
+							$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_y').val(childsafe_y);
+							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').val(childsafe_question);
+							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').val(childsafe_answer);
+						}
+
+						features_selects.each(function (index, select) {
+
+							$('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
+
+							if ($(this).parent().find('.f_id').val() == 0) {
+								$('#myModal').find('.modal-body').append('<div class="sub-tables" data-id="' + rowCount + '">\n' + subs + '</div>');
+							}
+
+						});
+
+						$('#menu1').find(`[data-id='${rowCount}']`).each(function (i, obj) {
+
+							$(obj).find('.ladderband-btn').attr('data-id', rowCount);
+							$(obj).find('.feature-select').attr('name', 'features' + rowCount + '[]');
+							$(obj).find('.f_price').attr('name', 'f_price' + rowCount + '[]');
+							$(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
+							$(obj).find('.f_area').attr('name', 'f_area' + rowCount + '[]');
+							$(obj).find('.sub_feature').attr('name', 'sub_feature' + rowCount + '[]');
+							$(obj).find('#childsafe_x').attr('name', 'childsafe_x' + rowCount);
+							$(obj).find('#childsafe_y').attr('name', 'childsafe_y' + rowCount);
+
+						});
+
+						$('#myModal').find('.modal-body').find(`[data-id='${rowCount}']`).each(function (i, obj) {
+
+							$(obj).find('.sizeA').each(function (b, obj1) {
+
+								if ($(this).val() == 1) {
+									$(this).prev('input').prop("checked", true);
 								}
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
-								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-							}
-						}
-						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+							});
 
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-						}
+							$(obj).find('.sizeB').each(function (c, obj2) {
 
-						calculate_total();
-					}
-				});
-			}
-			else
-            {
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-            }
+								if ($(this).val() == 1) {
+									$(this).prev('input').prop("checked", true);
+								}
 
-		});
+							});
 
-		function focus_row(last_row) {
-
-			var windowsize = $(window).width();
-
-			if (windowsize > 992) {
-
-				$('#products_table .content-div').not(last_row).find('.collapse[aria-expanded]').collapse("hide");
-
-			}
-
-			$('#products_table .content-div.active').removeClass('active');
-			last_row.addClass('active');
-
-			var id = last_row.data('id');
-
-			$('#menu1').children().not(`[data-id='${id}']`).hide();
-			$('#menu1').find(`[data-id='${id}']`).show();
-
-		}
-
-		function numbering() {
-			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
-		}
-
-		function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, suppliers = null, supplier = null, colors = null, color = null, models = null, model = null, model_impact_value = null, width = null, width_unit = null, height = null, height_unit = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_based_option = null, base_price = null, supplier_margin = null, retailer_margin = null, width_readonly = null, height_readonly = null, price_before_labor = null, price_before_labor_old = null, labor_impact = null, labor_impact_old = null, discount = null, labor_discount = null, total_discount = null, total_discount_old = null, last_column = null) {
-
-			var rowCount = $('#products_table .content-div:last').data('id');
-			rowCount = rowCount + 1;
-
-			var r_id = $('#products_table .content-div:last').find('.content:eq(0)').find('.sr-res').text();
-			r_id = parseInt(r_id) + 1;
-
-			if (!copy) {
-
-				$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
-					'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
-                    '                       									 	<label class="content-label">Sr. No</label>\n' +
-					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
-					'                       									 </div>\n' +
-					'\n' +
-					'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
-					'                                                            <input type="hidden" id="basic_price" name="basic_price[]">\n' +
-					'                                                            <input type="hidden" id="rate" name="rate[]">\n' +
-					'                                                            <input type="hidden" id="row_total" name="total[]">\n' +
-					'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
-					'                                                            <input type="hidden" value="0" id="childsafe" name="childsafe[]">\n' +
-					'                                                            <input type="hidden" value="0" id="ladderband" name="ladderband[]">\n' +
-					'                                                            <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">\n' +
-					'                                                            <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
-					'                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
-					'                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
-					'                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
-					'                                                            <input type="hidden" id="price_based_option" name="price_based_option[]">\n' +
-					'                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
-                    '                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
-                    '                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
-					'\n' +
-					'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Supplier</label>\n' +
-					'\n' +
-					'                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
-					'\n' +
-					'                                                                    <option value=""></option>\n' +
-					'\n' +
-					'                                                                    @foreach($suppliers as $key)\n' +
-					'\n' +
-					'                                                                        <option value="{{$key->id}}">{{$key->company_name}}</option>\n' +
-					'\n' +
-					'                                                                     @endforeach\n' +
-					'\n' +
-					'                                                                </select>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div style="width: 22%;" class="products content item3 full-res">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Product</label>\n' +
-					'\n' +
-					'                                                                <select name="products[]" class="js-data-example-ajax">\n' +
-					'\n' +
-					'                                                                    <option value=""></option>\n' +
-					'\n' +
-					'                                                                    @foreach($products as $key)\n' +
-					'\n' +
-					'                                                                        <option value="{{$key->id}}">{{$key->title}}</option>\n' +
-					'\n' +
-					'                                                                    @endforeach\n' +
-					'\n' +
-					'                                                                </select>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="width item4 content" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Width</label>\n' +
-					'\n' +
-					'                                                                <div class="m-box">\n' +
-					'                                                                	<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
-					'                                                                   <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">\n' +
-					'                                                                </div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="height item5 content" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Height</label>\n' +
-					'\n' +
-					'                                                                <div class="m-box">\n' +
-					'                                                                	<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
-					'                                                                	<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">\n' +
-					'                                                                </div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item6" style="width: 7%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Art.</label>\n' +
-					'\n' +
-					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
-					'																	<input type="hidden" class="price_before_labor_old">\n' +
-					'																 </div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item7" style="width: 7%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Arb.</label>\n' +
-					'\n' +
-					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">\n' +
-					'                                                                	<input type="hidden" class="labor_impact_old">\n' +
-					'																 </div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item8" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Discount</label>\n' +
-					'\n' +
-					'																<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
-					'																<input type="hidden" value="0" class="total_discount_old">\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div style="width: 7%;" class="content item9">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Total</label>\n' +
-					'\n' +
-					'																<div class="price res-white"></div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">\n' +
-					'\n' +
-					'                       									 	<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">\n' +
-					'\n' +
-					'																<div style="display: none;" class="green-circle tooltip1">\n' +
-					'																	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>\n' +
-					'																</div>\n' +
-					'\n' +
-					'																<div style="visibility: hidden;" class="yellow-circle tooltip1">\n' +
-					'																	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>\n' +
-					'																</div>\n' +
-					'\n' +
-					'																<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-					'\n' +
-					'																	<i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
-					'\n' +
-					'																	<span class="tooltiptext">Add</span>\n' +
-					'\n' +
-					'																</span>\n' +
-					'\n' +
-					'																<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-					'\n' +
-					'																	<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
-					'\n' +
-					'																	<span class="tooltiptext">Remove</span>\n' +
-					'\n' +
-					'																</span>\n' +
-					'\n' +
-					'																<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-					'\n' +
-					'																	<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
-					'\n' +
-					'																	<span class="tooltiptext">Copy</span>\n' +
-					'\n' +
-					'																</span>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
-					'\n' +
-					'                       									 	<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse">\n' +
-					'\n' +
-					'                       									 	<div style="width: 25%;" class="color item12">\n' +
-					'\n' +
-					'																	<label>Color</label>\n' +
-					'\n' +
-					'                                                                	<select name="colors[]" class="js-data-example-ajax2">\n' +
-					'\n' +
-					'                                                                    	<option value=""></option>\n' +
-					'\n' +
-					'                                                                	</select>\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'																<div style="width: 25%;margin-left: 10px;" class="model item13">\n' +
-					'\n' +
-					'																	<label>Model</label>\n' +
-					'\n' +
-					'                                                                	<select name="models[]" class="js-data-example-ajax3">\n' +
-					'\n' +
-					'                                                                   	<option value=""></option>\n' +
-					'\n' +
-					'                                                                	</select>\n' +
-					'                                                                   <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="">\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
-					'\n' +
-					'																	<label>Discount %</label>\n' +
-					'\n' +
-					'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'																<div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">\n' +
-					'\n' +
-					'																	<label>Labor Discount %</label>\n' +
-					'\n' +
-					'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" value="0" name="labor_discount[]">\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                        </div>');
-
-				var last_row = $('#products_table .content-div:last');
-
-				focus_row(last_row);
-
-				last_row.find(".js-data-example-ajax").select2({
-					width: '100%',
-					height: '200px',
-					placeholder: "{{__('text.Select Product')}}",
-					allowClear: true,
-					"language": {
-						"noResults": function () {
-							return '{{__('text.No results found')}}';
-						}
-					},
-				});
-
-				last_row.find(".js-data-example-ajax1").select2({
-					width: '100%',
-					height: '200px',
-					placeholder: "Select Supplier",
-					allowClear: true,
-					"language": {
-						"noResults": function () {
-							return '{{__('text.No results found')}}';
-						}
-					},
-				});
-
-				last_row.find(".js-data-example-ajax2").select2({
-					width: '100%',
-					height: '200px',
-					placeholder: "Select Color",
-					allowClear: true,
-					"language": {
-						"noResults": function () {
-							return '{{__('text.No results found')}}';
-						}
-					},
-				});
-
-				last_row.find(".js-data-example-ajax3").select2({
-					width: '100%',
-					height: '200px',
-					placeholder: "Select Model",
-					allowClear: true,
-					"language": {
-						"noResults": function () {
-							return '{{__('text.No results found')}}';
-						}
-					},
-				});
-			}
-			else {
-
-				$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
-					'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
-                    '                       									 	<label class="content-label">Sr. No</label>\n' +
-					'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
-					'                       									 </div>\n' +
-					'\n' +
-					'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
-					'                                                            <input value="' + basic_price + '" type="hidden" id="basic_price" name="basic_price[]">\n' +
-					'                                                            <input value="' + rate + '" type="hidden" id="rate" name="rate[]">\n' +
-					'                                                            <input value="' + price + '" type="hidden" id="row_total" name="total[]">\n' +
-					'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
-					'                                                            <input type="hidden" value="' + childsafe + '" id="childsafe" name="childsafe[]">\n' +
-					'                                                            <input type="hidden" value="' + ladderband + '" id="ladderband" name="ladderband[]">\n' +
-					'                                                            <input type="hidden" value="' + ladderband_value + '" id="ladderband_value" name="ladderband_value[]">\n' +
-					'                                                            <input type="hidden" value="' + ladderband_price_impact + '" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
-					'                                                            <input type="hidden" value="' + ladderband_impact_type + '" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
-					'                                                            <input type="hidden" value="' + area_conflict + '" id="area_conflict" name="area_conflict[]">\n' +
-					'                                                            <input type="hidden" value="' + delivery_days + '" id="delivery_days" name="delivery_days[]">\n' +
-					'                                                            <input type="hidden" value="' + price_based_option + '" id="price_based_option" name="price_based_option[]">\n' +
-					'                                                            <input type="hidden" value="' + base_price + '" id="base_price" name="base_price[]">\n' +
-                    '                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
-                    '                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
-					'\n' +
-					'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Supplier</label>\n' +
-					'\n' +
-					'                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
-					'\n' +
-					suppliers +
-					'\n' +
-					'                                                                </select>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div style="width: 22%;" class="products content item3 full-res">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Product</label>\n' +
-					'\n' +
-					'                                                                <select name="products[]" class="js-data-example-ajax">\n' +
-					'\n' +
-					products +
-					'\n' +
-					'                                                                </select>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="width item4 content" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Width</label>\n' +
-					'\n' +
-					'                                                                <div class="m-box">\n' +
-					'                                                                	<input ' + width_readonly + ' value="' + width + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
-					'                                                                   <input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="' + width_unit + '">\n' +
-					'                                                                </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="height item5 content" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Height</label>\n' +
-					'\n' +
-					'                                                                <div class="m-box">\n' +
-					'                                                                	<input ' + height_readonly + ' value="' + height + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
-					'                                                                	<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="' + height_unit + '">\n' +
-					'                                                                </div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item6" style="width: 7%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Art.</label>\n' +
-					'\n' +
-					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
-					'																	<input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
-					'																 </div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item7" style="width: 7%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Arb.</label>\n' +
-					'\n' +
-					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input value="' + labor_impact + '" type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">\n' +
-					'                                                                	<input value="' + labor_impact_old + '" type="hidden" class="labor_impact_old">\n' +
-					'																 </div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item8" style="width: 10%;">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">Discount</label>\n' +
-					'\n' +
-					'																<input type="text" value="' + total_discount + '" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
-					'																<input type="hidden" value="' + total_discount_old + '" class="total_discount_old">\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div style="width: 7%;" class="content item9">\n' +
-					'\n' +
-					'                       									 	<label class="content-label">€ Total</label>\n' +
-					'\n' +
-					'																<div class="price res-white">' + price_text + '</div>\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">\n' +
-					'\n' +
-					last_column +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
-					'\n' +
-					'																<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" aria-expanded="true" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'															<div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse in" aria-expanded="true">\n' +
-					'\n' +
-					'                       									 	<div style="width: 25%;" class="color item12">\n' +
-					'\n' +
-					'																	<label>Color</label>\n' +
-					'\n' +
-					'                                                                	<select name="colors[]" class="js-data-example-ajax2">\n' +
-					'\n' +
-					colors +
-					'\n' +
-					'                                                                	</select>\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'																<div style="width: 25%;margin-left: 10px;" class="model item13">\n' +
-					'\n' +
-					'																	<label>Model</label>\n' +
-					'\n' +
-					'                                                                	<select name="models[]" class="js-data-example-ajax3">\n' +
-					'\n' +
-					models +
-					'\n' +
-					'                                                                	</select>\n' +
-					'                                                                   <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="' + model_impact_value + '">\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
-					'\n' +
-					'																	<label>Discount %</label>\n' +
-					'\n' +
-					'																	<input value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" name="discount[]">\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'																<div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">\n' +
-					'\n' +
-					'																	<label>Labor Discount %</label>\n' +
-					'\n' +
-					'																	<input value="' + labor_discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" name="labor_discount[]">\n' +
-					'\n' +
-					'																</div>\n' +
-					'\n' +
-					'                                                            </div>\n' +
-					'\n' +
-					'                                                        </div>');
-
-				var last_row = $('#products_table .content-div:last');
-
-				last_row.find('.js-data-example-ajax').val(product);
-				last_row.find('.js-data-example-ajax1').val(supplier);
-				last_row.find('.js-data-example-ajax2').val(color);
-				last_row.find('.js-data-example-ajax3').val(model);
-
-				if (features) {
-
-					$('#menu1').append('<div data-id="' + rowCount + '" style="margin: 0;" class="form-group">\n' + features + '</div>');
-
-					$('#menu1').find(`[data-id='${rowCount}']`).find('input[name="qty[]"]').val(qty);
-
-					if (childsafe == 1) {
-						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').attr('name', 'childsafe_option' + rowCount);
-						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe_diff').attr('name', 'childsafe_diff' + rowCount);
-						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').attr('name', 'childsafe_answer' + rowCount);
-						$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_x').val(childsafe_x);
-						$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_y').val(childsafe_y);
-						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').val(childsafe_question);
-						$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').val(childsafe_answer);
-					}
-
-					features_selects.each(function (index, select) {
-
-						$('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
-
-						if ($(this).parent().find('.f_id').val() == 0) {
-							$('#myModal').find('.modal-body').append('<div class="sub-tables" data-id="' + rowCount + '">\n' + subs + '</div>');
-						}
-
-					});
-
-					$('#menu1').find(`[data-id='${rowCount}']`).each(function (i, obj) {
-
-						$(obj).find('.ladderband-btn').attr('data-id', rowCount);
-						$(obj).find('.feature-select').attr('name', 'features' + rowCount + '[]');
-						$(obj).find('.f_price').attr('name', 'f_price' + rowCount + '[]');
-						$(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
-						$(obj).find('.f_area').attr('name', 'f_area' + rowCount + '[]');
-						$(obj).find('.sub_feature').attr('name', 'sub_feature' + rowCount + '[]');
-						$(obj).find('#childsafe_x').attr('name', 'childsafe_x' + rowCount);
-						$(obj).find('#childsafe_y').attr('name', 'childsafe_y' + rowCount);
-
-					});
-
-					$('#myModal').find('.modal-body').find(`[data-id='${rowCount}']`).each(function (i, obj) {
-
-						$(obj).find('.sizeA').each(function (b, obj1) {
-
-							if ($(this).val() == 1) {
-								$(this).prev('input').prop("checked", true);
-							}
+							$(obj).find('.sub_product_id').attr('name', 'sub_product_id' + rowCount + '[]');
+							$(obj).find('.sizeA').attr('name', 'sizeA' + rowCount + '[]');
+							$(obj).find('.sizeB').attr('name', 'sizeB' + rowCount + '[]');
+							$(obj).find('.cus_radio').attr('name', 'cus_radio' + rowCount + '[]');
+							$(obj).find('.cus_radio').attr('data-id', rowCount);
 
 						});
 
-						$(obj).find('.sizeB').each(function (c, obj2) {
+					}
 
-							if ($(this).val() == 1) {
-								$(this).prev('input').prop("checked", true);
+					focus_row(last_row);
+
+					last_row.find(".js-data-example-ajax").select2({
+						width: '100%',
+						height: '200px',
+						placeholder: "{{__('text.Select Product')}}",
+						allowClear: true,
+						"language": {
+							"noResults": function () {
+								return '{{__('text.No results found')}}';
 							}
-
-						});
-
-						$(obj).find('.sub_product_id').attr('name', 'sub_product_id' + rowCount + '[]');
-						$(obj).find('.sizeA').attr('name', 'sizeA' + rowCount + '[]');
-						$(obj).find('.sizeB').attr('name', 'sizeB' + rowCount + '[]');
-						$(obj).find('.cus_radio').attr('name', 'cus_radio' + rowCount + '[]');
-						$(obj).find('.cus_radio').attr('data-id', rowCount);
-
+						},
 					});
 
+					last_row.find(".js-data-example-ajax1").select2({
+						width: '100%',
+						height: '200px',
+						placeholder: "Select Supplier",
+						allowClear: true,
+						"language": {
+							"noResults": function () {
+								return '{{__('text.No results found')}}';
+							}
+						},
+					});
+
+					last_row.find(".js-data-example-ajax2").select2({
+						width: '100%',
+						height: '200px',
+						placeholder: "Select Color",
+						allowClear: true,
+						"language": {
+							"noResults": function () {
+								return '{{__('text.No results found')}}';
+							}
+						},
+					});
+
+					last_row.find(".js-data-example-ajax3").select2({
+						width: '100%',
+						height: '200px',
+						placeholder: "Select Model",
+						allowClear: true,
+						"language": {
+							"noResults": function () {
+								return '{{__('text.No results found')}}';
+							}
+						},
+					});
 				}
 
-				focus_row(last_row);
-
-				last_row.find(".js-data-example-ajax").select2({
-					width: '100%',
-					height: '200px',
-					placeholder: "{{__('text.Select Product')}}",
-					allowClear: true,
-					"language": {
-						"noResults": function () {
-							return '{{__('text.No results found')}}';
-						}
-					},
-				});
-
-				last_row.find(".js-data-example-ajax1").select2({
-					width: '100%',
-					height: '200px',
-					placeholder: "Select Supplier",
-					allowClear: true,
-					"language": {
-						"noResults": function () {
-							return '{{__('text.No results found')}}';
-						}
-					},
-				});
-
-				last_row.find(".js-data-example-ajax2").select2({
-					width: '100%',
-					height: '200px',
-					placeholder: "Select Color",
-					allowClear: true,
-					"language": {
-						"noResults": function () {
-							return '{{__('text.No results found')}}';
-						}
-					},
-				});
-
-				last_row.find(".js-data-example-ajax3").select2({
-					width: '100%',
-					height: '200px',
-					placeholder: "Select Model",
-					allowClear: true,
-					"language": {
-						"noResults": function () {
-							return '{{__('text.No results found')}}';
-						}
-					},
-				});
-			}
-
-			calculate_total();
-		}
-
-		$(document).on('click', '#products_table .content-div', function (e) {
-
-			if (e.target.id !== "next-row-td" && e.target.id !== "next-row-span" && e.target.id !== "next-row-icon") {
-				focus_row($(this));
-			}
-
-		});
-
-		$(document).on('click', '.next-row', function () {
-
-			if ($(this).parents(".content-div").next('.content-div').length == 0) {
-				add_row();
-			}
-			else {
-				var next_row = $(this).parents(".content-div").next('.content-div');
-				focus_row(next_row);
-			}
-		});
-
-		$(document).on('click', '.add-row', function () {
-
-			add_row();
-
-		});
-
-		$(document).on('click', '.remove-row', function () {
-
-			var rowCount = $('#products_table .content-div').length;
-
-			var current = $(this).parents('.content-div');
-
-			var id = current.data('id');
-
-			if (rowCount != 1) {
-
-				$('#menu1').find(`[data-id='${id}']`).remove();
-				$('#myModal').find('.modal-body').find(`[data-id='${id}']`).remove();
-				$('#myModal2').find('.modal-body').find(`[data-id='${id}']`).remove();
-
-				var next = current.next('.content-div');
-
-				if (next.length < 1) {
-					var next = current.prev('.content-div');
-				}
-
-				focus_row(next);
-
-				current.remove();
-
-				numbering();
 				calculate_total();
 			}
 
-		});
+			$(document).on('click', '#products_table .content-div', function (e) {
 
-		$(document).on('click', '.save-data', function () {
+				if (e.target.id !== "next-row-td" && e.target.id !== "next-row-span" && e.target.id !== "next-row-icon") {
+					focus_row($(this));
+				}
 
-			var customer = $('.customer-select').val();
-			var flag = 0;
+			});
 
-			if (!customer) {
-				flag = 1;
-				$('#cus-box .select2-container--default .select2-selection--single').css('border-color', 'red');
-			}
-			else {
-				$('#cus-box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
-			}
+			$(document).on('click', '.next-row', function () {
+
+				if ($(this).parents(".content-div").next('.content-div').length == 0) {
+					add_row();
+				}
+				else {
+					var next_row = $(this).parents(".content-div").next('.content-div');
+					focus_row(next_row);
+				}
+			});
+
+			$(document).on('click', '.add-row', function () {
+
+				add_row();
+
+			});
+
+			$(document).on('click', '.remove-row', function () {
+
+				var rowCount = $('#products_table .content-div').length;
+
+				var current = $(this).parents('.content-div');
+
+				var id = current.data('id');
+
+				if (rowCount != 1) {
+
+					$('#menu1').find(`[data-id='${id}']`).remove();
+					$('#myModal').find('.modal-body').find(`[data-id='${id}']`).remove();
+					$('#myModal2').find('.modal-body').find(`[data-id='${id}']`).remove();
+
+					var next = current.next('.content-div');
+
+					if (next.length < 1) {
+						var next = current.prev('.content-div');
+					}
+
+					focus_row(next);
+
+					current.remove();
+
+					numbering();
+					calculate_total();
+				}
+
+			});
+
+			$(document).on('click', '.save-data', function () {
+
+				var customer = $('.customer-select').val();
+				var flag = 0;
+
+				if (!customer) {
+					flag = 1;
+					$('#cus-box .select2-container--default .select2-selection--single').css('border-color', 'red');
+				}
+				else {
+					$('#cus-box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+				}
 
 
-			$("[name='suppliers[]']").each(function (i, obj) {
+				$("[name='suppliers[]']").each(function (i, obj) {
 
-				if (!$(this).parent().hasClass('hide')) {
+					if (!$(this).parent().hasClass('hide')) {
+						if (!obj.value) {
+							flag = 1;
+							$(obj).next().find('.select2-selection').css('border', '1px solid red');
+						}
+						else {
+							$(obj).next().find('.select2-selection').css('border', '0');
+						}
+					}
+
+				});
+
+				$("[name='products[]']").each(function (i, obj) {
+
 					if (!obj.value) {
 						flag = 1;
 						$(obj).next().find('.select2-selection').css('border', '1px solid red');
@@ -3901,1593 +4411,1359 @@
 					else {
 						$(obj).next().find('.select2-selection').css('border', '0');
 					}
-				}
-
-			});
-
-			$("[name='products[]']").each(function (i, obj) {
-
-				if (!obj.value) {
-					flag = 1;
-					$(obj).next().find('.select2-selection').css('border', '1px solid red');
-				}
-				else {
-					$(obj).next().find('.select2-selection').css('border', '0');
-				}
-
-			});
-
-
-			$("[name='colors[]']").each(function (i, obj) {
-
-				if (!obj.value) {
-					flag = 1;
-					$(obj).next().find('.select2-selection').css('border', '1px solid red');
-				}
-				else {
-					$(obj).next().find('.select2-selection').css('border', '0');
-				}
-
-			});
-
-
-			$("[name='models[]']").each(function (i, obj) {
-
-				if (!obj.value) {
-					flag = 1;
-					$(obj).next().find('.select2-selection').css('border', '1px solid red');
-				}
-				else {
-					$(obj).next().find('.select2-selection').css('border', '0');
-				}
-
-			});
-
-			var conflict_feature = 0;
-
-			$("[name='row_id[]']").each(function () {
-
-				var id = $(this).val();
-				var conflict_flag = 0;
-
-				var childsafe = $("[name='childsafe_option" + id + "']").val();
-
-				if (!childsafe && childsafe != undefined) {
-					flag = 1;
-					conflict_feature = 1;
-					$("[name='childsafe_option" + id + "']").css('border-bottom', '1px solid red');
-				}
-				else {
-					$("[name='childsafe_option" + id + "']").css('border-bottom', '1px solid lightgrey');
-				}
-
-				$("[name='features" + id + "[]']").each(function (i, obj) {
-
-					var selected_feature = $(this).val();
-					var feature_id = $(this).parent().find('.f_id').val();
-
-					if (feature_id != 0) {
-						if (selected_feature == 0) {
-							flag = 1;
-							conflict_feature = 1;
-							$(this).css('border-bottom', '1px solid red');
-						}
-						else {
-							$(this).css('border-bottom', '1px solid lightgrey');
-						}
-					}
-
-				});
-
-				$("[name='f_area" + id + "[]']").each(function () {
-
-					var conflict = $(this).val();
-
-					if (conflict == 1) {
-						conflict_flag = 1;
-					}
 
 				});
 
 
-				if (conflict_flag == 1) {
-					flag = 1;
-					$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
-					$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
-				}
-				else {
-					var area_conflict = $('#products_table').find(`[data-id='${id}']`).find('#area_conflict').val();
+				$("[name='colors[]']").each(function (i, obj) {
 
-					if (area_conflict == 3) {
+					if (!obj.value) {
 						flag = 1;
-						$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
-						$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
-					}
-					else if (area_conflict == 2) {
-						flag = 1;
-						$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '0');
-						$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
-					}
-					else if (area_conflict == 1) {
-						flag = 1;
-						$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
-						$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '0');
+						$(obj).next().find('.select2-selection').css('border', '1px solid red');
 					}
 					else {
-						if (!$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').val()) {
+						$(obj).next().find('.select2-selection').css('border', '0');
+					}
+
+				});
+
+
+				$("[name='models[]']").each(function (i, obj) {
+
+					if (!obj.value) {
+						flag = 1;
+						$(obj).next().find('.select2-selection').css('border', '1px solid red');
+					}
+					else {
+						$(obj).next().find('.select2-selection').css('border', '0');
+					}
+
+				});
+
+				var conflict_feature = 0;
+
+				$("[name='row_id[]']").each(function () {
+
+					var id = $(this).val();
+					var conflict_flag = 0;
+
+					var childsafe = $("[name='childsafe_option" + id + "']").val();
+
+					if (!childsafe && childsafe != undefined) {
+						flag = 1;
+						conflict_feature = 1;
+						$("[name='childsafe_option" + id + "']").css('border-bottom', '1px solid red');
+					}
+					else {
+						$("[name='childsafe_option" + id + "']").css('border-bottom', '1px solid lightgrey');
+					}
+
+					$("[name='features" + id + "[]']").each(function (i, obj) {
+
+						var selected_feature = $(this).val();
+						var feature_id = $(this).parent().find('.f_id').val();
+
+						if (feature_id != 0) {
+							if (selected_feature == 0) {
+								flag = 1;
+								conflict_feature = 1;
+								$(this).css('border-bottom', '1px solid red');
+							}
+							else {
+								$(this).css('border-bottom', '1px solid lightgrey');
+							}
+						}
+
+					});
+
+					$("[name='f_area" + id + "[]']").each(function () {
+
+						var conflict = $(this).val();
+
+						if (conflict == 1) {
+							conflict_flag = 1;
+						}
+
+					});
+
+
+					if (conflict_flag == 1) {
+						flag = 1;
+						$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
+						$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
+					}
+					else {
+						var area_conflict = $('#products_table').find(`[data-id='${id}']`).find('#area_conflict').val();
+
+						if (area_conflict == 3) {
 							flag = 1;
 							$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
-						}
-						else {
-							$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '0');
-						}
-
-						if (!$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').val()) {
-							flag = 1;
 							$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
 						}
-						else {
+						else if (area_conflict == 2) {
+							flag = 1;
+							$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '0');
+							$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
+						}
+						else if (area_conflict == 1) {
+							flag = 1;
+							$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
 							$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '0');
 						}
+						else {
+							if (!$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').val()) {
+								flag = 1;
+								$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '1px solid red');
+							}
+							else {
+								$('#products_table').find(`[data-id='${id}']`).find('.width').find('.m-input').css('border', '0');
+							}
+
+							if (!$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').val()) {
+								flag = 1;
+								$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '1px solid red');
+							}
+							else {
+								$('#products_table').find(`[data-id='${id}']`).find('.height').find('.m-input').css('border', '0');
+							}
+						}
 					}
+
+				});
+
+				if (conflict_feature) {
+
+					Swal.fire({
+						icon: 'error',
+						title: '{{__('text.Oops...')}}',
+						text: 'Feature should not be empty!',
+					});
+
+				}
+
+				if (!flag) {
+					$('#form-quote').submit();
 				}
 
 			});
 
-			if (conflict_feature) {
+			$(document).on('click', '.copy-row', function () {
 
-				Swal.fire({
-					icon: 'error',
-					title: '{{__('text.Oops...')}}',
-					text: 'Feature should not be empty!',
-				});
+				var current = $(this).parents('.content-div');
+				var id = current.data('id');
+				var childsafe = current.find('#childsafe').val();
+				var ladderband = current.find('#ladderband').val();
+				var ladderband_value = current.find('#ladderband_value').val();
+				var ladderband_price_impact = current.find('#ladderband_price_impact').val();
+				var ladderband_impact_type = current.find('#ladderband_impact_type').val();
+				var area_conflict = current.find('#area_conflict').val();
+				var delivery_days = current.find('#delivery_days').val();
+				var rate = current.find('#rate').val();
+				var basic_price = current.find('#basic_price').val();
+				var price = current.find('#row_total').val();
+				var products = current.find('.js-data-example-ajax').html();
+				var product = current.find('.js-data-example-ajax').val();
+				var suppliers = current.find('.js-data-example-ajax1').html();
+				var supplier = current.find('.js-data-example-ajax1').val();
+				var colors = current.find('.js-data-example-ajax2').html();
+				var color = current.find('.js-data-example-ajax2').val();
+				var models = current.find('.js-data-example-ajax3').html();
+				var model = current.find('.js-data-example-ajax3').val();
+				var model_impact_value = current.find('.model_impact_value').val();
+				var width = current.find('.width').find('.m-input').val();
+				var width_unit = current.find('.width').find('.measure-unit').val();
+				var height = current.find('.height').find('.m-input').val();
+				var height_unit = current.find('.height').find('.measure-unit').val();
+				var price_text = current.find('.price').text();
+				var features = $('#menu1').find(`[data-id='${id}']`).html();
+				var childsafe_question = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-select').val();
+				var childsafe_answer = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-answer').val();
+				var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
+				var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
+				var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
+				var childsafe_x = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_x').val();
+				var childsafe_y = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_y').val();
+				var price_based_option = current.find('#price_based_option').val();
+				var base_price = current.find('#base_price').val();
+				var supplier_margin = current.find('#supplier_margin').val();
+				var retailer_margin = current.find('#retailer_margin').val();
+				var price_before_labor = current.find('.price_before_labor').val();
+				var price_before_labor_old = current.find('.price_before_labor_old').val();
+				var labor_impact = current.find('.labor_impact').val();
+				var labor_impact_old = current.find('.labor_impact_old').val();
+				var discount = current.find('.discount-box').find('.discount_values').val();
+				var labor_discount = current.find('.labor-discount-box').find('.labor_discount_values').val();
+				var total_discount = current.find('.total_discount').val();
+				var total_discount_old = current.find('.total_discount_old').val();
+				var last_column = current.find('#next-row-td').html();
 
-			}
+				var width_readonly = '';
+				var height_readonly = '';
 
-			if (!flag) {
-                $('#form-quote').submit();
-			}
+				if (price_based_option == 2) {
+					height_readonly = 'readonly';
+				}
+				else if (price_based_option == 3) {
+					width_readonly = 'readonly';
+				}
 
-		});
+				add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount, labor_discount, total_discount, total_discount_old, last_column);
 
-		$(document).on('click', '.copy-row', function () {
+			});
 
-			var current = $(this).parents('.content-div');
-			var id = current.data('id');
-			var childsafe = current.find('#childsafe').val();
-			var ladderband = current.find('#ladderband').val();
-			var ladderband_value = current.find('#ladderband_value').val();
-			var ladderband_price_impact = current.find('#ladderband_price_impact').val();
-			var ladderband_impact_type = current.find('#ladderband_impact_type').val();
-			var area_conflict = current.find('#area_conflict').val();
-			var delivery_days = current.find('#delivery_days').val();
-			var rate = current.find('#rate').val();
-			var basic_price = current.find('#basic_price').val();
-			var price = current.find('#row_total').val();
-			var products = current.find('.js-data-example-ajax').html();
-			var product = current.find('.js-data-example-ajax').val();
-			var suppliers = current.find('.js-data-example-ajax1').html();
-			var supplier = current.find('.js-data-example-ajax1').val();
-			var colors = current.find('.js-data-example-ajax2').html();
-			var color = current.find('.js-data-example-ajax2').val();
-			var models = current.find('.js-data-example-ajax3').html();
-			var model = current.find('.js-data-example-ajax3').val();
-			var model_impact_value = current.find('.model_impact_value').val();
-			var width = current.find('.width').find('.m-input').val();
-			var width_unit = current.find('.width').find('.measure-unit').val();
-			var height = current.find('.height').find('.m-input').val();
-			var height_unit = current.find('.height').find('.measure-unit').val();
-			var price_text = current.find('.price').text();
-			var features = $('#menu1').find(`[data-id='${id}']`).html();
-			var childsafe_question = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-select').val();
-			var childsafe_answer = $('#menu1').find(`[data-id='${id}']`).find('.childsafe-answer').val();
-			var features_selects = $('#menu1').find(`[data-id='${id}']`).find('.feature-select');
-			var qty = $('#menu1').find(`[data-id='${id}']`).find('input[name="qty[]"]').val();
-			var subs = $('#myModal').find('.modal-body').find(`[data-id='${id}']`).html();
-			var childsafe_x = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_x').val();
-			var childsafe_y = $('#menu1').find(`[data-id='${id}']`).find('#childsafe_y').val();
-			var price_based_option = current.find('#price_based_option').val();
-			var base_price = current.find('#base_price').val();
-            var supplier_margin = current.find('#supplier_margin').val();
-            var retailer_margin = current.find('#retailer_margin').val();
-			var price_before_labor = current.find('.price_before_labor').val();
-			var price_before_labor_old = current.find('.price_before_labor_old').val();
-			var labor_impact = current.find('.labor_impact').val();
-			var labor_impact_old = current.find('.labor_impact_old').val();
-			var discount = current.find('.discount-box').find('.discount_values').val();
-			var labor_discount = current.find('.labor-discount-box').find('.labor_discount_values').val();
-			var total_discount = current.find('.total_discount').val();
-			var total_discount_old = current.find('.total_discount_old').val();
-			var last_column = current.find('#next-row-td').html();
+			$(document).on('keypress', "input[name='labor_impact[]']", function (e) {
 
-			var width_readonly = '';
-			var height_readonly = '';
+				e = e || window.event;
+				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+				var val = String.fromCharCode(charCode);
 
-			if (price_based_option == 2) {
-				height_readonly = 'readonly';
-			}
-			else if (price_based_option == 3) {
-				width_readonly = 'readonly';
-			}
-
-			add_row(true, rate, basic_price, price, products, product, suppliers, supplier, colors, color, models, model, model_impact_value, width, width_unit, height, height_unit, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_based_option, base_price, supplier_margin, retailer_margin, width_readonly, height_readonly, price_before_labor, price_before_labor_old, labor_impact, labor_impact_old, discount, labor_discount, total_discount, total_discount_old, last_column);
-
-		});
-
-		$(document).on('keypress', "input[name='labor_impact[]']", function (e) {
-
-			e = e || window.event;
-			var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-			var val = String.fromCharCode(charCode);
-
-			if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-			{
-				e.preventDefault();
-				return false;
-			}
-
-			if (e.which == 44) {
-				if (this.value.indexOf(',') > -1) {
+				if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+				{
 					e.preventDefault();
 					return false;
 				}
-			}
 
-			var num = $(this).attr("maskedFormat").toString().split(',');
-			var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-			if (!regex.test(this.value)) {
-				this.value = this.value.substring(0, this.value.length - 1);
-			}
-
-		});
-
-		$(document).on('keypress', "input[name='qty[]']", function (e) {
-
-			e = e || window.event;
-			var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-			var val = String.fromCharCode(charCode);
-
-			if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-			{
-				e.preventDefault();
-				return false;
-			}
-
-			if (e.which == 44) {
-				e.preventDefault();
-				return false;
-			}
-
-			var num = $(this).attr("maskedFormat").toString().split(',');
-			var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-			if (!regex.test(this.value)) {
-				this.value = this.value.substring(0, this.value.length - 1);
-			}
-
-		});
-
-		$(document).on('keypress', ".childsafe_values, .discount_values, .labor_discount_values", function (e) {
-
-			e = e || window.event;
-			var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-			var val = String.fromCharCode(charCode);
-
-			if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-			{
-				e.preventDefault();
-				return false;
-			}
-
-			if (e.which == 44) {
-				e.preventDefault();
-				return false;
-			}
-
-		});
-
-		$(document).on('input', ".discount_values, .labor_discount_values", function (e) {
-
-			calculate_total();
-
-		});
-
-
-		$(document).on('input', "input[name='qty[]']", function (e) {
-
-			calculate_total(1);
-
-		});
-
-		$(document).on('keypress', "input[name='width[]']", function (e) {
-
-			e = e || window.event;
-			var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-			var val = String.fromCharCode(charCode);
-
-			if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-			{
-				e.preventDefault();
-				return false;
-			}
-
-			if (e.which == 44) {
-				if (this.value.indexOf(',') > -1) {
-					e.preventDefault();
-					return false;
-				}
-			}
-
-			var num = $(this).attr("maskedFormat").toString().split(',');
-			var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-			if (!regex.test(this.value)) {
-				this.value = this.value.substring(0, this.value.length - 1);
-			}
-
-		});
-
-		$(document).on('keypress', "input[name='height[]']", function (e) {
-
-			e = e || window.event;
-			var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-			var val = String.fromCharCode(charCode);
-
-			if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-			{
-				e.preventDefault();
-				return false;
-			}
-
-			if (e.which == 44) {
-				if (this.value.indexOf(',') > -1) {
-					e.preventDefault();
-					return false;
-				}
-			}
-
-			var num = $(this).attr("maskedFormat").toString().split(',');
-			var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-			if (!regex.test(this.value)) {
-				this.value = this.value.substring(0, this.value.length - 1);
-			}
-
-		});
-
-		$(document).on('focusout', "input[name='qty[]'], input[name='labor_impact[]']", function (e) {
-
-			if (!$(this).val()) {
-				$(this).val(0);
-			}
-
-			if ($(this).val().slice($(this).val().length - 1) == ',') {
-				var val = $(this).val();
-				val = val + '00';
-				$(this).val(val);
-			}
-
-		});
-
-		$(document).on('focusout', "input[name='width[]'], input[name='height[]']", function (e) {
-
-			if ($(this).val().slice($(this).val().length - 1) == ',') {
-				var val = $(this).val();
-				val = val + '00';
-				$(this).val(val);
-			}
-		});
-
-		$(document).on('input', "input[name='width[]']", function (e) {
-
-			var current = $(this);
-			var row_id = current.parents(".content-div").data('id');
-
-			var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
-			var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
-
-			var width = current.val();
-			width = width.replace(/\,/g, '.');
-
-			var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
-			height = height.replace(/\,/g, '.');
-
-			var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
-			var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
-			var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-			var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
-			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-
-			if (width && height && color && model && product) {
-
-				if ($(this).parents(".content-div").find('.suppliers').hasClass('hide')) {
-					var margin = 0;
-				}
-				else {
-					var margin = 1;
-				}
-
-				$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-
-				$.ajax({
-					type: "GET",
-					data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
-					url: "<?php echo url('/aanbieder/get-price')?>",
-					success: function (data) {
-
-						if (typeof data[0].value !== 'undefined') {
-
-							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-							if (data[0].value === 'both') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
-							}
-							else if (data[0].value === 'x_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
-							}
-							else if (data[0].value === 'y_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
-							}
-							else {
-								$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
-								var childsafe = data[3].childsafe;
-
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-
-								if (price_based_option == 1) {
-									var price = data[0].value;
-									var org = data[0].value;
-								}
-								else {
-									var price = base_price;
-									var org = base_price;
-								}
-
-								var basic_price = price;
-
-								/*if (margin == 1) {
-									if (data[2]) {
-										price = parseFloat(price);
-										var supplier_margin = data[2].margin;
-										var retailer_margin = data[2].retailer_margin;
-
-                                        $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val(supplier_margin);
-                                        $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val(retailer_margin);
-
-										if (supplier_margin && retailer_margin) {
-											price = (price / supplier_margin) * retailer_margin;
-											price = price.toFixed(2);
-										}
-									}
-								}*/
-
-								// var features = '';
-								var count_features = 0;
-								var f_value = 0;
-                                var m1_impact = data[3].m1_impact;
-                                var m2_impact = data[3].m2_impact;
-                                var m1_impact_value = 0;
-                                var m2_impact_value = 0;
-
-								// if (childsafe == 1) {
-
-								//     count_features = count_features + 1;
-
-								// 	var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-								// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-								// 		'</div></div>\n' +
-								// 		'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-								// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-								// 		'</div></div>\n' +
-								// 		'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-								// 		'<option value="">Select any option</option>\n' +
-								// 		'<option value="2">Add childsafety clip</option>\n' +
-								// 		'</select>\n' +
-								// 		'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-								// 		'</div></div>\n';
-
-								// 	features = features + content;
-
-								// }
-
-								// if (ladderband == 1) {
-
-								// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-								// 		'<option value="0">No</option>\n' +
-								// 		'<option value="1">Yes</option>\n' +
-								// 		'</select>\n' +
-								// 		'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-								// 		'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-								// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-								// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-								// 		'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
-
-								// 	features = features + content;
-
-								// }
-
-								// $.each(data[1], function (index, value) {
-
-                                //     count_features = count_features + 1;
-
-								// 	var opt = '<option value="0">Select Feature</option>';
-
-								// 	$.each(value.features, function (index1, value1) {
-
-								// 		opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
-
-								// 	});
-
-								// 	if (value.comment_box == 1) {
-								// 		var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
-								// 	}
-								// 	else {
-								// 		var icon = '';
-								// 	}
-
-								// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-								// 		'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-								// 		'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-								// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-								// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-								// 		'</div>' + icon + '</div>\n';
-
-								// 	features = features + content;
-
-								// });
-
-                                if(count_features > 0)
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-                                }
-                                else
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-                                }
-
-								// if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-								// 	$('#menu1').find(`[data-id='${row_id}']`).remove();
-								// }
-
-								// $('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-								// 	'\n' +
-								// 	'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 	'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-								// 	'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-								// 	'</div></div>' + features +
-								// 	'</div>');
-
-								if (data[3].max_size) {
-
-									var sq = (width * height) / 10000;
-									var max_size = data[3].max_size;
-
-									if (sq > max_size) {
-										Swal.fire({
-											icon: 'error',
-											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
-										});
-
-										current.parent().find('.f_area').val(1);
-									}
-								}
-								else {
-									current.parent().find('.f_area').val(0);
-								}
-
-                                var model_impact_value = data[3].value;
-
-                                if (m1_impact == 1) {
-
-                                    m1_impact_value = model_impact_value * (width / 100);
-
-                                }
-
-                                if (m2_impact == 1) {
-
-                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
-
-                                }
-
-                                if (data[3].price_impact == 1) {
-
-                                    if (data[3].impact_type == 0) {
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-                                        price = price.toFixed(2);
-
-                                    }
-                                    else {
-
-                                        var per = (model_impact_value) / 100;
-                                        model_impact_value = basic_price * per;
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-                                        price = price.toFixed(2);
-                                    }
-
-                                }
-
-                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
-
-                                if(margin == 1)
-                                {
-                                    if (data[2]) {
-
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if (supplier_margin && retailer_margin) {
-                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
-                                        }
-                                    }
-                                }
-
-                                price = parseFloat(price).toFixed(2);
-
-								var price_before_labor = parseFloat(price).toFixed(2);
-								var labor = 0;
-
-								if (data[4]) {
-									labor = data[4].labor;
-									labor = labor * (width / 100);
-									//labor = Math.round(labor);
-									price = parseFloat(price) + parseFloat(labor);
-									price = price.toFixed(2);
-									labor = parseFloat(labor).toFixed(2);
-								}
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
-								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-							}
-						}
-						else {
-
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-						}
-
-						calculate_total();
+				if (e.which == 44) {
+					if (this.value.indexOf(',') > -1) {
+						e.preventDefault();
+						return false;
 					}
-				});
-			}
-			else
-            {
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-            }
-
-		});
-
-		$(document).on('input', "input[name='height[]']", function (e) {
-
-			var current = $(this);
-			var row_id = current.parents(".content-div").data('id');
-
-			var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
-			var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
-
-			var height = current.val();
-			height = height.replace(/\,/g, '.');
-
-			var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
-			width = width.replace(/\,/g, '.');
-
-			var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
-			var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
-			var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-			var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
-			$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-
-			if (width && height && color && model && product) {
-
-				if ($(this).parents(".content-div").find('.suppliers').hasClass('hide')) {
-					var margin = 0;
-				}
-				else {
-					var margin = 1;
 				}
 
-				$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-				$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-
-				$.ajax({
-					type: "GET",
-					data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
-					url: "<?php echo url('/aanbieder/get-price')?>",
-					success: function (data) {
-
-						if (typeof data[0].value !== 'undefined') {
-
-							$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-							if (data[0].value === 'both') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
-							}
-							else if (data[0].value === 'x_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
-							}
-							else if (data[0].value === 'y_axis') {
-
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
-								});
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
-							}
-							else {
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
-								var childsafe = data[3].childsafe;
-
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-
-								if (price_based_option == 1) {
-									var price = data[0].value;
-									var org = data[0].value;
-								}
-								else {
-									var price = base_price;
-									var org = base_price;
-								}
-
-								var basic_price = price;
-
-								/*if (margin == 1) {
-									if (data[2]) {
-										price = parseFloat(price);
-										var supplier_margin = data[2].margin;
-										var retailer_margin = data[2].retailer_margin;
-
-                                        $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val(supplier_margin);
-                                        $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val(retailer_margin);
-
-										if (supplier_margin && retailer_margin) {
-											price = (price / supplier_margin) * retailer_margin;
-											price = price.toFixed(2);
-										}
-									}
-								}*/
-
-								// var features = '';
-								var count_features = 0;
-								var f_value = 0;
-                                var m1_impact = data[3].m1_impact;
-                                var m2_impact = data[3].m2_impact;
-                                var m1_impact_value = 0;
-                                var m2_impact_value = 0;
-
-								// if (childsafe == 1) {
-
-								//     count_features = count_features + 1;
-
-								// 	var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-								// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-								// 		'</div></div>\n' +
-								// 		'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-								// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-								// 		'</div></div>\n' +
-								// 		'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-								// 		'<option value="">Select any option</option>\n' +
-								// 		'<option value="2">Add childsafety clip</option>\n' +
-								// 		'</select>\n' +
-								// 		'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-								// 		'</div></div>\n';
-
-								// 	features = features + content;
-
-								// }
-
-								// if (ladderband == 1) {
-
-								// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-								// 		'<option value="0">No</option>\n' +
-								// 		'<option value="1">Yes</option>\n' +
-								// 		'</select>\n' +
-								// 		'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-								// 		'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-								// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-								// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-								// 		'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+				var num = $(this).attr("maskedFormat").toString().split(',');
+				var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+				if (!regex.test(this.value)) {
+					this.value = this.value.substring(0, this.value.length - 1);
+				}
 
-								// 	features = features + content;
-
-								// }
+			});
 
-								// $.each(data[1], function (index, value) {
+			$(document).on('keypress', "input[name='qty[]']", function (e) {
 
-                                //     count_features = count_features + 1;
+				e = e || window.event;
+				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+				var val = String.fromCharCode(charCode);
 
-								// 	var opt = '<option value="0">Select Feature</option>';
+				if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+				{
+					e.preventDefault();
+					return false;
+				}
 
-								// 	$.each(value.features, function (index1, value1) {
+				if (e.which == 44) {
+					e.preventDefault();
+					return false;
+				}
 
-								// 		opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+				var num = $(this).attr("maskedFormat").toString().split(',');
+				var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+				if (!regex.test(this.value)) {
+					this.value = this.value.substring(0, this.value.length - 1);
+				}
 
-								// 	});
+			});
 
-								// 	if (value.comment_box == 1) {
-								// 		var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
-								// 	}
-								// 	else {
-								// 		var icon = '';
-								// 	}
+			$(document).on('keypress', ".childsafe_values, .discount_values, .labor_discount_values", function (e) {
 
-								// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 		'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-								// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-								// 		'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-								// 		'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-								// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-								// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-								// 		'</div>' + icon + '</div>\n';
+				e = e || window.event;
+				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+				var val = String.fromCharCode(charCode);
 
-								// 	features = features + content;
+				if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+				{
+					e.preventDefault();
+					return false;
+				}
 
-								// });
+				if (e.which == 44) {
+					e.preventDefault();
+					return false;
+				}
 
-                                if(count_features > 0)
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-                                }
-                                else
-                                {
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-                                }
-
-								// if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-								// 	$('#menu1').find(`[data-id='${row_id}']`).remove();
-								// }
-
-								// $('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
-								// 	'\n' +
-								// 	'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								// 	'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
-								// 	'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
-								// 	'</div></div>' + features +
-								// 	'</div>');
-
-								if (data[3].max_size) {
-
-									var sq = (width * height) / 10000;
-									var max_size = data[3].max_size;
-
-									if (sq > max_size) {
-										Swal.fire({
-											icon: 'error',
-											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
-										});
-
-										current.parent().find('.f_area').val(1);
-									}
-
-								}
-								else {
-									current.parent().find('.f_area').val(0);
-								}
-
-                                var model_impact_value = data[3].value;
-
-                                if (m1_impact == 1) {
-
-                                    m1_impact_value = model_impact_value * (width / 100);
-
-                                }
-
-                                if (m2_impact == 1) {
-
-                                    m2_impact_value = model_impact_value * ((width/100) * (height/100));
-
-                                }
-
-								if (data[3].price_impact == 1) {
-
-									if (data[3].impact_type == 0) {
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-										price = price.toFixed(2);
-
-									}
-									else {
-
-										var per = (model_impact_value) / 100;
-                                        model_impact_value = basic_price * per;
-
-                                        price = parseFloat(price) + parseFloat(model_impact_value);
-										price = price.toFixed(2);
-									}
-
-								}
-
-                                price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
-
-                                if(margin == 1)
-                                {
-                                    if (data[2]) {
-
-                                        var supplier_margin = data[2].margin;
-                                        var retailer_margin = data[2].retailer_margin;
-
-                                        if (supplier_margin && retailer_margin) {
-                                            price = (parseFloat(price) / supplier_margin) * retailer_margin;
-                                        }
-                                    }
-                                }
-
-                                price = parseFloat(price).toFixed(2);
-
-								var price_before_labor = parseFloat(price).toFixed(2);
-								var labor = 0;
-
-								if (data[4]) {
-									labor = data[4].labor;
-									labor = labor * (width / 100);
-									//labor = Math.round(labor);
-									price = parseFloat(price) + parseFloat(labor);
-									price = price.toFixed(2);
-									labor = parseFloat(labor).toFixed(2);
-								}
-
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
-								//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-							}
-						}
-						else {
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-							$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-						}
-
-						calculate_total();
+			});
+
+			$(document).on('input', ".discount_values, .labor_discount_values", function (e) {
+
+				calculate_total();
+
+			});
+
+
+			$(document).on('input', "input[name='qty[]']", function (e) {
+
+				calculate_total(1);
+
+			});
+
+			$(document).on('keypress', "input[name='width[]']", function (e) {
+
+				e = e || window.event;
+				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+				var val = String.fromCharCode(charCode);
+
+				if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+				{
+					e.preventDefault();
+					return false;
+				}
+
+				if (e.which == 44) {
+					if (this.value.indexOf(',') > -1) {
+						e.preventDefault();
+						return false;
 					}
-				});
-			}
-			else
-            {
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-            }
-
-		});
-
-		$(document).on('input', '.labor_impact', function () {
-
-			var value = $(this).val();
-			value = value.replace(/\,/g, '.');
-			var row_id = $(this).parents(".content-div").data('id');
-			var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
-			price_before_labor = price_before_labor.replace(/\,/g, '.');
-			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
-			var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-			total_discount = total_discount.replace(/\,/g, '.');
-
-			if (!value) {
-				value = 0;
-			}
-
-			var total = parseFloat(price_before_labor) + parseFloat(value);
-			total = total + parseFloat(total_discount);
-			total = parseFloat(total);
-			total = total.toFixed(2);
-			var price = total;
-			total = total / qty;
-			total = parseFloat(total).toFixed(2);
-			//total = Math.round(total);
-
-			var new_old_value = value / qty;
-			new_old_value = parseFloat(new_old_value).toFixed(2);
-
-			$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(new_old_value);
-			$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
-			$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-			$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-			calculate_total(0,1);
-
-		});
-
-		$(document).on('input', '#childsafe_x, #childsafe_y', function () {
-
-			var id = $(this).attr('id');
-			var row_id = $(this).parent().parent().parent().data('id');
-
-			if (id == 'childsafe_x') {
-				var x = $(this).val();
-				var y = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
-			}
-			else {
-				var x = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
-				var y = $(this).val();
-			}
-
-			var diff = x - y;
-			diff = Math.abs(diff);
-
-			if (x && y) {
-
-				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
-				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
-
-				if (diff <= 150) {
-
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1" selected>Please note not childsafe</option><option value="2">Add childsafety clip</option>');
-
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
-						'\n' +
-						'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
-						'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-						'                                                                                                    <option value="1">Make it childsafe</option>\n' +
-						'                                                                                                    <option value="2">Yes i agree</option>\n' +
-						'                                                                                            </select>\n' +
-						'                                                                                        </div>\n' +
-						'\n' +
-						'                                                                                    </div>');
-
-				}
-				else {
-
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option><option value="3" selected>Yes childsafe</option>');
-
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
-						'\n' +
-						'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
-						'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-						'                                                                                                    <option value="3">Is childsafe</option>\n' +
-						'                                                                                            </select>\n' +
-						'                                                                                        </div>\n' +
-						'\n' +
-						'                                                                                    </div>');
-
 				}
 
-				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe_diff').val(diff);
-
-                var flag = 0;
-
-                var childsafe = $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-select').val();
-
-                if (!childsafe && childsafe != undefined) {
-                    flag = 1;
-                }
-
-                $("[name='features" + row_id + "[]']").each(function (i, obj) {
-
-                    var selected_feature = $(this).val();
-                    var feature_id = $(this).parent().find('.f_id').val();
-
-                    if (feature_id != 0) {
-                        if (selected_feature == 0) {
-                            flag = 1;
-                        }
-                    }
-
-                });
-
-                if(flag == 1)
-                {
-                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                    $('#products_table').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
-                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-                }
-                else
-                {
-                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-                }
-			}
-			else {
-
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-
-				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
-				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
-				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option>');
-			}
-
-		});
-
-		$(document).on('change', '.childsafe-select', function () {
-			var current = $(this);
-			var row_id = current.parent().parent().parent().data('id');
-			var value = current.val();
-			var value_x = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
-			var value_y = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
-
-			if (value_x && value_y) {
-				if (!value) {
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+				var num = $(this).attr("maskedFormat").toString().split(',');
+				var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+				if (!regex.test(this.value)) {
+					this.value = this.value.substring(0, this.value.length - 1);
 				}
-				else if (value == 2 || value == 3) {
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
 
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
-						'\n' +
-						'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
-						'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-						'                                                                                                    <option value="3">Is childsafe</option>\n' +
-						'                                                                                            </select>\n' +
-						'                                                                                        </div>\n' +
-						'\n' +
-						'                                                                                    </div>');
+			});
+
+			$(document).on('keypress', "input[name='height[]']", function (e) {
+
+				e = e || window.event;
+				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+				var val = String.fromCharCode(charCode);
+
+				if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+				{
+					e.preventDefault();
+					return false;
 				}
-				else {
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
 
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
-						'\n' +
-						'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
-						'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-						'                                                                                                    <option value="1">Make it childsafe</option>\n' +
-						'                                                                                                    <option value="2">Yes i agree</option>\n' +
-						'                                                                                            </select>\n' +
-						'                                                                                        </div>\n' +
-						'\n' +
-						'                                                                                    </div>');
+				if (e.which == 44) {
+					if (this.value.indexOf(',') > -1) {
+						e.preventDefault();
+						return false;
+					}
 				}
-			}
-			else {
-				current.val('');
 
-				Swal.fire({
-					icon: 'error',
-					title: '{{__('text.Oops...')}}',
-					text: 'Kindly fill both childsafe values first.',
-				});
-			}
+				var num = $(this).attr("maskedFormat").toString().split(',');
+				var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+				if (!regex.test(this.value)) {
+					this.value = this.value.substring(0, this.value.length - 1);
+				}
 
-		});
+			});
 
-		$(document).on('change', '.feature-select', function () {
+			$(document).on('focusout', "input[name='qty[]'], input[name='labor_impact[]']", function (e) {
 
-			var current = $(this);
-			var row_id = current.parent().parent().parent().data('id');
-			var feature_select = current.val();
-			var id = current.parent().find('.f_id').val();
-			var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
-			width = width.replace(/\,/g, '.');
-			var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
-			height = height.replace(/\,/g, '.');
-			var product_id = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-			var ladderband_value = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val();
-			var ladderband_price_impact = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val();
-			var ladderband_impact_type = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val();
+				if (!$(this).val()) {
+					$(this).val(0);
+				}
 
-			var impact_value = current.next('input').val();
-			var total = $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val();
-			var basic_price = $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val();
-			var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
-			var margin = $('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide');
-			var supplier_margin = $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val();
-            var retailer_margin = $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val();
+				if ($(this).val().slice($(this).val().length - 1) == ',') {
+					var val = $(this).val();
+					val = val + '00';
+					$(this).val(val);
+				}
 
-			total = total - impact_value;
-			var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
-			price_before_labor = price_before_labor - impact_value;
+			});
 
-			if (id == 0) {
+			$(document).on('focusout', "input[name='width[]'], input[name='height[]']", function (e) {
 
-				if (feature_select == 1) {
+				if ($(this).val().slice($(this).val().length - 1) == ',') {
+					var val = $(this).val();
+					val = val + '00';
+					$(this).val(val);
+				}
+			});
 
-					if (ladderband_price_impact == 1) {
-						if (ladderband_impact_type == 0) {
-							impact_value = ladderband_value;
+			$(document).on('input', "input[name='width[]']", function (e) {
 
-                            if(!margin)
-                            {
-                                if (supplier_margin && retailer_margin) {
-                                    if(supplier_margin != 0)
-                                    {
-                                        impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                    }
-                                }
-                            }
+				var current = $(this);
+				var row_id = current.parents(".content-div").data('id');
 
-							impact_value = parseFloat(impact_value).toFixed(2);
-							total = parseFloat(total) + parseFloat(impact_value);
-							total = total.toFixed(2);
-						}
-						else {
-							impact_value = ladderband_value;
-							var per = (impact_value) / 100;
-							impact_value = basic_price * per;
+				var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
+				var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
 
-                            if(!margin)
-                            {
-                                if (supplier_margin && retailer_margin) {
-                                    if(supplier_margin != 0)
-                                    {
-                                        impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                    }
-                                }
-                            }
+				var width = current.val();
+				width = width.replace(/\,/g, '.');
 
-							impact_value = parseFloat(impact_value).toFixed(2);
-							total = parseFloat(total) + parseFloat(impact_value);
-							total = total.toFixed(2);
-						}
+				var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
+				height = height.replace(/\,/g, '.');
+
+				var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
+				var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
+				var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+				var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
+				$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+
+				if (width && height && color && model && product) {
+
+					if ($(this).parents(".content-div").find('.suppliers').hasClass('hide')) {
+						var margin = 0;
 					}
 					else {
-						impact_value = 0;
-						total = parseFloat(total) + parseFloat(impact_value);
-						total = total.toFixed(2);
+						var margin = 1;
 					}
 
-					//total = Math.round(total);
-					price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
-					price_before_labor = parseFloat(price_before_labor).toFixed(2);
-					//price_before_labor = Math.round(price_before_labor);
-
-					current.next('input').val(impact_value);
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
-					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-					calculate_total();
+					$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
 
 					$.ajax({
 						type: "GET",
-						data: "product_id=" + product_id,
-						url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
+						data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
+						url: "<?php echo url('/aanbieder/get-price')?>",
 						success: function (data) {
 
-							$('#myModal').find('.modal-body').find('.sub-tables').hide();
+							if (typeof data[0].value !== 'undefined') {
 
-							if ($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).length > 0) {
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+								$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+
+								if (data[0].value === 'both') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
+								}
+								else if (data[0].value === 'x_axis') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
+								}
+								else if (data[0].value === 'y_axis') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
+								}
+								else {
+									$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
+									var childsafe = data[3].childsafe;
+
+									$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+
+									if (price_based_option == 1) {
+										var price = data[0].value;
+										var org = data[0].value;
+									}
+									else {
+										var price = base_price;
+										var org = base_price;
+									}
+
+									var basic_price = price;
+
+									/*if (margin == 1) {
+                                        if (data[2]) {
+                                            price = parseFloat(price);
+                                            var supplier_margin = data[2].margin;
+                                            var retailer_margin = data[2].retailer_margin;
+
+                                            $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val(supplier_margin);
+                                            $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val(retailer_margin);
+
+                                            if (supplier_margin && retailer_margin) {
+                                                price = (price / supplier_margin) * retailer_margin;
+                                                price = price.toFixed(2);
+                                            }
+                                        }
+                                    }*/
+
+									// var features = '';
+									var count_features = 0;
+									var f_value = 0;
+									var m1_impact = data[3].m1_impact;
+									var m2_impact = data[3].m2_impact;
+									var m1_impact_value = 0;
+									var m2_impact_value = 0;
+
+									// if (childsafe == 1) {
+
+									//     count_features = count_features + 1;
+
+									// 	var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+									// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+									// 		'</div></div>\n' +
+									// 		'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+									// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+									// 		'</div></div>\n' +
+									// 		'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+									// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
+									// 		'<option value="">Select any option</option>\n' +
+									// 		'<option value="2">Add childsafety clip</option>\n' +
+									// 		'</select>\n' +
+									// 		'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
+									// 		'</div></div>\n';
+
+									// 	features = features + content;
+
+									// }
+
+									// if (ladderband == 1) {
+
+									// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+									// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
+									// 		'<option value="0">No</option>\n' +
+									// 		'<option value="1">Yes</option>\n' +
+									// 		'</select>\n' +
+									// 		'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+									// 		'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+									// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+									// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+									// 		'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+
+									// 	features = features + content;
+
+									// }
+
+									// $.each(data[1], function (index, value) {
+
+									//     count_features = count_features + 1;
+
+									// 	var opt = '<option value="0">Select Feature</option>';
+
+									// 	$.each(value.features, function (index1, value1) {
+
+									// 		opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+
+									// 	});
+
+									// 	if (value.comment_box == 1) {
+									// 		var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+									// 	}
+									// 	else {
+									// 		var icon = '';
+									// 	}
+
+									// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
+									// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+									// 		'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+									// 		'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+									// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+									// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+									// 		'</div>' + icon + '</div>\n';
+
+									// 	features = features + content;
+
+									// });
+
+									if(count_features > 0)
+									{
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+									}
+									else
+									{
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+									}
+
+									// if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
+									// 	$('#menu1').find(`[data-id='${row_id}']`).remove();
+									// }
+
+									// $('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
+									// 	'\n' +
+									// 	'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 	'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+									// 	'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+									// 	'</div></div>' + features +
+									// 	'</div>');
+
+									if (data[3].max_size) {
+
+										var sq = (width * height) / 10000;
+										var max_size = data[3].max_size;
+
+										if (sq > max_size) {
+											Swal.fire({
+												icon: 'error',
+												title: '{{__('text.Oops...')}}',
+												text: 'Area is greater than max size: ' + max_size,
+											});
+
+											current.parent().find('.f_area').val(1);
+										}
+									}
+									else {
+										current.parent().find('.f_area').val(0);
+									}
+
+									var model_impact_value = data[3].value;
+
+									if (m1_impact == 1) {
+
+										m1_impact_value = model_impact_value * (width / 100);
+
+									}
+
+									if (m2_impact == 1) {
+
+										m2_impact_value = model_impact_value * ((width/100) * (height/100));
+
+									}
+
+									if (data[3].price_impact == 1) {
+
+										if (data[3].impact_type == 0) {
+
+											price = parseFloat(price) + parseFloat(model_impact_value);
+											price = price.toFixed(2);
+
+										}
+										else {
+
+											var per = (model_impact_value) / 100;
+											model_impact_value = basic_price * per;
+
+											price = parseFloat(price) + parseFloat(model_impact_value);
+											price = price.toFixed(2);
+										}
+
+									}
+
+									price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+
+									if(margin == 1)
+									{
+										if (data[2]) {
+
+											var supplier_margin = data[2].margin;
+											var retailer_margin = data[2].retailer_margin;
+
+											if (supplier_margin && retailer_margin) {
+												price = (parseFloat(price) / supplier_margin) * retailer_margin;
+											}
+										}
+									}
+
+									price = parseFloat(price).toFixed(2);
+
+									var price_before_labor = parseFloat(price).toFixed(2);
+									var labor = 0;
+
+									if (data[4]) {
+										labor = data[4].labor;
+										labor = labor * (width / 100);
+										//labor = Math.round(labor);
+										price = parseFloat(price) + parseFloat(labor);
+										price = price.toFixed(2);
+										labor = parseFloat(labor).toFixed(2);
+									}
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
+									//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
+								}
+							}
+							else {
+
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
 							}
 
-
-							$('#myModal').find('.modal-body').append(
-								'<div class="sub-tables" data-id="' + row_id + '">\n' +
-								'<table style="width: 100%;">\n' +
-								'<thead>\n' +
-								'<tr>\n' +
-								'<th>ID</th>\n' +
-								'<th>Title</th>\n' +
-								'<th>Size 38mm</th>\n' +
-								'<th>Size 25mm</th>\n' +
-								'</tr>\n' +
-								'</thead>\n' +
-								'<tbody>\n' +
-								'</tbody>\n' +
-								'</table>\n' +
-								'</div>'
-							);
-
-							$.each(data, function (index, value) {
-
-								var size1 = value.size1_value;
-								var size2 = value.size2_value;
-
-								if (size1 == 1) {
-									size1 = '<input data-id="' + row_id + '" class="cus_radio" name="cus_radio' + row_id + '[]" type="radio"><input class="cus_value sizeA" type="hidden" value="0" name="sizeA' + row_id + '[]">';
-								}
-								else {
-									size1 = 'X' + '<input class="sizeA" name="sizeA' + row_id + '[]" type="hidden" value="x">';
-								}
-
-								if (size2 == 1) {
-									size2 = '<input data-id="' + row_id + '" class="cus_radio" name="cus_radio' + row_id + '[]" type="radio"><input class="cus_value sizeB" type="hidden" value="0" name="sizeB' + row_id + '[]">';
-								}
-								else {
-									size2 = 'X' + '<input class="sizeB" name="sizeB' + row_id + '[]" type="hidden" value="x">';
-								}
-
-								$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('table').append(
-									'<tr>\n' +
-									'<td><input class="sub_product_id" type="hidden" name="sub_product_id' + row_id + '[]" value="' + value.id + '">' + value.code + '</td>\n' +
-									'<td>' + value.title + '</td>\n' +
-									'<td>' + size1 + '</td>\n' +
-									'<td>' + size2 + '</td>\n' +
-									'</tr>\n'
-								);
-
-							});
-
-							$('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').removeClass('hide');
-							/*$('.top-bar').css('z-index','1');*/
-							$('#myModal').modal('toggle');
-							$('.modal-backdrop').hide();
+							calculate_total();
 						}
 					});
 				}
-				else {
-
-					$('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').addClass('hide');
-					$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-
-					impact_value = 0;
-					total = parseFloat(total) + parseFloat(impact_value);
-					total = total.toFixed(2);
-					//total = Math.round(total);
-					price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
-					price_before_labor = parseFloat(price_before_labor).toFixed(2);
-					//price_before_labor = Math.round(price_before_labor);
-
-					current.next('input').val(impact_value);
-
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
-					$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
-
-					calculate_total();
+				else
+				{
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
 				}
-			}
-			else {
-				var heading = current.find("option:selected").text();
-				var heading_id = current.val();
 
-				$.ajax({
-					type: "GET",
-					data: "id=" + feature_select,
-					url: "<?php echo url('/aanbieder/get-feature-price')?>",
-					success: function (data) {
+			});
 
-						if (current.parent().parent().next('.sub-features').length > 0) {
-							var sub_impact_value = current.parent().parent().next('.sub-features').find('.f_price').val();
-							total = total - sub_impact_value;
-							price_before_labor = price_before_labor - sub_impact_value;
-							current.parent().parent().next('.sub-features').remove();
+			$(document).on('input', "input[name='height[]']", function (e) {
+
+				var current = $(this);
+				var row_id = current.parents(".content-div").data('id');
+
+				var price_based_option = $('#products_table').find(`[data-id='${row_id}']`).find('#price_based_option').val();
+				var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
+
+				var height = current.val();
+				height = height.replace(/\,/g, '.');
+
+				var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
+				width = width.replace(/\,/g, '.');
+
+				var color = $('#products_table').find(`[data-id='${row_id}']`).find('.color').find('select').val();
+				var model = $('#products_table').find(`[data-id='${row_id}']`).find('.model').find('select').val();
+				var product = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+				var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
+				$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+
+				if (width && height && color && model && product) {
+
+					if ($(this).parents(".content-div").find('.suppliers').hasClass('hide')) {
+						var margin = 0;
+					}
+					else {
+						var margin = 1;
+					}
+
+					$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
+
+					$.ajax({
+						type: "GET",
+						data: "product=" + product + "&color=" + color + "&model=" + model + "&width=" + width + "&height=" + height + "&margin=" + margin,
+						url: "<?php echo url('/aanbieder/get-price')?>",
+						success: function (data) {
+
+							if (typeof data[0].value !== 'undefined') {
+
+								$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+
+								if (data[0].value === 'both') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
+								}
+								else if (data[0].value === 'x_axis') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
+								}
+								else if (data[0].value === 'y_axis') {
+
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+									});
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
+								}
+								else {
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
+									var childsafe = data[3].childsafe;
+
+									$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+
+									if (price_based_option == 1) {
+										var price = data[0].value;
+										var org = data[0].value;
+									}
+									else {
+										var price = base_price;
+										var org = base_price;
+									}
+
+									var basic_price = price;
+
+									/*if (margin == 1) {
+                                        if (data[2]) {
+                                            price = parseFloat(price);
+                                            var supplier_margin = data[2].margin;
+                                            var retailer_margin = data[2].retailer_margin;
+
+                                            $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val(supplier_margin);
+                                            $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val(retailer_margin);
+
+                                            if (supplier_margin && retailer_margin) {
+                                                price = (price / supplier_margin) * retailer_margin;
+                                                price = price.toFixed(2);
+                                            }
+                                        }
+                                    }*/
+
+									// var features = '';
+									var count_features = 0;
+									var f_value = 0;
+									var m1_impact = data[3].m1_impact;
+									var m2_impact = data[3].m2_impact;
+									var m1_impact_value = 0;
+									var m2_impact_value = 0;
+
+									// if (childsafe == 1) {
+
+									//     count_features = count_features + 1;
+
+									// 	var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+									// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+									// 		'</div></div>\n' +
+									// 		'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+									// 		'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+									// 		'</div></div>\n' +
+									// 		'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+									// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
+									// 		'<option value="">Select any option</option>\n' +
+									// 		'<option value="2">Add childsafety clip</option>\n' +
+									// 		'</select>\n' +
+									// 		'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
+									// 		'</div></div>\n';
+
+									// 	features = features + content;
+
+									// }
+
+									// if (ladderband == 1) {
+
+									// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+									// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
+									// 		'<option value="0">No</option>\n' +
+									// 		'<option value="1">Yes</option>\n' +
+									// 		'</select>\n' +
+									// 		'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+									// 		'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+									// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+									// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+									// 		'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+
+									// 	features = features + content;
+
+									// }
+
+									// $.each(data[1], function (index, value) {
+
+									//     count_features = count_features + 1;
+
+									// 	var opt = '<option value="0">Select Feature</option>';
+
+									// 	$.each(value.features, function (index1, value1) {
+
+									// 		opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+
+									// 	});
+
+									// 	if (value.comment_box == 1) {
+									// 		var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+									// 	}
+									// 	else {
+									// 		var icon = '';
+									// 	}
+
+									// 	var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 		'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
+									// 		'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+									// 		'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+									// 		'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+									// 		'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+									// 		'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+									// 		'</div>' + icon + '</div>\n';
+
+									// 	features = features + content;
+
+									// });
+
+									if(count_features > 0)
+									{
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+									}
+									else
+									{
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+										$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+									}
+
+									// if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
+									// 	$('#menu1').find(`[data-id='${row_id}']`).remove();
+									// }
+
+									// $('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
+									// 	'\n' +
+									// 	'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+									// 	'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+									// 	'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
+									// 	'</div></div>' + features +
+									// 	'</div>');
+
+									if (data[3].max_size) {
+
+										var sq = (width * height) / 10000;
+										var max_size = data[3].max_size;
+
+										if (sq > max_size) {
+											Swal.fire({
+												icon: 'error',
+												title: '{{__('text.Oops...')}}',
+												text: 'Area is greater than max size: ' + max_size,
+											});
+
+											current.parent().find('.f_area').val(1);
+										}
+
+									}
+									else {
+										current.parent().find('.f_area').val(0);
+									}
+
+									var model_impact_value = data[3].value;
+
+									if (m1_impact == 1) {
+
+										m1_impact_value = model_impact_value * (width / 100);
+
+									}
+
+									if (m2_impact == 1) {
+
+										m2_impact_value = model_impact_value * ((width/100) * (height/100));
+
+									}
+
+									if (data[3].price_impact == 1) {
+
+										if (data[3].impact_type == 0) {
+
+											price = parseFloat(price) + parseFloat(model_impact_value);
+											price = price.toFixed(2);
+
+										}
+										else {
+
+											var per = (model_impact_value) / 100;
+											model_impact_value = basic_price * per;
+
+											price = parseFloat(price) + parseFloat(model_impact_value);
+											price = price.toFixed(2);
+										}
+
+									}
+
+									price = parseFloat(price) + parseFloat(m1_impact_value) + parseFloat(m2_impact_value);
+
+									if(margin == 1)
+									{
+										if (data[2]) {
+
+											var supplier_margin = data[2].margin;
+											var retailer_margin = data[2].retailer_margin;
+
+											if (supplier_margin && retailer_margin) {
+												price = (parseFloat(price) / supplier_margin) * retailer_margin;
+											}
+										}
+									}
+
+									price = parseFloat(price).toFixed(2);
+
+									var price_before_labor = parseFloat(price).toFixed(2);
+									var labor = 0;
+
+									if (data[4]) {
+										labor = data[4].labor;
+										labor = labor * (width / 100);
+										//labor = Math.round(labor);
+										price = parseFloat(price) + parseFloat(labor);
+										price = price.toFixed(2);
+										labor = parseFloat(labor).toFixed(2);
+									}
+
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
+									$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val(model_impact_value);
+									//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+									$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
+									$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
+								}
+							}
+							else {
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.model').find('.model_impact_value').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+							}
+
+							calculate_total();
 						}
+					});
+				}
+				else
+				{
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+				}
 
-						if (data[1].length > 0) {
-							var opt = '<option value="0">Select Feature</option>';
+			});
 
-							$.each(data[1], function (index, value) {
+			$(document).on('input', '.labor_impact', function () {
 
-								opt = opt + '<option value="' + value.id + '">' + value.title + '</option>';
+				var value = $(this).val();
+				value = value.replace(/\,/g, '.');
+				var row_id = $(this).parents(".content-div").data('id');
+				var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
+				price_before_labor = price_before_labor.replace(/\,/g, '.');
+				var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+				var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
+				total_discount = total_discount.replace(/\,/g, '.');
 
-							});
+				if (!value) {
+					value = 0;
+				}
 
-							current.parent().parent().after('<div class="row sub-features" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								'<label style="margin-right: 10px;margin-bottom: 0;">' + heading + '</label>' +
-								'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-								'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-								'<input value="' + heading_id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-								'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-								'<input value="1" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-								'</div></div>');
-						}
+				var total = parseFloat(price_before_labor) + parseFloat(value);
+				total = total + parseFloat(total_discount);
+				total = parseFloat(total);
+				total = total.toFixed(2);
+				var price = total;
+				total = total / qty;
+				total = parseFloat(total).toFixed(2);
+				//total = Math.round(total);
 
-						if (data[0] && data[0].max_size) {
-							var sq = (width * height) / 10000;
-							var max_size = data[0].max_size;
+				var new_old_value = value / qty;
+				new_old_value = parseFloat(new_old_value).toFixed(2);
 
-							if (sq > max_size) {
-								Swal.fire({
-									icon: 'error',
-									title: '{{__('text.Oops...')}}',
-									text: 'Area is greater than max size: ' + max_size,
-								});
+				$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(new_old_value);
+				$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
+				$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
+				$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
 
-								current.parent().find('.f_area').val(1);
+				calculate_total(0,1);
+
+			});
+
+			$(document).on('input', '#childsafe_x, #childsafe_y', function () {
+
+				var id = $(this).attr('id');
+				var row_id = $(this).parent().parent().parent().data('id');
+
+				if (id == 'childsafe_x') {
+					var x = $(this).val();
+					var y = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
+				}
+				else {
+					var x = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
+					var y = $(this).val();
+				}
+
+				var diff = x - y;
+				diff = Math.abs(diff);
+
+				if (x && y) {
+
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
+
+					if (diff <= 150) {
+
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1" selected>Please note not childsafe</option><option value="2">Add childsafety clip</option>');
+
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
+								'\n' +
+								'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
+								'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
+								'                                                                                                    <option value="1">Make it childsafe</option>\n' +
+								'                                                                                                    <option value="2">Yes i agree</option>\n' +
+								'                                                                                            </select>\n' +
+								'                                                                                        </div>\n' +
+								'\n' +
+								'                                                                                    </div>');
+
+					}
+					else {
+
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option><option value="3" selected>Yes childsafe</option>');
+
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
+								'\n' +
+								'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
+								'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
+								'                                                                                                    <option value="3">Is childsafe</option>\n' +
+								'                                                                                            </select>\n' +
+								'                                                                                        </div>\n' +
+								'\n' +
+								'                                                                                    </div>');
+
+					}
+
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe_diff').val(diff);
+
+					var flag = 0;
+
+					var childsafe = $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-select').val();
+
+					if (!childsafe && childsafe != undefined) {
+						flag = 1;
+					}
+
+					$("[name='features" + row_id + "[]']").each(function (i, obj) {
+
+						var selected_feature = $(this).val();
+						var feature_id = $(this).parent().find('.f_id').val();
+
+						if (feature_id != 0) {
+							if (selected_feature == 0) {
+								flag = 1;
 							}
 						}
-						else {
-							current.parent().find('.f_area').val(0);
-						}
 
-						if (data[0] && data[0].price_impact == 1) {
+					});
 
-							if (data[0].variable == 1) {
-								impact_value = data[0].value;
-								impact_value = impact_value * (width / 100);
+					if(flag == 1)
+					{
+						$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+						$('#products_table').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+						$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+					}
+					else
+					{
+						$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+						$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+						$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+					}
+				}
+				else {
 
-                                if(!margin)
-                                {
-                                    if (supplier_margin && retailer_margin) {
-                                        if(supplier_margin != 0)
-                                        {
-                                            impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                        }
-                                    }
-                                }
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+					$('#products_table').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option>');
+				}
+
+			});
+
+			$(document).on('change', '.childsafe-select', function () {
+				var current = $(this);
+				var row_id = current.parent().parent().parent().data('id');
+				var value = current.val();
+				var value_x = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_x').val();
+				var value_y = $('#menu1').find(`[data-id='${row_id}']`).find('#childsafe_y').val();
+
+				if (value_x && value_y) {
+					if (!value) {
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+					}
+					else if (value == 2 || value == 3) {
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
+								'\n' +
+								'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
+								'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
+								'                                                                                                    <option value="3">Is childsafe</option>\n' +
+								'                                                                                            </select>\n' +
+								'                                                                                        </div>\n' +
+								'\n' +
+								'                                                                                    </div>');
+					}
+					else {
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
+
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
+								'\n' +
+								'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
+								'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
+								'                                                                                                    <option value="1">Make it childsafe</option>\n' +
+								'                                                                                                    <option value="2">Yes i agree</option>\n' +
+								'                                                                                            </select>\n' +
+								'                                                                                        </div>\n' +
+								'\n' +
+								'                                                                                    </div>');
+					}
+				}
+				else {
+					current.val('');
+
+					Swal.fire({
+						icon: 'error',
+						title: '{{__('text.Oops...')}}',
+						text: 'Kindly fill both childsafe values first.',
+					});
+				}
+
+			});
+
+			$(document).on('change', '.feature-select', function () {
+
+				var current = $(this);
+				var row_id = current.parent().parent().parent().data('id');
+				var feature_select = current.val();
+				var id = current.parent().find('.f_id').val();
+				var width = $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.m-input').val();
+				width = width.replace(/\,/g, '.');
+				var height = $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.m-input').val();
+				height = height.replace(/\,/g, '.');
+				var product_id = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
+				var ladderband_value = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val();
+				var ladderband_price_impact = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val();
+				var ladderband_impact_type = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val();
+
+				var impact_value = current.next('input').val();
+				var total = $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val();
+				var basic_price = $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val();
+				var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
+				var margin = $('#products_table').find(`[data-id='${row_id}']`).find('.suppliers').hasClass('hide');
+				var supplier_margin = $('#products_table').find(`[data-id='${row_id}']`).find('#supplier_margin').val();
+				var retailer_margin = $('#products_table').find(`[data-id='${row_id}']`).find('#retailer_margin').val();
+
+				total = total - impact_value;
+				var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val();
+				price_before_labor = price_before_labor - impact_value;
+
+				if (id == 0) {
+
+					if (feature_select == 1) {
+
+						if (ladderband_price_impact == 1) {
+							if (ladderband_impact_type == 0) {
+								impact_value = ladderband_value;
+
+								if(!margin)
+								{
+									if (supplier_margin && retailer_margin) {
+										if(supplier_margin != 0)
+										{
+											impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+										}
+									}
+								}
 
 								impact_value = parseFloat(impact_value).toFixed(2);
 								total = parseFloat(total) + parseFloat(impact_value);
 								total = total.toFixed(2);
 							}
 							else {
-								if (data[0].impact_type == 0) {
-									impact_value = data[0].value;
+								impact_value = ladderband_value;
+								var per = (impact_value) / 100;
+								impact_value = basic_price * per;
 
-                                    if(!margin)
-                                    {
-                                        if (supplier_margin && retailer_margin) {
-                                            if(supplier_margin != 0)
-                                            {
-                                                impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                            }
-                                        }
-                                    }
-
-									impact_value = parseFloat(impact_value).toFixed(2);
-									total = parseFloat(total) + parseFloat(impact_value);
-									total = total.toFixed(2);
+								if(!margin)
+								{
+									if (supplier_margin && retailer_margin) {
+										if(supplier_margin != 0)
+										{
+											impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+										}
+									}
 								}
-								else {
-									impact_value = data[0].value;
-									var per = (impact_value) / 100;
-									impact_value = basic_price * per;
 
-                                    if(!margin)
-                                    {
-                                        if (supplier_margin && retailer_margin) {
-                                            if(supplier_margin != 0)
-                                            {
-                                                impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-                                            }
-                                        }
-                                    }
-
-									impact_value = parseFloat(impact_value).toFixed(2);
-									total = parseFloat(total) + parseFloat(impact_value);
-									total = total.toFixed(2);
-								}
+								impact_value = parseFloat(impact_value).toFixed(2);
+								total = parseFloat(total) + parseFloat(impact_value);
+								total = total.toFixed(2);
 							}
 						}
 						else {
@@ -5509,121 +5785,342 @@
 
 						calculate_total();
 
-                        var flag = 0;
+						$.ajax({
+							type: "GET",
+							data: "product_id=" + product_id,
+							url: "<?php echo url('/aanbieder/get-sub-products-sizes')?>",
+							success: function (data) {
 
-                        var childsafe = $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-select').val();
+								$('#myModal').find('.modal-body').find('.sub-tables').hide();
 
-                        if (!childsafe && childsafe != undefined) {
-                            flag = 1;
-                        }
+								if ($('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).length > 0) {
+									$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+								}
 
-                        $("[name='features" + row_id + "[]']").each(function (i, obj) {
 
-                            var selected_feature = $(this).val();
-                            var feature_id = $(this).parent().find('.f_id').val();
+								$('#myModal').find('.modal-body').append(
+										'<div class="sub-tables" data-id="' + row_id + '">\n' +
+										'<table style="width: 100%;">\n' +
+										'<thead>\n' +
+										'<tr>\n' +
+										'<th>ID</th>\n' +
+										'<th>Title</th>\n' +
+										'<th>Size 38mm</th>\n' +
+										'<th>Size 25mm</th>\n' +
+										'</tr>\n' +
+										'</thead>\n' +
+										'<tbody>\n' +
+										'</tbody>\n' +
+										'</table>\n' +
+										'</div>'
+								);
 
-                            if (feature_id != 0) {
-                                if (selected_feature == 0) {
-                                    flag = 1;
-                                }
-                            }
+								$.each(data, function (index, value) {
 
-                        });
+									var size1 = value.size1_value;
+									var size2 = value.size2_value;
 
-                        if(flag == 1)
-                        {
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                            $('#products_table').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-                        }
-                        else
-                        {
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                            $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-                        }
+									if (size1 == 1) {
+										size1 = '<input data-id="' + row_id + '" class="cus_radio" name="cus_radio' + row_id + '[]" type="radio"><input class="cus_value sizeA" type="hidden" value="0" name="sizeA' + row_id + '[]">';
+									}
+									else {
+										size1 = 'X' + '<input class="sizeA" name="sizeA' + row_id + '[]" type="hidden" value="x">';
+									}
+
+									if (size2 == 1) {
+										size2 = '<input data-id="' + row_id + '" class="cus_radio" name="cus_radio' + row_id + '[]" type="radio"><input class="cus_value sizeB" type="hidden" value="0" name="sizeB' + row_id + '[]">';
+									}
+									else {
+										size2 = 'X' + '<input class="sizeB" name="sizeB' + row_id + '[]" type="hidden" value="x">';
+									}
+
+									$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('table').append(
+											'<tr>\n' +
+											'<td><input class="sub_product_id" type="hidden" name="sub_product_id' + row_id + '[]" value="' + value.id + '">' + value.code + '</td>\n' +
+											'<td>' + value.title + '</td>\n' +
+											'<td>' + size1 + '</td>\n' +
+											'<td>' + size2 + '</td>\n' +
+											'</tr>\n'
+									);
+
+								});
+
+								$('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').removeClass('hide');
+								/*$('.top-bar').css('z-index','1');*/
+								$('#myModal').modal('toggle');
+								$('.modal-backdrop').hide();
+							}
+						});
 					}
-				});
-			}
+					else {
+
+						$('#menu1').find(`[data-id='${row_id}']`).find('.ladderband-btn').addClass('hide');
+						$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+
+						impact_value = 0;
+						total = parseFloat(total) + parseFloat(impact_value);
+						total = total.toFixed(2);
+						//total = Math.round(total);
+						price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
+						price_before_labor = parseFloat(price_before_labor).toFixed(2);
+						//price_before_labor = Math.round(price_before_labor);
+
+						current.next('input').val(impact_value);
+
+						$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+						$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
+						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+
+						calculate_total();
+					}
+				}
+				else {
+					var heading = current.find("option:selected").text();
+					var heading_id = current.val();
+
+					$.ajax({
+						type: "GET",
+						data: "id=" + feature_select,
+						url: "<?php echo url('/aanbieder/get-feature-price')?>",
+						success: function (data) {
+
+							if (current.parent().parent().next('.sub-features').length > 0) {
+								var sub_impact_value = current.parent().parent().next('.sub-features').find('.f_price').val();
+								total = total - sub_impact_value;
+								price_before_labor = price_before_labor - sub_impact_value;
+								current.parent().parent().next('.sub-features').remove();
+							}
+
+							if (data[1].length > 0) {
+								var opt = '<option value="0">Select Feature</option>';
+
+								$.each(data[1], function (index, value) {
+
+									opt = opt + '<option value="' + value.id + '">' + value.title + '</option>';
+
+								});
+
+								current.parent().parent().after('<div class="row sub-features" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">' + heading + '</label>' +
+										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+										'<input value="' + heading_id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+										'<input value="1" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+										'</div></div>');
+							}
+
+							if (data[0] && data[0].max_size) {
+								var sq = (width * height) / 10000;
+								var max_size = data[0].max_size;
+
+								if (sq > max_size) {
+									Swal.fire({
+										icon: 'error',
+										title: '{{__('text.Oops...')}}',
+										text: 'Area is greater than max size: ' + max_size,
+									});
+
+									current.parent().find('.f_area').val(1);
+								}
+							}
+							else {
+								current.parent().find('.f_area').val(0);
+							}
+
+							if (data[0] && data[0].price_impact == 1) {
+
+								if (data[0].variable == 1) {
+									impact_value = data[0].value;
+									impact_value = impact_value * (width / 100);
+
+									if(!margin)
+									{
+										if (supplier_margin && retailer_margin) {
+											if(supplier_margin != 0)
+											{
+												impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+											}
+										}
+									}
+
+									impact_value = parseFloat(impact_value).toFixed(2);
+									total = parseFloat(total) + parseFloat(impact_value);
+									total = total.toFixed(2);
+								}
+								else {
+									if (data[0].impact_type == 0) {
+										impact_value = data[0].value;
+
+										if(!margin)
+										{
+											if (supplier_margin && retailer_margin) {
+												if(supplier_margin != 0)
+												{
+													impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+												}
+											}
+										}
+
+										impact_value = parseFloat(impact_value).toFixed(2);
+										total = parseFloat(total) + parseFloat(impact_value);
+										total = total.toFixed(2);
+									}
+									else {
+										impact_value = data[0].value;
+										var per = (impact_value) / 100;
+										impact_value = basic_price * per;
+
+										if(!margin)
+										{
+											if (supplier_margin && retailer_margin) {
+												if(supplier_margin != 0)
+												{
+													impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+												}
+											}
+										}
+
+										impact_value = parseFloat(impact_value).toFixed(2);
+										total = parseFloat(total) + parseFloat(impact_value);
+										total = total.toFixed(2);
+									}
+								}
+							}
+							else {
+								impact_value = 0;
+								total = parseFloat(total) + parseFloat(impact_value);
+								total = total.toFixed(2);
+							}
+
+							//total = Math.round(total);
+							price_before_labor = parseFloat(price_before_labor) + parseFloat(impact_value);
+							price_before_labor = parseFloat(price_before_labor).toFixed(2);
+							//price_before_labor = Math.round(price_before_labor);
+
+							current.next('input').val(impact_value);
+
+							$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
+							$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + total.replace(/\./g, ','));
+							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(total);
+
+							calculate_total();
+
+							var flag = 0;
+
+							var childsafe = $('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-select').val();
+
+							if (!childsafe && childsafe != undefined) {
+								flag = 1;
+							}
+
+							$("[name='features" + row_id + "[]']").each(function (i, obj) {
+
+								var selected_feature = $(this).val();
+								var feature_id = $(this).parent().find('.f_id').val();
+
+								if (feature_id != 0) {
+									if (selected_feature == 0) {
+										flag = 1;
+									}
+								}
+
+							});
+
+							if(flag == 1)
+							{
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+								$('#products_table').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+							}
+							else
+							{
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+							}
+						}
+					});
+				}
+
+			});
+
+			$(document).on('change', '.childsafe-select', function () {
+
+				var current = $(this);
+				var row_id = current.parent().parent().parent().data('id');
+				var feature_select = current.val();
+
+				if(!feature_select)
+				{
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+					$('#products_table').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+				}
+				else
+				{
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+					$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+				}
+
+			});
+
+			/*$('#myModal, #myModal2').on('hidden.bs.modal', function () {
+                $('.top-bar').css('z-index','1000');
+            });*/
+
+			$(document).on('click', '.comment-btn', function () {
+
+				var current = $(this);
+				var row_id = current.parent().parent().data('id');
+				var feature_id = current.data('feature');
+
+				$('#myModal2').find('.modal-body').find('.comment-boxes').hide();
+
+				if ($('#myModal2').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${feature_id}']`).length > 0) {
+					var box = $('#myModal2').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${feature_id}']`);
+					box.parent().show();
+				}
+				else {
+					$('#myModal2').find('.modal-body').append(
+							'<div class="comment-boxes" data-id="' + row_id + '">\n' +
+							'<textarea style="resize: vertical;width: 100%;border: 1px solid #c9c9c9;border-radius: 5px;outline: none;" data-id="' + feature_id + '" rows="5" name="comment-' + row_id + '-' + feature_id + '"></textarea>\n' +
+							'</div>'
+					);
+				}
+
+				/*$('.top-bar').css('z-index','1');*/
+				$('#myModal2').modal('toggle');
+				$('.modal-backdrop').hide();
+
+			});
+
+			$(document).on('click', '.ladderband-btn', function () {
+
+				var current = $(this);
+				var row_id = current.data('id');
+
+				$('#myModal').find('.modal-body').find('.sub-tables').hide();
+				$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).show();
+
+				/*$('.top-bar').css('z-index','1');*/
+				$('#myModal').modal('toggle');
+				$('.modal-backdrop').hide();
+
+			});
+
+			$(document).on('change', '.cus_radio', function () {
+
+				var row_id = $(this).data('id');
+
+				$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('.cus_radio').next('input').val(0);
+				$(this).next('input').val(1);
+
+			});
+
 
 		});
-
-        $(document).on('change', '.childsafe-select', function () {
-
-            var current = $(this);
-            var row_id = current.parent().parent().parent().data('id');
-            var feature_select = current.val();
-
-            if(!feature_select)
-            {
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('.yellow-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-            }
-            else
-            {
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-            }
-
-        });
-
-		/*$('#myModal, #myModal2').on('hidden.bs.modal', function () {
-			$('.top-bar').css('z-index','1000');
-		});*/
-
-		$(document).on('click', '.comment-btn', function () {
-
-			var current = $(this);
-			var row_id = current.parent().parent().data('id');
-			var feature_id = current.data('feature');
-
-			$('#myModal2').find('.modal-body').find('.comment-boxes').hide();
-
-			if ($('#myModal2').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${feature_id}']`).length > 0) {
-				var box = $('#myModal2').find('.modal-body').find(`[data-id='${row_id}']`).find(`[data-id='${feature_id}']`);
-				box.parent().show();
-			}
-			else {
-				$('#myModal2').find('.modal-body').append(
-					'<div class="comment-boxes" data-id="' + row_id + '">\n' +
-					'<textarea style="resize: vertical;width: 100%;border: 1px solid #c9c9c9;border-radius: 5px;outline: none;" data-id="' + feature_id + '" rows="5" name="comment-' + row_id + '-' + feature_id + '"></textarea>\n' +
-					'</div>'
-				);
-			}
-
-			/*$('.top-bar').css('z-index','1');*/
-			$('#myModal2').modal('toggle');
-			$('.modal-backdrop').hide();
-
-		});
-
-		$(document).on('click', '.ladderband-btn', function () {
-
-			var current = $(this);
-			var row_id = current.data('id');
-
-			$('#myModal').find('.modal-body').find('.sub-tables').hide();
-			$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).show();
-
-			/*$('.top-bar').css('z-index','1');*/
-			$('#myModal').modal('toggle');
-			$('.modal-backdrop').hide();
-
-		});
-
-		$(document).on('change', '.cus_radio', function () {
-
-			var row_id = $(this).data('id');
-
-			$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).find('.cus_radio').next('input').val(0);
-			$(this).next('input').val(1);
-
-		});
-
-
-	});
-</script>
+	</script>
 
 @endsection

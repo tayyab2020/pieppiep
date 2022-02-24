@@ -74,9 +74,32 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
 
-            $user = Auth::guard('user')->user();
-
             if (Auth::check()) {
+                $user = Auth::guard('user')->user();
+                $user_id = $user->id;
+                $user_role = $user->role_id;
+
+                if($user_role == 4)
+                {
+                    $main_id = $user->main_id;
+
+                    if($main_id)
+                    {
+                        $user_id = $main_id;
+                    }
+
+                    $is_floor = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where(function($query) {
+                        $query->where('categories.cat_name','LIKE', '%Floors%')->orWhere('categories.cat_name','LIKE', '%Vloeren%');
+                    })->select('categories.cat_name')->first();
+
+                    $is_blind = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where(function($query) {
+                        $query->where('categories.cat_name','LIKE', '%Blinds%')->orWhere('categories.cat_name','LIKE', '%Binnen zonwering%');
+                    })->select('categories.cat_name')->first();
+
+                    $supplier_global_categories = array($is_floor,$is_blind);
+
+                    $settings->with('supplier_global_categories', $supplier_global_categories);
+                }
                 $settings->with('currentUser', Auth::user());
             }else {
                 $settings->with('currentUser', null);
@@ -101,32 +124,6 @@ class AppServiceProvider extends ServiceProvider
                 $settings->with('quote_products', $quote_products);
                 $settings->with('quote_services', $quote_services);
                 $settings->with('quote_data', $quote_data);
-            }
-
-            $user = Auth::guard('user')->user();
-            $user_id = $user->id;
-            $user_role = $user->role_id;
-
-            if($user_role == 4)
-            {
-                $main_id = $user->main_id;
-
-                if($main_id)
-                {
-                    $user_id = $main_id;
-                }
-
-                $is_floor = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where(function($query) {
-                    $query->where('categories.cat_name','LIKE', '%Floors%')->orWhere('categories.cat_name','LIKE', '%Vloeren%');
-                })->select('categories.cat_name')->first();
-    
-                $is_blind = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where(function($query) {
-                    $query->where('categories.cat_name','LIKE', '%Blinds%')->orWhere('categories.cat_name','LIKE', '%Binnen zonwering%');
-                })->select('categories.cat_name')->first();
-
-                $supplier_global_categories = array($is_floor,$is_blind);
-
-                $settings->with('supplier_global_categories', $supplier_global_categories);
             }
             
             $settings->with('sl', Sociallink::find(1));
