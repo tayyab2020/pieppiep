@@ -51,8 +51,6 @@
                                                                     <th style="padding: 5px;"></th>
                                                                     <th>Product</th>
                                                                     <th style="width: 200px;">Color</th>
-                                                                    <th>Width</th>
-                                                                    <th>Height</th>
                                                                     <th>Qty</th>
                                                                     <th style="width: 200px;">Delivery Date</th>
                                                                 </tr>
@@ -73,16 +71,6 @@
                                                                         </td>
                                                                         <td class="color">
                                                                             {{$item->color_title}}
-                                                                        </td>
-                                                                        <td class="width">
-                                                                            <div class="m-box">
-                                                                                {{str_replace('.', ',', floatval($item->width))}} {{$item->width_unit ? ' '. $item->width_unit : null}}
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="height">
-                                                                            <div class="m-box">
-                                                                                {{str_replace('.', ',', floatval($item->height))}} {{$item->height_unit ? ' '. $item->height_unit : null}}
-                                                                            </div>
                                                                         </td>
                                                                         <td>{{$item->qty}}</td>
                                                                         <td style="padding: 0;">
