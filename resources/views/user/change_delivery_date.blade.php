@@ -50,7 +50,6 @@
                                                                 <tr>
                                                                     <th style="padding: 5px;"></th>
                                                                     <th>Product</th>
-                                                                    <th style="width: 200px;">Color</th>
                                                                     <th>Qty</th>
                                                                     <th style="width: 200px;">Delivery Date</th>
                                                                 </tr>
@@ -67,10 +66,7 @@
                                                                         <input type="hidden" value="{{$item->id}}" id="data_id" name="data_id[]">
 
                                                                         <td class="products">
-                                                                            {{$item->product_title}}
-                                                                        </td>
-                                                                        <td class="color">
-                                                                            {{$item->color_title}}
+                                                                            {{$item->product_title . ', '. $item->model . ', ' . $item->color_title}}
                                                                         </td>
                                                                         <td>{{$item->qty}}</td>
                                                                         <td style="padding: 0;">
