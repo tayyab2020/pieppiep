@@ -2607,6 +2607,7 @@ class UserController extends Controller
             $mail_body_template = str_replace('{aan_voornaam}',$data->name,$mail_body_template);
             $mail_body_template = str_replace('{offerte_nummer}',$data->quotation_invoice_number,$mail_body_template);
             $mail_body_template = str_replace('{Click here to accept this quote directly online}','Click <a style="color: blue;" href="'.$link.'">here</a> to accept this quote directly online',$mail_body_template);
+            $mail_body_template = str_replace('{Klik hier om de offerte te accepteren}','Klik <a style="color: blue;" href="'.$link.'">hier</a> om de offerte te accepteren',$mail_body_template);
             $mail_body_template = str_replace('{van_voornaam}',$user->name,$mail_body_template);
             $mail_body_template = str_replace('{van_bedrijfsnaam}',$user->company_name,$mail_body_template);
         }
@@ -2920,7 +2921,7 @@ class UserController extends Controller
 
         if($user_role == 2)
         {
-            $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('orders')->get();
+            $invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('orders')->get();
 
             return view('user.quote_invoices', compact('invoices'));
         }

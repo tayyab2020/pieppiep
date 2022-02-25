@@ -161,11 +161,13 @@
 
                                                     <tbody>
 
+                                                    <?php $t = 1; ?>
+
                                                     @foreach($invoices as $key)
 
                                                         @if(Route::currentRouteName() == 'new-orders')
 
-                                                            <?php $sup_data = $key->orders->unique('supplier_id'); $t = 1; ?>
+                                                            <?php $sup_data = $key->orders->unique('supplier_id'); ?>
 
                                                             @foreach($sup_data as $sup)
 
