@@ -173,7 +173,7 @@
 
 																		<div style="display: flex;align-items: center;">
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																			<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
+																			<input type="hidden" value="{{$item->qty != 0 ? $item->price_before_labor/$item->qty : 0}}" class="price_before_labor_old">
 																		</div>
 																	</div>
 
@@ -182,7 +182,7 @@
 																		<label class="content-label">Discount</label>
 
 																		<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
-																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
+																		<input type="hidden" value="{{$item->qty != 0 ? $item->total_discount/$item->qty : 0}}" class="total_discount_old">
 																	</div>
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
