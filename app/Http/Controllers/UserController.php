@@ -4067,7 +4067,7 @@ class UserController extends Controller
 
             $invoice_items->color = $request->colors[$i];
             $invoice_items->rate = $request->rate[$i];
-            $invoice_items->qty = $request->qty[$i];
+            $invoice_items->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
             $invoice_items->amount = $request->total[$i];
             $invoice_items->delivery_days = $request->delivery_days[$i];
             $invoice_items->delivery_date = $delivery_date;
