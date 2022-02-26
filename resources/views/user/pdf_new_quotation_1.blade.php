@@ -455,7 +455,7 @@
                                             <td style="width: 40%;padding: 5px;">
                                                 <div style="display: inline-block;width: 100%;">
                                                     <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Invoer:</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$date}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice') {{$request->retailer_delivery_date}} @endif</span>
                                                 </div>
                                             </td>
                                             <td style="width: 60%;padding: 5px;padding-left: 20px;">
@@ -470,7 +470,7 @@
                                             <td style="width: 40%;padding: 5px;">
                                                 <div style="display: inline-block;width: 100%;">
                                                     <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Planning verzending:</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'supplier' || $role == 'invoice') {{$request->delivery_date[$i]}} @endif</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->installation_date}}</span>
                                                 </div>
                                             </td>
                                             <td style="width: 60%;padding: 5px;padding-left: 20px;">
@@ -501,7 +501,7 @@
                         @endif
 
 
-                        @if($form_type == 1 && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+                        @if($form_type == 1 && $role != 'invoice' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                             <div class="page_break">
 

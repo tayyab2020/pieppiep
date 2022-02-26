@@ -3556,7 +3556,7 @@ class UserController extends Controller
             $order->color = $request->colors[$i];
             $order->rate = 0;
             $order->basic_price = 0;
-            $order->qty = $request->qty[$i];
+            $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
             $order->amount = 0;
             $order->delivery_days = $request->delivery_days[$i];
             $order->delivery_date = $delivery_date;
@@ -3974,7 +3974,7 @@ class UserController extends Controller
             
             $invoice->net_amount = str_replace(',', '.',$request->net_amount);
             $invoice->tax_amount = str_replace(',', '.',$request->tax_amount);
-            $invoice->delivery_date = $request->delivery_date;
+            $invoice->delivery_date = $request->retailer_delivery_date;
             $invoice->installation_date = $request->installation_date;
             $invoice->save();
         }
@@ -4085,7 +4085,7 @@ class UserController extends Controller
             $order->model_id = $request->models[$i];
             $order->color = $request->colors[$i];
             $order->rate = $request->rate[$i];
-            $order->qty = $request->qty[$i];
+            $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
             $order->amount = $request->total[$i];
             $order->delivery_days = $request->delivery_days[$i];
             $order->delivery_date = $delivery_date;
@@ -5317,9 +5317,9 @@ class UserController extends Controller
 
             $date = date("Y-m-d");
             $role = 'invoice';
+            $form_type = $request->form_type;
 
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
-
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
             $pdf->save($file);
 
             $counter_invoice = $counter_invoice + 1;

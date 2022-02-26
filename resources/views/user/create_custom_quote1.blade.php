@@ -179,7 +179,7 @@
 																		<label class="content-label">Qty</label>
 
 																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="{{$item->qty}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																			<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
 																		</div>
                                                                     </div>
 																	
@@ -424,7 +424,7 @@
 
 																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
 																	<label>Delivery Date: </label>
-																	<input value="{{isset($invoice) ? $invoice[0]->retailer_delivery_date : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="delivery_date">
+																	<input value="{{isset($invoice) ? $invoice[0]->retailer_delivery_date : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="retailer_delivery_date">
 																</div>
 																<div class="headings1" style="width: 23%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
 																<div class="headings1" style="width: 7%;display: flex;align-items: center;">

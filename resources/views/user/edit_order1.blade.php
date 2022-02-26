@@ -163,7 +163,7 @@
 																		<label class="content-label">Qty</label>
 
 																		<div style="display: flex;align-items: center;">
-																			<input type="text" readonly value="{{$item->qty}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																			<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
 																		</div>
 																	</div>
 
@@ -1891,7 +1891,7 @@
 					'                       									 	<label class="content-label">Qty</label>\n' +
 					'\n' +
 					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input type="text" readonly name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
+					'																 	<input type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -2030,7 +2030,7 @@
 					'                       									 	<label class="content-label">Qty</label>\n' +
 					'\n' +
 					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input value="' + qty + '" readonly type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
+					'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -2608,30 +2608,32 @@
 
 		});
 
-		// $(document).on('keypress', "input[name='qty[]']", function (e) {
+		$(document).on('keypress', "input[name='qty[]']", function (e) {
 
-		// 	e = e || window.event;
-		// 	var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-		// 	var val = String.fromCharCode(charCode);
+			e = e || window.event;
+			var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+			var val = String.fromCharCode(charCode);
 
-		// 	if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
-		// 	{
-		// 		e.preventDefault();
-		// 		return false;
-		// 	}
+			if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
+			{
+				e.preventDefault();
+				return false;
+			}
 
-		// 	if (e.which == 44) {
-		// 		e.preventDefault();
-		// 		return false;
-		// 	}
+			if (e.which == 44) {
+				if (this.value.indexOf(',') > -1) {
+					e.preventDefault();
+					return false;
+				}
+			}
 
-		// 	var num = $(this).attr("maskedFormat").toString().split(',');
-		// 	var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
-		// 	if (!regex.test(this.value)) {
-		// 		this.value = this.value.substring(0, this.value.length - 1);
-		// 	}
+			var num = $(this).attr("maskedFormat").toString().split(',');
+			var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+			if (!regex.test(this.value)) {
+				this.value = this.value.substring(0, this.value.length - 1);
+			}
 
-		// });
+		});
 
 		$(document).on('keypress', ".childsafe_values, .discount_values", function (e) {
 
@@ -2693,19 +2695,19 @@
 
 		});
 
-		// $(document).on('focusout', "input[name='qty[]'], input[name='labor_impact[]']", function (e) {
+		$(document).on('focusout', "input[name='qty[]']", function (e) {
 
-		// 	if (!$(this).val()) {
-		// 		$(this).val(0);
-		// 	}
+			if (!$(this).val()) {
+				$(this).val(0);
+			}
 
-		// 	if ($(this).val().slice($(this).val().length - 1) == ',') {
-		// 		var val = $(this).val();
-		// 		val = val + '00';
-		// 		$(this).val(val);
-		// 	}
+			if ($(this).val().slice($(this).val().length - 1) == ',') {
+				var val = $(this).val();
+				val = val + '00';
+				$(this).val(val);
+			}
 
-		// });
+		});
 
 		$(document).on('focusout', ".width, .height", function (e) {
 
@@ -3213,6 +3215,8 @@
 
 			});
 
+			total_qty = total_qty.replace(/\./g, ',');
+
 			$("#products_table").find(`.content-div[data-id='${product_row}']`).find('.qty').val(total_qty);
 		}
 
@@ -3381,7 +3385,6 @@
             var feature_select = current.val();
             var id = current.parent().find('.f_id').val();
             var product_id = $('#products_table').find(`[data-id='${row_id}']`).find('.products').find('select').val();
-            var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 
             if (id == 0) {
 
