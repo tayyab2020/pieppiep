@@ -501,7 +501,7 @@
 																						<div class="attribute item2 width-box" style="width: 10%;">
 
 																							<div class="m-box">
-																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 1) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{str_replace('.', ',',floatval($temp->width))}}" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width{{$i+1}}[]" type="text">
+																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 1 && $temp->width != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->width ? str_replace('.', ',',floatval($temp->width)) : NULL}}" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
 																							</div>
 
@@ -510,7 +510,7 @@
 																						<div class="attribute item3 height-box" style="width: 10%;">
 
 																							<div class="m-box">
-																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 0) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{str_replace('.', ',',floatval($temp->height))}}" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height{{$i+1}}[]" type="text">
+																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 0 && $temp->height != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->height ? str_replace('.', ',',floatval($temp->height)) : NULL}}" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
 																							</div>
 
@@ -2492,35 +2492,35 @@
 
 				});
 
-				$("[name='width" + id + "[]']").each(function (i, obj) {
+				// $("[name='width" + id + "[]']").each(function (i, obj) {
 
-					var value = $(this).val();
+				// 	var value = $(this).val();
 
-					if (value == "") {
-						flag = 1;
-						$(this).css('border', '1px solid red');
-					}
-					else 
-					{
-						$(this).css('border', '1px solid #ccc');
-					}
+				// 	if (value == "") {
+				// 		flag = 1;
+				// 		$(this).css('border', '1px solid red');
+				// 	}
+				// 	else 
+				// 	{
+				// 		$(this).css('border', '1px solid #ccc');
+				// 	}
 
-				});
+				// });
 
-				$("[name='height" + id + "[]']").each(function (i, obj) {
+				// $("[name='height" + id + "[]']").each(function (i, obj) {
 
-					var value = $(this).val();
+				// 	var value = $(this).val();
 
-					if (value == "") {
-						flag = 1;
-						$(this).css('border', '1px solid red');
-					}
-					else 
-					{
-						$(this).css('border', '1px solid #ccc');
-					}
+				// 	if (value == "") {
+				// 		flag = 1;
+				// 		$(this).css('border', '1px solid red');
+				// 	}
+				// 	else 
+				// 	{
+				// 		$(this).css('border', '1px solid #ccc');
+				// 	}
 
-				});
+				// });
 
 				// $("[name='cutting_lose_percentage" + id + "[]']").each(function (i, obj) {
 

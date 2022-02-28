@@ -3511,15 +3511,15 @@ class UserController extends Controller
             $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
             $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
 
-            date_default_timezone_set('Europe/Amsterdam');
-            $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
-            $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+            // date_default_timezone_set('Europe/Amsterdam');
+            // $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
+            // $is_weekend = date('N', strtotime($delivery_date)) >= 6;
 
-            while($is_weekend)
-            {
-                $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 days'));
-                $is_weekend = date('N', strtotime($delivery_date)) >= 6;
-            }
+            // while($is_weekend)
+            // {
+            //     $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 days'));
+            //     $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+            // }
 
             if($request->form_type == 1)
             {
@@ -3559,7 +3559,7 @@ class UserController extends Controller
             $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
             $order->amount = 0;
             $order->delivery_days = $request->delivery_days[$i];
-            $order->delivery_date = $delivery_date;
+            // $order->delivery_date = $delivery_date;
             $order->price_before_labor = 0;
             $order->labor_impact = 0;
             $order->discount = 0;
@@ -3643,8 +3643,8 @@ class UserController extends Controller
                     $order_calculations->calculator_row = $cal;
                     $order_calculations->parent_row = $parent_row;
                     $order_calculations->description = $request->$description[$c];
-                    $order_calculations->width = str_replace(',', '.',$request->$width[$c]);
-                    $order_calculations->height = str_replace(',', '.',$request->$height[$c]);
+                    $order_calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
+                    $order_calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
                     $order_calculations->cutting_lose = $request->$cutting_lose[$c];
                     $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
                     $order_calculations->box_quantity = $request->$box_quantity[$c];
@@ -3994,14 +3994,23 @@ class UserController extends Controller
             $suppliers[] = User::where('id',$request->suppliers[$i])->first();
 
             date_default_timezone_set('Europe/Amsterdam');
-            $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
+            $delivery_date = date('Y-m-d', strtotime( $request->retailer_delivery_date . ' -1 day' ));
             $is_weekend = date('N', strtotime($delivery_date)) >= 6;
 
             while($is_weekend)
             {
-                $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 days'));
+                $delivery_date = date('Y-m-d', strtotime($delivery_date. '- 1 day'));
                 $is_weekend = date('N', strtotime($delivery_date)) >= 6;
             }
+
+            // $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
+            // $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+
+            // while($is_weekend)
+            // {
+            //     $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 days'));
+            //     $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+            // }
 
             if(!$request->order_number[$i])
             {
@@ -4189,8 +4198,8 @@ class UserController extends Controller
                     $calculations->calculator_row = $cal;
                     $calculations->parent_row = $parent_row;
                     $calculations->description = $request->$description[$c];
-                    $calculations->width = str_replace(',', '.',$request->$width[$c]);
-                    $calculations->height = str_replace(',', '.',$request->$height[$c]);
+                    $calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
+                    $calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
                     $calculations->cutting_lose = $request->$cutting_lose[$c];
                     $calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
                     $calculations->box_quantity = $request->$box_quantity[$c];
@@ -4204,8 +4213,8 @@ class UserController extends Controller
                     $order_calculations->calculator_row = $cal;
                     $order_calculations->parent_row = $parent_row;
                     $order_calculations->description = $request->$description[$c];
-                    $order_calculations->width = str_replace(',', '.',$request->$width[$c]);
-                    $order_calculations->height = str_replace(',', '.',$request->$height[$c]);
+                    $order_calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
+                    $order_calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
                     $order_calculations->cutting_lose = $request->$cutting_lose[$c];
                     $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
                     $order_calculations->box_quantity = $request->$box_quantity[$c];

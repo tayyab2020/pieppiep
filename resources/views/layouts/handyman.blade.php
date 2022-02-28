@@ -211,7 +211,7 @@
 
                 </div>
 
-            <a class="dropdown-toggle" href="#homeSubmenu" data-toggle="collapse"
+            <a style="display: flex;" class="dropdown-toggle" href="#homeSubmenu" data-toggle="collapse"
                aria-expanded="false">
 
                 <img style="width: 45px;height: 45px;border-radius: 100%;border: 1px solid #dddddd;margin-right: 10px;"
