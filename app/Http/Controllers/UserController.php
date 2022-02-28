@@ -3511,7 +3511,16 @@ class UserController extends Controller
             $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
             $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
 
-            // date_default_timezone_set('Europe/Amsterdam');
+            date_default_timezone_set('Europe/Amsterdam');
+            $delivery_date = date('Y-m-d', strtotime( $request->retailer_delivery_date . ' -1 day' ));
+            $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+
+            while($is_weekend)
+            {
+                $delivery_date = date('Y-m-d', strtotime($delivery_date. '- 1 day'));
+                $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+            }
+            
             // $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
             // $is_weekend = date('N', strtotime($delivery_date)) >= 6;
 
@@ -3559,7 +3568,7 @@ class UserController extends Controller
             $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
             $order->amount = 0;
             $order->delivery_days = $request->delivery_days[$i];
-            // $order->delivery_date = $delivery_date;
+            $order->delivery_date = $delivery_date;
             $order->price_before_labor = 0;
             $order->labor_impact = 0;
             $order->discount = 0;

@@ -108,6 +108,12 @@
                                                 <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
                                                 <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
+                                                @if($role == 'supplier')
+
+                                                    <th style="width: 10% !important;font-size: 20px;font-weight: 500;">Delivery Date</th>
+
+                                                @endif
+
                                                 @if($role == 'supplier2')
 
                                                     <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
@@ -139,7 +145,7 @@
 
                                                     ?>
 
-                                                    @if($request->$box_quantity[$c])
+                                                    @if($request->$box_quantity[$c] || count($calculator_row) == 1)
 
                                                         <tr>
 
@@ -169,12 +175,18 @@
 
                                                     ?>
 
-                                                    @if($box_quantity)
+                                                    @if($box_quantity || count($calculator_rows[$i]) == 1)
 
                                                         <tr>
 
                                                             <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
                                                             <td>{{str_replace('.', ',',$box_quantity)}}</td>
+
+                                                            @if($role == 'supplier')
+
+                                                            <td>{{$request->delivery_date[$i]}}</td>
+
+                                                            @endif
 
                                                         </tr>
 

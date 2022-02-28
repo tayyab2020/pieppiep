@@ -106,7 +106,7 @@ class UpdateDates implements ShouldQueue
             $width_unit[] = $temp->width_unit;
             $height[] = $temp->height;
             $height_unit[] = $temp->height_unit;
-            $delivery[] = $temp->delivery_date;
+            $delivery[] = $delivery_dates[$x];
 
             if($form_type == 1)
             {
