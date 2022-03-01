@@ -2821,6 +2821,8 @@
 					if(qty_changed == 0)
 					{
 						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
+						console.log(old_discount);
+						console.log(isNaN(old_discount));
 
 						if(isNaN(old_discount))
 						{
@@ -2829,7 +2831,6 @@
 						else
 						{
 							old_discount = old_discount.replace(/\,/g, '.');
-							console.log(old_discount);
 						}
 
 						old_discount = parseFloat(old_discount).toFixed(2);
