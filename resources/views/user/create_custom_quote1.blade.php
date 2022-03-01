@@ -2794,7 +2794,6 @@
 					}
 
 					rate = rate * qty;
-					console.log(rate);
 
 					// var labor_impact = $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val();
 					// labor_impact = labor_impact * qty;
@@ -2822,6 +2821,7 @@
 					if(qty_changed == 0)
 					{
 						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
+						console.log(old_discount);
 
 						if(isNaN(old_discount))
 						{
@@ -2835,6 +2835,8 @@
 						old_discount = parseFloat(old_discount).toFixed(2);
 
 						rate = rate - old_discount;
+
+						console.log(rate);
 
 						var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
 						// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
