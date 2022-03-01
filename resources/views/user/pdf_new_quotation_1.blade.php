@@ -93,6 +93,7 @@
                                         $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
                                         $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
                                         $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
+                                        $art = $art + number_format((float)($arb), 2, '.', ',');
                                         $art = number_format((float)($art), 2, ',', '.');
                                         $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
                                     }
