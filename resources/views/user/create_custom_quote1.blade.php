@@ -2824,12 +2824,7 @@
 						old_discount = old_discount.replace(/\,/g, '.');
 						old_discount = parseFloat(old_discount).toFixed(2);
 
-						console.log(old_discount);
-						console.log(rate);
-
 						rate = rate - old_discount;
-
-						console.log(rate);
 
 						var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
 						// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
@@ -2851,6 +2846,7 @@
 						var total_discount = discount_val;
 						total_discount = parseFloat(total_discount).toFixed(2);
 
+console.log(isNaN(total_discount));
 						if(isNaN(total_discount))
 						{
 							total_discount = 0;
@@ -2858,6 +2854,8 @@
 
 						var old_discount = total_discount / qty;
 						old_discount = parseFloat(old_discount).toFixed(2);
+
+						console.log(isNaN(old_discount));
 
 						if(isNaN(old_discount))
 						{
@@ -2869,6 +2867,8 @@
 
 						rate = parseFloat(rate) - parseFloat(total_discount);
 						var price = rate / qty;
+
+						console.log(isNaN(price));
 
 						if(isNaN(price))
 						{
@@ -2911,6 +2911,8 @@
 					total = parseFloat(total) + parseFloat(rate);
 					total = total.toFixed(2);
 
+					console.log(isNaN(rate));
+
 					if(isNaN(rate))
 					{
 						rate = 0;
@@ -2930,6 +2932,7 @@
 
 				});
 
+				console.log(isNaN(total));
 
 				if(isNaN(total))
 				{
