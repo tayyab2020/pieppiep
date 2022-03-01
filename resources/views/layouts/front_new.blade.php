@@ -1594,7 +1594,41 @@
 
     .exact-ac .mainmenu .dropdown.show > a:after {
         background: #f78c2d;
-    }</style>
+    }
+    .dropbtn {
+        background-color: #04AA6D;
+        color: white;
+        font-size: 16px;
+        border: none;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {background-color: #ddd;}
+
+    .dropdown:hover .dropdown-content {display: block;}
+
+    .dropdown:hover .dropbtn {background-color: #3e8e41;}
+    </style>
 
 <nav class="navbar fixed-top navbar-expand-lg mainmenu">
     <div class="container">
@@ -1639,8 +1673,27 @@
                 </li>
             </ul>
             <ul class="menu-right nav menu float-right">
-                <li class="item-6953"><a href="{{route('user-login')}}" class="link-blue menu-right" target="_blank"
-                                         rel="noopener">Login</a></li>
+
+                @if(Auth::guard('user')->check())
+
+                    <li class="item-6953">
+
+                        <div class="dropdown">
+                            <button style="padding: 10px;font-family: Apax,Arial,sans-serif;" class="dropbtn">Profile <i style="margin-left: 5px;" class="fa fa-angle-down"></i></button>
+                            <div class="dropdown-content">
+                                <a href="{{route('user-dashboard')}}">{{Auth::guard('user')->user()->role_id == 2 ? 'Retailer Dashboard' : 'Supplier Dashboard'}}</a>
+                                <a href="{{route('user-logout')}}">{{$lang->logout}}</a>
+                            </div>
+                        </div>
+
+                    </li>
+
+                @else
+
+                    <li class="item-6953"><a href="{{route('user-login')}}" class="link-blue menu-right" target="_blank" rel="noopener">Login</a></li>
+
+                @endif
+                
                 <li class="item-7035"><a href="/nl/reeleezee/probeer/slim-boekhouden-start" class="btn-blue">Probeer
                         nu</a></li>
             </ul>
