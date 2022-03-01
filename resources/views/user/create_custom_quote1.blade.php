@@ -2846,7 +2846,6 @@
 						var total_discount = discount_val;
 						total_discount = parseFloat(total_discount).toFixed(2);
 
-console.log(isNaN(total_discount));
 						if(isNaN(total_discount))
 						{
 							total_discount = 0;
@@ -2854,8 +2853,6 @@ console.log(isNaN(total_discount));
 
 						var old_discount = total_discount / qty;
 						old_discount = parseFloat(old_discount).toFixed(2);
-
-						console.log(isNaN(old_discount));
 
 						if(isNaN(old_discount))
 						{
@@ -2867,8 +2864,6 @@ console.log(isNaN(total_discount));
 
 						rate = parseFloat(rate) - parseFloat(total_discount);
 						var price = rate / qty;
-
-						console.log(isNaN(price));
 
 						if(isNaN(price))
 						{
@@ -2911,8 +2906,6 @@ console.log(isNaN(total_discount));
 					total = parseFloat(total) + parseFloat(rate);
 					total = total.toFixed(2);
 
-					console.log(isNaN(rate));
-
 					if(isNaN(rate))
 					{
 						rate = 0;
@@ -2931,8 +2924,6 @@ console.log(isNaN(total_discount));
 					// labor_cost_total = parseFloat(labor_cost_total).toFixed(2);
 
 				});
-
-				console.log(isNaN(total));
 
 				if(isNaN(total))
 				{
