@@ -2879,7 +2879,7 @@
 							price = 0;
 						}
 
-						// $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
 
 					}
 					else
