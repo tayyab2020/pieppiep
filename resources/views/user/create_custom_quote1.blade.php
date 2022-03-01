@@ -2829,13 +2829,14 @@
 						else
 						{
 							old_discount = old_discount.replace(/\,/g, '.');
+							console.log(old_discount);
 						}
 
 						old_discount = parseFloat(old_discount).toFixed(2);
 
 						console.log(old_discount);
 						console.log(rate);
-						
+
 						rate = rate - old_discount;
 
 						console.log(rate);
