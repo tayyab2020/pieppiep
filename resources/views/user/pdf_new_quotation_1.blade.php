@@ -93,7 +93,7 @@
                                         $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
                                         $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
                                         $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
-                                        $art = $art + number_format((float)($arb), 2, '.', ',');
+                                        $total = $art + number_format((float)(str_replace(',', '.',$arb)), 2, '.', ',');
                                         $art = number_format((float)($art), 2, ',', '.');
                                         $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
                                     }
@@ -440,7 +440,7 @@
 
                                                         <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
                                                         <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{number_format((float)($request->rate[$i]), 2, ',', '.')}}</td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{$form_type == 1 ? number_format((float)($request->rate[$i]), 2, ',', '.') : $total}}</td>
 
                                                 </tr>
 
