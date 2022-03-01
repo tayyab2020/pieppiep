@@ -76,7 +76,7 @@
 
                                     if($form_type == 1)
                                     {
-                                        $arb_discount = $request->total_discount[$i] == 0 ? 0 : $request->total_discount[$i]/100;
+                                        $arb_discount = str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'));
                                         $arb = $request->rate[$i];
                                         $arb = number_format((float)($arb), 2, ',', '.');
                                         $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
