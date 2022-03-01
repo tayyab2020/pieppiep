@@ -2821,7 +2821,6 @@
 					if(qty_changed == 0)
 					{
 						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-						console.log(old_discount);
 
 						if(isNaN(old_discount))
 						{
@@ -2834,6 +2833,9 @@
 
 						old_discount = parseFloat(old_discount).toFixed(2);
 
+						console.log(old_discount);
+						console.log(rate);
+						
 						rate = rate - old_discount;
 
 						console.log(rate);
