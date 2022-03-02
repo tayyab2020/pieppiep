@@ -1403,7 +1403,7 @@
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Quantity:</label>
-                                                                                                    <input value="{{$mod->estimated_price_quantity}}" class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="Advice Price Quantity" type="text">
+                                                                                                    <input value="{{str_replace('.', ',', floatval($mod->estimated_price_quantity))}}" class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="Advice Price Quantity" type="text">
 
                                                                                                 </div>
 
@@ -3824,21 +3824,21 @@
 
         });
 
-        $(document).on('keypress', ".estimated_price_quantity", function(e){
+        // $(document).on('keypress', ".estimated_price_quantity", function(e){
 
-            e = e || window.event;
-            var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-            var val = String.fromCharCode(charCode);
+        //     e = e || window.event;
+        //     var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+        //     var val = String.fromCharCode(charCode);
 
-            if (!val.match(/^[0-9]+$/))  // For characters validation
-            {
-                e.preventDefault();
-                return false;
-            }
+        //     if (!val.match(/^[0-9]+$/))  // For characters validation
+        //     {
+        //         e.preventDefault();
+        //         return false;
+        //     }
 
-        });
+        // });
 
-        $(document).on('keypress', ".estimated_price_per_box", function(e){
+        $(document).on('keypress', ".estimated_price_per_box, .estimated_price_quantity", function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -3882,7 +3882,8 @@
                 var estimated_price_per_box = $(this).parent().parent().find('#estimated_price_per_box').val();
             }
 
-            var estimated_price_per_box = estimated_price_per_box.replace(/\,/g, '.');
+            estimated_price_per_box = estimated_price_per_box.replace(/\,/g, '.');
+            estimated_price_quantity = estimated_price_quantity.replace(/\,/g, '.');
             var estimated_price = estimated_price_per_box/estimated_price_quantity;
 
             if (!isNaN(estimated_price) && estimated_price !== Infinity) {
