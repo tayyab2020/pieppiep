@@ -1694,8 +1694,7 @@
 
                 @endif
                 
-                <li class="item-7035"><a href="/nl/reeleezee/probeer/slim-boekhouden-start" class="btn-blue">Probeer
-                        nu</a></li>
+                <li class="item-7035"><a href="" class="btn-blue">Probeer nu</a></li>
             </ul>
 
         </div>
