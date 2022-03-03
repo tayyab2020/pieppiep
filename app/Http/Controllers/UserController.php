@@ -406,17 +406,17 @@ class UserController extends Controller
 
         if($user->can('show-dashboard'))
         {
-            $no = 0;
-            $commission_percentage = Generalsetting::findOrFail(1);
-
-            $post = invoices::where('handyman_id', '=', $user->id)->where('is_completed', 1)->get();
-
-            foreach ($post as $temp) {
-
-                $no = $no + 1;
+            if($user->role_id == 2)
+            {
+                $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
+                $orders = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_orders.supplier_id')->whereIn('new_orders.supplier_id',$suppliers)->where('new_quotations.finished',1)->orderBy('new_orders.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_orders.delivery_date','new_orders.order_date','new_orders.approved','new_quotations.*')->get();
+            }
+            else
+            {
+                $orders = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_orders.supplier_id')->where('new_orders.supplier_id',$user->id)->where('new_quotations.finished',1)->orderBy('new_orders.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_orders.delivery_date','new_orders.order_date','new_orders.approved','new_quotations.*')->get();
             }
 
-            $orders = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_orders.supplier_id')->where('new_quotations.finished',1)->orderBy('new_orders.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_orders.delivery_date','new_orders.order_date','new_orders.approved','new_quotations.*')->get();
+            $commission_percentage = Generalsetting::findOrFail(1);
 
             $start = strtotime(date('Y-m-01', strtotime('0 month')));
             $end = strtotime(date('Y-m-01', strtotime('-5 month')));
@@ -474,7 +474,7 @@ class UserController extends Controller
             $invoices_chart = json_encode($invoices_chart);
             $quotes_chart = json_encode($quotes_chart);
 
-            return view('user.dashboard', compact('user', 'no','commission_percentage','invoices_chart','quotes_chart','orders'));
+            return view('user.dashboard', compact('user','commission_percentage','invoices_chart','quotes_chart','orders'));
         }
         else
         {
