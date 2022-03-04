@@ -47,9 +47,8 @@
                                     <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->email}}</p>
                                     <br>
                                     <br>
-                                    <!-- @if($role != 'retailer' && $role != 'order' && $role != 'supplier2' && $role != 'supplier3') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> OF: {{$quotation_invoice_number}}</p> @endif -->
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') ORB: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', $order_numbers_string), ','); echo 'OR: ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') ORB: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') FA: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', $order_numbers_string), ','); echo 'OR: ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
 
                                     </div>
 
@@ -274,7 +273,7 @@
 
                                                 <?php
 
-                                                if($role == 'retailer' || $role == 'order') {
+                                                if($role == 'retailer' || $role == 'invoice1' || $role == 'order') {
 
                                                     $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = isset($request->$childsafe_answer) ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
 
@@ -305,7 +304,7 @@
 
                                                         @foreach($col as $x => $feature)
 
-                                                            @if($role == 'retailer' || $role == 'order')
+                                                            @if($role == 'retailer' || $role == 'invoice1' || $role == 'order')
 
                                                                 <?php
 
@@ -468,7 +467,7 @@
                                             <td style="width: 40%;padding: 5px;">
                                                 <div style="display: inline-block;width: 100%;">
                                                     <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Invoer:</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice') {{$request->retailer_delivery_date}} @endif</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$request->retailer_delivery_date}} @endif</span>
                                                 </div>
                                             </td>
                                             <td style="width: 60%;padding: 5px;padding-left: 20px;">
@@ -514,7 +513,7 @@
                         @endif
 
 
-                        @if($form_type == 1 && $role != 'invoice' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+                        @if($form_type == 1 && $role != 'invoice' && $role != 'invoice1' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                             <div class="page_break">
 

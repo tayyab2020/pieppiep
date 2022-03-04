@@ -1189,20 +1189,42 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->role_id == 2)
 
-                <li><a @if(Route::currentRouteName() == 'retailer-company-info' || Route::currentRouteName() == 'email-templates') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Configurations</span></a>
+                <li><a @if(Route::currentRouteName() == 'retailer-company-info' || Route::currentRouteName() == 'email-templates' || Route::currentRouteName() == 'prefix-settings') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Configurations</span></a>
 
                     <ul class="hide">
 
-                            <span class="toggle-aside-nav">
-                                <i class="icon accordian-left-icon"></i>
-                            </span>
+                        <span class="toggle-aside-nav">
+                            <i class="icon accordian-left-icon"></i>
+                        </span>
 
                         <div style="overflow-y: auto;height: 100%;">
 
                             <li><a href="{{route('retailer-company-info')}}"><i class="fa fa-angle-right"></i> Company Info</a></li>
 
                             <li><a href="{{route('email-templates')}}"><i class="fa fa-angle-right"></i> Email Templates</a></li>
+                            
+                            <li><a href="{{route('prefix-settings')}}"><i class="fa fa-angle-right"></i> Prefix Settings</a></li>
 
+
+                        </div>
+
+                    </ul>
+
+                </li>
+
+            @elseif(auth()->user()->role_id == 4)
+
+                <li><a @if(Route::currentRouteName() == 'prefix-settings') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Configurations</span></a>
+
+                    <ul class="hide">
+
+                         <span class="toggle-aside-nav">
+                            <i class="icon accordian-left-icon"></i>
+                        </span>
+
+                        <div style="overflow-y: auto;height: 100%;">
+                            
+                            <li><a href="{{route('prefix-settings')}}"><i class="fa fa-angle-right"></i> Prefix Settings</a></li>
 
                         </div>
 

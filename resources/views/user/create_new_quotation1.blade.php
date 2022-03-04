@@ -13,6 +13,7 @@
 
 				<input type="hidden" name="form_type" value="2">
 				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
+				<input type="hidden" name="is_invoice" value="{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? 0 : 1) : 0}}">
 
 				<div style="margin: 0;" class="row">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -2746,7 +2747,6 @@
 					$(this).parent().find('#rate').val(rate);
 					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate.replace(/\./g, ','));
 					/*$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate);*/
-
 
 					var art = price_before_labor;
 					price_before_labor_total = parseFloat(price_before_labor_total) + parseFloat(art);

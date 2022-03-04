@@ -108,6 +108,8 @@
   Route::post('/create-customer','UserController@CreateCustomer');
   Route::get('/get-customer-email','UserController@GetCustomerEmail');
   Route::get('/email-templates','UserController@EmailTemplates')->name('email-templates');
+  Route::get('/prefix-settings','UserController@PrefixSettings')->name('prefix-settings');
+  Route::post('/prefix-settings','UserController@SavePrefixSettings')->name('save-prefix-settings');
   Route::post('/save-email-template','UserController@SaveEmailTemplate')->name('save-email-template');
   Route::get('/aanvrager-offerte/{id?}', 'UserController@CustomerQuotations')->name('customer-quotations');
   Route::get('/aanvrager-facturen/{id?}', 'UserController@CustomerInvoices')->name('customer-invoices');
