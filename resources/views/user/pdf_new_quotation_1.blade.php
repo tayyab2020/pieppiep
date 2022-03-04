@@ -78,7 +78,6 @@
                                         $arb_discount = str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'));
                                         $arb = $request->rate[$i];
                                         $arb = number_format((float)($arb), 2, ',', '.');
-                                        $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
                                     }
                                     else
                                     {
