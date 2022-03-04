@@ -179,7 +179,7 @@
                                                         <tr>
 
                                                             <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
-                                                            <td>{{str_replace('.', ',',$box_quantity)}}</td>
+                                                            <td>{{count($calculator_rows[$i]) == 1 ? $request->qty[$i] : str_replace('.', ',',$box_quantity)}}</td>
 
                                                             @if($role == 'supplier')
 
