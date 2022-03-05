@@ -413,7 +413,64 @@ class UserController extends Controller
 
     public function SavePrefixSettings(Request $request)
     {
-        User::where('id',$request->user_id)->update(['quotation_prefix' => $request->quotation_prefix ? $request->quotation_prefix : 'OF', 'quotation_length' => $request->quotation_length, 'order_prefix' => $request->order_prefix ? $request->order_prefix : 'OR', 'order_length' => $request->order_length, 'invoice_prefix' => $request->invoice_prefix ? $request->invoice_prefix : 'INV', 'invoice_length' => $request->invoice_length]);
+        $flag = 0;
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+        $msg = "";
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->role_id == 2)
+        {
+            $quotation_number = $request->quotation_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->quotation_length : date("Y") . '-' . $request->quotation_length;
+            $check_quotation = new_quotations::where('quotation_invoice_number',$quotation_number)->where('creator_id',$user_id)->first();
+
+            if($check_quotation)
+            {
+                $flag = 1;
+                $msg .= 'Quotation number conflict.<br>';
+            }
+
+            $invoice_number = $request->invoice_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->invoice_length : date("Y") . '-' . $request->invoice_length;
+            $check_invoice = new_invoices::where('invoice_number',$invoice_number)->where('creator_id',$user_id)->first();
+
+            if($check_invoice)
+            {
+                $flag = 1;
+                $msg .= 'Invoice number conflict.';
+            }
+
+            if($flag)
+            {
+                Session::flash('unsuccess', $msg);
+                return redirect()->back();
+            }
+
+            User::where('id',$request->user_id)->update(['quotation_prefix' => $request->quotation_prefix ? $request->quotation_prefix : 'OF', 'counter' => ltrim($request->quotation_length, '0'), 'quotation_client_id' => $request->quotation_client_id, 'invoice_prefix' => $request->invoice_prefix ? $request->invoice_prefix : 'INV', 'counter_invoice' => ltrim($request->invoice_length, '0'), 'invoice_client_id' => $request->invoice_client_id]);
+        }
+        else
+        {
+            $order_number = $request->order_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->order_length : date("Y") . '-' . $request->order_length;
+            $check_order = new_orders::where('order_number',$order_number)->where('supplier_id',$user_id)->first();
+
+            if($check_order)
+            {
+                $flag = 1;
+                $msg .= 'Order number conflict.';
+            }
+
+            if($flag)
+            {
+                Session::flash('unsuccess', $msg);
+                return redirect()->back();
+            }
+
+            User::where('id',$request->user_id)->update(['order_prefix' => $request->order_prefix ? $request->order_prefix : 'OR', 'counter_order' => ltrim($request->order_length, '0'), 'order_client_id' => $request->order_client_id]);
+        }
 
         Session::flash('success', 'Information updated successfully.');
 

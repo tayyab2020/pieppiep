@@ -26,92 +26,125 @@
 
                                         <input type="hidden" name="user_id" value="{{$user->id}}"/>
 
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_display_name">Quotation Prefix</label>
-                                            <div class="col-sm-6">
-                                                <input value="{{$user->quotation_prefix}}" class="form-control" name="quotation_prefix" placeholder="Enter Quotation Prefix" type="text">
+                                        @if($user->role_id == 2)
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Client ID in quotation number?</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="quotation_client_id">
+                                                        <option {{$user->quotation_client_id == 0 ? 'selected' : null}} value="0">No</option>
+                                                        <option {{$user->quotation_client_id == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_slug">Quotation Number Length</label>
-                                            <div class="col-sm-6">
-
-                                                <select class="form-control" name="quotation_length">
-
-                                                    <option {{$user->quotation_length == 1 ? 'selected' : null}} value="1">1</option>
-                                                    <option {{$user->quotation_length == 2 ? 'selected' : null}} value="2">2</option>
-                                                    <option {{$user->quotation_length == 3 ? 'selected' : null}} value="3">3</option>
-                                                    <option {{$user->quotation_length == 4 ? 'selected' : null}} value="4">4</option>
-                                                    <option {{$user->quotation_length == 5 ? 'selected' : null}} value="5">5</option>
-                                                    <option {{$user->quotation_length == 6 ? 'selected' : null}} value="6">6</option>
-                                                    <option {{$user->quotation_length == 7 ? 'selected' : null}} value="7">7</option>
-                                                    <option {{$user->quotation_length == 8 ? 'selected' : null}} value="8">8</option>
-                                                    <option {{$user->quotation_length == 9 ? 'selected' : null}} value="9">9</option>
-                                                    <option {{$user->quotation_length == 10 ? 'selected' : null}} value="10">10</option>
-
-                                                </select>
-                                                
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Quotation Prefix</label>
+                                                <div class="col-sm-6">
+                                                    <input value="{{$user->quotation_prefix}}" class="form-control" name="quotation_prefix" placeholder="Enter Quotation Prefix" type="text">
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_display_name">Order Prefix</label>
-                                            <div class="col-sm-6">
-                                                <input value="{{$user->order_prefix}}" class="form-control" name="order_prefix" placeholder="Enter Order Prefix" type="text">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_slug">Quotation Number Length</label>
+                                                <div class="col-sm-6">
+
+                                                    <div class="input-group">
+
+                                                        <div class="input-group-btn">
+                                                            <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+                                                        </div>
+
+                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter)}}" name="quotation_length" type="text" id="myNumber" readonly class="form-control input-number" />
+
+                                                        <div class="input-group-btn">
+                                                            <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_slug">Order Number Length</label>
-                                            <div class="col-sm-6">
-
-                                                <select class="form-control" name="order_length">
-
-                                                    <option {{$user->order_length == 1 ? 'selected' : null}} value="1">1</option>
-                                                    <option {{$user->order_length == 2 ? 'selected' : null}} value="2">2</option>
-                                                    <option {{$user->order_length == 3 ? 'selected' : null}} value="3">3</option>
-                                                    <option {{$user->order_length == 4 ? 'selected' : null}} value="4">4</option>
-                                                    <option {{$user->order_length == 5 ? 'selected' : null}} value="5">5</option>
-                                                    <option {{$user->order_length == 6 ? 'selected' : null}} value="6">6</option>
-                                                    <option {{$user->order_length == 7 ? 'selected' : null}} value="7">7</option>
-                                                    <option {{$user->order_length == 8 ? 'selected' : null}} value="8">8</option>
-                                                    <option {{$user->order_length == 9 ? 'selected' : null}} value="9">9</option>
-                                                    <option {{$user->order_length == 10 ? 'selected' : null}} value="10">10</option>
-
-                                                </select>
-                                                
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Client ID in Invoice number?</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="invoice_client_id">
+                                                        <option {{$user->invoice_client_id == 0 ? 'selected' : null}} value="0">No</option>
+                                                        <option {{$user->invoice_client_id == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_display_name">Invoice Prefix</label>
-                                            <div class="col-sm-6">
-                                                <input value="{{$user->invoice_prefix}}" class="form-control" name="invoice_prefix" placeholder="Enter Invoice Prefix" type="text">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Invoice Prefix</label>
+                                                <div class="col-sm-6">
+                                                    <input value="{{$user->invoice_prefix}}" class="form-control" name="invoice_prefix" placeholder="Enter Invoice Prefix" type="text">
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_slug">Invoice Number Length</label>
-                                            <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_slug">Invoice Number Length</label>
+                                                <div class="col-sm-6">
 
-                                                <select class="form-control" name="invoice_length">
+                                                    <div class="input-group">
 
-                                                    <option {{$user->invoice_length == 1 ? 'selected' : null}} value="1">1</option>
-                                                    <option {{$user->invoice_length == 2 ? 'selected' : null}} value="2">2</option>
-                                                    <option {{$user->invoice_length == 3 ? 'selected' : null}} value="3">3</option>
-                                                    <option {{$user->invoice_length == 4 ? 'selected' : null}} value="4">4</option>
-                                                    <option {{$user->invoice_length == 5 ? 'selected' : null}} value="5">5</option>
-                                                    <option {{$user->invoice_length == 6 ? 'selected' : null}} value="6">6</option>
-                                                    <option {{$user->invoice_length == 7 ? 'selected' : null}} value="7">7</option>
-                                                    <option {{$user->invoice_length == 8 ? 'selected' : null}} value="8">8</option>
-                                                    <option {{$user->invoice_length == 9 ? 'selected' : null}} value="9">9</option>
-                                                    <option {{$user->invoice_length == 10 ? 'selected' : null}} value="10">10</option>
+                                                        <div class="input-group-btn">
+                                                            <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+                                                        </div>
 
-                                                </select>
-                                                
+                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter_invoice)}}" name="invoice_length" type="text" id="myNumber" readonly class="form-control input-number" />
+
+                                                        <div class="input-group-btn">
+                                                            <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                        </div>
+
+                                        @else
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Client ID in Order number?</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="order_client_id">
+                                                        <option {{$user->order_client_id == 0 ? 'selected' : null}} value="0">No</option>
+                                                        <option {{$user->order_client_id == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Order Prefix</label>
+                                                <div class="col-sm-6">
+                                                    <input value="{{$user->order_prefix}}" class="form-control" name="order_prefix" placeholder="Enter Order Prefix" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_slug">Order Number Length</label>
+                                                <div class="col-sm-6">
+
+                                                    <div class="input-group">
+
+                                                        <div class="input-group-btn">
+                                                            <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+                                                        </div>
+
+                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter_order)}}" name="order_length" type="text" id="myNumber" readonly class="form-control input-number" />
+
+                                                        <div class="input-group-btn">
+                                                            <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        @endif
 
                                         <hr>
 
@@ -130,6 +163,55 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+
+    <script>
+
+        $('body').on('click', '#up' ,function(){
+
+            var value = $(this).parents('.input-group').find('#myNumber').val();
+            value = parseInt(value.replace(/^0+/, ''));
+            value = value + 1;
+
+            value = value+"";
+
+            if(value.length > 6)
+            {
+                value = "999999";
+            }
+
+            while (value.length < 6) value = "0" + value;
+
+            $(this).parents('.input-group').find('#myNumber').val(value);
+
+        });
+
+        $('body').on('click', '#down' ,function(){
+
+            var value = $(this).parents('.input-group').find('#myNumber').val();
+
+            if(value == "000000")
+            {
+                value = "000000";
+            }
+            else
+            {
+                value = parseInt(value.replace(/^0+/, ''));
+                value = value - 1;
+            }
+
+            value = value+"";
+
+            while (value.length < 6) value = "0" + value;
+
+            $(this).parents('.input-group').find('#myNumber').val(value);
+
+        });
+
+    </script>
+
 @endsection
 
     <style type="text/css">
