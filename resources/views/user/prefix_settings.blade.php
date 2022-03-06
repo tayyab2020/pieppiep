@@ -46,7 +46,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Quotation Number Length</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">Quotation Counter</label>
                                                 <div class="col-sm-6">
 
                                                     <div class="input-group">
@@ -55,7 +55,7 @@
                                                             <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
                                                         </div>
 
-                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter)}}" name="quotation_length" type="text" id="myNumber" readonly class="form-control input-number" />
+                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter)}}" name="quotation_counter" type="text" id="myNumber" readonly class="form-control input-number" />
 
                                                         <div class="input-group-btn">
                                                             <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
@@ -84,7 +84,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Invoice Number Length</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">Invoice Counter</label>
                                                 <div class="col-sm-6">
 
                                                     <div class="input-group">
@@ -93,7 +93,7 @@
                                                             <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
                                                         </div>
 
-                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter_invoice)}}" name="invoice_length" type="text" id="myNumber" readonly class="form-control input-number" />
+                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter_invoice)}}" name="invoice_counter" type="text" id="myNumber" readonly class="form-control input-number" />
 
                                                         <div class="input-group-btn">
                                                             <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
@@ -124,7 +124,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Order Number Length</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">Order Counter</label>
                                                 <div class="col-sm-6">
 
                                                     <div class="input-group">
@@ -133,7 +133,7 @@
                                                             <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
                                                         </div>
 
-                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter_order)}}" name="order_length" type="text" id="myNumber" readonly class="form-control input-number" />
+                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter_order)}}" name="order_counter" type="text" id="myNumber" readonly class="form-control input-number" />
 
                                                         <div class="input-group-btn">
                                                             <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>

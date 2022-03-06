@@ -426,22 +426,22 @@ class UserController extends Controller
 
         if($user->role_id == 2)
         {
-            $quotation_number = $request->quotation_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->quotation_length : date("Y") . '-' . $request->quotation_length;
+            $quotation_number = $request->quotation_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->quotation_counter : date("Y") . '-' . $request->quotation_counter;
             $check_quotation = new_quotations::where('quotation_invoice_number',$quotation_number)->where('creator_id',$user_id)->first();
 
             if($check_quotation)
             {
                 $flag = 1;
-                $msg .= 'Quotation number conflict.<br>';
+                $msg .= 'Quotation number: '.$quotation_number.' already in system. Kindly change counter.<br>';
             }
 
-            $invoice_number = $request->invoice_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->invoice_length : date("Y") . '-' . $request->invoice_length;
+            $invoice_number = $request->invoice_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->invoice_counter : date("Y") . '-' . $request->invoice_counter;
             $check_invoice = new_invoices::where('invoice_number',$invoice_number)->where('creator_id',$user_id)->first();
 
             if($check_invoice)
             {
                 $flag = 1;
-                $msg .= 'Invoice number conflict.';
+                $msg .= 'Invoice number: '.$invoice_number.' already in system. Kindly change counter.';
             }
 
             if($flag)
@@ -450,17 +450,17 @@ class UserController extends Controller
                 return redirect()->back();
             }
 
-            User::where('id',$request->user_id)->update(['quotation_prefix' => $request->quotation_prefix ? $request->quotation_prefix : 'OF', 'counter' => ltrim($request->quotation_length, '0'), 'quotation_client_id' => $request->quotation_client_id, 'invoice_prefix' => $request->invoice_prefix ? $request->invoice_prefix : 'INV', 'counter_invoice' => ltrim($request->invoice_length, '0'), 'invoice_client_id' => $request->invoice_client_id]);
+            User::where('id',$request->user_id)->update(['quotation_prefix' => $request->quotation_prefix ? $request->quotation_prefix : 'OF', 'counter' => ltrim($request->quotation_counter, '0'), 'quotation_client_id' => $request->quotation_client_id, 'invoice_prefix' => $request->invoice_prefix ? $request->invoice_prefix : 'INV', 'counter_invoice' => ltrim($request->invoice_counter, '0'), 'invoice_client_id' => $request->invoice_client_id]);
         }
         else
         {
-            $order_number = $request->order_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->order_length : date("Y") . '-' . $request->order_length;
+            $order_number = $request->order_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . $request->order_counter : date("Y") . '-' . $request->order_counter;
             $check_order = new_orders::where('order_number',$order_number)->where('supplier_id',$user_id)->first();
 
             if($check_order)
             {
                 $flag = 1;
-                $msg .= 'Order number conflict.';
+                $msg .= 'Order number '.$order_number.' already in system. Kindly change counter.';
             }
 
             if($flag)
@@ -469,7 +469,7 @@ class UserController extends Controller
                 return redirect()->back();
             }
 
-            User::where('id',$request->user_id)->update(['order_prefix' => $request->order_prefix ? $request->order_prefix : 'OR', 'counter_order' => ltrim($request->order_length, '0'), 'order_client_id' => $request->order_client_id]);
+            User::where('id',$request->user_id)->update(['order_prefix' => $request->order_prefix ? $request->order_prefix : 'OR', 'counter_order' => ltrim($request->order_counter, '0'), 'order_client_id' => $request->order_client_id]);
         }
 
         Session::flash('success', 'Information updated successfully.');
@@ -3668,7 +3668,7 @@ class UserController extends Controller
                     if(!$order_number)
                     {
                         $counter_order = $suppliers[$i]->counter_order;
-                        $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
+                        $order_number = $suppliers[$i]->order_client_id ? date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%06u', $counter_order) : date("Y") . "-" . sprintf('%06u', $counter_order);
                         $counter_order = $counter_order + 1;
                         User::where('id',$request->suppliers[$i])->update(['counter_order' => $counter_order]);
                     }
@@ -4113,7 +4113,7 @@ class UserController extends Controller
         }
         else
         {
-            $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
+            $quotation_invoice_number = $user->quotation_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%06u', $counter) : date("Y") . '-' . sprintf('%06u', $counter);
 
             $invoice = new new_quotations();
             $invoice->form_type = $form_type;
@@ -4184,7 +4184,7 @@ class UserController extends Controller
                     if(!$order_number)
                     {
                         $counter_order = $suppliers[$i]->counter_order;
-                        $order_number = date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%04u', $counter_order);
+                        $order_number = $suppliers[$i]->order_client_id ? date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%06u', $counter_order) : date("Y") . '-' . sprintf('%06u', $counter_order);
                         $counter_order = $counter_order + 1;
                         User::where('id',$suppliers[$i]->id)->update(['counter_order' => $counter_order]);
                     }
@@ -4864,7 +4864,7 @@ class UserController extends Controller
             $quote->save();
 
             $requested_quote_number = $quote->quote_number;
-            $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
+            $quotation_invoice_number = $user->quotation_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%06u', $counter) : date("Y") . '-' . sprintf('%06u', $counter);
 
             $invoice = new quotation_invoices;
             $invoice->quote_id = $request->quote_id;
@@ -5601,7 +5601,7 @@ class UserController extends Controller
         {
             $date = date("Y-m-d");
             $invoice_data = new_quotations::where('id',$data->id)->first();
-            $invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter_invoice);
+            $invoice_number = $user->invoice_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%06u', $counter_invoice) : date("Y") . '-' . sprintf('%06u', $counter_invoice);
             $invoice_data->quotation_id = $data->id;
             $invoice_data->invoice_number = $invoice_number;
             $invoice_data->invoice_date = $date;
@@ -5781,7 +5781,7 @@ class UserController extends Controller
 
         if ($name == 'store-custom-quotation') {
 
-            $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
+            $quotation_invoice_number = $user->quotation_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%06u', $counter) : date("Y") . '-' . sprintf('%06u', $counter);
 
             $invoice = new custom_quotations;
             $invoice->quotation_invoice_number = $quotation_invoice_number;
@@ -5883,7 +5883,7 @@ class UserController extends Controller
 
         } elseif ($name == 'store-direct-invoice') {
 
-            $quotation_invoice_number = date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%04u', $counter);
+            $quotation_invoice_number = $user->quotation_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%06u', $counter) : date("Y") . '-' . sprintf('%06u', $counter);
 
             $invoice = new custom_quotations;
             $invoice->quotation_invoice_number = $quotation_invoice_number;
@@ -7121,6 +7121,7 @@ class UserController extends Controller
 
             }
         }
+        
         $counter = $counter->counter;
 
         $invoice_no = sprintf('%04u', $counter);
