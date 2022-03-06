@@ -408,7 +408,22 @@ class UserController extends Controller
             return redirect()->route('user-login');
         }
 
-        return view('user.prefix_settings',compact('user'));
+        $user_id = $user->id;
+
+        if($user->role_id == 2)
+        {
+            $last_quotation_number = new_quotations::where('creator_id',$user_id)->latest()->pluck('quotation_invoice_number')->first();
+            $last_order_number = '';
+            $last_invoice_number = new_invoices::where('creator_id',$user_id)->latest()->pluck('invoice_number')->first();
+        }
+        else
+        {
+            $last_quotation_number = '';
+            $last_order_number = new_orders::where('supplier_id',$user_id)->latest()->pluck('order_number')->first();
+            $last_invoice_number = '';
+        }
+
+        return view('user.prefix_settings',compact('user','last_quotation_number','last_order_number','last_invoice_number'));
     }
 
     public function SavePrefixSettings(Request $request)

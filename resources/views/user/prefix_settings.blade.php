@@ -46,27 +46,6 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Quotation Counter</label>
-                                                <div class="col-sm-6">
-
-                                                    <div class="input-group">
-
-                                                        <div class="input-group-btn">
-                                                            <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
-                                                        </div>
-
-                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter)}}" name="quotation_counter" type="text" id="myNumber" readonly class="form-control input-number" />
-
-                                                        <div class="input-group-btn">
-                                                            <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Client ID in Invoice number?</label>
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="invoice_client_id">
@@ -84,23 +63,32 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Invoice Counter</label>
-                                                <div class="col-sm-6">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name"></label>
+                                                <div class="col-sm-3">
+                                                    <label>Next Number</label>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>Last Number Used</label>
+                                                </div>
+                                            </div>
 
-                                                    <div class="input-group">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Quotation Counter</label>
+                                                <div class="col-sm-3">
+                                                    <input value="{{sprintf('%06d', $user->counter)}}" id="my_number" class="form-control" name="quotation_counter" required placeholder="Enter Quotation Counter" type="text">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <input value="{{$last_quotation_number}}" class="form-control" readonly placeholder="" type="text">
+                                                </div>
+                                            </div>
 
-                                                        <div class="input-group-btn">
-                                                            <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
-                                                        </div>
-
-                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter_invoice)}}" name="invoice_counter" type="text" id="myNumber" readonly class="form-control input-number" />
-
-                                                        <div class="input-group-btn">
-                                                            <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
-                                                        </div>
-
-                                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Invoice Counter</label>
+                                                <div class="col-sm-3">
+                                                    <input value="{{sprintf('%06d', $user->counter_invoice)}}" id="my_number" class="form-control" name="invoice_counter" required placeholder="Enter Invoice Counter" type="text">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <input value="{{$last_invoice_number}}" class="form-control" readonly placeholder="" type="text">
                                                 </div>
                                             </div>
 
@@ -124,23 +112,22 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Order Counter</label>
-                                                <div class="col-sm-6">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name"></label>
+                                                <div class="col-sm-3">
+                                                    <label>Next Number</label>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>Last Number Used</label>
+                                                </div>
+                                            </div>
 
-                                                    <div class="input-group">
-
-                                                        <div class="input-group-btn">
-                                                            <button style="height: 40px;outline: none !important;" type="button" id="down" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
-                                                        </div>
-
-                                                        <input style="background-color: white;" value="{{sprintf('%06d', $user->counter_order)}}" name="order_counter" type="text" id="myNumber" readonly class="form-control input-number" />
-
-                                                        <div class="input-group-btn">
-                                                            <button style="height: 40px;outline: none !important;" type="button" id="up" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
-                                                        </div>
-
-                                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Order Counter</label>
+                                                <div class="col-sm-3">
+                                                    <input value="{{sprintf('%06d', $user->counter_order)}}" class="form-control" name="order_counter" required placeholder="Enter Order Counter" type="text">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <input value="{{$last_order_number}}" class="form-control" readonly placeholder="" type="text">
                                                 </div>
                                             </div>
 
@@ -168,6 +155,19 @@
 @section('scripts')
 
     <script>
+
+        $('body').on('input', '#my_number' ,function(){
+
+            var value = $(this).val();
+            value = value.replace(/^0+/, '');
+
+            console.log(value.length);
+
+            while (value.length < 6) value = "0" + value;
+
+            $(this).val(value);
+
+        });
 
         $('body').on('click', '#up' ,function(){
 
