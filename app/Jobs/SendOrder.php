@@ -199,11 +199,11 @@ class SendOrder implements ShouldQueue
 
             if($form_type == 1)
             {
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('calculator_rows','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('supplier_data','calculator_rows','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
             }
             else
             {
-                $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('supplier_data','form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client', 'user', 'request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
             }
 
             $pdf->save($file);

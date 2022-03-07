@@ -124,7 +124,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Order Counter</label>
                                                 <div class="col-sm-3">
-                                                    <input value="{{sprintf('%06d', $user->counter_order)}}" class="form-control" name="order_counter" required placeholder="Enter Order Counter" type="text">
+                                                    <input value="{{sprintf('%06d', $user->counter_order)}}" id="my_number" class="form-control" name="order_counter" required placeholder="Enter Order Counter" type="text">
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <input value="{{$last_order_number}}" class="form-control" readonly placeholder="" type="text">
@@ -166,47 +166,6 @@
             while (value.length < 6) value = "0" + value;
 
             $(this).val(value);
-
-        });
-
-        $('body').on('click', '#up' ,function(){
-
-            var value = $(this).parents('.input-group').find('#myNumber').val();
-            value = parseInt(value.replace(/^0+/, ''));
-            value = value + 1;
-
-            value = value+"";
-
-            if(value.length > 6)
-            {
-                value = "999999";
-            }
-
-            while (value.length < 6) value = "0" + value;
-
-            $(this).parents('.input-group').find('#myNumber').val(value);
-
-        });
-
-        $('body').on('click', '#down' ,function(){
-
-            var value = $(this).parents('.input-group').find('#myNumber').val();
-
-            if(value == "000000")
-            {
-                value = "000000";
-            }
-            else
-            {
-                value = parseInt(value.replace(/^0+/, ''));
-                value = value - 1;
-            }
-
-            value = value+"";
-
-            while (value.length < 6) value = "0" + value;
-
-            $(this).parents('.input-group').find('#myNumber').val(value);
 
         });
 

@@ -3691,6 +3691,10 @@ class UserController extends Controller
 
                 $order_numbers[$i] = $order_number;
             }
+            else
+            {
+                $supplier_data = User::where('id',$request->supplier_id)->first();
+            }
 
             $order = new new_orders;
             $order->order_number = $order_number;
@@ -4020,13 +4024,13 @@ class UserController extends Controller
             {
                 $role = 'supplier3';
                 $form_type = 1;
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('supplier_data','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
             }
             else
             {
                 $role = 'supplier1';
                 $form_type = 2;
-                $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('supplier_data','form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
             }
 
             $pdf->save($file);
