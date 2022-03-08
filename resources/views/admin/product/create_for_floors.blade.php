@@ -40,7 +40,6 @@
                                                 {{--<li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu2">General Options</a></li>--}}
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu3">Colors Options</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu5">Features</a></li>
-                                                <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu6">Price Control</a></li>
                                                 <li style="margin-bottom: 0;"><a data-toggle="tab" href="#menu7">Models</a></li>
                                             </ul>
 
@@ -140,21 +139,6 @@
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Size</label>
                                                             <div class="col-sm-6">
                                                                 <input value="{{isset($cats) ? $cats->size : null}}" class="form-control" name="size" id="blood_group_slug" placeholder="Enter Size" type="number">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Measure</label>
-                                                            <div class="col-sm-6">
-                                                                
-                                                                <select class="js-data-example-ajax3 form-control" style="height: 40px;" name="measure" id="measure">
-
-                                                                    <option @if(isset($cats)) @if($cats->measure == 'M1') selected @endif @endif value="M1">M1</option>
-                                                                    <option @if(isset($cats)) @if($cats->measure == 'M2') selected @endif @endif value="M2">M2</option>
-                                                                    <option @if(isset($cats)) @if($cats->measure == 'Custom Sized') selected @endif @endif value="Custom Sized">Custom Sized</option>
-
-                                                                </select>
-                                                                
                                                             </div>
                                                         </div>
 
@@ -1181,50 +1165,6 @@
 
                                                     </div>
 
-                                                    <div id="menu6" class="tab-pane fade">
-
-                                                        <div class="row" style="margin: 0;">
-
-                                                            <div class="form-group">
-
-                                                                <div class="row" style="margin: 0;">
-
-                                                                    <div style="margin: 10px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                        <label class="container1">Price based on price table
-                                                                            <input type="radio" name="price_based_option" value="1" {{isset($cats) ? ($cats->price_based_option == 1 ? 'checked' : null) : 'checked'}}>
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </div>
-
-                                                                    <div style="margin: 10px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                        <label class="container1">Price based on width
-                                                                            <input type="radio" name="price_based_option" value="2" {{isset($cats) ? ($cats->price_based_option == 2 ? 'checked' : null) : null}}>
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </div>
-
-                                                                    <div style="margin: 10px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                        <label class="container1">Price based on height
-                                                                            <input type="radio" name="price_based_option" value="3" {{isset($cats) ? ($cats->price_based_option == 3 ? 'checked' : null) : null}}>
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </div>
-
-                                                                    <div style="margin: 10px 0;display: flex;align-items: center;justify-content: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                        <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;" class="control-label">Base Price:</label>
-                                                                        <input style="width: auto;border-radius: 10px;" class="form-control base_price" value="{{isset($cats) ? $cats->base_price : 0}}" name="base_price" id="blood_group_slug" placeholder="Base Price" type="number">
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-
                                                     <div id="menu7" class="tab-pane fade">
 
                                                         <div class="form-group" style="margin-bottom: 20px;">
@@ -1240,11 +1180,7 @@
                                                                 </div>
 
                                                                 <div style="font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Price Impact</h4>
-                                                                </div>
-
-                                                                <div style="font-family: monospace;" class="col-sm-2">
-                                                                    <h4>Impact Type</h4>
+                                                                    <h4>Measure</h4>
                                                                 </div>
 
                                                                 <div style="font-family: monospace;text-align: center;" class="col-sm-2">
@@ -1277,20 +1213,10 @@
 
                                                                             <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                                <select class="form-control" id="price_impact" name="model_price_impact[]">
-                                                                                    <option {{$key->price_impact == 0 ? 'selected' : null}} value="0">No</option>
-                                                                                    <option {{$key->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
-                                                                                    <option {{$key->m1_impact == 1 ? 'selected' : null}} value="2">m¹ Impact</option>
-                                                                                    <option {{$key->m2_impact == 1 ? 'selected' : null}} value="3">m² Impact</option>
-                                                                                </select>
-
-                                                                            </div>
-
-                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                                <select class="form-control" id="impact_type" name="model_impact_type[]">
-                                                                                    <option {{$key->impact_type == 0 ? 'selected' : null}} value="0">€</option>
-                                                                                    <option {{$key->impact_type == 1 ? 'selected' : null}} value="1">%</option>
+                                                                                <select class="form-control" id="model_measure" name="model_measure[]">
+                                                                                    <option {{$key->measure == 'M1' ? 'selected' : null}} value="M1">M1</option>
+                                                                                    <option {{$key->measure == 'M2' ? 'selected' : null}} value="M2">M2</option>
+                                                                                    <option {{$key->measure == 'Custom Sized' ? 'selected' : null}} value="Custom Sized">Custom Sized</option>
                                                                                 </select>
 
                                                                             </div>
@@ -1325,20 +1251,10 @@
 
                                                                         <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
 
-                                                                            <select class="form-control" id="price_impact" name="model_price_impact[]">
-                                                                                <option value="0">No</option>
-                                                                                <option value="1">Fixed</option>
-                                                                                <option value="2">m¹ Impact</option>
-                                                                                <option value="3">m² Impact</option>
-                                                                            </select>
-
-                                                                        </div>
-
-                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
-
-                                                                            <select class="form-control" id="impact_type" name="model_impact_type[]">
-                                                                                <option value="0">€</option>
-                                                                                <option value="1">%</option>
+                                                                            <select class="form-control" id="model_measure" name="model_measure[]">
+                                                                                <option value="M1">M1</option>
+                                                                                <option value="M2">M2</option>
+                                                                                <option value="Custom Sized">Custom Sized</option>
                                                                             </select>
 
                                                                         </div>
@@ -2557,23 +2473,11 @@
                 '\n' +
                 '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                 '\n' +
-                '                                                                        <select class="form-control" id="price_impact" name="model_price_impact[]">\n' +
+                '                                                                        <select class="form-control" id="model_measure" name="model_measure[]">\n' +
                 '\n' +
-                '                                                                           <option value="0">No</option>\n' +
-                '                                                                           <option value="1">Fixed</option>\n' +
-                '                                                                           <option value="2">m¹ Impact</option>\n' +
-                '                                                                           <option value="3">m² Impact</option>\n' +
-                '\n' +
-                '                                                                        </select>\n' +
-                '\n' +
-                '                                                                    </div>\n' +
-                '\n' +
-                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                '\n' +
-                '                                                                        <select class="form-control" id="impact_type" name="model_impact_type[]">\n' +
-                '\n' +
-                '                                                                           <option value="0">€</option>\n' +
-                '                                                                           <option value="1">%</option>\n' +
+                '                                                                           <option value="M1">M1</option>\n' +
+                '                                                                           <option value="M2">M2</option>\n' +
+                '                                                                           <option value="Custom Sized">Custom Sized</option>\n' +
                 '\n' +
                 '                                                                        </select>\n' +
                 '\n' +
@@ -2743,23 +2647,11 @@
                     '\n' +
                     '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                        <select class="form-control" id="price_impact" name="model_price_impact[]">\n' +
+                    '                                                                        <select class="form-control" id="model_measure" name="model_measure[]">\n' +
                     '\n' +
-                    '                                                                           <option value="0">No</option>\n' +
-                    '                                                                           <option value="1">Fixed</option>\n' +
-                    '                                                                           <option value="2">m¹ Impact</option>\n' +
-                    '                                                                           <option value="3">m² Impact</option>\n' +
-                    '\n' +
-                    '                                                                        </select>\n' +
-                    '\n' +
-                    '                                                                    </div>\n' +
-                    '\n' +
-                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
-                    '\n' +
-                    '                                                                        <select class="form-control" id="impact_type" name="model_impact_type[]">\n' +
-                    '\n' +
-                    '                                                                           <option value="0">€</option>\n' +
-                    '                                                                           <option value="1">%</option>\n' +
+                    '                                                                           <option value="M1">M1</option>\n' +
+                    '                                                                           <option value="M2">M2</option>\n' +
+                    '                                                                           <option value="Custom Sized">Custom Sized</option>\n' +
                     '\n' +
                     '                                                                        </select>\n' +
                     '\n' +
@@ -2831,23 +2723,44 @@
                     '\n' +
                     '                                                                                            </div>\n' +
                     '\n' +
-                    '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
-                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max m²:</label>\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>\n' +
+                    '                                                                                                    <input class="form-control estimated_price_per_box" id="estimated_price_per_box" name="estimated_price_per_box[]" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">\n' +
+                    '\n' +
+                    '                                                                                                </div>\n' +
+                    '\n' +
+                    '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Quantity:</label>\n' +
+                    '                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="Advice Price Quantity" type="text">\n' +
+                    '\n' +
+                    '                                                                                                </div>\n' +
+                    '\n' +
+                    '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price:</label>\n' +
+                    '                                                                                                    <input class="form-control estimated_price" id="estimated_price" name="estimated_price[]" readonly maskedformat="9,1" placeholder="Advice Price" type="text">\n' +
+                    '\n' +
+                    '                                                                                                </div>\n' +
+                    '\n' +
+                    '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max m²:</label>\n' +
                     '                                                                                                    <input class="form-control model_max_size" name="model_max_size[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max m²" type="text">\n' +
                     '\n' +
                     '                                                                                                </div>\n' +
                     '\n' +
-                    '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
-                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Width:</label>\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Width:</label>\n' +
                     '                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">\n' +
                     '\n' +
                     '                                                                                                </div>\n' +
                     '\n' +
-                    '                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;margin-top: 20px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
-                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;width: 30%;" class="control-label">Max Height:</label>\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Height:</label>\n' +
                     '                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
                     '\n' +
                     '                                                                                                </div>\n' +
@@ -3661,15 +3574,6 @@
                     text: 'Model should not be empty!',
                 });
             }*/
-            else if(!$(".base_price").val())
-            {
-                flag = 1;
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Base price should not be empty!',
-                });
-            }
 
             if(!flag)
             {
@@ -4644,13 +4548,6 @@
             width: '100%',
             height: '200px',
             placeholder: "Select Brand",
-            allowClear: true,
-        });
-
-        $(".js-data-example-ajax3").select2({
-            width: '100%',
-            height: '200px',
-            placeholder: "Select Measure",
             allowClear: true,
         });
 

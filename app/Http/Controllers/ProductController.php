@@ -523,6 +523,15 @@ class ProductController extends Controller
 
     public function store(StoreValidationRequest3 $request)
     {
+        $products = Products::all();
+
+        foreach($products as $key)
+        {
+            $find = product_models::where('product_id',$key->id)->update(['measure' => $key->measure]);
+        }
+
+        exit();
+
         $input = $request->all();
 
         // $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
@@ -834,19 +843,27 @@ class ProductController extends Controller
                         $model_check->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model_check->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
                         $model_check->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
-                        $model_check->price_impact = ($request->model_price_impact[$m] == 0 || $request->model_price_impact[$m] == 1) ? $request->model_price_impact[$m] : 0;
-                        $model_check->impact_type = $request->model_impact_type[$m];
-                        $model_check->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
-                        $model_check->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
-                        $model_check->childsafe = $request->childsafe[$m];
                         
                         if($request->form_type == 1)
                         {
+                            $model_check->price_impact = 0;
+                            $model_check->impact_type = 0;
+                            $model_check->m2_impact = 0;
+                            $model_check->m1_impact = 0;
+                            $model_check->measure = $request->model_measure[$m];
                             $model_check->estimated_price_per_box = str_replace(',', '.',$request->estimated_price_per_box[$m]);
                             $model_check->estimated_price_quantity = str_replace(',', '.',$request->estimated_price_quantity[$m]);
                             $model_check->estimated_price = str_replace(',', '.',$request->estimated_price[$m]);
                         }
+                        else
+                        {
+                            $model_check->price_impact = ($request->model_price_impact[$m] == 0 || $request->model_price_impact[$m] == 1) ? $request->model_price_impact[$m] : 0;
+                            $model_check->impact_type = $request->model_impact_type[$m];
+                            $model_check->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
+                            $model_check->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;   
+                        }
                         
+                        $model_check->childsafe = $request->childsafe[$m];
                         $model_check->save();
                     }
 
@@ -885,19 +902,27 @@ class ProductController extends Controller
                         $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
                         $model->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
-                        $model->price_impact = ($request->model_price_impact[$m] == 0 || $request->model_price_impact[$m] == 1) ? $request->model_price_impact[$m] : 0;
-                        $model->impact_type = $request->model_impact_type[$m];
-                        $model->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
-                        $model->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
-                        $model->childsafe = $request->childsafe[$m];
-
+                        
                         if($request->form_type == 1)
                         {
+                            $model->price_impact = 0;
+                            $model->impact_type = 0;
+                            $model->m2_impact = 0;
+                            $model->m1_impact = 0;
+                            $model->measure = $request->model_measure[$m];
                             $model->estimated_price_per_box = str_replace(',', '.',$request->estimated_price_per_box[$m]);
                             $model->estimated_price_quantity = str_replace(',', '.',$request->estimated_price_quantity[$m]);
                             $model->estimated_price = str_replace(',', '.',$request->estimated_price[$m]);
                         }
-
+                        else
+                        {
+                            $model->price_impact = ($request->model_price_impact[$m] == 0 || $request->model_price_impact[$m] == 1) ? $request->model_price_impact[$m] : 0;
+                            $model->impact_type = $request->model_impact_type[$m];
+                            $model->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
+                            $model->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
+                        }
+                        
+                        $model->childsafe = $request->childsafe[$m];
                         $model->save();
 
                         foreach ($feature_row as $a => $abc)
@@ -1304,19 +1329,27 @@ class ProductController extends Controller
                         $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
                         $model->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
-                        $model->price_impact = $request->model_price_impact[$m];
-                        $model->impact_type = $request->model_impact_type[$m];
-                        $model->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
-                        $model->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
-                        $model->childsafe = $request->childsafe[$m];
-
+                        
                         if($request->form_type == 1)
                         {
+                            $model->price_impact = 0;
+                            $model->impact_type = 0;
+                            $model->m2_impact = 0;
+                            $model->m1_impact = 0;
+                            $model->measure = $request->model_measure[$m];
                             $model->estimated_price_per_box = str_replace(',', '.',$request->estimated_price_per_box[$m]);
                             $model->estimated_price_quantity = str_replace(',', '.',$request->estimated_price_quantity[$m]);
                             $model->estimated_price = str_replace(',', '.',$request->estimated_price[$m]);
                         }
-                        
+                        else
+                        {
+                            $model->price_impact = $request->model_price_impact[$m];
+                            $model->impact_type = $request->model_impact_type[$m];
+                            $model->m2_impact = $request->model_price_impact[$m] == 3 ? 1 : 0;
+                            $model->m1_impact = $request->model_price_impact[$m] == 2 ? 1 : 0;
+                        }
+
+                        $model->childsafe = $request->childsafe[$m];
                         $model->save();
 
                         foreach ($feature_row as $a => $abc)
