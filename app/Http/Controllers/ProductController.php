@@ -523,15 +523,6 @@ class ProductController extends Controller
 
     public function store(StoreValidationRequest3 $request)
     {
-        $products = Products::all();
-
-        foreach($products as $key)
-        {
-            $find = product_models::where('product_id',$key->id)->update(['measure' => $key->measure]);
-        }
-
-        exit();
-
         $input = $request->all();
 
         // $prices = preg_replace("/,([\s])+/",",",$request->estimated_price);
