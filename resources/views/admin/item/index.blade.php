@@ -1,4 +1,4 @@
-@extends('layouts.handyman')
+@extends('layouts.admin')
 
 @section('content')
     <div class="right-side">
@@ -13,11 +13,7 @@
                                     <div class="add-product-header products">
                                         <h2>Items</h2>
 
-                                        @if(auth()->user()->can('create-item'))
-
-                                            <a href="{{route('admin-item-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add New Item</a>
-
-                                        @endif
+                                        <a href="{{route('admin-item-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add New Item</a>
 
                                     </div>
                                     <hr>
@@ -32,7 +28,7 @@
                                                     <tr role="row">
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 344px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Photo</th>
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Title</th>
-                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Handyman</th>
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Retailer</th>
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">Description</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 314px;" aria-label="Actions: activate to sort column ascending">Actions</th>
                                                     </tr>
@@ -46,17 +42,9 @@
                                                             <td>{{$item->name}} {{$item->family_name}}</td>
                                                             <td>{!!$item->description!!}</td>
                                                             <td>
-                                                                @if(auth()->user()->can('edit-item'))
 
-                                                                    <a href="{{route('admin-item-edit',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
-
-                                                                @endif
-
-                                                                @if(auth()->user()->can('delete-item'))
-
-                                                                        <a href="{{route('admin-item-delete',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
-
-                                                                @endif
+                                                                <a href="{{route('admin-item-edit',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
+                                                                <a href="{{route('admin-item-delete',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
 
                                                             </td>
                                                         </tr>

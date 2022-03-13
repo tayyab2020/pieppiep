@@ -23,59 +23,42 @@ class ItemController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:user');
+        $this->middleware('auth:admin');
     }
-
 
     public function index()
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
+        $items = items::leftjoin('users','users.id','=','items.user_id')->select('items.*','users.name','users.family_name')->get();
 
-        if($main_id)
-        {
-            $user_id = $main_id;
-        }
-
-        if($user->can('user-items'))
-        {
-            $items = items::leftjoin('users','users.id','=','items.user_id')->where('items.user_id',$user_id)->orderBy('items.id','desc')->select('items.*','users.name','users.family_name')->get();
-
-            return view('admin.item.index',compact('items'));
-        }
-        else
-        {
-            return redirect()->route('user-login');
-        }
+        return view('admin.item.index',compact('items'));
     }
 
     public function create()
     {
-        $user = Auth::guard('user')->user();
+        $categories = Category::get();
+        $retailers = User::where('role_id',2)->where('status',1)->where('active',1)->get();
 
-        if($user->can('create-item'))
-        {
-            return view('admin.item.create');
-        }
-        else
-        {
-            return redirect()->route('user-login');
-        }
+        return view('admin.item.create',compact('categories','retailers'));
     }
 
     public function store(StoreValidationRequest $request)
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
-
-        if($main_id)
+        if($request->item_id)
         {
-            $user_id = $main_id;
+            $item = items::where('id',$request->item_id)->first();
+
+            if ($item->photo != null) {
+                \File::delete(public_path() .'/assets/item_images/'.$item->photo);
+            }
+
+            Session::flash('success', 'Item updated successfully.');
+        }
+        else
+        {
+            $item = new items;
+            Session::flash('success', 'New Item added successfully.');
         }
 
-        $item = new items;
         $input = $request->all();
         $photo = '';
 
@@ -86,44 +69,32 @@ class ItemController extends Controller
             $photo = $name;
         }
 
+        $products = implode(',', $request->products);
+
         $item->cat_name = $request->title;
-        $item->user_id = $user_id;
+        $item->user_id = $request->retailer_id;
+        $item->category_id = $request->category_id;
         $item->photo = $photo;
         $item->description = $request->description;
-        $item->rate = $request->rate;
+        $item->rate = str_replace(",",".",$request->rate);
+        $item->products = $products ? $products : NULL;
         $item->save();
 
-
-        Session::flash('success', 'New Item added successfully.');
         return redirect()->route('admin-item-index');
     }
 
     public function edit($id)
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
+        $item = items::where('id',$id)->first();
+        $categories = Category::get();
+        $retailers = User::where('role_id',2)->where('status',1)->where('active',1)->get();
 
-        if($main_id)
+        if(!$item)
         {
-            $user_id = $main_id;
+            return redirect()->back();
         }
 
-        if($user->can('edit-item'))
-        {
-            $item = items::where('id',$id)->where('user_id',$user_id)->first();
-
-            if(!$item)
-            {
-                return redirect()->back();
-            }
-
-            return view('admin.item.edit',compact('item'));
-        }
-        else
-        {
-            return redirect()->route('user-login');
-        }
+        return view('admin.item.create',compact('item','categories','retailers'));
     }
 
     public function update(UpdateValidationRequest $request, $id)
@@ -160,39 +131,23 @@ class ItemController extends Controller
 
     public function destroy($id)
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $main_id = $user->main_id;
+        $item = items::where('id',$id)->first();
 
-        if($main_id)
+        if(!$item)
         {
-            $user_id = $main_id;
+            return redirect()->back();
         }
 
-        if($user->can('delete-item'))
-        {
-            $item = items::where('id',$id)->where('user_id',$user_id)->first();
-
-            if(!$item)
-            {
-                return redirect()->back();
-            }
-
-            if($item->photo == null){
-                $item->delete();
-                Session::flash('success', 'Item deleted successfully.');
-                return redirect()->route('admin-item-index');
-            }
-
-            unlink(public_path().'/assets/item_images/'.$item->photo);
+        if($item->photo == null){
             $item->delete();
             Session::flash('success', 'Item deleted successfully.');
             return redirect()->route('admin-item-index');
         }
-        else
-        {
-            return redirect()->route('user-login');
-        }
+
+        \File::delete(public_path().'/assets/item_images/'.$item->photo);
+        $item->delete();
+        Session::flash('success', 'Item deleted successfully.');
+        return redirect()->route('admin-item-index');
 
     }
 }

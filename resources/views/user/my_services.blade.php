@@ -131,9 +131,15 @@
                                             <div class="row">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <div class="card" style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);margin-bottom: 0;">
-                                                        <div class="header">
+                                                        <div style="display: flex;justify-content: space-between;align-items: center;" class="header">
 
                                                             <h2 style="font-weight: bold;">Services Overview</h2>
+
+                                                            @if(auth()->user()->can('service-create'))
+
+                                                                <a href="{{route('service-create')}}" class="btn btn-success"><i class="fa fa-plus"></i> Add Services</a></li>
+
+                                                            @endif
 
                                                             <ul class="header-dropdown m-r--5">
                                                                 <li class="dropdown">
@@ -225,6 +231,11 @@
         </div>
 
         <style>
+
+            .alert p
+            {
+                color: #ffffff !important;
+            }
 
             @media (max-width: 768px)
             {

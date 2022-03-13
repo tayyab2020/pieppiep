@@ -23,7 +23,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header">
-                                        <h2>{{isset($my_product) ? 'Edit Service' : 'Add Service'}}</h2>
+                                        <h2>{{isset($my_service) ? 'Edit Service' : 'Add Service'}}</h2>
                                         <a href="{{route('my-services')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                     </div>
                                     <hr>
@@ -34,7 +34,7 @@
 
                                         {{csrf_field()}}
 
-                                        <input type="hidden" name="handyman_service_id" value="{{isset($my_service) ? $my_service->id : null}}" />
+                                        <input type="hidden" name="retailer_service_id" value="{{isset($my_service) ? $my_service->id : null}}" />
 
                                         <div class="form-group" style="display: none;">
                                             <label class="control-label col-sm-4" for="blood_group_slug">Services*</label>

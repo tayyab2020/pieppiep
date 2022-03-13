@@ -1,4 +1,4 @@
-@extends('layouts.handyman')
+@extends('layouts.admin')
 
 @section('content')
     <div class="right-side">
@@ -13,12 +13,7 @@
                                     <div class="add-product-header products">
                                         <h2>Services</h2>
 
-                                        @if(auth()->user()->can('service-create'))
-
-                                            <a href="{{route('admin-service-create')}}" class="btn add-newProduct-btn"><i
-                                                    class="fa fa-plus"></i> Add New Service</a>
-
-                                        @endif
+                                        <a href="{{route('admin-service-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add New Service</a>
 
                                     </div>
                                     <hr>
@@ -80,21 +75,9 @@
                                                             <td>{!!$cat->description!!}</td>
                                                             <td>{{$cat->slug}}</td>
                                                             <td>
-                                                                @if(auth()->user()->can('service-edit'))
 
-                                                                    <a href="{{route('admin-service-edit',$cat->id)}}"
-                                                                       class="btn btn-primary product-btn"><i
-                                                                            class="fa fa-edit"></i> Edit</a>
-
-                                                                @endif
-
-                                                                @if(auth()->user()->can('service-delete'))
-
-                                                                        <a href="{{route('admin-service-delete',$cat->id)}}"
-                                                                           class="btn btn-danger product-btn"><i
-                                                                                class="fa fa-trash"></i> Remove</a>
-
-                                                                @endif
+                                                                <a href="{{route('admin-service-edit',$cat->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
+                                                                <a href="{{route('admin-service-delete',$cat->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
 
                                                             </td>
                                                         </tr>

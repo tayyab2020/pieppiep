@@ -1,4 +1,4 @@
-@extends('layouts.handyman')
+@extends('layouts.admin')
 
 @section('styles')
 

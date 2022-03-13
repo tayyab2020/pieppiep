@@ -32,17 +32,34 @@
                                         @include('includes.form-success')
                                         {{csrf_field()}}
 
+                                        <input type="hidden" name="item_id" value="{{isset($item) ? $item->id : null}}">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">Category*</label>
+                                            <div class="col-sm-6">
+                                                <select class="js-data-example-ajax8 form-control" style="height: 40px;" name="category_id" id="blood_grp" required>
+
+                                                    <option value="">Select Category</option>
+
+                                                    @foreach($categories as $key)
+                                                        <option @if(isset($item)) @if($item->category_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->cat_name}}</option>
+                                                    @endforeach
+
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Item')}}*</label>
                                             <div class="col-sm-6">
-                                                <input class="form-control" name="item" id="blood_group_display_name" placeholder="{{__('text.Enter Item Title')}}" required="" type="text">
+                                                <input value="{{isset($item) ? $item->cat_name : null}}" class="form-control" name="item" id="blood_group_display_name" placeholder="{{__('text.Enter Item Title')}}" required="" type="text">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Rate')}}*</label>
                                             <div class="col-sm-6">
-                                                <input maskedFormat="9,1" autocomplete="off" class="form-control rate" name="rate" id="blood_group_display_name" placeholder="{{__('text.Enter Rate')}}" required="" type="text">
+                                                <input value="{{isset($item) ? number_format((float)$item->rate, 2, ',', '.') : null}}" maskedFormat="9,1" autocomplete="off" class="form-control rate" name="rate" id="blood_group_display_name" placeholder="{{__('text.Enter Rate')}}" required="" type="text">
                                             </div>
                                         </div>
 
@@ -50,7 +67,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="item_description">{{__('text.Item Description')}}</label>
                                             <div class="col-sm-6">
-                                                <textarea class="form-control" name="description" id="item_description" rows="5" style="resize: vertical;" placeholder="{{__('text.Enter Description')}}"></textarea>
+                                                <textarea class="form-control" name="description" id="item_description" rows="5" style="resize: vertical;" placeholder="{{__('text.Enter Description')}}">{{isset($item) ? $item->description : null}}</textarea>
                                             </div>
                                         </div>
 
@@ -58,10 +75,9 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="current_photo">{{__('text.Current Photo')}}</label>
                                             <div class="col-sm-6">
-                                                <img width="130px" height="90px" id="adminimg" src="" alt="">
+                                                <img width="130px" height="90px" id="adminimg" src="{{isset($item) ? $item->photo ? asset('assets/item_images/'.$item->photo):'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG' : null}}" alt="">
                                             </div>
                                         </div>
-
 
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="profile_photo">{{__('text.Add Photo')}}</label>
@@ -70,6 +86,48 @@
                                                 <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i> {{__('text.Add Item Photo')}}</button>
                                                 <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                             </div>
+                                        </div>
+
+                                        <div class="products-box">
+
+                                            @if(isset($item) && $item->products)
+
+                                                <?php $products = explode(',', $item->products); ?>
+
+                                                @foreach($products as $key)
+
+                                                    <div class="form-group product-box">
+                                                        <label class="control-label col-sm-4" for="blood_group_slug">Product</label>
+                                                        <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
+                                                            <div style="padding: 0;" class="col-lg-8">
+                                                                <input value="{{$key}}" class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">
+                                                            </div>
+                                                            <div style="display: flex;justify-content: flex-start;" class="col-lg-4">
+                                                                <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
+                                                                <span class="ui-close remove-product" style="margin:0;position: relative;right: 0;top: 0;">X</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                @endforeach
+
+                                            @else
+
+                                                <div class="form-group product-box">
+                                                    <label class="control-label col-sm-4" for="blood_group_slug">Product</label>
+                                                    <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
+                                                        <div style="padding: 0;" class="col-lg-8">
+                                                            <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">
+                                                        </div>
+                                                        <div style="display: flex;justify-content: flex-start;" class="col-lg-4">
+                                                            <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
+                                                            <span class="ui-close remove-product" style="margin:0;position: relative;right: 0;top: 0;">X</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            @endif
+
                                         </div>
 
 
@@ -99,6 +157,51 @@
     </script>
 
     <script type="text/javascript">
+
+        $("body").on('click','.add-product',function() {
+
+            $(".products-box").append('<div class="form-group product-box">\n' +
+                '                                                <label class="control-label col-sm-4" for="blood_group_slug">Product</label>\n' +
+                '                                                <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
+                '                                                    <div style="padding: 0;" class="col-lg-8">\n' +
+                '                                                        <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">\n' +
+                '                                                    </div>\n' +
+                '                                                    <div style="display: flex;justify-content: flex-start;" class="col-lg-4">\n' +
+                '                                                        <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
+                '                                                        <span class="ui-close remove-product" style="margin:0;position: relative;right: 0;top: 0;">X</span>\n' +
+                '                                                    </div>\n' +
+                '                                                </div>\n' +
+                '                                            </div>');
+
+        });
+
+        $("body").on('click','.remove-product',function() {
+
+            $(this).parents('.product-box').remove();
+
+            if($(".products-box .product-box").length == 0)
+            {
+                $(".products-box").append('<div class="form-group product-box">\n' +
+                    '                                                <label class="control-label col-sm-4" for="blood_group_slug">Product</label>\n' +
+                    '                                                <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
+                    '                                                    <div style="padding: 0;" class="col-lg-8">\n' +
+                    '                                                        <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">\n' +
+                    '                                                    </div>\n' +
+                    '                                                    <div style="display: flex;justify-content: flex-start;" class="col-lg-4">\n' +
+                    '                                                        <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
+                    '                                                        <span class="ui-close remove-product" style="margin:0;position: relative;right: 0;top: 0;">X</span>\n' +
+                    '                                                    </div>\n' +
+                    '                                                </div>\n' +
+                    '                                            </div>');
+            }
+
+        });
+
+        $(".js-data-example-ajax8").select2({
+            width: '100%',
+            placeholder: "Select Category",
+            allowClear: true,
+        });
 
         $('.rate').keypress(function(e){
 
@@ -161,6 +264,21 @@
     </script>
 
     <style type="text/css">
+
+        .select2-container .select2-selection--single
+        {
+            height: 40px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered
+        {
+            line-height: 40px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow
+        {
+            height: 38px;
+        }
 
         .swal2-show
         {

@@ -1173,6 +1173,11 @@
             '\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td style="text-align: center;">\n' +
+            '\n' +
+            '                                                                                           <span id="next-row-span" class="tooltip1 sub-category-row" data-id="'+feature_row+'" style="cursor: pointer;font-size: 20px;">\n' +
+            '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-shield"></i>\n' +
+            '                                                                                           </span>\n' +
+            '\n' +
             '                                                                                           <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">\n' +
             '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
             '                                                                                           </span>\n' +

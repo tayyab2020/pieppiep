@@ -82,6 +82,7 @@ use PDF;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Symfony\Component\Process\Process;
+use App\retailer_services;
 
 class UserController extends Controller
 {
@@ -7587,7 +7588,7 @@ class UserController extends Controller
         {
             $services_array = array();
 
-            $services_selected = handyman_services::leftjoin('services', 'services.id', '=', 'handyman_services.service_id')->where('handyman_services.handyman_id', '=', $user_id)->orderBy('services.id', 'desc')->select('services.*','handyman_services.rate','handyman_services.sell_rate','handyman_services.id','handyman_services.service_id')->get();
+            $services_selected = retailer_services::leftjoin('services', 'services.id', '=', 'retailer_services.service_id')->where('retailer_services.retailer_id', '=', $user_id)->orderBy('services.id', 'desc')->select('services.*','retailer_services.rate','retailer_services.sell_rate','retailer_services.id','retailer_services.service_id')->get();
 
             foreach ($services_selected as $key)
             {
@@ -7615,12 +7616,12 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        if($request->handyman_service_id)
+        if($request->retailer_service_id)
         {
             $sizes = explode(',', $request->size);
 
-            $post = handyman_services::where('id',$request->handyman_service_id)->first();
-            $post->handyman_id = $user_id;
+            $post = retailer_services::where('id',$request->retailer_service_id)->first();
+            $post->retailer_id = $user_id;
             $post->service_id = $request->service_id;
             $post->rate = str_replace(",",".",$request->product_rate);
             $post->sell_rate = str_replace(",",".",$request->product_sell_rate);
@@ -7632,8 +7633,8 @@ class UserController extends Controller
         {
             foreach ($request->service_checkboxes as $x => $key)
             {
-                $post = new handyman_services;
-                $post->handyman_id = $user_id;
+                $post = new retailer_services;
+                $post->retailer_id = $user_id;
                 $post->service_id = $request->service_id[$key];
                 $post->rate = $request->product_rate[$key];
                 $post->sell_rate = $request->product_sell_rate[$key];
@@ -7659,11 +7660,11 @@ class UserController extends Controller
 
         if($user->can('service-edit'))
         {
-            $my_service = handyman_services::leftjoin('services','services.id','=','handyman_services.service_id')->where('handyman_services.id',$id)->select('services.*','handyman_services.*')->first();
+            $my_service = retailer_services::leftjoin('services','services.id','=','retailer_services.service_id')->where('retailer_services.id',$id)->select('services.*','retailer_services.*')->first();
 
             $ids = array();
 
-            $my_services = handyman_services::where('handyman_id',$user_id)->where('id','!=',$id)->get();
+            $my_services = retailer_services::where('retailer_id',$user_id)->where('id','!=',$id)->get();
 
             foreach($my_services as $key)
             {
@@ -7686,7 +7687,7 @@ class UserController extends Controller
 
         if($user->can('service-delete'))
         {
-            $my_service = handyman_services::findOrFail($id);
+            $my_service = retailer_services::findOrFail($id);
 
             $my_service->delete();
             Session::flash('success', 'Service deleted successfully.');
@@ -7727,7 +7728,8 @@ class UserController extends Controller
 
         if($user->can('create-item'))
         {
-            return view('user.create_item');
+            $categories = Category::get();
+            return view('user.create_item',compact('categories'));
         }
         else
         {
@@ -7746,7 +7748,22 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        $item = new items;
+        if($request->item_id)
+        {
+            $item = items::where('id',$request->item_id)->first();
+
+            if ($item->photo != null) {
+                \File::delete(public_path() .'/assets/item_images/'.$item->photo);
+            }
+
+            Session::flash('success', __('text.Item updated successfully.'));
+        }
+        else
+        {
+            $item = new items;
+            Session::flash('success', __('text.Item added successfully.'));
+        }
+
         $photo = '';
 
         if ($file = $request->file('photo')) {
@@ -7755,15 +7772,17 @@ class UserController extends Controller
             $photo = $name;
         }
 
+        $products = implode(',', $request->products);
+
         $item->user_id = $user_id;
+        $item->category_id = $request->category_id;
         $item->cat_name = $request->item;
         $item->photo = $photo;
         $item->description = $request->description;
         $item->rate = str_replace(",",".",$request->rate);
+        $item->products = $products ? $products : NULL;
         $item->save();
 
-
-        Session::flash('success', __('text.Item added successfully.'));
         return redirect()->route('user-items');
     }
 
@@ -7781,7 +7800,8 @@ class UserController extends Controller
         if($user->can('edit-item'))
         {
             $item = items::where('id', $id)->where('user_id', $user_id)->first();
-            return view('user.edit_item', compact('item'));
+            $categories = Category::get();
+            return view('user.create_item', compact('item','categories'));
         }
         else
         {
