@@ -48,7 +48,7 @@
                                     <br>
                                     <br>
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', $order_numbers_string), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = ltrim(implode(',', $order_numbers_string), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
 
                                     </div>
 
@@ -102,33 +102,71 @@
 
                                         <table style="display: table;width: 100%;">
 
-                                            <thead>
-                                            <tr>
-                                                <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product/Item/Service</th>
-                                                <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
+                                            @if($role == 'order' || $role == 'supplier2' || $role == 'supplier3')
 
-                                                @if($role == 'supplier')
+                                                @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0)
 
-                                                    <th style="width: 10% !important;font-size: 20px;font-weight: 500;">Delivery Date</th>
+                                                    <thead>
+                                                    <tr>
+                                                        <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product/Item/Service</th>
+                                                        <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
+
+                                                        @if($role == 'supplier')
+
+                                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">Delivery Date</th>
+
+                                                        @endif
+
+                                                        @if($role == 'supplier2')
+
+                                                            <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
+                                                            <th class="border-0 text-uppercase small font-weight-bold">Order Number</th>
+
+                                                        @endif
+
+                                                        @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+
+                                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
+                                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+
+                                                        @endif
+
+                                                    </tr>
+                                                    </thead>
 
                                                 @endif
 
-                                                @if($role == 'supplier2')
+                                            @else
 
-                                                    <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
-                                                    <th class="border-0 text-uppercase small font-weight-bold">Order Number</th>
+                                                <thead>
+                                                <tr>
+                                                    <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product/Item/Service</th>
+                                                    <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
-                                                @endif
+                                                    @if($role == 'supplier')
 
-                                                @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+                                                        <th style="width: 10% !important;font-size: 20px;font-weight: 500;">Delivery Date</th>
 
-                                                    <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
-                                                    <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+                                                    @endif
 
-                                                @endif
+                                                    @if($role == 'supplier2')
 
-                                            </tr>
-                                            </thead>
+                                                        <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
+                                                        <th class="border-0 text-uppercase small font-weight-bold">Order Number</th>
+
+                                                    @endif
+
+                                                    @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+
+                                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
+                                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+
+                                                    @endif
+
+                                                </tr>
+                                                </thead>
+
+                                            @endif
 
                                             <tbody>
 

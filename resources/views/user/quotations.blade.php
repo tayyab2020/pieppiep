@@ -419,7 +419,11 @@
 
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                                <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
+                                                                                @if(count($key->orders) > 0)
+
+                                                                                    <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
+
+                                                                                @endif
 
                                                                             @else
 
@@ -501,8 +505,12 @@
                                                                                 <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
                                                                                 @if(!$key->processing)
+                                                                                
+                                                                                    @if(count($key->orders) > 0)
 
-                                                                                    <li><a href="{{ url('/aanbieder/download-full-order-pdf/'.$key->invoice_id) }}">Download Full Order PDF</a></li>
+                                                                                        <li><a href="{{ url('/aanbieder/download-full-order-pdf/'.$key->invoice_id) }}">Download Full Order PDF</a></li>
+
+                                                                                    @endif
 
                                                                                 @endif
 
