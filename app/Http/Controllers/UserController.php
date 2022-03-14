@@ -260,13 +260,24 @@ class UserController extends Controller
 
     public function GetColors(Request $request)
     {
-        if($request->model)
+        if($request->type == 'service')
         {
-            $data = Products::leftjoin('product_models','product_models.product_id','=','products.id')->where('product_models.id',$request->model)->where('products.id',$request->id)->select('products.*','product_models.measure','product_models.estimated_price_per_box','product_models.estimated_price_quantity','product_models.estimated_price','product_models.max_width')->first();
+            $data = Service::where('id',$request->id)->first();
+        }
+        elseif($request->type == 'item')
+        {
+            $data = items::where('id',$request->id)->first();
         }
         else
         {
-            $data = Products::where('id',$request->id)->with('colors')->with('models')->first();
+            if($request->model)
+            {
+                $data = Products::leftjoin('product_models','product_models.product_id','=','products.id')->where('product_models.id',$request->model)->where('products.id',$request->id)->select('products.*','product_models.measure','product_models.estimated_price_per_box','product_models.estimated_price_quantity','product_models.estimated_price','product_models.max_width')->first();
+            }
+            else
+            {
+                $data = Products::where('id',$request->id)->with('colors')->with('models')->first();
+            }
         }
 
         return $data;
@@ -1887,8 +1898,10 @@ class UserController extends Controller
                 $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
                 $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->leftjoin('supplier_categories','supplier_categories.user_id','=','retailers_requests.supplier_id')->where('supplier_categories.category_id',$floor_category_id)->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
                 $products = products::leftjoin('users','users.id','=','products.user_id')->whereIn('products.user_id',$suppliers)->where('products.category_id',$floor_category_id)->with('colors')->with('models')->select('products.*','users.name','users.family_name','users.company_name')->get();
+                $services = Service::leftjoin('retailer_services', 'retailer_services.service_id', '=', 'services.id')->where('retailer_services.retailer_id', $user_id)->select('services.*','retailer_services.sell_rate as rate')->get();
+                $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
 
-                return view('user.create_custom_quote1', compact('products','customers','suppliers','user'));
+                return view('user.create_custom_quote1', compact('products','customers','suppliers','user','services','items'));
             } else {
                 return redirect()->back();
             }
@@ -4043,7 +4056,7 @@ class UserController extends Controller
     }
 
     public function StoreNewQuotation(Request $request)
-    {   
+    {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
@@ -4171,10 +4184,30 @@ class UserController extends Controller
             $feature_sub_titles[$i][] = array();
             $sub_titles[$i] = '';
             $row_id = $request->row_id[$i];
-            $product_titles[] = product::where('id',$key)->pluck('title')->first();
-            $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
-            $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
-            $suppliers[] = User::where('id',$request->suppliers[$i])->first();
+            
+            if (strpos($key, 'I') > -1) {
+
+                $product_titles[] = items::where('id',(int)$key)->pluck('cat_name')->first();
+                $color_titles[] = '';
+                $model_titles[] = '';
+                $suppliers[] = NULL;
+
+            }
+            elseif (strpos($key, 'S') > -1) {
+
+                $product_titles[] = Service::where('id',(int)$key)->pluck('title')->first();
+                $color_titles[] = '';
+                $model_titles[] = '';
+                $suppliers[] = NULL;
+
+            }
+            else
+            {
+                $product_titles[] = product::where('id',$key)->pluck('title')->first();
+                $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
+                $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
+                $suppliers[] = User::where('id',$request->suppliers[$i])->first();
+            }
 
             date_default_timezone_set('Europe/Amsterdam');
             $delivery_date = date('Y-m-d', strtotime( $request->retailer_delivery_date . ' -1 day' ));
@@ -4197,32 +4230,63 @@ class UserController extends Controller
 
             if(!$request->is_invoice)
             {
-                if(!$request->order_number[$i])
-                {
-                    $order_number = new_orders::where('quotation_id',$invoice->id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
-
-                    if(!$order_number)
-                    {
-                        $counter_order = $suppliers[$i]->counter_order;
-                        $order_number = $suppliers[$i]->order_client_id ? date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%06u', $counter_order) : date("Y") . '-' . sprintf('%06u', $counter_order);
-                        $counter_order = $counter_order + 1;
-                        User::where('id',$suppliers[$i]->id)->update(['counter_order' => $counter_order]);
-                    }
-                }
-                else
-                {
-                    $order_number = $request->order_number[$i];
-                }
-
-                $order_numbers[$i] = $order_number;
-
                 $invoice_items = new new_quotations_data;
-                $invoice_items->order_number = $order_number;
                 $invoice_items->quotation_id = $invoice->id;
-                $invoice_items->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
-                $invoice_items->product_id = (int)$key;
-                $invoice_items->row_id = $row_id;
-                $invoice_items->model_id = $request->models[$i];
+
+                if (strpos($key, 'I') > -1) {
+
+                    $order_numbers[$i] = '';
+
+                    $invoice_items->item_id = (int)$key;
+                    $invoice_items->service_id = 0;
+                    $invoice_items->supplier_id = 0;
+                    $invoice_items->product_id = 0;
+                    $invoice_items->model_id = 0;
+                    $invoice_items->color = 0;
+
+                }
+                elseif (strpos($key, 'S') > -1) {
+
+                    $order_numbers[$i] = '';
+
+                    $invoice_items->item_id = 0;
+                    $invoice_items->service_id = (int)$key;
+                    $invoice_items->supplier_id = 0;
+                    $invoice_items->product_id = 0;
+                    $invoice_items->model_id = 0;
+                    $invoice_items->color = 0;
+
+                }
+                else {
+
+                    if(!$request->order_number[$i])
+                    {
+                        $order_number = new_orders::where('quotation_id',$invoice->id)->where('supplier_id',$request->suppliers[$i])->pluck('order_number')->first();
+
+                        if(!$order_number)
+                        {
+                            $counter_order = $suppliers[$i]->counter_order;
+                            $order_number = $suppliers[$i]->order_client_id ? date("Y") . "-" . sprintf('%04u', $suppliers[$i]->id) . '-' . sprintf('%06u', $counter_order) : date("Y") . '-' . sprintf('%06u', $counter_order);
+                            $counter_order = $counter_order + 1;
+                            User::where('id',$suppliers[$i]->id)->update(['counter_order' => $counter_order]);
+                        }
+                    }
+                    else
+                    {
+                        $order_number = $request->order_number[$i];
+                    }
+
+                    $order_numbers[$i] = $order_number;
+
+                    $invoice_items->order_number = $order_number;
+                    $invoice_items->item_id = 0;
+                    $invoice_items->service_id = 0;
+                    $invoice_items->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
+                    $invoice_items->product_id = (int)$key;
+                    $invoice_items->model_id = $request->models[$i];
+                    $invoice_items->color = $request->colors[$i];
+
+                }
 
                 if($form_type == 2)
                 {
@@ -4254,269 +4318,277 @@ class UserController extends Controller
                     $invoice_items->retailer_margin = 0;
                     $invoice_items->labor_discount = 0;
                     $invoice_items->basic_price = 0;
-                    $invoice_items->box_quantity = $request->estimated_price_quantity[$i];
-                    $invoice_items->measure = $request->measure[$i];
-                    $invoice_items->max_width = $request->max_width[$i];
+                    $invoice_items->box_quantity = $request->estimated_price_quantity[$i] ? $request->estimated_price_quantity[$i] : 0;
+                    $invoice_items->measure = $request->measure[$i] ? $request->measure[$i] : 0;
+                    $invoice_items->max_width = $request->max_width[$i] ? $request->max_width[$i] : 0;
                 }
 
-                $invoice_items->color = $request->colors[$i];
+                $invoice_items->row_id = $row_id;
                 $invoice_items->rate = $request->rate[$i];
                 $invoice_items->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
                 $invoice_items->amount = $request->total[$i];
-                $invoice_items->delivery_days = $request->delivery_days[$i];
+                $invoice_items->delivery_days = $request->delivery_days[$i] ? $request->delivery_days[$i] : 1;
                 $invoice_items->delivery_date = $delivery_date;
                 $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
                 $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                 $invoice_items->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
 
-                $order = new new_orders;
-                $order->order_number = $order_number;
-                $order->quotation_id = $invoice->id;
-                $order->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
-                $order->product_id = (int)$key;
-                $order->row_id = $row_id;
-                $order->model_id = $request->models[$i];
-                $order->color = $request->colors[$i];
-                $order->rate = $request->rate[$i];
-                $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
-                $order->amount = $request->total[$i];
-                $order->delivery_days = $request->delivery_days[$i];
-                $order->delivery_date = $delivery_date;
-                $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
-                $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
-                $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
-                $order->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
+                if (strpos($key, 'I') == 0 && strpos($key, 'S') == 0) {
 
-                if($request->childsafe[$i])
-                {
-                    $invoice_items->childsafe = $request->childsafe[$i];
-                    $order->childsafe = $request->childsafe[$i];
+                    $order = new new_orders;
+                    $order->order_number = $order_number;
+                    $order->quotation_id = $invoice->id;
+                    $order->supplier_id = $request->suppliers[$i] ? $request->suppliers[$i] : $user_id;
+                    $order->product_id = (int)$key;
+                    $order->row_id = $row_id;
+                    $order->model_id = $request->models[$i];
+                    $order->color = $request->colors[$i];
+                    $order->rate = $request->rate[$i];
+                    $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
+                    $order->amount = $request->total[$i];
+                    $order->delivery_days = $request->delivery_days[$i];
+                    $order->delivery_date = $delivery_date;
+                    $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
+                    $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
+                    $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
+                    $order->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
 
-                    $childsafe_question = 'childsafe_option'.$row_id;
-                    $invoice_items->childsafe_question = $request->$childsafe_question;
-                    $order->childsafe_question = $request->$childsafe_question;
-
-                    $childsafe_diff = 'childsafe_diff'.$row_id;
-                    $invoice_items->childsafe_diff = $request->$childsafe_diff;
-                    $order->childsafe_diff = $request->$childsafe_diff;
-
-                    $childsafe_answer = 'childsafe_answer'.$row_id;
-                    $invoice_items->childsafe_answer = $request->$childsafe_answer;
-                    $order->childsafe_answer = $request->$childsafe_answer;
-
-                    $childsafe_x = 'childsafe_x'.$row_id;
-                    $invoice_items->childsafe_x = $request->$childsafe_x;
-                    $order->childsafe_x = $request->$childsafe_x;
-
-                    $childsafe_y = 'childsafe_y'.$row_id;
-                    $invoice_items->childsafe_y = $request->$childsafe_y;
-                    $order->childsafe_y = $request->$childsafe_y;
-                }
-
-                if($form_type == 2)
-                {
-                    $order->model_impact_value = $request->model_impact_value[$i];
-                    $order->width = str_replace(',', '.',$request->width[$i]);
-                    $order->width_unit = $request->width_unit[$i];
-                    $order->height = str_replace(',', '.',$request->height[$i]);
-                    $order->height_unit = $request->height_unit[$i];
-                    $order->price_based_option = $request->price_based_option[$i];
-                    $order->labor_impact = $request->labor_impact[$i] ? str_replace(',', '.',$request->labor_impact[$i]) : 0;
-                    $order->labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
-                    $order->supplier_margin = $request->supplier_margin[$i] ? $request->supplier_margin[$i] : 0;
-                    $order->retailer_margin = $request->retailer_margin[$i] ? $request->retailer_margin[$i] : 0;
-                    $order->basic_price = $request->basic_price[$i];
-                    $order->box_quantity = NULL;
-                    $order->measure = NULL;
-                    $order->max_width = NULL;
-                }
-                else
-                {
-                    $order->model_impact_value = 0;
-                    $order->width = 0;
-                    $order->width_unit = "";
-                    $order->height = 0;
-                    $order->height_unit = "";
-                    $order->price_based_option = 0;
-                    $order->labor_impact = 0;
-                    $order->labor_discount = 0;
-                    $order->supplier_margin = 0;
-                    $order->retailer_margin = 0;
-                    $order->basic_price = 0;
-                    $order->box_quantity = $request->estimated_price_quantity[$i];
-                    $order->measure = $request->measure[$i];
-                    $order->max_width = $request->max_width[$i];
-                }
-
-                $invoice_items->save();
-                $order->save();
-
-                if($form_type == 1)
-                {
-                    $calculator_row = 'calculator_row'.$row_id;
-                    $calculator_row = $request->$calculator_row;
-
-                    foreach($calculator_row as $c => $cal)
+                    if($request->childsafe[$i])
                     {
-                        $description = 'attribute_description'.$row_id;
-                        $width = 'width'.$row_id;
-                        $height = 'height'.$row_id;
-                        $cutting_lose = 'cutting_lose_percentage'.$row_id;
-                        $box_quantity_supplier = 'box_quantity_supplier'.$row_id;
-                        $box_quantity = 'box_quantity'.$row_id;
-                        $total_boxes = 'total_boxes'.$row_id;
-                        $max_width = 'max_width'.$row_id;
-                        $turn = 'turn'.$row_id;
+                        $invoice_items->childsafe = $request->childsafe[$i];
+                        $order->childsafe = $request->childsafe[$i];
 
-                        if(is_numeric( $cal ) && floor( $cal ) != $cal)
-                        {
-                            $parent_row = floor($cal);
-                        }
-                        else
-                        {
-                            $parent_row = NULL;
-                        }
+                        $childsafe_question = 'childsafe_option'.$row_id;
+                        $invoice_items->childsafe_question = $request->$childsafe_question;
+                        $order->childsafe_question = $request->$childsafe_question;
 
-                        $calculations = new new_quotations_data_calculations;
-                        $calculations->quotation_data_id = $invoice_items->id;
-                        $calculations->calculator_row = $cal;
-                        $calculations->parent_row = $parent_row;
-                        $calculations->description = $request->$description[$c];
-                        $calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
-                        $calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
-                        $calculations->cutting_lose = $request->$cutting_lose[$c];
-                        $calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
-                        $calculations->box_quantity = $request->$box_quantity[$c];
-                        $calculations->total_boxes = $request->$total_boxes[$c];
-                        $calculations->max_width = $request->$max_width[$c];
-                        $calculations->turn = $request->$turn[$c];
-                        $calculations->save();
+                        $childsafe_diff = 'childsafe_diff'.$row_id;
+                        $invoice_items->childsafe_diff = $request->$childsafe_diff;
+                        $order->childsafe_diff = $request->$childsafe_diff;
 
-                        $order_calculations = new new_orders_calculations;
-                        $order_calculations->order_id = $order->id;
-                        $order_calculations->calculator_row = $cal;
-                        $order_calculations->parent_row = $parent_row;
-                        $order_calculations->description = $request->$description[$c];
-                        $order_calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
-                        $order_calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
-                        $order_calculations->cutting_lose = $request->$cutting_lose[$c];
-                        $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
-                        $order_calculations->box_quantity = $request->$box_quantity[$c];
-                        $order_calculations->total_boxes = $request->$total_boxes[$c];
-                        $order_calculations->max_width = $request->$max_width[$c];
-                        $order_calculations->turn = $request->$turn[$c];
-                        $order_calculations->save();
+                        $childsafe_answer = 'childsafe_answer'.$row_id;
+                        $invoice_items->childsafe_answer = $request->$childsafe_answer;
+                        $order->childsafe_answer = $request->$childsafe_answer;
+
+                        $childsafe_x = 'childsafe_x'.$row_id;
+                        $invoice_items->childsafe_x = $request->$childsafe_x;
+                        $order->childsafe_x = $request->$childsafe_x;
+
+                        $childsafe_y = 'childsafe_y'.$row_id;
+                        $invoice_items->childsafe_y = $request->$childsafe_y;
+                        $order->childsafe_y = $request->$childsafe_y;
                     }
-                }
 
-                $feature_row = 'features'.$row_id;
-                $features = $request->$feature_row;
-
-                if($features)
-                {
-                    foreach($features as $f => $key1)
+                    if($form_type == 2)
                     {
-                        $f_row = 'f_id'.$row_id;
-                        $f_ids = $request->$f_row;
+                        $order->model_impact_value = $request->model_impact_value[$i];
+                        $order->width = str_replace(',', '.',$request->width[$i]);
+                        $order->width_unit = $request->width_unit[$i];
+                        $order->height = str_replace(',', '.',$request->height[$i]);
+                        $order->height_unit = $request->height_unit[$i];
+                        $order->price_based_option = $request->price_based_option[$i];
+                        $order->labor_impact = $request->labor_impact[$i] ? str_replace(',', '.',$request->labor_impact[$i]) : 0;
+                        $order->labor_discount = $request->labor_discount[$i] ? $request->labor_discount[$i] : 0;
+                        $order->supplier_margin = $request->supplier_margin[$i] ? $request->supplier_margin[$i] : 0;
+                        $order->retailer_margin = $request->retailer_margin[$i] ? $request->retailer_margin[$i] : 0;
+                        $order->basic_price = $request->basic_price[$i];
+                        $order->box_quantity = NULL;
+                        $order->measure = NULL;
+                        $order->max_width = NULL;
+                    }
+                    else
+                    {
+                        $order->model_impact_value = 0;
+                        $order->width = 0;
+                        $order->width_unit = "";
+                        $order->height = 0;
+                        $order->height_unit = "";
+                        $order->price_based_option = 0;
+                        $order->labor_impact = 0;
+                        $order->labor_discount = 0;
+                        $order->supplier_margin = 0;
+                        $order->retailer_margin = 0;
+                        $order->basic_price = 0;
+                        $order->box_quantity = $request->estimated_price_quantity[$i];
+                        $order->measure = $request->measure[$i];
+                        $order->max_width = $request->max_width[$i];
+                    }
 
-                        $f_row1 = 'f_price'.$row_id;
-                        $f_prices = $request->$f_row1;
+                    $invoice_items->save();
+                    $order->save();
 
-                        $is_sub = 'sub_feature'.$row_id;
-                        $is_sub_feature = $request->$is_sub;
+                    if($form_type == 1)
+                    {
+                        $calculator_row = 'calculator_row'.$row_id;
+                        $calculator_row = $request->$calculator_row;
 
-                        $comment = 'comment-'.$row_id.'-'.$f_ids[$f];
-                        $comment = $request->$comment;
-
-                        if($f_ids[$f] == 0)
+                        foreach($calculator_row as $c => $cal)
                         {
-                            $post = new new_quotations_features;
-                            $post->quotation_data_id = $invoice_items->id;
-                            $post->price = $f_prices[$f];
-                            $post->feature_id = $f_ids[$f];
-                            $post->feature_sub_id = 0;
-                            $post->ladderband = $key1;
-                            $post->save();
+                            $description = 'attribute_description'.$row_id;
+                            $width = 'width'.$row_id;
+                            $height = 'height'.$row_id;
+                            $cutting_lose = 'cutting_lose_percentage'.$row_id;
+                            $box_quantity_supplier = 'box_quantity_supplier'.$row_id;
+                            $box_quantity = 'box_quantity'.$row_id;
+                            $total_boxes = 'total_boxes'.$row_id;
+                            $max_width = 'max_width'.$row_id;
+                            $turn = 'turn'.$row_id;
 
-                            $post_order_features = new new_orders_features;
-                            $post_order_features->order_data_id = $order->id;
-                            $post_order_features->price = $f_prices[$f];
-                            $post_order_features->feature_id = $f_ids[$f];
-                            $post_order_features->feature_sub_id = 0;
-                            $post_order_features->ladderband = $key1;
-                            $post_order_features->save();
-
-                            if($key1)
+                            if(is_numeric( $cal ) && floor( $cal ) != $cal)
                             {
-                                $size1 = 'sizeA'.$row_id[$f];
-                                $size1_value = $request->$size1;
+                                $parent_row = floor($cal);
+                            }
+                            else
+                            {
+                                $parent_row = NULL;
+                            }
 
-                                $size2 = 'sizeB'.$row_id[$f];
-                                $size2_value = $request->$size2;
+                            $calculations = new new_quotations_data_calculations;
+                            $calculations->quotation_data_id = $invoice_items->id;
+                            $calculations->calculator_row = $cal;
+                            $calculations->parent_row = $parent_row;
+                            $calculations->description = $request->$description[$c];
+                            $calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
+                            $calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
+                            $calculations->cutting_lose = $request->$cutting_lose[$c];
+                            $calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
+                            $calculations->box_quantity = $request->$box_quantity[$c];
+                            $calculations->total_boxes = $request->$total_boxes[$c];
+                            $calculations->max_width = $request->$max_width[$c];
+                            $calculations->turn = $request->$turn[$c];
+                            $calculations->save();
 
-                                $sub = 'sub_product_id'.$row_id[$f];
-                                $sub_value = $request->$sub;
+                            $order_calculations = new new_orders_calculations;
+                            $order_calculations->order_id = $order->id;
+                            $order_calculations->calculator_row = $cal;
+                            $order_calculations->parent_row = $parent_row;
+                            $order_calculations->description = $request->$description[$c];
+                            $order_calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
+                            $order_calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
+                            $order_calculations->cutting_lose = $request->$cutting_lose[$c];
+                            $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
+                            $order_calculations->box_quantity = $request->$box_quantity[$c];
+                            $order_calculations->total_boxes = $request->$total_boxes[$c];
+                            $order_calculations->max_width = $request->$max_width[$c];
+                            $order_calculations->turn = $request->$turn[$c];
+                            $order_calculations->save();
+                        }
+                    }
 
-                                foreach ($sub_value as $s => $key2)
+                    $feature_row = 'features'.$row_id;
+                    $features = $request->$feature_row;
+
+                    if($features)
+                    {
+                        foreach($features as $f => $key1)
+                        {
+                            $f_row = 'f_id'.$row_id;
+                            $f_ids = $request->$f_row;
+
+                            $f_row1 = 'f_price'.$row_id;
+                            $f_prices = $request->$f_row1;
+
+                            $is_sub = 'sub_feature'.$row_id;
+                            $is_sub_feature = $request->$is_sub;
+
+                            $comment = 'comment-'.$row_id.'-'.$f_ids[$f];
+                            $comment = $request->$comment;
+
+                            if($f_ids[$f] == 0)
+                            {
+                                $post = new new_quotations_features;
+                                $post->quotation_data_id = $invoice_items->id;
+                                $post->price = $f_prices[$f];
+                                $post->feature_id = $f_ids[$f];
+                                $post->feature_sub_id = 0;
+                                $post->ladderband = $key1;
+                                $post->save();
+
+                                $post_order_features = new new_orders_features;
+                                $post_order_features->order_data_id = $order->id;
+                                $post_order_features->price = $f_prices[$f];
+                                $post_order_features->feature_id = $f_ids[$f];
+                                $post_order_features->feature_sub_id = 0;
+                                $post_order_features->ladderband = $key1;
+                                $post_order_features->save();
+
+                                if($key1)
                                 {
-                                    $post1 = new new_quotations_sub_products;
-                                    $post1->feature_row_id = $post->id;
-                                    $post1->sub_product_id = $key2;
-                                    $post1->size1_value = $size1_value[$s];
-                                    $post1->size2_value = $size2_value[$s];
-                                    $post1->save();
+                                    $size1 = 'sizeA'.$row_id[$f];
+                                    $size1_value = $request->$size1;
 
-                                    $post_orders_sub_products = new new_orders_sub_products;
-                                    $post_orders_sub_products->feature_row_id = $post_order_features->id;
-                                    $post_orders_sub_products->sub_product_id = $key2;
-                                    $post_orders_sub_products->size1_value = $size1_value[$s];
-                                    $post_orders_sub_products->size2_value = $size2_value[$s];
-                                    $post_orders_sub_products->save();
+                                    $size2 = 'sizeB'.$row_id[$f];
+                                    $size2_value = $request->$size2;
 
-                                    if($size1_value[$s] == 1 || $size2_value[$s] == 1)
+                                    $sub = 'sub_product_id'.$row_id[$f];
+                                    $sub_value = $request->$sub;
+
+                                    foreach ($sub_value as $s => $key2)
                                     {
-                                        $sub_titles[$i] = product_ladderbands::where('product_id',$key)->where('id',$key2)->first();
+                                        $post1 = new new_quotations_sub_products;
+                                        $post1->feature_row_id = $post->id;
+                                        $post1->sub_product_id = $key2;
+                                        $post1->size1_value = $size1_value[$s];
+                                        $post1->size2_value = $size2_value[$s];
+                                        $post1->save();
 
-                                        if($size1_value[$s] == 1)
+                                        $post_orders_sub_products = new new_orders_sub_products;
+                                        $post_orders_sub_products->feature_row_id = $post_order_features->id;
+                                        $post_orders_sub_products->sub_product_id = $key2;
+                                        $post_orders_sub_products->size1_value = $size1_value[$s];
+                                        $post_orders_sub_products->size2_value = $size2_value[$s];
+                                        $post_orders_sub_products->save();
+
+                                        if($size1_value[$s] == 1 || $size2_value[$s] == 1)
                                         {
-                                            $sub_titles[$i]->size = '38mm';
-                                        }
-                                        else
-                                        {
-                                            $sub_titles[$i]->size = '25mm';
+                                            $sub_titles[$i] = product_ladderbands::where('product_id',$key)->where('id',$key2)->first();
+
+                                            if($size1_value[$s] == 1)
+                                            {
+                                                $sub_titles[$i]->size = '38mm';
+                                            }
+                                            else
+                                            {
+                                                $sub_titles[$i]->size = '25mm';
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        else
-                        {
-                            $post = new new_quotations_features;
-                            $post->quotation_data_id = $invoice_items->id;
-                            $post->price = $f_prices[$f];
-                            $post->feature_id = $f_ids[$f];
-                            $post->feature_sub_id = $key1;
-                            $post->sub_feature = $is_sub_feature[$f];
-                            $post->comment = $comment;
-                            $post->save();
+                            else
+                            {
+                                $post = new new_quotations_features;
+                                $post->quotation_data_id = $invoice_items->id;
+                                $post->price = $f_prices[$f];
+                                $post->feature_id = $f_ids[$f];
+                                $post->feature_sub_id = $key1;
+                                $post->sub_feature = $is_sub_feature[$f];
+                                $post->comment = $comment;
+                                $post->save();
 
-                            $post_order_features = new new_orders_features;
-                            $post_order_features->order_data_id = $order->id;
-                            $post_order_features->price = $f_prices[$f];
-                            $post_order_features->feature_id = $f_ids[$f];
-                            $post_order_features->feature_sub_id = $key1;
-                            $post_order_features->sub_feature = $is_sub_feature[$f];
-                            $post_order_features->comment = $comment;
-                            $post_order_features->save();
-                        }
+                                $post_order_features = new new_orders_features;
+                                $post_order_features->order_data_id = $order->id;
+                                $post_order_features->price = $f_prices[$f];
+                                $post_order_features->feature_id = $f_ids[$f];
+                                $post_order_features->feature_sub_id = $key1;
+                                $post_order_features->sub_feature = $is_sub_feature[$f];
+                                $post_order_features->comment = $comment;
+                                $post_order_features->save();
+                            }
 
-                        /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
-                        $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.id',$key1)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                            /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
+                            $feature_sub_titles[$i][] = product_features::leftjoin('features','features.id','=','product_features.heading_id')->where('product_features.product_id',$key)->where('product_features.id',$key1)->select('product_features.*','features.title as main_title','features.order_no','features.id as f_id')->first();
+                        }
+                    }
+                    else
+                    {
+                        $feature_sub_titles[$i] = array();
                     }
                 }
                 else
                 {
+                    $invoice_items->save();
                     $feature_sub_titles[$i] = array();
                 }
             }
@@ -4764,20 +4836,25 @@ class UserController extends Controller
             $file = public_path() . '/assets/newQuotations/' . $filename;
             $pdf->save($file);
 
-            $invoice->processing = 1;
-            $invoice->save();
-            $quotation_id = $invoice->id;
+            if (array_filter($suppliers)) {
 
-            if($form_type == 1)
-            {
-                $role = 'order';
-                CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
-            }
-            else
-            {
-                $role = 'supplier2';
-                CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
-            }
+                $invoice->processing = 1;
+                $invoice->save();
+                $quotation_id = $invoice->id;
+
+                if($form_type == 1)
+                {
+                    $role = 'order';
+                    CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
+                }
+                else
+                {
+                    $role = 'supplier2';
+                    CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
+                }
+
+           }
+
         }
         else
         {

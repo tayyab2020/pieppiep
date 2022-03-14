@@ -166,6 +166,14 @@
 
 																			@endforeach
 
+																			@foreach($services as $service)
+                                                    							<option data-type="Service" value="{{$service->id}}S">{{$service->title . ', Service'}}</option>
+                                                							@endforeach
+
+																			@foreach($items as $item)
+																				<option data-type="Item" value="{{$item->id}}I">{{$item->cat_name . ', Item, (' . $item->category . ')'}}</option>
+																			@endforeach
+
 																		</select>
 
 																		<input type="hidden" value="{{$item->product_id}}" name="products[]" id="product_id">
@@ -319,6 +327,14 @@
 
 																				@endforeach
 
+																			@endforeach
+
+																			@foreach($services as $service)
+                                                    							<option data-type="Service" value="{{$service->id}}S">{{$service->title . ', Service'}}</option>
+                                                							@endforeach
+
+																			@foreach($items as $item)
+																				<option data-type="Item" value="{{$item->id}}I">{{$item->cat_name . ', Item, (' . $item->category . ')'}}</option>
 																			@endforeach
 
 																		</select>
@@ -5029,13 +5045,31 @@
 								var max_width = current.parents(".content-div").find('#max_width').val();
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
 
+								if(product_id.includes('S'))
+                                {
+                                    var org_product_id = product_id;
+                                    product_id = product_id.replace('S', '');
+                                    var type = 'service';
+                                }
+                                else if(product_id.includes('I'))
+                                {
+                                    var org_product_id = product_id;
+                                    product_id = product_id.replace('I', '');
+                                    var type = 'item';
+                                }
+                                else
+                                {
+									var org_product_id = product_id;
+                                    var type = 'product';
+                                }
+
 								$.ajax({
 									type: "GET",
-									data: "id=" + product_id + "&model=" + model_id,
+									data: "id=" + product_id + "&model=" + model_id + "&type=" + type,
 									url: "<?php echo url('/aanbieder/get-colors')?>",
 									success: function (data) {
 
-										current.parents('.products').find('#product_id').val(product_id);
+										current.parents('.products').find('#product_id').val(org_product_id);
 										current.parents('.products').find('#supplier_id').val(supplier_id);
 										current.parents('.products').find('#color_id').val(color_id);
 										current.parents('.products').find('#model_id').val(model_id);
@@ -5044,352 +5078,307 @@
 
 										if (data != '') {
 
-											if(data.measure == 'M2')
+											if(type == 'product')
 											{
-												$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m1_box').hide();
-												$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m2_box').show();
+                                                if(data.measure == 'M2')
+                                                {
+                                                    $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m1_box').hide();
+                                                    $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m2_box').show();
+                                                }
+                                                else
+                                                {
+                                                    $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m2_box').hide();
+                                                    $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m1_box').show();
+                                                }
+
+                                                if(data.estimated_price_per_box)
+                                                {
+                                                    var estimated_price_per_box = data.estimated_price_per_box;
+                                                    estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
+                                                    var estimated_price_per_box_old = data.estimated_price_per_box;
+                                                }
+                                                else
+                                                {
+                                                    var estimated_price_per_box = 0;
+                                                    var estimated_price_per_box_old = 0;
+                                                }
+
+                                                if(data.max_width == null)
+                                                {
+                                                    data.max_width = 0;
+                                                }
+
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val(data.max_width);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#measure').val(data.measure);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
+                                                // $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
+                                                // $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+                                                // $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(data.ladderband_value);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(data.ladderband_price_impact);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#estimated_price_quantity').val(data.estimated_price_quantity);
+                                                $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.box_quantity_supplier').val(data.estimated_price_quantity);
+                                                $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.max_width').val(data.max_width);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+                                                $('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(estimated_price_per_box_old);
+
+                                                var model = model_id;
+                                                var color = color_id;
+                                                var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
+
+                                                var product = product_id;
+                                                var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+
+                                                if (color && model && product) {
+
+                                                    var margin = 1;
+
+                                                    $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
+                                                    // $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
+                                                    $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
+                                                    $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
+
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        data: "product=" + product + "&color=" + color + "&model=" + model + "&margin=" + margin + "&type=floors",
+                                                        url: "<?php echo url('/aanbieder/get-price')?>",
+                                                        success: function (data) {
+
+                                                            $('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+
+                                                            $('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
+                                                            var childsafe = data[3].childsafe;
+
+                                                            var features = '';
+                                                            var count_features = 0;
+                                                            var f_value = 0;
+                                                            var m1_impact = data[3].m1_impact;
+                                                            var m2_impact = data[3].m2_impact;
+                                                            var m1_impact_value = 0;
+                                                            var m2_impact_value = 0;
+
+                                                            $('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+
+                                                            if (childsafe == 1) {
+
+                                                                count_features = count_features + 1;
+
+                                                                var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                                                    '<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
+                                                                    '<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
+                                                                    '</div></div>\n' +
+                                                                    '<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                                                    '<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
+                                                                    '<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
+                                                                    '</div></div>\n' +
+                                                                    '<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                                                    '<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+                                                                    '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
+                                                                    '<option value="">Select any option</option>\n' +
+                                                                    '<option value="2">Add childsafety clip</option>\n' +
+                                                                    '</select>\n' +
+                                                                    '<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
+                                                                    '</div></div>\n';
+
+                                                                features = features + content;
+
+                                                            }
+
+                                                            if (ladderband == 1) {
+
+                                                                var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                                                    '<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+                                                                    '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
+                                                                    '<option value="0">No</option>\n' +
+                                                                    '<option value="1">Yes</option>\n' +
+                                                                    '</select>\n' +
+                                                                    '<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+                                                                    '<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+                                                                    '<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+                                                                    '<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+                                                                    '</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+
+                                                                features = features + content;
+
+                                                            }
+
+                                                            $.each(data[1], function (index, value) {
+
+                                                                count_features = count_features + 1;
+
+                                                                var opt = '<option value="0">Select Feature</option>';
+
+                                                                $.each(value.features, function (index1, value1) {
+
+                                                                    opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
+
+                                                                });
+
+                                                                if (value.comment_box == 1) {
+                                                                    var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+                                                                }
+                                                                else {
+                                                                    var icon = '';
+                                                                }
+
+                                                                var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
+                                                                    '<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
+                                                                    '<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
+                                                                    '<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
+                                                                    '<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
+                                                                    '<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
+                                                                    '<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
+                                                                    '</div>' + icon + '</div>\n';
+
+                                                                features = features + content;
+
+                                                            });
+
+                                                            if(count_features > 0)
+                                                            {
+                                                                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                                                                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                                                                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+                                                            }
+                                                            else
+                                                            {
+                                                                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+                                                                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+                                                                $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+                                                            }
+
+                                                            if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
+                                                                $('#menu1').find(`[data-id='${row_id}']`).remove();
+                                                            }
+
+                                                            $('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' + features + '</div>');
+
+                                                            current.parents('.content-div').find('.f_area').val(0);
+                                                        }
+                                                    });
+                                                }
+                                                else
+                                                {
+                                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
+                                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
+                                                    $('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+                                                }
+
+                                                if(data.measure != measure)
+                                                {
+                                                    $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
+                                                    add_attribute_row(false, row_id);
+                                                    $('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(1);
+                                                }
+                                                else
+                                                {
+                                                    if(measure == 'M1')
+                                                    {
+                                                        if(max_width != data.max_width)
+                                                        {
+                                                            $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
+
+                                                                $(this).find('.max_width').val(data.max_width);
+                                                                var row = $(this).data('id');
+                                                                calculator(row_id,row);
+
+                                                            });
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if(box_quantity != data.estimated_price_quantity)
+                                                        {
+                                                            $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
+
+                                                                $(this).find('.box_quantity_supplier').val(data.estimated_price_quantity);
+                                                                var row = $(this).data('id');
+                                                                calculator(row_id,row);
+
+                                                            });
+                                                        }
+                                                    }
+                                                }
 											}
 											else
-											{
-												$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m2_box').hide();
-												$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.m1_box').show();
-											}
+                                            {
+                                                if(type == 'service')
+                                                {
+                                                    if(data.estimated_prices)
+                                                    {
+                                                        var estimated_price_per_box = data.estimated_prices;
+                                                        var estimated_price_per_box_old = estimated_price_per_box.replace(/\,/g, '.');
+                                                    }
+                                                    else
+                                                    {
+                                                        var estimated_price_per_box = 0;
+                                                        var estimated_price_per_box_old = 0;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if(data.rate)
+                                                    {
+                                                        var estimated_price_per_box = parseFloat(data.rate).toFixed(2);
+                                                        estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
+                                                        var estimated_price_per_box_old = data.rate;
+                                                    }
+                                                    else
+                                                    {
+                                                        var estimated_price_per_box = 0;
+                                                        var estimated_price_per_box_old = 0;
+                                                    }
+                                                }
 
-											if(data.estimated_price_per_box)
-											{
-												var estimated_price_per_box = data.estimated_price_per_box;
-												estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
-												var estimated_price_per_box_old = data.estimated_price_per_box;
-											}
-											else
-											{
-												var estimated_price_per_box = 0;
-												var estimated_price_per_box_old = 0;
-											}
-
-											if(data.max_width == null)
-											{
-												data.max_width = 0;
-											}
-
-											$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val(data.max_width);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val(data.measure);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-											// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
-											// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
-											// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
-											$('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val(data.ladderband_value);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val(data.ladderband_price_impact);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val(data.ladderband_impact_type);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val(data.base_price);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#estimated_price_quantity').val(data.estimated_price_quantity);
-											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.box_quantity_supplier').val(data.estimated_price_quantity);
-											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.max_width').val(data.max_width);
-											$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-											$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-											$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
-											$('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
-											$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-											// if ((typeof (data) != "undefined") && data.measure) {
-
-											// 	if(data.measure == 'M2')
-											// 	{
-											// 		data.measure = 'm²';
-											// 	}
-											// 	else if(data.measure == 'M1')
-											// 	{
-											// 		data.measure = 'm';
-											// 	}
-
-											// 	$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val(data.measure);
-											// 	$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val(data.measure);
-
-											// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val(data.measure);
-											// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val(data.measure);
-											// }
-											// else {
-											// 	$('#products_table').find(`[data-id='${row_id}']`).find('#width_unit').val('');
-											// 	$('#products_table').find(`[data-id='${row_id}']`).find('#height_unit').val('');
-
-											// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.width-box').find('.measure-unit').val('');
-											// 	$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.height-box').find('.measure-unit').val('');
-											// }
-
-											$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
-											$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(estimated_price_per_box_old);
-
-											// $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').each(function (i, obj) {
-
-											// 	var row_id1 = $(this).data('id');
-											// 	calculator(row_id,row_id1);
-
-											// });
-
-											// // calculate_total();
-											// calculate_qty(row_id);
-
-											var model = model_id;
-											var color = color_id;
-											var base_price = $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val();
-
-											var product = product_id;
-											var ladderband = $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val();
-											$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
-
-											if (color && model && product) {
-
-												var margin = 1;
-
+												$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val('');
+												$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val('');
 												$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
 												// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
 												$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
 												$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-
-												$.ajax({
-													type: "GET",
-													data: "product=" + product + "&color=" + color + "&model=" + model + "&margin=" + margin + "&type=floors",
-													url: "<?php echo url('/aanbieder/get-price')?>",
-													success: function (data) {
-
-														$('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
-
-														$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val(data[3].childsafe);
-														var childsafe = data[3].childsafe;
-
-														// if (price_based_option == 1) {
-														// 	var price = data[0].value;
-														// 	var org = data[0].value;
-														// }
-														// else {
-														// 	var price = base_price;
-														// 	var org = base_price;
-														// }
-
-														// var basic_price = price;
-
-														/*if (margin == 1) {
-                                                            if (data[2]) {
-                                                                price = parseFloat(price);
-                                                                var supplier_margin = data[2].margin;
-                                                                var retailer_margin = data[2].retailer_margin;
-
-                                                                current.parent().parent().find('#supplier_margin').val(supplier_margin);
-                                                                current.parent().parent().find('#retailer_margin').val(retailer_margin);
-
-                                                                if (supplier_margin && retailer_margin) {
-                                                                    price = (price / supplier_margin) * retailer_margin;
-                                                                    price = price.toFixed(2);
-                                                                }
-                                                            }
-                                                        }*/
-
-														var features = '';
-														var count_features = 0;
-														var f_value = 0;
-														var m1_impact = data[3].m1_impact;
-														var m2_impact = data[3].m2_impact;
-														var m1_impact_value = 0;
-														var m2_impact_value = 0;
-
-														$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
-
-														if (childsafe == 1) {
-
-															count_features = count_features + 1;
-
-															var content = '<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-																	'<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>' +
-																	'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x' + row_id + '">\n' +
-																	'</div></div>\n' +
-																	'<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-																	'<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>' +
-																	'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
-																	'</div></div>\n' +
-																	'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-																	'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
-																	'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-																	'<option value="">Select any option</option>\n' +
-																	'<option value="2">Add childsafety clip</option>\n' +
-																	'</select>\n' +
-																	'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
-																	'</div></div>\n';
-
-															features = features + content;
-
-														}
-
-														if (ladderband == 1) {
-
-															var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-																	'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
-																	'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-																	'<option value="0">No</option>\n' +
-																	'<option value="1">Yes</option>\n' +
-																	'</select>\n' +
-																	'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-																	'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-																	'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-																	'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-																	'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
-
-															features = features + content;
-
-														}
-
-														$.each(data[1], function (index, value) {
-
-															count_features = count_features + 1;
-
-															var opt = '<option value="0">Select Feature</option>';
-
-															$.each(value.features, function (index1, value1) {
-
-																opt = opt + '<option value="' + value1.id + '">' + value1.title + '</option>';
-
-															});
-
-															if (value.comment_box == 1) {
-																var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
-															}
-															else {
-																var icon = '';
-															}
-
-															var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-																	'<label style="margin-right: 10px;margin-bottom: 0;">' + value.title + '</label>' +
-																	'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">' + opt + '</select>\n' +
-																	'<input value="' + f_value + '" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
-																	'<input value="' + value.id + '" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
-																	'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
-																	'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-																	'</div>' + icon + '</div>\n';
-
-															features = features + content;
-
-														});
-
-														if(count_features > 0)
-														{
-															$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-															$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-															$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-														}
-														else
-														{
-															$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
-															$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
-															$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
-														}
-
-														if ($('#menu1').find(`[data-id='${row_id}']`).length > 0) {
-															$('#menu1').find(`[data-id='${row_id}']`).remove();
-														}
-
-														$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' + features + '</div>');
-
-														current.parents('.content-div').find('.f_area').val(0);
-
-														// var model_impact_value = data[3].value;
-
-														// if (data[3].price_impact == 1) {
-
-														// 	if (data[3].impact_type == 0) {
-
-														// 		price = parseFloat(price) + parseFloat(model_impact_value);
-														// 		price = price.toFixed(2);
-
-														// 	}
-														// 	else {
-
-														// 		var per = (model_impact_value) / 100;
-														// 		model_impact_value = basic_price * per;
-
-														// 		price = parseFloat(price) + parseFloat(model_impact_value);
-														// 		price = price.toFixed(2);
-														// 	}
-
-														// }
-
-														// if(margin == 1)
-														// {
-														// 	if (data[2]) {
-
-														// 		var supplier_margin = data[2].margin;
-														// 		var retailer_margin = data[2].retailer_margin;
-
-														// 		if (supplier_margin && retailer_margin) {
-														// 			price = (parseFloat(price) / supplier_margin) * retailer_margin;
-														// 		}
-														// 	}
-														// }
-
-														// price = parseFloat(price).toFixed(2);
-
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.model_impact_value').val(model_impact_value);
-														//$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + Math.round(price));
-														// $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + price.replace(/\./g, ','));
-														// $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-														// $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(price);
-														// $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val(basic_price);
-
-														// calculate_total();
-													}
-												});
-											}
-											else
-											{
-												$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-												$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-												$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
-											}
-
-											if(data.measure != measure)
-											{
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
+                                                // $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
+                                                // $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#estimated_price_quantity').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
+                                                $('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(estimated_price_per_box_old);
+                                                $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(estimated_price_per_box_old);
+												$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
+												$('#products_table').find(`[data-id='${row_id}']`).find('#childsafe').val('');
+												$('#myModal').find('.modal-body').find(`[data-id='${row_id}']`).remove();
+												$('#menu1').find(`[data-id='${row_id}']`).remove();
 												$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
-												add_attribute_row(false, row_id);
-												$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(1);
+
 											}
-											else
-											{
-												if(measure == 'M1')
-												{
-													if(max_width != data.max_width)
-													{
-														$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
 
-															$(this).find('.max_width').val(data.max_width);
-															var row = $(this).data('id');
-															calculator(row_id,row);
-
-														});
-													}
-												}
-												else
-												{
-													if(box_quantity != data.estimated_price_quantity)
-													{
-														$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
-
-															$(this).find('.box_quantity_supplier').val(data.estimated_price_quantity);
-															var row = $(this).data('id');
-															calculator(row_id,row);
-
-														});
-													}
-												}
-											}
+											calculate_total();
 										}
 
 										var windowsize = $(window).width();
@@ -5403,9 +5392,12 @@
 									}
 								});
 
-								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').hide();
-								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').css('visibility','visible');
-								$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
+                                if(type != 'product')
+								{
+									$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').hide();
+									$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').css('visibility','visible');
+									$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.green-circle').show();
+								}
 
 								/*close the list of autocompleted values,
                                 (or any other open lists of autocompleted values:*/

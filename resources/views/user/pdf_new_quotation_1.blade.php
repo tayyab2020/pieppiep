@@ -104,7 +104,7 @@
 
                                             <thead>
                                             <tr>
-                                                <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product</th>
+                                                <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product/Item/Service</th>
                                                 <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
                                                 @if($role == 'supplier')
@@ -134,35 +134,39 @@
 
                                             @if($role == 'order' || $role == 'supplier2' || $role == 'supplier3')
 
-                                                <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
+                                                @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0)
 
-                                                @foreach($calculator_row as $c => $cal)
+                                                    <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
 
-                                                    <?php
+                                                    @foreach($calculator_row as $c => $cal)
 
-                                                    $box_quantity = 'box_quantity'.$request->row_id[$i];
+                                                        <?php
 
-                                                    ?>
+                                                        $box_quantity = 'box_quantity'.$request->row_id[$i];
 
-                                                    @if($request->$box_quantity[$c] || count($calculator_row) == 1)
+                                                        ?>
 
-                                                        <tr>
+                                                        @if($request->$box_quantity[$c] || count($calculator_row) == 1)
 
-                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
-                                                            <td>{{count($calculator_row) == 1 ? $request->qty[$i] : str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+                                                            <tr>
 
-                                                            @if($role == 'supplier2')
+                                                                <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                                <td>{{count($calculator_row) == 1 ? $request->qty[$i] : str_replace('.', ',',$request->$box_quantity[$c])}}</td>
 
-                                                                <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
-                                                                <td>{{$order_numbers[$i]}}</td>
+                                                                @if($role == 'supplier2')
 
-                                                            @endif
+                                                                    <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                                    <td>{{$order_numbers[$i]}}</td>
 
-                                                        </tr>
+                                                                @endif
 
-                                                    @endif
+                                                            </tr>
 
-                                                @endforeach
+                                                        @endif
+
+                                                    @endforeach
+
+                                                @endif
 
                                             @elseif($role == 'supplier' || $role == 'supplier1')
 
@@ -199,7 +203,19 @@
 
                                                     @if($form_type == 1)
 
-                                                        <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                        @if (strpos($key, 'I') > -1)
+
+                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Item)'}}</td>
+
+                                                        @elseif (strpos($key, 'S') > -1)
+
+                                                             <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Service)'}}</td>
+
+                                                        @else
+
+                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+
+                                                        @endif
 
                                                     @else
 
@@ -511,93 +527,96 @@
 
                         @endif
 
-
                         @if($form_type == 1 && $role != 'invoice' && $role != 'invoice1' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                             <div class="page_break">
 
                                 @foreach($request->products as $i => $key)
 
-                                    <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}} Calculations</h2>
+                                    @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0)
 
-                                    <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
+                                        <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}} Calculations</h2>
 
-                                        <tbody>
+                                        <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
 
-                                        <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
+                                            <tbody>
 
-                                        @if($request->measure[$i] == 'M1')
+                                            <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
 
-                                            <tr class="header">
-                                                <td class="headings" style="width: 9%;">Sr.No</td>
-                                                <td class="headings" style="width: 22%;">Description</td>
-                                                <td class="headings" style="width: 13%;">Width</td>
-                                                <td class="headings" style="width: 13%;">Height</td>
-                                                <td class="headings" style="width: 10%;">Cutting lose</td>
-                                                <td class="headings" style="width: 10%;">Turn</td>
-                                                <td class="headings" style="width: 13%;">Max Width</td>
-                                                <td class="headings" style="width: 10%;">Total</td>
-                                            </tr>
+                                            @if($request->measure[$i] == 'M1')
 
-                                        @else
+                                                <tr class="header">
+                                                    <td class="headings" style="width: 9%;">Sr.No</td>
+                                                    <td class="headings" style="width: 22%;">Description</td>
+                                                    <td class="headings" style="width: 13%;">Width</td>
+                                                    <td class="headings" style="width: 13%;">Height</td>
+                                                    <td class="headings" style="width: 10%;">Cutting lose</td>
+                                                    <td class="headings" style="width: 10%;">Turn</td>
+                                                    <td class="headings" style="width: 13%;">Max Width</td>
+                                                    <td class="headings" style="width: 10%;">Total</td>
+                                                </tr>
 
-                                            <tr class="header">
-                                                <td class="headings" style="width: 9%;">Sr.No</td>
-                                                <td class="headings" style="width: 22%;">Description</td>
-                                                <td class="headings" style="width: 13%;">Width</td>
-                                                <td class="headings" style="width: 13%;">Height</td>
-                                                <td class="headings" style="width: 10%;">Cutting lose</td>
-                                                <td class="headings" style="width: 10%;">Total</td>
-                                                <td class="headings" style="width: 13%;">Box quantity</td>
-                                                <td class="headings" style="width: 10%;">Total boxes</td>
-                                            </tr>
+                                            @else
 
-                                        @endif
+                                                <tr class="header">
+                                                    <td class="headings" style="width: 9%;">Sr.No</td>
+                                                    <td class="headings" style="width: 22%;">Description</td>
+                                                    <td class="headings" style="width: 13%;">Width</td>
+                                                    <td class="headings" style="width: 13%;">Height</td>
+                                                    <td class="headings" style="width: 10%;">Cutting lose</td>
+                                                    <td class="headings" style="width: 10%;">Total</td>
+                                                    <td class="headings" style="width: 13%;">Box quantity</td>
+                                                    <td class="headings" style="width: 10%;">Total boxes</td>
+                                                </tr>
 
-                                        @foreach($calculator_row as $c => $cal)
+                                            @endif
 
-                                            <?php
+                                            @foreach($calculator_row as $c => $cal)
 
-                                            $description = 'attribute_description'.$request->row_id[$i];
-                                            $width = 'width'.$request->row_id[$i];
-                                            $height = 'height'.$request->row_id[$i];
-                                            $cutting_lose = 'cutting_lose_percentage'.$request->row_id[$i];
-                                            $box_quantity_supplier = 'box_quantity_supplier'.$request->row_id[$i];
-                                            $box_quantity = 'box_quantity'.$request->row_id[$i];
-                                            $total_boxes = 'total_boxes'.$request->row_id[$i];
-                                            $max_width = 'max_width'.$request->row_id[$i];
-                                            $turn = 'turn'.$request->row_id[$i];
+                                                <?php
 
-                                            ?>
+                                                $description = 'attribute_description'.$request->row_id[$i];
+                                                $width = 'width'.$request->row_id[$i];
+                                                $height = 'height'.$request->row_id[$i];
+                                                $cutting_lose = 'cutting_lose_percentage'.$request->row_id[$i];
+                                                $box_quantity_supplier = 'box_quantity_supplier'.$request->row_id[$i];
+                                                $box_quantity = 'box_quantity'.$request->row_id[$i];
+                                                $total_boxes = 'total_boxes'.$request->row_id[$i];
+                                                $max_width = 'max_width'.$request->row_id[$i];
+                                                $turn = 'turn'.$request->row_id[$i];
 
-                                            <tr>
+                                                ?>
 
-                                                <td>{{$cal}}</td>
-                                                <td>{{$request->$description[$c]}}</td>
-                                                <td>{{$request->$width[$c]}}</td>
-                                                <td>{{$request->$height[$c]}}</td>
-                                                <td>{{$request->$cutting_lose[$c]}}</td>
+                                                <tr>
 
-                                                @if($request->measure[$i] == 'M1')
+                                                    <td>{{$cal}}</td>
+                                                    <td>{{$request->$description[$c]}}</td>
+                                                    <td>{{$request->$width[$c]}}</td>
+                                                    <td>{{$request->$height[$c]}}</td>
+                                                    <td>{{$request->$cutting_lose[$c]}}</td>
 
-                                                    <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
-                                                    <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
+                                                    @if($request->measure[$i] == 'M1')
 
-                                                @else
+                                                        <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
+                                                        <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
 
-                                                    <td>{{str_replace('.', ',',$request->$total_boxes[$c])}}</td>
-                                                    <td>{{str_replace('.', ',',$request->$box_quantity_supplier[$c])}}</td>
+                                                    @else
 
-                                                @endif
+                                                        <td>{{str_replace('.', ',',$request->$total_boxes[$c])}}</td>
+                                                        <td>{{str_replace('.', ',',$request->$box_quantity_supplier[$c])}}</td>
 
-                                                <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+                                                    @endif
 
-                                            </tr>
+                                                    <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
 
-                                        @endforeach
+                                                </tr>
 
-                                        </tbody>
-                                    </table>
+                                            @endforeach
+
+                                            </tbody>
+                                        </table>
+
+                                    @endif
 
                                 @endforeach
 
