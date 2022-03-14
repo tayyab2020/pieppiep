@@ -147,7 +147,7 @@
 																		<label class="content-label">Product</label>
 
 																		<div class="autocomplete" style="width:100%;">
-																			<input value="{{$product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')'}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																			<input value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																		</div>
 
 																		<select style="display: none;" class="form-control all-products" id="blood_grp">
@@ -170,13 +170,13 @@
                                                     							<option data-type="Service" value="{{$service->id}}S">{{$service->title . ', Service'}}</option>
                                                 							@endforeach
 
-																			@foreach($items as $item)
-																				<option data-type="Item" value="{{$item->id}}I">{{$item->cat_name . ', Item, (' . $item->category . ')'}}</option>
+																			@foreach($items as $item1)
+																				<option data-type="Item" value="{{$item1->id}}I">{{$item1->cat_name . ', Item, (' . $item1->category . ')'}}</option>
 																			@endforeach
 
 																		</select>
 
-																		<input type="hidden" value="{{$item->product_id}}" name="products[]" id="product_id">
+																		<input type="hidden" value="{{$item->item_id != 0 ? $item->item_id.'I' : ($item->service_id != 0 ? $item->service_id.'S' : $item->product_id)}}" name="products[]" id="product_id">
 																		<input type="hidden" value="{{$item->supplier_id}}" name="suppliers[]" id="supplier_id">
 																		<input type="hidden" value="{{$item->color}}" name="colors[]" id="color_id">
 																		<input type="hidden" value="{{$item->model_id}}" name="models[]" id="model_id">

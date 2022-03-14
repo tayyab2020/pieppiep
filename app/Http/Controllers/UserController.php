@@ -3163,7 +3163,7 @@ class UserController extends Controller
 
             if(\Route::currentRouteName() == 'view-new-quotation')
             {
-                $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations.delivery_date as retailer_delivery_date','new_quotations.installation_date as retailer_installation_date','new_quotations.id as invoice_id','new_quotations_data.box_quantity','new_quotations_data.measure','new_quotations_data.max_width','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+                $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.*','new_quotations_data.item_id','new_quotations_data.service_id','new_quotations.delivery_date as retailer_delivery_date','new_quotations.installation_date as retailer_installation_date','new_quotations.id as invoice_id','new_quotations_data.box_quantity','new_quotations_data.measure','new_quotations_data.max_width','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
                     ->with(['features' => function($query)
                     {
                         $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
@@ -3204,6 +3204,8 @@ class UserController extends Controller
 
             $supplier_products = array();
             $product_titles = array();
+            $item_titles = array();
+            $service_titles = array();
             $color_titles = array();
             $model_titles = array();
             $product_suppliers = array();
@@ -3222,6 +3224,8 @@ class UserController extends Controller
                 {
                     $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
                     $product_titles[] = product::where('id',$item->product_id)->where('category_id',$floor_category_id)->pluck('title')->first();
+                    $item_titles[] = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.id',$item->item_id)->select('items.cat_name','categories.cat_name as category')->first();
+                    $service_titles[] = Service::where('id',$item->service_id)->pluck('title')->first();
                     $color_titles[] = colors::where('id',$item->color)->pluck('title')->first();
                     $model_titles[] = product_models::where('id',$item->model_id)->pluck('model')->first();
                     $product_suppliers[] = User::where('id',$item->supplier_id)->first();
@@ -3262,7 +3266,16 @@ class UserController extends Controller
 
             if($check->form_type == 1)
             {
-                return view('user.create_custom_quote1', compact('products','product_titles','color_titles','model_titles','product_suppliers','features','sub_features','customers','invoice','sub_products'));
+                if($user_role == 2)
+                {
+                    $services = Service::leftjoin('retailer_services', 'retailer_services.service_id', '=', 'services.id')->where('retailer_services.retailer_id', $user_id)->select('services.*','retailer_services.sell_rate as rate')->get();
+                    $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
+                    return view('user.create_custom_quote1', compact('products','product_titles','item_titles','service_titles','color_titles','model_titles','product_suppliers','features','sub_features','customers','invoice','sub_products','services','items'));
+                }
+                else
+                {
+                    return view('user.create_custom_quote1', compact('products','product_titles','color_titles','model_titles','product_suppliers','features','sub_features','customers','invoice','sub_products'));
+                }
             }
             else
             {
