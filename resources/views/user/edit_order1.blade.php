@@ -74,30 +74,6 @@
 
 													</div>
 
-												@else
-
-													<div style="display: flex;">
-
-														<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
-
-															@if(!$check->approved)
-
-																<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-																	<i class="fa fa-fw fa-save"></i>
-																	<span class="tooltiptext">Save</span>
-																</span>
-
-															@endif
-
-															<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
-																<i class="fa fa-fw fa-close"></i>
-																<span class="tooltiptext">Close</span>
-															</a>
-
-														</div>
-
-													</div>
-
 												@endif
 
 										</div>

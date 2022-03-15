@@ -387,7 +387,7 @@
 
                                                                                     <li><a href="{{ url('/aanbieder/view-new-invoice/'.$key->invoice_id) }}">{{__('text.View Invoice')}}</a></li>
 
-                                                                                    <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+                                                                                    <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->i_id) }}">Download Invoice PDF</a></li>
 
                                                                                     @if(!$key->invoice_sent)
 

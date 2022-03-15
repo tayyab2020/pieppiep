@@ -241,11 +241,11 @@
 
                                                     @if($form_type == 1)
 
-                                                        @if(strpos($key, 'I') > -1)
+                                                        @if(strpos($key, 'I') > -1 || (isset($key->item_id) && $key->item_id != 0))
 
                                                             <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Item)'}}</td>
 
-                                                        @elseif(strpos($key, 'S') > -1)
+                                                        @elseif(strpos($key, 'S') > -1 || (isset($key->service_id) && $key->service_id != 0))
 
                                                              <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Service)'}}</td>
 
@@ -262,12 +262,14 @@
                                                     @endif
 
                                                     <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
+
                                                         @if($role == 'supplier2')
 
                                                             <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
                                                             <td>{{$order_numbers[$i]}}</td>
 
                                                         @endif
+
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
 
