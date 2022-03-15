@@ -71,32 +71,32 @@
 
                                     @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
-                                    <?php
+                                        <?php
 
-                                    if($form_type == 1)
-                                    {
-                                        $arb_discount = str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'));
-                                        $arb = $request->rate[$i];
-                                        $arb = number_format((float)($arb), 2, ',', '.');
-                                    }
-                                    else
-                                    {
-                                        $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
-                                        $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
-                                        $arb_price = number_format((float)($arb_price), 2, ',', '.');
-                                        $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
-                                        $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
-                                        $arb = $request->rate[$i] - $arb_discount;
-                                        $arb = number_format((float)($arb), 2, ',', '.');
-                                        $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
-                                        $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
-                                        $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
-                                        $total = $art + number_format((float)(str_replace(',', '.',$arb)), 2, '.', ',');
-                                        $art = number_format((float)($art), 2, ',', '.');
-                                        $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
-                                    }
+                                        if($form_type == 1)
+                                        {
+                                            $arb_discount = str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'));
+                                            $arb = $request->rate[$i];
+                                            $arb = number_format((float)($arb), 2, ',', '.');
+                                        }
+                                        else
+                                        {
+                                            $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
+                                            $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
+                                            $arb_price = number_format((float)($arb_price), 2, ',', '.');
+                                            $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
+                                            $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
+                                            $arb = $request->rate[$i] - $arb_discount;
+                                            $arb = number_format((float)($arb), 2, ',', '.');
+                                            $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
+                                            $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
+                                            $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
+                                            $total = $art + number_format((float)(str_replace(',', '.',$arb)), 2, '.', ',');
+                                            $art = number_format((float)($art), 2, ',', '.');
+                                            $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
+                                        }
 
-                                    ?>
+                                        ?>
 
                                     @endif
 
@@ -241,11 +241,11 @@
 
                                                     @if($form_type == 1)
 
-                                                        @if (strpos($key, 'I') > -1)
+                                                        @if(strpos($key, 'I') > -1)
 
                                                             <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Item)'}}</td>
 
-                                                        @elseif (strpos($key, 'S') > -1)
+                                                        @elseif(strpos($key, 'S') > -1)
 
                                                              <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Service)'}}</td>
 
@@ -661,7 +661,6 @@
                             </div>
 
                         @endif
-
 
                         <style type="text/css">
 

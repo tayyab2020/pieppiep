@@ -3304,16 +3304,16 @@ class UserController extends Controller
         {
             if($user_role == 2)
             {
-                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
             }
             else
             {
-                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_orders.supplier_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_orders.supplier_id',$user_id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
             }
         }
         else
         {
-            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();            
+            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();            
         }
 
         if($check)
@@ -3634,6 +3634,7 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
+        $user_role = $user->role_id;
 
         if($main_id)
         {
@@ -3650,7 +3651,6 @@ class UserController extends Controller
             $order_number = $order_number->order_number;
             $order_ids = new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->pluck('id');
             new_orders::where('quotation_id',$request->quotation_id)->where('supplier_id',$request->supplier_id)->delete();
-            
         }
         else
         {
@@ -4063,7 +4063,15 @@ class UserController extends Controller
             $pdf->save($file);
 
             Session::flash('success', 'Order has been updated successfully!');
-            return redirect()->route('new-orders');
+
+            if($user_role == 2)
+            {
+                return redirect()->route('new-orders');
+            }
+            else
+            {
+                return redirect()->route('customer-quotations');
+            }
         }
 
     }
@@ -5761,6 +5769,28 @@ class UserController extends Controller
                 }
 
                 $feature_sub_titles[$x][] = array();
+
+                if ($temp->item_id != 0) {
+
+                    $product_titles[] = items::where('id',(int)$temp)->pluck('cat_name')->first();
+                    $color_titles[] = '';
+                    $model_titles[] = '';
+    
+                }
+                elseif ($temp->service_id != 0) {
+    
+                    $product_titles[] = Service::where('id',(int)$temp)->pluck('title')->first();
+                    $color_titles[] = '';
+                    $model_titles[] = '';
+    
+                }
+                else
+                {
+                    $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
+                    $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
+                    $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
+                }
+
                 $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
                 $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
                 $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();

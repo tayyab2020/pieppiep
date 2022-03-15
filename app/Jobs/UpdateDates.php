@@ -175,7 +175,6 @@ class UpdateDates implements ShouldQueue
 
         $pdf->save($file);
 
-
         if($is_approved)
         {
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number) {
