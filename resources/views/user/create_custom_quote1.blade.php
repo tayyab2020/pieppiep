@@ -51,13 +51,7 @@
 											<div class="col-md-5">
 												<div class="form-group" style="margin: 0;">
 
-												@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
-
-												@else
-
 													<label>Customer</label>
-
-												@endif
 
 													<div id="cus-box" style="display: flex;">
 														<select class="customer-select form-control" name="customer"
@@ -2800,7 +2794,7 @@
 					qty = qty.replace(/\,/g, '.');
 
 					if (!qty) {
-						qty = 0;
+						qty = 1;
 					}
 
 					if (!obj.value) {
@@ -5317,11 +5311,11 @@
 											}
 											else
                                             {
-												if(data.rate)
+												if(data.sell_rate)
 												{
-													var estimated_price_per_box = parseFloat(data.rate).toFixed(2);
+													var estimated_price_per_box = parseFloat(data.sell_rate).toFixed(2);
 													estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
-													var estimated_price_per_box_old = data.rate;
+													var estimated_price_per_box_old = data.sell_rate;
 												}
 												else
 												{
@@ -5329,6 +5323,7 @@
 													var estimated_price_per_box_old = 0;
 												}
 
+												$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(1);
 												$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val('');
 												$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val('');
 												$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
@@ -5344,11 +5339,7 @@
                                                 $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_value').val('');
                                                 $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_price_impact').val('');
                                                 $('#products_table').find(`[data-id='${row_id}']`).find('#ladderband_impact_type').val('');
-                                                $('#products_table').find(`[data-id='${row_id}']`).find('#base_price').val('');
                                                 $('#products_table').find(`[data-id='${row_id}']`).find('#estimated_price_quantity').val('');
-                                                $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('');
-                                                $('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val('');
-                                                $('#products_table').find(`[data-id='${row_id}']`).find('#rate').val('');
                                                 $('#products_table').find(`[data-id='${row_id}']`).find('#basic_price').val('');
                                                 $('#myModal2').find(`.comment-boxes[data-id='${row_id}']`).remove();
                                                 $('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + estimated_price_per_box);
