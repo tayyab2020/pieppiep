@@ -403,8 +403,4 @@
 
     </style>
 
-
-    <script src="{{asset('assets/admin/js/jquery152.min.js')}}"></script>
-    <script src="{{asset('assets/admin/js/jqueryui.min.js')}}"></script>
-
 @endsection
