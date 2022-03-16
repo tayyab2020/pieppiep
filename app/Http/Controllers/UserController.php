@@ -263,7 +263,7 @@ class UserController extends Controller
     {
         if($request->type == 'service')
         {
-            $data = Service::where('id',$request->id)->first();
+            $data = Service::leftjoin('retailer_services','retailer_services.service_id','=','services.id')->where('services.id',$request->id)->select('services.*','retailer_services.sell_rate as rate')->first();
         }
         elseif($request->type == 'item')
         {

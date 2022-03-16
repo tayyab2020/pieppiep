@@ -5317,33 +5317,17 @@
 											}
 											else
                                             {
-                                                if(type == 'service')
-                                                {
-                                                    if(data.estimated_prices)
-                                                    {
-                                                        var estimated_price_per_box = data.estimated_prices;
-                                                        var estimated_price_per_box_old = estimated_price_per_box.replace(/\,/g, '.');
-                                                    }
-                                                    else
-                                                    {
-                                                        var estimated_price_per_box = 0;
-                                                        var estimated_price_per_box_old = 0;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if(data.rate)
-                                                    {
-                                                        var estimated_price_per_box = parseFloat(data.rate).toFixed(2);
-                                                        estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
-                                                        var estimated_price_per_box_old = data.rate;
-                                                    }
-                                                    else
-                                                    {
-                                                        var estimated_price_per_box = 0;
-                                                        var estimated_price_per_box_old = 0;
-                                                    }
-                                                }
+												if(data.rate)
+												{
+													var estimated_price_per_box = parseFloat(data.rate).toFixed(2);
+													estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
+													var estimated_price_per_box_old = data.rate;
+												}
+												else
+												{
+													var estimated_price_per_box = 0;
+													var estimated_price_per_box_old = 0;
+												}
 
 												$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val('');
 												$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val('');
