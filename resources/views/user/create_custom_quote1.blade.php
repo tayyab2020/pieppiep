@@ -198,7 +198,7 @@
 
 																		<div style="display: flex;align-items: center;">
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																			<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
+																			<input type="hidden" value="{{$item->price_before_labor}}" class="price_before_labor_old">
 																		</div>
                                                                     </div>
 
@@ -764,7 +764,7 @@
 
 																				@foreach($key->calculations as $c => $temp)
 
-																					<div class="attribute-content-div" data-id="{{$temp->calculator_row}}" data-main-id="{{$temp->parent_row ? $temp->parent_row : 0}}">
+																					<div @if($key->measure == 'Per Piece') style="display: none;" @endif class="attribute-content-div" data-id="{{$temp->calculator_row}}" data-main-id="{{$temp->parent_row ? $temp->parent_row : 0}}">
 
 																						<div class="attribute full-res item1" style="width: 22%;">
 																							<div style="display: flex;align-items: center;">
@@ -3411,7 +3411,7 @@
 					var max_width = $('#products_table').find(`[data-id='${product_row}']`).find('#max_width').val();
 					var measure = $('#products_table').find(`[data-id='${product_row}']`).find('#measure').val();
 
-					$(`.attributes_table[data-id='${product_row}']`).append('<div class="attribute-content-div" data-id="' + rowCount + '" data-main-id="0">\n' +
+					$(`.attributes_table[data-id='${product_row}']`).append((measure == "Per Piece" ? '<div style="display: none;" class="attribute-content-div" data-id="' + rowCount + '" data-main-id="0">\n' : '<div class="attribute-content-div" data-id="' + rowCount + '" data-main-id="0">\n') +
 							'\n' +
 							'                                                            <div class="attribute full-res item1" style="width: 22%;">\n' +
 							'                       									 	<div style="display: flex;align-items: center;"><input type="hidden" class="calculator_row" name="calculator_row'+product_row+'[]" value="'+rowCount+'"><span style="width: 10%">'+rowCount+'</span><div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description'+product_row+'[]"></textarea></div></div>\n' +
@@ -5281,13 +5281,13 @@
 
                                                 if(data.measure != measure)
                                                 {
-                                                    $('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
-                                                    add_attribute_row(false, row_id);
-                                                    $('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(1);
+													$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
+													add_attribute_row(false, row_id);
+													$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(1);
                                                 }
                                                 else
                                                 {
-                                                    if(measure == 'M1')
+													if(measure == 'M1')
                                                     {
                                                         if(max_width != data.max_width)
                                                         {
@@ -5300,7 +5300,7 @@
                                                             });
                                                         }
                                                     }
-                                                    else
+                                                    else if(measure == 'M2')
                                                     {
                                                         if(box_quantity != data.estimated_price_quantity)
                                                         {

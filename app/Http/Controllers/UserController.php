@@ -48,6 +48,7 @@ use App\Service;
 use Illuminate\Http\Request;
 use App\User;
 use App\Category;
+use App\sub_categories;
 use App\service_types;
 use Auth;
 use Illuminate\Support\Facades\Artisan;
@@ -7767,13 +7768,14 @@ class UserController extends Controller
 
         if($request->retailer_service_id)
         {
-            $sizes = explode(',', $request->size);
-
             $post = retailer_services::where('id',$request->retailer_service_id)->first();
             $post->retailer_id = $user_id;
             $post->service_id = $request->service_id;
             $post->rate = str_replace(",",".",$request->product_rate);
             $post->sell_rate = str_replace(",",".",$request->product_sell_rate);
+            $post->measure = $request->measure;
+            $post->category_id = $request->category_id;
+            $post->sub_category_id = $request->sub_category_id;
             $post->save();
 
             Session::flash('success', 'Service edited successfully.');
@@ -7787,6 +7789,9 @@ class UserController extends Controller
                 $post->service_id = $request->service_id[$key];
                 $post->rate = $request->product_rate[$key];
                 $post->sell_rate = $request->product_sell_rate[$key];
+                $post->measure = $request->measure[$key];
+                $post->category_id = $request->category_id[$key];
+                $post->sub_category_id = $request->sub_category_id[$key];
                 $post->save();
             }
 
@@ -7821,8 +7826,10 @@ class UserController extends Controller
             }
 
             $services = Service::whereNotIn('id',$ids)->get();
+            $categories = Category::get();
+            $sub_categories = sub_categories::get();
 
-            return view('user.create_service',compact('services','my_service'));
+            return view('user.create_service',compact('services','my_service','categories','sub_categories'));
         }
         else
         {
@@ -7925,10 +7932,12 @@ class UserController extends Controller
 
         $item->user_id = $user_id;
         $item->category_id = $request->category_id;
+        $item->sub_category_id = $request->sub_category_id;
         $item->cat_name = $request->item;
         $item->photo = $photo;
         $item->description = $request->description;
         $item->rate = str_replace(",",".",$request->rate);
+        $item->sell_rate = str_replace(",",".",$request->sell_rate);
         $item->products = $products ? $products : NULL;
         $item->save();
 
@@ -7950,7 +7959,8 @@ class UserController extends Controller
         {
             $item = items::where('id', $id)->where('user_id', $user_id)->first();
             $categories = Category::get();
-            return view('user.create_item', compact('item','categories'));
+            $sub_categories = sub_categories::get();
+            return view('user.create_item', compact('item','categories','sub_categories'));
         }
         else
         {

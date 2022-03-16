@@ -1217,6 +1217,7 @@
                                                                                     <option {{$key->measure == 'M1' ? 'selected' : null}} value="M1">M1</option>
                                                                                     <option {{$key->measure == 'M2' ? 'selected' : null}} value="M2">M2</option>
                                                                                     <option {{$key->measure == 'Custom Sized' ? 'selected' : null}} value="Custom Sized">Custom Sized</option>
+                                                                                    <option {{$key->measure == 'Per Piece' ? 'selected' : null}} value="Per Piece">Per Piece</option>
                                                                                 </select>
 
                                                                             </div>
@@ -1255,6 +1256,7 @@
                                                                                 <option value="M1">M1</option>
                                                                                 <option value="M2">M2</option>
                                                                                 <option value="Custom Sized">Custom Sized</option>
+                                                                                <option value="Per Piece">Per Piece</option>
                                                                             </select>
 
                                                                         </div>
@@ -2478,6 +2480,7 @@
                 '                                                                           <option value="M1">M1</option>\n' +
                 '                                                                           <option value="M2">M2</option>\n' +
                 '                                                                           <option value="Custom Sized">Custom Sized</option>\n' +
+                '                                                                           <option value="Per Piece">Per Piece</option>\n' +
                 '\n' +
                 '                                                                        </select>\n' +
                 '\n' +
@@ -2652,6 +2655,7 @@
                     '                                                                           <option value="M1">M1</option>\n' +
                     '                                                                           <option value="M2">M2</option>\n' +
                     '                                                                           <option value="Custom Sized">Custom Sized</option>\n' +
+                    '                                                                           <option value="Per Piece">Per Piece</option>\n' +
                     '\n' +
                     '                                                                        </select>\n' +
                     '\n' +

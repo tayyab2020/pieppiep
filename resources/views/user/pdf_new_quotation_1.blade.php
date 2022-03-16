@@ -573,7 +573,7 @@
 
                                 @foreach($request->products as $i => $key)
 
-                                    @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0)
+                                    @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0 && $request->measure[$i] != 'Per Piece')
 
                                         <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}} Calculations</h2>
 

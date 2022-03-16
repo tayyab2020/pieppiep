@@ -50,6 +50,27 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
+                                            <div class="col-sm-6">
+                                                <select class="js-data-example-ajax10 form-control" style="height: 40px;" name="sub_category_id" id="blood_grp">
+
+                                                    <option value="">Select Sub Category</option>
+
+                                                    @if(isset($sub_categories))
+
+                                                        @foreach($sub_categories as $sub_cat)
+
+                                                            <option @if(isset($item)) @if($item->sub_category_id == $sub_cat->id) selected @endif @endif value="{{$sub_cat->id}}">{{$sub_cat->cat_name}}</option>
+
+                                                        @endforeach
+
+                                                    @endif
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Item')}}*</label>
                                             <div class="col-sm-6">
                                                 <input value="{{isset($item) ? $item->cat_name : null}}" class="form-control" name="item" id="blood_group_display_name" placeholder="{{__('text.Enter Item Title')}}" required="" type="text">
@@ -57,9 +78,23 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_slug">VAT Percentage</label>
+                                            <div class="col-sm-6">
+                                                <input readonly name="product_vat" value="21" class="form-control product_vat" id="blood_group_slug" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Rate')}}*</label>
                                             <div class="col-sm-6">
-                                                <input value="{{isset($item) ? number_format((float)$item->rate, 2, ',', '.') : null}}" maskedFormat="9,1" autocomplete="off" class="form-control rate" name="rate" id="blood_group_display_name" placeholder="{{__('text.Enter Rate')}}" required="" type="text">
+                                                <input value="{{isset($item) ? number_format((float)$item->rate, 2, ',', '.') : null}}" maskedFormat="9,1" autocomplete="off" class="form-control product_rate" name="rate" id="blood_group_display_name" placeholder="{{__('text.Enter Rate')}}" required="" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_slug">Sell Rate*</label>
+                                            <div class="col-sm-6">
+                                                <input maskedFormat="9,1" autocomplete="off" name="sell_rate" step="any" value="{{isset($item) ? number_format((float)$item->sell_rate, 2, ',', '.') : null}}" class="form-control product_sell_rate" id="blood_group_slug" placeholder="Sell Rate" required="" type="text">
                                             </div>
                                         </div>
 
@@ -199,11 +234,48 @@
 
         $(".js-data-example-ajax8").select2({
             width: '100%',
+            height: '200px',
             placeholder: "Select Category",
             allowClear: true,
         });
 
-        $('.rate').keypress(function(e){
+        $(".js-data-example-ajax10").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Sub Category",
+            allowClear: true,
+        });
+
+        $('body').on('change', '.js-data-example-ajax8' ,function(){
+
+            var id = $(this).val();
+            var options = '';
+
+            $.ajax({
+                type:"GET",
+                data: "id=" + id + "&type=single",
+                url: "<?php echo url('/aanbieder/product/get-sub-categories-by-category')?>",
+                success: function(data) {
+
+                    $.each(data, function(index, value) {
+
+                        var opt = '<option value="'+value.id+'" >'+value.cat_name+'</option>';
+
+                        options = options + opt;
+
+                    });
+
+                    $('.js-data-example-ajax10').find('option')
+                        .remove()
+                        .end()
+                        .append('<option value="">Select Sub Category</option>'+options);
+
+                }
+            });
+
+        });
+
+        $('.product_rate,.product_sell_rate').keypress(function(e){
 
             e = e || window.event;
             var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -232,13 +304,40 @@
 
         });
 
-        $('.rate').on('focusout',function(e){
+        $('.product_rate,.product_sell_rate').on('focusout',function(e){
             if($(this).val().slice($(this).val().length - 1) == ',')
             {
                 var val = $(this).val();
                 val = val + '00';
                 $(this).val(val);
             }
+        });
+
+
+        $('.product_rate').on('change keyup', function() {
+
+            var rate = $(this).val().replace(/\,/g, '.');
+            var vat = parseInt($('.product_vat').val());
+            vat = (100 + vat)/100;
+
+            var sell_rate = rate * vat;
+            sell_rate = parseFloat(sell_rate).toFixed(2);
+
+            $(this).parent().parent().parent().find('.product_sell_rate').val(sell_rate.replace(/\./g, ','));
+
+        });
+
+        $('.product_sell_rate').on('change keyup', function() {
+
+            var sell_rate = $(this).val().replace(/\,/g, '.');
+            var vat = parseInt($('.product_vat').val());
+            vat = (100 + vat)/100;
+
+            var rate = sell_rate / vat;
+            rate = parseFloat(rate).toFixed(2);
+
+            $(this).parent().parent().parent().find('.product_rate').val(rate.replace(/\./g, ','));
+
         });
 
         function uploadclick(){

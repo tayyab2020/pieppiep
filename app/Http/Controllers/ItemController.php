@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\items;
+use App\sub_categories;
 use App\User;
 use App\users;
 use Illuminate\Http\Request;
@@ -74,9 +75,11 @@ class ItemController extends Controller
         $item->cat_name = $request->title;
         $item->user_id = $request->retailer_id;
         $item->category_id = $request->category_id;
+        $item->sub_category_id = $request->sub_category_id;
         $item->photo = $photo;
         $item->description = $request->description;
         $item->rate = str_replace(",",".",$request->rate);
+        $item->sell_rate = str_replace(",",".",$request->sell_rate);
         $item->products = $products ? $products : NULL;
         $item->save();
 
@@ -87,6 +90,7 @@ class ItemController extends Controller
     {
         $item = items::where('id',$id)->first();
         $categories = Category::get();
+        $sub_categories = sub_categories::get();
         $retailers = User::where('role_id',2)->where('status',1)->where('active',1)->get();
 
         if(!$item)
@@ -94,7 +98,7 @@ class ItemController extends Controller
             return redirect()->back();
         }
 
-        return view('admin.item.create',compact('item','categories','retailers'));
+        return view('admin.item.create',compact('item','categories','sub_categories','retailers'));
     }
 
     public function update(UpdateValidationRequest $request, $id)

@@ -64,7 +64,6 @@
                                                                         <th class="sorting" id="client"  tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Title')}}</th>
                                                                         <th class="sorting" id="client"  tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">Slug</th>
                                                                         <th class="sorting" id="client"  tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Description')}}</th>
-                                                                        <th class="sorting" id="client"  tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">Estimated Prices</th>
                                                                         <th class="sorting" id="client"  tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Measure')}}</th>
                                                                         <th class="sorting" id="client"  tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Rate')}}</th>
                                                                         <th class="sorting" id="client"  tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Sell Rate')}}</th>
@@ -94,7 +93,6 @@
                                                                             <td data-editable="false">{{$cat->title}}</td>
                                                                             <td data-editable="false">{{$cat->slug}}</td>
                                                                             <td data-editable="false">{!! $cat->description !!}</td>
-                                                                            <td data-editable="false">{{$cat->estimated_prices}}</td>
                                                                             <td data-editable="false">{{$cat->measure}}</td>
                                                                             {{--<td data-type="model_number"></td>--}}
                                                                             <td data-type="rate"><span style="border: 2px solid;display: block;width: 100%;">€</span></td>
@@ -102,6 +100,9 @@
                                                                             <td data-editable="false">21</td>
 
                                                                             <input type="hidden" name="service_id[]" value="{{$cat->id}}" />
+                                                                            <input type="hidden" name="category_id[]" value="{{$cat->category_id}}" />
+                                                                            <input type="hidden" name="sub_category_id[]" value="{{$cat->sub_category_id}}" />
+                                                                            <input type="hidden" name="measure[]" value="{{$cat->measure}}" />
                                                                             <input class="product_rate" name="product_rate[]" step="any" value="" type="hidden">
                                                                             <input class="product_sell_rate" name="product_sell_rate[]" step="any" value="" type="hidden">
                                                                             {{--<input class="model_number" name="model_number[]" value="" type="hidden">--}}

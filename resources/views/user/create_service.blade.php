@@ -51,6 +51,42 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_slug">Category</label>
+                                            <div class="col-sm-6">
+                                                <select class="js-data-example-ajax8 form-control" style="height: 40px;" name="category_id" id="blood_grp">
+
+                                                    <option value="">Select Category</option>
+
+                                                    @foreach($categories as $key)
+                                                        <option @if(isset($my_service)) @if($my_service->category_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->cat_name}}</option>
+                                                    @endforeach
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
+                                            <div class="col-sm-6">
+                                                <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id" id="blood_grp">
+
+                                                    <option value="">Select Sub Category</option>
+
+                                                    @if(isset($sub_categories))
+
+                                                        @foreach($sub_categories as $sub_cat)
+
+                                                            <option @if(isset($my_service)) @if($my_service->sub_category_id == $sub_cat->id) selected @endif @endif value="{{$sub_cat->id}}">{{$sub_cat->cat_name}}</option>
+
+                                                        @endforeach
+
+                                                    @endif
+
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div class="service_details" @if(!isset($my_service)) style="display: none;" @endif>
 
                                             <div class="form-group">
@@ -79,17 +115,21 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_slug">Measure</label>
                                                 <div class="col-sm-6">
-                                                    <input readonly name="measure" value="{{isset($my_service) ? $my_service->measure : null}}" class="form-control" id="blood_group_slug" type="text">
+                                                    <select class="form-control" id="measure" name="measure">
+                                                        <option {{isset($my_service) && $my_service->measure == 'M1' ? 'selected' : null}} value="M1">M1</option>
+                                                        <option {{isset($my_service) && $my_service->measure == 'M2' ? 'selected' : null}} value="M2">M2</option>
+                                                        <option {{isset($my_service) && $my_service->measure == 'Custom Sized' ? 'selected' : null}} value="Custom Sized">Custom Sized</option>
+                                                        <option {{isset($my_service) && $my_service->measure == 'Per Piece' ? 'selected' : null}} value="Per Piece">Per Piece</option>
+                                                    </select>
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Estimated Prices</label>
-                                                <div class="col-sm-6">
-                                                    <input readonly name="estimated_price" value="{{isset($my_service) ? $my_service->estimated_prices : null}}" class="form-control" id="blood_group_slug" type="text">
-                                                </div>
-                                            </div>
-
+{{--                                            <div class="form-group">--}}
+{{--                                                <label class="control-label col-sm-4" for="blood_group_slug">Estimated Prices</label>--}}
+{{--                                                <div class="col-sm-6">--}}
+{{--                                                    <input readonly name="estimated_price" value="{{isset($my_service) ? $my_service->estimated_prices : null}}" class="form-control" id="blood_group_slug" type="text">--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_slug">VAT Percentage</label>
@@ -97,7 +137,6 @@
                                                     <input readonly name="product_vat" value="21" class="form-control product_vat" id="blood_group_slug" type="text">
                                                 </div>
                                             </div>
-
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_slug">Rate*</label>
@@ -109,10 +148,9 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_slug">Sell Rate*</label>
                                                 <div class="col-sm-6">
-                                                    <input maskedFormat="9,1" autocomplete="off" name="product_sell_rate" step="any" value="{{isset($my_service) ? number_format((float)$my_service->sell_rate, 2, ',', '.') : null}}" class="form-control product_sell_rate" id="blood_group_slug" placeholder="" required="" type="text">
+                                                    <input maskedFormat="9,1" autocomplete="off" name="product_sell_rate" step="any" value="{{isset($my_service) ? number_format((float)$my_service->sell_rate, 2, ',', '.') : null}}" class="form-control product_sell_rate" id="blood_group_slug" placeholder="Sell Rate" required="" type="text">
                                                 </div>
                                             </div>
-
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="current_photo">Current Photo</label>
@@ -164,6 +202,49 @@
                     return '{{__('text.No results found')}}';
                 }
             },
+        });
+
+        $(".js-data-example-ajax8").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Category",
+            allowClear: true,
+        });
+
+        $(".js-data-example-ajax9").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "Select Sub Category",
+            allowClear: true,
+        });
+
+        $('body').on('change', '.js-data-example-ajax8' ,function(){
+
+            var id = $(this).val();
+            var options = '';
+
+            $.ajax({
+                type:"GET",
+                data: "id=" + id + "&type=single",
+                url: "<?php echo url('/aanbieder/product/get-sub-categories-by-category')?>",
+                success: function(data) {
+
+                    $.each(data, function(index, value) {
+
+                        var opt = '<option value="'+value.id+'" >'+value.cat_name+'</option>';
+
+                        options = options + opt;
+
+                    });
+
+                    $('.js-data-example-ajax9').find('option')
+                        .remove()
+                        .end()
+                        .append('<option value="">Select Sub Category</option>'+options);
+
+                }
+            });
+
         });
 
         $('.product_rate,.product_sell_rate').keypress(function(e){

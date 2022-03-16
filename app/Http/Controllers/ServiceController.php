@@ -7,6 +7,7 @@ use App\Service;
 use App\vats;
 use Illuminate\Http\Request;
 use App\Category;
+use App\sub_categories;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreValidationRequest4;
 use App\Http\Requests\UpdateValidationRequest;
@@ -35,7 +36,8 @@ class ServiceController extends Controller
 
     public function create()
     {
-        return view('admin.service.create');
+        $categories = Category::get();
+        return view('admin.service.create',compact('categories'));
     }
 
     public function store(StoreValidationRequest4 $request)
@@ -53,7 +55,7 @@ class ServiceController extends Controller
 
         $input = $request->all();
 
-        if ($file = $request->file('photo'))
+        if($file = $request->file('photo'))
         {
             $name = time().$file->getClientOriginalName();
             $file->move('assets/images',$name);
@@ -68,10 +70,11 @@ class ServiceController extends Controller
     public function edit($id)
     {
         $cats = Service::where('id','=',$id)->first();
+        $categories = Category::get();
+        $sub_categories = sub_categories::get();
 
-        return view('admin.service.create',compact('cats'));
+        return view('admin.service.create',compact('cats','categories','sub_categories'));
     }
-
 
     public function destroy($id)
     {
