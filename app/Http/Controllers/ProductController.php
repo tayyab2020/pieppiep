@@ -827,10 +827,10 @@ class ProductController extends Controller
 
                 if($model_check)
                 {
-                    if($temp != NULL && $request->model_values[$m] != NULL)
+                    if(($request->form_type == 1 && $temp != NULL) || ($temp != NULL && $request->model_values[$m] != NULL))
                     {
                         $model_check->model = $temp;
-                        $model_check->value = $request->model_values[$m];
+                        $model_check->value = $request->form_type == 1 ? 0 : $request->model_values[$m];
                         $model_check->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model_check->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
                         $model_check->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
@@ -884,12 +884,12 @@ class ProductController extends Controller
                 }
                 else
                 {
-                    if($temp != NULL && $request->model_values[$m] != NULL) {
+                    if(($request->form_type == 1 && $temp != NULL) || ($temp != NULL && $request->model_values[$m] != NULL)) {
 
                         $model = new product_models;
                         $model->product_id = $request->cat_id;
                         $model->model = $temp;
-                        $model->value = $request->model_values[$m];
+                        $model->value = $request->form_type == 1 ? 0 : $request->model_values[$m];
                         $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
                         $model->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;

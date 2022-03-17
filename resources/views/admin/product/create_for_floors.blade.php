@@ -1171,15 +1171,11 @@
 
                                                             <div class="row" style="margin: 0;">
 
-                                                                <div style="font-family: monospace;" class="col-sm-3">
+                                                                <div style="font-family: monospace;" class="col-sm-4">
                                                                     <h4>Model</h4>
                                                                 </div>
 
-                                                                <div style="font-family: monospace;" class="col-sm-3">
-                                                                    <h4>Value</h4>
-                                                                </div>
-
-                                                                <div style="font-family: monospace;" class="col-sm-2">
+                                                                <div style="font-family: monospace;" class="col-sm-4">
                                                                     <h4>Measure</h4>
                                                                 </div>
 
@@ -1199,19 +1195,13 @@
 
                                                                         <div data-id="{{$m+1}}" class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                            <div class="col-sm-3">
+                                                                            <div class="col-sm-4">
 
                                                                                 <input type="text" value="{{$key->model}}" placeholder="Model" name="models[]" class="form-control validate models">
 
                                                                             </div>
 
-                                                                            <div class="col-sm-3">
-
-                                                                                <input value="{{$key->value}}" class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
-
-                                                                            </div>
-
-                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+                                                                            <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-4">
 
                                                                                 <select class="form-control" id="model_measure" name="model_measure[]">
                                                                                     <option {{$key->measure == 'M1' ? 'selected' : null}} value="M1">M1</option>
@@ -1238,19 +1228,13 @@
 
                                                                     <div data-id="1" class="form-group" style="margin: 0 0 20px 0;">
 
-                                                                        <div class="col-sm-3">
+                                                                        <div class="col-sm-4">
 
                                                                             <input type="text" placeholder="Model" name="models[]" class="form-control validate models">
 
                                                                         </div>
 
-                                                                        <div class="col-sm-3">
-
-                                                                            <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">
-
-                                                                        </div>
-
-                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">
+                                                                        <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-4">
 
                                                                             <select class="form-control" id="model_measure" name="model_measure[]">
                                                                                 <option value="M1">M1</option>
@@ -2461,19 +2445,13 @@
 
             $(".model_box").append('<div data-id="'+model_row+'" class="form-group" style="margin: 0 0 20px 0;">\n' +
                 '\n' +
-                '                                                                   <div class="col-sm-3">\n' +
+                '                                                                   <div class="col-sm-4">\n' +
                 '\n' +
                 '                                                                        <input type="text" placeholder="Model" name="models[]" class="form-control validate models">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
-                '                                                                    <div class="col-sm-3">\n' +
-                '\n' +
-                '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                '\n' +
-                '                                                                    </div>\n' +
-                '\n' +
-                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-4">\n' +
                 '\n' +
                 '                                                                        <select class="form-control" id="model_measure" name="model_measure[]">\n' +
                 '\n' +
@@ -2636,19 +2614,13 @@
 
                 $(".model_box").append('<div data-id="1" class="form-group" style="margin: 0 0 20px 0;">\n' +
                     '\n' +
-                    '                                                                   <div class="col-sm-3">\n' +
+                    '                                                                   <div class="col-sm-4">\n' +
                     '\n' +
                     '                                                                        <input type="text" placeholder="Model" name="models[]" class="form-control validate models">\n' +
                     '\n' +
                     '                                                                    </div>\n' +
                     '\n' +
-                    '                                                                    <div class="col-sm-3">\n' +
-                    '\n' +
-                    '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
-                    '\n' +
-                    '                                                                    </div>\n' +
-                    '\n' +
-                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-2">\n' +
+                    '                                                                    <div style="display: flex;align-items: center;height: 40px;justify-content: center;" class="col-sm-4">\n' +
                     '\n' +
                     '                                                                        <select class="form-control" id="model_measure" name="model_measure[]">\n' +
                     '\n' +
