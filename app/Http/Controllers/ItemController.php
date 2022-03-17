@@ -70,12 +70,13 @@ class ItemController extends Controller
             $photo = $name;
         }
 
+        $sub_categories = implode(',', $request->sub_category_id);
         $products = implode(',', $request->products);
 
         $item->cat_name = $request->title;
         $item->user_id = $request->retailer_id;
         $item->category_id = $request->category_id;
-        $item->sub_category_id = $request->sub_category_id;
+        $item->sub_category_ids = $sub_categories ? $sub_categories : NULL;
         $item->photo = $photo;
         $item->description = $request->description;
         $item->rate = str_replace(",",".",$request->rate);
@@ -90,7 +91,7 @@ class ItemController extends Controller
     {
         $item = items::where('id',$id)->first();
         $categories = Category::get();
-        $sub_categories = sub_categories::get();
+        $sub_categories = sub_categories::where('main_id',$item->category_id)->get();
         $retailers = User::where('role_id',2)->where('status',1)->where('active',1)->get();
 
         if(!$item)

@@ -101,7 +101,7 @@
 
                                                                             <input type="hidden" name="service_id[]" value="{{$cat->id}}" />
                                                                             <input type="hidden" name="category_id[]" value="{{$cat->category_id}}" />
-                                                                            <input type="hidden" name="sub_category_id[]" value="{{$cat->sub_category_id}}" />
+                                                                            <input type="hidden" name="sub_category_id[]" value="{{$cat->sub_category_ids}}" />
                                                                             <input type="hidden" name="measure[]" value="{{$cat->measure}}" />
                                                                             <input class="product_rate" name="product_rate[]" step="any" value="" type="hidden">
                                                                             <input class="product_sell_rate" name="product_sell_rate[]" step="any" value="" type="hidden">

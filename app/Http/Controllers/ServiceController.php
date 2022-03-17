@@ -62,6 +62,9 @@ class ServiceController extends Controller
             $input['photo'] = $name;
         }
 
+        $sub_categories = implode(',', $request->sub_category_id);
+        $input['sub_category_ids'] = $sub_categories ? $sub_categories : NULL;
+
         $service->fill($input)->save();
 
         return redirect()->route('admin-service-index');
@@ -71,7 +74,7 @@ class ServiceController extends Controller
     {
         $cats = Service::where('id','=',$id)->first();
         $categories = Category::get();
-        $sub_categories = sub_categories::get();
+        $sub_categories = sub_categories::where('main_id',$cats->category_id)->get();
 
         return view('admin.service.create',compact('cats','categories','sub_categories'));
     }

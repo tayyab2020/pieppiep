@@ -49,25 +49,60 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
-                                            <div class="col-sm-6">
-                                                <select class="js-data-example-ajax10 form-control" style="height: 40px;" name="sub_category_id" id="blood_grp">
+                                        <div class="sub-categories-box form-group">
 
-                                                    <option value="">Select Sub Category</option>
+                                            @if(isset($item) && $item->sub_category_ids)
 
-                                                    @if(isset($sub_categories))
+                                                <?php $sub_category_id = explode(',', $item->sub_category_ids); ?>
 
-                                                        @foreach($sub_categories as $sub_cat)
+                                                @foreach($sub_category_id as $key)
 
-                                                            <option @if(isset($item)) @if($item->sub_category_id == $sub_cat->id) selected @endif @endif value="{{$sub_cat->id}}">{{$sub_cat->cat_name}}</option>
+                                                    <div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">
+                                                        <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
+                                                        <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
+                                                            <div style="padding: 0;" class="col-lg-10">
+                                                                <select class="js-data-example-ajax10 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">
 
-                                                        @endforeach
+                                                                    <option value="">Select Sub Category</option>
 
-                                                    @endif
+                                                                    @foreach($sub_categories as $sub_cat)
 
-                                                </select>
-                                            </div>
+                                                                        <option @if($key == $sub_cat->id) selected @endif value="{{$sub_cat->id}}">{{$sub_cat->cat_name}}</option>
+
+                                                                    @endforeach
+
+                                                                </select>
+                                                            </div>
+                                                            <div style="display: flex;justify-content: flex-end;padding: 0;" class="col-lg-2">
+                                                                <span class="ui-close add-sub-category" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
+                                                                <span class="ui-close remove-sub-category" style="margin:0;position: relative;right: 0;top: 0;">X</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                @endforeach
+
+                                            @else
+
+                                                <div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">
+                                                    <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
+                                                    <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
+                                                        <div style="padding: 0;" class="col-lg-10">
+                                                            <select class="js-data-example-ajax10 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">
+
+                                                                <option value="">Select Sub Category</option>
+
+                                                            </select>
+                                                        </div>
+                                                        <div style="display: flex;justify-content: flex-end;padding: 0;" class="col-lg-2">
+                                                            <span class="ui-close add-sub-category" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
+                                                            <span class="ui-close remove-sub-category" style="margin:0;position: relative;right: 0;top: 0;">X</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            @endif
+
                                         </div>
 
                                         <div class="form-group">
@@ -165,7 +200,6 @@
 
                                         </div>
 
-
                                         <hr>
                                         <div class="add-product-footer">
                                             <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{__('text.Add Item')}}</button>
@@ -246,9 +280,76 @@
             allowClear: true,
         });
 
-        $('body').on('change', '.js-data-example-ajax8' ,function(){
+        $("body").on('click','.add-sub-category',function() {
 
-            var id = $(this).val();
+            var id = $('.js-data-example-ajax8').val();
+
+            $(".sub-categories-box").append('<div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">\n' +
+                '                                                    <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>\n' +
+                '                                                    <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
+                '                                                        <div style="padding: 0;" class="col-lg-10">\n' +
+                '                                                            <select class="js-data-example-ajax10 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">\n' +
+                '\n' +
+                '                                                            <option value="">Select Sub Category</option>\n' +
+                '\n' +
+                '                                                            </select>\n' +
+                '                                                        </div>\n' +
+                '                                                        <div style="display: flex;justify-content: flex-end;padding: 0;" class="col-lg-2">\n' +
+                '                                                            <span class="ui-close add-sub-category" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
+                '                                                            <span class="ui-close remove-sub-category" style="margin:0;position: relative;right: 0;top: 0;">X</span>\n' +
+                '                                                        </div>\n' +
+                '                                                    </div>\n' +
+                '                                                </div>');
+
+            get_sub_categories(id,2);
+
+            $(".js-data-example-ajax10").select2({
+                width: '100%',
+                height: '200px',
+                placeholder: "Select Sub Category",
+                allowClear: true,
+            });
+
+        });
+
+        $("body").on('click','.remove-sub-category',function() {
+
+            var id = $('.js-data-example-ajax8').val();
+            $(this).parents('.sub-category-box').remove();
+
+            if($(".sub-categories-box .sub-category-box").length == 0)
+            {
+                $(".sub-categories-box").append('<div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">\n' +
+                    '                                                    <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>\n' +
+                    '                                                    <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
+                    '                                                        <div style="padding: 0;" class="col-lg-10">\n' +
+                    '                                                            <select class="js-data-example-ajax10 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">\n' +
+                    '\n' +
+                    '                                                            <option value="">Select Sub Category</option>\n' +
+                    '\n' +
+                    '                                                            </select>\n' +
+                    '                                                        </div>\n' +
+                    '                                                        <div style="display: flex;justify-content: flex-end;padding: 0;" class="col-lg-2">\n' +
+                    '                                                            <span class="ui-close add-sub-category" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
+                    '                                                            <span class="ui-close remove-sub-category" style="margin:0;position: relative;right: 0;top: 0;">X</span>\n' +
+                    '                                                        </div>\n' +
+                    '                                                    </div>\n' +
+                    '                                                </div>');
+
+                get_sub_categories(id,1);
+
+                $(".js-data-example-ajax10").select2({
+                    width: '100%',
+                    height: '200px',
+                    placeholder: "Select Sub Category",
+                    allowClear: true,
+                });
+            }
+
+        });
+
+        function get_sub_categories(id,type)
+        {
             var options = '';
 
             $.ajax({
@@ -265,13 +366,29 @@
 
                     });
 
-                    $('.js-data-example-ajax10').find('option')
+                    if(type == 1)
+                    {
+                        var current = $('.js-data-example-ajax10');
+                    }
+                    else
+                    {
+                        var current = $('.sub-categories-box .sub-category-box:last').find('.js-data-example-ajax10');
+                    }
+
+                    current.find('option')
                         .remove()
                         .end()
                         .append('<option value="">Select Sub Category</option>'+options);
 
                 }
             });
+        }
+
+        $('body').on('change', '.js-data-example-ajax8' ,function(){
+
+            var id = $(this).val();
+
+            get_sub_categories(id,1);
 
         });
 
@@ -312,7 +429,6 @@
                 $(this).val(val);
             }
         });
-
 
         $('.product_rate').on('change keyup', function() {
 
