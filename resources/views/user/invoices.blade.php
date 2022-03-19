@@ -262,7 +262,7 @@
 
                                                                     $date1 = date('d-m-Y',$date); ?>
 
-                                                                <td><span style="display: none;">{{date('m-d-Y',$date)}}</span>{{$date1}}</td>
+                                                                <td data-sort="{{strtotime($key->invoice_date)}}">{{$date1}}</td>
 
                                                                 <td>
 
@@ -372,7 +372,7 @@
 
                                                             $date1 = date('d-m-Y',$date); ?>
 
-                                                            <td><span style="display: none;">{{date('m-d-Y',$date)}}</span>{{$date1}}</td>
+                                                            <td data-sort="{{strtotime($key->invoice_date)}}">{{$date1}}</td>
 
                                                             <td>
                                                                 
@@ -384,25 +384,32 @@
                                                                         
                                                                         <ul class="dropdown-menu">
 
-                                                                            <li><a href="{{ url('/aanbieder/view-new-invoice/'.$key->quotation_id) }}">{{__('text.View Invoice')}}</a></li>
-                                                                            <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->quotation_id) }}">{{$key->has_negative_invoice ? 'View Negative Invoice' : 'Create Negative Invoice'}}</a></li>
-                                                                            <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+                                                                            @if(!$key->negative_invoice)
 
-                                                                            @if($key->has_negative_invoice)
+                                                                                <li><a href="{{ url('/aanbieder/view-new-invoice/'.$key->quotation_id) }}">{{__('text.View Invoice')}}</a></li>
 
+                                                                                @if(!$key->has_negative_invoice)
+                                                                                    <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->quotation_id) }}">Create Negative Invoice</a></li>
+                                                                                @endif
+
+                                                                                <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+
+                                                                                @if(!$key->invoice_sent)
+
+                                                                                    <li><a class="send-new-invoice" data-negative="0" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Invoice</a></li>
+
+                                                                                @endif
+
+                                                                            @else
+
+                                                                                <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->quotation_id) }}">View Negative Invoice</a></li>
                                                                                 <li><a href="{{ url('/aanbieder/download-negative-invoice-pdf/'.$key->quotation_id) }}">Download Negative Invoice PDF</a></li>
 
-                                                                            @endif
+                                                                                @if(!$key->negative_invoice_sent)
 
-                                                                            @if(!$key->invoice_sent)
+                                                                                    <li><a class="send-negative-invoice" data-negative="1" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Negative Invoice</a></li>
 
-                                                                                <li><a class="send-new-invoice" data-negative="0" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Invoice</a></li>
-
-                                                                            @endif
-
-                                                                            @if(!$key->negative_invoice_sent)
-
-                                                                                <li><a class="send-negative-invoice" data-negative="1" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Negative Invoice</a></li>
+                                                                                @endif
 
                                                                             @endif
 

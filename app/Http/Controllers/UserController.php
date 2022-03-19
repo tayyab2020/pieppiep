@@ -1016,7 +1016,9 @@ class UserController extends Controller
 
         if($user_role == 2)
         {
-            $new_invoices = new_invoices::leftjoin('new_quotations','new_quotations.id','=','new_invoices.quotation_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_invoices.customer_details')->where('new_invoices.creator_id', $user_id)->where('new_invoices.invoice',1)->orderBy('new_invoices.created_at', 'desc')->select('new_invoices.*', 'new_quotations.quotation_invoice_number', 'new_invoices.id as invoice_id', 'new_invoices.invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+            $new_invoices = new_invoices::leftjoin('new_quotations','new_quotations.id','=','new_invoices.quotation_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_invoices.customer_details')->where('new_invoices.creator_id', $user_id)->where('new_invoices.invoice',1)->orderBy('new_invoices.created_at', 'desc')->select('new_invoices.*', 'new_quotations.quotation_invoice_number', 'new_invoices.id as invoice_id', 'new_invoices.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+            $new_negative_invoices = new_negative_invoices::leftjoin('new_quotations','new_quotations.id','=','new_invoices.quotation_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_invoices.customer_details')->where('new_invoices.creator_id', $user_id)->orderBy('new_invoices.created_at', 'desc')->select('new_invoices.*', 'new_quotations.quotation_invoice_number', 'new_invoices.id as invoice_id', 'new_invoices.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('data')->get();
+            $new_invoices = $new_invoices->concat($new_negative_invoices);
         }
         else
         {
