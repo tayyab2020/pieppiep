@@ -153,6 +153,7 @@
   Route::get('/accept-new-quotation/{id}', 'UserController@AcceptNewQuotation');
   Route::get('/accept-new-quotation-mail/{id}', 'UserController@AcceptNewQuotationMail')->name('accept-new-quotation-mail');
   Route::post('/send-invoice', 'UserController@SendInvoice')->name('send-new-invoice');
+  Route::post('/send-negative-invoice', 'UserController@SendNegativeInvoice')->name('send-negative-invoice');
   Route::get('/bekijk-offerteaanvraag-aanbieder/{id}', 'UserController@HandymanQuoteRequest');
   Route::get('/download-handyman-quote-request/{id}', 'UserController@DownloadHandymanQuoteRequest');
   Route::get('/opstellen-offerte/{id}', 'UserController@CreateQuotation');

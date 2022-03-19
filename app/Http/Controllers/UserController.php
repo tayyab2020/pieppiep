@@ -5889,6 +5889,64 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function SendNegativeInvoice(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+        }
+
+        $user_id = $user->id;
+        $check = new_invoices::where('quotation_id',$request->quotation_id3)->where('creator_id',$user_id)->where('negative_invoice_sent',0)->first();
+
+        if (!$check) {
+            return redirect()->back();
+        }
+
+//        new_quotations::where('id', $request->quotation_id3)->where('creator_id',$user_id)->where('negative_invoice_sent',0)->update(['negative_invoice_sent' => 1]);
+        $check->negative_invoice_sent = 1;
+        $check->save();
+
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
+        $client_name = $client->name . ' ' . $client->family_name;
+        $client_email = $client->email;
+        $retailer_company = $user->company_name;
+
+        $invoice = new_negative_invoices::where('quotation_id',$request->quotation_id3)->where('creator_id',$user_id)->where('negative_invoice_sent',0)->first();
+        $invoice_number = $invoice->invoice_number;
+        $invoice->negative_invoice_sent = 1;
+        $invoice->save();
+        $filename = $invoice_number . '.pdf';
+        $file = public_path() . '/assets/newNegativeInvoices/' . $filename;
+
+        $mail_to = $request->mail_to3;
+        $subject = $request->mail_subject3;
+        $msg = $request->mail_body3;
+
+        \Mail::send('user.global_mail',
+            array(
+                'msg' => $msg,
+            ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename) {
+                $message->to($mail_to)
+                    ->from('info@pieppiep.com')
+                    ->subject($subject)
+                    ->attach($file, [
+                        'as' => $filename,
+                        'mime' => 'application/pdf',
+                    ]);
+            });
+
+//        new_quotations::where('id', $request->quotation_id3)->update(['mail_negative_invoice_to' => $request->mail_to3]);
+        new_invoices::where('quotation_id', $request->quotation_id3)->update(['mail_negative_invoice_to' => $request->mail_to3]);
+        new_negative_invoices::where('quotation_id', $request->quotation_id3)->update(['mail_negative_invoice_to' => $request->mail_to3]);
+
+        Session::flash('success', 'Negative Invoice sent to customer successfully!');
+        return redirect()->back();
+    }
+
     public function CreateNewInvoice($id)
     {
         $invoice_id = $id;
