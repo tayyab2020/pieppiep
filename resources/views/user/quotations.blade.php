@@ -385,13 +385,13 @@
 
                                                                                 @else
 
-                                                                                    <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->invoice_id) }}">{{$key->has_negative_invoice ? 'View Negative Invoice' : 'Create Negative Invoice'}}</a></li>
+                                                                                    <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->invoice_id) }}">{{$key->invoices[0]->has_negative_invoice ? 'View Negative Invoice' : 'Create Negative Invoice'}}</a></li>
 
                                                                                     <li><a href="{{ url('/aanbieder/view-new-invoice/'.$key->invoice_id) }}">{{__('text.View Invoice')}}</a></li>
 
-                                                                                    <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->i_id) }}">Download Invoice PDF</a></li>
+                                                                                    <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoices[0]->id) }}">Download Invoice PDF</a></li>
 
-                                                                                    @if($key->has_negative_invoice)
+                                                                                    @if($key->invoices[0]->has_negative_invoice)
 
                                                                                         <li><a href="{{ url('/aanbieder/download-negative-invoice-pdf/'.$key->invoice_id) }}">Download Negative Invoice PDF</a></li>
 
