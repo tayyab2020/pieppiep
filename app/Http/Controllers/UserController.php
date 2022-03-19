@@ -977,7 +977,7 @@ class UserController extends Controller
         {
             if($user_role == 2)
             {
-                $new_invoices = new_quotations::leftjoin('new_invoices','new_invoices.quotation_id','=','new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_invoices.negative_invoice',0)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_invoices.has_negative_invoice','new_invoices.id as i_id','new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('orders')->get();
+                $new_invoices = new_quotations::leftjoin('new_invoices','new_invoices.quotation_id','=','new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_invoices.has_negative_invoice','new_invoices.id as i_id','new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('orders')->get();
             }
             else
             {
