@@ -15,11 +15,11 @@
                                         
                                         <h2 style="display: inline-block;">{{__('text.Quotation Invoices')}}</h2>
 
-                                            @if(auth()->user()->can('create-direct-invoice'))
+                                            <!-- @if(auth()->user()->can('create-direct-invoice'))
 
                                                 <a style="float: right;margin-right: 10px;" href="{{route('create-direct-invoice')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create New Invoice')}}</a>
 
-                                            @endif
+                                            @endif -->
 
                                     </div>
                                     <hr>

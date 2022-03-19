@@ -34,6 +34,7 @@ use App\new_invoices_data;
 use App\new_invoices_data_calculations;
 use App\new_invoices_features;
 use App\new_invoices_sub_products;
+use App\new_negative_invoices;
 use App\product;
 use App\product_features;
 use App\product_models;
@@ -974,14 +975,13 @@ class UserController extends Controller
 
         if($user->can('create-new-quotation'))
         {
-
             if($user_role == 2)
             {
-                $new_invoices = new_quotations::leftjoin('new_invoices','new_invoices.quotation_id','=','new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_invoices.id as i_id','new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('orders')->get();
+                $new_invoices = new_quotations::leftjoin('new_invoices','new_invoices.quotation_id','=','new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_invoices.negative_invoice',0)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_invoices.has_negative_invoice','new_invoices.id as i_id','new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name')->with('orders')->get();
             }
             else
             {
-                $new_invoices = new_quotations::leftjoin('new_invoices','new_invoices.quotation_id','=','new_quotations.id')->leftjoin('new_orders', 'new_orders.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_orders.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_invoices.id as i_id','new_quotations.*', 'new_quotations.id as invoice_id', 'new_orders.order_sent', 'new_orders.id as data_id', 'new_quotations.created_at as invoice_date', 'new_orders.order_number','new_orders.approved as data_approved','new_orders.processing as data_processing','new_orders.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
+                $new_invoices = new_quotations::leftjoin('new_invoices','new_invoices.quotation_id','=','new_quotations.id')->leftjoin('new_orders', 'new_orders.quotation_id', '=', 'new_quotations.id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_invoices.negative_invoice',0)->where('new_orders.supplier_id', $user_id)->where('new_quotations.finished',1)->orderBy('new_quotations.created_at', 'desc')->select('new_invoices.has_negative_invoice','new_invoices.id as i_id','new_quotations.*', 'new_quotations.id as invoice_id', 'new_orders.order_sent', 'new_orders.id as data_id', 'new_quotations.created_at as invoice_date', 'new_orders.order_number','new_orders.approved as data_approved','new_orders.processing as data_processing','new_orders.delivered as data_delivered', 'customers_details.name', 'customers_details.family_name')->get();
                 $new_invoices = $new_invoices->unique('invoice_id');
             }
         }
@@ -3182,21 +3182,45 @@ class UserController extends Controller
             }
             else
             {
-                $invoice = new_invoices_data::leftjoin('new_invoices','new_invoices.id','=','new_invoices_data.invoice_id')->leftjoin('products','products.id','=','new_invoices_data.product_id')->where('new_invoices.quotation_id', $id)->where('new_invoices.creator_id', $user_id)->select('new_invoices.*','new_invoices_data.item_id','new_invoices_data.service_id','new_invoices.delivery_date as retailer_delivery_date','new_invoices.installation_date as retailer_installation_date','new_invoices.id as invoice_id','new_invoices_data.box_quantity','new_invoices_data.measure','new_invoices_data.max_width','new_invoices_data.discount','new_invoices_data.labor_discount','new_invoices_data.total_discount','new_invoices_data.price_before_labor','new_invoices_data.labor_impact','new_invoices_data.model_impact_value','new_invoices_data.childsafe','new_invoices_data.childsafe_question','new_invoices_data.childsafe_answer','new_invoices_data.childsafe_x','new_invoices_data.childsafe_y','new_invoices_data.childsafe_diff','new_invoices_data.model_id','new_invoices_data.delivery_days','new_invoices_data.delivery_date','new_invoices_data.id','new_invoices_data.supplier_id','new_invoices_data.product_id','new_invoices_data.row_id','new_invoices_data.rate','new_invoices_data.basic_price','new_invoices_data.qty','new_invoices_data.amount','new_invoices_data.color','new_invoices_data.width','new_invoices_data.width_unit','new_invoices_data.height','new_invoices_data.height_unit','new_invoices_data.price_based_option','new_invoices_data.base_price','new_invoices_data.supplier_margin','new_invoices_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
-                    ->with(['features' => function($query)
-                    {
-                        $query->leftjoin('features','features.id','=','new_invoices_features.feature_id')
-                            /*->where('new_quotations_features.sub_feature',0)*/
-                            ->select('new_invoices_features.*','features.title','features.comment_box');
+                $invoice = array();
 
-                    }])
-                    ->with(['sub_features' => function($query)
-                    {
-                        $query->leftjoin('product_features','product_features.id','=','new_invoices_features.feature_id')
-                            /*->where('new_quotations_features.sub_feature',1)*/
-                            ->select('new_invoices_features.*','product_features.title');
+                if(\Route::currentRouteName() == 'create-new-negative-invoice')
+                {
+                    $invoice = new_invoices_data::leftjoin('new_invoices','new_invoices.id','=','new_invoices_data.invoice_id')->leftjoin('products','products.id','=','new_invoices_data.product_id')->where('new_invoices.negative_invoice',1)->where('new_invoices.quotation_id', $id)->where('new_invoices.creator_id', $user_id)->select('new_invoices.*','new_invoices_data.item_id','new_invoices_data.service_id','new_invoices.delivery_date as retailer_delivery_date','new_invoices.installation_date as retailer_installation_date','new_invoices.id as invoice_id','new_invoices_data.box_quantity','new_invoices_data.measure','new_invoices_data.max_width','new_invoices_data.discount','new_invoices_data.labor_discount','new_invoices_data.total_discount','new_invoices_data.price_before_labor','new_invoices_data.labor_impact','new_invoices_data.model_impact_value','new_invoices_data.childsafe','new_invoices_data.childsafe_question','new_invoices_data.childsafe_answer','new_invoices_data.childsafe_x','new_invoices_data.childsafe_y','new_invoices_data.childsafe_diff','new_invoices_data.model_id','new_invoices_data.delivery_days','new_invoices_data.delivery_date','new_invoices_data.id','new_invoices_data.supplier_id','new_invoices_data.product_id','new_invoices_data.row_id','new_invoices_data.rate','new_invoices_data.basic_price','new_invoices_data.qty','new_invoices_data.amount','new_invoices_data.color','new_invoices_data.width','new_invoices_data.width_unit','new_invoices_data.height','new_invoices_data.height_unit','new_invoices_data.price_based_option','new_invoices_data.base_price','new_invoices_data.supplier_margin','new_invoices_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+                        ->with(['features' => function($query)
+                        {
+                            $query->leftjoin('features','features.id','=','new_invoices_features.feature_id')
+                                /*->where('new_quotations_features.sub_feature',0)*/
+                                ->select('new_invoices_features.*','features.title','features.comment_box');
 
-                    }])->with('calculations')->get();
+                        }])
+                        ->with(['sub_features' => function($query)
+                        {
+                            $query->leftjoin('product_features','product_features.id','=','new_invoices_features.feature_id')
+                                /*->where('new_quotations_features.sub_feature',1)*/
+                                ->select('new_invoices_features.*','product_features.title');
+
+                        }])->with('calculations')->get();
+                }
+
+                if(count($invoice) == 0)
+                {
+                    $invoice = new_invoices_data::leftjoin('new_invoices','new_invoices.id','=','new_invoices_data.invoice_id')->leftjoin('products','products.id','=','new_invoices_data.product_id')->where('new_invoices.negative_invoice',0)->where('new_invoices.quotation_id', $id)->where('new_invoices.creator_id', $user_id)->select('new_invoices.*','new_invoices_data.item_id','new_invoices_data.service_id','new_invoices.delivery_date as retailer_delivery_date','new_invoices.installation_date as retailer_installation_date','new_invoices.id as invoice_id','new_invoices_data.box_quantity','new_invoices_data.measure','new_invoices_data.max_width','new_invoices_data.discount','new_invoices_data.labor_discount','new_invoices_data.total_discount','new_invoices_data.price_before_labor','new_invoices_data.labor_impact','new_invoices_data.model_impact_value','new_invoices_data.childsafe','new_invoices_data.childsafe_question','new_invoices_data.childsafe_answer','new_invoices_data.childsafe_x','new_invoices_data.childsafe_y','new_invoices_data.childsafe_diff','new_invoices_data.model_id','new_invoices_data.delivery_days','new_invoices_data.delivery_date','new_invoices_data.id','new_invoices_data.supplier_id','new_invoices_data.product_id','new_invoices_data.row_id','new_invoices_data.rate','new_invoices_data.basic_price','new_invoices_data.qty','new_invoices_data.amount','new_invoices_data.color','new_invoices_data.width','new_invoices_data.width_unit','new_invoices_data.height','new_invoices_data.height_unit','new_invoices_data.price_based_option','new_invoices_data.base_price','new_invoices_data.supplier_margin','new_invoices_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+                        ->with(['features' => function($query)
+                        {
+                            $query->leftjoin('features','features.id','=','new_invoices_features.feature_id')
+                                /*->where('new_quotations_features.sub_feature',0)*/
+                                ->select('new_invoices_features.*','features.title','features.comment_box');
+
+                        }])
+                        ->with(['sub_features' => function($query)
+                        {
+                            $query->leftjoin('product_features','product_features.id','=','new_invoices_features.feature_id')
+                                /*->where('new_quotations_features.sub_feature',1)*/
+                                ->select('new_invoices_features.*','product_features.title');
+
+                        }])->with('calculations')->get();
+                }
             }
 
             if (!$invoice) {
@@ -3502,13 +3526,44 @@ class UserController extends Controller
         }
 
         if (!$invoice) {
-            return redirect()->route('new-invoices');
+            return redirect()->back();
         }
 
         $invoice_number = $invoice->invoice_number;
         $filename = $invoice_number . '.pdf';
 
         return response()->download(public_path("assets/newInvoices/{$filename}"));
+    }
+
+    public function DownloadNegativeInvoicePDF($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($user_role == 2)
+        {
+            if($main_id)
+            {
+                $user_id = $main_id;
+            }
+
+            $invoice = new_negative_invoices::where('quotation_id', $id)->where('creator_id', $user_id)->first();
+        }
+        else
+        {
+            $invoice = new_negative_invoices::where('quotation_id', $id)->where('user_id', $user_id)->first();
+        }
+
+        if (!$invoice) {
+            return redirect()->back();
+        }
+
+        $invoice_number = $invoice->invoice_number;
+        $filename = $invoice_number . '.pdf';
+
+        return response()->download(public_path("assets/newNegativeInvoices/{$filename}"));
     }
 
     public function DownloadFullOrderPDF($id)
@@ -4104,28 +4159,108 @@ class UserController extends Controller
             {
                 if($form_type == 2)
                 {
-                    new_invoices::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    if(!$request->negative_invoice)
+                    {
+                        new_invoices::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    }
+                    else
+                    {
+                        if($request->negative_invoice_id)
+                        {
+                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                        }
+                    }
                 }
                 else
                 {
-                    new_invoices::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    if(!$request->negative_invoice)
+                    {
+                        new_invoices::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    }
+                    else
+                    {
+                        if($request->negative_invoice_id)
+                        {
+                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                        }
+                    }
                 }
 
-                $data_ids = new_invoices_data::where('invoice_id',$request->quotation_id)->pluck('id');
-                $feature_ids = new_invoices_features::whereIn('invoice_data_id',$data_ids)->pluck('id');
-
-                new_invoices_data::where('invoice_id',$request->quotation_id)->delete();
-
-                if($form_type == 1)
+                if(!$request->negative_invoice)
                 {
-                    new_invoices_data_calculations::whereIn('invoice_data_id',$data_ids)->delete();
+                    $data_ids = new_invoices_data::where('invoice_id',$request->quotation_id)->pluck('id');
+                    $feature_ids = new_invoices_features::whereIn('invoice_data_id',$data_ids)->pluck('id');
+
+                    new_invoices_data::where('invoice_id',$request->quotation_id)->delete();
+
+                    if($form_type == 1)
+                    {
+                        new_invoices_data_calculations::whereIn('invoice_data_id',$data_ids)->delete();
+                    }
+
+                    new_invoices_features::whereIn('invoice_data_id',$data_ids)->delete();
+                    new_invoices_sub_products::whereIn('feature_row_id',$feature_ids)->delete();
+
+                    $invoice = new_invoices::where('id',$request->quotation_id)->first();
+                    $invoice_number = $invoice->invoice_number;
                 }
+                else
+                {
+                    if(!$request->negative_invoice_id)
+                    {
+                        new_invoices::where('id',$request->quotation_id)->update(['has_negative_invoice' => 1]);
 
-                new_invoices_features::whereIn('invoice_data_id',$data_ids)->delete();
-                new_invoices_sub_products::whereIn('feature_row_id',$feature_ids)->delete();
+                        $counter_negative_invoice = $user->counter_invoice;
+                        $invoice_number = $user->invoice_client_id ? date("Y") . "-" . sprintf('%04u', $user_id) . '-' . sprintf('%06u', $counter_negative_invoice) : date("Y") . '-' . sprintf('%06u', $counter_negative_invoice);
+                        $counter_negative_invoice = $counter_negative_invoice + 1;
+                        $user->counter_invoice = $counter_negative_invoice;
+                        $user->save();
 
-                $invoice = new_invoices::where('id',$request->quotation_id)->first();
-                $invoice_number = $invoice->invoice_number;
+                        $org_invoice_data = new_invoices::where('id',$request->quotation_id)->first();
+                        $org_invoice_data->invoice_number = $invoice_number;
+                        $org_invoice_data->negative_invoice = 1;
+                        $org_invoice_data->customer_details = $request->customer;
+                        $org_invoice_data->vat_percentage = 21;
+                        $org_invoice_data->subtotal = str_replace(',', '.',$request->total_amount);
+                        $org_invoice_data->grand_total = str_replace(',', '.',$request->total_amount);
+                        $org_invoice_data->price_before_labor_total = str_replace(',', '.',$request->price_before_labor_total);
+
+                        if($form_type == 2)
+                        {
+                            $org_invoice_data->labor_cost_total = str_replace(',', '.',$request->labor_cost_total);
+                        }
+                        else
+                        {
+                            $org_invoice_data->labor_cost_total = 0;
+                        }
+
+                        $org_invoice_data->net_amount = str_replace(',', '.',$request->net_amount);
+                        $org_invoice_data->tax_amount = str_replace(',', '.',$request->tax_amount);
+                        $org_invoice_data->delivery_date = $request->retailer_delivery_date;
+                        $org_invoice_data->installation_date = $request->installation_date;
+                        $invoice = $org_invoice_data->replicate();
+                        $invoice->setTable('new_invoices');
+                        $invoice->save();
+                    }
+                    else
+                    {
+                        $invoice = new_negative_invoices::where('id',$request->negative_invoice_id)->first();
+                        $invoice_number = $invoice->invoice_number;
+                    }
+
+                    $data_ids = new_invoices_data::where('invoice_id',$request->negative_invoice_id)->pluck('id');
+                    $feature_ids = new_invoices_features::whereIn('invoice_data_id',$data_ids)->pluck('id');
+
+                    new_invoices_data::where('invoice_id',$request->negative_invoice_id)->delete();
+
+                    if($form_type == 1)
+                    {
+                        new_invoices_data_calculations::whereIn('invoice_data_id',$data_ids)->delete();
+                    }
+
+                    new_invoices_features::whereIn('invoice_data_id',$data_ids)->delete();
+                    new_invoices_sub_products::whereIn('feature_row_id',$feature_ids)->delete();
+                }
             }
             else
             {
@@ -4923,11 +5058,29 @@ class UserController extends Controller
             $date = $invoice->created_at;
             $role = 'invoice1';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
-            $file = public_path() . '/assets/newInvoices/' . $filename;
-            $pdf->save($file);
+            if(!$request->negative_invoice)
+            {
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $file = public_path() . '/assets/newInvoices/' . $filename;
+                $pdf->save($file);
 
-            Session::flash('success','Invoice has been updated successfully.');
+                Session::flash('success','Invoice has been updated successfully.');
+            }
+            else
+            {
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $file = public_path() . '/assets/newNegativeInvoices/' . $filename;
+                $pdf->save($file);
+
+                if($request->negative_invoice_id)
+                {
+                    Session::flash('success','Negative Invoice has been updated successfully.');
+                }
+                else
+                {
+                    Session::flash('success','Negative Invoice has been created successfully.');
+                }
+            }
         }
 
         return redirect()->route('customer-quotations');

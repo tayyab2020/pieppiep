@@ -23,6 +23,7 @@ yarn-error.log
 /public/assets/supplierQuotations
 /public/assets/supplierApproved
 /public/assets/newInvoices
+/public/assets/newNegativeInvoices
 /public/assets/colorImages
 /public/assets/Orders
 /config/app.php

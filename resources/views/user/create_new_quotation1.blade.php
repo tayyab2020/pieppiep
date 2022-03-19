@@ -14,6 +14,8 @@
 				<input type="hidden" name="form_type" value="2">
 				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
 				<input type="hidden" name="is_invoice" value="{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? 0 : 1) : 0}}">
+				<input type="hidden" name="negative_invoice" value="{{Route::currentRouteName() == 'create-new-negative-invoice' ? 1 : 0}}">
+				<input type="hidden" name="negative_invoice_id" value="{{isset($invoice) ? (Route::currentRouteName() == 'create-new-negative-invoice' ? ($invoice[0]->negative_invoice != 0 ? $invoice[0]->invoice_id : null) : null) : null}}">
 
 				<div style="margin: 0;" class="row">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -25,18 +27,33 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : __('text.View Invoice')) : __('text.Create Quotation')}}</h2>
+											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : (Route::currentRouteName() == 'create-new-negative-invoice' ? 'Create Negative Invoice' : __('text.View Invoice') )) : __('text.Create Quotation')}}</h2>
 
 											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
 
-												@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+												@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
 
-													<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-														<i class="fa fa-fw fa-save"></i>
-														<span class="tooltiptext">Save</span>
-													</span>
+													@if(!$invoice[0]->invoice_sent || Route::currentRouteName() == 'create-new-negative-invoice')
 
-												@endif
+														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+															<i class="fa fa-fw fa-save"></i>
+															<span class="tooltiptext">Save</span>
+														</span>
+
+													@endif
+
+												@else
+
+													@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+
+														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+															<i class="fa fa-fw fa-save"></i>
+															<span class="tooltiptext">Save</span>
+														</span>
+
+													@endif
+
+												@endif	
 
 												<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
 													<i class="fa fa-fw fa-close"></i>
@@ -52,13 +69,7 @@
 											<div class="col-md-5">
 												<div class="form-group" style="margin: 0;">
 
-												@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
-
-												@else
-
 													<label>Customer</label>
-
-												@endif
 
 													<div id="cus-box" style="display: flex;">
 														<select class="customer-select form-control" name="customer"
@@ -77,9 +88,21 @@
 
 														</select>
 
-														@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+														@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
 
-															<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+															@if(!$invoice[0]->invoice_sent || Route::currentRouteName() == 'create-new-negative-invoice')
+
+																<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+
+															@endif
+
+														@else
+
+															@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+
+																<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
+
+															@endif
 
 														@endif
 
@@ -231,13 +254,14 @@
 																	<div style="width: 7%;" class="content item9">
 
 																		<label class="content-label">€ Total</label>
+																		@if(Route::currentRouteName() == 'create-new-negative-invoice') -&nbsp; @endif
 																		<div class="price res-white">€ {{str_replace('.', ',',floatval($item->rate))}}</div>
 
 																	</div>
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
 
-																		@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+																		@if((Route::currentRouteName() == 'create-new-negative-invoice') || (isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
 
 																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
@@ -578,7 +602,7 @@
 																</div>
 																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">Te betalen: €</span>
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Te betalen: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
 																		<input name="total_amount" id="total_amount"
 																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																			type="text" readonly
@@ -599,7 +623,7 @@
 																<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
 																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: €</span>
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
 																			<input name="net_amount" id="net_amount"
 																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																				type="text" readonly
@@ -616,7 +640,7 @@
 																<div class="headings1" style="width: 7%;"></div>
 																<div class="headings2" style="width: 30%;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): €</span>
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
 																		<input name="tax_amount" id="tax_amount"
 																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																			type="text" readonly
@@ -661,6 +685,7 @@
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																			<label
 																				style="margin-right: 10px;margin-bottom: 0;">Quantity</label>
+																			@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
 																			<input value="{{$key1->qty}}"
 																				style="border: none;border-bottom: 1px solid lightgrey;"
 																				maskedformat="9,1" name="qty[]"
@@ -3241,6 +3266,7 @@
 											'\n' +
 											'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 											'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+											'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
 											'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
 											'</div></div>' + features +
 											'</div>');
@@ -3322,8 +3348,9 @@
 										//labor = Math.round(labor);
 										price = parseFloat(price) + parseFloat(labor);
 										price = price.toFixed(2);
-										labor = parseFloat(labor).toFixed(2);
 									}
+
+									labor = parseFloat(labor).toFixed(2);
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
@@ -3609,6 +3636,7 @@
 											'\n' +
 											'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
 											'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+											'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
 											'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
 											'</div></div>' + features +
 											'</div>');
@@ -3690,9 +3718,10 @@
 										labor = labor * (width / 100);
 										//labor = Math.round(labor);
 										price = parseFloat(price) + parseFloat(labor);
-										price = price.toFixed(2);
-										labor = parseFloat(labor).toFixed(2);
+										price = price.toFixed(2);										
 									}
+
+									labor = parseFloat(labor).toFixed(2);
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
@@ -3877,6 +3906,7 @@
 							'                                                            <div style="width: 7%;" class="content item9">\n' +
 							'\n' +
 							'                       									 	<label class="content-label">€ Total</label>\n' +
+							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-&nbsp;'; } ?>'+
 							'\n' +
 							'																<div class="price res-white"></div>\n' +
 							'                                                            </div>\n' +
@@ -4128,6 +4158,7 @@
 							'                                                            <div style="width: 7%;" class="content item9">\n' +
 							'\n' +
 							'                       									 	<label class="content-label">€ Total</label>\n' +
+							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-&nbsp;'; } ?>'+
 							'\n' +
 							'																<div class="price res-white">' + price_text + '</div>\n' +
 							'                                                            </div>\n' +
@@ -5091,9 +5122,10 @@
 										labor = labor * (width / 100);
 										//labor = Math.round(labor);
 										price = parseFloat(price) + parseFloat(labor);
-										price = price.toFixed(2);
-										labor = parseFloat(labor).toFixed(2);
+										price = price.toFixed(2);										
 									}
+
+									labor = parseFloat(labor).toFixed(2);
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
@@ -5459,8 +5491,9 @@
 										//labor = Math.round(labor);
 										price = parseFloat(price) + parseFloat(labor);
 										price = price.toFixed(2);
-										labor = parseFloat(labor).toFixed(2);
 									}
+
+									labor = parseFloat(labor).toFixed(2);
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);

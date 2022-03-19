@@ -261,7 +261,7 @@
 
                                                     @endif
 
-                                                    <td style="font-size: 20px;padding: 5px;">{{$request->qty[$i]}}</td>
+                                                    <td style="font-size: 20px;padding: 5px;">{{$request->negative_invoice ? '-' : null}} {{$request->qty[$i]}}</td>
 
                                                         @if($role == 'supplier2')
 
@@ -271,7 +271,7 @@
                                                         @endif
 
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb}}</td>
+                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} {{$arb}}</td>
 
                                                 </tr>
 
@@ -282,7 +282,7 @@
                                                 @if($arb_discount != 0)
 
                                                     <tr>
-                                                        <td style="font-size: 20px;padding: 5px;">Inclusief € {{$arb_discount}} korting</td>
+                                                        <td style="font-size: 20px;padding: 5px;">Inclusief {{$request->negative_invoice ? '-' : null}} € {{$arb_discount}} korting</td>
                                                         <td style="font-size: 20px;padding: 5px;"></td>
                                                         <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
                                                         <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
@@ -480,21 +480,21 @@
                                                 <tr>
 
                                                     <?php
-                                                    $ex_vat = ($request->rate[$i]/121)*100;
-                                                    $vat = $request->rate[$i] - $ex_vat;
-                                                    $vat = number_format((float)($vat), 2, ',', '.');
-                                                    $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
+                                                        $ex_vat = ($request->rate[$i]/121)*100;
+                                                        $vat = $request->rate[$i] - $ex_vat;
+                                                        $vat = number_format((float)($vat), 2, ',', '.');
+                                                        $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
                                                     ?>
 
                                                         @if($request->total_discount[$i] != 0)
 
-                                                            <td style="font-size: 20px;padding: 5px;">€ {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
+                                                            <td style="font-size: 20px;padding: 5px;">{{$request->negative_invoice ? '-' : null}} € {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
 
                                                         @endif
 
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$ex_vat}}</td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">€ {{$vat}}</td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: right;">€ {{$form_type == 1 ? number_format((float)($request->rate[$i]), 2, ',', '.') : $total}}</td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$ex_vat}}</td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$vat}}</td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: right;">{{$request->negative_invoice ? '-' : null}} € {{$form_type == 1 ? number_format((float)($request->rate[$i]), 2, ',', '.') : $total}}</td>
 
                                                 </tr>
 
@@ -528,7 +528,7 @@
                                             <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                 <div style="display: inline-block;width: 100%;">
                                                     <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -543,7 +543,7 @@
                                             <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                 <div style="display: inline-block;width: 100%;">
                                                     <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)(str_replace(',', '.',$request->tax_amount)), 2, ',', '.')}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->tax_amount)), 2, ',', '.')}}</span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -553,7 +553,7 @@
                                             <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
                                                 <div style="display: inline-block;width: 100%;">
                                                     <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Te betalen</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format((float)(str_replace(',', '.',$request->total_amount)), 2, ',', '.')}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->total_amount)), 2, ',', '.')}}</span>
                                                 </div>
                                             </td>
                                         </tr>

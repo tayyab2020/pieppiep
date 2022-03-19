@@ -79,6 +79,7 @@
   Route::get('/view-order/{id}', 'UserController@EditOrder')->name('view-order');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
   Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadInvoicePDF');
+  Route::get('/download-negative-invoice-pdf/{id}', 'UserController@DownloadNegativeInvoicePDF');
   Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');
   Route::get('/download-full-order-pdf/{id}', 'UserController@DownloadFullOrderPDF');
   Route::get('/download-order-confirmation-pdf/{id}', 'UserController@DownloadOrderConfirmationPDF');
@@ -145,6 +146,7 @@
   Route::get('/supplier-order-delivered/{id}', 'UserController@SupplierOrderDelivered');
   Route::get('/retailer-mark-delivered/{id}', 'UserController@RetailerMarkDelivered');
   Route::get('/create-new-invoice/{id}', 'UserController@CreateNewInvoice');
+  Route::get('/create-new-negative-invoice/{id}', 'UserController@EditNewQuotation')->name('create-new-negative-invoice');
   Route::post('/change-delivery-dates', 'UserController@UpdateDeliveryDates')->name('change-delivery-date');
   Route::post('/aangepaste-offerte/ask-customization', 'UserController@CustomQuotationAskCustomization');
   Route::get('/eigen-offerte/accepteren-offerte/{id}', 'UserController@CustomQuotationAcceptQuotation');
