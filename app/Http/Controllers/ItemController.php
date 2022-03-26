@@ -91,7 +91,7 @@ class ItemController extends Controller
     {
         $item = items::where('id',$id)->first();
         $categories = Category::get();
-        $sub_categories = sub_categories::where('main_id',$item->category_id)->get();
+        $sub_categories = sub_categories::where('parent_id',$item->category_id)->get();
         $retailers = User::where('role_id',2)->where('status',1)->where('active',1)->get();
 
         if(!$item)

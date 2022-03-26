@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Brand;
 use App\carts;
 use App\Category;
+use App\sub_categories;
 use App\Generalsetting;
 use App\handyman_quotes;
 use App\handyman_terminals;
@@ -55,20 +56,19 @@ class AdminUserController extends Controller
         $query->leftjoin('categories','categories.id','=','question_services.service_id');
         }])->get();
 
-
         return view('admin.user.questions',compact('data'));
     }
 
     public function CreateQuestion()
     {
-        $services = Category::get();
+        $services = sub_categories::get();
 
         return view('admin.user.create_question',compact('services'));
     }
 
     public function EditQuestion($id)
     {
-        $services = Category::get();
+        $services = sub_categories::get();
 
         $data = quotation_questions::where('id',$id)->with('answers')->with('services')->first();
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Brand;
 use App\estimated_prices;
 use App\items;
+use App\retailer_services;
 use App\Model1;
 use App\Products;
 use App\question_services;
@@ -45,6 +46,9 @@ use App\handyman_unavailability_hours;
 use App\terms_conditions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\sub_categories;
+use App\default_features_details;
+use App\features_details;
 
 
 class FrontendController extends Controller
@@ -350,6 +354,140 @@ class FrontendController extends Controller
 
     public function index()
     {
+        $sub_categories = sub_categories::get();
+
+        foreach($sub_categories as $key)
+        {
+            $cat = new Category;
+            $cat->cat_name = $key->cat_name;
+            $cat->cat_slug = $key->cat_slug;
+            $cat->description = $key->description;
+            $cat->parent_id = $key->main_id;
+            $cat->deleted_at = $key->deleted_at;
+            $cat->save();
+
+            Products::where('sub_category_id',$key->id)->update(['sub_category_id' => $cat->id]);
+            $old[] = $key->id;
+            $new[] = $cat->id;
+        }
+
+        $all = default_features_details::get();
+
+        foreach($all as $temp)
+        {
+            if($temp->sub_category_ids != NULL)
+            {
+                $sub_category_ids = explode(',',$temp->sub_category_ids);
+
+                foreach($old as $x => $abc)
+                {
+                    $key = array_search($abc, $sub_category_ids);
+
+                    if($key !== false)
+                    {
+                        $sub_category_ids[$key] = $new[$x];
+                    }
+                }
+
+                $temp->sub_category_ids = implode(',',$sub_category_ids);
+                $temp->save();
+            }
+        }
+
+        $all_features = features_details::get();
+
+        foreach($all_features as $temp)
+        {
+            if($temp->sub_category_ids != NULL)
+            {
+                $sub_category_ids = explode(',',$temp->sub_category_ids);
+
+                foreach($old as $x => $abc)
+                {
+                    $key = array_search($abc, $sub_category_ids);
+
+                    if($key !== false)
+                    {
+                        $sub_category_ids[$key] = $new[$x];
+                    }
+                }
+
+                $temp->sub_category_ids = implode(',',$sub_category_ids);
+                $temp->save();
+            }
+        }
+
+        $all_items = items::get();
+
+        foreach($all_items as $temp)
+        {
+            if($temp->sub_category_ids != NULL)
+            {
+                $sub_category_ids = explode(',',$temp->sub_category_ids);
+
+                foreach($old as $x => $abc)
+                {
+                    $key = array_search($abc, $sub_category_ids);
+
+                    if($key !== false)
+                    {
+                        $sub_category_ids[$key] = $new[$x];
+                    }
+                }
+
+                $temp->sub_category_ids = implode(',',$sub_category_ids);
+                $temp->save();
+            }
+        }
+
+        $all_retailer_services = retailer_services::get();
+
+        foreach($all_retailer_services as $temp)
+        {
+            if($temp->sub_category_ids != NULL)
+            {
+                $sub_category_ids = explode(',',$temp->sub_category_ids);
+
+                foreach($old as $x => $abc)
+                {
+                    $key = array_search($abc, $sub_category_ids);
+
+                    if($key !== false)
+                    {
+                        $sub_category_ids[$key] = $new[$x];
+                    }
+                }
+
+                $temp->sub_category_ids = implode(',',$sub_category_ids);
+                $temp->save();
+            }
+        }
+
+        $all_services = Service::get();
+
+        foreach($all_services as $temp)
+        {
+            if($temp->sub_category_ids != NULL)
+            {
+                $sub_category_ids = explode(',',$temp->sub_category_ids);
+
+                foreach($old as $x => $abc)
+                {
+                    $key = array_search($abc, $sub_category_ids);
+
+                    if($key !== false)
+                    {
+                        $sub_category_ids[$key] = $new[$x];
+                    }
+                }
+
+                $temp->sub_category_ids = implode(',',$sub_category_ids);
+                $temp->save();
+            }
+        }
+
+        exit();
+
         $language = $this->lang->lang;
         $blogs = Blog::all();
         $brands = Brand::where('photo','!=',NULL)->get();

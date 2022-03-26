@@ -76,7 +76,7 @@ class ProductController extends Controller
     {
         if($request->type == 'single')
         {
-            $sub_categories = sub_categories::where('main_id','=',$request->id)->get();
+            $sub_categories = sub_categories::where('parent_id','=',$request->id)->get();
         }
         else
         {
@@ -89,7 +89,7 @@ class ProductController extends Controller
                 $ids_array = [];
             }
 
-            $sub_categories = sub_categories::leftjoin('categories','categories.id','=','sub_categories.main_id')->whereIn('sub_categories.main_id',$ids_array)->select('sub_categories.*','categories.cat_name as title')->get();
+            $sub_categories = sub_categories::whereIn('parent_id',$ids_array)->with('main_category')->get();
         }
 
         return $sub_categories;
@@ -1465,7 +1465,7 @@ class ProductController extends Controller
             $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.id',$cats->category_id)->select('categories.*')->get();
-            $sub_categories = sub_categories::where('main_id',$cats->category_id)->get();
+            $sub_categories = sub_categories::where('parent_id',$cats->category_id)->get();
             $brands = Brand::where('user_id',$user_id)->get();
             /*$models = Model1::get();*/
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();

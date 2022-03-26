@@ -59,7 +59,7 @@ class MyCategoryController extends Controller
 
         $input = $request->all();
 
-        if ($file = $request->file('photo'))
+        if($file = $request->file('photo'))
         {
             $name = time().$file->getClientOriginalName();
             $file->move('assets/images',$name);
@@ -83,7 +83,7 @@ class MyCategoryController extends Controller
                     if($key1 && $request->sub_category_slug[$x])
                     {
                         $check1 = new sub_categories;
-                        $check1->main_id = $cat->id;
+                        $check1->parent_id = $cat->id;
                         $check1->cat_name = $key1;
                         $check1->cat_slug = $request->sub_category_slug[$x];
                         $check1->description = $request->sub_category_description[$x];
@@ -96,7 +96,7 @@ class MyCategoryController extends Controller
                 {
                     if($key1 && $request->sub_category_slug[$x])
                     {
-                        $check1->main_id = $cat->id;
+                        $check1->parent_id = $cat->id;
                         $check1->cat_name = $key1;
                         $check1->cat_slug = $request->sub_category_slug[$x];
                         $check1->description = $request->sub_category_description[$x];
@@ -108,11 +108,11 @@ class MyCategoryController extends Controller
 
             }
 
-            sub_categories::whereNotIn('id',$id_array)->where('main_id',$cat->id)->delete();
+            sub_categories::whereNotIn('id',$id_array)->where('parent_id',$cat->id)->delete();
         }
         else
         {
-            sub_categories::where('main_id',$cat->id)->delete();
+            sub_categories::where('parent_id',$cat->id)->delete();
         }
 
 
@@ -177,18 +177,17 @@ class MyCategoryController extends Controller
         }
 
         if($cat->photo == null){
-            $cat->delete();
-            sub_categories::where('main_id',$id)->delete();
-            supplier_categories::where('category_id',$id)->delete();
             Session::flash('success', 'Category deleted successfully.');
-            return redirect()->route('admin-my-cat-index');
+        }
+        else
+        {
+            \File::delete(public_path() .'/assets/images/'.$cat->photo);
+            Session::flash('success', 'Category deleted successfully.');
         }
 
-        \File::delete(public_path() .'/assets/images/'.$cat->photo);
         $cat->delete();
-        sub_categories::where('main_id',$id)->delete();
+        sub_categories::where('parent_id',$id)->delete();
         supplier_categories::where('category_id',$id)->delete();
-        Session::flash('success', 'Category deleted successfully.');
         return redirect()->route('admin-my-cat-index');
     }
 

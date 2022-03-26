@@ -10,7 +10,7 @@ class new_invoices extends Model
 
     public function newQuery($excludeDeleted = true) {
         return parent::newQuery($excludeDeleted)
-            ->where('negative_invoice', '=', 0);
+            ->where('negative_invoice','=', 0);
     }
 
     public function data()

@@ -8042,7 +8042,7 @@ class UserController extends Controller
 
             $services = Service::whereNotIn('id',$ids)->get();
             $categories = Category::get();
-            $sub_categories = sub_categories::where('main_id',$my_service->category_id)->get();
+            $sub_categories = sub_categories::where('parent_id',$my_service->category_id)->get();
 
             return view('user.create_service',compact('services','my_service','categories','sub_categories'));
         }
@@ -8175,7 +8175,7 @@ class UserController extends Controller
         {
             $item = items::where('id', $id)->where('user_id', $user_id)->first();
             $categories = Category::get();
-            $sub_categories = sub_categories::where('main_id',$item->category_id)->get();
+            $sub_categories = sub_categories::where('parent_id',$item->category_id)->get();
             return view('user.create_item', compact('item','categories','sub_categories'));
         }
         else

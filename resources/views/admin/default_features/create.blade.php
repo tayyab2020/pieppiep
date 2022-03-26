@@ -627,7 +627,7 @@
                                                                                     @if($key->id)
 
                                                                                         <tr data-id="{{$key->id}}">
-                                                                                            <td>{{$key->title}}</td>
+                                                                                            <td>{{$key->main_category->cat_name}}</td>
                                                                                             <td>
                                                                                                 {{$key->cat_name}}
                                                                                             </td>
@@ -673,7 +673,7 @@
                                                                                 @if($key->id)
 
                                                                                     <tr data-id="{{$key->id}}">
-                                                                                        <td>{{$key->title}}</td>
+                                                                                        <td>{{$key->main_category->cat_name}}</td>
                                                                                         <td>
                                                                                             {{$key->cat_name}}
                                                                                         </td>
@@ -947,7 +947,7 @@
                             if($(this).find("table tbody tr[data-id='" + value.id + "']").length == 0)
                             {
                                 $(this).find("table tbody").append('<tr data-id="'+value.id+'">\n' +
-                                    '                                                                                           <td>'+value.title+'</td>\n' +
+                                    '                                                                                           <td>'+value.main_category.cat_name+'</td>\n' +
                                     '                                                                                           <td>'+value.cat_name+'</td>\n' +
                                     '                                                                                           <td>\n' +
                                     '                                                                                               <input type="hidden" name="sub_category_id'+row_id+'[]" value="'+value.id+'">\n' +

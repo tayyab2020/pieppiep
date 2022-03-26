@@ -19,6 +19,7 @@ use Auth;
 use App\Generalsetting;
 use App\Category;
 use App\sub_categories;
+use App\supplier_categories;
 use Mollie\Laravel\Facades\Mollie;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -279,7 +280,21 @@ class FeaturesController extends Controller
                 $cats = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
                 $features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
                 $sub_features_data = features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
-                $sub_categories = features::leftjoin("categories",\DB::raw("FIND_IN_SET(categories.id,features.category_ids)"),">",\DB::raw("'0'"))->leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->leftjoin('sub_categories','sub_categories.main_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('features.id',$feature->id)->where('sub_categories.deleted_at','=',NULL)->select('sub_categories.*','categories.cat_name as title')->get();
+                // $sub_categories = features::leftjoin("categories",\DB::raw("FIND_IN_SET(categories.id,features.category_ids)"),">",\DB::raw("'0'"))->leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->leftjoin('sub_categories','sub_categories.main_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('features.id',$feature->id)->where('sub_categories.deleted_at','=',NULL)->select('sub_categories.*','categories.cat_name as title')->get();
+                $cat_ids = array_map('intval', explode(',', $feature->category_ids));
+                $supplier_categories = array();
+
+                foreach($cat_ids as $key)
+                {
+                    $find = supplier_categories::where('category_id',$key)->where('user_id',$user_id)->first();
+                    
+                    if($find)
+                    {
+                        $supplier_categories[] = $key;
+                    }
+                }
+
+                $sub_categories = sub_categories::whereIn('parent_id',$supplier_categories)->where('deleted_at',NULL)->orderBy('parent_id','desc')->get();
 
                 return view('admin.features.create',compact('feature','cats','features_data','sub_features_data','sub_categories'));
             }
@@ -302,7 +317,21 @@ class FeaturesController extends Controller
                 $cats = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
                 $features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',0)->get();
                 $sub_features_data = default_features_details::where('feature_id',$feature->id)->where('sub_feature',1)->get();
-                $sub_categories = default_features::leftjoin("categories",\DB::raw("FIND_IN_SET(categories.id,default_features.category_ids)"),">",\DB::raw("'0'"))->leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->leftjoin('sub_categories','sub_categories.main_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('default_features.id',$feature->id)->where('sub_categories.deleted_at','=',NULL)->select('sub_categories.*','categories.cat_name as title')->get();
+                // $sub_categories = default_features::leftjoin("categories",\DB::raw("FIND_IN_SET(categories.id,default_features.category_ids)"),">",\DB::raw("'0'"))->leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->leftjoin('sub_categories','sub_categories.main_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('default_features.id',$feature->id)->where('sub_categories.deleted_at','=',NULL)->select('sub_categories.*','categories.cat_name as title')->get();
+                $cat_ids = array_map('intval', explode(',', $feature->category_ids));
+                $supplier_categories = array();
+
+                foreach($cat_ids as $key)
+                {
+                    $find = supplier_categories::where('category_id',$key)->where('user_id',$user_id)->first();
+                    
+                    if($find)
+                    {
+                        $supplier_categories[] = $key;
+                    }
+                }
+
+                $sub_categories = sub_categories::whereIn('parent_id',$supplier_categories)->where('deleted_at',NULL)->orderBy('parent_id','desc')->get();
 
                 return view('admin.features.create',compact('feature','cats','features_data','sub_features_data','sub_categories'));
             }
