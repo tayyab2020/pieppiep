@@ -111,13 +111,15 @@ class AppServiceProvider extends ServiceProvider
                 $settings->with('currentUser', null);
             }
 
-            if($settings->currentUser == '')
-            {
-                $settings->with('gs', Generalsetting::where('backend',0)->first());
-            }
-            else {
-                $settings->with('gs', Generalsetting::where('backend',1)->first());
-            }
+            // if($settings->currentUser == '')
+            // {
+            //     $settings->with('gs', Generalsetting::where('backend',0)->first());
+            // }
+            // else {
+            //     $settings->with('gs', Generalsetting::where('backend',1)->first());
+            // }
+
+            $settings->with('gs', Generalsetting::where('backend',1)->first());
 
             if(\Route::currentRouteName() == 'front.index' || \Route::currentRouteName() == 'front.products' || \Route::currentRouteName() == 'front.product' || \Route::currentRouteName() == 'front.services' || \Route::currentRouteName() == 'front.service')
             {
