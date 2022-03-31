@@ -112,6 +112,14 @@ class BrandController extends Controller
                     $other_suppliers = implode(',',$other_suppliers);
                     $key->other_suppliers = $other_suppliers ? $other_suppliers : NULL;
                     $key->save();
+
+                    $brand_edit_request = brand_edit_requests::where('brand_id',$key->id)->where('user_id',$user_id)->first();
+
+                    if($brand_edit_request->photo != null){
+                        \File::delete(public_path() .'/assets/images/'.$brand_edit_request->photo);
+                    }
+
+                    $brand_edit_request->delete();
                 }
             }
         }
@@ -350,14 +358,12 @@ class BrandController extends Controller
                 return redirect()->back();
             }
 
-            if($cat->photo == null){
-                $cat->delete();
-                Session::flash('success', 'Brand deleted successfully.');
-                return redirect()->route('admin-brand-index');
+            if(!$cat->photo == null){
+                \File::delete(public_path() .'/assets/images/'.$cat->photo);
             }
 
-            \File::delete(public_path() .'/assets/images/'.$cat->photo);
             $cat->delete();
+            brand_edit_requests::where('brand_id',$id)->delete();
             Session::flash('success', 'Brand deleted successfully.');
             return redirect()->route('admin-brand-index');
         }
