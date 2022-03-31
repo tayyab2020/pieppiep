@@ -15,7 +15,7 @@
                                     <div class="add-product-header">
                                         <h2>Other Supplier Brands</h2>
 
-                                        <a href="{{route('admin-my-brand-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('admin-brand-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                     </div>
 
                                     <form class="form-horizontal" action="{{route('supplier-brands-store')}}" method="POST" enctype="multipart/form-data">
