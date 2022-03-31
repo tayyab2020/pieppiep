@@ -255,7 +255,7 @@ class BrandController extends Controller
                 return redirect()->back();
             }
 
-            return view('admin.brand.create',compact('cats'));
+            return view('admin.brand.create',compact('cats','user_id'));
         }
         else
         {
