@@ -100,6 +100,26 @@
                                             </div>
                                         </div>
 
+                                        @if(!isset($cats) || ($user_id == $cats->user_id))
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="website_title">Trademark *</label>
+
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="trademark" required="">
+
+                                                        <option {{isset($cats) ? ($cats->trademark == 0 ? 'selected' : null) : null}} value="0">No</option>
+                                                        <option {{isset($cats) ? ($cats->trademark == 1 ? 'selected' : null) : null}} value="1">Yes</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        @else
+
+                                            <input type="hidden" name="trademark" value="{{$cats->trademark}}">
+
+                                        @endif
 
                                         <hr>
 
@@ -177,16 +197,5 @@
         }
 
     </style>
-
-
-    <script>
-        $('#cp1').colorpicker();
-        $('#cp2').colorpicker();
-    </script>
-
-
-
-    <script src="{{asset('assets/admin/js/jquery152.min.js')}}"></script>
-    <script src="{{asset('assets/admin/js/jqueryui.min.js')}}"></script>
 
 @endsection

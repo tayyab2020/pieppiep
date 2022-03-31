@@ -30,292 +30,169 @@
 
                                         @include('includes.form-success')
 
-                                         <form method="post" class="form-horizontal" action="{{route('theme.change')}}" id="theme-form">{{csrf_field()}} 
+                                        {{--                                        <form method="post" class="form-horizontal" action="{{route('theme.change')}}" id="theme-form">{{csrf_field()}}--}}
 
-                                        
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Select Office <span>All following theme changes will be applied to selected office.</span></label>
-                                            <div class="col-sm-6">
-                                              <select name="office" id="office" class="form-control" onchange="formSubmit1(this)">
+                                        {{--                                            <div class="form-group">--}}
+                                        {{--                                                <label class="control-label col-sm-4" for="website_title">Select Office <span>All following theme changes will be applied to selected office.</span></label>--}}
+                                        {{--                                                <div class="col-sm-6">--}}
+                                        {{--                                                    <select name="office" id="office" class="form-control" onchange="formSubmit1(this)">--}}
 
-                                                @if($data->backend == 0)
+                                        {{--                                                        <option value="0" {{$data->backend == 0 ? 'selected' : null}}>Front Office</option>--}}
+                                        {{--                                                        <option value="1" {{$data->backend == 1 ? 'selected' : null}}>Back Office</option>--}}
 
-                                                <option value="0" selected>Front Office</option>
-                                                <option value="1">Back Office</option>
+                                        {{--                                                    </select>--}}
+                                        {{--                                                </div>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                            --}}
+                                        {{--                                        </form>--}}
 
-                                                @else
+                                        <form class="form-horizontal" action="{{route('admin-gs-contentsup')}}" method="POST" enctype="multipart/form-data">
 
-                                                <option value="0">Front Office</option>
-                                                <option value="1" selected>Back Office</option>
+                                            {{csrf_field()}}
 
-                                                @endif
-                                                
-                                                
+                                            <input type="hidden" name="office" id="office_select" value="1">
 
-                                              </select>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="website_title">Website Title *</label>
+                                                <div class="col-sm-6">
+                                                    <input name="title" id="website_title" class="form-control" placeholder="Enter Website Title" required="" type="text" value="{{$data->title}}">
+                                                </div>
                                             </div>
-                                          </div>
-                                        
-
-                                      </form>
-
-                                    <form class="form-horizontal" action="{{route('admin-gs-contentsup')}}" method="POST" enctype="multipart/form-data">
-
-                                                  
-                                          {{csrf_field()}}
-
-                                          <input type="hidden" name="office" id="office_select" value="{{$data->backend}}">
-
-                                          
-
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Website Title *</label>
-                                            <div class="col-sm-6">
-                                              <input name="title" id="website_title" class="form-control" placeholder="Enter Website Title" required="" type="text" value="{{$data->title}}">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="map_key">Google Map Api Key*</label>
+                                                <div class="col-sm-6">
+                                                    <textarea name="map_key" id="map_key" class="form-control" placeholder="Enter Map Key" required="">{{$data->map_key}}</textarea>
+                                                </div>
                                             </div>
-                                          </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="map_key">Google Map Api Key*</label>
-                                            <div class="col-sm-6">
-                                                <textarea name="map_key" id="map_key" class="form-control" placeholder="Enter Map Key" required="">{{$data->map_key}}</textarea>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="website_title">Theme Color *<span>Leaving Empty Will Set The Default Color (Don't Use RGB)</span></label>
+                                                <div class="col-sm-6">
+                                                    <div id="cp2" class="input-group colorpicker-component">
+                                                        <input id="cp1" type="text" name="colors" value="{{$data->colors}}"  class="form-control"  />
+                                                        <span class="input-group-addon"><i></i></span>
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                          </div>
-                                          
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Theme Color *<span>Leaving Empty Will Set The Default Color (Don't Use RGB)</span></label>
-                                            <div class="col-sm-6">
-                                              <div id="cp2" class="input-group colorpicker-component">
-                                  <input id="cp1" type="text" name="colors" value="{{$data->colors}}"  class="form-control"  />
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
 
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="website_title">Button Background Color *<span>Leaving Empty Will Set The Default Or Theme Color (Don't Use RGB)</span></label>
+
+                                                <div class="col-sm-6">
+
+                                                    <div id="cp4" class="input-group colorpicker-component">
+
+                                                        <input id="cp3" type="text" name="btn_bg" value="{{$data->btn_bg}}"  class="form-control"  />
+
+                                                        <span class="input-group-addon"><i></i></span>
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                          </div>
 
-                                          @if($data->backend == 0)
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="website_title">Button Border Color *<span>Leaving Empty Will Set Default Color To Transparent (Don't Use RGB)</span></label>
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Menu Bar Text Color *<span>Leaving Empty Will Set Default Color (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp18" class="input-group colorpicker-component">
+                                                <div class="col-sm-6">
 
-                                  <input id="cp17" type="text" name="menu_tx" value="{{$data->menu_tx}}"  class="form-control"  />
+                                                    <div id="cp6" class="input-group colorpicker-component">
 
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
+                                                        <input id="cp5" type="text" name="btn_brd" value="{{$data->btn_brd}}"  class="form-control"  />
 
+                                                        <span class="input-group-addon"><i></i></span>
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                          </div>
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Menu Bar Mobile Text Color *<span>Leaving Empty Will Set Default Color (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp20" class="input-group colorpicker-component">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="website_title">Button Text Color *<span>Leaving Empty Will Set Default Color To White (Don't Use RGB)</span></label>
 
-                                  <input id="cp19" type="text" name="menu_mobile_tx" value="{{$data->menu_mobile_tx}}"  class="form-control"  />
+                                                <div class="col-sm-6">
 
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
+                                                    <div id="cp8" class="input-group colorpicker-component">
 
+                                                        <input id="cp7" type="text" name="btn_col" value="{{$data->btn_col}}"  class="form-control"  />
+
+                                                        <span class="input-group-addon"><i></i></span>
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                          </div>
 
-                                          @endif
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Button Background Color *<span>Leaving Empty Will Set The Default Or Theme Color (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp4" class="input-group colorpicker-component">
-
-                                  <input id="cp3" type="text" name="btn_bg" value="{{$data->btn_bg}}"  class="form-control"  />
-
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="current_logo">Current Admin Background Image</label>
+                                                <div class="col-sm-6">
+                                                    <img id="adminimg" src="{{asset('assets/images/'.$data->bimg)}}" alt="No Image Found" id="adminimg">
+                                                </div>
                                             </div>
-                                          </div>
-
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Button Border Color *<span>Leaving Empty Will Set Default Color To Transparent (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp6" class="input-group colorpicker-component">
-
-                                  <input id="cp5" type="text" name="btn_brd" value="{{$data->btn_brd}}"  class="form-control"  />
-
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="bimg">Setup New Admin Background Image</label>
+                                                <div class="col-sm-6">
+                                                    <input  type="file" name="bimg" id="bimg">
+                                                </div>
                                             </div>
-                                          </div>
 
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Button Text Color *<span>Leaving Empty Will Set Default Color To White (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp8" class="input-group colorpicker-component">
-
-                                  <input id="cp7" type="text" name="btn_col" value="{{$data->btn_col}}"  class="form-control"  />
-
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="current_logo">Current Handyman Background Image</label>
+                                                <div class="col-sm-6">
+                                                    <img  src="{{asset('assets/images/'.$data->h_sidebg)}}" alt="No Image Found">
+                                                </div>
                                             </div>
-                                          </div>
-
-                                          @if($data->backend == 0)
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Form Background Color *<span>Leaving Empty Will Set Default Or Theme Color (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp10" class="input-group colorpicker-component">
-
-                                  <input id="cp9" type="text" name="form_bg" value="{{$data->form_bg}}"  class="form-control"  />
-
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="h_sidebg">Setup New Handyman Background Image</label>
+                                                <div class="col-sm-6">
+                                                    <input  type="file" name="h_sidebg" id="h_sidebg">
+                                                </div>
                                             </div>
-                                          </div>
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Form Text Color *<span>Leaving Empty Will Set Default Color To Black (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp12" class="input-group colorpicker-component">
-
-                                  <input id="cp11" type="text" name="form_col" value="{{$data->form_col}}"  class="form-control"  />
-
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="current_logo">Current Handyman Dashboard Background</label>
+                                                <div class="col-sm-6">
+                                                    <img  src="{{asset('assets/images/'.$data->h_dashbg)}}" alt="No Image Found">
+                                                </div>
                                             </div>
-                                          </div>
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Form Icon Color *<span>Leaving Empty Will Set Default Or Theme Color (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp16" class="input-group colorpicker-component">
-
-                                  <input id="cp15" type="text" name="form_ic" value="{{$data->form_ic}}"  class="form-control"  />
-
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="h_dashbg">Setup New Handyman Dashboard Background</label>
+                                                <div class="col-sm-6">
+                                                    <input  type="file" name="h_dashbg" id="h_dashbg">
+                                                </div>
                                             </div>
-                                          </div>
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Available Sectors Background Color *<span>Leaving Empty Will Set Default Or Theme Color (Don't Use RGB)</span></label>
-                                            
-                                            <div class="col-sm-6">
-                                              
-                                              <div id="cp14" class="input-group colorpicker-component">
-
-                                  <input id="cp13" type="text" name="as_bg" value="{{$data->as_bg}}"  class="form-control"  />
-
-                                    <span class="input-group-addon"><i></i></span>
-                                    </div>
-
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="current_logo">Current Client Background Image</label>
+                                                <div class="col-sm-6">
+                                                    <img  src="{{asset('assets/images/'.$data->c_sidebg)}}" alt="No Image Found">
+                                                </div>
                                             </div>
-                                          </div>
-
-                                          @endif
-
-                                          @if($data->backend == 1)
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="current_logo">Current Admin Background Image</label>
-                                            <div class="col-sm-6">
-                                        <img id="adminimg" src="{{asset('assets/images/'.$data->bimg)}}" alt="No Image Found" id="adminimg">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="c_sidebg">Setup New Client Background Image</label>
+                                                <div class="col-sm-6">
+                                                    <input  type="file" name="c_sidebg" id="c_sidebg">
+                                                </div>
                                             </div>
-                                          </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="bimg">Setup New Admin Background Image</label>
-                                            <div class="col-sm-6">
-                                              <input  type="file" name="bimg" id="bimg">
-                                            </div>
-                                          </div>
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="current_logo">Current Handyman Background Image</label>
-                                            <div class="col-sm-6">
-                                        <img  src="{{asset('assets/images/'.$data->h_sidebg)}}" alt="No Image Found">
-                                            </div>
-                                          </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="h_sidebg">Setup New Handyman Background Image</label>
-                                            <div class="col-sm-6">
-                                              <input  type="file" name="h_sidebg" id="h_sidebg">
-                                            </div>
-                                          </div>
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="current_logo">Current Handyman Dashboard Background</label>
-                                            <div class="col-sm-6">
-                                        <img  src="{{asset('assets/images/'.$data->h_dashbg)}}" alt="No Image Found">
-                                            </div>
-                                          </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="h_dashbg">Setup New Handyman Dashboard Background</label>
-                                            <div class="col-sm-6">
-                                              <input  type="file" name="h_dashbg" id="h_dashbg">
-                                            </div>
-                                          </div>
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="current_logo">Current Client Background Image</label>
-                                            <div class="col-sm-6">
-                                        <img  src="{{asset('assets/images/'.$data->c_sidebg)}}" alt="No Image Found">
-                                            </div>
-                                          </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="c_sidebg">Setup New Client Background Image</label>
-                                            <div class="col-sm-6">
-                                              <input  type="file" name="c_sidebg" id="c_sidebg">
-                                            </div>
-                                          </div>
 
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="current_logo">Current Client Dashboard Background</label>
-                                            <div class="col-sm-6">
-                                        <img  src="{{asset('assets/images/'.$data->c_dashbg)}}" alt="No Image Found">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="current_logo">Current Client Dashboard Background</label>
+                                                <div class="col-sm-6">
+                                                    <img  src="{{asset('assets/images/'.$data->c_dashbg)}}" alt="No Image Found">
+                                                </div>
                                             </div>
-                                          </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-4" for="c_dashbg">Setup New Client Dashboard Background</label>
-                                            <div class="col-sm-6">
-                                              <input  type="file" name="c_dashbg" id="c_dashbg">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="c_dashbg">Setup New Client Dashboard Background</label>
+                                                <div class="col-sm-6">
+                                                    <input  type="file" name="c_dashbg" id="c_dashbg">
+                                                </div>
                                             </div>
-                                          </div>
 
-
-                                          
-
-                                          @endif
-                                          
-                                        <hr>
-                                        <div class="add-product-footer">
-                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">Update Setting</button>
-                                        </div>
+                                            <hr>
+                                            <div class="add-product-footer">
+                                                <button name="addProduct_btn" type="submit" class="btn add-product_btn">Update Setting</button>
+                                            </div>
                                         </form>
+
                                     </div>
                                 </div>
                         </div>

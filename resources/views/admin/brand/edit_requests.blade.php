@@ -1,4 +1,4 @@
-@extends('layouts.handyman')
+@extends('layouts.admin')
 
 @section('content')
     <div class="right-side">
@@ -11,19 +11,10 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
-                                        <h2>Brands</h2>
+                                        
+                                        <h2>Brand Edit Requests</h2>
 
-                                        <div>
-
-                                            <a style="border-radius: 30px;" href="{{route('other-suppliers-brands')}}" class="btn btn-success"><i style="font-size: 12px;" class="fa fa-plus"></i> Add brands from other suppliers</a>
-
-                                            @if(auth()->user()->can('brand-create'))
-
-                                                <a href="{{route('admin-brand-create')}}" class="btn add-newProduct-btn"><i style="font-size: 12px;" class="fa fa-plus"></i> Add New Brand</a>
-
-                                            @endif
-
-                                        </div>
+                                        <a href="{{route('admin-my-brand-index')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> All Brands</a>
 
                                     </div>
                                     <hr>
@@ -43,7 +34,7 @@
                                                     <tr role="row">
                                                         <th class="sorting_asc" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
-                                                            colspan="1" style="width: 344px;" aria-sort="ascending"
+                                                            colspan="1" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
                                                             Photo
                                                         </th>
@@ -57,25 +48,13 @@
                                                             aria-controls="product-table_wrapper" rowspan="1"
                                                             colspan="1" style="width: 144px;" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
-                                                            Description
+                                                            Supplier
                                                         </th>
                                                         <th class="sorting_asc" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
                                                             colspan="1" style="width: 144px;" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
                                                             Slug
-                                                        </th>
-                                                        <th class="sorting_asc" tabindex="0"
-                                                            aria-controls="product-table_wrapper" rowspan="1"
-                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
-                                                            aria-label="Blood Group Name: activate to sort column descending">
-                                                            My Brand
-                                                        </th>
-                                                        <th class="sorting_asc" tabindex="0"
-                                                            aria-controls="product-table_wrapper" rowspan="1"
-                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
-                                                            aria-label="Blood Group Name: activate to sort column descending">
-                                                            Trademark
                                                         </th>
                                                         <th class="sorting" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
@@ -87,67 +66,18 @@
                                                     </thead>
 
                                                     <tbody>
-                                                    @foreach($cats as $cat)
-
-                                                        <?php
-
-                                                                if($cat->other_suppliers)
-                                                                    {
-                                                                        $array = explode(',',$cat->other_suppliers);
-                                                                    }
-                                                                else
-                                                                    {
-                                                                        $array = array();
-                                                                    }
-                                                        ?>
-
+                                                    @foreach($requests as $cat)
                                                         <tr role="row" class="odd">
                                                             <td tabindex="0" class="sorting_1"><img
                                                                     src="{{ $cat->photo ? asset('assets/images/'.$cat->photo):'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG'}}"
                                                                     alt="Category's Photo" style="max-height: 100px;">
                                                             </td>
                                                             <td>{{$cat->cat_name}}</td>
-                                                            <td>{!!$cat->description!!}</td>
+                                                            <td>{{$cat->company_name}}</td>
                                                             <td>{{$cat->cat_slug}}</td>
                                                             <td>
-                                                                @if(in_array($user_id,$array))
-
-                                                                    <button class="btn btn-danger">No</button>
-
-                                                                @else
-
-                                                                    <button class="btn btn-success">Yes</button>
-
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if($cat->trademark)
-
-                                                                    <button class="btn btn-success">Yes</button>
-
-                                                                @else
-
-                                                                    <button class="btn btn-danger">No</button>
-
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if(auth()->user()->can('brand-edit'))
-
-                                                                    <a href="{{route('admin-brand-edit',$cat->id)}}"
-                                                                       class="btn btn-primary product-btn"><i
-                                                                            class="fa fa-edit"></i> Edit</a>
-
-                                                                @endif
-
-                                                                @if(auth()->user()->can('brand-delete') && !in_array($user_id,$array))
-
-                                                                        <a href="{{route('admin-brand-delete',$cat->id)}}"
-                                                                           class="btn btn-danger product-btn"><i
-                                                                                class="fa fa-trash"></i> Remove</a>
-
-                                                                @endif
-
+                                                                <a href="{{route('admin-my-brand-edit-request',$cat->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Take Action</a>
+                                                                <a href="{{route('admin-my-brand-delete-edit-request',$cat->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Delete</a>
                                                             </td>
                                                         </tr>
                                                     @endforeach

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Brand;
+use App\brand_edit_requests;
 use App\Model1;
+use App\Sociallink;
+use App\User;
 use App\vats;
 use Illuminate\Http\Request;
 use App\Category;
@@ -24,6 +27,7 @@ class BrandController extends Controller
     public function __construct()
     {
         $this->middleware('auth:user');
+        $this->sl = Sociallink::findOrFail(1);
     }
 
     public function index()
@@ -39,9 +43,13 @@ class BrandController extends Controller
 
         if($user->can('user-brands'))
         {
-            $cats = Brand::where('user_id',$user_id)->orderBy('id','desc')->get();
+            $cats = Brand::where(function($query) use($user_id) {
+                $query->where('user_id',$user_id)->orWhere(function($query1) use($user_id) {
+                    $query1->whereRaw("find_in_set($user_id,other_suppliers)")->where('trademark',0);
+                });
+            })->orderBy('id','desc')->get();
 
-            return view('admin.brand.index',compact('cats'));
+            return view('admin.brand.index',compact('cats','user_id'));
         }
         else
         {
@@ -49,21 +57,7 @@ class BrandController extends Controller
         }
     }
 
-    public function create()
-    {
-        $user = Auth::guard('user')->user();
-
-        if($user->can('brand-create'))
-        {
-            return view('admin.brand.create');
-        }
-        else
-        {
-            return redirect()->route('user-login');
-        }
-    }
-
-    public function store(StoreValidationRequest1 $request)
+    public function otherSuppliersBrands()
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
@@ -74,10 +68,147 @@ class BrandController extends Controller
             $user_id = $main_id;
         }
 
+        if($user->role_id == 4)
+        {
+            $brands = Brand::where('user_id','!=',$user_id)->get();
+
+            return view('user.supplier_brands',compact('brands','user_id'));
+        }
+    }
+
+    public function SupplierBrandsStore(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $brand_ids = $request->supplier_brands ? $request->supplier_brands : array();
+        $brands = Brand::where('user_id','!=',$user_id)->get();
+
+        foreach ($brands as $key)
+        {
+            $other_suppliers = $key->other_suppliers ? explode(',',$key->other_suppliers) : array();
+
+            if(in_array($key->id,$brand_ids))
+            {
+                if(!in_array($user_id,$other_suppliers))
+                {
+                    $other_suppliers[] = $user_id;
+                    $other_suppliers = implode(',',$other_suppliers);
+                    $key->other_suppliers = $other_suppliers ? $other_suppliers : NULL;
+                    $key->save();
+                }
+            }
+
+            if(!$request->supplier_brands || !in_array($key->id,$brand_ids))
+            {
+                if (($index = array_search($user_id, $other_suppliers)) !== false) {
+                    unset($other_suppliers[$index]);
+                    $other_suppliers = implode(',',$other_suppliers);
+                    $key->other_suppliers = $other_suppliers ? $other_suppliers : NULL;
+                    $key->save();
+                }
+            }
+        }
+
+        Session::flash('success', 'List updated successfully!');
+
+        return redirect()->back();
+    }
+
+    public function create()
+    {
+        $user = Auth::guard('user')->user();
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+        }
+
+        $user_id = $user->id;
+
+        if($user->can('brand-create'))
+        {
+            return view('admin.brand.create',compact('user_id'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function store(StoreValidationRequest1 $request)
+    {
+        $user = Auth::guard('user')->user();
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+        }
+
+        $user_id = $user->id;
+
         if($request->cat_id)
         {
-            $cat = Brand::where('id',$request->cat_id)->first();
-            Session::flash('success', 'Brand edited successfully.');
+            $cat = Brand::where('id',$request->cat_id)->where('user_id',$user_id)->first();
+
+            if($cat)
+            {
+                Session::flash('success', 'Brand edited successfully.');
+            }
+            else
+            {
+                $check = brand_edit_requests::where('brand_id',$request->cat_id)->where('user_id',$user_id)->first();
+
+                if(!$check)
+                {
+                    $check = new brand_edit_requests;
+                    $check->user_id = $user_id;
+                    $check->brand_id = $request->cat_id;
+
+                    Session::flash('success', 'Brand edit request has been created successfully.');
+                }
+                else
+                {
+                    Session::flash('success', 'Brand edit request has been updated successfully.');
+                }
+
+                if($file = $request->file('photo'))
+                {
+                    $name = time().$file->getClientOriginalName();
+                    $file->move('assets/images',$name);
+                    if($check->photo != null)
+                    {
+                        \File::delete(public_path() .'/assets/images/'.$check->photo);
+                    }
+                    $check->photo = $name;
+                }
+
+                $check->cat_name = $request->cat_name;
+                $check->cat_slug = $request->cat_slug;
+                $check->description = $request->description;
+                $check->save();
+
+                $admin_email = $this->sl->admin_email;
+                $supplier_company = $user->company_name;
+                $brand = Brand::where('id',$request->cat_id)->pluck('cat_name')->first();
+
+                \Mail::send(array(), array(), function ($message) use ($admin_email,$supplier_company,$brand) {
+                    $message->to($admin_email)
+                        ->from('info@vloerofferte.nl')
+                        ->subject('Brand Edit Request')
+                        ->setBody('Dear Nordin Adoui, A new brand edit request has been submitted by <b>'.$supplier_company.'</b> for brand: <b>'.$brand.'</b>.', 'text/html');
+                });
+
+                return redirect()->route('admin-brand-index');
+            }
         }
         else
         {
@@ -88,10 +219,14 @@ class BrandController extends Controller
         $input = $request->all();
         $input['user_id'] = $user_id;
 
-        if ($file = $request->file('photo'))
+        if($file = $request->file('photo'))
         {
             $name = time().$file->getClientOriginalName();
             $file->move('assets/images',$name);
+            if($cat->photo != null)
+            {
+                \File::delete(public_path() .'/assets/images/'.$cat->photo);
+            }
             $input['photo'] = $name;
         }
 
@@ -113,7 +248,7 @@ class BrandController extends Controller
 
         if($user->can('brand-edit'))
         {
-            $cats = Brand::where('id','=',$id)->where('user_id',$user_id)->first();
+            $cats = Brand::where('id','=',$id)->first();
 
             if(!$cats)
             {

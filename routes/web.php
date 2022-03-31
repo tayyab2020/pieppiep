@@ -303,6 +303,8 @@
   Route::get('/my-features/edit/{id}', 'FeaturesController@MyCategoryEdit')->name('admin-features-edit');
   Route::get('/my-features/delete/{id}', 'FeaturesController@MyCategoryDestroy')->name('admin-features-delete');
 
+  Route::get('/other-suppliers-brands', 'BrandController@otherSuppliersBrands')->name('other-suppliers-brands');
+  Route::post('/supplier-brands-store', 'BrandController@supplierBrandsStore')->name('supplier-brands-store');
   Route::get('/brands', 'BrandController@index')->name('admin-brand-index');
   Route::get('/brand/create', 'BrandController@create')->name('admin-brand-create');
   Route::post('/brand/create', 'BrandController@store')->name('admin-brand-store');
@@ -361,6 +363,15 @@
   Route::post('/my-category/create', 'MyCategoryController@MyCategoryStore')->name('admin-my-cat-store');
   Route::get('/my-category/edit/{id}', 'MyCategoryController@MyCategoryEdit')->name('admin-my-cat-edit');
   Route::get('/my-category/delete/{id}', 'MyCategoryController@MyCategoryDestroy')->name('admin-my-cat-delete');
+
+  Route::get('/my-brands', 'MyBrandController@index')->name('admin-my-brand-index');
+  Route::get('/my-brand/create', 'MyBrandController@create')->name('admin-my-brand-create');
+  Route::post('/my-brand/create', 'MyBrandController@store')->name('admin-my-brand-store');
+  Route::get('/my-brand/edit/{id}', 'MyBrandController@edit')->name('admin-my-brand-edit');
+  Route::get('/my-brand/delete/{id}', 'MyBrandController@destroy')->name('admin-my-brand-delete');
+  Route::get('/my-brand/edit-requests/{id}', 'MyBrandController@editRequests')->name('admin-my-brand-edit-requests');
+  Route::get('/my-brand/edit-request/{id}', 'MyBrandController@editRequest')->name('admin-my-brand-edit-request');
+  Route::get('/my-brand/delete-edit-request/{id}', 'MyBrandController@deleteEditRequest')->name('admin-my-brand-delete-edit-request');
 
   Route::get('/features', 'DefaultFeaturesController@index')->name('default-features-index');
   Route::get('/features/create', 'DefaultFeaturesController@create')->name('default-features-create');

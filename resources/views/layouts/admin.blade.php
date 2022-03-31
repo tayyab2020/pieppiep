@@ -79,6 +79,7 @@
                                         <li><a href="{{route('quotation-questions')}}"><i class="fa fa-angle-right"></i> Categories Quotation Questions</a></li>
                                         <li><a href="{{route('services-quotation-questions')}}"><i class="fa fa-angle-right"></i> Services Quotation Questions</a></li>
                                         <li><a href="{{route('admin-my-cat-index')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
+                                        <li><a href="{{route('admin-my-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
                                         <li><a href="{{route('default-features-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
                                         <li><a href="{{route('admin-service-index')}}"><i class="fa fa-angle-right"></i> Services</a></li>
                                         <li><a href="{{route('admin-item-index')}}"><i class="fa fa-angle-right"></i> Items</a></li>
