@@ -40,14 +40,14 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_display_name">Title*</label>
                                             <div class="col-sm-6">
-                                                <input {{$brand->edit_request_id ? 'readonly' : null}} value="{{isset($brand) ? $brand->cat_name : null}}" class="form-control" name="cat_name" id="blood_group_display_name" placeholder="Enter Brand title" required="" type="text">
+                                                <input {{isset($brand) && $brand->edit_request_id ? 'readonly' : null}} value="{{isset($brand) ? $brand->cat_name : null}}" class="form-control" name="cat_name" id="blood_group_display_name" placeholder="Enter Brand title" required="" type="text">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_slug">Slug*</label>
                                             <div class="col-sm-6">
-                                                <input {{$brand->edit_request_id ? 'readonly' : null}} value="{{isset($brand) ? $brand->cat_slug : null}}" class="form-control" name="cat_slug" id="blood_group_slug" placeholder="Enter Brand Slug" required="" type="text">
+                                                <input {{isset($brand) && $brand->edit_request_id ? 'readonly' : null}} value="{{isset($brand) ? $brand->cat_slug : null}}" class="form-control" name="cat_slug" id="blood_group_slug" placeholder="Enter Brand Slug" required="" type="text">
                                             </div>
                                         </div>
 
@@ -55,7 +55,7 @@
                                             <label class="control-label col-sm-4" for="blood_group_slug">Trademark*</label>
                                             <div class="col-sm-6">
 
-                                                <select {{$brand->edit_request_id ? 'readonly' : null}} class="form-control" name="trademark">
+                                                <select {{isset($brand) && $brand->edit_request_id ? 'readonly' : null}} class="form-control" name="trademark">
                                                     <option {{(isset($brand) && $brand->trademark == 0) ? 'selected' : null}} value="0">No</option>
                                                     <option {{(isset($brand) && $brand->trademark == 1) ? 'selected' : null}} value="1">Yes</option>
                                                 </select>
@@ -69,7 +69,7 @@
 
                                             <div class="col-sm-6">
 
-                                                <select {{$brand->edit_request_id ? 'readonly' : null}} style="height: 100px;" class="form-control" name="other_suppliers[]" id="suppliers" multiple>
+                                                <select {{isset($brand) && $brand->edit_request_id ? 'readonly' : null}} style="height: 100px;" class="form-control" name="other_suppliers[]" id="suppliers" multiple>
 
                                                     @foreach($suppliers as $supplier)
 
@@ -86,7 +86,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="service_description">Description</label>
                                             <div class="col-sm-6">
-                                                <textarea {{$brand->edit_request_id ? 'readonly' : null}} class="form-control" name="description" id="service_description" rows="5" style="resize: vertical;" placeholder="Enter Brand Description">{{isset($brand) ? $brand->description : null}}</textarea>
+                                                <textarea {{isset($brand) && $brand->edit_request_id ? 'readonly' : null}} class="form-control" name="description" id="service_description" rows="5" style="resize: vertical;" placeholder="Enter Brand Description">{{isset($brand) ? $brand->description : null}}</textarea>
                                             </div>
                                         </div>
 
@@ -97,7 +97,7 @@
                                             </div>
                                         </div>
 
-                                        @if(!$brand->edit_request_id)
+                                        @if(isset($brand) && !$brand->edit_request_id)
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="profile_photo">Add Photo</label>
