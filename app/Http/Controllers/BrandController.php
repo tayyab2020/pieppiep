@@ -167,42 +167,40 @@ class BrandController extends Controller
 
         $user_id = $user->id;
 
-        $check_name = Brand::where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id',$user_id)->first();
-
-        if($check_name)
-        {
-            Session::flash('unsuccess', 'Brand name already in use.');
-            return redirect()->back()->withInput();
-        }
-
-        $check_slug = Brand::where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id',$user_id)->first();
-
-        if($check_slug)
-        {
-            Session::flash('unsuccess', 'Slug already in use.');
-            return redirect()->back()->withInput();
-        }
-
-        $check_name1 = Brand::where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id','!=',$user_id)->first();
-
-        if($check_name1)
-        {
-            Session::flash('unsuccess', 'Brand name is already taken, If you are allowed to use it send us a message.');
-            return redirect()->back()->withInput();
-        }
-
-        $check_slug1 = Brand::where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id','!=',$user_id)->first();
-
-        if($check_slug1)
-        {
-            Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
-            return redirect()->back()->withInput();
-        }
-
-        exit();
-
         if($request->cat_id)
         {
+            $check_name = Brand::where('id','!=',$request->cat_id)->where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id',$user_id)->first();
+
+            if($check_name)
+            {
+                Session::flash('unsuccess', 'Brand name already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug = Brand::where('id','!=',$request->cat_id)->where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id',$user_id)->first();
+
+            if($check_slug)
+            {
+                Session::flash('unsuccess', 'Slug already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_name1 = Brand::where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id','!=',$user_id)->first();
+
+            if($check_name1)
+            {
+                Session::flash('unsuccess', 'Brand name is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug1 = Brand::where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id','!=',$user_id)->first();
+
+            if($check_slug1)
+            {
+                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+
             $cat = Brand::where('id',$request->cat_id)->where('user_id',$user_id)->first();
 
             if($cat)
@@ -258,6 +256,38 @@ class BrandController extends Controller
         }
         else
         {
+            $check_name = Brand::where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id',$user_id)->first();
+
+            if($check_name)
+            {
+                Session::flash('unsuccess', 'Brand name already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug = Brand::where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id',$user_id)->first();
+
+            if($check_slug)
+            {
+                Session::flash('unsuccess', 'Slug already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_name1 = Brand::where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id','!=',$user_id)->first();
+
+            if($check_name1)
+            {
+                Session::flash('unsuccess', 'Brand name is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug1 = Brand::where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id','!=',$user_id)->first();
+
+            if($check_slug1)
+            {
+                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+
             $cat = new Brand;
             Session::flash('success', 'New Brand added successfully.');
         }
