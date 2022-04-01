@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Brand;
 use App\brand_edit_requests;
+use App\Http\Requests\StoreValidationRequest7;
 use App\vats;
 use Illuminate\Http\Request;
 use App\Category;
@@ -43,7 +44,7 @@ class MyBrandController extends Controller
         return view('admin.brand.create_my_brand',compact('suppliers'));
     }
 
-    public function store(StoreValidationRequest $request)
+    public function store(StoreValidationRequest7 $request)
     {
         if($request->edit_request_id)
         {
@@ -89,8 +90,9 @@ class MyBrandController extends Controller
             $input = $request->all();
             $input['user_id'] = 0;
             $input['other_suppliers'] = isset($input['other_suppliers']) ? implode(',',$input['other_suppliers']) : NULL;
+            $other_suppliers_array = $request->other_suppliers ? $request->other_suppliers : array();
 
-            $brand_edit_requests = brand_edit_requests::where('brand_id',$request->brand_id)->whereNotIn('user_id',$request->other_suppliers)->get();
+            $brand_edit_requests = brand_edit_requests::where('brand_id',$request->brand_id)->whereNotIn('user_id',$other_suppliers_array)->get();
 
             foreach ($brand_edit_requests as $key)
             {
