@@ -64,6 +64,13 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_slug">Supplier</label>
+                                            <div class="col-sm-6">
+                                                <input readonly="" value="{{isset($brand) ? $brand->company_name : null}}" class="form-control" id="blood_group_slug" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
 
                                             <label class="control-label col-sm-4" for="blood_group_slug">Other Suppliers (Optional)</label>
 
@@ -345,15 +352,5 @@
   }
 
 </style>
-
-
-    <script>
-            $('#cp1').colorpicker();
-            $('#cp2').colorpicker();
-    </script>
-
-
-
-
 
 @endsection

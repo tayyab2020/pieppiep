@@ -33,7 +33,7 @@ class MyBrandController extends Controller
 
     public function index()
     {
-        $brands = Brand::leftjoin("users",\DB::raw("FIND_IN_SET(users.id,brands.other_suppliers)"),">",\DB::raw("'0'"))->leftjoin("users as main","main.id","=","brands.user_id")->select('brands.*','users.company_name','main.company_name as main_supplier')->orderBy('brands.id','desc')->get();
+        $brands = Brand::leftjoin("users",\DB::raw("FIND_IN_SET(users.id,brands.other_suppliers)"),">",\DB::raw("'0'"))->leftjoin("users as main","main.id","=","brands.user_id")->select('brands.*','users.company_name','main.company_name as main_supplier')->orderBy('brands.id','desc')->paginate(10);
 
         return view('admin.brand.my_brands_index',compact('brands'));
     }
@@ -123,7 +123,7 @@ class MyBrandController extends Controller
 
     public function edit($id)
     {
-        $brand = Brand::where('id',$id)->first();
+        $brand = Brand::leftjoin('users','users.id','=','brands.user_id')->where('brands.id',$id)->select('brands.*','users.company_name')->first();
 
         if(!$brand)
         {
@@ -178,15 +178,26 @@ class MyBrandController extends Controller
             return redirect()->back();
         }
 
-        if($cat->photo != null){
-            \File::delete(public_path() .'/assets/images/'.$cat->photo);
+        if($cat->other_suppliers)
+        {
+            $cat->user_id = 0;
+            $cat->save();
+
+            Session::flash('success', 'Brand is used by other suppliers. So brand is now under admin access only but cant be deleted.');
+        }
+        else
+        {
+            if($cat->photo != null){
+                \File::delete(public_path() .'/assets/images/'.$cat->photo);
+            }
+
+            $cat->delete();
+            brand_edit_requests::where('brand_id',$id)->delete();
+
+            Session::flash('success', 'Brand deleted successfully.');
         }
 
-        Session::flash('success', 'Brand deleted successfully.');
-
-        $cat->delete();
-        brand_edit_requests::where('brand_id',$id)->delete();
-        return redirect()->route('admin-my-brand-index');
+        return redirect()->back();
     }
 
 }

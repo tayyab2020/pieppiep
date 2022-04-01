@@ -132,15 +132,29 @@
                 </div>
                 <!-- Ending of Dashboard data-table area -->
             </div>
+
+            <div class="text-center clearfix clear col-md-12 margin_tb_5" >
+                <div class="pagination"> {!! $brands->render() !!} </div>
+            </div>
+
         </div>
     </div>
+
+    <style>
+        .page-link
+        {
+            border-radius: 0 !important;
+        }
+    </style>
 
 @endsection
 
 @section('scripts')
 
     <script type="text/javascript">
-        $('#example').DataTable();
+        $('#example').DataTable({
+            paging: false,
+        });
     </script>
 
 @endsection
