@@ -24,10 +24,9 @@ class StoreValidationRequest1 extends FormRequest
      */
     public function rules(\Illuminate\Http\Request $request)
     {
-
         return [
             /*'cat_name'=>'unique:brands,cat_name,NULL,id,deleted_at,NULL',*/
-            'cat_slug'=>'unique:brands,cat_slug,'.$request->cat_id.',id,deleted_at,NULL',
+//            'cat_slug'=>'unique:brands,cat_slug,'.$request->cat_id.',id,deleted_at,NULL',
             'photo' => 'mimes:jpeg,jpg,png',
             'email' => 'unique:users|unique:admins',
             'logo'  => 'mimes:jpeg,jpg,png',

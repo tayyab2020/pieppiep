@@ -50,7 +50,7 @@
                                             <label class="control-label col-sm-4" for="blood_group_display_name">Title*
                                                 <span>(In Any Language)</span></label>
                                             <div class="col-sm-6">
-                                                <input value="{{isset($cats) ? $cats->cat_name : null}}"
+                                                <input value="{{isset($cats) ? $cats->cat_name : old('cat_name')}}"
                                                        class="form-control" name="cat_name"
                                                        id="blood_group_display_name" placeholder="Enter Brand title"
                                                        required="" type="text">
@@ -59,7 +59,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_slug">Slug* <span>(In English)</span></label>
                                             <div class="col-sm-6">
-                                                <input value="{{isset($cats) ? $cats->cat_slug : null}}"
+                                                <input value="{{isset($cats) ? $cats->cat_slug : old('cat_slug')}}"
                                                        class="form-control" name="cat_slug" id="blood_group_slug"
                                                        placeholder="Enter Brand Slug" required="" type="text">
                                             </div>
@@ -72,7 +72,7 @@
                                             <div class="col-sm-6">
                                                 <textarea class="form-control" name="description"
                                                           id="service_description" rows="5" style="resize: vertical;"
-                                                          placeholder="Enter Brand Description">{{isset($cats) ? $cats->description : null}}</textarea>
+                                                          placeholder="Enter Brand Description">{{isset($cats) ? $cats->description : old('description')}}</textarea>
                                             </div>
                                         </div>
 
