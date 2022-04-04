@@ -371,6 +371,18 @@ class MyBrandController extends Controller
         return view('admin.brand.create_my_brand',compact('brand','suppliers','supplier_ids','type_edit_requests','types'));
     }
 
+    public function deleteEditRequest($id)
+    {
+        $user_id = brand_edit_requests::where('id',$id)->pluck('user_id')->first();
+
+        brand_edit_requests::where('id',$id)->delete();
+        type_edit_requests::where('brand_id',$id)->where('user_id',$user_id)->delete();
+
+        Session::flash('success', 'Request deleted successfully.');
+
+        return redirect()->route('admin-my-brand-index');
+    }
+
     public function destroy($id)
     {
         $cat = Brand::where('id',$id)->first();
@@ -384,6 +396,8 @@ class MyBrandController extends Controller
         {
             $cat->user_id = 0;
             $cat->save();
+
+            Model1::where('brand_id',$id)->update(['user_id' => 0]);
 
             Session::flash('success', 'Brand is used by other suppliers. So brand is now under admin access only but cant be deleted.');
         }
