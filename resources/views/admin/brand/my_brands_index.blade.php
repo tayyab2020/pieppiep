@@ -115,7 +115,11 @@
                                                             <td>{{$cat->cat_slug}}</td>
                                                             <td>
                                                                 <a href="{{route('admin-my-brand-edit',$cat->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit</a>
-                                                                <a href="{{route('admin-my-brand-edit-requests',$cat->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit Requests</a>
+
+                                                                @if(count($cat->brand_edit_requests) > 0)
+                                                                    <a href="{{route('admin-my-brand-edit-requests',$cat->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit Requests</a>
+                                                                @endif
+
                                                                 <a href="{{route('admin-my-brand-delete',$cat->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> Remove</a>
                                                             </td>
                                                         </tr>
@@ -141,10 +145,17 @@
     </div>
 
     <style>
+
         .page-link
         {
             border-radius: 0 !important;
         }
+
+        .dataTables_info
+        {
+            padding-bottom: 10px;
+        }
+
     </style>
 
 @endsection
@@ -154,6 +165,7 @@
     <script type="text/javascript">
         $('#example').DataTable({
             paging: false,
+            // searching: false,
         });
     </script>
 

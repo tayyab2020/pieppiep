@@ -23,7 +23,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header">
-                                        <h2>{{isset($cats) ? 'Edit Model' : 'Add Model'}}</h2>
+                                        <h2>{{isset($cats) ? 'Edit Type' : 'Add Type'}}</h2>
                                         <a href="{{route('admin-model-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                     </div>
                                     <hr>
@@ -33,6 +33,54 @@
                                         @include('includes.form-success')
 
                                         {{csrf_field()}}
+
+                                        @if(isset($type_edit_request) && $type_edit_request)
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name"></label>
+                                                <div class="col-sm-6">
+                                                    <h3>Edit Request Details</h3>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">Title</label>
+                                                <div class="col-sm-6">
+                                                    <input value="{{$type_edit_request->cat_name}}"
+                                                           class="form-control" readonly
+                                                           id="blood_group_display_name" placeholder="Enter Type title"
+                                                           type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_slug">Slug</label>
+                                                <div class="col-sm-6">
+                                                    <input value="{{$type_edit_request->cat_slug}}"
+                                                           class="form-control" id="blood_group_slug" readonly
+                                                           placeholder="Enter Type Slug" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="service_description">Type Description</label>
+                                                <div class="col-sm-6">
+                                                    <div class="summernote">{!! $type_edit_request->description !!}</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="current_photo">Current Photo</label>
+                                                <div class="col-sm-6">
+                                                    <img width="130px" height="90px" id="adminimg1"
+                                                         src="{{$type_edit_request->photo ? asset('assets/images/'.$type_edit_request->photo):'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG'}}"
+                                                         alt="">
+                                                </div>
+                                            </div>
+
+                                            <hr style="margin-bottom: 40px;border-top: 1px solid #d6d6d6;">
+
+                                        @endif
 
                                         <input type="hidden" name="cat_id" value="{{isset($cats) ? $cats->id : null}}" />
 
@@ -53,9 +101,10 @@
 
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="service_description">Model Description*</label>
+                                            <label class="control-label col-sm-4" for="service_description">Type Description*</label>
                                             <div class="col-sm-6">
-                                                <textarea class="form-control" name="description" id="service_description" rows="5" style="resize: vertical;" placeholder="Enter Model Description">{{isset($cats) ? $cats->description : null}}</textarea>
+                                                <input type="hidden" name="description">
+                                                <div class="summernote">{!! isset($cats) ? $cats->description : null !!}</div>
                                             </div>
                                         </div>
 
@@ -77,28 +126,35 @@
                                             </div>
                                         </div>
 
+                                        @if(!isset($cats) || ($user_id == $cats->user_id))
 
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4" for="website_title">Brand *</label>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="website_title">Brand *</label>
 
-                                            <div class="col-sm-6">
-                                                <select class="form-control" name="brand_id" required>
-                                                    <option value="">Select Brand</option>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="brand_id" required>
+                                                        <option value="">Select Brand</option>
 
-                                                    @foreach($brands as $key)
+                                                        @foreach($brands as $key)
 
-                                                        <option @if(isset($cats)) @if($cats->brand_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->cat_name}}</option>
+                                                            <option @if(isset($cats)) @if($cats->brand_id == $key->id) selected @endif @endif value="{{$key->id}}">{{$key->cat_name}}</option>
 
-                                                    @endforeach
+                                                        @endforeach
 
-                                                </select>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
+
+                                        @else
+
+                                            <input type="hidden" name="brand_id" value="{{$cats->brand_id}}">
+
+                                        @endif
 
                                         <hr>
 
                                         <div class="add-product-footer">
-                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($cats) ? 'Edit Model' : 'Add Model'}}</button>
+                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($cats) ? 'Edit Type' : 'Add Type'}}</button>
                                         </div>
 
                                     </form>
@@ -116,14 +172,32 @@
 
 @section('scripts')
 
-    <script type="text/javascript" src="{{asset('assets/admin/js/nicEdit.js')}}"></script>
-    <script type="text/javascript">
-        //<![CDATA[
-        bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-        //]]>
-    </script>
-
 <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('.summernote').summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['fontsize', ['fontsize']],
+                /*['color', ['color']],*/
+                ['fontname', ['fontname']],
+                ['forecolor', ['forecolor']],
+            ],
+            height: 200,   //set editable area's height
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            },
+            callbacks: {
+                onChange: function (contents, $editable) {
+                    $(this).prev('input').val(contents);
+                }
+            }
+        });
+
+    });
 
   function uploadclick(){
     $("#uploadFile").click();

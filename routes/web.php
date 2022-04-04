@@ -312,12 +312,14 @@
   Route::post('/brand/update/{id}', 'BrandController@update')->name('admin-brand-update');
   Route::get('/brand/delete/{id}', 'BrandController@destroy')->name('admin-brand-delete');
 
-  Route::get('/models', 'ModelController@index')->name('admin-model-index');
-  Route::get('/model/create', 'ModelController@create')->name('admin-model-create');
-  Route::post('/model/create', 'ModelController@store')->name('admin-model-store');
-  Route::get('/model/edit/{id}', 'ModelController@edit')->name('admin-model-edit');
-  Route::post('/model/update/{id}', 'ModelController@update')->name('admin-model-update');
-  Route::get('/model/delete/{id}', 'ModelController@destroy')->name('admin-model-delete');
+  Route::get('/other-suppliers-types', 'ModelController@otherSuppliersTypes')->name('other-suppliers-types');
+  Route::post('/supplier-types-store', 'ModelController@supplierTypesStore')->name('supplier-types-store');
+  Route::get('/types', 'ModelController@index')->name('admin-model-index');
+  Route::get('/type/create', 'ModelController@create')->name('admin-model-create');
+  Route::post('/type/create', 'ModelController@store')->name('admin-model-store');
+  Route::get('/type/edit/{id}', 'ModelController@edit')->name('admin-model-edit');
+  Route::post('/type/update/{id}', 'ModelController@update')->name('admin-model-update');
+  Route::get('/type/delete/{id}', 'ModelController@destroy')->name('admin-model-delete');
 
   Route::get('/items', 'ItemController@index')->name('admin-item-index');
   Route::get('/item/create', 'ItemController@create')->name('admin-item-create');

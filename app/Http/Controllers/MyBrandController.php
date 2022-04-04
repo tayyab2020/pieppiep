@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Brand;
 use App\brand_edit_requests;
 use App\Http\Requests\StoreValidationRequest7;
+use App\Model1;
+use App\type_edit_requests;
 use App\vats;
 use Illuminate\Http\Request;
 use App\Category;
@@ -33,7 +35,7 @@ class MyBrandController extends Controller
 
     public function index()
     {
-        $brands = Brand::leftjoin("users",\DB::raw("FIND_IN_SET(users.id,brands.other_suppliers)"),">",\DB::raw("'0'"))->leftjoin("users as main","main.id","=","brands.user_id")->select('brands.*','users.company_name','main.company_name as main_supplier')->orderBy('brands.id','desc')->paginate(10);
+        $brands = Brand::leftjoin("users",\DB::raw("FIND_IN_SET(users.id,brands.other_suppliers)"),">",\DB::raw("'0'"))->leftjoin("users as main","main.id","=","brands.user_id")->select('brands.*','users.company_name','main.company_name as main_supplier')->orderBy('brands.id','desc')->with('brand_edit_requests')->paginate(10);
 
         return view('admin.brand.my_brands_index',compact('brands'));
     }
@@ -44,8 +46,115 @@ class MyBrandController extends Controller
         return view('admin.brand.create_my_brand',compact('suppliers'));
     }
 
+    public function CustomValidations($id,$title,$slug)
+    {
+        if($id)
+        {
+            $check_name = Brand::where('id','!=',$id)->where('cat_name',$title)->first();
+
+            if($check_name)
+            {
+                Session::flash('unsuccess', 'Brand name already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug = Brand::where('id','!=',$id)->where('cat_slug',$slug)->first();
+
+            if($check_slug)
+            {
+                Session::flash('unsuccess', 'Slug already in use.');
+                return redirect()->back()->withInput();
+            }
+        }
+        else
+        {
+            $check_name = Brand::where('cat_name',$title)->first();
+
+            if($check_name)
+            {
+                Session::flash('unsuccess', 'Brand name already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug = Brand::where('cat_slug',$slug)->first();
+
+            if($check_slug)
+            {
+                Session::flash('unsuccess', 'Slug already in use.');
+                return redirect()->back()->withInput();
+            }
+        }
+
+        return NULL;
+    }
+
+    public function CustomValidationsTypes($id,$title,$slug)
+    {
+        foreach ($title as $a => $key)
+        {
+            if(isset($id[$a]))
+            {
+                if($key && $slug[$a])
+                {
+                    $check_name = Model1::where('id','!=',$id[$a])->where('cat_name',$key)->first();
+
+                    if($check_name)
+                    {
+                        Session::flash('unsuccess', 'Type title: <b>'.$key.'</b> already in use.');
+                        return redirect()->back()->withInput();
+                    }
+
+                    $check_slug = Model1::where('id','!=',$id[$a])->where('cat_slug',$slug[$a])->first();
+
+                    if($check_slug)
+                    {
+                        Session::flash('unsuccess', 'Slug: <b>'.$slug[$a].'</b> already in use.');
+                        return redirect()->back()->withInput();
+                    }
+                }
+            }
+            else
+            {
+                if($key && $slug[$a])
+                {
+                    $check_name = Model1::where('cat_name',$key)->first();
+
+                    if($check_name)
+                    {
+                        Session::flash('unsuccess', 'Type title: <b>'.$key.'</b> already in use.');
+                        return redirect()->back()->withInput();
+                    }
+
+                    $check_slug = Model1::where('cat_slug',$slug[$a])->first();
+
+                    if($check_slug)
+                    {
+                        Session::flash('unsuccess', 'Slug: <b>'.$slug[$a].'</b> already in use.');
+                        return redirect()->back()->withInput();
+                    }
+                }
+            }
+        }
+
+        return NULL;
+    }
+
     public function store(StoreValidationRequest7 $request)
     {
+        $validations = $this->CustomValidations($request->brand_id ? $request->brand_id : NULL,$request->cat_name,$request->cat_slug);
+
+        if($validations)
+        {
+            return $validations;
+        }
+
+        $validations = $this->CustomValidationsTypes($request->brand_id ? $request->type_ids : NULL,$request->types,$request->type_slugs);
+
+        if($validations)
+        {
+            return $validations;
+        }
+
         if($request->edit_request_id)
         {
             $post = Brand::where('id',$request->brand_id)->first();
@@ -71,7 +180,28 @@ class MyBrandController extends Controller
 
             $post->save();
 
+            foreach ($request->types as $t => $key)
+            {
+                if($key && $request->type_slugs[$t])
+                {
+                    $post_type = Model1::where('id',$request->type_ids[$t])->first();
+
+                    if(!$post_type)
+                    {
+                        $post_type = new Model1;
+                    }
+
+                    $post_type->user_id = $post->user_id;
+                    $post_type->brand_id = $request->brand_id;
+                    $post_type->cat_name = $key;
+                    $post_type->cat_slug = $request->type_slugs[$t];
+                    $post_type->description = $request->type_descriptions[$t];
+                    $post_type->save();
+                }
+            }
+
             brand_edit_requests::where('id',$request->edit_request_id)->delete();
+            type_edit_requests::whereIn('id',$request->type_ids)->delete();
             Session::flash('success', 'Brand edited successfully.');
         }
         else
@@ -79,16 +209,67 @@ class MyBrandController extends Controller
             if($request->brand_id)
             {
                 $cat = Brand::where('id',$request->brand_id)->first();
+                $supplier_id = $cat->user_id;
+
                 Session::flash('success', 'Brand edited successfully.');
+
+                $type_ids = array();
+
+                foreach ($request->types as $x => $temp)
+                {
+                    if($temp && $request->type_slugs[$x])
+                    {
+                        $type = Model1::where('id',$request->type_ids[$x])->first();
+
+                        if(!$type)
+                        {
+                            $type = new Model1;
+                        }
+
+                        $type->user_id = $supplier_id;
+                        $type->brand_id = $cat->id;
+                        $type->cat_name = $temp;
+                        $type->cat_slug = $request->type_slugs[$x];
+                        $type->description = $request->type_descriptions[$x];
+                        $type->save();
+
+                        $type_ids[] = $type->id;
+                    }
+                }
+
+                $types_delete = Model1::whereNotIn('id',$type_ids)->where('brand_id',$cat->id)->get();
+
+                foreach ($types_delete as $del)
+                {
+                    if($del->photo != null)
+                    {
+                        \File::delete(public_path() .'/assets/images/'.$del->photo);
+                    }
+
+                    $type_edit_requests = type_edit_requests::where('type_id',$del->id)->get();
+
+                    foreach ($type_edit_requests as $e_del)
+                    {
+                        if($e_del->photo != null)
+                        {
+                            \File::delete(public_path() .'/assets/images/'.$e_del->photo);
+                        }
+
+                        $e_del->delete();
+                    }
+
+                    $del->delete();
+                }
             }
             else
             {
                 $cat = new Brand();
+                $supplier_id = 0;
                 Session::flash('success', 'New Brand added successfully.');
             }
 
             $input = $request->all();
-            $input['user_id'] = 0;
+            $input['user_id'] = $supplier_id;
             $input['other_suppliers'] = isset($input['other_suppliers']) ? implode(',',$input['other_suppliers']) : NULL;
             $other_suppliers_array = $request->other_suppliers ? $request->other_suppliers : array();
 
@@ -116,6 +297,23 @@ class MyBrandController extends Controller
             }
 
             $cat->fill($input)->save();
+
+            if(!$request->brand_id)
+            {
+                foreach ($request->types as $s => $key)
+                {
+                    if($key && $request->type_slugs[$s])
+                    {
+                        $type = new Model1;
+                        $type->user_id = 0;
+                        $type->brand_id = $cat->id;
+                        $type->cat_name = $key;
+                        $type->cat_slug = $request->type_slugs[$s];
+                        $type->description = $request->type_descriptions[$s];
+                        $type->save();
+                    }
+                }
+            }
         }
 
         return redirect()->route('admin-my-brand-index');
@@ -141,7 +339,9 @@ class MyBrandController extends Controller
             $supplier_ids = array();
         }
 
-        return view('admin.brand.create_my_brand',compact('brand','supplier_ids','suppliers'));
+        $types = Model1::where('brand_id',$id)->get();
+
+        return view('admin.brand.create_my_brand',compact('brand','supplier_ids','suppliers','types'));
     }
 
     public function editRequests($id)
@@ -153,7 +353,9 @@ class MyBrandController extends Controller
 
     public function editRequest($id)
     {
-        $brand = brand_edit_requests::leftjoin('brands','brands.id','=','brand_edit_requests.brand_id')->where('brand_edit_requests.id',$id)->select('brands.*','brand_edit_requests.id as edit_request_id','brand_edit_requests.cat_name as edit_title','brand_edit_requests.cat_slug as edit_slug','brand_edit_requests.photo as edit_photo','brand_edit_requests.description as edit_description')->first();
+        $brand = brand_edit_requests::leftjoin('brands','brands.id','=','brand_edit_requests.brand_id')->leftjoin('users','users.id','=','brands.user_id')->where('brand_edit_requests.id',$id)->select('brands.*','users.company_name','brand_edit_requests.id as edit_request_id','brand_edit_requests.user_id as request_supplier_id','brand_edit_requests.cat_name as edit_title','brand_edit_requests.cat_slug as edit_slug','brand_edit_requests.photo as edit_photo','brand_edit_requests.description as edit_description')->first();
+        $type_edit_requests = type_edit_requests::where('brand_id',$brand->id)->where('user_id',$brand->request_supplier_id)->get();
+        $types = Model1::where('brand_id',$brand->id)->get();
 
         $suppliers = User::where('role_id',4)->where('id','!=',$brand->user_id)->get();
 
@@ -166,7 +368,7 @@ class MyBrandController extends Controller
             $supplier_ids = array();
         }
 
-        return view('admin.brand.create_my_brand',compact('brand','suppliers','supplier_ids'));
+        return view('admin.brand.create_my_brand',compact('brand','suppliers','supplier_ids','type_edit_requests','types'));
     }
 
     public function destroy($id)
@@ -193,6 +395,7 @@ class MyBrandController extends Controller
 
             $cat->delete();
             brand_edit_requests::where('brand_id',$id)->delete();
+            type_edit_requests::where('brand_id',$id)->delete();
 
             Session::flash('success', 'Brand deleted successfully.');
         }

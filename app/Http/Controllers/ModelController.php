@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Brand;
+use App\brand_edit_requests;
 use App\Model1;
+use App\Sociallink;
+use App\type_edit_requests;
+use App\User;
 use App\vats;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -25,6 +29,7 @@ class ModelController extends Controller
     public function __construct()
     {
         $this->middleware('auth:user');
+        $this->sl = Sociallink::findOrFail(1);
     }
 
     public function index()
@@ -40,14 +45,94 @@ class ModelController extends Controller
 
         if($user->can('user-models'))
         {
-            $cats = Model1::leftjoin('brands','brands.id','=','models.brand_id')->where('models.user_id',$user_id)->orderBy('models.id','desc')->select('models.*','brands.cat_name as brand')->get();
+            $cats = Model1::leftjoin('brands','brands.id','=','models.brand_id')->where(function($query) use($user_id) {
+                $query->where('models.user_id',$user_id)->orWhere(function($query1) use($user_id) {
+                    $query1->whereRaw("find_in_set($user_id,brands.other_suppliers)")->where('trademark',0);
+                });
+            })->orderBy('models.id','desc')->select('models.*','brands.cat_name as brand')->get();
 
-            return view('admin.model.index',compact('cats'));
+            return view('admin.model.index',compact('cats','user_id'));
         }
         else
         {
             return redirect()->route('user-login');
         }
+    }
+
+    public function otherSuppliersTypes()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($user->role_id == 4)
+        {
+            $types = Model1::leftjoin('brands','brands.id','=','models.brand_id')->where('brands.user_id','!=',$user_id)->where('brands.trademark',0)->select('brands.*','models.id as type_id','models.cat_name as type')->get();
+
+            return view('user.supplier_types',compact('types','user_id'));
+        }
+    }
+
+    public function SupplierTypesStore(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $type_ids = $request->supplier_types ? $request->supplier_types : array();
+        $brands = Brand::where('user_id','!=',$user_id)->get();
+
+        foreach ($brands as $key)
+        {
+            $other_suppliers = $key->other_suppliers ? explode(',',$key->other_suppliers) : array();
+
+            if(in_array($key->id,$brand_ids))
+            {
+                if(!in_array($user_id,$other_suppliers))
+                {
+                    $other_suppliers[] = $user_id;
+                    $other_suppliers = implode(',',$other_suppliers);
+                    $key->other_suppliers = $other_suppliers ? $other_suppliers : NULL;
+                    $key->save();
+                }
+            }
+
+            if(!$request->supplier_brands || !in_array($key->id,$brand_ids))
+            {
+                if (($index = array_search($user_id, $other_suppliers)) !== false) {
+
+                    unset($other_suppliers[$index]);
+                    $other_suppliers = implode(',',$other_suppliers);
+                    $key->other_suppliers = $other_suppliers ? $other_suppliers : NULL;
+                    $key->save();
+
+                    $brand_edit_request = brand_edit_requests::where('brand_id',$key->id)->where('user_id',$user_id)->first();
+
+                    if($brand_edit_request)
+                    {
+                        if($brand_edit_request->photo != null){
+                            \File::delete(public_path() .'/assets/images/'.$brand_edit_request->photo);
+                        }
+
+                        $brand_edit_request->delete();
+                    }
+                }
+            }
+        }
+
+        Session::flash('success', 'List updated successfully!');
+
+        return redirect()->back();
     }
 
     public function create()
@@ -73,26 +158,159 @@ class ModelController extends Controller
         }
     }
 
+    public function CustomValidations($id,$user_id,$title,$slug)
+    {
+        if($id)
+        {
+            $check_name = Model1::where('id','!=',$id)->where('cat_name',$title)->where('user_id',$user_id)->first();
+
+            if($check_name)
+            {
+                Session::flash('unsuccess', 'Type title already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug = Model1::where('id','!=',$id)->where('cat_slug',$slug)->where('user_id',$user_id)->first();
+
+            if($check_slug)
+            {
+                Session::flash('unsuccess', 'Slug already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_name1 = Model1::where('id','!=',$id)->where('cat_name',$title)->where('user_id','!=',$user_id)->first();
+
+            if($check_name1)
+            {
+                Session::flash('unsuccess', 'Type title is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug1 = Model1::where('id','!=',$id)->where('cat_slug',$slug)->where('user_id','!=',$user_id)->first();
+
+            if($check_slug1)
+            {
+                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+        }
+        else
+        {
+            $check_name = Model1::where('cat_name',$title)->where('user_id',$user_id)->first();
+
+            if($check_name)
+            {
+                Session::flash('unsuccess', 'Type title already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug = Model1::where('cat_slug',$slug)->where('user_id',$user_id)->first();
+
+            if($check_slug)
+            {
+                Session::flash('unsuccess', 'Slug already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_name1 = Model1::where('cat_name',$title)->where('user_id','!=',$user_id)->first();
+
+            if($check_name1)
+            {
+                Session::flash('unsuccess', 'Type title is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug1 = Model1::where('cat_slug',$slug)->where('user_id','!=',$user_id)->first();
+
+            if($check_slug1)
+            {
+                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+        }
+
+        return NULL;
+    }
+
     public function store(StoreValidationRequest2 $request)
     {
         $user = Auth::guard('user')->user();
-        $user_id = $user->id;
         $main_id = $user->main_id;
 
         if($main_id)
         {
-            $user_id = $main_id;
+            $user = User::where('id',$main_id)->first();
+        }
+
+        $user_id = $user->id;
+
+        $validations = $this->CustomValidations($request->cat_id ? $request->cat_id : NULL,$user_id,$request->cat_name,$request->cat_slug);
+
+        if($validations)
+        {
+            return $validations;
         }
 
         if($request->cat_id)
         {
-            $cat = Model1::where('id',$request->cat_id)->first();
-            Session::flash('success', 'Model edited successfully.');
+            $cat = Model1::where('id',$request->cat_id)->where('user_id',$user_id)->first();
+
+            if($cat)
+            {
+                Session::flash('success', 'Type edited successfully.');
+            }
+            else
+            {
+                $check = type_edit_requests::where('type_id',$request->cat_id)->where('user_id',$user_id)->first();
+
+                if(!$check)
+                {
+                    $check = new type_edit_requests;
+                    $check->user_id = $user_id;
+                    $check->brand_id = $request->brand_id;
+                    $check->type_id = $request->cat_id;
+
+                    Session::flash('success', 'Type edit request has been created successfully.');
+                }
+                else
+                {
+                    Session::flash('success', 'Type edit request has been updated successfully.');
+                }
+
+                if($file = $request->file('photo'))
+                {
+                    $name = time().$file->getClientOriginalName();
+                    $file->move('assets/images',$name);
+                    if($check->photo != null)
+                    {
+                        \File::delete(public_path() .'/assets/images/'.$check->photo);
+                    }
+                    $check->photo = $name;
+                }
+
+                $check->cat_name = $request->cat_name;
+                $check->cat_slug = $request->cat_slug;
+                $check->description = $request->description;
+                $check->save();
+
+                $admin_email = $this->sl->admin_email;
+                $supplier_company = $user->company_name;
+                $type = Model1::where('id',$request->cat_id)->pluck('cat_name')->first();
+
+                \Mail::send(array(), array(), function ($message) use ($admin_email,$supplier_company,$type) {
+                    $message->to($admin_email)
+                        ->from('info@vloerofferte.nl')
+                        ->subject('Brand Edit Request')
+                        ->setBody('Dear Nordin Adoui, A new type edit request has been submitted by <b>'.$supplier_company.'</b> for type: <b>'.$type.'</b>.', 'text/html');
+                });
+
+                return redirect()->route('admin-model-index');
+            }
         }
         else
         {
             $cat = new Model1;
-            Session::flash('success', 'New Model added successfully.');
+            Session::flash('success', 'New Type added successfully.');
         }
 
         $input = $request->all();
@@ -123,16 +341,25 @@ class ModelController extends Controller
 
         if($user->can('model-edit'))
         {
-            $cats = Model1::where('id','=',$id)->where('user_id',$user_id)->first();
+            $cats = Model1::where('id','=',$id)->first();
 
             if(!$cats)
             {
                 return redirect()->back();
             }
 
-            $brands = Brand::where('user_id',$user_id)->get();
+            if($user_id == $cats->user_id)
+            {
+                $brands = Brand::where('user_id',$user_id)->get();
+            }
+            else
+            {
+                $brands = NULL;
+            }
 
-            return view('admin.model.create',compact('cats','brands'));
+            $type_edit_request = type_edit_requests::where('type_id',$cats->id)->where('user_id',$user_id)->first();
+
+            return view('admin.model.create',compact('cats','brands','type_edit_request','user_id'));
         }
         else
         {
@@ -142,7 +369,6 @@ class ModelController extends Controller
 
     public function update(UpdateValidationRequest $request, $id)
     {
-
         $vat = vats::where('id',$request->vat)->first();
 
         if(!$request->main_service)
@@ -227,15 +453,23 @@ class ModelController extends Controller
                 return redirect()->back();
             }
 
-            if($cat->photo == null){
-                $cat->delete();
-                Session::flash('success', 'Model deleted successfully.');
-                return redirect()->route('admin-model-index');
+            if($cat->photo != null){
+                \File::delete(public_path() .'/assets/images/'.$cat->photo);
             }
 
-            \File::delete(public_path() .'/assets/images/'.$cat->photo);
+            $type_edit_request = type_edit_requests::where('type_id',$id)->get();
+
+            foreach ($type_edit_request as $key)
+            {
+                if($key->photo != null){
+                    \File::delete(public_path() .'/assets/images/'.$key->photo);
+                }
+
+                $key->delete();
+            }
+
             $cat->delete();
-            Session::flash('success', 'Model deleted successfully.');
+            Session::flash('success', 'Type deleted successfully.');
             return redirect()->route('admin-model-index');
         }
         else

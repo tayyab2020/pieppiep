@@ -11,14 +11,20 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
-                                        <h2>Models</h2>
+                                        <h2>Types</h2>
 
-                                        @if(auth()->user()->can('model-create'))
+                                        <div>
 
-                                            <a href="{{route('admin-model-create')}}" class="btn add-newProduct-btn"><i
-                                                    class="fa fa-plus"></i> Add New Model</a>
+{{--                                            <a style="border-radius: 30px;" href="{{route('other-suppliers-types')}}" class="btn btn-success"><i style="font-size: 12px;" class="fa fa-plus"></i> Add Types from other suppliers</a>--}}
 
-                                        @endif
+                                            @if(auth()->user()->can('model-create'))
+
+                                                <a href="{{route('admin-model-create')}}" class="btn add-newProduct-btn"><i
+                                                            class="fa fa-plus"></i> Add New Type</a>
+
+                                            @endif
+
+                                        </div>
 
                                     </div>
                                     <hr>
@@ -66,6 +72,12 @@
                                                             aria-label="Blood Group Name: activate to sort column descending">
                                                             Slug
                                                         </th>
+                                                        <th class="sorting_asc" tabindex="0"
+                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                            aria-label="Blood Group Name: activate to sort column descending">
+                                                            My Type
+                                                        </th>
                                                         <th class="sorting" tabindex="0"
                                                             aria-controls="product-table_wrapper" rowspan="1"
                                                             colspan="1" style="width: 314px;"
@@ -87,6 +99,17 @@
                                                             <td>{!!$cat->description!!}</td>
                                                             <td>{{$cat->cat_slug}}</td>
                                                             <td>
+                                                                @if($cat->user_id != $user_id)
+
+                                                                    <button class="btn btn-danger">No</button>
+
+                                                                @else
+
+                                                                    <button class="btn btn-success">Yes</button>
+
+                                                                @endif
+                                                            </td>
+                                                            <td>
 
                                                                 @if(auth()->user()->can('model-edit'))
 
@@ -98,9 +121,13 @@
 
                                                                 @if(auth()->user()->can('model-delete'))
 
-                                                                        <a href="{{route('admin-model-delete',$cat->id)}}"
-                                                                           class="btn btn-danger product-btn"><i
-                                                                                class="fa fa-trash"></i> Remove</a>
+                                                                        @if($cat->user_id == $user_id)
+
+                                                                            <a href="{{route('admin-model-delete',$cat->id)}}"
+                                                                               class="btn btn-danger product-btn"><i
+                                                                                        class="fa fa-trash"></i> Remove</a>
+
+                                                                        @endif
 
                                                                 @endif
 

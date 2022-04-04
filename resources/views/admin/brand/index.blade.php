@@ -140,7 +140,7 @@
 
                                                                 @endif
 
-                                                                @if(auth()->user()->can('brand-delete') && !in_array($user_id,$array))
+                                                                @if(auth()->user()->can('brand-delete'))
 
                                                                         <a href="{{route('admin-brand-delete',$cat->id)}}"
                                                                            class="btn btn-danger product-btn"><i

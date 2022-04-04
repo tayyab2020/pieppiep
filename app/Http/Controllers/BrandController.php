@@ -6,6 +6,7 @@ use App\Brand;
 use App\brand_edit_requests;
 use App\Model1;
 use App\Sociallink;
+use App\type_edit_requests;
 use App\User;
 use App\vats;
 use Illuminate\Http\Request;
@@ -136,14 +137,13 @@ class BrandController extends Controller
     public function create()
     {
         $user = Auth::guard('user')->user();
+        $user_id = $user->id;
         $main_id = $user->main_id;
 
         if($main_id)
         {
-            $user = User::where('id',$main_id)->first();
+            $user_id = $main_id;
         }
-
-        $user_id = $user->id;
 
         if($user->can('brand-create'))
         {
@@ -153,6 +153,163 @@ class BrandController extends Controller
         {
             return redirect()->route('user-login');
         }
+    }
+
+    public function CustomValidations($id,$user_id,$title,$slug)
+    {
+        if($id)
+        {
+            $check_name = Brand::where('id','!=',$id)->where('cat_name',$title)->where('user_id',$user_id)->first();
+
+            if($check_name)
+            {
+                Session::flash('unsuccess', 'Brand name already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug = Brand::where('id','!=',$id)->where('cat_slug',$slug)->where('user_id',$user_id)->first();
+
+            if($check_slug)
+            {
+                Session::flash('unsuccess', 'Slug already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_name1 = Brand::where('id','!=',$id)->where('cat_name',$title)->where('user_id','!=',$user_id)->first();
+
+            if($check_name1)
+            {
+                Session::flash('unsuccess', 'Brand name is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug1 = Brand::where('id','!=',$id)->where('cat_slug',$slug)->where('user_id','!=',$user_id)->first();
+
+            if($check_slug1)
+            {
+                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+        }
+        else
+        {
+            $check_name = Brand::where('cat_name',$title)->where('user_id',$user_id)->first();
+
+            if($check_name)
+            {
+                Session::flash('unsuccess', 'Brand name already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug = Brand::where('cat_slug',$slug)->where('user_id',$user_id)->first();
+
+            if($check_slug)
+            {
+                Session::flash('unsuccess', 'Slug already in use.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_name1 = Brand::where('cat_name',$title)->where('user_id','!=',$user_id)->first();
+
+            if($check_name1)
+            {
+                Session::flash('unsuccess', 'Brand name is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+
+            $check_slug1 = Brand::where('cat_slug',$slug)->where('user_id','!=',$user_id)->first();
+
+            if($check_slug1)
+            {
+                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
+                return redirect()->back()->withInput();
+            }
+        }
+
+        return NULL;
+    }
+
+    public function CustomValidationsTypes($id,$user_id,$title,$slug)
+    {
+        foreach ($title as $a => $key)
+        {
+            if($id[$a])
+            {
+                if($key && $slug[$a])
+                {
+                    $check_name = Model1::where('id','!=',$id[$a])->where('cat_name',$key)->where('user_id',$user_id)->first();
+
+                    if($check_name)
+                    {
+                        Session::flash('unsuccess', 'Type title: <b>'.$key.'</b> already in use.');
+                        return redirect()->back()->withInput();
+                    }
+
+                    $check_slug = Model1::where('id','!=',$id[$a])->where('cat_slug',$slug[$a])->where('user_id',$user_id)->first();
+
+                    if($check_slug)
+                    {
+                        Session::flash('unsuccess', 'Slug: <b>'.$slug[$a].'</b> already in use.');
+                        return redirect()->back()->withInput();
+                    }
+
+                    $check_name1 = Model1::where('id','!=',$id[$a])->where('cat_name',$key)->where('user_id','!=',$user_id)->first();
+
+                    if($check_name1)
+                    {
+                        Session::flash('unsuccess', 'Type title: <b>'.$key.'</b> is already taken, If you are allowed to use it send us a message.');
+                        return redirect()->back()->withInput();
+                    }
+
+                    $check_slug1 = Model1::where('id','!=',$id[$a])->where('cat_slug',$slug[$a])->where('user_id','!=',$user_id)->first();
+
+                    if($check_slug1)
+                    {
+                        Session::flash('unsuccess', 'Slug: <b>'.$slug[$a].'</b> is already taken, If you are allowed to use it send us a message.');
+                        return redirect()->back()->withInput();
+                    }
+                }
+            }
+            else
+            {
+                if($key && $slug[$a])
+                {
+                    $check_name = Model1::where('cat_name',$key)->where('user_id',$user_id)->first();
+
+                    if($check_name)
+                    {
+                        Session::flash('unsuccess', 'Type title: <b>'.$key.'</b> already in use.');
+                        return redirect()->back()->withInput();
+                    }
+
+                    $check_slug = Model1::where('cat_slug',$slug[$a])->where('user_id',$user_id)->first();
+
+                    if($check_slug)
+                    {
+                        Session::flash('unsuccess', 'Slug: <b>'.$slug[$a].'</b> already in use.');
+                        return redirect()->back()->withInput();
+                    }
+
+                    $check_name1 = Model1::where('cat_name',$key)->where('user_id','!=',$user_id)->first();
+
+                    if($check_name1)
+                    {
+                        Session::flash('unsuccess', 'Type title: <b>'.$key.'</b> is already taken, If you are allowed to use it send us a message.');
+                        return redirect()->back()->withInput();
+                    }
+
+                    $check_slug1 = Model1::where('cat_slug',$slug[$a])->where('user_id','!=',$user_id)->first();
+
+                    if($check_slug1)
+                    {
+                        Session::flash('unsuccess', 'Slug: <b>'.$slug[$a].'</b> is already taken, If you are allowed to use it send us a message.');
+                        return redirect()->back()->withInput();
+                    }
+                }
+            }
+        }
+
+        return NULL;
     }
 
     public function store(StoreValidationRequest1 $request)
@@ -167,45 +324,75 @@ class BrandController extends Controller
 
         $user_id = $user->id;
 
+        $validations = $this->CustomValidations($request->cat_id ? $request->cat_id : NULL,$user_id,$request->cat_name,$request->cat_slug);
+
+        if($validations)
+        {
+            return $validations;
+        }
+
+        $validations = $this->CustomValidationsTypes($request->cat_id ? $request->type_ids : NULL,$user_id,$request->types,$request->type_slugs);
+
+        if($validations)
+        {
+            return $validations;
+        }
+
         if($request->cat_id)
         {
-            $check_name = Brand::where('id','!=',$request->cat_id)->where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id',$user_id)->first();
-
-            if($check_name)
-            {
-                Session::flash('unsuccess', 'Brand name already in use.');
-                return redirect()->back()->withInput();
-            }
-
-            $check_slug = Brand::where('id','!=',$request->cat_id)->where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id',$user_id)->first();
-
-            if($check_slug)
-            {
-                Session::flash('unsuccess', 'Slug already in use.');
-                return redirect()->back()->withInput();
-            }
-
-            $check_name1 = Brand::where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id','!=',$user_id)->first();
-
-            if($check_name1)
-            {
-                Session::flash('unsuccess', 'Brand name is already taken, If you are allowed to use it send us a message.');
-                return redirect()->back()->withInput();
-            }
-
-            $check_slug1 = Brand::where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id','!=',$user_id)->first();
-
-            if($check_slug1)
-            {
-                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
-                return redirect()->back()->withInput();
-            }
-
             $cat = Brand::where('id',$request->cat_id)->where('user_id',$user_id)->first();
 
             if($cat)
             {
                 Session::flash('success', 'Brand edited successfully.');
+
+                $type_ids = array();
+
+                foreach ($request->types as $x => $temp)
+                {
+                    if($temp && $request->type_slugs[$x])
+                    {
+                        $type = Model1::where('id',$request->type_ids[$x])->first();
+
+                        if(!$type)
+                        {
+                            $type = new Model1;
+                        }
+
+                        $type->user_id = $user_id;
+                        $type->brand_id = $cat->id;
+                        $type->cat_name = $temp;
+                        $type->cat_slug = $request->type_slugs[$x];
+                        $type->description = $request->type_descriptions[$x];
+                        $type->save();
+
+                        $type_ids[] = $type->id;
+                    }
+                }
+
+                $types_delete = Model1::whereNotIn('id',$type_ids)->where('brand_id',$cat->id)->where('user_id',$user_id)->get();
+
+                foreach ($types_delete as $del)
+                {
+                    if($del->photo != null)
+                    {
+                        \File::delete(public_path() .'/assets/images/'.$del->photo);
+                    }
+
+                    $type_edit_requests = type_edit_requests::where('type_id',$del->id)->get();
+
+                    foreach ($type_edit_requests as $e_del)
+                    {
+                        if($e_del->photo != null)
+                        {
+                            \File::delete(public_path() .'/assets/images/'.$e_del->photo);
+                        }
+
+                        $e_del->delete();
+                    }
+
+                    $del->delete();
+                }
             }
             else
             {
@@ -240,6 +427,27 @@ class BrandController extends Controller
                 $check->description = $request->description;
                 $check->save();
 
+                foreach ($request->types as $t => $key)
+                {
+                    if($key && $request->type_slugs[$t])
+                    {
+                        $check_type = type_edit_requests::where('type_id',$request->type_ids[$t])->where('user_id',$user_id)->first();
+
+                        if(!$check_type)
+                        {
+                            $check_type = new type_edit_requests;
+                            $check_type->user_id = $user_id;
+                            $check_type->brand_id = $request->cat_id;
+                            $check_type->type_id = $request->type_ids[$t];
+                        }
+
+                        $check_type->cat_name = $key;
+                        $check_type->cat_slug = $request->type_slugs[$t];
+                        $check_type->description = $request->type_descriptions[$t];
+                        $check_type->save();
+                    }
+                }
+
                 $admin_email = $this->sl->admin_email;
                 $supplier_company = $user->company_name;
                 $brand = Brand::where('id',$request->cat_id)->pluck('cat_name')->first();
@@ -256,38 +464,6 @@ class BrandController extends Controller
         }
         else
         {
-            $check_name = Brand::where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id',$user_id)->first();
-
-            if($check_name)
-            {
-                Session::flash('unsuccess', 'Brand name already in use.');
-                return redirect()->back()->withInput();
-            }
-
-            $check_slug = Brand::where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id',$user_id)->first();
-
-            if($check_slug)
-            {
-                Session::flash('unsuccess', 'Slug already in use.');
-                return redirect()->back()->withInput();
-            }
-
-            $check_name1 = Brand::where('cat_name','LIKE','%'.$request->cat_name.'%')->where('user_id','!=',$user_id)->first();
-
-            if($check_name1)
-            {
-                Session::flash('unsuccess', 'Brand name is already taken, If you are allowed to use it send us a message.');
-                return redirect()->back()->withInput();
-            }
-
-            $check_slug1 = Brand::where('cat_slug','LIKE','%'.$request->cat_slug.'%')->where('user_id','!=',$user_id)->first();
-
-            if($check_slug1)
-            {
-                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
-                return redirect()->back()->withInput();
-            }
-
             $cat = new Brand;
             Session::flash('success', 'New Brand added successfully.');
         }
@@ -307,6 +483,23 @@ class BrandController extends Controller
         }
 
         $cat->fill($input)->save();
+
+        if(!$request->cat_id)
+        {
+            foreach ($request->types as $s => $key)
+            {
+                if($key && $request->type_slugs[$s])
+                {
+                    $type = new Model1;
+                    $type->user_id = $user_id;
+                    $type->brand_id = $cat->id;
+                    $type->cat_name = $key;
+                    $type->cat_slug = $request->type_slugs[$s];
+                    $type->description = $request->type_descriptions[$s];
+                    $type->save();
+                }
+            }
+        }
 
         return redirect()->route('admin-brand-index');
     }
@@ -331,7 +524,11 @@ class BrandController extends Controller
                 return redirect()->back();
             }
 
-            return view('admin.brand.create',compact('cats','user_id'));
+            $brand_edit_request = brand_edit_requests::where('brand_id',$cats->id)->where('user_id',$user_id)->first();
+            $type_edit_requests = type_edit_requests::where('brand_id',$cats->id)->where('user_id',$user_id)->get();
+            $types = Model1::where('brand_id',$cats->id)->get();
+
+            return view('admin.brand.create',compact('cats','user_id','types','brand_edit_request','type_edit_requests'));
         }
         else
         {
@@ -423,22 +620,67 @@ class BrandController extends Controller
 
             if(!$cat)
             {
-                return redirect()->back();
-            }
+                $other_supplier_brand = Brand::where('id',$id)->first();
 
-            if($cat->other_suppliers)
-            {
-                $cat->user_id = 0;
-                $cat->save();
+                if(!$other_supplier_brand)
+                {
+                    return redirect()->back();
+                }
+
+                $suppliers = explode(',',$other_supplier_brand->other_suppliers);
+
+                if (($index = array_search($user_id, $suppliers)) !== false) {
+
+                    unset($suppliers[$index]);
+                    $other_suppliers = implode(',',$suppliers);
+                    $other_supplier_brand->other_suppliers = $other_suppliers ? $other_suppliers : NULL;
+                    $other_supplier_brand->save();
+
+                    $brand_edit_request = brand_edit_requests::where('brand_id',$other_supplier_brand->id)->where('user_id',$user_id)->first();
+
+                    if($brand_edit_request)
+                    {
+                        if($brand_edit_request->photo != null){
+                            \File::delete(public_path() .'/assets/images/'.$brand_edit_request->photo);
+                        }
+
+                        $brand_edit_request->delete();
+                    }
+
+                    $type_edit_request = type_edit_requests::where('brand_id',$other_supplier_brand->id)->where('user_id',$user_id)->first();
+
+                    if($type_edit_request)
+                    {
+                        if($type_edit_request->photo != null){
+                            \File::delete(public_path() .'/assets/images/'.$type_edit_request->photo);
+                        }
+
+                        $type_edit_request->delete();
+                    }
+                }
+                else
+                {
+                    return redirect()->back();
+                }
             }
             else
             {
-                if($cat->photo != null){
-                    \File::delete(public_path() .'/assets/images/'.$cat->photo);
+                if($cat->other_suppliers)
+                {
+                    $cat->user_id = 0;
+                    $cat->save();
                 }
+                else
+                {
+                    if($cat->photo != null){
+                        \File::delete(public_path() .'/assets/images/'.$cat->photo);
+                    }
 
-                $cat->delete();
-                brand_edit_requests::where('brand_id',$id)->delete();
+                    $cat->delete();
+                    Model1::where('brand_id',$id)->delete();
+                    brand_edit_requests::where('brand_id',$id)->delete();
+                    type_edit_requests::where('brand_id',$id)->delete();
+                }
             }
 
             Session::flash('success', 'Brand deleted successfully.');
