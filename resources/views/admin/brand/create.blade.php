@@ -257,47 +257,41 @@
 
                                                         @endif
 
-                                                            @if(isset($types) && count($types) > 0)
+                                                            <div class="type_box col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
 
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-4" for="blood_group_display_name"></label>
-                                                                    <div class="col-sm-6">
-                                                                        <h3>Original Details</h3>
+                                                                <div style="margin: 0;" class="row">
+
+                                                                    <div class="col-sm-3">
+
+                                                                        <h4>Title</h4>
+
                                                                     </div>
+
+                                                                    <div class="col-sm-3">
+
+                                                                        <h4>Slug</h4>
+
+                                                                    </div>
+
+                                                                    <div class="col-sm-5 type_description">
+
+                                                                        <h4>Description</h4>
+
+                                                                    </div>
+
+                                                                    <div class="col-xs-1 col-sm-1">
+
+                                                                    </div>
+
                                                                 </div>
 
-                                                                <div class="type_box col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
-
-                                                                    <div style="margin: 0;" class="row">
-
-                                                                        <div class="col-sm-3">
-
-                                                                            <h4>Title</h4>
-
-                                                                        </div>
-
-                                                                        <div class="col-sm-3">
-
-                                                                            <h4>Slug</h4>
-
-                                                                        </div>
-
-                                                                        <div class="col-sm-5 type_description">
-
-                                                                            <h4>Description</h4>
-
-                                                                        </div>
-
-                                                                        <div class="col-xs-1 col-sm-1">
-
-                                                                        </div>
-
-                                                                    </div>
+                                                                @if(isset($types) && count($types) > 0)
 
                                                                     @foreach($types as $x => $key)
 
-                                                                        <div class="form-group" data-id="{{$x+1}}">
+                                                                        <div class="form-group type_row" data-id="{{$x+1}}">
 
+                                                                            <input type="hidden" value="0" class="row_removed" name="removed_rows[]">
                                                                             <input type="hidden" name="type_ids[]" value="{{$key->id}}">
 
                                                                             <div class="col-sm-3">
@@ -320,61 +314,18 @@
                                                                             </div>
 
                                                                             <div class="col-xs-1 col-sm-1">
-                                                                                @if(!isset($cats) || ($user_id == $cats->user_id))
-                                                                                    <span class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>
-                                                                                @endif
+                                                                                <span class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>
                                                                             </div>
 
                                                                         </div>
 
                                                                     @endforeach
 
-                                                                </div>
+                                                                @else
 
-                                                                @if(!isset($cats) || ($user_id == $cats->user_id))
+                                                                    <div class="form-group type_row" data-id="1">
 
-                                                                    <div class="form-group add-type">
-                                                                        <label class="control-label col-sm-3" for=""></label>
-
-                                                                        <div class="col-sm-12 text-center">
-                                                                            <button class="btn btn-default featured-btn" type="button" id="add-type-btn"><i class="fa fa-plus"></i> Add More Types</button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                @endif
-
-                                                            @elseif(!isset($cats) || ($user_id == $cats->user_id))
-
-                                                                <div class="type_box col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
-
-                                                                    <div style="margin: 0;" class="row">
-
-                                                                        <div class="col-sm-3">
-
-                                                                            <h4>Title</h4>
-
-                                                                        </div>
-
-                                                                        <div class="col-sm-3">
-
-                                                                            <h4>Slug</h4>
-
-                                                                        </div>
-
-                                                                        <div class="col-sm-5 type_description">
-
-                                                                            <h4>Description</h4>
-
-                                                                        </div>
-
-                                                                        <div class="col-xs-1 col-sm-1">
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    <div class="form-group" data-id="1">
-
+                                                                        <input type="hidden" value="0" class="row_removed" name="removed_rows[]">
                                                                         <input type="hidden" name="type_ids[]">
 
                                                                         <div class="col-sm-3">
@@ -402,21 +353,17 @@
 
                                                                     </div>
 
+                                                                @endif
+
+                                                            </div>
+
+                                                            <div class="form-group add-type">
+                                                                <label class="control-label col-sm-3" for=""></label>
+
+                                                                <div class="col-sm-12 text-center">
+                                                                    <button class="btn btn-default featured-btn" type="button" id="add-type-btn"><i class="fa fa-plus"></i> Add More Types</button>
                                                                 </div>
-
-                                                                <div class="form-group add-type">
-                                                                    <label class="control-label col-sm-3" for=""></label>
-
-                                                                    <div class="col-sm-12 text-center">
-                                                                        <button class="btn btn-default featured-btn" type="button" id="add-type-btn"><i class="fa fa-plus"></i> Add More Types</button>
-                                                                    </div>
-                                                                </div>
-
-                                                            @else
-
-                                                                <h3 style="text-align: center;">The supplier of this brand has not linked any type with it.</h3>
-
-                                                            @endif
+                                                            </div>
 
                                                     </div>
                                                 </div>
@@ -474,10 +421,10 @@
 
             $("#add-type-btn").on('click', function () {
 
-                var row = $('.type_box').find('.form-group').last().data('id');
+                var row = $('.type_box').find('.type_row').last().data('id');
                 row = row + 1;
 
-                $(".type_box").append('<div class="form-group" data-id="' + row + '"> <input type="hidden" name="type_ids[]">\n' +
+                $(".type_box").append('<div class="form-group type_row" data-id="' + row + '"> <input type="hidden" value="0" class="row_removed" name="removed_rows[]"><input type="hidden" name="type_ids[]">\n' +
                     '\n' +
                     '                                                                <div class="col-sm-3">\n' +
                     '\n' +
@@ -530,12 +477,16 @@
             $('body').on('click', '.remove-type', function () {
 
                 var parent = this.parentNode.parentNode;
+                var row = $('.type_box').find('.type_row').last().data('id');
+                row = row + 1;
 
-                $(parent).hide();
-                $(parent).remove();
+                $(parent).find('.row_removed').val(1);
+                $(parent).addClass('hide');
+                // $(parent).remove();
 
-                if ($(".type_box .form-group").length == 0) {
-                    $(".type_box").append('<div class="form-group" data-id="1"> <input type="hidden" name="type_ids[]">\n' +
+                if ($(".type_box .type_row:not('.hide')").length == 0) {
+
+                    $(".type_box").append('<div class="form-group type_row" data-id="'+row+'"> <input type="hidden" value="0" class="row_removed" name="removed_rows[]"><input type="hidden" name="type_ids[]">\n' +
                         '\n' +
                         '                                                                <div class="col-sm-3">\n' +
                         '\n' +

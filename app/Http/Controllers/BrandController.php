@@ -233,7 +233,7 @@ class BrandController extends Controller
     {
         foreach ($title as $a => $key)
         {
-            if($id[$a])
+            if(isset($id[$a]))
             {
                 if($key && $slug[$a])
                 {
@@ -429,22 +429,36 @@ class BrandController extends Controller
 
                 foreach ($request->types as $t => $key)
                 {
+                    $type_id = $request->type_ids[$t] ? $request->type_ids[$t] : 0;
+
                     if($key && $request->type_slugs[$t])
                     {
-                        $check_type = type_edit_requests::where('type_id',$request->type_ids[$t])->where('user_id',$user_id)->first();
+                        $check_type = type_edit_requests::where('brand_id',$request->cat_id)->where('user_id',$user_id)->skip($t)->first();
 
-                        if(!$check_type)
+                        if($request->removed_rows[$t])
                         {
-                            $check_type = new type_edit_requests;
-                            $check_type->user_id = $user_id;
-                            $check_type->brand_id = $request->cat_id;
-                            $check_type->type_id = $request->type_ids[$t];
+                            if($check_type)
+                            {
+                                $check_type->delete_row = 1;
+                                $check_type->save();
+                            }
                         }
+                        else
+                        {
+                            if(!$check_type)
+                            {
+                                $check_type = new type_edit_requests;
+                                $check_type->user_id = $user_id;
+                                $check_type->brand_id = $request->cat_id;
+                            }
 
-                        $check_type->cat_name = $key;
-                        $check_type->cat_slug = $request->type_slugs[$t];
-                        $check_type->description = $request->type_descriptions[$t];
-                        $check_type->save();
+                            $check_type->type_id = $type_id;
+                            $check_type->cat_name = $key;
+                            $check_type->cat_slug = $request->type_slugs[$t];
+                            $check_type->description = $request->type_descriptions[$t];
+                            $check_type->delete_row = 0;
+                            $check_type->save();
+                        }
                     }
                 }
 
@@ -525,7 +539,7 @@ class BrandController extends Controller
             }
 
             $brand_edit_request = brand_edit_requests::where('brand_id',$cats->id)->where('user_id',$user_id)->first();
-            $type_edit_requests = type_edit_requests::where('brand_id',$cats->id)->where('user_id',$user_id)->get();
+            $type_edit_requests = type_edit_requests::where('brand_id',$cats->id)->where('user_id',$user_id)->where('delete_row',0)->get();
             $types = Model1::where('brand_id',$cats->id)->get();
 
             return view('admin.brand.create',compact('cats','user_id','types','brand_edit_request','type_edit_requests'));

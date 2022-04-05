@@ -36,6 +36,7 @@
                                         {{csrf_field()}}
 
                                         <input type="hidden" name="brand_id" value="{{isset($brand) ? $brand->id : null}}" />
+                                        <input type="hidden" name="request_supplier_id" value="{{isset($brand) ? $brand->request_supplier_id : null}}" />
 
                                         <div style="margin: 0 0 50px 0;display: flex;justify-content: center;" class="row">
 
@@ -206,7 +207,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+                                                            <div class="type_box col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
 
                                                                 <div style="margin: 0;" class="row">
 
@@ -236,27 +237,32 @@
 
                                                                 @foreach($type_edit_requests as $s => $temp)
 
-                                                                    <div class="form-group">
+                                                                    <div @if($temp->delete_row) class="form-group type_row hide" @else class="form-group type_row" @endif data-id="{{$s+1}}">
+
+                                                                        <input type="hidden" value="{{$temp->delete_row ? 1 : 0}}" class="row_removed" name="removed_rows[]">
+                                                                        <input type="hidden" name="type_ids[]" value="{{$temp->type_id}}">
 
                                                                         <div class="col-sm-3">
 
-                                                                            <input readonly value="{{$temp->cat_name}}" class="form-control" id="blood_group_slug" placeholder="Type Title" type="text">
+                                                                            <input value="{{$temp->cat_name}}" name="types[]" class="form-control type_title" id="blood_group_slug" placeholder="Type Title" type="text">
 
                                                                         </div>
 
                                                                         <div class="col-sm-3">
 
-                                                                            <input readonly value="{{$temp->cat_slug}}" class="form-control" id="blood_group_slug" placeholder="Type Slug" type="text">
+                                                                            <input value="{{$temp->cat_slug}}" name="type_slugs[]" class="form-control type_slug" id="blood_group_slug" placeholder="Type Slug" type="text">
 
                                                                         </div>
 
                                                                         <div class="col-sm-5 type_description">
 
+                                                                            <input type="hidden" value="{{$temp->description}}" name="type_descriptions[]">
                                                                             <div class="summernote">{!! $temp->description !!}</div>
 
                                                                         </div>
 
                                                                         <div class="col-xs-1 col-sm-1">
+                                                                            <span data-type="type-edit" class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>
                                                                         </div>
 
                                                                     </div>
@@ -265,10 +271,17 @@
 
                                                             </div>
 
+                                                            <div class="form-group add-type">
+                                                                <label class="control-label col-sm-3" for=""></label>
+
+                                                                <div class="col-sm-12 text-center">
+                                                                    <button data-type="type-edit" class="btn btn-default featured-btn" type="button" id="add-type-btn"><i class="fa fa-plus"></i> Add More Types</button>
+                                                                </div>
+                                                            </div>
+
                                                             <div style="margin-bottom: 40px;border-top: 1px solid #d6d6d6;width: 100%;display: inline-block;"></div>
 
                                                         @endif
-
 
                                                             @if(isset($types) && count($types) > 0)
 
@@ -279,7 +292,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="type_box col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+                                                                <div class="type_box1 col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
 
                                                                     <div style="margin: 0;" class="row">
 
@@ -309,32 +322,45 @@
 
                                                                     @foreach($types as $x => $key)
 
-                                                                        <div class="form-group" data-id="{{$x+1}}">
+                                                                        <div class="form-group type_row" data-id="{{$x+1}}">
 
-                                                                            <input type="hidden" name="type_ids[]" value="{{$key->id}}">
+                                                                            @if(!isset($type_edit_requests) || count($type_edit_requests) == 0)
+
+                                                                                <input type="hidden" name="type_ids[]" value="{{$key->id}}">
+
+                                                                            @endif
 
                                                                             <div class="col-sm-3">
 
-                                                                                <input value="{{$key->cat_name}}" class="form-control type_title" name="types[]" id="blood_group_slug" placeholder="Type Title" type="text">
+                                                                                <input value="{{$key->cat_name}}" class="form-control type_title" @if(isset($type_edit_requests) && count($type_edit_requests) > 0) readonly @else name="types[]" @endif id="blood_group_slug" placeholder="Type Title" type="text">
 
                                                                             </div>
 
                                                                             <div class="col-sm-3">
 
-                                                                                <input value="{{$key->cat_slug}}" class="form-control type_slug" name="type_slugs[]" id="blood_group_slug" placeholder="Type Slug" type="text">
+                                                                                <input value="{{$key->cat_slug}}" class="form-control type_slug" @if(isset($type_edit_requests) && count($type_edit_requests) > 0) readonly @else name="type_slugs[]" @endif id="blood_group_slug" placeholder="Type Slug" type="text">
 
                                                                             </div>
 
                                                                             <div class="col-sm-5 type_description">
 
-                                                                                <input type="hidden" value="{{$key->description}}" name="type_descriptions[]">
+                                                                                @if(!isset($type_edit_requests) || count($type_edit_requests) == 0)
+
+                                                                                    <input type="hidden" value="{{$key->description}}" name="type_descriptions[]">
+
+                                                                                @endif
+
                                                                                 <div class="summernote">{!! $key->description !!}</div>
 
                                                                             </div>
 
-                                                                            <div class="col-xs-1 col-sm-1">
-                                                                                <span class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>
-                                                                            </div>
+                                                                            @if(!isset($type_edit_requests) || count($type_edit_requests) == 0)
+
+                                                                                <div class="col-xs-1 col-sm-1">
+                                                                                    <span data-type="edit" class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>
+                                                                                </div>
+
+                                                                            @endif
 
                                                                         </div>
 
@@ -342,17 +368,21 @@
 
                                                                 </div>
 
-                                                                <div class="form-group add-type">
-                                                                    <label class="control-label col-sm-3" for=""></label>
+                                                                @if(!isset($type_edit_requests) || count($type_edit_requests) == 0)
 
-                                                                    <div class="col-sm-12 text-center">
-                                                                        <button class="btn btn-default featured-btn" type="button" id="add-type-btn"><i class="fa fa-plus"></i> Add More Types</button>
+                                                                    <div class="form-group add-type">
+                                                                        <label class="control-label col-sm-3" for=""></label>
+
+                                                                        <div class="col-sm-12 text-center">
+                                                                            <button data-type="edit" class="btn btn-default featured-btn" type="button" id="add-type-btn"><i class="fa fa-plus"></i> Add More Types</button>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
+
+                                                                @endif
 
                                                             @else
 
-                                                                <div class="type_box col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+                                                                <div class="type_box1 col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
 
                                                                     <div style="margin: 0;" class="row">
 
@@ -380,9 +410,9 @@
 
                                                                     </div>
 
-                                                                    <div class="form-group" data-id="1">
+                                                                    <div class="form-group type_row" data-id="1">
 
-                                                                        <input type="hidden" name="type_ids[]">
+                                                                        <input type="hidden" value="0" name="type_ids[]">
 
                                                                         <div class="col-sm-3">
 
@@ -404,7 +434,7 @@
                                                                         </div>
 
                                                                         <div class="col-xs-1 col-sm-1">
-                                                                            <span class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>
+                                                                            <span data-type="edit" class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>
                                                                         </div>
 
                                                                     </div>
@@ -415,7 +445,7 @@
                                                                     <label class="control-label col-sm-3" for=""></label>
 
                                                                     <div class="col-sm-12 text-center">
-                                                                        <button class="btn btn-default featured-btn" type="button" id="add-type-btn"><i class="fa fa-plus"></i> Add More Types</button>
+                                                                        <button data-type="edit" class="btn btn-default featured-btn" type="button" id="add-type-btn"><i class="fa fa-plus"></i> Add More Types</button>
                                                                     </div>
                                                                 </div>
 
@@ -477,10 +507,24 @@
 
         $("#add-type-btn").on('click', function () {
 
-            var row = $('.type_box').find('.form-group').last().data('id');
-            row = row + 1;
+            var type = $(this).data('type');
 
-            $(".type_box").append('<div class="form-group" data-id="' + row + '"> <input type="hidden" name="type_ids[]">\n' +
+            if(type == 'type-edit')
+            {
+                var current = $(".type_box");
+                var row = current.find('.type_row').last().data('id');
+                row = row + 1;
+                var es = '<div class="form-group type_row" data-id="' + row + '"> <input type="hidden" value="0" class="row_removed" name="removed_rows[]"><input type="hidden" value="0" name="type_ids[]">\n';
+            }
+            else
+            {
+                var current = $(".type_box1");
+                var row = current.find('.type_row').last().data('id');
+                row = row + 1;
+                var es = '<div class="form-group type_row" data-id="' + row + '"> <input type="hidden" value="0" name="type_ids[]">\n';
+            }
+
+            current.append(es +
                 '\n' +
                 '                                                                <div class="col-sm-3">\n' +
                 '\n' +
@@ -502,7 +546,7 @@
                 '                                                                </div>\n' +
                 '\n' +
                 '                                                                <div class="col-xs-1 col-sm-1">\n' +
-                '                                                                    <span class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                '                                                                    <span data-type="'+type+'" class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>\n' +
                 '                                                                </div>\n' +
                 '\n' +
                 '                </div>');
@@ -533,12 +577,32 @@
         $('body').on('click', '.remove-type', function () {
 
             var parent = this.parentNode.parentNode;
+            var type = $(this).data('type');
 
-            $(parent).hide();
-            $(parent).remove();
+            if(type == 'type-edit')
+            {
+                var current = $(".type_box");
+                var row = current.find('.type_row').last().data('id');
+                row = row + 1;
+                var es = '<div class="form-group type_row" data-id="' + row + '"> <input type="hidden" value="0" class="row_removed" name="removed_rows[]"><input type="hidden" value="0" name="type_ids[]">\n';
 
-            if ($(".type_box .form-group").length == 0) {
-                $(".type_box").append('<div class="form-group" data-id="1"> <input type="hidden" name="type_ids[]">\n' +
+                $(parent).find('.row_removed').val(1);
+                $(parent).addClass('hide');
+            }
+            else
+            {
+                var current = $(".type_box1");
+                var row = current.find('.type_row').last().data('id');
+                row = row + 1;
+                var es = '<div class="form-group type_row" data-id="' + row + '"> <input type="hidden" value="0" name="type_ids[]">\n';
+
+                $(parent).hide();
+                $(parent).remove();
+            }
+
+            if ($(".type_box .type_row:not('.hide')").length == 0) {
+
+                $(".type_box").append(es +
                     '\n' +
                     '                                                                <div class="col-sm-3">\n' +
                     '\n' +
@@ -560,7 +624,7 @@
                     '                                                                </div>\n' +
                     '\n' +
                     '                                                                <div class="col-xs-1 col-sm-1">\n' +
-                    '                                                                    <span class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>\n' +
+                    '                                                                    <span data-type="'+type+'" class="ui-close remove-type" data-id="" style="margin:0;right:70%;">X</span>\n' +
                     '                                                                </div>\n' +
                     '\n' +
                     '                </div>');

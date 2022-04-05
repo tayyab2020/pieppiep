@@ -180,34 +180,57 @@ class MyBrandController extends Controller
 
             $post->save();
 
-            foreach ($request->types as $t => $key)
+            foreach($request->types as $t => $key)
             {
                 if($key && $request->type_slugs[$t])
                 {
-                    $post_type = Model1::where('id',$request->type_ids[$t])->first();
-
-                    if(!$post_type)
+                    if($request->removed_rows[$t])
                     {
-                        $post_type = new Model1;
+                        Model1::where('id',$request->type_ids[$t])->delete();
                     }
+                    else
+                    {
+                        $post_type = Model1::where('id',$request->type_ids[$t])->first();
 
-                    $post_type->user_id = $post->user_id;
-                    $post_type->brand_id = $request->brand_id;
-                    $post_type->cat_name = $key;
-                    $post_type->cat_slug = $request->type_slugs[$t];
-                    $post_type->description = $request->type_descriptions[$t];
-                    $post_type->save();
+                        if(!$post_type)
+                        {
+                            $post_type = new Model1;
+                        }
+
+                        $post_type->user_id = $post->user_id;
+                        $post_type->brand_id = $request->brand_id;
+                        $post_type->cat_name = $key;
+                        $post_type->cat_slug = $request->type_slugs[$t];
+                        $post_type->description = $request->type_descriptions[$t];
+                        $post_type->save();
+                    }
                 }
             }
 
             brand_edit_requests::where('id',$request->edit_request_id)->delete();
-            type_edit_requests::whereIn('id',$request->type_ids)->delete();
-            Session::flash('success', 'Brand edited successfully.');
+            type_edit_requests::where('brand_id',$request->brand_id)->where('user_id',$request->request_supplier_id)->delete();
+            Session::flash('success', 'Task completed successfully.');
         }
         else
         {
             if($request->brand_id)
             {
+                $check_brand_request = brand_edit_requests::where('brand_id',$request->brand_id)->first();
+
+                if($check_brand_request)
+                {
+                    Session::flash('unsuccess', 'Edit request(s) are pending for this brand. Action required!');
+                    return redirect()->back();
+                }
+
+                $check_types_request = type_edit_requests::where('brand_id',$request->brand_id)->first();
+
+                if($check_types_request)
+                {
+                    Session::flash('unsuccess', 'Edit request(s) for type(s) of this brand are pending. Action required!');
+                    return redirect()->back();
+                }
+
                 $cat = Brand::where('id',$request->brand_id)->first();
                 $supplier_id = $cat->user_id;
 
