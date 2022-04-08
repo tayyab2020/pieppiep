@@ -260,8 +260,11 @@ class ProductController extends Controller
         if($request->cat && $user->can('product-create'))
         {
             $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.cat_name',$request->cat)->select('categories.*')->get();
-            $brands = Brand::where('user_id',$user_id)->get();
-            /*$models = Model1::get();*/
+            $brands = Brand::where(function($query) use($user_id) {
+                $query->where('user_id',$user_id)->orWhere(function($query1) use($user_id) {
+                    $query1->whereRaw("find_in_set($user_id,other_suppliers)")->where('trademark',0);
+                });
+            })->orderBy('id','desc')->get();
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
 
@@ -1311,12 +1314,14 @@ class ProductController extends Controller
 
                 foreach ($models as $m => $temp)
                 {
-                    if($temp != NULL && $request->model_values[$m] != NULL) {
+                    $model_value = isset($request->model_values[$m]) ? $request->model_values[$m] : 0;
+
+                    if($temp != NULL) {
 
                         $model = new product_models;
                         $model->product_id = $cat->id;
                         $model->model = $temp;
-                        $model->value = $request->model_values[$m];
+                        $model->value = $model_value;
                         $model->max_size = is_numeric($request->model_max_size[$m]) || $request->model_max_size[$m] ? str_replace(",", ".", $request->model_max_size[$m]) : NULL;
                         $model->max_width = is_numeric($request->model_max_width[$m]) || $request->model_max_width[$m] ? str_replace(",", ".", $request->model_max_width[$m]) : NULL;
                         $model->max_height = is_numeric($request->model_max_height[$m]) || $request->model_max_height[$m] ? str_replace(",", ".", $request->model_max_height[$m]) : NULL;
@@ -1466,8 +1471,12 @@ class ProductController extends Controller
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.id',$cats->category_id)->select('categories.*')->get();
             $sub_categories = sub_categories::where('parent_id',$cats->category_id)->get();
-            $brands = Brand::where('user_id',$user_id)->get();
-            /*$models = Model1::get();*/
+            $brands = Brand::where(function($query) use($user_id) {
+                $query->where('user_id',$user_id)->orWhere(function($query1) use($user_id) {
+                    $query1->whereRaw("find_in_set($user_id,other_suppliers)")->where('trademark',0);
+                });
+            })->orderBy('id','desc')->get();
+            $types = Model1::where('brand_id',$cats->brand_id)->get();
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
             $models = product_models::with(['features' => function($query)
@@ -1484,7 +1493,7 @@ class ProductController extends Controller
             }
             else
             {
-                return view('admin.product.create_for_floors',compact('ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
+                return view('admin.product.create_for_floors',compact('types','ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
             }
 
         }

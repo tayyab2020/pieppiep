@@ -431,6 +431,7 @@ class MyBrandController extends Controller
             }
 
             $cat->delete();
+            Model1::where('brand_id',$id)->delete();
             brand_edit_requests::where('brand_id',$id)->delete();
             type_edit_requests::where('brand_id',$id)->delete();
 
