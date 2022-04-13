@@ -362,7 +362,6 @@
 
                                                                 </td>
 
-
                                                                 <?php $date = strtotime($key->invoice_date);
 
                                                                 $date1 = date('d-m-Y',$date); ?>
@@ -387,7 +386,7 @@
 
                                                                                     <li><a href="{{ url('/aanbieder/view-new-invoice/'.$key->invoice_id) }}">{{__('text.View Invoice')}}</a></li>
 
-                                                                                    <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoices[0]->id) }}">Download Invoice PDF</a></li>
+                                                                                    <li><a href="{{ isset($key->invoices[0]) ? url('/aanbieder/download-invoice-pdf/'.$key->invoices[0]->id) : null }}">Download Invoice PDF</a></li>
 
                                                                                 @endif
 

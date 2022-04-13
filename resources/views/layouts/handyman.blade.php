@@ -1263,16 +1263,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @endif-->
 
-            {{--@if(auth()->user()->can('handyman-quotation-requests'))
-
-                <li>
-                    <a href="{{route('handyman-quotation-requests')}}"><span class="icon catalog-icon"></span> <span>{{__('text.Quotation Requests')}}</span></a>
-                </li>
-
-            @endif
-
-
-            @if(auth()->user()->can('quotations'))
+            {{--@if(auth()->user()->can('quotations'))
 
                 <li>
                     <a href="{{route('quotations')}}"><span class="icon catalog-icon"></span> <span>{{__('text.Quotations')}}</span></a>
@@ -1299,9 +1290,9 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @endif--}}
 
 
-            @if(auth()->user()->hasAnyPermission(['customer-quotations', 'customer-invoices']))
+            @if(auth()->user()->hasAnyPermission(['customer-quotations', 'customer-invoices', 'handyman-quotation-requests']))
 
-                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices') class="active1" @endif href="javascript:"><span class="icon sales-icon"></span> <span>{{__('text.Sales')}}</span></a>
+                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'handyman-quotation-requests') class="active1" @endif href="javascript:"><span class="icon sales-icon"></span> <span>{{__('text.Sales')}}</span></a>
 
                     <ul class="hide">
 
@@ -1314,6 +1305,12 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                             @if(auth()->user()->can('create-new-quotation'))
 
                                 <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 2) New Quotations @else New Orders @endif</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->can('handyman-quotation-requests'))
+
+                                <li><a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotation Requests')}}</a></li>
 
                             @endif
 

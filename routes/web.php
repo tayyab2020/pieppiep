@@ -114,7 +114,7 @@
   Route::post('/save-email-template','UserController@SaveEmailTemplate')->name('save-email-template');
   Route::get('/aanvrager-offerte/{id?}', 'UserController@CustomerQuotations')->name('customer-quotations');
   Route::get('/aanvrager-facturen/{id?}', 'UserController@CustomerInvoices')->name('customer-invoices');
-  Route::get('/offerte/vloeren', 'UserController@HandymanCreateQuote')->name('create-custom-quotation');
+  Route::get('/offerte/vloeren/{id?}', 'UserController@HandymanCreateQuote')->name('create-custom-quotation');
   Route::get('/aanbieder-opstellen-directe-verkoopfactuur', 'UserController@HandymanCreateQuote')->name('create-direct-invoice');
   Route::post('/opstellen-eigen-offerte', 'UserController@StoreCustomQuotation')->name('store-custom-quotation');
   Route::post('/create-direct-invoice', 'UserController@StoreCustomQuotation')->name('store-direct-invoice');

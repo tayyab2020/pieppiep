@@ -105,9 +105,13 @@
 
                                                                             <span class="btn btn-info">{{__('text.Asking for Review')}}</span>
 
+                                                                        @elseif($invoices[$i]->accepted)
+
+                                                                            <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
+
                                                                         @elseif($invoices[$i]->approved)
 
-                                                                            <span class="btn btn-success">{{__('text.Quotation Approved')}}</span>
+                                                                            <span class="btn btn-success">Quotation Sent</span>
 
                                                                         @else
 
@@ -145,7 +149,7 @@
                                                                             @if(auth()->user()->can('view-handyman-quotation'))
 
                                                                                 @if($invoices[$i])
-                                                                                    <li><a href="{{ url('/aanbieder/bekijk-offerte/'.$invoices[$i]->id) }}">{{__('text.View Quotation')}}</a></li>
+                                                                                    <li><a href="{{ route('view-new-quotation', ['id' => $invoices[$i]->id]) }}">{{__('text.View Quotation')}}</a></li>
                                                                                 @endif
 
                                                                             @endif
@@ -184,7 +188,7 @@
 
                                                                                     @if(auth()->user()->can('create-quotation'))
 
-                                                                                        <li><a href="{{ url('/aanbieder/opstellen-offerte/'.$key->id) }}">{{__('text.Create Quotation')}}</a></li>
+                                                                                        <li><a href="{{ route('create-custom-quotation', ['id' => Crypt::encrypt($key->id) ]) }}">{{__('text.Create Quotation')}}</a></li>
 
                                                                                     @endif
 
@@ -213,6 +217,13 @@
 
 
     <style type="text/css">
+
+        .btn-primary1
+        {
+            background-color: darkcyan;
+            border-color: darkcyan;
+            color: white !important;
+        }
 
         .dropdown-menu
         {

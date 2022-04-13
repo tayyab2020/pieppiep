@@ -11,6 +11,7 @@
 				{{csrf_field()}}
 
 				<input type="hidden" name="form_type" value="1">
+				<input type="hidden" name="quote_request_id" value="{{isset($request_id) ? ($request_id ? $request_id : null) : null}}">
 				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
 				<input type="hidden" name="is_invoice" value="{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? 0 : 1) : 0}}">
 				<input type="hidden" name="negative_invoice" value="{{Route::currentRouteName() == 'create-new-negative-invoice' ? 1 : 0}}">
