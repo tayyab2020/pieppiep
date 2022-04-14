@@ -603,7 +603,7 @@ class AdminUserController extends Controller
 
             ini_set('max_execution_time', 180);
 
-            $pdf = PDF::loadView('admin.user.pdf_quote',compact('quote','q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('admin.user.pdf_quote',compact('quote','q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
             $pdf->save(public_path().'/assets/quotesPDF/'.$filename);
         }
