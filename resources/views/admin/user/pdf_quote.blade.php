@@ -25,14 +25,14 @@
 
                                 <div class="col-md-12 col-sm-12 col-xs-12">
 
-                                    <img class="img-fluid" src="{{ public_path('assets/images/'.$gs->logo) }}" style="width:50%; height:100%;margin-bottom: 30px;">
+                                    <img class="img-fluid" src="https://vloerofferte.nl/assets/images/'.$gs1->logo" style="width:50%; height:100%;margin-bottom: 30px;">
 
-                                    <p class="para" style="margin-top: 20px;margin-left: 26px;">{!! $gs->street !!}</p>
+                                    <p class="para" style="margin-top: 20px;margin-left: 26px;">{!! $gs1->street !!}</p>
 
                                     <div style="margin-top: 20px;">
 
                                         <div style="float: left;">
-                                            <p class="para">TEL: {{$gs->phone}}<br>BTW: NL001973883B94<br>IBAN: NL87ABNA0825957680<br>KvK-nummer: 70462623</p>
+                                            <p class="para">TEL: {{$gs1->phone}}<br>BTW: NL001973883B94<br>IBAN: NL87ABNA0825957680<br>KvK-nummer: 70462623</p>
                                         </div>
 
                                         <div style="float: right;">
@@ -58,7 +58,7 @@
 
                                     <?php $quote_delivery_date = date('d-m-Y',strtotime($quote->quote_delivery)); ?>
 
-                                    @if($quote->cat_name != '' && $quote->brand_name != '' && $quote->model_name != '')
+                                    @if($quote->cat_name != '' && $quote->brand_name != '' && $quote->model_name != '' && $quote->type_title != '' && $quote->color != '')
 
                                         <br><br>
                                         <p class="mb-1 m-rest">{{__('text.Delivery Date')}}: {{$quote_delivery_date}}</p>
@@ -83,12 +83,13 @@
                                     <table class="table" style="border: 1px solid #e5e5e5;">
                                         <thead>
                                         <tr>
-                                            @if($quote->cat_name != '' && $quote->brand_name != '' && $quote->model_name != '')
+                                            @if($quote->cat_name != '' && $quote->brand_name != '' && $quote->model_name != ''  && $quote->type_title != '' && $quote->color != '')
 
                                                 <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Category/Item')}}</th>
                                                 <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Brand')}}</th>
                                                 <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Model')}}</th>
-                                                <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Model Number')}}</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">Type</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Color')}}</th>
 
                                             @else
 
@@ -109,7 +110,8 @@
                                                     <td>{{$quote->cat_name}}</td>
                                                     <td>{{$quote->brand_name}}</td>
                                                     <td>{{$quote->model_name}}</td>
-                                                    <td>{{$quote->quote_model_number}}</td>
+                                                    <td>{{$quote->type_title}}</td>
+                                                    <td>{{$quote->color}}</td>
 
                                                 @else
 

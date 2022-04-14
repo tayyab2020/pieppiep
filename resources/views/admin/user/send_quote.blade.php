@@ -32,6 +32,8 @@
                                                     <p style="text-align: center;font-size: 20px;" class="form-control"><b>Category:</b> {{$request->cat_name}}</p>
                                                     <p style="text-align: center;font-size: 20px;" class="form-control"><b>Brand:</b> {{$request->brand_name}}</p>
                                                     <p style="text-align: center;font-size: 20px;" class="form-control"><b>Model:</b> {{$request->model_name}}</p>
+                                                    <p style="text-align: center;font-size: 20px;" class="form-control"><b>Type:</b> {{$request->type_title}}</p>
+                                                    <p style="text-align: center;font-size: 20px;" class="form-control"><b>Color:</b> {{$request->color}}</p>
 
                                                 @else
 

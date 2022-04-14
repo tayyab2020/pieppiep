@@ -154,7 +154,7 @@ class ProductController extends Controller
             })
                 ->leftjoin('retailers_requests','retailers_requests.supplier_id','=','products.user_id')
                 ->leftjoin('users','users.id','=','products.user_id')
-                ->leftjoin('categories','categories.id','=','products.category_id')
+                ->leftjoin('categories','categories.id','=','products.sub_category_id')
                 ->leftjoin('brands','brands.id','=','products.brand_id')
                 ->leftjoin('models','models.id','=','products.model_id')
                 ->where('products.user_id',$id)
