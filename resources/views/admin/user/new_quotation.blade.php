@@ -1,4 +1,4 @@
-@extends('layouts.handyman')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -7,15 +7,8 @@
 	<div class="container-fluid">
 		<div class="row">
 
-			<form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}" method="POST" enctype="multipart/form-data">
+			<form id="form-quote" style="padding: 0;" class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
 				{{csrf_field()}}
-
-				<input type="hidden" name="form_type" value="1">
-				<input type="hidden" id="quote_request_id" name="quote_request_id" value="{{isset($request_id) ? $request_id : (isset($invoice) ? $invoice[0]->quote_request_id : null)}}">
-				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
-				<input type="hidden" name="is_invoice" value="{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? 0 : 1) : 0}}">
-				<input type="hidden" name="negative_invoice" value="{{Route::currentRouteName() == 'create-new-negative-invoice' ? 1 : 0}}">
-				<input type="hidden" name="negative_invoice_id" value="{{isset($invoice) ? (Route::currentRouteName() == 'create-new-negative-invoice' ? ($invoice[0]->negative_invoice != 0 ? $invoice[0]->invoice_id : null) : null) : null}}">
 
 				<div style="margin: 0;" class="row">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -27,35 +20,11 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : (Route::currentRouteName() == 'create-new-negative-invoice' ? 'Create Negative Invoice' : __('text.View Invoice') )) : __('text.Create Quotation')}}</h2>
+											<h2 style="margin-top: 0;">View Quotation</h2>
 
-											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
+											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">												
 
-												@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
-
-													@if(!$invoice[0]->invoice_sent || Route::currentRouteName() == 'create-new-negative-invoice')
-
-														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-															<i class="fa fa-fw fa-save"></i>
-															<span class="tooltiptext">Save</span>
-														</span>
-
-													@endif
-
-												@else
-
-													@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
-
-														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-															<i class="fa fa-fw fa-save"></i>
-															<span class="tooltiptext">Save</span>
-														</span>
-
-													@endif
-
-												@endif												
-
-												<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
+												<a href="{{route('handyman-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
 													<i class="fa fa-fw fa-close"></i>
 													<span class="tooltiptext">Close</span>
 												</a>
@@ -63,56 +32,6 @@
 											</div>
 
 										</div>
-
-										@if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
-
-											<hr>
-
-											<div class="col-md-5">
-												<div class="form-group" style="margin: 0;">
-
-													<label>Customer</label>
-
-													<div id="cus-box" style="display: flex;">
-														<select class="customer-select form-control" name="customer"
-																required>
-
-															<option value="">{{__('text.Select Customer')}}</option>
-
-															@foreach($customers as $key)
-
-																<option {{isset($invoice) ? ($invoice[0]->user_id ==
-																$key->user_id ? 'selected' : null) : null}}
-																		value="{{$key->id}}">{{$key->name}}
-																	{{$key->family_name}}</option>
-
-															@endforeach
-
-														</select>
-
-														@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
-
-															@if(!$invoice[0]->invoice_sent || Route::currentRouteName() == 'create-new-negative-invoice')
-
-																<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
-
-															@endif
-
-														@else
-
-															@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
-
-																<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
-
-															@endif
-
-														@endif
-
-													</div>
-												</div>
-											</div>
-
-										@endif
 
 										<div style="display: inline-block;width: 100%;">
 
@@ -140,13 +59,11 @@
 																<div class="headings" style="width: 13%;"></div>
                                                             </div>
 
-															@if(isset($invoice))
-
-																@foreach($invoice as $i => $item)
+															@foreach($invoice as $i => $item)
 
 																<div @if($i==0) class="content-div active" @else class="content-div" @endif data-id="{{$i+1}}">
 
-                                                                    <div class="content full-res item1" style="width: 2%;">
+																	<div class="content full-res item1" style="width: 2%;">
 																		<label class="content-label">Sr. No</label>
 																		<div style="padding: 0 5px;" class="sr-res">{{$i+1}}</div>
 																	</div>
@@ -164,8 +81,8 @@
 																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
 																	<input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
 																	<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
-                                                                    <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
-                                                                    <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
+																	<input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
+																	<input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
 																	<input type="hidden" value="{{$item->box_quantity}}" id="estimated_price_quantity" name="estimated_price_quantity[]">
 																	<input type="hidden" value="{{$item->measure}}" id="measure" name="measure[]">
 																	<input type="hidden" value="{{$item->max_width}}" id="max_width" name="max_width[]">
@@ -178,37 +95,6 @@
 																			<input value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																		</div>
 
-																		<select style="display: none;" class="form-control all-products" id="blood_grp">
-
-																			@foreach($products as $key)
-
-																				@foreach($key->models as $key1)
-
-																					@foreach($key->colors as $key2)
-
-																						<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
-
-																					@endforeach
-
-																				@endforeach
-
-																			@endforeach
-
-																			@foreach($services as $service)
-                                                    							<option data-type="Service" value="{{$service->id}}S">{{$service->title . ', Service'}}</option>
-                                                							@endforeach
-
-																			@foreach($items as $item1)
-																				<option data-type="Item" value="{{$item1->id}}I">{{$item1->cat_name . ', Item, (' . $item1->category . ')'}}</option>
-																			@endforeach
-
-																		</select>
-
-																		<input type="hidden" value="{{$item->item_id != 0 ? $item->item_id.'I' : ($item->service_id != 0 ? $item->service_id.'S' : $item->product_id)}}" name="products[]" id="product_id">
-																		<input type="hidden" value="{{$item->supplier_id}}" name="suppliers[]" id="supplier_id">
-																		<input type="hidden" value="{{$item->color}}" name="colors[]" id="color_id">
-																		<input type="hidden" value="{{$item->model_id}}" name="models[]" id="model_id">
-
 																	</div>
 
 																	<div class="content item6" style="width: 17%;">
@@ -216,11 +102,10 @@
 																		<label class="content-label">Qty</label>
 
 																		<div style="display: flex;align-items: center;">
-																			@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
 																		</div>
-                                                                    </div>
-																	
+																	</div>
+
 																	<div class="content item6" style="width: 17%;">
 
 																		<label class="content-label">€ Art.</label>
@@ -229,7 +114,7 @@
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																			<input type="hidden" value="{{$item->price_before_labor}}" class="price_before_labor_old">
 																		</div>
-                                                                    </div>
+																	</div>
 
 																	<div class="content item8" style="width: 10%;">
 
@@ -237,231 +122,38 @@
 
 																		<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
 																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
-                                                                    </div>
+																	</div>
 
 																	<div style="width: 7%;" class="content item9">
 
 																		<label class="content-label">€ Total</label>
-																		@if(Route::currentRouteName() == 'create-new-negative-invoice') -&nbsp; @endif
 																		<div class="price res-white">€ {{str_replace('.', ',',floatval($item->rate))}}</div>
 
 																	</div>
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
 
-																		@if((Route::currentRouteName() == 'create-new-negative-invoice') || (isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
-
-																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-
-																				<div style="display: none;" class="green-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
-                                                                            	</div>
-                                                                            	
-																				<div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
-                                                                            	</div>
-
-																				<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																					<span class="tooltiptext">Add</span>
-																				</span>
-
-																				<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																					<span class="tooltiptext">Remove</span>
-																				</span>
-
-																				<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																					<span class="tooltiptext">Copy</span>
-																				</span>
-
-																				<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-																					<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-																					<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																				</span>-->
-
-                                                                        	</div>
-
-																		@endif
-                                                                        
-                                                                    </div>
-
-                                                                    <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
-                                                                        <button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo{{$i+1}}"></button>
-                                                                    </div>
-
-                                                                    <div style="width: 100%;" id="demo{{$i+1}}" class="item16 collapse">
-
-                                                                        <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
-
-                                                                            <label>Discount % </label>
-
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                            	</div>
-
-																@endforeach
-
-															@else
-
-															<div class="content-div active" data-id="1">
-
-                                                                    <div class="content full-res item1" style="width: 2%;">
-																		<label class="content-label">Sr. No</label>
-																		<div style="padding: 0 5px;" class="sr-res">1</div>
 																	</div>
 
-																	<input type="hidden" id="order_number" name="order_number[]">
-																	<input type="hidden" id="basic_price" name="basic_price[]">
-																	<input type="hidden" id="rate" name="rate[]">
-																	<input type="hidden" id="row_total" name="total[]">
-																	<input type="hidden" value="1" id="row_id" name="row_id[]">
-																	<input type="hidden" value="0" id="childsafe" name="childsafe[]">
-																	<input type="hidden" value="0" id="ladderband" name="ladderband[]">
-																	<input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
-																	<input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
-																	<input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
-																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
-																	<input type="hidden" id="delivery_days" name="delivery_days[]">
-																	<input type="hidden" id="base_price" name="base_price[]">
-                                                                    <input type="hidden" id="supplier_margin" name="supplier_margin[]">
-                                                                    <input type="hidden" id="retailer_margin" name="retailer_margin[]">
-																	<input type="hidden" id="estimated_price_quantity" name="estimated_price_quantity[]">
-																	<input type="hidden" id="measure" name="measure[]">
-																	<input type="hidden" id="max_width" name="max_width[]">
+																	<div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
+																		<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo{{$i+1}}"></button>
+																	</div>
 
-																	<div style="width: 34%;" class="products content item3 full-res">
+																	<div style="width: 100%;" id="demo{{$i+1}}" class="item16 collapse">
 
-																		<label class="content-label">Product</label>
+																		<div style="width: 25%;margin-left: 10px;" class="discount-box item14">
 
-																		<div class="autocomplete" style="width:100%;">
-																			<input id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																			<label>Discount % </label>
+
+																			<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
+
 																		</div>
-
-																		<select style="display: none;" class="form-control all-products" id="blood_grp">
-
-																			@foreach($products as $key)
-																		
-																				@foreach($key->models as $key1)
-																			
-																					@foreach($key->colors as $key2)
-
-																						<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
-
-																					@endforeach
-
-																				@endforeach
-
-																			@endforeach
-
-																			@foreach($services as $service)
-                                                    							<option data-type="Service" value="{{$service->id}}S">{{$service->title . ', Service'}}</option>
-                                                							@endforeach
-
-																			@foreach($items as $item)
-																				<option data-type="Item" value="{{$item->id}}I">{{$item->cat_name . ', Item, (' . $item->category . ')'}}</option>
-																			@endforeach
-
-																		</select>
-
-																		<input type="hidden" name="products[]" id="product_id">
-																		<input type="hidden" name="suppliers[]" id="supplier_id">
-																		<input type="hidden" name="colors[]" id="color_id">
-																		<input type="hidden" name="models[]" id="model_id">
-
-                                                                    </div>
-
-																	<div class="content item6" style="width: 17%;">
-
-																		<label class="content-label">Qty</label>
-
-																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="1" name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
-																		</div>
-                                                                    </div>
-
-																	<div class="content item6" style="width: 17%;">
-
-																		<label class="content-label">€ Art.</label>
-
-																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																			<input type="hidden" value="0" class="price_before_labor_old">
-																		</div>
-                                                                    </div>
-
-																	<div class="content item8" style="width: 10%;">
-
-																		<label class="content-label">Discount</label>
-
-																		<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
-																		<input type="hidden" value="0" class="total_discount_old">
-                                                                    </div>
-
-																	<div style="width: 7%;" class="content item9">
-
-																		<label class="content-label">€ Total</label>
-																		<div class="price res-white"></div>
 
 																	</div>
 
-																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
-                                                                        <div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+																</div>
 
-																			<div style="display: none;" class="green-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
-                                                                            </div>
-
-                                                                            <div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
-                                                                            </div>
-
-																			<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																				<span class="tooltiptext">Add</span>
-																			</span>
-
-																			<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																				<span class="tooltiptext">Remove</span>
-																			</span>
-
-																			<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
-																				<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																				<span class="tooltiptext">Copy</span>
-																			</span>
-
-                                                                            <!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-																			<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-																			<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																			</span>-->
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
-                                                                        <button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo"></button>
-                                                                    </div>
-
-                                                                    <div style="width: 100%;" id="demo" class="item16 collapse">
-
-                                                                        <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
-
-                                                                            <label>Discount % </label>
-
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                            </div>
-
-															@endif
+															@endforeach
 
                                                         </section>
 
@@ -470,14 +162,8 @@
 															<div style="display: flex;justify-content: center;">
 
 																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
-
-																	@if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
-
-																		<label>Delivery Date: </label>
-																		<input value="{{isset($invoice) ? $invoice[0]->retailer_delivery_date : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="retailer_delivery_date">
-
-																	@endif
-																	
+																	<label>Delivery Date: </label>
+																	<input value="{{$invoice[0]->retailer_delivery_date}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="retailer_delivery_date">
 																</div>
 																<div class="headings1" style="width: 23%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
 																<div class="headings1" style="width: 7%;display: flex;align-items: center;">
@@ -487,17 +173,17 @@
 																			id="price_before_labor_total"
 																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
+																			value="{{str_replace('.', ',',floatval($invoice[0]->price_before_labor_total))}}">
 																	</div>
 																</div>
 																
 																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Te betalen: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Te betalen: €</span>
 																		<input name="total_amount" id="total_amount"
 																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->grand_total)) : 0}}">
+																			value="{{str_replace('.', ',',floatval($invoice[0]->grand_total))}}">
 																	</div>
 																</div>
 
@@ -507,18 +193,18 @@
 
 																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
 																	<label>Installation Date: </label>
-																	<input value="{{isset($invoice) ? $invoice[0]->retailer_installation_date : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="installation_date" name="installation_date">
+																	<input value="{{$invoice[0]->retailer_installation_date}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="installation_date" name="installation_date">
 																</div>
 																<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
 																<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
 																<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
 																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: €</span>
 																			<input name="net_amount" id="net_amount"
 																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																				type="text" readonly
-																				value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->net_amount)) : 0}}">
+																				value="{{str_replace('.', ',',floatval($invoice[0]->net_amount))}}">
 																	</div>
 																</div>
 
@@ -531,11 +217,11 @@
 																<div class="headings1" style="width: 7%;"></div>
 																<div class="headings2" style="width: 30%;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
+																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): €</span>
 																		<input name="tax_amount" id="tax_amount"
 																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->tax_amount)) : 0}}">
+																			value="{{str_replace('.', ',',floatval($invoice[0]->tax_amount))}}">
 																	</div>
 																</div>
 
@@ -559,9 +245,7 @@
 
 															<div id="menu1" class="tab-pane">
 
-																@if(isset($invoice))
-
-																	<?php $f = 0; $s = 0; ?>
+																<?php $f = 0; $s = 0; ?>
 
 																		@foreach($invoice as $x => $key1)
 
@@ -752,15 +436,11 @@
 
 																		@endforeach
 
-																@endif
-
 															</div>
 
 															<div id="menu2" class="tab-pane fade active in">
 
-																@if(isset($invoice))
-
-																	@foreach($invoice as $i => $key)
+																@foreach($invoice as $i => $key)
 
 																		<section @if($i == 0) class="attributes_table active" @else class="attributes_table" @endif data-id="{{$i+1}}" style="width: 100%;">
 
@@ -885,25 +565,6 @@
 																						<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
 																							<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
 
-																								@if($temp->parent_row == NULL)
-
-																									<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																										<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																										<span class="tooltiptext">Add</span>
-																									</span>
-
-																									<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																										<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																										<span class="tooltiptext">Remove</span>
-																									</span>
-
-																									<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
-																										<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																										<span class="tooltiptext">Copy</span>
-																									</span>
-
-																								@endif
-
 																							</div>
 																						</div>
 
@@ -914,134 +575,6 @@
 																		</section>
 
 																	@endforeach
-
-																@else
-
-																	<section class="attributes_table active" data-id="1" style="width: 100%;">
-
-																		<div class="header-div">
-																			<div class="headings" style="width: 22%;">Description</div>
-																			<div class="headings" style="width: 10%;">Width</div>
-																			<div class="headings" style="width: 10%;">Height</div>
-																			<div class="headings" style="width: 10%;">Cutting lose</div>
-																			<div class="headings m2_box" style="width: 10%;">Total</div>
-																			<div class="headings m1_box" style="width: 10%;display: none;">Turn</div>
-																			<div class="headings m1_box" style="width: 10%;display: none;">Max Width</div>
-																			<div class="headings m2_box" style="width: 10%;">Box quantity</div>
-																			<div class="headings m1_box" style="width: 10%;display: none;">Total</div>
-																			<div class="headings m2_box" style="width: 10%;">Total boxes</div>
-																			<div class="headings" style="width: 18%;"></div>
-																		</div>
-
-																		<div class="attribute-content-div" data-id="1" data-main-id="0">
-
-																			<div class="attribute full-res item1" style="width: 22%;">
-																				<div style="display: flex;align-items: center;">
-																					<input type="hidden" class="calculator_row" name="calculator_row1[]" value="1">
-																					<span style="width: 10%">1</span>
-																					<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]"></textarea></div>
-																				</div>
-																			</div>
-
-																			<div class="attribute item2 width-box" style="width: 10%;">
-
-																				<div class="m-box">
-																					<input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
-																					<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
-																				</div>
-
-																			</div>
-
-																			<div class="attribute item3 height-box" style="width: 10%;">
-
-																				<div class="m-box">
-																					<input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
-																					<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
-																				</div>
-
-																			</div>
-
-																			<div class="attribute item4" style="width: 10%;">
-
-																				<div class="m-box">
-																					<input class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
-																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
-																				</div>
-
-																			</div>
-
-																			<div class="attribute item5 m2_box" style="width: 10%;">
-
-																				<div class="m-box">
-																					<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
-																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
-																				</div>
-
-																			</div>
-
-																			<div class="attribute item5 m1_box" style="width: 10%;display: none;">
-
-																				<div style="display: flex;align-items: center;">
-																					<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" name="turn1[]">
-																						<option value="0">No</option>
-																						<option value="1">Yes</option>
-																					</select>
-																				</div>
-
-																			</div>
-
-																			<div class="attribute item6 m1_box" style="width: 10%;display: none;">
-
-																				<div style="display: flex;align-items: center;">
-																					<input type="number" name="max_width1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">
-																				</div>
-
-																			</div>
-
-																			<div class="attribute item6 m2_box" style="width: 10%;">
-
-																				<div class="m-box">
-																					<input class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;background: transparent;" readonly autocomplete="off" name="box_quantity_supplier1[]" type="number">
-																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
-																				</div>
-
-																			</div>
-
-																			<div class="attribute item7" style="width: 10%;">
-
-																				<div style="display: flex;align-items: center;">
-																					<input type="number" name="box_quantity1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">
-																				</div>
-
-																			</div>
-
-																			<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
-																				<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
-
-																				<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																					<span class="tooltiptext">Add</span>
-																				</span>
-
-																					<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																					<span class="tooltiptext">Remove</span>
-																				</span>
-
-																					<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																					<span class="tooltiptext">Copy</span>
-																				</span>
-
-																				</div>
-																			</div>
-
-																		</div>
-
-
-																	</section>
-
-																@endif
 
 															</div>
 
@@ -1073,7 +606,6 @@
 								<h4 class="modal-title">Sub Products Sizes</h4>
 							</div>
 							<div class="modal-body">
-								@if(isset($invoice))
 
 								@foreach($invoice as $x => $key1)
 
@@ -1145,7 +677,6 @@
 
 								@endforeach
 
-								@endif
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -1166,8 +697,6 @@
 							</div>
 							<div class="modal-body">
 
-								@if(isset($invoice))
-
 								@foreach($invoice as $x => $key1)
 
 								@foreach($key1->features as $feature)
@@ -1187,8 +716,6 @@
 
 								@endforeach
 
-								@endif
-
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -1207,117 +734,6 @@
 </div>
 
 <div id="cover"></div>
-
-<div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<button style="background-color: white !important;color: black !important;" type="button" class="close"
-					data-dismiss="modal" aria-hidden="true">×</button>
-				<h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
-			</div>
-
-			<div class="modal-body" id="myWizard" style="display: inline-block;">
-
-				<input type="hidden" id="token" name="token" value="{{csrf_token()}}">
-				<input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
-				<input type="hidden" id="handyman_name" name="handyman_name"
-					value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}"
-							type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="family_name" name="family_name" class="form-control validation"
-							placeholder="{{$lang->fn}}" type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}"
-							type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="address" name="address" class="form-control" placeholder="{{$lang->ad}}" type="text">
-						<input type="hidden" id="check_address" value="0">
-					</div>
-				</div>
-
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="postcode" name="postcode" class="form-control" readonly placeholder="{{$lang->pc}}"
-							type="text">
-					</div>
-				</div>
-
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="city" name="city" class="form-control" placeholder="{{$lang->ct}}" readonly
-							type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="phone" name="phone" class="form-control" placeholder="{{$lang->pn}}" type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-envelope"></i>
-						</div>
-						<input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}"
-							type="email">
-					</div>
-				</div>
-
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;"
-					class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
-			</div>
-
-		</div>
-
-	</div>
-</div>
 
 <style>
 
@@ -3022,415 +2438,6 @@
 				$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 			}
 
-			function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, product_text = null, supplier = null, color = null, model = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, base_price = null, supplier_margin = null, retailer_margin = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
-
-				var rowCount = $('#products_table .content-div:last').data('id');
-				rowCount = rowCount + 1;
-
-				var r_id = $('#products_table .content-div:last').find('.content:eq(0)').find('.sr-res').text();
-				r_id = parseInt(r_id) + 1;
-
-				if (!copy) {
-
-					$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
-							'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
-							'                       									 	<label class="content-label">Sr. No</label>\n' +
-							'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
-							'                       									 </div>\n' +
-							'\n' +
-							'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
-							'                                                            <input type="hidden" id="basic_price" name="basic_price[]">\n' +
-							'                                                            <input type="hidden" id="rate" name="rate[]">\n' +
-							'                                                            <input type="hidden" id="row_total" name="total[]">\n' +
-							'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
-							'                                                            <input type="hidden" value="0" id="childsafe" name="childsafe[]">\n' +
-							'                                                            <input type="hidden" value="0" id="ladderband" name="ladderband[]">\n' +
-							'                                                            <input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">\n' +
-							'                                                            <input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
-							'                                                            <input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
-							'                                                            <input type="hidden" value="0" id="area_conflict" name="area_conflict[]">\n' +
-							'                                                            <input type="hidden" value="1" id="delivery_days" name="delivery_days[]">\n' +
-							'                                                            <input type="hidden" id="base_price" name="base_price[]">\n' +
-							'                                                            <input type="hidden" id="supplier_margin" name="supplier_margin[]">\n' +
-							'                                                            <input type="hidden" id="retailer_margin" name="retailer_margin[]">\n' +
-							'                                                            <input type="hidden" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
-							'                                                            <input type="hidden" id="measure" name="measure[]">\n' +
-							'                                                            <input type="hidden" id="max_width" name="max_width[]">\n' +
-							'\n' +
-							'                                                            <div style="width: 34%;" class="products content item3 full-res">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">Product</label>\n' +
-							'\n' +
-							'                                                                <div class="autocomplete" style="width:100%;">\n' +
-							'\n' +
-							'																	<input id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
-							'\n' +
-							'                                                                </div>\n' +
-							'\n' +
-							'																 <select style="display: none;" class="form-control all-products" id="blood_grp">\n' +
-							'\n' +
-							'                                                                    @foreach($products as $key)\n' +
-							'\n' +
-							'                                                                    	@foreach($key->models as $key1)\n' +
-							'\n' +
-							'                                                                    		@foreach($key->colors as $key2)\n' +
-							'\n' +
-							'                                                                        		<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>\n' +
-							'\n' +
-							'                                                                    		@endforeach\n' +
-							'\n' +
-							'                                                                    	@endforeach\n' +
-							'\n' +
-							'                                                                    @endforeach\n' +
-							'\n' +
-							'                                                                </select>\n' +
-							'\n' +
-							'																<input type="hidden" name="products[]" id="product_id">\n' +
-							'																<input type="hidden" name="suppliers[]" id="supplier_id">\n' +
-							'																<input type="hidden" name="colors[]" id="color_id">\n' +
-							'																<input type="hidden" name="models[]" id="model_id">\n' +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="content item6" style="width: 17%;">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">Qty</label>\n' +
-							'\n' +
-							'																 <div style="display: flex;align-items: center;">\n' +
-							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
-							'																 	<input type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
-							'																 </div>\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="content item7" style="width: 17%;">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">€ Art.</label>\n' +
-							'\n' +
-							'																 <div style="display: flex;align-items: center;">\n' +
-							'																 	<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
-							'																	<input type="hidden" class="price_before_labor_old">\n' +
-							'																 </div>\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="content item8" style="width: 10%;">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">Discount</label>\n' +
-							'\n' +
-							'																<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
-							'																<input type="hidden" value="0" class="total_discount_old">\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div style="width: 7%;" class="content item9">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">€ Total</label>\n' +
-							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-&nbsp;'; } ?>'+
-							'\n' +
-							'																<div class="price res-white"></div>\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">\n' +
-							'\n' +
-							'                       									 	<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">\n' +
-							'\n' +
-							'																<div style="display: none;" class="green-circle tooltip1">\n' +
-							'																	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>\n' +
-							'																</div>\n' +
-							'\n' +
-							'																<div style="visibility: hidden;" class="yellow-circle tooltip1">\n' +
-							'																	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>\n' +
-							'																</div>\n' +
-							'\n' +
-							'																<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-							'\n' +
-							'																	<i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
-							'\n' +
-							'																	<span class="tooltiptext">Add</span>\n' +
-							'\n' +
-							'																</span>\n' +
-							'\n' +
-							'																<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-							'\n' +
-							'																	<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
-							'\n' +
-							'																	<span class="tooltiptext">Remove</span>\n' +
-							'\n' +
-							'																</span>\n' +
-							'\n' +
-							'																<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
-							'\n' +
-							'																	<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
-							'\n' +
-							'																	<span class="tooltiptext">Copy</span>\n' +
-							'\n' +
-							'																</span>\n' +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
-							'\n' +
-							'                       									 	<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse">\n' +
-							'\n' +
-							'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
-							'\n' +
-							'																	<label>Discount %</label>\n' +
-							'\n' +
-							'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
-							'\n' +
-							'																</div>\n' +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                        </div>');
-
-
-					$('#menu2').append('<section class="attributes_table active" data-id="'+rowCount+'" style="width: 100%;">\n' +
-							'                                                            <div class="header-div">\n' +
-							'                       									 	<div class="headings" style="width: 22%;">Description</div>\n' +
-							'                       									 	<div class="headings" style="width: 10%;">Width</div>\n' +
-							'																<div class="headings" style="width: 10%;">Height</div>\n' +
-							'																<div class="headings" style="width: 10%;">Cutting lose</div>\n' +
-							'																<div class="headings m2_box" style="width: 10%;">Total</div>\n' +
-							'																<div class="headings m1_box" style="width: 10%;display: none;">Turn</div>\n' +
-							'																<div class="headings m1_box" style="width: 10%;display: none;">Max Width</div>\n' +
-							'																<div class="headings m2_box" style="width: 10%;">Box quantity</div>\n' +
-							'																<div class="headings m1_box" style="width: 10%;display: none;">Total</div>\n' +
-							'																<div class="headings m2_box" style="width: 10%;">Total boxes</div>\n' +
-							'																<div class="headings" style="width: 18%;"></div>\n' +
-							'                       									 </div>\n'
-					);
-
-					add_attribute_row(false, rowCount);
-
-					var last_row = $('#products_table .content-div:last');
-
-					focus_row(last_row);
-
-					autocomplete(last_row.find("#productInput")[0], product_titles, product_ids, model_ids, color_ids, supplier_ids);
-
-				}
-				else {
-
-					$("#products_table").append('<div class="content-div" data-id="' + rowCount + '">\n' +
-							'                                                            <div class="content full-res item1" style="width: 2%;">\n' +
-							'                       									 	<label class="content-label">Sr. No</label>\n' +
-							'                       									 	<div style="padding: 0 5px;" class="sr-res">' + r_id + '</div>\n' +
-							'                       									 </div>\n' +
-							'\n' +
-							'                                                            <input type="hidden" id="order_number" name="order_number[]">\n' +
-							'                                                            <input value="' + basic_price + '" type="hidden" id="basic_price" name="basic_price[]">\n' +
-							'                                                            <input value="' + rate + '" type="hidden" id="rate" name="rate[]">\n' +
-							'                                                            <input value="' + price + '" type="hidden" id="row_total" name="total[]">\n' +
-							'                                                            <input type="hidden" value="' + rowCount + '" id="row_id" name="row_id[]">\n' +
-							'                                                            <input type="hidden" value="' + childsafe + '" id="childsafe" name="childsafe[]">\n' +
-							'                                                            <input type="hidden" value="' + ladderband + '" id="ladderband" name="ladderband[]">\n' +
-							'                                                            <input type="hidden" value="' + ladderband_value + '" id="ladderband_value" name="ladderband_value[]">\n' +
-							'                                                            <input type="hidden" value="' + ladderband_price_impact + '" id="ladderband_price_impact" name="ladderband_price_impact[]">\n' +
-							'                                                            <input type="hidden" value="' + ladderband_impact_type + '" id="ladderband_impact_type" name="ladderband_impact_type[]">\n' +
-							'                                                            <input type="hidden" value="' + area_conflict + '" id="area_conflict" name="area_conflict[]">\n' +
-							'                                                            <input type="hidden" value="' + delivery_days + '" id="delivery_days" name="delivery_days[]">\n' +
-							'                                                            <input type="hidden" value="' + base_price + '" id="base_price" name="base_price[]">\n' +
-							'                                                            <input type="hidden" value="' + supplier_margin + '" id="supplier_margin" name="supplier_margin[]">\n' +
-							'                                                            <input type="hidden" value="' + retailer_margin + '" id="retailer_margin" name="retailer_margin[]">\n' +
-							'                                                            <input type="hidden" value="' + estimated_price_quantity + '" id="estimated_price_quantity" name="estimated_price_quantity[]">\n' +
-							'                                                            <input type="hidden" value="' + measure + '" id="measure" name="measure[]">\n' +
-							'                                                            <input type="hidden" value="' + max_width + '" id="max_width" name="max_width[]">\n' +
-							'\n' +
-							'                                                            <div style="width: 34%;" class="products content item3 full-res">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">Product</label>\n' +
-							'\n' +
-							'                                                                <div class="autocomplete" style="width:100%;">\n' +
-							'\n' +
-							'																	<input id="productInput" value="'+product_text+'" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
-							'\n' +
-							'                                                                </div>\n' +
-							'\n' +
-							'																 <select style="display: none;" class="form-control all-products" id="blood_grp">\n' +
-							'\n' +
-							products +
-							'\n' +
-							'                                                                </select>\n' +
-							'\n' +
-							'																<input type="hidden" name="products[]" id="product_id" value="'+product+'">\n' +
-							'																<input type="hidden" name="suppliers[]" id="supplier_id" value="'+supplier+'">\n' +
-							'																<input type="hidden" name="colors[]" id="color_id" value="'+color+'">\n' +
-							'																<input type="hidden" name="models[]" id="model_id" value="'+model+'">\n' +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="content item6" style="width: 17%;">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">Qty</label>\n' +
-							'\n' +
-							'																 <div style="display: flex;align-items: center;">\n' +
-							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
-							'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
-							'																 </div>\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="content item7" style="width: 17%;">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">€ Art.</label>\n' +
-							'\n' +
-							'																 <div style="display: flex;align-items: center;">\n' +
-							'																 	<input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
-							'																	<input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
-							'																 </div>\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="content item8" style="width: 10%;">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">Discount</label>\n' +
-							'\n' +
-							'																<input type="text" value="' + total_discount + '" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
-							'																<input type="hidden" value="' + total_discount_old + '" class="total_discount_old">\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div style="width: 7%;" class="content item9">\n' +
-							'\n' +
-							'                       									 	<label class="content-label">€ Total</label>\n' +
-							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-&nbsp;'; } ?>'+
-							'\n' +
-							'																<div class="price res-white">' + price_text + '</div>\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">\n' +
-							'\n' +
-							last_column +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">\n' +
-							'\n' +
-							'																<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" aria-expanded="true" data-toggle="collapse" data-target="#demo' + rowCount + '"></button>\n' +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                            <div style="width: 100%;" id="demo' + rowCount + '" class="item16 collapse">\n' +
-							'\n' +
-							'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
-							'\n' +
-							'																	<label>Discount %</label>\n' +
-							'\n' +
-							'																	<input value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" name="discount[]">\n' +
-							'\n' +
-							'																</div>\n' +
-							'\n' +
-							'                                                            </div>\n' +
-							'\n' +
-							'                                                        </div>');
-
-					var last_row = $('#products_table .content-div:last');
-
-					autocomplete(last_row.find("#productInput")[0], product_titles, product_ids, model_ids, color_ids, supplier_ids);
-
-					if (features) {
-
-						$('#menu1').append('<div data-id="' + rowCount + '" style="margin: 0;" class="form-group">\n' + features + '</div>');
-
-						if (childsafe == 1) {
-							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').attr('name', 'childsafe_option' + rowCount);
-							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe_diff').attr('name', 'childsafe_diff' + rowCount);
-							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').attr('name', 'childsafe_answer' + rowCount);
-							$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_x').val(childsafe_x);
-							$('#menu1').find(`[data-id='${rowCount}']`).find('#childsafe_y').val(childsafe_y);
-							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-select').val(childsafe_question);
-							$('#menu1').find(`[data-id='${rowCount}']`).find('.childsafe-answer').val(childsafe_answer);
-						}
-
-						features_selects.each(function (index, select) {
-
-							$('#menu1').find(`[data-id='${rowCount}']`).find('.feature-select').eq(index).val($(this).val());
-
-							if ($(this).parent().find('.f_id').val() == 0) {
-								$('#myModal').find('.modal-body').append('<div class="sub-tables" data-id="' + rowCount + '">\n' + subs + '</div>');
-							}
-
-						});
-
-						$('#menu1').find(`[data-id='${rowCount}']`).each(function (i, obj) {
-
-							$(obj).find('.ladderband-btn').attr('data-id', rowCount);
-							$(obj).find('.feature-select').attr('name', 'features' + rowCount + '[]');
-							$(obj).find('.f_price').attr('name', 'f_price' + rowCount + '[]');
-							$(obj).find('.f_id').attr('name', 'f_id' + rowCount + '[]');
-							$(obj).find('.f_area').attr('name', 'f_area' + rowCount + '[]');
-							$(obj).find('.sub_feature').attr('name', 'sub_feature' + rowCount + '[]');
-							$(obj).find('#childsafe_x').attr('name', 'childsafe_x' + rowCount);
-							$(obj).find('#childsafe_y').attr('name', 'childsafe_y' + rowCount);
-
-						});
-
-						$('#myModal').find('.modal-body').find(`[data-id='${rowCount}']`).each(function (i, obj) {
-
-							$(obj).find('.sizeA').each(function (b, obj1) {
-
-								if ($(this).val() == 1) {
-									$(this).prev('input').prop("checked", true);
-								}
-
-							});
-
-							$(obj).find('.sizeB').each(function (c, obj2) {
-
-								if ($(this).val() == 1) {
-									$(this).prev('input').prop("checked", true);
-								}
-
-							});
-
-							$(obj).find('.sub_product_id').attr('name', 'sub_product_id' + rowCount + '[]');
-							$(obj).find('.sizeA').attr('name', 'sizeA' + rowCount + '[]');
-							$(obj).find('.sizeB').attr('name', 'sizeB' + rowCount + '[]');
-							$(obj).find('.cus_radio').attr('name', 'cus_radio' + rowCount + '[]');
-							$(obj).find('.cus_radio').attr('data-id', rowCount);
-
-						});
-
-					}
-
-					if(menu2)
-					{
-						$('#menu2').append('<section class="attributes_table" data-id="'+rowCount+'" style="width: 100%;"></section>\n');
-						menu2.appendTo(`#menu2 .attributes_table[data-id='${rowCount}']`);
-
-						$('#menu2').find(`.attributes_table[data-id='${rowCount}']`).each(function (i, obj) {
-
-							$(obj).find('.calculator_row').attr('name', 'calculator_row' + rowCount + '[]');
-							$(obj).find('.attribute_description').attr('name', 'attribute_description' + rowCount + '[]');
-							$(obj).find('.width-box').find('.width').attr('name', 'width' + rowCount + '[]');
-							$(obj).find('.width-box').find('.measure-unit').attr('name', 'width_unit' + rowCount + '[]');
-							$(obj).find('.height-box').find('.height').attr('name', 'height' + rowCount + '[]');
-							$(obj).find('.height-box').find('.measure-unit').attr('name', 'height_unit' + rowCount + '[]');
-							$(obj).find('.cutting_lose_percentage').attr('name', 'cutting_lose_percentage' + rowCount + '[]');
-							$(obj).find('.total_boxes').attr('name', 'total_boxes' + rowCount + '[]');
-							$(obj).find('.box_quantity_supplier').attr('name', 'box_quantity_supplier' + rowCount + '[]');
-							$(obj).find('.box_quantity').attr('name', 'box_quantity' + rowCount + '[]');
-							$(obj).find('.max_width').attr('name', 'max_width' + rowCount + '[]');
-							$(obj).find('.turn').attr('name', 'turn' + rowCount + '[]');
-
-						});
-
-						turns.each(function (index, select) {
-
-							$('#menu2').find(`.attributes_table[data-id='${rowCount}']`).find('.turn').eq(index).val($(this).val());
-
-						});
-					}
-
-					focus_row(last_row);
-
-				}
-
-				calculate_total();
-			}
-
 			function add_attribute_row(copy = false, product_row, menu2 = null, turn = 0, row_id = null) {
 
 				var check_length = $(`.attributes_table[data-id='${product_row}']`).find('.attribute-content-div[data-main-id="0"]').length;
@@ -3691,7 +2698,7 @@
 				var quote_request_id = $('#quote_request_id').val();
 				var flag = 0;
 
-				if(quote_request_id == '')
+				if(quote_request_id != '')
 				{
 					var customer = $('.customer-select').val();
 					if (!customer) {

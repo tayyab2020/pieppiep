@@ -1308,7 +1308,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                             @endif
 
-                            @if(auth()->user()->can('handyman-quotation-requests'))
+                            @if(auth()->user()->role_id == 2 && auth()->user()->can('handyman-quotation-requests'))
 
                                 <li><a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotation Requests')}}</a></li>
 

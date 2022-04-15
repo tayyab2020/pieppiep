@@ -133,7 +133,7 @@ class UserController extends Controller
 
         }
 
-        $this->gs = Generalsetting::findOrFail(1);
+        $this->gs = Generalsetting::where('backend',1)->first();
     }
 
     public function SelectQuotationsType()
@@ -609,7 +609,7 @@ class UserController extends Controller
         $requests = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('services', 'services.id', '=', 'quotes.quote_service1')->where('quotes.user_id', $user_id)->select('quotes.*', 'categories.cat_name','services.title')->orderBy('quotes.created_at','desc')->get();
 
         foreach ($requests as $key) {
-            $invoices[] = quotation_invoices::where('quote_id', $key->id)->where('approved', 1)->get();
+            $invoices[] = new_quotations::where('quote_request_id', $key->id)->where('approved', 1)->get();
         }
 
 
@@ -1108,9 +1108,9 @@ class UserController extends Controller
         $user_role = $user->role_id;
 
         if ($id) {
-            $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotes.user_id', $user_id)->where('quotes.status', '<', 3)->where('quotation_invoices.quote_id', $id)->where('quotation_invoices.invoice', 0)->where('quotation_invoices.approved', 1)->orderBy('quotation_invoices.created_at', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.commission_percentage', 'quotation_invoices.commission', 'quotation_invoices.total_receive', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.id as invoice_id', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'quotation_invoices.accept_date', 'quotation_invoices.delivery_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+            $invoices = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('quotes.user_id', $user_id)->where('quotes.status', '<', 3)->where('new_quotations.quote_request_id', $id)->where('new_quotations.invoice', 0)->where('new_quotations.approved', 1)->orderBy('new_quotations.created_at', 'desc')->select('quotes.*', 'new_quotations.review_text', 'new_quotations.ask_customization', 'new_quotations.approved', 'new_quotations.accepted', 'new_quotations.id as invoice_id', 'new_quotations.quotation_invoice_number', 'new_quotations.tax_amount as tax', 'new_quotations.subtotal', 'new_quotations.grand_total', 'new_quotations.created_at as invoice_date', 'new_quotations.accept_date', 'new_quotations.delivery_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
         } else {
-            $invoices = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotes.user_id', $user_id)->where('quotes.status', '<', 3)->where('quotation_invoices.invoice', 0)->where('quotation_invoices.approved', 1)->orderBy('quotation_invoices.created_at', 'desc')->select('quotes.*', 'quotation_invoices.review_text', 'quotation_invoices.commission_percentage', 'quotation_invoices.commission', 'quotation_invoices.total_receive', 'quotation_invoices.ask_customization', 'quotation_invoices.approved', 'quotation_invoices.accepted', 'quotation_invoices.id as invoice_id', 'quotation_invoices.quotation_invoice_number', 'quotation_invoices.tax', 'quotation_invoices.subtotal', 'quotation_invoices.grand_total', 'quotation_invoices.created_at as invoice_date', 'quotation_invoices.accept_date', 'quotation_invoices.delivery_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+            $invoices = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('quotes.user_id', $user_id)->where('quotes.status', '<', 3)->where('new_quotations.invoice', 0)->where('new_quotations.approved', 1)->orderBy('new_quotations.created_at', 'desc')->select('quotes.*', 'new_quotations.review_text', 'new_quotations.ask_customization', 'new_quotations.approved', 'new_quotations.accepted', 'new_quotations.id as invoice_id', 'new_quotations.quotation_invoice_number', 'new_quotations.tax_amount as tax', 'new_quotations.subtotal', 'new_quotations.grand_total', 'new_quotations.created_at as invoice_date', 'new_quotations.accept_date', 'new_quotations.delivery_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
         }
 
         return view('user.client_quote_invoices', compact('invoices'));
@@ -1159,7 +1159,7 @@ class UserController extends Controller
 
     public function QuoteRequest($id)
     {
-        $request = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands', 'brands.id', '=', 'quotes.quote_brand')->leftjoin('models', 'models.id', '=', 'quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->where('quotes.id', $id)->select('quotes.*', 'categories.cat_name','services.title','brands.cat_name as brand_name','models.cat_name as model_name')->withCount('quotations')->first();
+        $request = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands', 'brands.id', '=', 'quotes.quote_brand')->leftjoin('models', 'models.id', '=', 'quotes.quote_type')->leftjoin('product_models', 'product_models.id', '=', 'quotes.quote_model')->leftjoin('colors', 'colors.id', '=', 'quotes.quote_color')->leftjoin('services','services.id','=','quotes.quote_service1')->where('quotes.id', $id)->select('quotes.*', 'categories.cat_name','services.title','brands.cat_name as brand_name','product_models.model as model_name','models.cat_name as type_title','colors.title as color')->withCount('quotations')->first();
 
         $q_a = requests_q_a::where('request_id', $id)->get();
 
@@ -1172,7 +1172,7 @@ class UserController extends Controller
         $user_id = $user->id;
         $role = $user->role_id;
 
-        $quote = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('models','models.id','=','quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->where('quotes.id', $id)->where('quotes.user_id', $user_id)->select('quotes.*', 'categories.cat_name','services.title','brands.cat_name as brand_name','models.cat_name as model_name')->first();
+        $quote = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('models','models.id','=','quotes.quote_type')->leftjoin('product_models','product_models.id','=','quotes.quote_model')->leftjoin('colors','colors.id','=','quotes.quote_color')->leftjoin('services','services.id','=','quotes.quote_service1')->where('quotes.id', $id)->where('quotes.user_id', $user_id)->select('quotes.*', 'categories.cat_name','services.title','brands.cat_name as brand_name','product_models.model as model_name','models.cat_name as type_title','colors.title as color')->first();
 
         $q_a = requests_q_a::where('request_id', $id)->get();
 
@@ -1195,7 +1195,7 @@ class UserController extends Controller
 
                 ini_set('max_execution_time', 180);
 
-                $pdf = PDF::loadView('admin.user.pdf_quote', compact('quote', 'q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+                $pdf = PDF::loadView('admin.user.pdf_quote', compact('quote', 'q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
                 if($role == 3)
                 {
@@ -1505,14 +1505,14 @@ class UserController extends Controller
 
         ini_set('max_execution_time', 180);
 
-        $pdf = PDF::loadView('user.pdf_quotation', compact('delivery_date','quote', 'type', 'invoice', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+        $pdf = PDF::loadView('user.pdf_quotation', compact('delivery_date','quote', 'type', 'invoice', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
         $pdf->save($file);
 
         $handyman_role = 1;
 
         $file1 = public_path() . '/assets/quotationsPDF/HandymanQuotations/' . $filename;
 
-        $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','delivery_date','quote', 'type', 'invoice', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+        $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','delivery_date','quote', 'type', 'invoice', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
         $pdf->save($file1);
 
         quotation_invoices::where('id', $request->invoice_id)->update(['ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date]);
@@ -1527,13 +1527,13 @@ class UserController extends Controller
 
         ini_set('max_execution_time', 180);
 
-        $pdf = PDF::loadView('admin.user.pdf_quote',compact('delivery_date','quote','q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+        $pdf = PDF::loadView('admin.user.pdf_quote',compact('delivery_date','quote','q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
         $pdf->save(public_path().'/assets/adminQuotesPDF/'.$filename);
 
         $role = 2;
 
-        $pdf = PDF::loadView('admin.user.pdf_quote',compact('delivery_date','quote','q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+        $pdf = PDF::loadView('admin.user.pdf_quote',compact('delivery_date','quote','q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
         $pdf->save(public_path().'/assets/quotesPDF/'.$filename);
 
@@ -2816,7 +2816,7 @@ class UserController extends Controller
 
                     ini_set('max_execution_time', 180);
 
-                    $pdf = PDF::loadView('admin.user.pdf_quote', compact('quote', 'q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+                    $pdf = PDF::loadView('admin.user.pdf_quote', compact('quote', 'q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
                     $pdf->save(public_path() . '/assets/quotesPDF/' . $filename);
                 }
@@ -2997,20 +2997,78 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
 
-        $settings = Generalsetting::findOrFail(1);
+        $check = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.id', $id)->where('quotes.user_id', $user_id)->first();
 
-        $vat_percentage = $settings->vat;
+        if($check)
+        {
+            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->select('new_quotations.*','new_quotations_data.item_id','new_quotations_data.service_id','new_quotations.delivery_date as retailer_delivery_date','new_quotations.installation_date as retailer_installation_date','new_quotations.id as invoice_id','new_quotations_data.box_quantity','new_quotations_data.measure','new_quotations_data.max_width','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+                ->with(['features' => function($query)
+                {
+                    $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
+                        /*->where('new_quotations_features.sub_feature',0)*/
+                        ->select('new_quotations_features.*','features.title','features.comment_box');
+                }])
+                ->with(['sub_features' => function($query)
+                {
+                    $query->leftjoin('product_features','product_features.id','=','new_quotations_features.feature_id')
+                        /*->where('new_quotations_features.sub_feature',1)*/
+                        ->select('new_quotations_features.*','product_features.title');
+                }])->with('calculations')->get();
 
-        $quotation = quotation_invoices::leftjoin('quotation_invoices_data', 'quotation_invoices_data.quotation_id', '=', 'quotation_invoices.id')->leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->where('quotation_invoices.id', $id)->where('quotes.user_id', $user_id)->select('quotation_invoices.*', 'quotes.id as quote_id', 'quotes.quote_zipcode', 'quotes.quote_postcode', 'quotes.quote_city', 'quotes.quote_number', 'quotes.created_at as quote_date', 'quotation_invoices_data.id as data_id', 'quotation_invoices_data.product_title', 'quotation_invoices_data.s_i_id', 'quotation_invoices_data.item', 'quotation_invoices_data.service', 'quotation_invoices_data.brand', 'quotation_invoices_data.model', 'quotation_invoices_data.rate', 'quotation_invoices_data.qty', 'quotation_invoices_data.description as data_description', 'quotation_invoices_data.estimated_date', 'quotation_invoices_data.amount')->get();
+            if (!$invoice) {
+                return redirect()->back();
+            }
 
-        if (count($quotation) != 0) {
+            $supplier_products = array();
+            $product_titles = array();
+            $item_titles = array();
+            $service_titles = array();
+            $color_titles = array();
+            $model_titles = array();
+            $product_suppliers = array();
+            $sub_products = array();
+            $colors = array();
+            $models = array();
+            $features = array();
+            $sub_features = array();
 
-            return view('user.client_quotation', compact('quotation', 'vat_percentage'));
+            $f = 0;
+            $s = 0;
 
-        } else {
-            return redirect('aanbieder/quotation-requests');
+            foreach ($invoice as $i => $item)
+            {
+                $product_titles[] = product::where('id',$item->product_id)->pluck('title')->first();
+                $item_titles[] = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.id',$item->item_id)->select('items.cat_name','categories.cat_name as category')->first();
+                $service_titles[] = Service::where('id',$item->service_id)->pluck('title')->first();
+                $color_titles[] = colors::where('id',$item->color)->pluck('title')->first();
+                $model_titles[] = product_models::where('id',$item->model_id)->pluck('model')->first();
+                $product_suppliers[] = User::where('id',$item->supplier_id)->first();
+
+                foreach ($item->features as $feature)
+                {
+                    $features[$f] = product_features::leftjoin('model_features','model_features.product_feature_id','=','product_features.id')->where('product_features.product_id',$item->product_id)->where('product_features.heading_id',$feature->feature_id)->where('product_features.sub_feature',0)->where('model_features.model_id',$item->model_id)->where('model_features.linked',1)->select('product_features.*')->get();
+
+                    if($feature->ladderband)
+                    {
+                        $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->select('new_quotations_sub_products.*','product_ladderbands.title','product_ladderbands.code')->get();
+                    }
+
+                    $f = $f + 1;
+                }
+
+                foreach ($item->sub_features as $sub_feature)
+                {
+                    $sub_features[$s] = product_features::where('product_id',$item->product_id)->where('main_id',$sub_feature->feature_id)->get();
+                    $s = $s + 1;
+                }
+            }
+
+            return view('user.client_new_quotation', compact('product_titles','color_titles','model_titles','product_suppliers','features','sub_features','invoice','sub_products'));
+        }
+        else
+        {
+            return redirect()->back();
         }
     }
 
@@ -4001,12 +4059,12 @@ class UserController extends Controller
             if($request->category == 1)
             {
                 $form_type = 1;
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('suppliers','order_numbers','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('suppliers','order_numbers','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             }
             else
             {
                 $form_type = 2;
-                $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             }
             
             $file = public_path() . '/assets/Orders/' . $filename;
@@ -4119,13 +4177,13 @@ class UserController extends Controller
             {
                 $role = 'supplier3';
                 $form_type = 1;
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('supplier_data','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('supplier_data','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             }
             else
             {
                 $role = 'supplier1';
                 $form_type = 2;
-                $pdf = PDF::loadView('user.pdf_new_quotation', compact('supplier_data','form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation', compact('supplier_data','form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request', 'quotation_invoice_number','order_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             }
 
             $pdf->save($file);
@@ -4187,13 +4245,13 @@ class UserController extends Controller
                 {
                     if(!$request->negative_invoice)
                     {
-                        new_invoices::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                        new_invoices::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                     }
                     else
                     {
                         if($request->negative_invoice_id)
                         {
-                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                         }
                     }
                 }
@@ -4231,7 +4289,6 @@ class UserController extends Controller
                         $org_invoice_data = new_invoices::where('id',$request->quotation_id)->first();
                         $org_invoice_data->invoice_number = $invoice_number;
                         $org_invoice_data->negative_invoice = 1;
-                        $org_invoice_data->customer_details = $request->customer;
                         $org_invoice_data->vat_percentage = 21;
                         $org_invoice_data->subtotal = str_replace(',', '.',$request->total_amount);
                         $org_invoice_data->grand_total = str_replace(',', '.',$request->total_amount);
@@ -4239,10 +4296,14 @@ class UserController extends Controller
 
                         if($form_type == 2)
                         {
+                            $org_invoice_data->user_id = $client->user_id;
+                            $org_invoice_data->customer_details = $request->customer;
                             $org_invoice_data->labor_cost_total = str_replace(',', '.',$request->labor_cost_total);
                         }
                         else
                         {
+                            $org_invoice_data->user_id = $request->quote_request_id ? 0 : $client->user_id;
+                            $org_invoice_data->customer_details = $request->quote_request_id ? 0 : $request->customer;
                             $org_invoice_data->labor_cost_total = 0;
                         }
 
@@ -4284,7 +4345,7 @@ class UserController extends Controller
                 }
                 else
                 {
-                    new_quotations::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    new_quotations::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                 }
 
                 $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
@@ -4322,8 +4383,6 @@ class UserController extends Controller
             $invoice->form_type = $form_type;
             $invoice->quotation_invoice_number = $quotation_invoice_number;
             $invoice->creator_id = $user_id;
-            $invoice->user_id = $client->user_id;
-            $invoice->customer_details = $request->customer;
             $invoice->vat_percentage = 21;
             $invoice->subtotal = str_replace(',', '.',$request->total_amount);
             $invoice->grand_total = str_replace(',', '.',$request->total_amount);
@@ -4331,10 +4390,14 @@ class UserController extends Controller
 
             if($form_type == 2)
             {
+                $invoice->user_id = $client->user_id;
+                $invoice->customer_details = $request->customer;
                 $invoice->labor_cost_total = str_replace(',', '.',$request->labor_cost_total);
             }
             else
             {
+                $invoice->user_id = $request->quote_request_id ? 0 : $client->user_id;
+                $invoice->customer_details = $request->quote_request_id ? 0 : $request->customer;
                 $invoice->labor_cost_total = 0;
             }
             
@@ -4343,6 +4406,12 @@ class UserController extends Controller
             $invoice->delivery_date = $request->retailer_delivery_date;
             $invoice->installation_date = $request->installation_date;
             $invoice->save();
+
+            if($form_type == 1 && $request->quote_request_id)
+            {
+                $quote = quotes::where('id', $request->quote_request_id)->update(['status' => 1]);
+            }
+            
         }
 
         $order_numbers = array();
@@ -5012,7 +5081,7 @@ class UserController extends Controller
 
             if($request->quotation_id)
             {
-                if($ask)
+                if($ask && !$request->quote_request_id)
                 {
                     \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number) {
                         $message->to($client->email)
@@ -5038,7 +5107,7 @@ class UserController extends Controller
             $date = $invoice->created_at;
             $role = 'retailer';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             $file = public_path() . '/assets/newQuotations/' . $filename;
             $pdf->save($file);
 
@@ -5073,7 +5142,7 @@ class UserController extends Controller
 
             if(!$request->negative_invoice)
             {
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
                 $file = public_path() . '/assets/newInvoices/' . $filename;
                 $pdf->save($file);
 
@@ -5081,7 +5150,7 @@ class UserController extends Controller
             }
             else
             {
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
                 $file = public_path() . '/assets/newNegativeInvoices/' . $filename;
                 $pdf->save($file);
 
@@ -5258,7 +5327,7 @@ class UserController extends Controller
 
                 ini_set('max_execution_time', 180);
 
-                $pdf = PDF::loadView('user.pdf_quotation', compact('quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+                $pdf = PDF::loadView('user.pdf_quotation', compact('quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
                 $pdf->save(public_path() . '/assets/quotationsPDF/' . $filename);
             }
@@ -5267,7 +5336,7 @@ class UserController extends Controller
 
             if (!file_exists($file1)) {
 
-                $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+                $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
                 $pdf->save(public_path() . '/assets/quotationsPDF/HandymanQuotations/' . $filename);
             }
@@ -5367,13 +5436,13 @@ class UserController extends Controller
 
             ini_set('max_execution_time', 180);
 
-            $pdf = PDF::loadView('user.pdf_quotation', compact('quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_quotation', compact('quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
             $pdf->save(public_path() . '/assets/quotationsPDF/' . $filename);
 
             $file1 = public_path() . '/assets/quotationsPDF/HandymanQuotations/' . $filename;
 
-            $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
             $pdf->save(public_path() . '/assets/quotationsPDF/HandymanQuotations/' . $filename);
 
@@ -5478,13 +5547,13 @@ class UserController extends Controller
 
             ini_set('max_execution_time', 180);
 
-            $pdf = PDF::loadView('user.pdf_quotation', compact('quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_quotation', compact('quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
             $pdf->save(public_path() . '/assets/quotationsPDF/' . $filename);
 
             $file1 = public_path() . '/assets/quotationsPDF/HandymanQuotations/' . $filename;
 
-            $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','quote', 'type', 'request', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
             $pdf->save(public_path() . '/assets/quotationsPDF/HandymanQuotations/' . $filename);
 
@@ -6130,7 +6199,7 @@ class UserController extends Controller
             $role = 'invoice';
             $form_type = $request->form_type;
 
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             $pdf->save($file);
 
             $counter_invoice = $counter_invoice + 1;
@@ -6248,7 +6317,7 @@ class UserController extends Controller
 
                 $date = $invoice->created_at;
 
-                $pdf = PDF::loadView('user.pdf_custom_quotation', compact('date','client', 'user', 'type', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+                $pdf = PDF::loadView('user.pdf_custom_quotation', compact('date','client', 'user', 'type', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
                 $pdf->save(public_path() . '/assets/customQuotations/' . $filename);
             }
@@ -6354,7 +6423,7 @@ class UserController extends Controller
 
                 $date = $invoice->created_at;
 
-                $pdf = PDF::loadView('user.pdf_custom_quotation', compact('date','client', 'user', 'type', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+                $pdf = PDF::loadView('user.pdf_custom_quotation', compact('date','client', 'user', 'type', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
                 $pdf->save(public_path() . '/assets/customQuotations/' . $filename);
             }
@@ -6471,7 +6540,7 @@ class UserController extends Controller
 
             $date = $quotation->created_at;
 
-            $pdf = PDF::loadView('user.pdf_custom_quotation', compact('date','client', 'user', 'type', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_custom_quotation', compact('date','client', 'user', 'type', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
             $pdf->save(public_path() . '/assets/customQuotations/' . $filename);
 
@@ -6587,7 +6656,7 @@ class UserController extends Controller
 
             $date = $quotation->created_at;
 
-            $pdf = PDF::loadView('user.pdf_custom_quotation', compact('date','client', 'user', 'type', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_custom_quotation', compact('date','client', 'user', 'type', 'request', 'quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
 
             $pdf->save(public_path() . '/assets/customQuotations/' . $filename);
 

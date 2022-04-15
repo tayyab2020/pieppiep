@@ -64,7 +64,7 @@
                                             </div>
                                         </div>
 
-                                            @if($request->cat_name != '' && $request->brand_name != '' && $request->model_name != '')
+                                            @if($request->cat_name != '' && $request->brand_name != '' && $request->model_name != '' && $request->type_title != '' && $request->color != '')
 
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Category')}}* </label>
@@ -88,9 +88,16 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Model Number')}}</label>
+                                                    <label class="control-label col-sm-4" for="blood_group_display_name">Type* </label>
                                                     <div class="col-sm-6">
-                                                        <p style="padding: 10px;" class="form-control">{{$request->quote_model_number}}</p>
+                                                        <p style="padding: 10px;" class="form-control">{{$request->type_title}}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Color')}}* </label>
+                                                    <div class="col-sm-6">
+                                                        <p style="padding: 10px;" class="form-control">{{$request->color}}</p>
                                                     </div>
                                                 </div>
 

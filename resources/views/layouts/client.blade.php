@@ -741,7 +741,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             </li>--}}
 
             <li>
-                <a href="{{route('client-new-quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span>New Quotations</span></a>
+                <a href="{{route('client-new-quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span>Direct Quotations</span></a>
             </li>
 
             <li>
@@ -749,7 +749,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             </li>
 
             <li>
-                <a href="{{route('client-quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span>{{__('text.Quotations')}}</span></a>
+                <a href="{{route('client-quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span>Indirect Quotations</span></a>
             </li>
 
             <li>

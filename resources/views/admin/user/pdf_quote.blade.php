@@ -32,7 +32,7 @@
                                     <div style="margin-top: 20px;">
 
                                         <div style="float: left;">
-                                            <p class="para">{{$gs1->site.'assets/images/'.$gs1->logo}} <br> TEL: {{$gs1->phone}}<br>BTW: NL001973883B94<br>IBAN: NL87ABNA0825957680<br>KvK-nummer: 70462623</p>
+                                            <p class="para">TEL: {{$gs1->phone}}<br>BTW: NL001973883B94<br>IBAN: NL87ABNA0825957680<br>KvK-nummer: 70462623</p>
                                         </div>
 
                                         <div style="float: right;">
@@ -105,7 +105,7 @@
                                         <tbody>
 
                                             <tr>
-                                                @if($quote->cat_name != '' && $quote->brand_name != '' && $quote->model_name != '')
+                                                @if($quote->cat_name != '' && $quote->brand_name != '' && $quote->model_name != '' && $quote->type_title != '' && $quote->color != '')
 
                                                     <td>{{$quote->cat_name}}</td>
                                                     <td>{{$quote->brand_name}}</td>

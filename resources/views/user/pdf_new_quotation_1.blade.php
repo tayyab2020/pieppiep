@@ -15,24 +15,43 @@
 
                             <?php
                             $address = explode(',', $user->address); array_pop($address); array_pop($address); $address = implode(",",$address);
-                            $client_address = explode(',', $client->address); array_pop($client_address); array_pop($client_address); $client_address = implode(",",$client_address);
+                            
+                            if($client)
+                            {
+                                $client_address = explode(',', $client->address); array_pop($client_address); array_pop($client_address); $client_address = implode(",",$client_address);
+                            }
+                            
                             $date = date('d-m-Y',strtotime($date));
                             ?>
 
                                 <div class="row p-5">
 
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <img class="img-fluid" src="{{ $user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg') }}" style="width:40%;height:100%;margin-bottom: 30px;">
+                                        <img class="img-fluid" src="{{ $client ? ($user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg')) : $gs1->site.'assets/images/'.$gs1->logo }}" style="width:40%;height:100%;margin-bottom: 30px;">
                                     </div>
 
-                                    <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
-                                        {{--<p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>--}}
-                                        <p style="margin: 0">{{$user->company_name}}</p>
-                                        <p style="margin: 0">{{$address}}</p>
-                                        <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
-                                        <p style="margin: 0">TEL: {{$user->phone}}</p>
-                                        <p style="margin: 0">{{$user->email}}</p>
-                                    </div>
+                                    @if($client)
+
+                                        <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
+                                            {{--<p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>--}}
+                                            <p style="margin: 0">{{$user->company_name}}</p>
+                                            <p style="margin: 0">{{$address}}</p>
+                                            <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
+                                            <p style="margin: 0">TEL: {{$user->phone}}</p>
+                                            <p style="margin: 0">{{$user->email}}</p>
+                                        </div>
+
+                                    @else
+
+                                        <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
+                                            <p style="margin: 0">{!! $gs1->street !!}</p>
+                                            <p style="margin: 0">BTW: NL001973883B94</p>
+                                            <p style="margin: 0">TEL: {{$gs1->phone}}</p>
+                                            <p style="margin: 0">IBAN: NL87ABNA0825957680</p>
+                                            <p style="margin: 0">KvK-nummer: 70462623</p>
+                                        </div>
+
+                                    @endif
 
                                 </div>
 
@@ -40,13 +59,17 @@
 
                                     <div class="col-md-6 col-sm-6 col-xs-12">
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">Customer Details</p>
-                                    <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
-                                    <p style="font-size: 18px;" class="mb-1 m-rest">{{$client_address}}</p>
-                                    <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
-                                    <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->email}}</p>
-                                    <br>
-                                    <br>
+                                    @if($client)
+
+                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">Customer Details</p>
+                                        <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
+                                        <p style="font-size: 18px;" class="mb-1 m-rest">{{$client_address}}</p>
+                                        <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
+                                        <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->email}}</p>
+                                        <br>
+                                        <br>
+
+                                    @endif
 
                                     <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = ltrim(implode(',', $order_numbers_string), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
 

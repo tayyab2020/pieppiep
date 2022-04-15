@@ -350,6 +350,10 @@
 
                                                                                 <span class="btn btn-success">Order Processing</span>
 
+                                                                            @elseif($key->quote_request_id)
+
+                                                                                <span class="btn btn-info">{{__('text.Waiting For Approval')}}</span>
+
                                                                             @else
 
                                                                                 <span class="btn btn-warning">{{__('text.Pending')}}</span>
@@ -380,7 +384,11 @@
 
                                                                                 @if(!$key->invoice)
 
-                                                                                    <li><a href="{{ url('/aanbieder/create-new-invoice/'.$key->invoice_id) }}">Create Invoice</a></li>
+                                                                                    @if(!$key->quote_request_id || ($key->status > 1))
+
+                                                                                        <li><a href="{{ url('/aanbieder/create-new-invoice/'.$key->invoice_id) }}">Create Invoice</a></li>
+
+                                                                                    @endif
 
                                                                                 @else
 
@@ -401,7 +409,7 @@
 
                                                                                 @endif
 
-                                                                                @if($key->status == 1)
+                                                                                @if($key->status == 1 && !$key->quote_request_id)
 
                                                                                     <li><a href="{{ url('/aanbieder/accept-new-quotation/'.$key->invoice_id) }}">{{__('text.Accept')}}</a></li>
 
@@ -509,7 +517,7 @@
 
                                                                             @endif
 
-                                                                            @if(!$key->approved)
+                                                                            @if(!$key->approved && !$key->quote_request_id)
 
                                                                                 <li><a class="send-new-quotation" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Send Quotation')}}</a></li>
 

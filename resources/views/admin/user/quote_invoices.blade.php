@@ -75,7 +75,7 @@
 
                                                             <td>{{$key->invoice_id}}</td>
 
-                                                            <td style="outline: none;">@if(Route::currentRouteName() == 'handyman-quotations') <input @if($key->approved || $key->status >= 2) disabled @endif style="margin: 10px 10px;position: relative;top: 2px;" type="checkbox" name="action[]" value="{{$key->invoice_id}}" class="action"> @endif <a href="{{ url('/logstof/view-quotation/'.$key->invoice_id) }}">@if(Route::currentRouteName() == 'handyman-quotations') QUO# @else INV# @endif {{$key->quotation_invoice_number}}</a></td>
+                                                            <td style="outline: none;">@if(Route::currentRouteName() == 'handyman-quotations') <input @if($key->approved || $key->status >= 2) disabled @endif style="margin: 10px 10px;position: relative;top: 2px;" type="checkbox" name="action[]" value="{{$key->invoice_id}}" class="action"> @endif <a href="{{ route('admin-view-new-quotation', ['id' => $key->invoice_id]) }}">@if(Route::currentRouteName() == 'handyman-quotations') QUO# @else INV# @endif {{$key->quotation_invoice_number}}</a></td>
 
                                                             <?php $requested_quote_number = $key->quote_number; ?>
 
@@ -184,7 +184,7 @@
                                                                     <button style="outline: none;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Action
                                                                         <span class="caret"></span></button>
                                                                     <ul class="dropdown-menu">
-                                                                        <li><a href="{{ url('/logstof/view-quotation/'.$key->invoice_id) }}">View</a></li>
+                                                                        <li><a href="{{ route('admin-view-new-quotation', ['id' => $key->invoice_id]) }}">View</a></li>
                                                                         <li><a href="{{ url('/logstof/view-quote-request/'.$key->id) }}">View Request</a></li>
                                                                         @if(Route::currentRouteName() == 'handyman-commission-invoices')
                                                                             <li><a href="{{ url('/logstof/download-commission-invoice/'.$key->invoice_id) }}">Download PDF</a></li>

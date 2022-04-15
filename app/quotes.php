@@ -10,6 +10,6 @@ class quotes extends Model
 
     public function quotations()
     {
-        return $this->hasMany(quotation_invoices::class, 'quote_id');
+        return $this->hasMany(new_quotations::class, 'quote_request_id');
     }
 }

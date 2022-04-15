@@ -53,7 +53,7 @@ return [
             'strict' => true,
             'engine' => null,
             'modes'  => [
-                'ONLY_FULL_GROUP_BY',
+                //'ONLY_FULL_GROUP_BY', // Disable this to allow grouping by one column
                 'STRICT_TRANS_TABLES',
                 'NO_ZERO_IN_DATE',
                 'NO_ZERO_DATE',
