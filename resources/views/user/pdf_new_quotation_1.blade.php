@@ -23,7 +23,25 @@
                             
                             $date = date('d-m-Y',strtotime($date));
 
-                            $url = isset($_SERVER["REMOTE_ADDR"]) ? $gs1->site.'assets/images/'.$gs1->logo : '';
+                            if(isset($_SERVER["REMOTE_ADDR"]))
+                            {
+                                $whitelist = array(
+                                    '127.0.0.1',
+                                    '::1'
+                                );
+
+                                if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
+                                    $url = $gs1->site.'assets/images/'.$gs1->logo;
+                                }
+                                else
+                                {
+                                    $url = '';
+                                }
+                            }
+                            else
+                            {
+                                $url = '';
+                            }
 
                             ?>
 
