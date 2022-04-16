@@ -1166,11 +1166,14 @@ class UserController extends Controller
         return view('user.client_quote_request', compact('request',  'q_a'));
     }
 
-    public function DownloadQuoteRequest($id)
+    public function DownloadQuoteRequest($id,$user_id = NULL,$role = NULL,$type = NULL)
     {
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $role = $user->role_id;
+        if($type != 'api')
+        {
+            $user = Auth::guard('user')->user();
+            $user_id = $user->id;
+            $role = $user->role_id;
+        }
 
         $quote = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('models','models.id','=','quotes.quote_type')->leftjoin('product_models','product_models.id','=','quotes.quote_model')->leftjoin('colors','colors.id','=','quotes.quote_color')->leftjoin('services','services.id','=','quotes.quote_service1')->where('quotes.id', $id)->where('quotes.user_id', $user_id)->select('quotes.*', 'categories.cat_name','services.title','brands.cat_name as brand_name','product_models.model as model_name','models.cat_name as type_title','colors.title as color')->first();
 
@@ -1207,17 +1210,39 @@ class UserController extends Controller
                 }
             }
 
-            if($role == 3)
+            if($type != 'api')
             {
-                return response()->download(public_path("assets/adminQuotesPDF/{$filename}"));
+                if($role == 3)
+                {
+                    return response()->download(public_path("assets/adminQuotesPDF/{$filename}"));
+                }
+                else
+                {
+                    return response()->download(public_path("assets/quotesPDF/{$filename}"));
+                }
             }
             else
             {
-                return response()->download(public_path("assets/quotesPDF/{$filename}"));
+                if($role == 3)
+                {
+                    return public_path() . '/assets/adminQuotesPDF/' . $filename;
+                }
+                else
+                {
+                    return public_path() . '/assets/quotesPDF/' . $filename;
+                }
             }
 
         } else {
-            return redirect('aanbieder/quotation-requests');
+
+            if($type != 'api')
+            {
+                return redirect('aanbieder/quotation-requests');
+            }
+            else
+            {
+                return 'Invalid';
+            }
         }
     }
 
@@ -1461,18 +1486,15 @@ class UserController extends Controller
     }
 
 
-    public function AcceptQuotation(Request $request)
+    public function AcceptQuotation($request,$user_id)
     {
+        $user = User::where('id',$user_id)->first();
         $now = date('d-m-Y H:i:s');
         $time = strtotime($now);
         $time = date('H:i:s',$time);
         $delivery_date = $request->delivery_date . ' ' . $time;
 
-        $user = Auth::guard('user')->user();
-        $user_id = $user->id;
-        $user_role = $user->role_id;
-
-        $invoice = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('quotation_invoices_data', 'quotation_invoices_data.quotation_id', '=', 'quotation_invoices.id')->leftjoin('users','users.id','=','quotation_invoices.handyman_id')->where('quotation_invoices.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('quotation_invoices_data.*', 'quotation_invoices.quote_id','quotation_invoices.description as other_info', 'quotation_invoices.vat_percentage', 'quotation_invoices.tax', 'quotation_invoices.subtotal as sub_total', 'quotation_invoices.grand_total', 'quotation_invoices.quotation_invoice_number', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.subtotal as sub_total', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
         if (count($invoice) == 0) {
             return redirect()->back();
@@ -1492,30 +1514,11 @@ class UserController extends Controller
             quotes::where('id', $invoice[0]->quote_id)->update(['status' => 2, 'quote_delivery' => $delivery_date]);
         }
 
-        $quote = quotes::leftjoin('categories','categories.id','=','quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('models','models.id','=','quotes.quote_model')->leftjoin('services','services.id','=','quotes.quote_service1')->leftjoin('users','users.id','=','quotes.user_id')->where('quotes.id',$invoice[0]->quote_id)->select('quotes.*','categories.cat_name','services.title','brands.cat_name as brand_name','models.cat_name as model_name','users.postcode','users.city','users.address')->first();
+        $quote = quotes::leftjoin('categories','categories.id','=','quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('product_models','product_models.id','=','quotes.quote_model')->leftjoin('models','models.id','=','quotes.quote_type')->leftjoin('colors','colors.id','=','quotes.quote_color')->leftjoin('services','services.id','=','quotes.quote_service1')->leftjoin('users','users.id','=','quotes.user_id')->where('quotes.id',$invoice[0]->quote_id)->select('quotes.*','categories.cat_name','services.title','brands.cat_name as brand_name','product_models.model as model_name','models.cat_name as type_title','colors.title as color','users.postcode','users.city','users.address')->first();
 
         $quotation_invoice_number = $invoice[0]->quotation_invoice_number;
-        $requested_quote_number = $quote->quote_number;
 
-        $filename = $quotation_invoice_number . '.pdf';
-
-        $file = public_path() . '/assets/quotationsPDF/' . $filename;
-
-        $type = 'delivery-address-edit';
-
-        ini_set('max_execution_time', 180);
-
-        $pdf = PDF::loadView('user.pdf_quotation', compact('delivery_date','quote', 'type', 'invoice', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
-        $pdf->save($file);
-
-        $handyman_role = 1;
-
-        $file1 = public_path() . '/assets/quotationsPDF/HandymanQuotations/' . $filename;
-
-        $pdf = PDF::loadView('user.pdf_quotation', compact('handyman_role','delivery_date','quote', 'type', 'invoice', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
-        $pdf->save($file1);
-
-        quotation_invoices::where('id', $request->invoice_id)->update(['ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date]);
+        new_quotations::where('id', $request->invoice_id)->update(['ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date]);
 
         $q_a = requests_q_a::where('request_id',$quote->id)->get();
 
@@ -1537,7 +1540,7 @@ class UserController extends Controller
 
         $pdf->save(public_path().'/assets/quotesPDF/'.$filename);
 
-        $handyman_email = $invoice[0]->email;
+        $retailer_email = $invoice[0]->email;
         $user_name = $invoice[0]->name;
 
         $link = url('/') . '/aanbieder/dashboard';
@@ -1551,8 +1554,8 @@ class UserController extends Controller
             $msg = "Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice[0]->quotation_invoice_number . "<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
         }
 
-        \Mail::send(array(), array(), function ($message) use ($msg, $handyman_email, $user_name, $invoice, $user) {
-            $message->to($handyman_email)
+        \Mail::send(array(), array(), function ($message) use ($msg, $retailer_email, $user_name, $invoice, $user) {
+            $message->to($retailer_email)
                 ->from('info@vloerofferte.nl')
                 ->subject(__('text.Quotation Accepted!'))
                 ->setBody($msg, 'text/html');
@@ -1568,9 +1571,7 @@ class UserController extends Controller
                 ->setBody("A quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by Mr/Mrs " . $user->name . "<br>Handyman: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
 
-        Session::flash('success', __('text.Quotation accepted successfully!'));
-
-        return redirect()->back();
+        return 'true';
     }
 
 

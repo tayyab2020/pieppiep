@@ -176,11 +176,7 @@
 
                                                                                     @if($invoices[$i]->ask_customization)
 
-                                                                                        @if(auth()->user()->can('edit-handyman-quotation'))
-
-                                                                                            <li><a href="{{ url('/aanbieder/bewerk-offerte/'.$invoices[$i]->id) }}">{{__('text.Edit Quotation')}}</a></li>
-
-                                                                                        @endif
+                                                                                        <li><a onclick="ask(this)" data-text="{{$invoices[$i]->review_text}}" href="javascript:void(0)">{{__('text.Review Reason')}}</a></li>
 
                                                                                     @endif
 
@@ -212,6 +208,31 @@
                 </div>
                 <!-- Ending of Dashboard data-table area -->
             </div>
+        </div>
+    </div>
+
+    <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button style="font-size: 32px;background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 style="margin: 10px 0;" id="myModalLabel">{{__('text.Review Reason')}}</h3>
+                    </div>
+
+                    <div class="modal-body" id="myWizard">
+
+                        <textarea rows="5" style="resize: vertical;" type="text" name="review_text" id="review_text" class="form-control" readonly autocomplete="off"></textarea>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" aria-label="Close" style="border: 0;outline: none;background-color: #e5e5e5 !important;color: black !important;" class="btn back">{{__('text.Close')}}</button>
+                    </div>
+
+                </div>
+
         </div>
     </div>
 
@@ -406,6 +427,7 @@
 @section('scripts')
 
     <script type="text/javascript">
+
         $('#example').DataTable({
             order: [[6, 'desc']],
             "oLanguage": {
@@ -419,6 +441,16 @@
                 "sEmptyTable": '<?php echo __('text.No data available in table'); ?>'
             }
         });
+
+        function ask(e)
+        {
+            var text = $(e).data('text');
+
+            $('#review_text').val(text);
+
+            $('#myModal1').modal('toggle');
+        }
+
     </script>
 
 @endsection

@@ -141,6 +141,17 @@ class FrontendController extends Controller
         $this->sl = Sociallink::findOrFail(1);
     }
 
+    public function DownloadQuoteRequestApi(Request $request)
+    {
+        $user_controller = new UserController();
+        return $user_controller->DownloadQuoteRequest($request->id,$request->user_id,$request->user_role,'api');
+    }
+
+    public function AcceptQuotationApi(Request $request)
+    {
+        $user_controller = new UserController();
+        return $user_controller->AcceptQuotation((object)$request['request'],$request['user_id']);
+    }
 
     function getOS()
     {

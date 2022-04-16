@@ -22,12 +22,15 @@
                             }
                             
                             $date = date('d-m-Y',strtotime($date));
+
+                            $url = isset($_SERVER["REMOTE_ADDR"]) ? $gs1->site.'assets/images/'.$gs1->logo : '';
+
                             ?>
 
                                 <div class="row p-5">
 
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <img class="img-fluid" src="{{ $client ? ($user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg')) : $gs1->site.'assets/images/'.$gs1->logo }}" style="width:40%;height:100%;margin-bottom: 30px;">
+                                        <img class="img-fluid" src="{{ $client ? ($user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg')) : $url }}" style="width:40%;height:100%;margin-bottom: 30px;">
                                     </div>
 
                                     @if($client)

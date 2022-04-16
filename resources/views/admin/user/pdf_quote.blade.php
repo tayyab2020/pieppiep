@@ -21,11 +21,31 @@
 
                                 $quote_number = $quote->quote_number;
 
+                                if(isset($_SERVER["REMOTE_ADDR"]))
+                                    {
+                                        $whitelist = array(
+                                            '127.0.0.1',
+                                            '::1'
+                                        );
+
+                                        if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
+                                            $url = $gs1->site.'assets/images/'.$gs1->logo;
+                                        }
+                                        else
+                                        {
+                                            $url = '';
+                                        }
+                                    }
+                                else
+                                    {
+                                        $url = '';
+                                    }
+
                                 ?>
 
                                 <div class="col-md-12 col-sm-12 col-xs-12">
 
-                                    <img class="img-fluid" src="{{$gs1->site.'assets/images/'.$gs1->logo}}" style="width:50%; height:100%;margin-bottom: 30px;">
+                                    <img class="img-fluid" src="{{$url}}" style="width:50%; height:100%;margin-bottom: 30px;">
 
                                     <p class="para" style="margin-top: 20px;margin-left: 26px;">{!! $gs1->street !!}</p>
 

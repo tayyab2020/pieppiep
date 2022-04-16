@@ -12,6 +12,8 @@
 */
 
   Route::get('/','FrontendController@index')->name('front.index');
+  Route::post('/download-quote-request-api','FrontendController@DownloadQuoteRequestApi')->name('download-quote-request-api');
+  Route::post('/accept-quotation-api','FrontendController@AcceptQuotationApi')->name('accept-quotation-api');
   Route::get('/products','FrontendController@products')->name('front.products');
   Route::get('/product/{id}','FrontendController@product')->name('front.product');
   Route::get('/our-services','FrontendController@services')->name('front.services');
