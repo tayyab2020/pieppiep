@@ -566,7 +566,7 @@
                                             <td style="width: 40%;padding: 5px;">
                                                 <div style="display: inline-block;width: 100%;">
                                                     <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Invoer:</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$request->retailer_delivery_date}} @endif</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{date('d-m-Y',strtotime($request->retailer_delivery_date))}} @endif</span>
                                                 </div>
                                             </td>
                                             <td style="width: 60%;padding: 5px;padding-left: 20px;">
@@ -625,7 +625,16 @@
 
                                             <tbody>
 
-                                            <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
+                                            <?php
+
+                                            if(isset($re_edit)) {
+                                                $calculator_row = $calculator_row = $request->calculations[$i];
+                                            }
+                                            else {
+                                                $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row;
+                                            }
+
+                                            ?>
 
                                             @if($request->measure[$i] == 'M1')
 
@@ -657,43 +666,73 @@
 
                                             @foreach($calculator_row as $c => $cal)
 
-                                                <?php
+                                                @if(isset($re_edit))
 
-                                                $description = 'attribute_description'.$request->row_id[$i];
-                                                $width = 'width'.$request->row_id[$i];
-                                                $height = 'height'.$request->row_id[$i];
-                                                $cutting_lose = 'cutting_lose_percentage'.$request->row_id[$i];
-                                                $box_quantity_supplier = 'box_quantity_supplier'.$request->row_id[$i];
-                                                $box_quantity = 'box_quantity'.$request->row_id[$i];
-                                                $total_boxes = 'total_boxes'.$request->row_id[$i];
-                                                $max_width = 'max_width'.$request->row_id[$i];
-                                                $turn = 'turn'.$request->row_id[$i];
+                                                    <tr>
 
-                                                ?>
+                                                        <td>{{$cal->calculator_row}}</td>
+                                                        <td>{{$cal->description}}</td>
+                                                        <td>{{str_replace('.', ',',$cal->width)}}</td>
+                                                        <td>{{str_replace('.', ',',$cal->height)}}</td>
+                                                        <td>{{$cal->cutting_lose}}</td>
 
-                                                <tr>
+                                                        @if($request->measure[$i] == 'M1')
 
-                                                    <td>{{$cal}}</td>
-                                                    <td>{{$request->$description[$c]}}</td>
-                                                    <td>{{$request->$width[$c]}}</td>
-                                                    <td>{{$request->$height[$c]}}</td>
-                                                    <td>{{$request->$cutting_lose[$c]}}</td>
+                                                            <td>{{$cal->turn == 0 ? 'No' : 'Yes'}}</td>
+                                                            <td>{{str_replace('.', ',',$cal->max_width)}}</td>
 
-                                                    @if($request->measure[$i] == 'M1')
+                                                        @else
 
-                                                        <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
-                                                        <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
+                                                            <td>{{str_replace('.', ',',$cal->total_boxes)}}</td>
+                                                            <td>{{str_replace('.', ',',$cal->box_quantity_supplier)}}</td>
 
-                                                    @else
+                                                        @endif
 
-                                                        <td>{{str_replace('.', ',',$request->$total_boxes[$c])}}</td>
-                                                        <td>{{str_replace('.', ',',$request->$box_quantity_supplier[$c])}}</td>
+                                                        <td>{{str_replace('.', ',',$cal->box_quantity)}}</td>
 
-                                                    @endif
+                                                    </tr>
 
-                                                    <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+                                                @else
 
-                                                </tr>
+                                                    <?php
+
+                                                    $description = 'attribute_description'.$request->row_id[$i];
+                                                    $width = 'width'.$request->row_id[$i];
+                                                    $height = 'height'.$request->row_id[$i];
+                                                    $cutting_lose = 'cutting_lose_percentage'.$request->row_id[$i];
+                                                    $box_quantity_supplier = 'box_quantity_supplier'.$request->row_id[$i];
+                                                    $box_quantity = 'box_quantity'.$request->row_id[$i];
+                                                    $total_boxes = 'total_boxes'.$request->row_id[$i];
+                                                    $max_width = 'max_width'.$request->row_id[$i];
+                                                    $turn = 'turn'.$request->row_id[$i];
+
+                                                    ?>
+
+                                                    <tr>
+
+                                                        <td>{{$cal}}</td>
+                                                        <td>{{$request->$description[$c]}}</td>
+                                                        <td>{{$request->$width[$c]}}</td>
+                                                        <td>{{$request->$height[$c]}}</td>
+                                                        <td>{{$request->$cutting_lose[$c]}}</td>
+
+                                                        @if($request->measure[$i] == 'M1')
+
+                                                            <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
+                                                            <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
+
+                                                        @else
+
+                                                            <td>{{str_replace('.', ',',$request->$total_boxes[$c])}}</td>
+                                                            <td>{{str_replace('.', ',',$request->$box_quantity_supplier[$c])}}</td>
+
+                                                        @endif
+
+                                                        <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+
+                                                    </tr>
+
+                                                @endif
 
                                             @endforeach
 
