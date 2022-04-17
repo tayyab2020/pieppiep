@@ -166,7 +166,7 @@
 
                                                                                 @if(auth()->user()->can('create-handyman-invoice'))
 
-                                                                                    <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$invoices[$i]->id) }}">{{__('text.Create Invoice')}}</a></li>
+                                                                                    <!-- <li><a href="{{ url('/aanbieder/opstellen-factuur/'.$invoices[$i]->id) }}">{{__('text.Create Invoice')}}</a></li> -->
 
                                                                                 @endif
 
