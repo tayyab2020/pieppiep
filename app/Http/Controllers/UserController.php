@@ -1225,6 +1225,8 @@ class UserController extends Controller
             {
                 if($role == 3)
                 {
+                    var_dump(public_path() . '/assets/adminQuotesPDF/' . $filename);
+                    exit();
                     return public_path() . '/assets/adminQuotesPDF/' . $filename;
                 }
                 else
