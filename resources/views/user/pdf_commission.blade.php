@@ -53,7 +53,7 @@
                                 <p class="mb-1 m-rest">{{__('text.Created at')}}: {{$date}}</p>
                                 <p class="mb-1 m-rest">{{__('text.Customer Invoice')}}: INV# {{$quotation_invoice_number}}</p>
                                 <p class="mb-1 m-rest">{{__('text.Requested Quote Number')}}: {{$requested_quote_number}}</p>
-                                <p class="mb-1 m-rest">{{__('text.Requested Service')}}: {{$quote->cat_name}}</p>
+                                <p class="mb-1 m-rest">{{__('text.Requested Service')}}: {{$quote->cat_name}} {{$quote->title ? ' ('.$quote->title.')' : null}}</p>
                                 <p class="mb-1 m-rest">{{__('text.Delivery Address')}}: {{$quote->quote_zipcode}}</p>
                             </div>
 
@@ -131,7 +131,7 @@
                                     @foreach($invoice as $key)
 
                                         <tr>
-                                            <td>{{$key->service}} {{$key->brand}} {{$key->model}}</td>
+                                            <td>{{$key->item_id != 0 ? $product_titles[$i] . ' (Item)' : ($key->service_id != 0 ? $product_titles[$i] . ' (Service)' : $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i])}}</td>
                                             <td>{{number_format((float)$key->amount, 2, ',', '.')}}</td>
                                             <td>{{number_format((float)$invoice[0]->qty, 2, ',', '.')}}</td>
                                             <td>{{number_format((float)$invoice[0]->rate, 2, ',', '.')}}</td>

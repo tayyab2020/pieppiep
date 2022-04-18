@@ -1,8 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\colors;
+use App\items;
+use App\new_quotations;
+use App\product;
+use App\product_models;
 use App\quotation_invoices;
 use App\quotes;
+use App\Service;
 use App\User;
 use Illuminate\Http\Request;
 use Mollie\Laravel\Facades\Mollie;
@@ -28,7 +34,7 @@ class MollieQuotationPaymentController extends Controller {
             return;
         }
 
-        $api_key = Generalsetting::findOrFail(1);
+        $api_key = Generalsetting::where('backend',1)->first();
         $sl = Sociallink::findOrFail(1);
 
         $mollie = new \Mollie\Api\MollieApiClient();
@@ -45,35 +51,106 @@ class MollieQuotationPaymentController extends Controller {
             $paid_amount = $data->paid_amount;
             $quotation_invoice_number = $data->quotation_invoice_number;
             $commission_invoice_number = $data->commission_invoice_number;
-            $handyman_dash = url('/').'/aanbieder/dashboard';
+            $retailer_dash = url('/').'/aanbieder/dashboard';
             $commission_percentage = $data->commission_percentage;
             $commission = $data->commission;
             $total_receive = $data->total_receive;
             $language = $data->language;
 
-            quotation_invoices::where('id','=',$data->invoice_id)->update(['invoice' => 1, 'ask_customization' => 0, 'commission_percentage' => $commission_percentage, 'commission' => $commission, 'total_receive' => $total_receive, 'payment_date' => $now, 'payment_id' => $payment_id, 'commission_invoice_number' => $commission_invoice_number]);
+            new_quotations::where('id','=',$data->invoice_id)->update(['paid' => 1, 'ask_customization' => 0, 'commission_percentage' => $commission_percentage, 'commission' => $commission, 'total_receive' => $total_receive, 'payment_date' => $now, 'payment_id' => $payment_id, 'commission_invoice_number' => $commission_invoice_number]);
             quotes::where('id','=',$data->quote_id)->update(['status' => 3]);
 
-            $handyman = User::where('id','=',$data->handyman_id)->first();
-            $name = $handyman->name;
-            $email = $handyman->email;
+            $retailer = User::where('id','=',$data->retailer_id)->first();
+            $name = $retailer->name;
+            $email = $retailer->email;
 
-            $quote = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('users','users.id','=','quotes.user_id')->where('quotes.id', $data->quote_id)->select('quotes.*', 'categories.cat_name', 'users.postcode', 'users.city', 'users.address')->first();
-            $invoice = quotation_invoices::leftjoin('quotation_invoices_data', 'quotation_invoices_data.quotation_id', '=', 'quotation_invoices.id')->leftjoin('users','users.id','=','quotation_invoices.handyman_id')->where('quotation_invoices.quote_id', $data->quote_id)->select('quotation_invoices_data.*', 'quotation_invoices.created_at', 'quotation_invoices.description as other_info', 'quotation_invoices.vat_percentage', 'quotation_invoices.tax', 'quotation_invoices.subtotal as sub_total', 'quotation_invoices.grand_total','users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
+            $quote = quotes::leftjoin('categories','categories.id','=','quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('product_models','product_models.id','=','quotes.quote_model')->leftjoin('models','models.id','=','quotes.quote_type')->leftjoin('colors','colors.id','=','quotes.quote_color')->leftjoin('services','services.id','=','quotes.quote_service1')->leftjoin('users','users.id','=','quotes.user_id')->where('quotes.id', $data->quote_id)->select('quotes.*','categories.cat_name','services.title','brands.cat_name as brand_name','product_models.model as model_name','models.cat_name as type_title','colors.title as color', 'users.postcode', 'users.city', 'users.address')->first();
+            $invoice = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.quote_request_id', $data->quote_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.description as other_info', 'new_quotations.vat_percentage', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'users.compressed_photo', 'users.quotation_prefix', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
             $requested_quote_number = $quote->quote_number;
 
             $filename = $quotation_invoice_number . '.pdf';
 
-            $file = public_path() . '/assets/quotationsPDF/' . $filename;
+            $request = new_quotations::where('id', $data->invoice_id)->with('data')->first();
+            $user = $invoice[0];
 
-            $type = 'invoice';
+            $client = new \stdClass();
+            $client->address = $quote->quote_zipcode;
+            $client->name = $quote->quote_name;
+            $client->family_name = $quote->quote_familyname;
+            $client->postcode = $quote->quote_postcode;
+            $client->postcode = $quote->quote_city;
+            $client->email = $quote->quote_email;
+
+            $request->products = $request->data;
+            $request->retailer_delivery_date = $request->delivery_date;
+            $request->total_amount = $request->grand_total;
+
+            foreach ($request->products as $i => $key) {
+
+                $total_discount[$i] = str_replace('.', ',',$key->total_discount);
+                $request->total_discount = $total_discount;
+
+                $rate[$i] = $key->rate;
+                $request->rate = $rate;
+
+                $qty[$i] = str_replace('.', ',',$key->qty);
+                $request->qty = $qty;
+
+                $total[$i] = $key->total;
+                $request->total = $total;
+
+                $measure[$i] = $key->measure;
+                $request->measure = $measure;
+
+                if ($key->item_id != 0) {
+
+                    $product_titles[] = items::where('id',$key->item_id)->pluck('cat_name')->first();
+                    $color_titles[] = '';
+                    $model_titles[] = '';
+
+                }
+                elseif ($key->service_id != 0) {
+
+                    $product_titles[] = Service::where('id',$key->service_id)->pluck('title')->first();
+                    $color_titles[] = '';
+                    $model_titles[] = '';
+
+                }
+                else
+                {
+                    $product_titles[] = product::where('id',$key->product_id)->pluck('title')->first();
+                    $color_titles[] = colors::where('id',$key->color)->pluck('title')->first();
+                    $model_titles[] = product_models::where('id',$key->model_id)->pluck('model')->first();
+                }
+
+                $calculations[$i] = $key->calculations()->get();
+                $request->calculations = $calculations;
+
+                if($key->item_id != 0)
+                {
+                    $request->products[$i] = $key->item_id . 'I';
+                }
+                elseif($key->service_id != 0)
+                {
+                    $request->products[$i] = $key->service_id . 'S';
+                }
+                else
+                {
+                    $request->products[$i] = $key->product_id;
+                }
+            }
 
             ini_set('max_execution_time', 180);
 
-            $pdf = PDF::loadView('user.pdf_quotation', compact('quote', 'type', 'invoice', 'quotation_invoice_number', 'requested_quote_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
-            $pdf->save($file);
+            $date = $invoice[0]->created_at;
+            $role = 'retailer';
+            $form_type = 1;
+            $re_edit = 1;
 
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('re_edit','form_type','role','product_titles','color_titles','model_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $file = public_path() . '/assets/newQuotations/' . $filename;
+            $pdf->save($file);
 
             $filename = $commission_invoice_number . '.pdf';
 
@@ -81,22 +158,22 @@ class MollieQuotationPaymentController extends Controller {
 
             $type = 'commission_invoice';
 
-            $pdf = PDF::loadView('user.pdf_commission', compact('quote', 'type', 'invoice', 'commission_invoice_number', 'quotation_invoice_number', 'requested_quote_number', 'commission_percentage', 'commission', 'total_receive'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_commission', compact('product_titles','color_titles','model_titles','quote', 'type', 'invoice', 'commission_invoice_number', 'quotation_invoice_number', 'requested_quote_number', 'commission_percentage', 'commission', 'total_receive'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
 
             $pdf->save($file);
 
 
             if($language == 'du')
             {
-                $msg = "Beste ". $name .",<br><br>De klant heeft de factuur betaald QUO# " . $quotation_invoice_number . ", Wij betalen het bedrag minus commissiekosten aan je uit, zodra de klant de goederen heeft ontvangen en de status van de levering heeft gewijzigd naar ontvangen. <a href='".$handyman_dash."'>Klik hier</a> om naar je dashboard te gaan.<br><br><b>Wat als?</b><br><br>Geen melding dat het pakket is ontvangen? Wees gerust, na zeven dagen gaan we hier vanuit. Als verkoper ontvang je uiterlijk de volgende werkdag om 18.00 uur het aankoopbedrag op je rekening.<br><br>Met vriendelijke groeten,<br><br>Vloerofferte";
+                $msg = "Beste ". $name .",<br><br>De klant heeft de factuur betaald QUO# " . $quotation_invoice_number . ", Wij betalen het bedrag minus commissiekosten aan je uit, zodra de klant de goederen heeft ontvangen en de status van de levering heeft gewijzigd naar ontvangen. <a href='".$retailer_dash."'>Klik hier</a> om naar je dashboard te gaan.<br><br><b>Wat als?</b><br><br>Geen melding dat het pakket is ontvangen? Wees gerust, na zeven dagen gaan we hier vanuit. Als verkoper ontvang je uiterlijk de volgende werkdag om 18.00 uur het aankoopbedrag op je rekening.<br><br>Met vriendelijke groeten,<br><br>Vloerofferte";
             }
             else
             {
-                $msg = "Dear Mr/Mrs ". $name .",<br><br>We have received a total amount of € " . $paid_amount ." for your quotation # " . $quotation_invoice_number . ". This amount will soon be transferred to your account. Below attached is your invoice along with our commission. For further details visit your panel through <a href='".$handyman_dash."'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+                $msg = "Dear Mr/Mrs ". $name .",<br><br>We have received a total amount of € " . $paid_amount ." for your quotation # " . $quotation_invoice_number . ". This amount will soon be transferred to your account. Below attached is your invoice along with our commission. For further details visit your panel through <a href='".$retailer_dash."'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
             }
 
 
-            \Mail::send(array(), array(), function ($message) use ($msg, $file, $filename, $email, $name, $handyman_dash, $paid_amount, $quotation_invoice_number) {
+            \Mail::send(array(), array(), function ($message) use ($msg, $file, $filename, $email, $name, $retailer_dash, $paid_amount, $quotation_invoice_number) {
                 $message->to($email)
                     ->from('info@vloerofferte.nl')
                     ->subject(__('text.Payment Received!'))

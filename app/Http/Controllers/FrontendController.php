@@ -153,6 +153,12 @@ class FrontendController extends Controller
         return $user_controller->AcceptQuotation((object)$request['request'],$request['user_id']);
     }
 
+    public function PayQuotationApi(Request $request)
+    {
+        $user_controller = new UserController();
+        return $user_controller->PayQuotation($request['data'],$request['pay_invoice_id'],$request['language'],$request['user_id']);
+    }
+
     function getOS()
     {
 
@@ -315,13 +321,13 @@ class FrontendController extends Controller
 
         $inv_decrypt = Crypt::decrypt($id);
 
-        $invoice = quotation_invoices::where('id',$inv_decrypt)->first();
+        $invoice = new_quotations::where('id',$inv_decrypt)->first();
 
         if ($invoice == "") {
             return view('front.index');
         } else {
 
-            if ($invoice->invoice != 1) {
+            if ($invoice->paid != 1) {
 
                 return view('front.quotation_payment_failed');
 

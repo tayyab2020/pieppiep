@@ -1486,7 +1486,7 @@ class UserController extends Controller
         $time = date('H:i:s',$time);
         $delivery_date = $request->delivery_date . ' ' . $time;
 
-        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.subtotal as sub_total', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
         if (count($invoice) == 0) {
             return 'false';
@@ -1515,7 +1515,7 @@ class UserController extends Controller
 
         $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
         $user = $invoice[0];
-        $client = User::where('id',$user_id)->first();
+        $client = '';
 
         $request->products = $request->data;
         $request->retailer_delivery_date = $request->delivery_date;
@@ -1642,118 +1642,57 @@ class UserController extends Controller
     }
 
 
-    public function PayQuotation(Request $request)
+    public function PayQuotation($data,$pay_invoice_id,$language,$user_id)
     {
-
-        $pay_invoice_id = $request->pay_invoice_id;
-        $data = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->where('quotation_invoices.id', $pay_invoice_id)->select('quotes.*', 'quotation_invoices.grand_total','quotation_invoices.handyman_id','quotation_invoices.quotation_invoice_number','quotation_invoices.accept_date', 'quotation_invoices.delivery_date')->first();
         $quote_id = $data->id;
-        $handyman_id = $data->handyman_id;
+        $retailer_id = $data->creator_id;
         $quotation_invoice_number = $data->quotation_invoice_number;
 
-        $accept_date = $data->accept_date;
-        $delivery_date = $data->delivery_date;
+        $total_mollie = number_format((float)$data->grand_total, 2, '.', '');
+        $settings = Generalsetting::where('backend',1)->first();
+        $description = 'Payment for Quotation No. ' . $quotation_invoice_number;
 
-        $second = 1000;
-        $minute = $second * 60;
-        $hour = $minute * 60;
-        $day = $hour * 24;
+        $inv_encrypt = Crypt::encrypt($pay_invoice_id);
+        $commission_percentage = $settings->commission_percentage;
+        $commission = $total_mollie * ($commission_percentage/100);
+        $commission = number_format((float)$commission, 2, '.', '');
+//        $commission_vat = ($commission/(21 + 100)) * 100;
+//        $commission_vat = $commission - $commission_vat;
 
+        $total_receive = $total_mollie - $commission;
+        $total_receive = number_format((float)$total_receive, 2, '.', '');
 
-        if($accept_date !== NULL && $delivery_date !== NULL)
-        {
-            $now1 = date("d-m-Y H:i:s", strtotime('+6 hours', strtotime($accept_date)));
-            $now1 = strtotime($now1) * 1000;
+        $commission_invoice_number = explode('-',  $quotation_invoice_number);
+        unset($commission_invoice_number[1]);
+        $commission_invoice_number = implode("-",$commission_invoice_number);
+        $vloerofferte_url = Generalsetting::where('backend',0)->pluck('site')->first();
 
-            $countDown_accept = strtotime($accept_date) * 1000;
-            $countDown_delivery = strtotime($delivery_date) * 1000;
+        $mollie = new \Mollie\Api\MollieApiClient();
+        $mollie->setApiKey($settings->mollie);
+        $payment = $mollie->payments->create([
+            'amount' => [
+                'currency' => 'EUR',
+                'value' => $total_mollie, // You must send the correct number of decimals, thus we enforce the use of strings
+            ],
+            'description' => $description,
+            'webhookUrl' => route('webhooks.quotation_payment'),
+            'redirectUrl' => $vloerofferte_url.'aanbieder/quotation-payment-redirect-page/' . $inv_encrypt,
+            "metadata" => [
+                "invoice_id" => $pay_invoice_id,
+                "quote_id" => $quote_id,
+                "retailer_id" => $retailer_id,
+                "quotation_invoice_number" => $quotation_invoice_number,
+                "commission_invoice_number" => $commission_invoice_number,
+                "paid_amount" => $total_mollie,
+                "commission_percentage" => $commission_percentage,
+                "commission" => $commission,
+                "total_receive" => $total_receive,
+                "language" => $language,
+                "user_id" => $user_id
+            ],
+        ]);
 
-            $dif = $countDown_delivery - $countDown_accept;
-
-            $now = date('d-m-Y H:i:s');
-            $now = strtotime($now) * 1000;
-            $distance = $countDown_delivery - $now;
-            $check = 0;
-
-            if (floor($dif / ($day)) >= 3) {
-
-                if ((floor($distance / ($day)) - 2) < 0) {
-
-                    $check = 1;
-
-                }
-
-            } else {
-
-                $distance1 = $now1 - $now;
-
-                if (floor(($distance1 % ($day)) / ($hour)) <= 0 && floor(($distance1 % ($hour)) / ($minute)) <= 0 && floor(($distance1 % ($minute)) / $second) <= 0) {
-
-                    $check = 1;
-
-                }
-            }
-
-            }
-        else
-        {
-            $check = 1;
-        }
-
-        if($check == 0)
-        {
-            $total_mollie = number_format((float)$data->grand_total, 2, '.', '');
-            $api_key = Generalsetting::findOrFail(1);
-            $description = 'Payment for Invoice No. ' . $quotation_invoice_number;
-
-            $inv_encrypt = Crypt::encrypt($pay_invoice_id);
-            $settings = Generalsetting::findOrFail(1);
-            $commission_percentage = $settings->commission_percentage;
-            $commission = $total_mollie * ($commission_percentage/100);
-            $commission = number_format((float)$commission, 2, '.', '');
-            $commission_vat = ($commission/(21 + 100)) * 100;
-            $commission_vat = $commission - $commission_vat;
-
-            $total_receive = $total_mollie - $commission;
-            $total_receive = number_format((float)$total_receive, 2, '.', '');
-
-            $commission_invoice_number = explode('-',  $quotation_invoice_number);
-            unset($commission_invoice_number[1]);
-            $commission_invoice_number = implode("-",$commission_invoice_number);
-
-            $language = $this->lang->lang;
-
-            $mollie = new \Mollie\Api\MollieApiClient();
-            $mollie->setApiKey($api_key->mollie);
-            $payment = $mollie->payments->create([
-                'amount' => [
-                    'currency' => 'EUR',
-                    'value' => $total_mollie, // You must send the correct number of decimals, thus we enforce the use of strings
-                ],
-                'description' => $description,
-                'webhookUrl' => route('webhooks.quotation_payment'),
-                'redirectUrl' => url('/aanbieder/quotation-payment-redirect-page/' . $inv_encrypt),
-                "metadata" => [
-                    "invoice_id" => $pay_invoice_id,
-                    "quote_id" => $quote_id,
-                    "handyman_id" => $handyman_id,
-                    "quotation_invoice_number" => $quotation_invoice_number,
-                    "commission_invoice_number" => $commission_invoice_number,
-                    "paid_amount" => $total_mollie,
-                    "commission_percentage" => $commission_percentage,
-                    "commission" => $commission,
-                    "total_receive" => $total_receive,
-                    "language" => $language
-                ],
-            ]);
-
-            return redirect($payment->getCheckoutUrl(), 303);
-        }
-        else
-        {
-            Session::flash('unsuccess', 'Quotation Expired!');
-            return redirect()->back();
-        }
+        return redirect($payment->getCheckoutUrl(), 303);
     }
 
 
