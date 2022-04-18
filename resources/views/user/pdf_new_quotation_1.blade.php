@@ -99,7 +99,6 @@
                                     <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
                                         <br><br><br><br><br>
                                         <p class="text-muted" style="font-size: 15px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
-                                        {{--<p class="text-muted" style="font-size: 15px;margin: 0;">Client ID {{sprintf('%04u', $client->id)}}</p>--}}
                                     </div>
 
                                 </div>
