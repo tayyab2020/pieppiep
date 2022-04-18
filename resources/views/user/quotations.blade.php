@@ -324,7 +324,23 @@
 
                                                                             @else
 
-                                                                                <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
+                                                                                @if(!$key->quote_request_id)
+
+                                                                                    <span class="btn btn-primary1">{{__('text.Quotation Accepted')}}</span>
+
+                                                                                @else
+
+                                                                                    @if($key->paid)
+
+                                                                                        <span class="btn btn-success">Paid</span>
+
+                                                                                    @else
+
+                                                                                        <span class="btn btn-primary1">Payment Pending</span>
+
+                                                                                    @endif
+
+                                                                                @endif
 
                                                                             @endif
 
@@ -384,7 +400,7 @@
 
                                                                                 @if(!$key->invoice)
 
-                                                                                    @if(!$key->quote_request_id || ($key->status > 1))
+                                                                                    @if(!$key->quote_request_id || $key->paid)
 
                                                                                         <li><a href="{{ url('/aanbieder/create-new-invoice/'.$key->invoice_id) }}">Create Invoice</a></li>
 
@@ -420,9 +436,13 @@
 
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                                @if(count($key->orders) > 0)
+                                                                                @if(!$key->quote_request_id || $key->paid)
 
-                                                                                    <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
+                                                                                    @if(count($key->orders) > 0)
+
+                                                                                        <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">View Order</a></li>
+
+                                                                                    @endif
 
                                                                                 @endif
 
@@ -432,10 +452,13 @@
 
                                                                             @endif
                                                                             
+                                                                            @if(!$key->quote_request_id || $key->paid)
 
-                                                                            @if($key->accepted && !$key->processing && !$key->finished)
+                                                                                @if($key->accepted && !$key->processing && !$key->finished)
 
-                                                                                <li><a class="send-new-order" data-id="{{$key->invoice_id}}" href="javascript:void(0)">Send Order</a></li>
+                                                                                    <li><a class="send-new-order" data-id="{{$key->invoice_id}}" href="javascript:void(0)">Send Order</a></li>
+
+                                                                                @endif
 
                                                                             @endif
 
@@ -505,11 +528,15 @@
 
                                                                                 <li><a href="{{ url('/aanbieder/download-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
-                                                                                @if(!$key->processing)
-                                                                                
-                                                                                    @if(count($key->orders) > 0)
+                                                                                @if(!$key->quote_request_id || $key->paid)
 
-                                                                                        <li><a href="{{ url('/aanbieder/download-full-order-pdf/'.$key->invoice_id) }}">Download Full Order PDF</a></li>
+                                                                                    @if(!$key->processing)
+                                                                                
+                                                                                        @if(count($key->orders) > 0)
+
+                                                                                            <li><a href="{{ url('/aanbieder/download-full-order-pdf/'.$key->invoice_id) }}">Download Full Order PDF</a></li>
+
+                                                                                        @endif
 
                                                                                     @endif
 

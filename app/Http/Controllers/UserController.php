@@ -1223,14 +1223,7 @@ class UserController extends Controller
             }
             else
             {
-                if($role == 3)
-                {
-                    return public_path() . '/assets/adminQuotesPDF/' . $filename;
-                }
-                else
-                {
-                    return public_path() . '/assets/quotesPDF/' . $filename;
-                }
+                return 'true';
             }
 
         } else {
