@@ -1644,6 +1644,7 @@ class UserController extends Controller
 
     public function PayQuotation($data,$pay_invoice_id,$language,$user_id)
     {
+        return $data;
         $quote_id = $data->id;
         $retailer_id = $data->creator_id;
         $quotation_invoice_number = $data->quotation_invoice_number;
