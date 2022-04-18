@@ -19,7 +19,8 @@ class VerifyCsrfToken extends BaseVerifier
         '/mollie1',
         '/webhooks/quotation_payment',
         '/download-quote-request-api',
-        '/accept-quotation-api'
+        '/accept-quotation-api',
+        '/pay-quotation-api'
 
     ];
 }
