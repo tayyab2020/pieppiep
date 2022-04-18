@@ -156,7 +156,14 @@ class FrontendController extends Controller
     public function PayQuotationApi(Request $request)
     {
         $user_controller = new UserController();
-        return $user_controller->PayQuotation($request['data'],$request['pay_invoice_id'],$request['language'],$request['user_id']);
+        try {
+
+            return $user_controller->PayQuotation($request['data'],$request['pay_invoice_id'],$request['language'],$request['user_id']);
+          
+          } catch (\Exception $e) {
+          
+              return $e->getMessage();
+          }
     }
 
     function getOS()
