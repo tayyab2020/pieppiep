@@ -162,7 +162,7 @@ class FrontendController extends Controller
           
           } catch (\Exception $e) {
           
-              return $e->getMessage();
+              return $e;
           }
     }
 
