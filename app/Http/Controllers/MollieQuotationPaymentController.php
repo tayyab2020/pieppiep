@@ -65,14 +65,13 @@ class MollieQuotationPaymentController extends Controller {
             $email = $retailer->email;
 
             $quote = quotes::leftjoin('categories','categories.id','=','quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('product_models','product_models.id','=','quotes.quote_model')->leftjoin('models','models.id','=','quotes.quote_type')->leftjoin('colors','colors.id','=','quotes.quote_color')->leftjoin('services','services.id','=','quotes.quote_service1')->leftjoin('users','users.id','=','quotes.user_id')->where('quotes.id', $data->quote_id)->select('quotes.*','categories.cat_name','services.title','brands.cat_name as brand_name','product_models.model as model_name','models.cat_name as type_title','colors.title as color', 'users.postcode', 'users.city', 'users.address')->first();
-            $invoice = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.quote_request_id', $data->quote_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.description as other_info', 'new_quotations.vat_percentage', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'users.compressed_photo', 'users.quotation_prefix', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
             $requested_quote_number = $quote->quote_number;
 
             $filename = $quotation_invoice_number . '.pdf';
 
-            $request = new_quotations::where('id', $data->invoice_id)->with('data')->first();
-            $user = $invoice[0];
+            $request = new_quotations::leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $data->invoice_id)->where('new_quotations.quote_request_id', $data->quote_id)->with('data')->select('new_quotations.*','new_quotations.tax_amount as tax','new_quotations.description as other_info','users.compressed_photo', 'users.quotation_prefix', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->first();
+            $user = $request;
 
             $client = new \stdClass();
             $client->address = $quote->quote_zipcode;
@@ -143,7 +142,7 @@ class MollieQuotationPaymentController extends Controller {
 
             ini_set('max_execution_time', 180);
 
-            $date = $invoice[0]->created_at;
+            $date = $request->created_at;
             $role = 'retailer';
             $form_type = 1;
             $re_edit = 1;
@@ -158,10 +157,9 @@ class MollieQuotationPaymentController extends Controller {
 
             $type = 'commission_invoice';
 
-            $pdf = PDF::loadView('user.pdf_commission', compact('product_titles','color_titles','model_titles','quote', 'type', 'invoice', 'commission_invoice_number', 'quotation_invoice_number', 'requested_quote_number', 'commission_percentage', 'commission', 'total_receive'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_commission', compact('date','request', 'product_titles', 'color_titles', 'model_titles', 'quote', 'type', 'commission_invoice_number', 'quotation_invoice_number', 'requested_quote_number', 'commission_percentage', 'commission', 'total_receive'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
 
             $pdf->save($file);
-
 
             if($language == 'du')
             {

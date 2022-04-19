@@ -34,16 +34,15 @@
                         <div class="row pb-5 p-5" style="margin-right: 15px !important;">
 
                             <?php
-                            $date = date('d-m-Y',strtotime($invoice[0]->created_at));
-                            $address = explode(',', $invoice[0]->address); array_pop($address); array_pop($address); $address = implode(",",$address);
+                            $address = explode(',', $user->address); array_pop($address); array_pop($address); $address = implode(",",$address);
                             ?>
 
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <p class="mb-1 m-rest">{{$invoice[0]->company_name}}</p>
+                                <p class="mb-1 m-rest">{{$user->company_name}}</p>
                                 <p class="mb-1 m-rest">{{$address}}</p>
-                                <p class="mb-1 m-rest">{{$invoice[0]->postcode}} {{$invoice[0]->city}}</p>
-                                <p class="mb-1 m-rest">{{$invoice[0]->tax_number}}</p>
-                                <p class="mb-1 m-rest">{{$invoice[0]->registration_number}}</p>
+                                <p class="mb-1 m-rest">{{$user->postcode}} {{$user->city}}</p>
+                                <p class="mb-1 m-rest">{{$user->tax_number}}</p>
+                                <p class="mb-1 m-rest">{{$user->registration_number}}</p>
                                 <br>
                                 <p style="font-size: 25px;" class="font-weight-bold mb-4 m-heading">{{__('text.Commission Invoice')}}</p>
                             </div>
@@ -73,7 +72,7 @@
                                     <tbody>
 
                                     <?php
-                                        $commission_vat = ($commission/($invoice[0]->vat_percentage + 100)) * 100;
+                                        $commission_vat = ($commission/($user->vat_percentage + 100)) * 100;
                                         $commission_vat = $commission - $commission_vat;
                                         $subtotal = $commission - $commission_vat;
                                     ?>
@@ -81,7 +80,7 @@
                                     <tr>
                                         <td>{{__('text.Commission')}}</td>
                                         <td>€ {{number_format((float)$commission, 2, ',', '.')}}</td>
-                                        <td>{{$invoice[0]->vat_percentage}}%</td>
+                                        <td>{{$user->vat_percentage}}%</td>
                                         <td>{{number_format((float)$commission_vat, 2, ',', '.')}}</td>
                                     </tr>
 
@@ -128,13 +127,13 @@
                                     </tr>
 
 
-                                    @foreach($invoice as $key)
+                                    @foreach($request->products as $i => $key)
 
                                         <tr>
                                             <td>{{$key->item_id != 0 ? $product_titles[$i] . ' (Item)' : ($key->service_id != 0 ? $product_titles[$i] . ' (Service)' : $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i])}}</td>
                                             <td>{{number_format((float)$key->amount, 2, ',', '.')}}</td>
-                                            <td>{{number_format((float)$invoice[0]->qty, 2, ',', '.')}}</td>
-                                            <td>{{number_format((float)$invoice[0]->rate, 2, ',', '.')}}</td>
+                                            <td>{{number_format((float)$key->qty, 2, ',', '.')}}</td>
+                                            <td>{{number_format((float)$key->rate, 2, ',', '.')}}</td>
                                         </tr>
 
                                     @endforeach
@@ -148,9 +147,9 @@
 
                                     <tr>
                                         <td></td>
-                                        <td>€ {{number_format((float)$invoice[0]->grand_total, 2, ',', '.')}}</td>
-                                        <td>{{$invoice[0]->vat_percentage}}%</td>
-                                        <td>{{number_format((float)$invoice[0]->tax, 2, ',', '.')}}</td>
+                                        <td>€ {{number_format((float)$user->grand_total, 2, ',', '.')}}</td>
+                                        <td>{{$user->vat_percentage}}%</td>
+                                        <td>{{number_format((float)$user->tax, 2, ',', '.')}}</td>
                                     </tr>
 
                                     <tr>
