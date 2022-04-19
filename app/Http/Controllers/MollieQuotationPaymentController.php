@@ -157,7 +157,7 @@ class MollieQuotationPaymentController extends Controller {
 
             $type = 'commission_invoice';
 
-            $pdf = PDF::loadView('user.pdf_commission', compact('date','request', 'product_titles', 'color_titles', 'model_titles', 'quote', 'type', 'commission_invoice_number', 'quotation_invoice_number', 'requested_quote_number', 'commission_percentage', 'commission', 'total_receive'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
+            $pdf = PDF::loadView('user.pdf_commission', compact('user','date','request', 'product_titles', 'color_titles', 'model_titles', 'quote', 'type', 'commission_invoice_number', 'quotation_invoice_number', 'requested_quote_number', 'commission_percentage', 'commission', 'total_receive'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140]);
 
             $pdf->save($file);
 
