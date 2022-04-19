@@ -1618,10 +1618,10 @@ class UserController extends Controller
         }
         else
         {
-            $msg = "Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $client->name . " has accepted your quotation QUO# " . $invoice[0]->quotation_invoice_number . "<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+            $msg = "Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
         }
 
-        \Mail::send(array(), array(), function ($message) use ($msg, $retailer_email, $user_name, $invoice, $client) {
+        \Mail::send(array(), array(), function ($message) use ($msg, $retailer_email, $user_name, $invoice) {
             $message->to($retailer_email)
                 ->from('info@vloerofferte.nl')
                 ->subject(__('text.Quotation Accepted!'))
@@ -1631,11 +1631,11 @@ class UserController extends Controller
 
         $admin_email = $this->sl->admin_email;
 
-        \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice, $client) {
+        \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice) {
             $message->to($admin_email)
                 ->from('info@vloerofferte.nl')
                 ->subject('Quotation Accepted!')
-                ->setBody("A quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by Mr/Mrs " . $client->name . "<br>Handyman: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("A quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted.<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
 
         return 'true';
