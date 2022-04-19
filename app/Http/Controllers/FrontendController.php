@@ -158,6 +158,9 @@ class FrontendController extends Controller
         $user_controller = new UserController();
         try {
 
+            var_dump((object)$request['request']);
+            exit();
+
             return $user_controller->PayQuotation((object)$request['request'],$request['pay_invoice_id'],$request['language'],$request['user_id']);
           
           } catch (\Exception $e) {
