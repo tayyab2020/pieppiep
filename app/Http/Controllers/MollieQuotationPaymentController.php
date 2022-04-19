@@ -34,7 +34,7 @@ class MollieQuotationPaymentController extends Controller {
             return;
         }
 
-        $api_key = Generalsetting::where('backend',1)->first();
+        $api_key = Generalsetting::where('backend',0)->first();
         $sl = Sociallink::findOrFail(1);
 
         $mollie = new \Mollie\Api\MollieApiClient();
