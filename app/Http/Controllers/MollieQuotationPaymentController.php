@@ -78,7 +78,7 @@ class MollieQuotationPaymentController extends Controller {
             $client->name = $quote->quote_name;
             $client->family_name = $quote->quote_familyname;
             $client->postcode = $quote->quote_postcode;
-            $client->postcode = $quote->quote_city;
+            $client->city = $quote->quote_city;
             $client->email = $quote->quote_email;
 
             $request->products = $request->data;
