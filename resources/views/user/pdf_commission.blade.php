@@ -131,9 +131,9 @@
 
                                         <tr>
                                             <td>{{ strpos($key, 'I') > -1 ? $product_titles[$i] . ' (Item)' : ( strpos($key, 'S') > -1 ? $product_titles[$i] . ' (Service)' : $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] ) }}</td>
-                                            <td>{{number_format((float)$key->amount, 2, ',', '.')}}</td>
-                                            <td>{{number_format((float)$key->qty, 2, ',', '.')}}</td>
-                                            <td>{{number_format((float)$key->rate, 2, ',', '.')}}</td>
+                                            <td>{{number_format((float)$request->amount[$i], 2, ',', '.')}}</td>
+                                            <td>{{$request->qty[$i]}}</td>
+                                            <td>{{number_format((float)$request->rate[$i], 2, ',', '.')}}</td>
                                         </tr>
 
                                     @endforeach
@@ -147,9 +147,9 @@
 
                                     <tr>
                                         <td></td>
-                                        <td>€ {{number_format((float)$user->grand_total, 2, ',', '.')}}</td>
-                                        <td>{{$user->vat_percentage}}%</td>
-                                        <td>{{number_format((float)$user->tax, 2, ',', '.')}}</td>
+                                        <td>€ {{number_format((float)$request->total_amount, 2, ',', '.')}}</td>
+                                        <td>{{$request->vat_percentage}}%</td>
+                                        <td>{{number_format((float)$request->tax, 2, ',', '.')}}</td>
                                     </tr>
 
                                     <tr>

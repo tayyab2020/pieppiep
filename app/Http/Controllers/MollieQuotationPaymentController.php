@@ -90,6 +90,9 @@ class MollieQuotationPaymentController extends Controller {
                 $total_discount[$i] = str_replace('.', ',',$key->total_discount);
                 $request->total_discount = $total_discount;
 
+                $amount[$i] = $key->amount;
+                $request->amount = $amount;
+
                 $rate[$i] = $key->rate;
                 $request->rate = $rate;
 
