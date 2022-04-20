@@ -26,5 +26,6 @@ yarn-error.log
 /public/assets/newNegativeInvoices
 /public/assets/colorImages
 /public/assets/Orders
+/public/assets/CommissionInvoices
 /config/app.php
 /resources/views/layouts/front.blade.php

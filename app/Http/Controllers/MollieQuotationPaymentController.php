@@ -156,7 +156,7 @@ class MollieQuotationPaymentController extends Controller {
 
             $filename = $commission_invoice_number . '.pdf';
 
-            $file = public_path() . '/assets/quotationsPDF/CommissionInvoices/' . $filename;
+            $file = public_path() . '/assets/CommissionInvoices/' . $filename;
 
             $type = 'commission_invoice';
 
