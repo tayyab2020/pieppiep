@@ -130,7 +130,7 @@
                                     @foreach($request->products as $i => $key)
 
                                         <tr>
-                                            <td>{{$key->item_id != 0 ? $product_titles[$i] . ' (Item)' : ($key->service_id != 0 ? $product_titles[$i] . ' (Service)' : $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i])}}</td>
+                                            <td>{{ strpos($key, 'I') > -1 ? $product_titles[$i] . ' (Item)' : ( strpos($key, 'S') > -1 ? $product_titles[$i] . ' (Service)' : $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] ) }}</td>
                                             <td>{{number_format((float)$key->amount, 2, ',', '.')}}</td>
                                             <td>{{number_format((float)$key->qty, 2, ',', '.')}}</td>
                                             <td>{{number_format((float)$key->rate, 2, ',', '.')}}</td>
