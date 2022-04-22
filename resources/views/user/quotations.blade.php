@@ -213,7 +213,7 @@
 
                                                                 <td><a href="">@if(Auth::guard('user')->user()->role_id == 4) OR# {{$key->order_number}} @else OF# {{$key->quotation_invoice_number}} @endif</a></td>
 
-                                                                <td>{{$key->name}} {{$key->family_name}}</td>
+                                                                <td>{{$key->quote_request_id && $key->paid ? $key->quote_name . ' ' . $key->quote_familyname : $key->name . ' ' . $key->family_name}}</td>
 
                                                                 @if(Auth::guard('user')->user()->role_id == 2)
 
