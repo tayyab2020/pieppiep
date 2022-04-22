@@ -49,6 +49,7 @@ class MollieQuotationPaymentController extends Controller {
             $data = $payment->metadata;
             $now = date('d-m-Y H:i:s');
             $paid_amount = $data->paid_amount;
+            $service_fee = $data->service_fee;
             $quotation_invoice_number = $data->quotation_invoice_number;
             $commission_invoice_number = $data->commission_invoice_number;
             $retailer_dash = url('/').'/aanbieder/dashboard';
@@ -154,6 +155,11 @@ class MollieQuotationPaymentController extends Controller {
             $file = public_path() . '/assets/newQuotations/' . $filename;
             $pdf->save($file);
 
+            $customer_quotation = 1;
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('customer_quotation','service_fee','form_type','role','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $file = public_path() . '/assets/newQuotations/CustomerQuotations/' . $filename;
+            $pdf->save($file);
+
             $filename = $commission_invoice_number . '.pdf';
 
             $file = public_path() . '/assets/CommissionInvoices/' . $filename;
@@ -170,7 +176,7 @@ class MollieQuotationPaymentController extends Controller {
             }
             else
             {
-                $msg = "Dear Mr/Mrs ". $name .",<br><br>We have received a total amount of € " . $paid_amount ." for your quotation # " . $quotation_invoice_number . ". This amount will soon be transferred to your account. Below attached is your invoice along with our commission. For further details visit your panel through <a href='".$retailer_dash."'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+                $msg = "Dear Mr/Mrs ". $name .",<br><br>We have received payment for your quotation # " . $quotation_invoice_number . ". This amount will soon be transferred to your account. Below attached is your invoice along with our commission. For further details visit your panel through <a href='".$retailer_dash."'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
             }
 
 

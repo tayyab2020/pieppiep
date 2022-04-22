@@ -1510,8 +1510,9 @@ class UserController extends Controller
 
         $quotation_invoice_number = $invoice[0]->quotation_invoice_number;
         $filename = $quotation_invoice_number . '.pdf';
+        $service_fee = $this->gs->service_fee;
 
-        new_quotations::where('id', $request->invoice_id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date]);
+        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date]);
 
         $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
         $user = $invoice[0];

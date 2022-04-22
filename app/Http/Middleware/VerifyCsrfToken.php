@@ -20,7 +20,6 @@ class VerifyCsrfToken extends BaseVerifier
         '/webhooks/quotation_payment',
         '/download-quote-request-api',
         '/accept-quotation-api',
-        '/pay-quotation-api'
 
     ];
 }

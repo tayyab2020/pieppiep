@@ -48,7 +48,17 @@
                                 <div class="row p-5">
 
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <img class="img-fluid" src="{{ $client ? ($user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg')) : $url }}" style="width:40%;height:100%;margin-bottom: 30px;">
+                                        
+                                        @if(isset($customer_quotation))
+
+                                            <img class="img-fluid" src="{{ $url }}" style="width:40%;height:100%;margin-bottom: 30px;">
+
+                                        @else
+
+                                            <img class="img-fluid" src="{{ $client ? ($user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg')) : $url }}" style="width:40%;height:100%;margin-bottom: 30px;">
+
+                                        @endif
+                                        
                                     </div>
 
                                     @if($client)
@@ -107,41 +117,77 @@
 
                         {{--<hr class="my-5">--}}
 
-                        @foreach($request->products as $i => $key)
+                        @if(isset($customer_quotation))
 
                             <div class="row p-5" style="font-size: 15px;padding: 2rem !important;border-bottom: 2px solid black !important;">
                                 <div class="col-md-12" style="padding: 0 !important;">
 
-                                    @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+                                    <table style="display: table;width: 100%;">
 
-                                        <?php
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product/Item/Service</th>
+                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
+                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
+                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+                                        </tr>
+                                        </thead>
 
-                                        if($form_type == 1)
-                                        {
-                                            $arb_discount = str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'));
-                                            $arb = $request->rate[$i];
-                                            $arb = number_format((float)($arb), 2, ',', '.');
-                                        }
-                                        else
-                                        {
-                                            $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
-                                            $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
-                                            $arb_price = number_format((float)($arb_price), 2, ',', '.');
-                                            $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
-                                            $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
-                                            $arb = $request->rate[$i] - $arb_discount;
-                                            $arb = number_format((float)($arb), 2, ',', '.');
-                                            $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
-                                            $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
-                                            $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
-                                            $total = $art + number_format((float)(str_replace(',', '.',$arb)), 2, '.', ',');
-                                            $art = number_format((float)($art), 2, ',', '.');
-                                            $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
-                                        }
+                                        <tbody>
 
-                                        ?>
+                                        <tr>
 
-                                    @endif
+                                            <td style="font-size: 20px;padding: 5px;">Service Fee</td>
+                                            <td style="font-size: 20px;padding: 5px;">1</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$service_fee}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$service_fee}}</td>
+
+                                        </tr>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        @else
+
+                            @foreach($request->products as $i => $key)
+
+                                <div class="row p-5" style="font-size: 15px;padding: 2rem !important;border-bottom: 2px solid black !important;">
+                                    <div class="col-md-12" style="padding: 0 !important;">
+
+                                        @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+
+                                            <?php
+
+                                            if($form_type == 1)
+                                            {
+                                                $arb_discount = str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'));
+                                                $arb = $request->rate[$i];
+                                                $arb = number_format((float)($arb), 2, ',', '.');
+                                            }
+                                            else
+                                            {
+                                                $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
+                                                $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
+                                                $arb_price = number_format((float)($arb_price), 2, ',', '.');
+                                                $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
+                                                $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
+                                                $arb = $request->rate[$i] - $arb_discount;
+                                                $arb = number_format((float)($arb), 2, ',', '.');
+                                                $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
+                                                $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
+                                                $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
+                                                $total = $art + number_format((float)(str_replace(',', '.',$arb)), 2, '.', ',');
+                                                $art = number_format((float)($art), 2, ',', '.');
+                                                $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
+                                            }
+
+                                            ?>
+
+                                        @endif
 
                                         <table style="display: table;width: 100%;">
 
@@ -268,7 +314,7 @@
 
                                                             @if($role == 'supplier')
 
-                                                            <td>{{$request->delivery_date[$i]}}</td>
+                                                                <td>{{$request->delivery_date[$i]}}</td>
 
                                                             @endif
 
@@ -290,7 +336,7 @@
 
                                                         @elseif(strpos($key, 'S') > -1 || (isset($key->service_id) && $key->service_id != 0))
 
-                                                             <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Service)'}}</td>
+                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Service)'}}</td>
 
                                                         @else
 
@@ -306,12 +352,12 @@
 
                                                     <td style="font-size: 20px;padding: 5px;">{{$request->negative_invoice ? '-' : null}} {{$request->qty[$i]}}</td>
 
-                                                        @if($role == 'supplier2')
+                                                    @if($role == 'supplier2')
 
-                                                            <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
-                                                            <td>{{$order_numbers[$i]}}</td>
+                                                        <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                        <td>{{$order_numbers[$i]}}</td>
 
-                                                        @endif
+                                                    @endif
 
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} {{$arb}}</td>
@@ -523,21 +569,21 @@
                                                 <tr>
 
                                                     <?php
-                                                        $ex_vat = ($request->rate[$i]/121)*100;
-                                                        $vat = $request->rate[$i] - $ex_vat;
-                                                        $vat = number_format((float)($vat), 2, ',', '.');
-                                                        $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
+                                                    $ex_vat = ($request->rate[$i]/121)*100;
+                                                    $vat = $request->rate[$i] - $ex_vat;
+                                                    $vat = number_format((float)($vat), 2, ',', '.');
+                                                    $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
                                                     ?>
 
-                                                        @if($request->total_discount[$i] != 0)
+                                                    @if($request->total_discount[$i] != 0)
 
-                                                            <td style="font-size: 20px;padding: 5px;">{{$request->negative_invoice ? '-' : null}} € {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
+                                                        <td style="font-size: 20px;padding: 5px;">{{$request->negative_invoice ? '-' : null}} € {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
 
-                                                        @endif
+                                                    @endif
 
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$ex_vat}}</td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$vat}}</td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: right;">{{$request->negative_invoice ? '-' : null}} € {{$form_type == 1 ? number_format((float)($request->rate[$i]), 2, ',', '.') : $total}}</td>
+                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$ex_vat}}</td>
+                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$vat}}</td>
+                                                    <td style="font-size: 20px;padding: 5px;text-align: right;">{{$request->negative_invoice ? '-' : null}} € {{$form_type == 1 ? number_format((float)($request->rate[$i]), 2, ',', '.') : $total}}</td>
 
                                                 </tr>
 
@@ -547,202 +593,204 @@
 
                                         @endif
 
+                                    </div>
                                 </div>
-                            </div>
 
-                        @endforeach
+                            @endforeach
 
-                        @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+                                @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
-                            <div class="row p-5" style="padding: 2rem !important;">
-                                <div class="col-md-12" style="padding: 0 !important;">
+                                    <div class="row p-5" style="padding: 2rem !important;">
+                                        <div class="col-md-12" style="padding: 0 !important;">
 
-                                    <table style="display: table;width: 100%;margin-top: 30px;">
+                                            <table style="display: table;width: 100%;margin-top: 30px;">
 
-                                        <tbody>
+                                                <tbody>
 
-                                        <tr>
-                                            <td style="width: 40%;padding: 5px;">
-                                                <div style="display: inline-block;width: 100%;">
-                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Invoer:</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{date('d-m-Y',strtotime($request->retailer_delivery_date))}} @endif</span>
-                                                </div>
-                                            </td>
-                                            <td style="width: 60%;padding: 5px;padding-left: 20px;">
-                                                <div style="display: inline-block;width: 100%;">
-                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td style="width: 40%;padding: 5px;">
-                                                <div style="display: inline-block;width: 100%;">
-                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Planning verzending:</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->installation_date}}</span>
-                                                </div>
-                                            </td>
-                                            <td style="width: 60%;padding: 5px;padding-left: 20px;">
-                                                <div style="display: inline-block;width: 100%;">
-                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->tax_amount)), 2, ',', '.')}}</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td style="width: 40%;font-size: 20px;padding: 5px;"></td>
-                                            <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
-                                                <div style="display: inline-block;width: 100%;">
-                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Te betalen</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->total_amount)), 2, ',', '.')}}</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-                            </div>
-
-                        @endif
-
-                        @if($form_type == 1 && $role != 'invoice' && $role != 'invoice1' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
-
-                            <div class="page_break">
-
-                                @foreach($request->products as $i => $key)
-
-                                    @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0 && $request->measure[$i] != 'Per Piece')
-
-                                        <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}} Calculations</h2>
-
-                                        <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
-
-                                            <tbody>
-
-                                            <?php
-
-                                            if(isset($re_edit)) {
-                                                $calculator_row = $calculator_row = $request->calculations[$i];
-                                            }
-                                            else {
-                                                $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row;
-                                            }
-
-                                            ?>
-
-                                            @if($request->measure[$i] == 'M1')
-
-                                                <tr class="header">
-                                                    <td class="headings" style="width: 9%;">Sr.No</td>
-                                                    <td class="headings" style="width: 22%;">Description</td>
-                                                    <td class="headings" style="width: 13%;">Width</td>
-                                                    <td class="headings" style="width: 13%;">Height</td>
-                                                    <td class="headings" style="width: 10%;">Cutting lose</td>
-                                                    <td class="headings" style="width: 10%;">Turn</td>
-                                                    <td class="headings" style="width: 13%;">Max Width</td>
-                                                    <td class="headings" style="width: 10%;">Total</td>
+                                                <tr>
+                                                    <td style="width: 40%;padding: 5px;">
+                                                        <div style="display: inline-block;width: 100%;">
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Invoer:</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{date('d-m-Y',strtotime($request->retailer_delivery_date))}} @endif</span>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 60%;padding: 5px;padding-left: 20px;">
+                                                        <div style="display: inline-block;width: 100%;">
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
+                                                        </div>
+                                                    </td>
                                                 </tr>
 
-                                            @else
-
-                                                <tr class="header">
-                                                    <td class="headings" style="width: 9%;">Sr.No</td>
-                                                    <td class="headings" style="width: 22%;">Description</td>
-                                                    <td class="headings" style="width: 13%;">Width</td>
-                                                    <td class="headings" style="width: 13%;">Height</td>
-                                                    <td class="headings" style="width: 10%;">Cutting lose</td>
-                                                    <td class="headings" style="width: 10%;">Total</td>
-                                                    <td class="headings" style="width: 13%;">Box quantity</td>
-                                                    <td class="headings" style="width: 10%;">Total boxes</td>
+                                                <tr>
+                                                    <td style="width: 40%;padding: 5px;">
+                                                        <div style="display: inline-block;width: 100%;">
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Planning verzending:</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->installation_date}}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 60%;padding: 5px;padding-left: 20px;">
+                                                        <div style="display: inline-block;width: 100%;">
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->tax_amount)), 2, ',', '.')}}</span>
+                                                        </div>
+                                                    </td>
                                                 </tr>
 
-                                            @endif
+                                                <tr>
+                                                    <td style="width: 40%;font-size: 20px;padding: 5px;"></td>
+                                                    <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
+                                                        <div style="display: inline-block;width: 100%;">
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Te betalen</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->total_amount)), 2, ',', '.')}}</span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
 
-                                            @foreach($calculator_row as $c => $cal)
+                                                </tbody>
 
-                                                @if(isset($re_edit))
+                                            </table>
 
-                                                    <tr>
+                                        </div>
+                                    </div>
 
-                                                        <td>{{$cal->calculator_row}}</td>
-                                                        <td>{{$cal->description}}</td>
-                                                        <td>{{str_replace('.', ',',$cal->width)}}</td>
-                                                        <td>{{str_replace('.', ',',$cal->height)}}</td>
-                                                        <td>{{$cal->cutting_lose}}</td>
+                                @endif
 
-                                                        @if($request->measure[$i] == 'M1')
+                                @if($form_type == 1 && $role != 'invoice' && $role != 'invoice1' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
-                                                            <td>{{$cal->turn == 0 ? 'No' : 'Yes'}}</td>
-                                                            <td>{{str_replace('.', ',',$cal->max_width)}}</td>
+                                    <div class="page_break">
 
-                                                        @else
+                                        @foreach($request->products as $i => $key)
 
-                                                            <td>{{str_replace('.', ',',$cal->total_boxes)}}</td>
-                                                            <td>{{str_replace('.', ',',$cal->box_quantity_supplier)}}</td>
+                                            @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0 && $request->measure[$i] != 'Per Piece')
 
-                                                        @endif
+                                                <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}} Calculations</h2>
 
-                                                        <td>{{str_replace('.', ',',$cal->box_quantity)}}</td>
+                                                <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
 
-                                                    </tr>
-
-                                                @else
+                                                    <tbody>
 
                                                     <?php
 
-                                                    $description = 'attribute_description'.$request->row_id[$i];
-                                                    $width = 'width'.$request->row_id[$i];
-                                                    $height = 'height'.$request->row_id[$i];
-                                                    $cutting_lose = 'cutting_lose_percentage'.$request->row_id[$i];
-                                                    $box_quantity_supplier = 'box_quantity_supplier'.$request->row_id[$i];
-                                                    $box_quantity = 'box_quantity'.$request->row_id[$i];
-                                                    $total_boxes = 'total_boxes'.$request->row_id[$i];
-                                                    $max_width = 'max_width'.$request->row_id[$i];
-                                                    $turn = 'turn'.$request->row_id[$i];
+                                                    if(isset($re_edit)) {
+                                                        $calculator_row = $calculator_row = $request->calculations[$i];
+                                                    }
+                                                    else {
+                                                        $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row;
+                                                    }
 
                                                     ?>
 
-                                                    <tr>
+                                                    @if($request->measure[$i] == 'M1')
 
-                                                        <td>{{$cal}}</td>
-                                                        <td>{{$request->$description[$c]}}</td>
-                                                        <td>{{$request->$width[$c]}}</td>
-                                                        <td>{{$request->$height[$c]}}</td>
-                                                        <td>{{$request->$cutting_lose[$c]}}</td>
+                                                        <tr class="header">
+                                                            <td class="headings" style="width: 9%;">Sr.No</td>
+                                                            <td class="headings" style="width: 22%;">Description</td>
+                                                            <td class="headings" style="width: 13%;">Width</td>
+                                                            <td class="headings" style="width: 13%;">Height</td>
+                                                            <td class="headings" style="width: 10%;">Cutting lose</td>
+                                                            <td class="headings" style="width: 10%;">Turn</td>
+                                                            <td class="headings" style="width: 13%;">Max Width</td>
+                                                            <td class="headings" style="width: 10%;">Total</td>
+                                                        </tr>
 
-                                                        @if($request->measure[$i] == 'M1')
+                                                    @else
 
-                                                            <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
-                                                            <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
+                                                        <tr class="header">
+                                                            <td class="headings" style="width: 9%;">Sr.No</td>
+                                                            <td class="headings" style="width: 22%;">Description</td>
+                                                            <td class="headings" style="width: 13%;">Width</td>
+                                                            <td class="headings" style="width: 13%;">Height</td>
+                                                            <td class="headings" style="width: 10%;">Cutting lose</td>
+                                                            <td class="headings" style="width: 10%;">Total</td>
+                                                            <td class="headings" style="width: 13%;">Box quantity</td>
+                                                            <td class="headings" style="width: 10%;">Total boxes</td>
+                                                        </tr>
+
+                                                    @endif
+
+                                                    @foreach($calculator_row as $c => $cal)
+
+                                                        @if(isset($re_edit))
+
+                                                            <tr>
+
+                                                                <td>{{$cal->calculator_row}}</td>
+                                                                <td>{{$cal->description}}</td>
+                                                                <td>{{str_replace('.', ',',$cal->width)}}</td>
+                                                                <td>{{str_replace('.', ',',$cal->height)}}</td>
+                                                                <td>{{$cal->cutting_lose}}</td>
+
+                                                                @if($request->measure[$i] == 'M1')
+
+                                                                    <td>{{$cal->turn == 0 ? 'No' : 'Yes'}}</td>
+                                                                    <td>{{str_replace('.', ',',$cal->max_width)}}</td>
+
+                                                                @else
+
+                                                                    <td>{{str_replace('.', ',',$cal->total_boxes)}}</td>
+                                                                    <td>{{str_replace('.', ',',$cal->box_quantity_supplier)}}</td>
+
+                                                                @endif
+
+                                                                <td>{{str_replace('.', ',',$cal->box_quantity)}}</td>
+
+                                                            </tr>
 
                                                         @else
 
-                                                            <td>{{str_replace('.', ',',$request->$total_boxes[$c])}}</td>
-                                                            <td>{{str_replace('.', ',',$request->$box_quantity_supplier[$c])}}</td>
+                                                            <?php
+
+                                                            $description = 'attribute_description'.$request->row_id[$i];
+                                                            $width = 'width'.$request->row_id[$i];
+                                                            $height = 'height'.$request->row_id[$i];
+                                                            $cutting_lose = 'cutting_lose_percentage'.$request->row_id[$i];
+                                                            $box_quantity_supplier = 'box_quantity_supplier'.$request->row_id[$i];
+                                                            $box_quantity = 'box_quantity'.$request->row_id[$i];
+                                                            $total_boxes = 'total_boxes'.$request->row_id[$i];
+                                                            $max_width = 'max_width'.$request->row_id[$i];
+                                                            $turn = 'turn'.$request->row_id[$i];
+
+                                                            ?>
+
+                                                            <tr>
+
+                                                                <td>{{$cal}}</td>
+                                                                <td>{{$request->$description[$c]}}</td>
+                                                                <td>{{$request->$width[$c]}}</td>
+                                                                <td>{{$request->$height[$c]}}</td>
+                                                                <td>{{$request->$cutting_lose[$c]}}</td>
+
+                                                                @if($request->measure[$i] == 'M1')
+
+                                                                    <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
+                                                                    <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
+
+                                                                @else
+
+                                                                    <td>{{str_replace('.', ',',$request->$total_boxes[$c])}}</td>
+                                                                    <td>{{str_replace('.', ',',$request->$box_quantity_supplier[$c])}}</td>
+
+                                                                @endif
+
+                                                                <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+
+                                                            </tr>
 
                                                         @endif
 
-                                                        <td>{{str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+                                                    @endforeach
 
-                                                    </tr>
+                                                    </tbody>
+                                                </table>
 
-                                                @endif
+                                            @endif
 
-                                            @endforeach
+                                        @endforeach
 
-                                            </tbody>
-                                        </table>
+                                    </div>
 
-                                    @endif
-
-                                @endforeach
-
-                            </div>
+                                @endif
 
                         @endif
 
