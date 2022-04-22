@@ -74,7 +74,14 @@ class UpdateDates implements ShouldQueue
 
         $check = new_quotations::where('id',$invoice_id)->where('creator_id',$user_id)->first();
 
-        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
+        if($check->customer_details)
+        {
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
+        }
+        else
+        {
+            $client = '';
+        }
 
         $request = new_quotations::where('id',$invoice_id)->first();
         $request->products = new_orders::where('quotation_id',$invoice_id)->where('supplier_id',$supplier_id)->get();
