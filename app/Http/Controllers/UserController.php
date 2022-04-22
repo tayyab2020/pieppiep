@@ -6059,7 +6059,22 @@ class UserController extends Controller
             $new_invoice->setTable('new_invoices');
             $new_invoice->save();
 
-            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->customer_details)->select('customers_details.*','users.email')->first();
+            if($data->quote_request_id)
+            {
+                $quote = quotes::where('id', $data->quote_request_id)->first();
+                $client = new \stdClass();
+                $client->address = $quote->quote_zipcode;
+                $client->name = $quote->quote_name;
+                $client->family_name = $quote->quote_familyname;
+                $client->postcode = $quote->quote_postcode;
+                $client->city = $quote->quote_city;
+                $client->email = $quote->quote_email;
+            }
+            else
+            {
+                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->customer_details)->select('customers_details.*','users.email')->first();
+            }
+
             $request = new_quotations::where('id',$invoice_id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
             $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
 
