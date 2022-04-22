@@ -71,7 +71,7 @@
 
                                                                 <td><a href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}">FA# {{$key->quotation_invoice_number}}</a></td>
 
-                                                                <td>{{$key->quote_request_id ? $key->quote_name . ' ' . $key->quote_familyname : $key->name . ' ' . $key->family_name}}</td>
+                                                                <td>{{$key->name}} {{$key->family_name}}</td>
 
                                                                 @if(Auth::guard('user')->user()->role_id == 2)
                                                                 
@@ -356,7 +356,7 @@
 
                                                             <td>FA# {{$key->invoice_number}}</td>
 
-                                                            <td>{{$key->name}} {{$key->family_name}}</td>
+                                                            <td>{{$key->quote_request_id ? $key->quote_name . ' ' . $key->quote_familyname : $key->name . ' ' . $key->family_name}}</td>
 
                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
