@@ -1289,24 +1289,17 @@ class UserController extends Controller
             $user_id = $main_id;
         }
 
-        if($user->can('download-commission-invoice'))
-        {
-            $invoice = quotation_invoices::where('id', $id)->where('handyman_id', $user_id)->first();
+        $invoice = new_quotations::where('id', $id)->where('creator_id', $user_id)->first();
 
-            if (!$invoice) {
-                return redirect()->route('quotations');
-            }
-
-            $commission_invoice_number = $invoice->commission_invoice_number;
-
-            $filename = $commission_invoice_number . '.pdf';
-
-            return response()->download(public_path("assets/quotationsPDF/CommissionInvoices/{$filename}"));
+        if (!$invoice) {
+            return redirect()->route('quotations');
         }
-        else
-        {
-            return redirect()->route('user-login');
-        }
+
+        $commission_invoice_number = $invoice->commission_invoice_number;
+
+        $filename = $commission_invoice_number . '.pdf';
+
+        return response()->download(public_path("assets/CommissionInvoices/{$filename}"));
     }
 
     public function DownloadCustomQuotation($id)

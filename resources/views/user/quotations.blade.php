@@ -414,6 +414,12 @@
 
                                                                                 @endif
 
+                                                                                @if($key->paid)
+
+                                                                                    <li><a href="{{ url('/aanbieder/download-commission-invoice/'.$key->invoice_id) }}">Download Commission Invoice</a></li>
+
+                                                                                @endif
+
                                                                             @endif
 
                                                                             
