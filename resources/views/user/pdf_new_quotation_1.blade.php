@@ -55,13 +55,13 @@
 
                                         @else
 
-                                            <img class="img-fluid" src="{{ $client ? ($user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg')) : $url }}" style="width:40%;height:100%;margin-bottom: 30px;">
+                                            <img class="img-fluid" src="{{ $client || $role == 'supplier1' ? ($user->compressed_photo ? public_path('assets/images/'.$user->compressed_photo) : public_path('assets/images/LOGO-page-001.jpg')) : $url }}" style="width:40%;height:100%;margin-bottom: 30px;">
 
                                         @endif
                                         
                                     </div>
 
-                                    @if($client)
+                                    @if($client || $role == 'supplier1')
 
                                         <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
                                             {{--<p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>--}}
