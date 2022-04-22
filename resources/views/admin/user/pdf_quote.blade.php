@@ -117,6 +117,9 @@
                                                 <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Description')}}</th>
 
                                             @endif
+
+                                            <th class="border-0 text-uppercase small font-weight-bold">Qty</th>
+
                                             {{--<th class="border-0 text-uppercase small font-weight-bold">Street</th>
                                             <th class="border-0 text-uppercase small font-weight-bold">House Number</th>--}}
                                         </tr>
@@ -139,6 +142,8 @@
                                                     <td>{{$quote->quote_description}}</td>
 
                                                 @endif
+
+                                                <td>{{$quote->quote_qty}}</td>
 
                                                 {{--<td>{{$quote->quote_street}}</td>
                                                 <td>{{$quote->quote_house}}</td>--}}

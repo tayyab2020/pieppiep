@@ -139,9 +139,64 @@
 
                                             <td style="font-size: 20px;padding: 5px;">Service Fee</td>
                                             <td style="font-size: 20px;padding: 5px;">1</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$service_fee}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{$service_fee}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format($service_fee, 2, ',', '.')}}</td>
+                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format($service_fee, 2, ',', '.')}}</td>
 
+                                        </tr>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+
+                            <?php
+                            $ex_vat = ($service_fee/121)*100;
+                            $vat = $service_fee - $ex_vat;
+                            $vat = number_format((float)($vat), 2, ',', '.');
+                            $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
+                            ?>
+
+                            <div class="row p-5" style="padding: 2rem !important;">
+                                <div class="col-md-12" style="padding: 0 !important;">
+
+                                    <table style="display: table;width: 100%;margin-top: 30px;">
+
+                                        <tbody>
+
+                                        <tr>
+                                            <td style="width: 40%;padding: 5px;">
+
+                                            </td>
+                                            <td style="width: 60%;padding: 5px;padding-left: 20px;">
+                                                <div style="display: inline-block;width: 100%;">
+                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{$ex_vat}}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 40%;padding: 5px;">
+
+                                            </td>
+                                            <td style="width: 60%;padding: 5px;padding-left: 20px;">
+                                                <div style="display: inline-block;width: 100%;">
+                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{$ex_vat}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{$vat}}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width: 40%;font-size: 20px;padding: 5px;"></td>
+                                            <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
+                                                <div style="display: inline-block;width: 100%;">
+                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Te betalen</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format($service_fee, 2, ',', '.')}}</span>
+                                                </div>
+                                            </td>
                                         </tr>
 
                                         </tbody>
@@ -611,7 +666,7 @@
                                                     <td style="width: 40%;padding: 5px;">
                                                         <div style="display: inline-block;width: 100%;">
                                                             <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Invoer:</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{date('d-m-Y',strtotime($request->retailer_delivery_date))}} @endif</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$request->retailer_delivery_date ? date('d-m-Y',strtotime($request->retailer_delivery_date)) : null}} @endif</span>
                                                         </div>
                                                     </td>
                                                     <td style="width: 60%;padding: 5px;padding-left: 20px;">

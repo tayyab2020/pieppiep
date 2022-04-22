@@ -76,7 +76,7 @@
                                     <a href="#leads" data-toggle="collapse" @if(Route::currentRouteName() == 'quotation-requests' || Route::currentRouteName() == 'handyman-quotations' || Route::currentRouteName() == 'handyman-quotations-invoices' || Route::currentRouteName() == 'handyman-commission-invoices' || Route::currentRouteName() == 'quotation-questions' || Route::currentRouteName() == 'admin-my-cat-index' || Route::currentRouteName() == 'admin-features' || Route::currentRouteName() == 'admin-service-index' || Route::currentRouteName() == 'admin-item-index') aria-expanded="true" @else aria-expanded="false" @endif><i class="fa fa-fw fa-file-code-o"></i> Leads for admin</a>
                                     <ul class="collapse list-unstyled submenu" id="leads">
                                         <li><a href="{{route('quotation-requests')}}"><i class="fa fa-angle-right"></i> Quotation Requests</a></li>
-                                        <li><a href="{{route('handyman-quotations')}}"><i class="fa fa-angle-right"></i> Handyman Quotations</a></li>
+                                        <li><a href="{{route('handyman-quotations')}}"><i class="fa fa-angle-right"></i> Retailer Quotations</a></li>
                                         <li><a href="{{route('handyman-quotations-invoices')}}"><i class="fa fa-angle-right"></i> Quotation Invoices</a></li>
                                         <li><a href="{{route('handyman-commission-invoices')}}"><i class="fa fa-angle-right"></i> Commission Invoices</a></li>
                                         <li><a href="{{route('quotation-questions')}}"><i class="fa fa-angle-right"></i> Categories Quotation Questions</a></li>

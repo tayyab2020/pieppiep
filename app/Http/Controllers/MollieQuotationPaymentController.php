@@ -52,6 +52,7 @@ class MollieQuotationPaymentController extends Controller {
             $service_fee = $data->service_fee;
             $quotation_invoice_number = $data->quotation_invoice_number;
             $commission_invoice_number = $data->commission_invoice_number;
+            $client_dash = $api_key->site.'aanbieder/client-new-quotations';
             $retailer_dash = url('/').'/aanbieder/dashboard';
             $commission_percentage = $data->commission_percentage;
             $commission = $data->commission;
@@ -157,8 +158,8 @@ class MollieQuotationPaymentController extends Controller {
 
             $customer_quotation = 1;
             $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('customer_quotation','service_fee','form_type','role','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
-            $file = public_path() . '/assets/newQuotations/CustomerQuotations/' . $filename;
-            $pdf->save($file);
+            $file1 = public_path() . '/assets/newQuotations/CustomerQuotations/' . $filename;
+            $pdf->save($file1);
 
             $filename = $commission_invoice_number . '.pdf';
 
@@ -170,6 +171,20 @@ class MollieQuotationPaymentController extends Controller {
 
             $pdf->save($file);
 
+            $msg = "Dear Mr/Mrs ". $client->name .",<br><br>We have received your payment for quotation # " . $quotation_invoice_number . ". Service fee invoice is attached below. For further details visit your panel through <a href='".$client_dash."'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+
+            \Mail::send(array(), array(), function ($message) use ($msg, $file1, $filename, $client) {
+                $message->to($client->email)
+                    ->from('info@vloerofferte.nl')
+                    ->subject(__('text.Payment Received!'))
+                    ->setBody($msg, 'text/html');
+
+                $message->attach($file1, [
+                    'as' => $filename,
+                    'mime' => 'application/pdf',
+                ]);
+            });
+
             if($language == 'du')
             {
                 $msg = "Beste ". $name .",<br><br>De klant heeft de factuur betaald QUO# " . $quotation_invoice_number . ", Wij betalen het bedrag minus commissiekosten aan je uit, zodra de klant de goederen heeft ontvangen en de status van de levering heeft gewijzigd naar ontvangen. <a href='".$retailer_dash."'>Klik hier</a> om naar je dashboard te gaan.<br><br><b>Wat als?</b><br><br>Geen melding dat het pakket is ontvangen? Wees gerust, na zeven dagen gaan we hier vanuit. Als verkoper ontvang je uiterlijk de volgende werkdag om 18.00 uur het aankoopbedrag op je rekening.<br><br>Met vriendelijke groeten,<br><br>Vloerofferte";
@@ -178,7 +193,6 @@ class MollieQuotationPaymentController extends Controller {
             {
                 $msg = "Dear Mr/Mrs ". $name .",<br><br>We have received payment for your quotation # " . $quotation_invoice_number . ". This amount will soon be transferred to your account. Below attached is your invoice along with our commission. For further details visit your panel through <a href='".$retailer_dash."'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
             }
-
 
             \Mail::send(array(), array(), function ($message) use ($msg, $file, $filename, $email, $name, $retailer_dash, $paid_amount, $quotation_invoice_number) {
                 $message->to($email)
@@ -191,7 +205,6 @@ class MollieQuotationPaymentController extends Controller {
                     'mime' => 'application/pdf',
                 ]);
             });
-
 
             $admin_email = $sl->admin_email;
 

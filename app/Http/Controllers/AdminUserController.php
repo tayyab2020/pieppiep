@@ -430,7 +430,7 @@ class AdminUserController extends Controller
 
         $quote_model = product_models::where('id',$request->quote_model)->first();
         $quote_color = colors::where('id',$request->quote_color)->first();
-        $categories = Category::where('parent_id','!=',0)->get();
+        $categories = sub_categories::get();
         $services = Service::all();
         $brands = Brand::all();
         $models = product_models::groupBy('model')->get();

@@ -5903,7 +5903,7 @@ class UserController extends Controller
 
         if($data)
         {
-            new_quotations::where('id', $id)->where('new_quotations.creator_id', $user_id)->update(['new_quotations.retailer_delivered' => 1]);
+            new_quotations::where('id', $id)->where('creator_id', $user_id)->update(['retailer_delivered' => 1]);
 
             $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email')->first();
             $client_name = $client->name . ' ' . $client->family_name;
