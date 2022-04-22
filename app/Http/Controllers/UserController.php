@@ -2715,7 +2715,14 @@ class UserController extends Controller
             $user = User::where('id',$main_id)->first();
         }
 
-        $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->where('new_quotations.id',$id)->select('new_quotations.*','users.name','users.email')->first();
+        if($request->customer_type == 0)
+        {
+            $data = new_quotations::leftjoin('quotes','quotes.id','=','new_quotations.quote_request_id')->where('new_quotations.id',$id)->select('new_quotations.*','quotes.quote_name as name','quotes.quote_email as email')->first();
+        }
+        else
+        {
+            $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->where('new_quotations.id',$id)->select('new_quotations.*','users.name','users.email')->first();
+        }
 
         if($req_type == 'quotation')
         {

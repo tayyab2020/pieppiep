@@ -396,7 +396,7 @@
 
                                                                                 @if(!$key->invoice_sent)
 
-                                                                                    <li><a class="send-new-invoice" data-negative="0" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Invoice</a></li>
+                                                                                    <li><a class="send-new-invoice" data-type="{{$key->quote_request_id ? 0 : 1}}" data-negative="0" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Invoice</a></li>
 
                                                                                 @endif
 
@@ -407,7 +407,7 @@
 
                                                                                 @if(!$key->negative_invoice_sent)
 
-                                                                                    <li><a class="send-negative-invoice" data-negative="1" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Negative Invoice</a></li>
+                                                                                    <li><a class="send-negative-invoice" data-type="{{$key->quote_request_id ? 0 : 1}}" data-negative="1" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Negative Invoice</a></li>
 
                                                                                 @endif
 
@@ -799,11 +799,12 @@
 
             var id = $(this).data('id');
             var negative = $(this).data('negative');
+            var type = $(this).data('type');
 
             $.ajax({
 
                 type: "GET",
-                data: "id=" + id + '&type=invoice',
+                data: "id=" + id + '&customer_type=' + type + '&type=invoice',
                 url: "<?php echo url('/aanbieder/get-customer-email')?>",
 
                 success: function (data) {
