@@ -5947,9 +5947,20 @@ class UserController extends Controller
         $check->invoice_sent = 1;
         $check->save();
 
-        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
-        $client_name = $client->name . ' ' . $client->family_name;
-        $client_email = $client->email;
+        if($check->quote_request_id)
+        {
+            $quote = quotes::where('id', $check->quote_request_id)->first();
+            $client = new \stdClass();
+            $client_name = $quote->quote_name . ' ' . $quote->quote_familyname;
+            $client_email = $quote->quote_email;
+        }
+        else
+        {
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
+            $client_name = $client->name . ' ' . $client->family_name;
+            $client_email = $client->email;
+        }
+        
         $retailer_company = $user->company_name;
         $invoice_number = $check->invoice_number;
         $filename = $invoice_number . '.pdf';
