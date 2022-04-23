@@ -1861,10 +1861,26 @@ class UserController extends Controller
         if($id)
         {
             $request_id = Crypt::decrypt($id);
+            $quote = quotes::where('id',$request_id)->first();
+            $quote_qty = $quote->quote_qty;
+
+            if($quote->quote_service)
+            {
+                $model = product_models::where('id',$quote->quote_model)->pluck('model')->first();
+                $color = colors::where('id',$quote->quote_color)->pluck('title')->first();
+                $product_request = Products::leftjoin('product_models','product_models.product_id','=','products.id')->leftjoin('colors','colors.product_id','=','products.id')->leftjoin('users','users.id','=','products.user_id')->where('product_models.model',$model)->where('colors.title',$color)->where('products.sub_category_id',$quote->quote_service)->where('products.brand_id',$quote->quote_brand)->where('products.model_id',$quote->quote_type)->select('products.*','users.id as supplier_id','users.company_name','product_models.id as model_id','product_models.model','product_models.measure','product_models.estimated_price_per_box','product_models.estimated_price_quantity','product_models.estimated_price','product_models.max_width','colors.id as color_id','colors.title as color')->first();
+            }
+            else
+            {
+                $product_request = Service::leftjoin('retailer_services','retailer_services.service_id','=','services.id')->where('services.id',$quote->quote_service1)->select('services.*','retailer_services.sell_rate')->first();
+            }
         }
         else
         {
             $request_id = '';
+            $product_request = '';
+            $quote = '';
+            $quote_qty = '';
         }
 
         $user = Auth::guard('user')->user();
@@ -1915,7 +1931,7 @@ class UserController extends Controller
                 $services = Service::leftjoin('retailer_services', 'retailer_services.service_id', '=', 'services.id')->where('retailer_services.retailer_id', $user_id)->select('services.*','retailer_services.sell_rate as rate')->get();
                 $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
 
-                return view('user.create_custom_quote1', compact('products','customers','suppliers','user','services','items','request_id'));
+                return view('user.create_custom_quote1', compact('products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
             } else {
                 return redirect()->back();
             }
