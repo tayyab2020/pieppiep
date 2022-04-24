@@ -5692,6 +5692,25 @@ class UserController extends Controller
         }
     }
 
+    public function SendQuotationAdmin($id)
+    {
+        $quotation = new_quotations::where('id',$id)->first();
+        $quotation->admin_quotation_sent = 1;
+        $quotation->save();
+
+        $admin_email = $this->sl->admin_email;
+
+        \Mail::send(array(), array(), function ($message) use ($admin_email,$quotation) {
+            $message->to($admin_email)
+                ->from('info@pieppiep.com')
+                ->subject('Quotation waiting for approval')
+                ->setBody("Recent activity: New quotation QUO# <b>" . $quotation->quotation_invoice_number . "</b> has been submitted for approval.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+        });
+
+        Session::flash('success', 'Quotation submitted for approval.');
+        return redirect()->back();
+    }
+
     public function SendNewQuotation(Request $request)
     {
         $user = Auth::guard('user')->user();

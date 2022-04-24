@@ -370,7 +370,7 @@
 
                                                                                 <span class="btn btn-success">Order Processing</span>
 
-                                                                            @elseif($key->quote_request_id)
+                                                                            @elseif($key->quote_request_id && $key->admin_quotation_sent)
 
                                                                                 <span class="btn btn-info">{{__('text.Waiting For Approval')}}</span>
 
@@ -426,7 +426,7 @@
 
                                                                             @endif
 
-                                                                            
+
                                                                             @if($key->status != 2 && $key->status != 3)
 
                                                                                 @if($key->ask_customization)
@@ -461,7 +461,7 @@
                                                                                 <li><a href="{{ url('/aanbieder/edit-order/'.$key->invoice_id) }}">View Order</a></li>
 
                                                                             @endif
-                                                                            
+
                                                                             @if(!$key->quote_request_id || $key->paid)
 
                                                                                 @if($key->accepted && !$key->processing && !$key->finished)
@@ -541,7 +541,7 @@
                                                                                 @if(!$key->quote_request_id || $key->paid)
 
                                                                                     @if(!$key->processing)
-                                                                                
+
                                                                                         @if(count($key->orders) > 0)
 
                                                                                             <li><a href="{{ url('/aanbieder/download-full-order-pdf/'.$key->invoice_id) }}">Download Full Order PDF</a></li>
@@ -551,6 +551,12 @@
                                                                                     @endif
 
                                                                                 @endif
+
+                                                                            @endif
+
+                                                                            @if($key->quote_request_id && !$key->admin_quotation_sent)
+
+                                                                                <li><a href="{{ url('/aanbieder/send-quotation-admin/'.$key->invoice_id) }}">{{__('text.Send Quotation')}}</a></li>
 
                                                                             @endif
 

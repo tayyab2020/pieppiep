@@ -113,9 +113,13 @@
 
                                                                             <span class="btn btn-success">Quotation Sent</span>
 
-                                                                        @else
+                                                                        @elseif($invoices[$i]->admin_quotation_sent)
 
                                                                             <span class="btn btn-info">{{__('text.Waiting For Approval')}}</span>
+
+                                                                        @else
+
+                                                                            <span class="btn btn-info">Quotation Created</span>
 
                                                                         @endif
 

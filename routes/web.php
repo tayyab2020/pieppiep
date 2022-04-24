@@ -143,6 +143,7 @@
   Route::get('/quotation-payment-redirect-page/{id}', 'FrontendController@QuotationPaymentRedirectPage');
   Route::get('/versturen-eigen-offerte/{id}', 'UserController@SendCustomQuotation');
   Route::post('/send-new-quotation', 'UserController@SendNewQuotation')->name('send-new-quotation');
+  Route::get('/send-quotation-admin/{id}', 'UserController@SendQuotationAdmin');
   Route::post('/send-order', 'UserController@SendOrder')->name('send-new-order');
   Route::get('/change-delivery-dates/{id}', 'UserController@ChangeDeliveryDates');
   Route::get('/supplier-order-delivered/{id}', 'UserController@SupplierOrderDelivered');
@@ -425,7 +426,7 @@
   Route::get('/delete-services-question/{id}', 'AdminUserController@DeleteServicesQuestion')->name('delete-services-question');
 
   Route::get('/quotation-requests', 'AdminUserController@QuotationRequests')->name('quotation-requests');
-  Route::get('/handyman-quotations/{id?}', 'AdminUserController@HandymanQuotations')->name('handyman-quotations');
+  Route::get('/retailer-quotations/{id?}', 'AdminUserController@HandymanQuotations')->name('handyman-quotations');
   Route::get('/handyman-quotations-invoices/{id?}', 'AdminUserController@HandymanQuotationsInvoices')->name('handyman-quotations-invoices');
   Route::get('/view-new-quotation/{id}', 'AdminUserController@ViewNewQuotation')->name('admin-view-new-quotation');
   Route::get('/handyman-commission-invoices/{id?}', 'AdminUserController@HandymanQuotationsInvoices')->name('handyman-commission-invoices');
