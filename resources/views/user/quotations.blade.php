@@ -225,13 +225,14 @@
 
                                                                     @if($key->status == 3)
 
-                                                                        @if($key->received)
+                                                                        @if($key->customer_received)
 
                                                                             <span class="btn btn-success">{{__('text.Goods Received')}}</span>
 
-                                                                        @elseif($key->delivered)
+                                                                        @elseif($key->retailer_delivered)
 
                                                                             <span class="btn btn-success">{{__('text.Goods Delivered')}}</span>
+
                                                                         @else
 
                                                                             <span class="btn btn-success">{{__('text.Invoice Generated')}}</span>
