@@ -5921,16 +5921,27 @@ class UserController extends Controller
         {
             new_quotations::where('id', $id)->where('creator_id', $user_id)->update(['retailer_delivered' => 1]);
 
-            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email')->first();
-            $client_name = $client->name . ' ' . $client->family_name;
-            $client_email = $client->email;
-            $order_number = $data->quotation_invoice_number;
+            if($data->quote_request_id)
+            {
+                $quote = quotes::where('id',$data->quote_request_id)->first();
+                $client = new \stdClass();
+                $client_name = $quote->quote_name . ' ' . $quote->quote_familyname;
+                $client_email = $quote->quote_email;
+            }
+            else
+            {
+                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email')->first();
+                $client_name = $client->name . ' ' . $client->family_name;
+                $client_email = $client->email;
+            }
 
-            \Mail::send(array(), array(), function ($message) use ($client_email, $retailer_company, $client_name, $order_number) {
+            $quotation_invoice_number = $data->quotation_invoice_number;
+
+            \Mail::send(array(), array(), function ($message) use ($client_email, $retailer_company, $client_name, $quotation_invoice_number) {
                 $message->to($client_email)
                     ->from('info@pieppiep.com')
                     ->subject('Quotation marked as delivered by retailer!')
-                    ->setBody("Recent activity: Hi ".$client_name.", quotation has been delivered by retailer <b>".$retailer_company."</b><br> Quotation No: <b>" . $order_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+                    ->setBody("Recent activity: Hi ".$client_name.", quotation has been delivered by retailer <b>".$retailer_company."</b><br> Quotation No: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
 
             Session::flash('success', 'Quotation marked as delivered.');
