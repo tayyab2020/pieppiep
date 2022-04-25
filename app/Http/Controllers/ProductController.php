@@ -1472,6 +1472,8 @@ class ProductController extends Controller
             $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.id',$cats->category_id)->select('categories.*')->get();
+            $category_id = $categories[0]->id;
+            $predefined_models = predefined_models::whereRaw("find_in_set('$category_id',category_ids)")->where('user_id',$user_id)->get();
             $sub_categories = sub_categories::where('parent_id',$cats->category_id)->get();
             $brands = Brand::where(function($query) use($user_id) {
                 $query->where('user_id',$user_id)->orWhere(function($query1) use($user_id) {
@@ -1491,11 +1493,11 @@ class ProductController extends Controller
 
             if($categories[0]->cat_name == 'Blinds' || $categories[0]->cat_name == 'Binnen zonwering')
             {
-                return view('admin.product.create',compact('ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
+                return view('admin.product.create',compact('ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings','predefined_models'));
             }
             else
             {
-                return view('admin.product.create_for_floors',compact('types','ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings'));
+                return view('admin.product.create_for_floors',compact('types','ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings','predefined_models'));
             }
 
         }

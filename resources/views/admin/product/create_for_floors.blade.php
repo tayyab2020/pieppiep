@@ -1753,6 +1753,9 @@
                     val = val.toLowerCase();
                     var res = string.includes(val);
 
+                    console.log(string);
+                    console.log(res);
+
                     if (res) {
                         /*create a DIV element for each matching element:*/
                         b = document.createElement("DIV");
