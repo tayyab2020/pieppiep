@@ -787,6 +787,11 @@
 		border-bottom: 1px solid #d4d4d4;
 	}
 
+	.autocomplete-items div:last-child
+    {
+        border-bottom: 0;
+    }
+
 	/*when hovering an item:*/
 	.autocomplete-items div:hover {
 		background-color: #e9e9e9;
@@ -4437,6 +4442,10 @@
 							});
 							a.appendChild(b);
 						}
+						else
+                    	{
+                        	a.style.border = "0";
+                    	}
 					}
 				});
 				/*execute a function presses a key on the keyboard:*/

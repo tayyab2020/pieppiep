@@ -335,10 +335,15 @@
   Route::get('/features/create', 'FeaturesController@create')->name('admin-feature-create');
   Route::post('/features/create', 'FeaturesController@store')->name('admin-feature-store');
   Route::get('/features/edit/{id}', 'FeaturesController@edit')->name('admin-feature-edit');
-  Route::post('/features/update/{id}', 'FeaturesController@update')->name('admin-feature-update');
   Route::get('/features/delete/{id}', 'FeaturesController@destroy')->name('admin-feature-delete');
-
   Route::get('/features/add-default-feature/{id}', 'FeaturesController@edit')->name('add-default-feature');
+
+  Route::get('/models', 'PredefinedModelsController@index')->name('predefined-model-index');
+  Route::get('/models/create', 'PredefinedModelsController@create')->name('predefined-model-create');
+  Route::post('/models/create', 'PredefinedModelsController@store')->name('predefined-model-store');
+  Route::get('/models/edit/{id}', 'PredefinedModelsController@edit')->name('predefined-model-edit');
+  Route::get('/models/delete/{id}', 'PredefinedModelsController@destroy')->name('predefined-model-delete');
+  Route::get('/models/add-default-model/{id}', 'PredefinedModelsController@edit')->name('add-default-model');
 
   Route::get('/suppliers', 'UserController@Suppliers')->name('suppliers');
   Route::post('/send-request-supplier', 'UserController@SendRequestSupplier')->name('send-request-supplier');
@@ -383,6 +388,12 @@
   Route::post('/features/create', 'DefaultFeaturesController@store')->name('default-features-store');
   Route::get('/features/edit/{id}', 'DefaultFeaturesController@edit')->name('default-features-edit');
   Route::get('/features/delete/{id}', 'DefaultFeaturesController@destroy')->name('default-features-delete');
+
+  Route::get('/models', 'DefaultPredefinedModelsController@index')->name('default-models-index');
+  Route::get('/models/create', 'DefaultPredefinedModelsController@create')->name('default-models-create');
+  Route::post('/models/create', 'DefaultPredefinedModelsController@store')->name('default-models-store');
+  Route::get('/models/edit/{id}', 'DefaultPredefinedModelsController@edit')->name('default-models-edit');
+  Route::get('/models/delete/{id}', 'DefaultPredefinedModelsController@destroy')->name('default-models-delete');
 
   Route::get('/mark-delivered/{id}', 'AdminUserController@MarkDelivered');
   Route::get('/mark-received/{id}', 'AdminUserController@MarkReceived');

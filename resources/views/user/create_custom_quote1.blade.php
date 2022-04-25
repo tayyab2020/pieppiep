@@ -123,6 +123,32 @@
 
 											@include('includes.form-success')
 
+											<select style="display: none;" class="form-control all-products" id="blood_grp">
+
+												@foreach($products as $key)
+
+													@foreach($key->models as $key1)
+
+														@foreach($key->colors as $key2)
+
+															<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
+
+														@endforeach
+
+													@endforeach
+
+												@endforeach
+
+												@foreach($services as $service)
+													<option data-type="Service" value="{{$service->id}}S">{{$service->title . ', Service'}}</option>
+												@endforeach
+
+												@foreach($items as $item1)
+													<option data-type="Item" value="{{$item1->id}}I">{{$item1->cat_name . ', Item, (' . $item1->category . ')'}}</option>
+												@endforeach
+
+											</select>
+
 											<div style="padding-bottom: 0;" class="form-horizontal">
 
 												<div style="margin: 0;border-top: 1px solid #eee;" class="row">
@@ -178,32 +204,6 @@
 																		<div class="autocomplete" style="width:100%;">
 																			<input value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																		</div>
-
-																		<select style="display: none;" class="form-control all-products" id="blood_grp">
-
-																			@foreach($products as $key)
-
-																				@foreach($key->models as $key1)
-
-																					@foreach($key->colors as $key2)
-
-																						<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
-
-																					@endforeach
-
-																				@endforeach
-
-																			@endforeach
-
-																			@foreach($services as $service)
-                                                    							<option data-type="Service" value="{{$service->id}}S">{{$service->title . ', Service'}}</option>
-                                                							@endforeach
-
-																			@foreach($items as $item1)
-																				<option data-type="Item" value="{{$item1->id}}I">{{$item1->cat_name . ', Item, (' . $item1->category . ')'}}</option>
-																			@endforeach
-
-																		</select>
 
 																		<input type="hidden" value="{{$item->item_id != 0 ? $item->item_id.'I' : ($item->service_id != 0 ? $item->service_id.'S' : $item->product_id)}}" name="products[]" id="product_id">
 																		<input type="hidden" value="{{$item->supplier_id}}" name="suppliers[]" id="supplier_id">
@@ -343,32 +343,6 @@
 																		<div class="autocomplete" style="width:100%;">
 																			<input id="productInput" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.$product_request->model.', '.$product_request->color.', ('.$product_request->company_name.')' : $product_request->title.', Service') : null}}" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																		</div>
-
-																		<select style="display: none;" class="form-control all-products" id="blood_grp">
-
-																			@foreach($products as $key)
-																		
-																				@foreach($key->models as $key1)
-																			
-																					@foreach($key->colors as $key2)
-
-																						<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
-
-																					@endforeach
-
-																				@endforeach
-
-																			@endforeach
-
-																			@foreach($services as $service)
-                                                    							<option data-type="Service" value="{{$service->id}}S">{{$service->title . ', Service'}}</option>
-                                                							@endforeach
-
-																			@foreach($items as $item)
-																				<option data-type="Item" value="{{$item->id}}I">{{$item->cat_name . ', Item, (' . $item->category . ')'}}</option>
-																			@endforeach
-
-																		</select>
 
 																		<input type="hidden" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->id : $product_request->id.'S') : null}}" name="products[]" id="product_id">
 																		<input type="hidden" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->supplier_id : null) : null}}" name="suppliers[]" id="supplier_id">
@@ -1371,6 +1345,11 @@
 		background-color: #fff;
 		border-bottom: 1px solid #d4d4d4;
 	}
+
+	.autocomplete-items div:last-child
+    {
+        border-bottom: 0;
+    }
 
 	/*when hovering an item:*/
 	.autocomplete-items div:hover {
@@ -3039,7 +3018,7 @@
 				$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 			}
 
-			function add_row(copy = false, rate = null, basic_price = null, price = null, products = null, product = null, product_text = null, supplier = null, color = null, model = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, base_price = null, supplier_margin = null, retailer_margin = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
+			function add_row(copy = false, rate = null, basic_price = null, price = null, product = null, product_text = null, supplier = null, color = null, model = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, base_price = null, supplier_margin = null, retailer_margin = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
 
 				var rowCount = $('#products_table .content-div:last').data('id');
 				rowCount = rowCount + 1;
@@ -3083,24 +3062,6 @@
 							'																	<input id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
 							'\n' +
 							'                                                                </div>\n' +
-							'\n' +
-							'																 <select style="display: none;" class="form-control all-products" id="blood_grp">\n' +
-							'\n' +
-							'                                                                    @foreach($products as $key)\n' +
-							'\n' +
-							'                                                                    	@foreach($key->models as $key1)\n' +
-							'\n' +
-							'                                                                    		@foreach($key->colors as $key2)\n' +
-							'\n' +
-							'                                                                        		<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>\n' +
-							'\n' +
-							'                                                                    		@endforeach\n' +
-							'\n' +
-							'                                                                    	@endforeach\n' +
-							'\n' +
-							'                                                                    @endforeach\n' +
-							'\n' +
-							'                                                                </select>\n' +
 							'\n' +
 							'																<input type="hidden" name="products[]" id="product_id">\n' +
 							'																<input type="hidden" name="suppliers[]" id="supplier_id">\n' +
@@ -3267,12 +3228,6 @@
 							'																	<input id="productInput" value="'+product_text+'" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
 							'\n' +
 							'                                                                </div>\n' +
-							'\n' +
-							'																 <select style="display: none;" class="form-control all-products" id="blood_grp">\n' +
-							'\n' +
-							products +
-							'\n' +
-							'                                                                </select>\n' +
 							'\n' +
 							'																<input type="hidden" name="products[]" id="product_id" value="'+product+'">\n' +
 							'																<input type="hidden" name="suppliers[]" id="supplier_id" value="'+supplier+'">\n' +
@@ -3868,7 +3823,6 @@
 				var rate = current.find('#rate').val();
 				var basic_price = current.find('#basic_price').val();
 				var price = current.find('#row_total').val();
-				var products = current.find('.all-products').html();
 				var product = current.find('#product_id').val();
 				var product_text = current.find('#productInput').val();
 				var supplier = current.find('#supplier_id').val();
@@ -3899,7 +3853,7 @@
 				var measure = current.find('#measure').val();
 				var max_width = current.find('#max_width').val();
 
-				add_row(true, rate, basic_price, price, products, product, product_text, supplier, color, model, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, base_price, supplier_margin, retailer_margin, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
+				add_row(true, rate, basic_price, price, product, product_text, supplier, color, model, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, base_price, supplier_margin, retailer_margin, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
 
 			});
 
@@ -5452,6 +5406,10 @@
 							});
 							a.appendChild(b);
 						}
+						else
+                    	{
+                        	a.style.border = "0";
+                    	}
 					}
 				});
 				/*execute a function presses a key on the keyboard:*/

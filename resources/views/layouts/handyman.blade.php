@@ -1440,6 +1440,12 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('user-models'))
 
+                                    <li><a href="{{route('predefined-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
+
+                                @endif
+
+                                @if(auth()->user()->can('user-models'))
+
                                     <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Types</a></li>
 
                                 @endif

@@ -38,6 +38,7 @@ use App\service_types;
 use App\sub_services;
 use App\handyman_products;
 use App\carts;
+use App\predefined_models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Excel;
@@ -227,7 +228,6 @@ class ProductController extends Controller
         return redirect()->route('admin-product-index');
     }
 
-
     public function resetSupplierMargins()
     {
         $user = Auth::guard('user')->user();
@@ -265,16 +265,18 @@ class ProductController extends Controller
                     $query1->whereRaw("find_in_set($user_id,other_suppliers)")->where('trademark',0);
                 });
             })->orderBy('id','desc')->get();
+            $category_id = $categories[0]->id;
+            $predefined_models = predefined_models::whereRaw("find_in_set('$category_id',category_ids)")->where('user_id',$user_id)->get();
             $tables = price_tables::where('connected',1)->where('user_id',$user_id)->get();
             $features_headings = features::where('user_id',$user_id)->get();
 
             if($request->cat == 'Blinds' || $request->cat == 'Binnen zonwering')
             {
-                return view('admin.product.create',compact('categories','brands','tables','features_headings'));
+                return view('admin.product.create',compact('categories','brands','tables','features_headings','predefined_models'));
             }
             else
             {
-                return view('admin.product.create_for_floors',compact('categories','brands','tables','features_headings'));
+                return view('admin.product.create_for_floors',compact('categories','brands','tables','features_headings','predefined_models'));
             }
 
         }

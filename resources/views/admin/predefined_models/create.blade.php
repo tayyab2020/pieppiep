@@ -13,18 +13,18 @@
                                 <div class="add-product-box">
 
                                     <div class="add-product-header">
-                                        <h2>{{isset($feature) ? 'Edit Feature' : 'Add Feature'}}</h2>
-                                        <a href="{{route('admin-feature-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <h2>{{isset($model) ? 'Edit Model' : 'Add Model'}}</h2>
+                                        <a href="{{route('predefined-model-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                     </div>
 
-                                    <form class="form-horizontal" action="{{route('admin-feature-store')}}" method="POST" enctype="multipart/form-data">
+                                    <form class="form-horizontal" action="{{route('predefined-model-store')}}" method="POST" enctype="multipart/form-data">
                                         @include('includes.form-error')
                                         @include('includes.form-success')
 
                                         {{csrf_field()}}
 
-                                        <input type="hidden" name="default_feature" value="{{Route::currentRouteName() == 'admin-feature-edit' ? 0 : 1}}">
-                                        <input type="hidden" id="heading_id" name="heading_id" value="{{isset($feature) ? $feature->id : null}}">
+                                        <input type="hidden" name="default_model" value="{{Route::currentRouteName() == 'predefined-model-edit' ? 0 : 1}}">
+                                        <input type="hidden" id="heading_id" name="heading_id" value="{{isset($model) ? $model->id : null}}">
 
                                         <div class="accordion-menu">
 
@@ -37,82 +37,43 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
                                                             <div class="col-sm-6">
-                                                                <input value="{{isset($feature) ? $feature->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Feature heading" required="" type="text">
+                                                                <input value="{{isset($model) ? $model->model : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Model Title" required="" type="text">
                                                             </div>
                                                         </div>
 
-                                                        <div style="margin: 20px 0;display: flex;align-items: center;justify-content: flex-start;" class="form-group">
-
-                                                            <label style="padding-top: 0;" class="control-label col-sm-4">Comment Box:</label>
-
-                                                            <span style="font-size: 15px;padding-right: 10px;font-weight: 600;font-family: monospace;margin-left: 20px;">No</span>
-                                                            <label style="margin: 0;" class="switch">
-                                                                <input {{isset($feature) ? ($feature->comment_box ? 'checked' : null) : null}} class="comment_box" name="comment_box" type="checkbox">
-                                                                <span class="slider round"></span>
-                                                            </label>
-                                                            <span style="font-size: 15px;padding-left: 10px;font-weight: 900;font-family: monospace;">Yes</span>
-
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Value</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" value="{{isset($model) ? $model->value : null}}" placeholder="Model Value" class="form-control" name="value" id="blood_group_display_name">
+                                                            </div>
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">PDF Order</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Measure</label>
                                                             <div class="col-sm-6">
-                                                                <select class="form-control" name="order_no" id="blood_group_display_name" required="">
+                                                                <select class="form-control" name="measure" id="blood_group_display_name">
 
-                                                                    <option {{isset($feature) ? ($feature->order_no == 0 ? 'selected' : null) : null}} value="0">1</option>
-                                                                    <option {{isset($feature) ? ($feature->order_no == 1 ? 'selected' : null) : null}} value="1">2</option>
-                                                                    <option {{isset($feature) ? ($feature->order_no == 2 ? 'selected' : null) : null}} value="2">3</option>
-                                                                    <option {{isset($feature) ? ($feature->order_no == 3 ? 'selected' : null) : null}} value="3">4</option>
-                                                                    <option {{isset($feature) ? ($feature->order_no == 4 ? 'selected' : null) : null}} value="4">5</option>
-                                                                    <option {{isset($feature) ? ($feature->order_no == 5 ? 'selected' : null) : null}} value="5">6</option>
-                                                                    <option {{isset($feature) ? ($feature->order_no == 6 ? 'selected' : null) : null}} value="6">7</option>
+                                                                    <option {{isset($model) ? ($model->measure == 'M1' ? 'selected' : null) : null}} value="M1">M1</option>
+                                                                    <option {{isset($model) ? ($model->measure == 'M2' ? 'selected' : null) : null}} value="M2">M2</option>
+                                                                    <option {{isset($model) ? ($model->measure == 'Custom Sized' ? 'selected' : null) : null}} value="Custom Sized">Custom Sized</option>
+                                                                    <option {{isset($model) ? ($model->measure == 'Per Piece' ? 'selected' : null) : null}} value="Per Piece">Per Piece</option>
 
                                                                 </select>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Quote Order</label>
-                                                            <div class="col-sm-6">
-                                                                <input type="number" value="{{isset($feature) ? $feature->quote_order_no : 0}}" placeholder="Quote Order" class="form-control quote_order_no" name="quote_order_no" id="blood_group_display_name" required="">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Feature Type*</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">Model Category*</label>
 
                                                             <div class="col-sm-6">
 
-                                                                <select class="form-control" name="feature_type" id="feature_type" required>
+                                                                <?php if(isset($model)) $category_ids = explode(',',$model->category_ids); ?>
 
-                                                                    <option value="">Select Feature Type</option>
-                                                                    <option {{isset($feature) ? ($feature->type == 'Text' ? 'selected' : null) : null}} value="Text">Text</option>
-                                                                    <option {{isset($feature) ? ($feature->type == 'Textarea' ? 'selected' : null) : null}} value="Textarea">Textarea</option>
-                                                                    <option {{isset($feature) ? ($feature->type == 'Price' ? 'selected' : null) : null}} value="Price">Price</option>
-                                                                    <option {{isset($feature) ? ($feature->type == 'Boolean' ? 'selected' : null) : null}} value="Boolean">Boolean</option>
-                                                                    <option {{isset($feature) ? ($feature->type == 'Select' ? 'selected' : null) : null}} value="Select">Select</option>
-                                                                    <option {{isset($feature) ? ($feature->type == 'Multiselect' ? 'selected' : null) : null}} value="Multiselect">Multiselect</option>
-                                                                    <option {{isset($feature) ? ($feature->type == 'Checkbox' ? 'selected' : null) : null}} value="Checkbox">Checkbox</option>
-
-                                                                </select>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Feature Category*</label>
-
-                                                            <div class="col-sm-6">
-
-                                                                <?php if(isset($feature)) $category_ids = explode(',',$feature->category_ids); ?>
-
-                                                                <select style="height: 100px;" class="form-control" name="feature_category[]" id="feature_category" required multiple>
+                                                                <select style="height: 100px;" class="form-control" name="model_category[]" id="model_category" required multiple>
 
                                                                     @foreach($cats as $cat)
 
-                                                                        <option {{isset($feature) ? (in_array($cat->id, $category_ids) ? 'selected' : null) : null}} value="{{$cat->id}}">{{$cat->cat_name}}</option>
+                                                                        <option {{isset($model) ? (in_array($cat->id, $category_ids) ? 'selected' : null) : null}} value="{{$cat->id}}">{{$cat->cat_name}}</option>
 
                                                                     @endforeach
 
@@ -127,189 +88,20 @@
 
                                                 <li>
                                                     <input type="checkbox">
-                                                    <h2>Validations <i class="arrow"></i></h2>
+                                                    <h2>Price Impact <i class="arrow"></i></h2>
                                                     <div class="accordion-content">
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Required</label>
-
-                                                            <div class="col-sm-6">
-
-                                                                <select class="form-control" name="feature_required" id="feature_required" required>
-
-                                                                    <option {{isset($feature) ? ($feature->is_required == 0 ? 'selected' : null) : null}} value="0">No</option>
-                                                                    <option {{isset($feature) ? ($feature->is_required == 1 ? 'selected' : null) : null}} value="1">Yes</option>
-
-                                                                </select>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Unique</label>
-
-                                                            <div class="col-sm-6">
-
-                                                                <select class="form-control" name="feature_unique" id="feature_unique" required>
-
-                                                                    <option {{isset($feature) ? ($feature->is_unique == 0 ? 'selected' : null) : null}} value="0">No</option>
-                                                                    <option {{isset($feature) ? ($feature->is_unique == 1 ? 'selected' : null) : null}} value="1">Yes</option>
-
-                                                                </select>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-                                                </li>
-
-                                                <li @if(!isset($feature) || ($feature->type != 'Select' && $feature->type != 'Multiselect' && $feature->type != 'Checkbox')) style="display: none;" @endif id="options-li">
-                                                    <input type="checkbox">
-                                                    <h2>Options <i class="arrow"></i></h2>
-                                                    <div class="accordion-content">
-
-                                                        <div class="table options-table">
-
-                                                            <table style="margin: auto;">
-
-                                                                <thead>
-                                                                <tr>
-                                                                    <th style="border-top-left-radius: 9px;">Title</th>
-                                                                    <th>Value</th>
-                                                                    <th style="width: 10%;">Sub Feature</th>
-                                                                    <th>Price Impact</th>
-                                                                    <th>Impact Type</th>
-                                                                    <th style="width: 12%;border-top-right-radius: 9px;"></th>
-                                                                </tr>
-                                                                </thead>
-
-                                                                <tbody>
-
-                                                                @if(isset($features_data) && count($features_data) > 0)
-
-                                                                    @foreach($features_data as $f1 => $key1)
-
-                                                                        <tr data-id="{{$f1+1}}">
-                                                                            <td>
-                                                                                <input value="{{$f1+1}}" type="hidden" name="f_rows[]" class="f_row">
-                                                                                <input value="{{ Route::currentRouteName() == 'admin-feature-edit' ? $key1->id : null }}" type="hidden" name="feature_ids[]">
-                                                                                <input value="{{$key1->title}}" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
-                                                                            </td>
-                                                                            <td>
-                                                                                <input value="{{$key1->value}}" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
-                                                                            </td>
-                                                                            <td>
-                                                                                <button data-id="{{$f1+1}}" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control" name="price_impact[]">
-
-                                                                                    <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">No</option>
-                                                                                    <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
-                                                                                    <option {{$key1->price_impact == 2 ? 'selected' : null}} value="2">m¹ Impact</option>
-
-                                                                                </select>
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control" name="impact_type[]">
-
-                                                                                    <option {{$key1->impact_type == 0 ? 'selected' : null}} value="0">€</option>
-                                                                                    <option {{$key1->impact_type == 1 ? 'selected' : null}} value="1">%</option>
-
-                                                                                </select>
-                                                                            </td>
-                                                                            <td style="text-align: center;">
-
-                                                                                <span data-id="{{$f1+1}}" id="next-row-span" class="tooltip1 sub-category-row" style="cursor: pointer;font-size: 20px;">
-                                                                                    <i id="next-row-icon" class="fa fa-fw fa-shield"></i>
-                                                                                </span>
-
-                                                                                <span id="next-row-span" class="tooltip1 add-row" data-id="" style="cursor: pointer;font-size: 20px;">
-                                                                                    <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-                                                                                </span>
-
-                                                                                <span data-id="{{$key1->id}}" id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
-                                                                                    <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-                                                                                </span>
-                                                                            </td>
-                                                                        </tr>
-
-                                                                    @endforeach
-
-                                                                @else
-
-                                                                    <tr data-id="1">
-                                                                        <td>
-                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="1">
-                                                                            <input type="hidden" name="feature_ids[]">
-                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
-                                                                        </td>
-                                                                        <td>
-                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
-                                                                        </td>
-                                                                        <td>
-                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
-                                                                        </td>
-                                                                        <td>
-                                                                            <select class="form-control" name="price_impact[]">
-
-                                                                                <option value="0">No</option>
-                                                                                <option value="1">Fixed</option>
-                                                                                <option value="2">m¹ Impact</option>
-
-                                                                            </select>
-                                                                        </td>
-                                                                        <td>
-                                                                            <select class="form-control" name="impact_type[]">
-
-                                                                                <option value="0">€</option>
-                                                                                <option value="1">%</option>
-
-                                                                            </select>
-                                                                        </td>
-                                                                        <td style="text-align: center;">
-
-                                                                            <span id="next-row-span" class="tooltip1 sub-category-row" data-id="1" style="cursor: pointer;font-size: 20px;">
-                                                                                <i id="next-row-icon" class="fa fa-fw fa-shield"></i>
-																		    </span>
-
-                                                                            <span id="next-row-span" class="tooltip1 add-row" data-id="" style="cursor: pointer;font-size: 20px;">
-                                                                                <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-                                                                            </span>
-
-                                                                            <span data-id="" id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
-																			<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																		</span>
-                                                                        </td>
-                                                                    </tr>
-
-                                                                @endif
-
-                                                                </tbody>
-
-                                                            </table>
-
-                                                        </div>
-
-                                                    </div>
-                                                </li>
-
-                                                <li>
-                                                    <input type="checkbox">
-                                                    <h2>Configurations <i class="arrow"></i></h2>
-                                                    <div class="accordion-content">
-
-                                                        {{--<div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Price Impact</label>
 
                                                             <div class="col-sm-6">
 
-                                                                <select class="form-control" name="price_impact" id="price_impact" required>
+                                                                <select class="form-control" name="price_impact" id="price_impact">
 
-                                                                    <option {{isset($feature) ? ($feature->price_impact == 0 ? 'selected' : null) : null}} value="0">No</option>
-                                                                    <option {{isset($feature) ? ($feature->price_impact == 1 ? 'selected' : null) : null}} value="1">Yes</option>
+                                                                    <option {{isset($model) ? ($model->price_impact == 0 ? 'selected' : null) : null}} value="0">No</option>
+                                                                    <option {{isset($model) ? ($model->price_impact == 1 ? 'selected' : null) : null}} value="1">Fixed</option>
+                                                                    <option {{isset($model) ? ($model->m1_impact == 1 ? 'selected' : null) : null}} value="2">m¹ Impact</option>
+                                                                    <option {{isset($model) ? ($model->m2_impact == 1 ? 'selected' : null) : null}} value="3">m² Impact</option>
 
                                                                 </select>
 
@@ -322,58 +114,10 @@
 
                                                             <div class="col-sm-6">
 
-                                                                <select class="form-control" name="impact_type" id="impact_type" required>
+                                                                <select class="form-control" name="impact_type" id="impact_type">
 
-                                                                    <option {{isset($feature) ? ($feature->impact_type == 0 ? 'selected' : null) : null}} value="0">€</option>
-                                                                    <option {{isset($feature) ? ($feature->impact_type == 1 ? 'selected' : null) : null}} value="1">%</option>
-
-                                                                </select>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">m¹ Impact</label>
-
-                                                            <div class="col-sm-6">
-
-                                                                <select class="form-control" name="m1_impact" id="m1_impact" required>
-
-                                                                    <option {{isset($feature) ? ($feature->m1_impact == 0 ? 'selected' : null) : null}} value="0">No</option>
-                                                                    <option {{isset($feature) ? ($feature->m1_impact == 1 ? 'selected' : null) : null}} value="1">Yes</option>
-
-                                                                </select>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">m² Impact</label>
-
-                                                            <div class="col-sm-6">
-
-                                                                <select class="form-control" name="m2_impact" id="m2_impact" required>
-
-                                                                    <option {{isset($feature) ? ($feature->m2_impact == 0 ? 'selected' : null) : null}} value="0">No</option>
-                                                                    <option {{isset($feature) ? ($feature->m2_impact == 1 ? 'selected' : null) : null}} value="1">Yes</option>
-
-                                                                </select>
-
-                                                            </div>
-
-                                                        </div>--}}
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Use for filter page</label>
-
-                                                            <div class="col-sm-6">
-
-                                                                <select class="form-control" name="feature_filter" id="feature__filter" required>
-
-                                                                    <option {{isset($feature) ? ($feature->filter == 0 ? 'selected' : null) : null}} value="0">No</option>
-                                                                    <option {{isset($feature) ? ($feature->filter == 1 ? 'selected' : null) : null}} value="1">Yes</option>
+                                                                    <option {{isset($model) ? ($model->impact_type == 0 ? 'selected' : null) : null}} value="0">€</option>
+                                                                    <option {{isset($model) ? ($model->impact_type == 1 ? 'selected' : null) : null}} value="1">%</option>
 
                                                                 </select>
 
@@ -389,344 +133,7 @@
                                         </div>
 
                                         <div style="margin-top: 20px;" class="add-product-footer">
-                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($feature) ? 'Edit Feature' : 'Add Feature'}}</button>
-                                        </div>
-
-                                        <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div style="width: 70%;" class="modal-dialog">
-
-                                                <div class="modal-content">
-
-                                                    <div class="modal-header">
-                                                        <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                        <h3 id="myModalLabel">Sub Features</h3>
-                                                    </div>
-
-                                                    <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
-
-                                                        <div id="sub-features">
-
-                                                            @if(isset($sub_features_data) && count($features_data) > 0)
-
-                                                                <?php $s1 = 1; ?>
-
-                                                                    @foreach($features_data as $s => $key)
-
-                                                                        <div data-id="{{$s+1}}" class="sub-feature-table-container table">
-
-                                                                            <table style="margin: auto;width: 95%;border-collapse: separate;">
-                                                                                <thead>
-                                                                                <tr>
-                                                                                    <th style="border-top-left-radius: 9px;">Feature</th>
-                                                                                    <th>Value</th>
-                                                                                    <th>Price Impact</th>
-                                                                                    <th>Impact Type</th>
-                                                                                    <th style="border-top-right-radius: 9px;">Remove</th>
-                                                                                </tr>
-                                                                                </thead>
-
-                                                                                <tbody>
-
-                                                                                @if($sub_features_data->contains('main_id',$key->id))
-
-                                                                                    @foreach($sub_features_data as $key1)
-
-                                                                                        @if($key->id == $key1->main_id)
-
-                                                                                            <tr data-id="1">
-                                                                                                <td>
-                                                                                                    <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
-                                                                                                    <input type="hidden" name="feature_row_ids{{$s+1}}[]" value="{{ Route::currentRouteName() == 'admin-feature-edit' ? $key1->id : null }}">
-                                                                                                    <input value="{{$key1->title}}" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Feature Title" type="text">
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <input value="{{$key1->value}}" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <select class="form-control" name="price_impact{{$s+1}}[]">
-
-                                                                                                        <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">No</option>
-                                                                                                        <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
-                                                                                                        <option {{$key1->price_impact == 2 ? 'selected' : null}} value="2">m¹ Impact</option>
-
-                                                                                                    </select>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <select class="form-control" name="impact_type{{$s+1}}[]">
-
-                                                                                                        <option {{$key1->impact_type == 0 ? 'selected' : null}} value="0">€</option>
-                                                                                                        <option {{$key1->impact_type == 1 ? 'selected' : null}} value="1">%</option>
-
-                                                                                                    </select>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <div style="display: flex;justify-content: center;"><span data-id="{{$key1->id}}" class="ui-close remove-sub-feature" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
-                                                                                                </td>
-                                                                                            </tr>
-
-                                                                                            <?php $s1 = $s1 + 1; ?>
-
-                                                                                        @endif
-
-                                                                                    @endforeach
-
-                                                                                @else
-
-                                                                                    <tr data-id="{{$s1}}">
-                                                                                        <td>
-                                                                                            <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
-                                                                                            <input type="hidden" name="feature_row_ids{{$s+1}}[]">
-                                                                                            <input value="" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Feature Title" type="text">
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <input value="" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <select class="form-control" name="price_impact{{$s+1}}[]">
-
-                                                                                                <option value="0">No</option>
-                                                                                                <option value="1">Fixed</option>
-                                                                                                <option value="2">m¹ Impact</option>
-
-                                                                                            </select>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <select class="form-control" name="impact_type{{$s+1}}[]">
-
-                                                                                                <option value="0">€</option>
-                                                                                                <option value="1">%</option>
-
-                                                                                            </select>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
-                                                                                        </td>
-                                                                                    </tr>
-
-                                                                                    <?php $s1 = $s1 + 1; ?>
-
-                                                                                @endif
-
-                                                                                </tbody>
-                                                                            </table>
-
-                                                                            <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                <button data-id="{{$s+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    @endforeach
-
-                                                            @else
-
-                                                                <div data-id="1" class="sub-feature-table-container table">
-
-                                                                    <table style="margin: auto;width: 95%;border-collapse: separate;">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th style="border-top-left-radius: 9px;">Feature</th>
-                                                                            <th>Value</th>
-                                                                            <th>Price Impact</th>
-                                                                            <th>Impact Type</th>
-                                                                            <th style="border-top-right-radius: 9px;">Remove</th>
-                                                                        </tr>
-                                                                        </thead>
-
-                                                                        <tbody>
-
-                                                                        <tr data-id="1">
-                                                                            <td>
-                                                                                <input type="hidden" name="f_rows1[]" class="f_row1" value="1">
-                                                                                <input type="hidden" name="feature_row_ids1[]">
-                                                                                <input class="form-control feature_title1" name="features1[]" id="blood_group_slug" placeholder="Feature Title" type="text">
-                                                                            </td>
-                                                                            <td>
-                                                                                <input class="form-control feature_value1" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control" name="price_impact1[]">
-
-                                                                                    <option value="0">No</option>
-                                                                                    <option value="1">Fixed</option>
-                                                                                    <option value="2">m¹ Impact</option>
-
-                                                                                </select>
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control" name="impact_type1[]">
-
-                                                                                    <option value="0">€</option>
-                                                                                    <option value="1">%</option>
-
-                                                                                </select>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div style="display: flex;justify-content: center;"><span class="ui-close remove-sub-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;top: 0;">X</span></div>
-                                                                            </td>
-                                                                        </tr>
-
-                                                                        </tbody>
-                                                                    </table>
-
-                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>
-                                                                    </div>
-                                                                </div>
-
-                                                            @endif
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div id="myModal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div style="width: 70%;" class="modal-dialog">
-
-                                                <div class="modal-content">
-
-                                                    <div class="modal-header">
-                                                        <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                        <h3 id="myModalLabel">Sub Categories</h3>
-                                                    </div>
-
-                                                    <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
-
-                                                        <div id="sub-categories">
-
-                                                            @if(isset($features_data))
-
-                                                                @if(count($features_data) > 0)
-
-                                                                    @foreach($features_data as $f2 => $key2)
-
-                                                                        <?php
-                                                                        $sub_categories1 = explode(',',$key2->sub_category_ids);
-                                                                        ?>
-
-                                                                        <div data-id="{{$f2+1}}" class="sub-category-table-container table1">
-
-                                                                            <table style="margin: auto;width: 95%;">
-                                                                                <thead>
-                                                                                <tr>
-                                                                                    <th>Main Category</th>
-                                                                                    <th>Sub Category</th>
-                                                                                    <th>Linked</th>
-                                                                                </tr>
-                                                                                </thead>
-
-                                                                                <tbody>
-
-                                                                                @foreach($sub_categories as $x => $key)
-
-                                                                                    @if($key->id)
-
-                                                                                        <tr data-id="{{$key->id}}">
-                                                                                            <td>{{$key->main_category->cat_name}}</td>
-                                                                                            <td>
-                                                                                                {{$key->cat_name}}
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <input type="hidden" name="sub_category_id{{$f2+1}}[]" value="{{$key->id}}">
-                                                                                                <select class="form-control" name="sub_category_link{{$f2+1}}[]">
-
-                                                                                                    <option value="0">No</option>
-                                                                                                    <option {{in_array($key->id, $sub_categories1) ? 'selected' : null}} value="1">Yes</option>
-
-                                                                                                </select>
-                                                                                            </td>
-                                                                                        </tr>
-
-                                                                                    @endif
-
-                                                                                @endforeach
-
-                                                                                </tbody>
-                                                                            </table>
-
-                                                                        </div>
-
-                                                                    @endforeach
-
-                                                                @else
-
-                                                                    <div data-id="1" class="sub-category-table-container table1">
-
-                                                                        <table style="margin: auto;width: 95%;">
-                                                                            <thead>
-                                                                            <tr>
-                                                                                <th>Main Category</th>
-                                                                                <th>Sub Category</th>
-                                                                                <th>Linked</th>
-                                                                            </tr>
-                                                                            </thead>
-
-                                                                            <tbody>
-
-                                                                            @foreach($sub_categories as $x => $key)
-
-                                                                                @if($key->id)
-
-                                                                                    <tr data-id="{{$key->id}}">
-                                                                                        <td>{{$key->main_category->cat_name}}</td>
-                                                                                        <td>
-                                                                                            {{$key->cat_name}}
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <input type="hidden" name="sub_category_id1[]" value="{{$key->id}}">
-                                                                                            <select class="form-control" name="sub_category_link1[]">
-
-                                                                                                <option selected value="0">No</option>
-                                                                                                <option value="1">Yes</option>
-
-                                                                                            </select>
-                                                                                        </td>
-                                                                                    </tr>
-
-                                                                                @endif
-
-                                                                            @endforeach
-
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                    </div>
-
-                                                                @endif
-
-                                                            @else
-
-                                                                <div data-id="1" class="sub-category-table-container table1">
-
-                                                                    <table style="margin: auto;width: 95%;">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th>Main Category</th>
-                                                                            <th>Sub Category</th>
-                                                                            <th>Linked</th>
-                                                                        </tr>
-                                                                        </thead>
-
-                                                                        <tbody>
-
-                                                                        </tbody>
-                                                                    </table>
-
-                                                                </div>
-
-                                                            @endif
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
+                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($model) ? 'Edit Model' : 'Add Model'}}</button>
                                         </div>
 
                                     </form>
@@ -952,8 +359,8 @@
                                     '                                                                                               <input type="hidden" name="sub_category_id'+row_id+'[]" value="'+value.id+'">\n' +
                                     '                                                                                               <select class="form-control" name="sub_category_link'+row_id+'[]">\n' +
                                     '\n' +
-                                    '                                                                                                   <option selected value="0">No</option>\n' +
-                                    '                                                                                                   <option value="1">Yes</option>\n' +
+                                    '                                                                                                   <option value="0">No</option>\n' +
+                                    '                                                                                                   <option selected value="1">Yes</option>\n' +
                                     '\n' +
                                     '                                                                                               </select>\n' +
                                     '                                                                                           </td>\n' +

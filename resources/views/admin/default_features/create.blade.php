@@ -36,7 +36,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
                                                             <div class="col-sm-6">
-                                                                <input value="{{isset($feature) ? $feature->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Item Title" required="" type="text">
+                                                                <input value="{{isset($feature) ? $feature->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Feature heading" required="" type="text">
                                                             </div>
                                                         </div>
 
@@ -681,8 +681,8 @@
                                                                                             <input type="hidden" name="sub_category_id1[]" value="{{$key->id}}">
                                                                                             <select class="form-control" name="sub_category_link1[]">
 
-                                                                                                <option value="0">No</option>
-                                                                                                <option selected value="1">Yes</option>
+                                                                                                <option selected value="0">No</option>
+                                                                                                <option value="1">Yes</option>
 
                                                                                             </select>
                                                                                         </td>
@@ -746,18 +746,18 @@
     <?php if(!isset($feature) || ($feature->type != 'Select' && $feature->type != 'Multiselect' && $feature->type != 'Checkbox')) { ?>
 
     <style>
-        .accordion-menu ul li:nth-of-type(1) { animation-delay: 0.5s; }
-        .accordion-menu ul li:nth-of-type(2) { animation-delay: 0.75s; }
-        .accordion-menu ul li:nth-of-type(4) { animation-delay: 1.0s; }
+        .accordion-menu ul li:nth-of-type(1) { animation-delay: 0.25s; }
+        .accordion-menu ul li:nth-of-type(2) { animation-delay: 0.55s; }
+        .accordion-menu ul li:nth-of-type(4) { animation-delay: 0.75s; }
     </style>
 
     <?php }else{ ?>
 
     <style>
-        .accordion-menu ul li:nth-of-type(1) { animation-delay: 0.5s; }
-        .accordion-menu ul li:nth-of-type(2) { animation-delay: 0.75s; }
-        .accordion-menu ul li:nth-of-type(3) { animation-delay: 1.0s; }
-        .accordion-menu ul li:nth-of-type(4) { animation-delay: 1.25s; }
+        .accordion-menu ul li:nth-of-type(1) { animation-delay: 0.25s; }
+        .accordion-menu ul li:nth-of-type(2) { animation-delay: 0.5s; }
+        .accordion-menu ul li:nth-of-type(3) { animation-delay: 0.75s; }
+        .accordion-menu ul li:nth-of-type(4) { animation-delay: 1.0s; }
     </style>
 
     <?php } ?>
@@ -953,8 +953,8 @@
                                     '                                                                                               <input type="hidden" name="sub_category_id'+row_id+'[]" value="'+value.id+'">\n' +
                                     '                                                                                               <select class="form-control" name="sub_category_link'+row_id+'[]">\n' +
                                     '\n' +
-                                    '                                                                                                   <option value="0">No</option>\n' +
-                                    '                                                                                                   <option selected value="1">Yes</option>\n' +
+                                    '                                                                                                   <option selected value="0">No</option>\n' +
+                                    '                                                                                                   <option value="1">Yes</option>\n' +
                                     '\n' +
                                     '                                                                                               </select>\n' +
                                     '                                                                                           </td>\n' +
