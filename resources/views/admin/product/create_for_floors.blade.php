@@ -1745,6 +1745,15 @@
                 a.setAttribute("class", "autocomplete-items");
                 x.appendChild(a);
                 this.parentNode.appendChild(x);
+
+                var border_flag = 0;
+                var found_flag = 0;
+
+                if(arr.length == 0)
+                {
+                    border_flag = 1;
+                }
+
                 /*for each item in the array...*/
                 for (i = 0; i < arr.length; i++) {
 
@@ -1752,9 +1761,6 @@
                     string = string.toLowerCase();
                     val = val.toLowerCase();
                     var res = string.includes(val);
-
-                    console.log(string);
-                    console.log(res);
 
                     if (res) {
                         /*create a DIV element for each matching element:*/
@@ -1779,11 +1785,14 @@
                             closeAllLists();
                         });
                         a.appendChild(b);
+
+                        found_flag = 1;
                     }
-                    else
-                    {
-                        a.style.border = "0";
-                    }
+                }
+
+                if(border_flag || !found_flag)
+                {
+                    a.style.border = "0";
                 }
             });
             /*execute a function presses a key on the keyboard:*/
