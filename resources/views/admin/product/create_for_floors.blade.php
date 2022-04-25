@@ -1763,6 +1763,9 @@
                     var res = string.includes(val);
 
                     if (res) {
+
+                        found_flag = 1;
+                        
                         /*create a DIV element for each matching element:*/
                         b = document.createElement("DIV");
                         /*make the matching letters bold:*/
@@ -1785,8 +1788,6 @@
                             closeAllLists();
                         });
                         a.appendChild(b);
-
-                        found_flag = 1;
                     }
                 }
 

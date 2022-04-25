@@ -4069,6 +4069,15 @@
 					a.setAttribute("class", "autocomplete-items");
 					/*append the DIV element as a child of the autocomplete container:*/
 					this.parentNode.appendChild(a);
+
+					var border_flag = 0;
+					var found_flag = 0;
+
+					if(arr.length == 0)
+					{
+						border_flag = 1;
+					}
+
 					/*for each item in the array...*/
 					for (i = 0; i < arr.length; i++) {
 
@@ -4078,6 +4087,9 @@
 						var res = string.includes(val);
 
 						if (res) {
+
+							found_flag = 1;
+
 							/*create a DIV element for each matching element:*/
 							b = document.createElement("DIV");
 							/*make the matching letters bold:*/
@@ -4442,11 +4454,13 @@
 							});
 							a.appendChild(b);
 						}
-						else
-                    	{
-                        	a.style.border = "0";
-                    	}
 					}
+
+					if(border_flag || !found_flag)
+					{
+						a.style.border = "0";
+					}
+
 				});
 				/*execute a function presses a key on the keyboard:*/
 				inp.addEventListener("keydown", function(e) {
