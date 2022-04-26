@@ -2801,6 +2801,10 @@
                     '\n' +
                     '        </div>');
 
+                var last_row = $('.model_box .model-row:last');
+
+                autocomplete(last_row.find("#modelInput")[0], model_titles, measures);
+
                 var rows = '';
 
                 $('.feature_box').find('.feature-row', this).each(function (index) {
