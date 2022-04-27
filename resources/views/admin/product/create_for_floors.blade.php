@@ -4747,6 +4747,22 @@
 
         });
 
+        $('.js-data-example-ajax2').on('change', function() {
+
+            var type_id = $(this).val();
+            var brand_text = $('.js-data-example-ajax1').children(':selected').text();
+            var type_text = $(this).children(':selected').text();
+
+            var first_model = $(".models:first").val();
+
+            if((brand_text && type_text) && !first_model)
+            {
+                var model = brand_text + ' ' + type_text;
+                $(".models:first").val(model);
+            }
+        
+        });
+
         function uploadclick(){
             $("#uploadFile").click();
             $("#uploadFile").change(function(event) {

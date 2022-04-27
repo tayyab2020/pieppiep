@@ -41,27 +41,6 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Value</label>
-                                                            <div class="col-sm-6">
-                                                                <input type="text" value="{{isset($model) ? $model->value : null}}" placeholder="Model Value" class="form-control" name="value" id="blood_group_display_name">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Measure</label>
-                                                            <div class="col-sm-6">
-                                                                <select class="form-control" name="measure" id="blood_group_display_name">
-
-                                                                    <option {{isset($model) ? ($model->measure == 'M1' ? 'selected' : null) : null}} value="M1">M1</option>
-                                                                    <option {{isset($model) ? ($model->measure == 'M2' ? 'selected' : null) : null}} value="M2">M2</option>
-                                                                    <option {{isset($model) ? ($model->measure == 'Custom Sized' ? 'selected' : null) : null}} value="Custom Sized">Custom Sized</option>
-                                                                    <option {{isset($model) ? ($model->measure == 'Per Piece' ? 'selected' : null) : null}} value="Per Piece">Per Piece</option>
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Model Category*</label>
 
                                                             <div class="col-sm-6">
@@ -87,40 +66,137 @@
 
                                                 <li>
                                                     <input type="checkbox">
-                                                    <h2>Price Impact <i class="arrow"></i></h2>
+                                                    <h2>Sizes <i class="arrow"></i></h2>
                                                     <div class="accordion-content">
 
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Price Impact</label>
+                                                        <div class="table options-table">
 
-                                                            <div class="col-sm-6">
+                                                            <table style="margin: auto;">
 
-                                                                <select class="form-control" name="price_impact" id="price_impact">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th style="border-top-left-radius: 9px;">Title</th>
+                                                                    <th>Value</th>
+                                                                    <th style="width: 10%;">Measure</th>
+                                                                    <th>Price Impact</th>
+                                                                    <th>Impact Type</th>
+                                                                    <th style="width: 12%;border-top-right-radius: 9px;"></th>
+                                                                </tr>
+                                                                </thead>
 
-                                                                    <option {{isset($model) ? ($model->price_impact == 0 ? 'selected' : null) : null}} value="0">No</option>
-                                                                    <option {{isset($model) ? ($model->price_impact == 1 ? 'selected' : null) : null}} value="1">Fixed</option>
-                                                                    <option {{isset($model) ? ($model->m1_impact == 1 ? 'selected' : null) : null}} value="2">m¹ Impact</option>
-                                                                    <option {{isset($model) ? ($model->m2_impact == 1 ? 'selected' : null) : null}} value="3">m² Impact</option>
+                                                                <tbody>
 
-                                                                </select>
+                                                                @if(isset($models_data) && count($models_data) > 0)
 
-                                                            </div>
+                                                                    @foreach($models_data as $f1 => $key1)
 
-                                                        </div>
+                                                                        <tr data-id="{{$f1+1}}">
+                                                                            <td>
+                                                                                <input value="{{$key1->id}}" type="hidden" name="size_ids[]">
+                                                                                <input value="{{$key1->model}}" class="form-control size_title" name="sizes[]" id="blood_group_slug" placeholder="Size Title" type="text">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input value="{{$key1->value}}" class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                            </td>
+                                                                            <td>
+                                                                                <select class="form-control" name="size_measure[]">
 
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Impact Type</label>
+                                                                                    <option {{$key1->measure == 'M1' ? 'selected' : null}} value="M1">M1</option>
+                                                                                    <option {{$key1->measure == 'M2' ? 'selected' : null}} value="M2">M2</option>
+                                                                                    <option {{$key1->measure == 'Custom Sized' ? 'selected' : null}} value="Custom Sized">Custom Sized</option>
+                                                                                    <option {{$key1->measure == 'Per Piece' ? 'selected' : null}} value="Per Piece">Per Piece</option>
 
-                                                            <div class="col-sm-6">
+                                                                                </select>
+                                                                            </td>
+                                                                            <td>
+                                                                                <select class="form-control" name="price_impact[]">
 
-                                                                <select class="form-control" name="impact_type" id="impact_type">
+                                                                                    <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">No</option>
+                                                                                    <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
+                                                                                    <option {{$key1->m1_impact == 1 ? 'selected' : null}} value="2">m¹ Impact</option>
+                                                                                    <option {{$key1->m2_impact == 1 ? 'selected' : null}} value="3">m² Impact</option>
 
-                                                                    <option {{isset($model) ? ($model->impact_type == 0 ? 'selected' : null) : null}} value="0">€</option>
-                                                                    <option {{isset($model) ? ($model->impact_type == 1 ? 'selected' : null) : null}} value="1">%</option>
+                                                                                </select>
+                                                                            </td>
+                                                                            <td>
+                                                                                <select class="form-control" name="impact_type[]">
 
-                                                                </select>
+                                                                                    <option {{$key1->impact_type == 0 ? 'selected' : null}} value="0">€</option>
+                                                                                    <option {{$key1->impact_type == 1 ? 'selected' : null}} value="1">%</option>
 
-                                                            </div>
+                                                                                </select>
+                                                                            </td>
+                                                                            <td style="text-align: center;">
+
+                                                                                <span id="next-row-span" class="tooltip1 add-row" data-id="" style="cursor: pointer;font-size: 20px;">
+                                                                                    <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+                                                                                </span>
+
+                                                                                <span data-id="{{$key1->id}}" id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
+                                                                                    <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+                                                                                </span>
+
+                                                                            </td>
+                                                                        </tr>
+
+                                                                    @endforeach
+
+                                                                @else
+
+                                                                    <tr data-id="1">
+                                                                        <td>
+                                                                            <input type="hidden" name="size_ids[]">
+                                                                            <input class="form-control size_title" name="sizes[]" id="blood_group_slug" placeholder="Size Title" type="text">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                        </td>
+                                                                        <td>
+                                                                            <select class="form-control" name="size_measure[]">
+
+                                                                                <option value="M1">M1</option>
+                                                                                <option value="M2">M2</option>
+                                                                                <option value="Custom Sized">Custom Sized</option>
+                                                                                <option value="Per Piece">Per Piece</option>
+
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <select class="form-control" name="price_impact[]">
+
+                                                                                <option value="0">No</option>
+                                                                                <option value="1">Fixed</option>
+                                                                                <option value="2">m¹ Impact</option>
+                                                                                <option value="3">m² Impact</option>
+
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <select class="form-control" name="impact_type[]">
+
+                                                                                <option value="0">€</option>
+                                                                                <option value="1">%</option>
+
+                                                                            </select>
+                                                                        </td>
+                                                                        <td style="text-align: center;">
+
+                                                                            <span id="next-row-span" class="tooltip1 add-row" data-id="" style="cursor: pointer;font-size: 20px;">
+                                                                                <i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																		    </span>
+
+                                                                            <span data-id="" id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">
+																			    <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																		    </span>
+
+                                                                        </td>
+                                                                    </tr>
+
+                                                                @endif
+
+                                                                </tbody>
+
+                                                            </table>
 
                                                         </div>
 
@@ -304,6 +380,133 @@
         //<![CDATA[
         bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
         //]]>
+    </script>
+
+    <script>
+
+        $(document).on('click', '.add-row', function () {
+
+            var row = $('.options-table table tbody tr:last').data('id');
+            row = row + 1;
+
+            $(".options-table table tbody").append('<tr data-id="'+row+'">\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <input type="hidden" name="size_ids[]">\n' +
+                '                                                                                            <input class="form-control size_title" name="sizes[]" id="blood_group_slug" placeholder="Size Title" type="text">\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                        </td>\n' +
+                '                                                                                        <td>\n' +
+                '                                                                            <select class="form-control" name="size_measure[]">\n' +
+                '\n' +
+                '                                                                                <option value="M1">M1</option>\n' +
+                '                                                                                <option value="M2">M2</option>\n' +
+                '                                                                                <option value="Custom Sized">Custom Sized</option>\n' +
+                '                                                                                <option value="Per Piece">Per Piece</option>\n' +
+                '\n' +
+                '                                                                            </select>\n' +
+                '                                                                        </td>\n' +
+                '                                                                        <td>\n' +
+                '                                                                            <select class="form-control" name="price_impact[]">\n' +
+                '\n' +
+                '                                                                                <option value="0">No</option>\n' +
+                '                                                                                <option value="1">Fixed</option>\n' +
+                '                                                                                <option value="2">m¹ Impact</option>\n' +
+                '                                                                                <option value="3">m² Impact</option>\n' +
+                '\n' +
+                '                                                                            </select>\n' +
+                '                                                                        </td>\n' +
+                '                                                                        <td>\n' +
+                '                                                                            <select class="form-control" name="impact_type[]">\n' +
+                '\n' +
+                '                                                                                <option value="0">€</option>\n' +
+                '                                                                                <option value="1">%</option>\n' +
+                '\n' +
+                '                                                                            </select>\n' +
+                '                                                                        </td>\n' +
+                '                                                                                        <td style="text-align: center;">\n' +
+                '\n' +
+                '                                                                                           <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">\n' +
+                '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
+                '                                                                                           </span>\n' +
+                '\n' +
+                '                                                                                           <span data-id="" id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">\n' +
+                '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
+                '                                                                                           </span>\n' +
+                '\n' +
+                '                                                                                        </td>\n' +
+                '                                                                </tr>');
+
+        });
+
+        $(document).on('click', '.remove-row', function () {
+
+            if ($(".options-table table tbody tr").length > 1) {
+
+                $(this).parents('tr').remove();
+
+            }
+
+            $(this).parents('tr').remove();
+
+            if($('.options-table').find("table tbody tr").length == 0)
+            {
+                var row = 1;
+
+                $(".options-table table tbody").append('<tr data-id="'+row+'">\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <input type="hidden" name="size_ids[]">\n' +
+                    '                                                                                            <input class="form-control size_title" name="sizes[]" id="blood_group_slug" placeholder="Size Title" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                                        <td>\n' +
+                    '                                                                            <select class="form-control" name="size_measure[]">\n' +
+                    '\n' +
+                    '                                                                                <option value="M1">M1</option>\n' +
+                    '                                                                                <option value="M2">M2</option>\n' +
+                    '                                                                                <option value="Custom Sized">Custom Sized</option>\n' +
+                    '                                                                                <option value="Per Piece">Per Piece</option>\n' +
+                    '\n' +
+                    '                                                                            </select>\n' +
+                    '                                                                        </td>\n' +
+                    '                                                                        <td>\n' +
+                    '                                                                            <select class="form-control" name="price_impact[]">\n' +
+                    '\n' +
+                    '                                                                                <option value="0">No</option>\n' +
+                    '                                                                                <option value="1">Fixed</option>\n' +
+                    '                                                                                <option value="2">m¹ Impact</option>\n' +
+                    '                                                                                <option value="3">m² Impact</option>\n' +
+                    '\n' +
+                    '                                                                            </select>\n' +
+                    '                                                                        </td>\n' +
+                    '                                                                        <td>\n' +
+                    '                                                                            <select class="form-control" name="impact_type[]">\n' +
+                    '\n' +
+                    '                                                                                <option value="0">€</option>\n' +
+                    '                                                                                <option value="1">%</option>\n' +
+                    '\n' +
+                    '                                                                            </select>\n' +
+                    '                                                                        </td>\n' +
+                    '                                                                                        <td style="text-align: center;">\n' +
+                    '\n' +
+                    '                                                                                           <span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;">\n' +
+                    '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
+                    '                                                                                           </span>\n' +
+                    '\n' +
+                    '                                                                                           <span data-id="" id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;">\n' +
+                    '                                                                                               <i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
+                    '                                                                                           </span>\n' +
+                    '\n' +
+                    '                                                                                        </td>\n' +
+                    '                                                                </tr>');
+
+            }
+
+        });
+
     </script>
 
 <style type="text/css">
