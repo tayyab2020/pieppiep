@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\predefined_models;
+use App\predefined_models_details;
 use App\default_predefined_models;
+use App\default_predefined_models_details;
 use App\User;
 use App\users;
 use Illuminate\Http\Request;
@@ -98,15 +100,57 @@ class PredefinedModelsController extends Controller
 
         $model->user_id = $user_id;
         $model->model = $request->title;
-        $model->value = $request->value ? $request->value : 0;
-        $model->measure = $request->measure;
-        $model->price_impact = $request->price_impact == 1 ? 1 : 0;
-        $model->impact_type = $request->impact_type;
-        $model->m1_impact = $request->price_impact == 2 ? 1 : 0;
-        $model->m2_impact = $request->price_impact == 3 ? 1 : 0;
         $model->category_ids = $category_ids;
         $model->default_model_id = $request->default_model ? $request->heading_id : NULL;
         $model->save();
+
+        $sizes = $request->sizes;
+        $size_ids = $request->size_ids;
+        $id_array = [];
+
+        foreach($sizes as $x => $key)
+        {
+            $size_check = predefined_models_details::where('id',$size_ids[$x])->first();
+
+            if($size_check)
+            {
+                if($key)
+                {
+                    $size_check->model_id = $model->id;
+                    $size_check->model = $key;
+                    $size_check->value = $request->size_values[$x] ? $request->size_values[$x] : 0;
+                    $size_check->measure = $request->size_measure[$x];
+                    $size_check->price_impact = $request->price_impact[$x] == 1 ? 1 : 0;
+                    $size_check->impact_type = $request->impact_type[$x];
+                    $size_check->m1_impact = $request->price_impact[$x] == 2 ? 1 : 0;
+                    $size_check->m2_impact = $request->price_impact[$x] == 3 ? 1 : 0;
+                    $size_check->save();
+                }
+
+                $id_array[] = $size_check->id;
+            }
+            else
+            {
+                if($key)
+                {
+                    $details = new predefined_models_details;
+                    $details->model_id = $model->id;
+                    $details->model = $key;
+                    $details->value = $request->size_values[$x] ? $request->size_values[$x] : 0;
+                    $details->measure = $request->size_measure[$x];
+                    $details->price_impact = $request->price_impact[$x] == 1 ? 1 : 0;
+                    $details->impact_type = $request->impact_type[$x];
+                    $details->m1_impact = $request->price_impact[$x] == 2 ? 1 : 0;
+                    $details->m2_impact = $request->price_impact[$x] == 3 ? 1 : 0;
+                    $details->save();
+
+                    $id_array[] = $details->id;
+                }
+            }
+
+        }
+
+        predefined_models_details::whereNotIn('id',$id_array)->where('model_id',$model->id)->delete();
 
         return redirect()->route('predefined-model-index');
     }
@@ -134,8 +178,9 @@ class PredefinedModelsController extends Controller
                 }
 
                 $cats = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
+                $models_data = predefined_models_details::where('model_id',$model->id)->get();
 
-                return view('admin.predefined_models.create',compact('model','cats'));
+                return view('admin.predefined_models.create',compact('model','cats','models_data'));
             }
             else
             {
@@ -154,8 +199,9 @@ class PredefinedModelsController extends Controller
                 }
 
                 $cats = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->select('categories.*')->get();
+                $models_data = default_predefined_models_details::where('model_id',$model->id)->get();
 
-                return view('admin.predefined_models.create',compact('model','cats'));
+                return view('admin.predefined_models.create',compact('model','cats','models_data'));
             }
             else
             {
@@ -185,6 +231,7 @@ class PredefinedModelsController extends Controller
             }
 
             $model->delete();
+            predefined_models_details::where('model_id',$id)->delete();
 
             Session::flash('success', 'Model deleted successfully.');
             return redirect()->route('predefined-model-index');
