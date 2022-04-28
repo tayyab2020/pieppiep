@@ -263,6 +263,7 @@
   Route::post('/product/update/{id}', 'ProductController@update')->name('admin-product-update');
   Route::get('/product/delete/{id}', 'ProductController@destroy')->name('admin-product-delete');
   Route::get('/product/get-sub-categories-by-category', 'ProductController@getSubCategoriesByCategory');
+  Route::get('/product/get-sizes-by-model', 'ProductController@getSizesByModel');
   Route::get('/product/products-models-by-brands', 'ProductController@productsModelsByBrands');
   Route::get('/product/get-prices-tables', 'ProductController@pricesTables');
   Route::post('/product/store-retailer-margins', 'ProductController@storeRetailerMargins')->name('store-retailer-margins');

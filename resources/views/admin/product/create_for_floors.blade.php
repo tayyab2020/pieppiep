@@ -37,7 +37,7 @@
 
                                             @foreach($predefined_models as $key)
 
-                                                <option data-measure="{{$key->measure}}" value="{{$key->model}}">{{$key->model}}</option>
+                                                <option value="{{$key->id}}">{{$key->model}}</option>
 
                                             @endforeach
 
@@ -1723,7 +1723,7 @@
 
     $(document).ready(function() {
 
-        function autocomplete(inp, arr, measures) {
+        function autocomplete(inp, arr, values) {
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/
             var currentFocus;
@@ -1773,15 +1773,39 @@
                         b.innerHTML += arr[i].substr(val.length);*/
                         b.innerHTML = arr[i];
                         /*insert a input field that will hold the current array item's value:*/
-                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'><input type='hidden' value='" + measures[i] + "'>";
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'><input type='hidden' value='" + values[i] + "'>";
                         /*execute a function when someone clicks on the item value (DIV element):*/
                         b.addEventListener("click", function(e) {
 
                             /*insert the value for the autocomplete text field:*/
                             inp.value = this.getElementsByTagName("input")[0].value;
-                            var measure = this.getElementsByTagName("input")[1].value;
+                            var id = this.getElementsByTagName("input")[1].value;
+                            var row_id = current.parents('.model-row').data('id');
+                            var remove_id = current.parents('.model-row').find('.remove-model').data('id');
 
-                            current.parents('.model-row').find('#model_measure').val(measure);
+                            $.ajax({
+                                type:"GET",
+                                data: "id=" + id,
+                                url: "<?php echo url('/aanbieder/product/get-sizes-by-model')?>",
+                                success: function(data) {
+
+                                    if(data.length > 0)
+                                    {
+                                        $.each(data, function(index, value) {
+
+                                            add_model(value.model,value.measure);
+
+                                        });
+
+                                        remove_model(remove_id,row_id);
+                                    }
+                                    else
+                                    {
+                                        remove_model(remove_id,row_id);
+                                    }
+
+                                }
+                            });
 
                             /*close the list of autocompleted values,
                             (or any other open lists of autocompleted values:*/
@@ -1853,19 +1877,19 @@
             });
         }
 
-        measures = [];
+        values = [];
         model_titles = [];
 
         var sel = $(".all-models");
         var length = sel.children('option').length;
 
         $(".all-models:first > option").each(function() {
-            if (this.value) measures.push(this.getAttribute('data-measure')); model_titles.push(this.value);
+            if (this.value) values.push(this.value); model_titles.push(this.text);
         });
 
         var cls = document.getElementsByClassName("models");
         for (n=0, length = cls.length; n < length; n++) {
-            autocomplete(cls[n], model_titles, measures);
+            autocomplete(cls[n], model_titles, values);
         }
 
         var rem_arr = [];
@@ -2591,9 +2615,8 @@
 
         });
 
-
-        $('body').on('click', '#add-model-btn' ,function(){
-
+        function add_model(title = '',measure = '')
+        {
             var model_row = $('.model_box').find('.form-group').last().data('id');
             model_row = model_row + 1;
 
@@ -2601,7 +2624,7 @@
                 '\n' +
                 '                                                                   <div class="col-sm-4 autocomplete">\n' +
                 '\n' +
-                '                                                                        <input type="text" id="modelInput" autocomplete="off" placeholder="Model" name="models[]" class="form-control validate models">\n' +
+                '                                                                        <input value="'+title+'" type="text" id="modelInput" autocomplete="off" placeholder="Model" name="models[]" class="form-control validate models">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
@@ -2609,10 +2632,10 @@
                 '\n' +
                 '                                                                        <select class="form-control" id="model_measure" name="model_measure[]">\n' +
                 '\n' +
-                '                                                                           <option value="M1">M1</option>\n' +
-                '                                                                           <option value="M2">M2</option>\n' +
-                '                                                                           <option value="Custom Sized">Custom Sized</option>\n' +
-                '                                                                           <option value="Per Piece">Per Piece</option>\n' +
+                (measure == 'M1' ? '<option selected value="M1">M1</option>\n': '<option value="M1">M1</option>\n') +
+                (measure == 'M2' ? '<option selected value="M2">M2</option>\n': '<option value="M2">M2</option>\n') +
+                (measure == 'Custom Sized' ? '<option selected value="Custom Sized">Custom Sized</option>\n': '<option value="Custom Sized">Custom Sized</option>\n') +
+                (measure == 'Per Piece' ? '<option selected value="Per Piece">Per Piece</option>\n': '<option value="Per Piece">Per Piece</option>\n') +
                 '\n' +
                 '                                                                        </select>\n' +
                 '\n' +
@@ -2630,7 +2653,7 @@
 
             var last_row = $('.model_box .model-row:last');
 
-            autocomplete(last_row.find("#modelInput")[0], model_titles, measures);
+            autocomplete(last_row.find("#modelInput")[0], model_titles, values);
 
             var rows = '';
 
@@ -2746,17 +2769,10 @@
                 rows +
                 '        </tbody>\n' +
                 '        </table>');
+        }
 
-
-        });
-
-        var rem_mod = [];
-
-        $('body').on('click', '.remove-model' ,function()
+        function remove_model(id,model_row)
         {
-            var id = $(this).data('id');
-            var model_row = $(this).parent().parent().data('id');
-
             if(id)
             {
                 rem_mod.push(id);
@@ -2803,7 +2819,7 @@
 
                 var last_row = $('.model_box .model-row:last');
 
-                autocomplete(last_row.find("#modelInput")[0], model_titles, measures);
+                autocomplete(last_row.find("#modelInput")[0], model_titles, values);
 
                 var rows = '';
 
@@ -2921,6 +2937,22 @@
                     '        </tbody>\n' +
                     '        </table>');
             }
+        }
+
+        $('body').on('click', '#add-model-btn' ,function(){
+
+            add_model();
+
+        });
+
+        var rem_mod = [];
+
+        $('body').on('click', '.remove-model' ,function()
+        {
+            var id = $(this).data('id');
+            var model_row = $(this).parent().parent().data('id');
+
+            remove_model(id,model_row);
 
         });
 

@@ -12,6 +12,7 @@ use App\features;
 use App\Imports\ProductsImport;
 use App\Model1;
 use App\model_features;
+use App\predefined_models_details;
 use App\supplier_categories;
 use App\price_tables;
 use App\product;
@@ -73,6 +74,13 @@ class ProductController extends Controller
         return view('user.select_type', compact('type','is_floor','is_blind'));
     }
 
+    public function getSizesByModel(Request $request)
+    {
+        $sizes = predefined_models_details::where('model_id','=',$request->id)->get();
+
+        return $sizes;
+    }
+
     public function getSubCategoriesByCategory(Request $request)
     {
         if($request->type == 'single')
@@ -83,7 +91,7 @@ class ProductController extends Controller
         {
             if($request->id)
             {
-                $ids_array = explode(',', $request->id);   
+                $ids_array = explode(',', $request->id);
             }
             else
             {
