@@ -1787,6 +1787,7 @@
                         var remove_id = '';
                         var row_id = $(this).data('id');
                         remove_model(remove_id,row_id);
+                        return false;
                     }
 
                 });
