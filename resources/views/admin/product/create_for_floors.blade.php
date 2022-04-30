@@ -1774,12 +1774,22 @@
             if($(this).is(":checked"))
             {
                 add_model(title,measure);
+                var row_id = $(this).parents('tr').data('id');
+                var remove_id = '';
+                remove_model(remove_id,row_id);
             }
             else
             {
-                var remove_id = '';
-                var row_id = $('.model_box').find('.models[value="'+title+'"]').parents('.model-row').data('id');
-                remove_model(remove_id,row_id);
+                $($('.model_box .model-row').get().reverse()).each(function(){
+
+                    if($(this).find('.models').val() == title && $(this).find('#model_measure').val() == measure)
+                    {
+                        var remove_id = '';
+                        var row_id = $(this).data('id');
+                        remove_model(remove_id,row_id);
+                    }
+
+                });
             }
 
         });
@@ -1854,7 +1864,7 @@
 
                                     $.each(data, function(index, value) {
 
-                                        $('#model-sizes table').append('<tr>\n' +
+                                        $('#model-sizes table').append('<tr data-id="'+row_id+'">\n' +
                                             '\n' +
                                             '                                                                            <td><input type="checkbox" class="size-checkbox"></td>\n' +
                                             '\n' +
@@ -1870,8 +1880,6 @@
 
                                     $('#myModal3').modal('toggle');
                                     $('.modal-backdrop').hide();
-
-                                    remove_model(remove_id,row_id);
 
                                 }
                             });
