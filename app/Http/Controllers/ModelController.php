@@ -196,7 +196,7 @@ class ModelController extends Controller
         }
         else
         {
-            $check_name = Model1::where('cat_name',$title)->where('user_id',$user_id)->first();
+            $check_name = Model1::where('cat_name',$title)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_name)
             {
@@ -204,7 +204,7 @@ class ModelController extends Controller
                 return redirect()->back()->withInput();
             }
 
-            $check_slug = Model1::where('cat_slug',$slug)->where('user_id',$user_id)->first();
+            $check_slug = Model1::where('cat_slug',$slug)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_slug)
             {
@@ -212,7 +212,7 @@ class ModelController extends Controller
                 return redirect()->back()->withInput();
             }
 
-            $check_name1 = Model1::where('cat_name',$title)->where('user_id','!=',$user_id)->first();
+            $check_name1 = Model1::where('cat_name',$title)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_name1)
             {
@@ -220,7 +220,7 @@ class ModelController extends Controller
                 return redirect()->back()->withInput();
             }
 
-            $check_slug1 = Model1::where('cat_slug',$slug)->where('user_id','!=',$user_id)->first();
+            $check_slug1 = Model1::where('cat_slug',$slug)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_slug1)
             {
