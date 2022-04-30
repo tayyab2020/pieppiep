@@ -232,7 +232,7 @@ class ModelController extends Controller
         return NULL;
     }
 
-    public function store(StoreValidationRequest2 $request)
+    public function store(Request $request)
     {
         $user = Auth::guard('user')->user();
         $main_id = $user->main_id;
