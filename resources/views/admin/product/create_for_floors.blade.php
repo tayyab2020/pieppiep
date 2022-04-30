@@ -1680,6 +1680,49 @@
         </div>
     </div>
 
+    <div id="myModal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div style="width: 70%;" class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">Model Sizes</h3>
+                </div>
+
+                <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
+
+                    <div id="model-sizes">
+
+                        <table style="margin: auto;width: 95%;border-collapse: separate;">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Title</th>
+                                <th>Measure</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">Close</button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
     <style>
 
         #menu7 .switch
@@ -1722,6 +1765,24 @@
     };
 
     $(document).ready(function() {
+
+        $('body').on('change', '.size-checkbox' ,function(){
+
+            var title = $(this).parents('tr').find('.size_title').text();
+            var measure = $(this).parents('tr').find('.size_measure').text();
+
+            if($(this).is(":checked"))
+            {
+                add_model(title,measure);
+            }
+            else
+            {
+                var remove_id = '';
+                var row_id = $('.model_box').find('.models[value="'+title+'"]').parents('.model-row').data('id');
+                remove_model(remove_id,row_id);
+            }
+
+        });
 
         function autocomplete(inp, arr, values) {
             /*the autocomplete function takes two arguments,
@@ -1789,20 +1850,28 @@
                                 url: "<?php echo url('/aanbieder/product/get-sizes-by-model')?>",
                                 success: function(data) {
 
-                                    if(data.length > 0)
-                                    {
-                                        $.each(data, function(index, value) {
+                                    $('#model-sizes table tbody tr').remove();
 
-                                            add_model(value.model,value.measure);
+                                    $.each(data, function(index, value) {
 
-                                        });
+                                        $('#model-sizes table').append('<tr>\n' +
+                                            '\n' +
+                                            '                                                                            <td><input type="checkbox" class="size-checkbox"></td>\n' +
+                                            '\n' +
+                                            '                                                                            <td class="size_title">'+value.model+'</td>\n' +
+                                            '\n' +
+                                            '                                                                            <td class="size_measure">'+value.measure+'</td>\n' +
+                                            '\n' +
+                                            '                                                                            </tr>');
 
-                                        remove_model(remove_id,row_id);
-                                    }
-                                    else
-                                    {
-                                        remove_model(remove_id,row_id);
-                                    }
+                                        // add_model(value.model,value.measure);
+
+                                    });
+
+                                    $('#myModal3').modal('toggle');
+                                    $('.modal-backdrop').hide();
+
+                                    remove_model(remove_id,row_id);
 
                                 }
                             });
