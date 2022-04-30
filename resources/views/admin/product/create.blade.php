@@ -37,7 +37,7 @@
 
                                             @foreach($predefined_models as $key)
 
-                                                <option data-price-impact="{{$key->price_impact == 1 ? 1 : ($key->m1_impact == 1 ? 2 : ($key->m2_impact == 1 ? 3 : 0))}}" data-impact-type="{{$key->impact_type}}" value="{{$key->value}}">{{$key->model}}</option>
+                                                <option value="{{$key->id}}">{{$key->model}}</option>
 
                                             @endforeach
 
@@ -2001,6 +2001,51 @@
         </div>
     </div>
 
+    <div id="myModal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div style="width: 70%;" class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button style="background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">Model Sizes</h3>
+                </div>
+
+                <div class="modal-body" id="myWizard" style="display: inline-block;width: 100%;padding: 30px 10px;">
+
+                    <div id="model-sizes">
+
+                        <table style="margin: auto;width: 95%;border-collapse: separate;">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Title</th>
+                                <th>Value</th>
+                                <th>Price Impact</th>
+                                <th>Impact Type</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">Close</button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
     <style>
 
         #menu7 .switch
@@ -2044,7 +2089,65 @@
 
     $(document).ready(function() {
 
-        function autocomplete(inp, arr, values, price_impacts, impact_types) {
+        $('body').on('change', '.size-checkbox' ,function(){
+
+            var title = $(this).parents('tr').find('.size_title').text();
+            var value = $(this).parents('tr').find('.size_value').text();
+            var price_impact = $(this).parents('tr').find('.size_price_impact').text();
+
+            if(price_impact == 'No')
+            {
+                price_impact = 0;
+            }
+            else if(price_impact == 'Fixed')
+            {
+                price_impact = 1;
+            }
+            else if(price_impact == 'm¹ Impact')
+            {
+                price_impact = 2;
+            }
+            else
+            {
+                price_impact = 3;
+            }
+
+            var impact_type = $(this).parents('tr').find('.size_impact_type').text();
+
+            if(impact_type == '€')
+            {
+                impact_type = 0;
+            }
+            else
+            {
+                impact_type = 1;
+            }
+
+            if($(this).is(":checked"))
+            {
+                add_model(title,value,price_impact,impact_type);
+                var row_id = $(this).parents('tr').data('id');
+                var remove_id = '';
+                remove_model(remove_id,row_id);
+            }
+            else
+            {
+                $($('.model_box .model-row').get().reverse()).each(function(){
+
+                    if($(this).find('.models').val() == title && $(this).find('.model_value').val() == value && $(this).find('#price_impact').val() == price_impact && $(this).find('#impact_type').val() == impact_type)
+                    {
+                        var remove_id = '';
+                        var row_id = $(this).data('id');
+                        remove_model(remove_id,row_id);
+                        return false;
+                    }
+
+                });
+            }
+
+        });
+
+        function autocomplete(inp, arr, values) {
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/
             var currentFocus;
@@ -2094,19 +2197,72 @@
                         b.innerHTML += arr[i].substr(val.length);*/
                         b.innerHTML = arr[i];
                         /*insert a input field that will hold the current array item's value:*/
-                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'><input type='hidden' value='" + values[i] + "'><input type='hidden' value='" + price_impacts[i] + "'><input type='hidden' value='" + impact_types[i] + "'>";
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'><input type='hidden' value='" + values[i] + "'>";
                         /*execute a function when someone clicks on the item value (DIV element):*/
                         b.addEventListener("click", function(e) {
 
                             /*insert the value for the autocomplete text field:*/
                             inp.value = this.getElementsByTagName("input")[0].value;
-                            var value = this.getElementsByTagName("input")[1].value;
-                            var price_impact = this.getElementsByTagName("input")[2].value;
-                            var impact_type = this.getElementsByTagName("input")[3].value;
+                            var id = this.getElementsByTagName("input")[1].value;
+                            var row_id = current.parents('.model-row').data('id');
 
-                            current.parents('.model-row').find('.model_value').val(value);
-                            current.parents('.model-row').find('#price_impact').val(price_impact);
-                            current.parents('.model-row').find('#impact_type').val(impact_type);
+                            $.ajax({
+                                type:"GET",
+                                data: "id=" + id,
+                                url: "<?php echo url('/aanbieder/product/get-sizes-by-model')?>",
+                                success: function(data) {
+
+                                    $('#model-sizes table tbody tr').remove();
+
+                                    $.each(data, function(index, value) {
+
+                                        if(value.price_impact == 1)
+                                        {
+                                            var price_impact = 'Fixed';
+                                        }
+                                        else if(value.m1_impact == 1)
+                                        {
+                                            var price_impact = 'm¹ Impact';
+                                        }
+                                        else if(value.m2_impact == 1)
+                                        {
+                                            var price_impact = 'm² Impact';
+                                        }
+                                        else
+                                        {
+                                            var price_impact = 'No';
+                                        }
+
+                                        if(value.impact_type == 0)
+                                        {
+                                            var impact_type = '€';
+                                        }
+                                        else
+                                        {
+                                            var impact_type = '%';
+                                        }
+
+                                        $('#model-sizes table').append('<tr data-id="'+row_id+'">\n' +
+                                            '\n' +
+                                            '                                                                            <td><input type="checkbox" class="size-checkbox"></td>\n' +
+                                            '\n' +
+                                            '                                                                            <td class="size_title">'+value.model+'</td>\n' +
+                                            '\n' +
+                                            '                                                                            <td class="size_value">'+value.value+'</td>\n' +
+                                            '\n' +
+                                            '                                                                            <td class="size_price_impact">'+price_impact+'</td>\n' +
+                                            '\n' +
+                                            '                                                                            <td class="size_impact_type">'+impact_type+'</td>\n' +
+                                            '\n' +
+                                            '                                                                            </tr>');
+
+                                    });
+
+                                    $('#myModal3').modal('toggle');
+                                    $('.modal-backdrop').hide();
+
+                                }
+                            });
 
                             /*close the list of autocompleted values,
                             (or any other open lists of autocompleted values:*/
@@ -2179,20 +2335,18 @@
         }
 
         values = [];
-        price_impacts = [];
-        impact_types = [];
         model_titles = [];
 
         var sel = $(".all-models");
         var length = sel.children('option').length;
 
         $(".all-models:first > option").each(function() {
-            if (this.value) values.push(this.value); model_titles.push(this.text); price_impacts.push(this.getAttribute('data-price-impact')); impact_types.push(this.getAttribute('data-impact-type'));
+            if (this.value) values.push(this.value); model_titles.push(this.text);
         });
 
         var cls = document.getElementsByClassName("models");
         for (n=0, length = cls.length; n < length; n++) {
-            autocomplete(cls[n], model_titles, values, price_impacts, impact_types);
+            autocomplete(cls[n], model_titles, values);
         }
 
         var rem_arr = [];
@@ -2918,9 +3072,8 @@
 
         });
 
-
-        $('body').on('click', '#add-model-btn' ,function(){
-
+        function add_model(title = '',value = '',price_impact = '',impact_type = '')
+        {
             var model_row = $('.model_box').find('.form-group').last().data('id');
             model_row = model_row + 1;
 
@@ -2928,13 +3081,13 @@
                 '\n' +
                 '                                                                   <div class="col-sm-3 autocomplete">\n' +
                 '\n' +
-                '                                                                        <input type="text" id="modelInput" autocomplete="off" placeholder="Model" name="models[]" class="form-control validate models">\n' +
+                '                                                                        <input value="'+title+'" type="text" id="modelInput" autocomplete="off" placeholder="Model" name="models[]" class="form-control validate models">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
                 '                                                                    <div class="col-sm-3">\n' +
                 '\n' +
-                '                                                                        <input class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                        <input value="'+value+'" class="form-control model_value" name="model_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '\n' +
                 '                                                                    </div>\n' +
                 '\n' +
@@ -2942,10 +3095,10 @@
                 '\n' +
                 '                                                                        <select class="form-control" id="price_impact" name="model_price_impact[]">\n' +
                 '\n' +
-                '                                                                           <option value="0">No</option>\n' +
-                '                                                                           <option value="1">Fixed</option>\n' +
-                '                                                                           <option value="2">m¹ Impact</option>\n' +
-                '                                                                           <option value="3">m² Impact</option>\n' +
+                (price_impact == 0 ? '<option selected value="0">No</option>\n': '<option value="0">No</option>\n') +
+                (price_impact == 1 ? '<option selected value="1">Fixed</option>\n': '<option value="1">Fixed</option>\n') +
+                (price_impact == 2 ? '<option selected value="2">m¹ Impact</option>\n': '<option value="2">m¹ Impact</option>\n') +
+                (price_impact == 3 ? '<option selected value="3">m² Impact</option>\n': '<option value="3">m² Impact</option>\n') +
                 '\n' +
                 '                                                                        </select>\n' +
                 '\n' +
@@ -2955,8 +3108,8 @@
                 '\n' +
                 '                                                                        <select class="form-control" id="impact_type" name="model_impact_type[]">\n' +
                 '\n' +
-                '                                                                           <option value="0">€</option>\n' +
-                '                                                                           <option value="1">%</option>\n' +
+                (impact_type == 0 ? '<option selected value="0">€</option>\n': '<option value="0">€</option>\n') +
+                (impact_type == 1 ? '<option selected value="1">%</option>\n': '<option value="1">%</option>\n') +
                 '\n' +
                 '                                                                        </select>\n' +
                 '\n' +
@@ -2974,7 +3127,7 @@
 
             var last_row = $('.model_box .model-row:last');
 
-            autocomplete(last_row.find("#modelInput")[0], model_titles, values, price_impacts, impact_types);
+            autocomplete(last_row.find("#modelInput")[0], model_titles, values);
 
             var rows = '';
 
@@ -3069,17 +3222,10 @@
                 rows +
                 '        </tbody>\n' +
                 '        </table>');
+        }
 
-
-        });
-
-        var rem_mod = [];
-
-        $('body').on('click', '.remove-model' ,function()
+        function remove_model(id,model_row)
         {
-            var id = $(this).data('id');
-            var model_row = $(this).parent().parent().data('id');
-
             if(id)
             {
                 rem_mod.push(id);
@@ -3143,7 +3289,7 @@
 
                 var last_row = $('.model_box .model-row:last');
 
-                autocomplete(last_row.find("#modelInput")[0], model_titles, values, price_impacts, impact_types);
+                autocomplete(last_row.find("#modelInput")[0], model_titles, values);
 
                 var rows = '';
 
@@ -3240,6 +3386,23 @@
                     '        </tbody>\n' +
                     '        </table>');
             }
+        }
+
+
+        $('body').on('click', '#add-model-btn' ,function(){
+
+            add_model();
+
+        });
+
+        var rem_mod = [];
+
+        $('body').on('click', '.remove-model' ,function()
+        {
+            var id = $(this).data('id');
+            var model_row = $(this).parent().parent().data('id');
+
+            remove_model(id,model_row);
 
         });
 

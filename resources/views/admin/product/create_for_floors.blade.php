@@ -1853,7 +1853,6 @@
                             inp.value = this.getElementsByTagName("input")[0].value;
                             var id = this.getElementsByTagName("input")[1].value;
                             var row_id = current.parents('.model-row').data('id');
-                            var remove_id = current.parents('.model-row').find('.remove-model').data('id');
 
                             $.ajax({
                                 type:"GET",
@@ -1874,8 +1873,6 @@
                                             '                                                                            <td class="size_measure">'+value.measure+'</td>\n' +
                                             '\n' +
                                             '                                                                            </tr>');
-
-                                        // add_model(value.model,value.measure);
 
                                     });
 
