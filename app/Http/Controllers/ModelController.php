@@ -47,7 +47,7 @@ class ModelController extends Controller
         {
             $cats = Model1::leftjoin('brands','brands.id','=','models.brand_id')->where(function($query) use($user_id) {
                 $query->where('models.user_id',$user_id)->orWhere(function($query1) use($user_id) {
-                    $query1->whereRaw("find_in_set($user_id,brands.other_suppliers)")->where('trademark',0);
+                    $query1->whereRaw("find_in_set($user_id,brands.other_suppliers)")->where('brands.trademark',0);
                 });
             })->orderBy('models.id','desc')->select('models.*','brands.cat_name as brand')->get();
 
@@ -182,7 +182,7 @@ class ModelController extends Controller
 
             if($check_name1)
             {
-                Session::flash('unsuccess', 'Type title is already taken, If you are allowed to use it send us a message.');
+                Session::flash('unsuccess', 'Type title is already taken, If you are allowed to use it than send us a message.');
                 return redirect()->back()->withInput();
             }
 
@@ -216,7 +216,7 @@ class ModelController extends Controller
 
             if($check_name1)
             {
-                Session::flash('unsuccess', 'Type title is already taken, If you are allowed to use it send us a message.');
+                Session::flash('unsuccess', 'Type title is already taken, If you are allowed to use it than send us a message.');
                 return redirect()->back()->withInput();
             }
 
