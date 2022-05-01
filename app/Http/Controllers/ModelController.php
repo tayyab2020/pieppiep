@@ -158,73 +158,73 @@ class ModelController extends Controller
         }
     }
 
-    public function CustomValidations($id,$user_id,$title,$slug)
+    public function CustomValidations($id,$user_id,$title,$slug,$brand_id)
     {
         if($id)
         {
-            $check_name = Model1::where('id','!=',$id)->where('cat_name',$title)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
+            $check_name = Model1::where('id','!=',$id)->where('cat_name',$title)->where('brand_id',$brand_id)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_name)
             {
-                Session::flash('unsuccess', 'Type title already in use.');
+                Session::flash('unsuccess', 'Type title already in use and linked with same brand.');
                 return redirect()->back()->withInput();
             }
 
-            $check_slug = Model1::where('id','!=',$id)->where('cat_slug',$slug)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
+            $check_slug = Model1::where('id','!=',$id)->where('cat_slug',$slug)->where('brand_id',$brand_id)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_slug)
             {
-                Session::flash('unsuccess', 'Slug already in use.');
+                Session::flash('unsuccess', 'Slug already in use and linked with same brand.');
                 return redirect()->back()->withInput();
             }
 
-            $check_name1 = Model1::where('id','!=',$id)->where('cat_name',$title)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
+            $check_name1 = Model1::where('id','!=',$id)->where('cat_name',$title)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_name1)
             {
-                Session::flash('unsuccess', 'Type title is already taken, If you are allowed to use it than send us a message.');
+                Session::flash('unsuccess', 'Type title is already taken and linked with same brand, If you are allowed to use it than send us a message.');
                 return redirect()->back()->withInput();
             }
 
-            $check_slug1 = Model1::where('id','!=',$id)->where('cat_slug',$slug)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
+            $check_slug1 = Model1::where('id','!=',$id)->where('cat_slug',$slug)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_slug1)
             {
-                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
+                Session::flash('unsuccess', 'Slug is already taken and linked with same brand, If you are allowed to use it send us a message.');
                 return redirect()->back()->withInput();
             }
         }
         else
         {
-            $check_name = Model1::where('cat_name',$title)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
+            $check_name = Model1::where('cat_name',$title)->where('brand_id',$brand_id)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_name)
             {
-                Session::flash('unsuccess', 'Type title already in use.');
+                Session::flash('unsuccess', 'Type title already in use and linked with same brand.');
                 return redirect()->back()->withInput();
             }
 
-            $check_slug = Model1::where('cat_slug',$slug)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
+            $check_slug = Model1::where('cat_slug',$slug)->where('brand_id',$brand_id)->where('user_id',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_slug)
             {
-                Session::flash('unsuccess', 'Slug already in use.');
+                Session::flash('unsuccess', 'Slug already in use and linked with same brand.');
                 return redirect()->back()->withInput();
             }
 
-            $check_name1 = Model1::where('cat_name',$title)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
+            $check_name1 = Model1::where('cat_name',$title)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_name1)
             {
-                Session::flash('unsuccess', 'Type title is already taken, If you are allowed to use it than send us a message.');
+                Session::flash('unsuccess', 'Type title is already taken and linked with same brand, If you are allowed to use it than send us a message.');
                 return redirect()->back()->withInput();
             }
 
-            $check_slug1 = Model1::where('cat_slug',$slug)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
+            $check_slug1 = Model1::where('cat_slug',$slug)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
             if($check_slug1)
             {
-                Session::flash('unsuccess', 'Slug is already taken, If you are allowed to use it send us a message.');
+                Session::flash('unsuccess', 'Slug is already taken and linked with same brand, If you are allowed to use it send us a message.');
                 return redirect()->back()->withInput();
             }
         }
@@ -244,7 +244,7 @@ class ModelController extends Controller
 
         $user_id = $user->id;
 
-        $validations = $this->CustomValidations($request->cat_id ? $request->cat_id : NULL,$user_id,$request->cat_name,$request->cat_slug);
+        $validations = $this->CustomValidations($request->cat_id ? $request->cat_id : NULL,$user_id,$request->cat_name,$request->cat_slug,$request->brand_id);
 
         if($validations)
         {
