@@ -178,21 +178,21 @@ class ModelController extends Controller
                 return redirect()->back()->withInput();
             }
 
-            $check_name1 = Model1::where('id','!=',$id)->where('cat_name',$title)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
+            // $check_name1 = Model1::where('id','!=',$id)->where('cat_name',$title)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
-            if($check_name1)
-            {
-                Session::flash('unsuccess', 'Type title is already taken and linked with same brand, If you are allowed to use it than send us a message.');
-                return redirect()->back()->withInput();
-            }
+            // if($check_name1)
+            // {
+            //     Session::flash('unsuccess', 'Type title is already taken and linked with same brand, If you are allowed to use it than send us a message.');
+            //     return redirect()->back()->withInput();
+            // }
 
-            $check_slug1 = Model1::where('id','!=',$id)->where('cat_slug',$slug)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
+            // $check_slug1 = Model1::where('id','!=',$id)->where('cat_slug',$slug)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
-            if($check_slug1)
-            {
-                Session::flash('unsuccess', 'Slug is already taken and linked with same brand, If you are allowed to use it send us a message.');
-                return redirect()->back()->withInput();
-            }
+            // if($check_slug1)
+            // {
+            //     Session::flash('unsuccess', 'Slug is already taken and linked with same brand, If you are allowed to use it send us a message.');
+            //     return redirect()->back()->withInput();
+            // }
         }
         else
         {
@@ -212,21 +212,21 @@ class ModelController extends Controller
                 return redirect()->back()->withInput();
             }
 
-            $check_name1 = Model1::where('cat_name',$title)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
+            // $check_name1 = Model1::where('cat_name',$title)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
-            if($check_name1)
-            {
-                Session::flash('unsuccess', 'Type title is already taken and linked with same brand, If you are allowed to use it than send us a message.');
-                return redirect()->back()->withInput();
-            }
+            // if($check_name1)
+            // {
+            //     Session::flash('unsuccess', 'Type title is already taken and linked with same brand, If you are allowed to use it than send us a message.');
+            //     return redirect()->back()->withInput();
+            // }
 
-            $check_slug1 = Model1::where('cat_slug',$slug)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
+            // $check_slug1 = Model1::where('cat_slug',$slug)->where('brand_id',$brand_id)->where('user_id','!=',$user_id)->where('deleted_at',NULL)->first();
 
-            if($check_slug1)
-            {
-                Session::flash('unsuccess', 'Slug is already taken and linked with same brand, If you are allowed to use it send us a message.');
-                return redirect()->back()->withInput();
-            }
+            // if($check_slug1)
+            // {
+            //     Session::flash('unsuccess', 'Slug is already taken and linked with same brand, If you are allowed to use it send us a message.');
+            //     return redirect()->back()->withInput();
+            // }
         }
 
         return NULL;
