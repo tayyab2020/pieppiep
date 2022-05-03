@@ -908,111 +908,225 @@
 																			<div class="headings" style="width: 18%;"></div>
 																		</div>
 
-																		<div class="attribute-content-div" data-id="1" data-main-id="0">
+																		@if($quote && (count($quote->dimensions) > 0))
 
-																			<div class="attribute full-res item1" style="width: 22%;">
-																				<div style="display: flex;align-items: center;">
-																					<input type="hidden" class="calculator_row" name="calculator_row1[]" value="1">
-																					<span style="width: 10%">1</span>
-																					<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]"></textarea></div>
-																				</div>
-																			</div>
+																			@foreach($quote->dimensions as $d => $key)
 
-																			<div class="attribute item2 width-box" style="width: 10%;">
+																				<div class="attribute-content-div" data-id="{{$d+1}}" data-main-id="0">
 
-																				<div class="m-box">
-																					<input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
-																					<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
-																				</div>
+																					<div class="attribute full-res item1" style="width: 22%;">
+																						<div style="display: flex;align-items: center;">
+																							<input type="hidden" class="calculator_row" name="calculator_row1[]" value="{{$d+1}}">
+																							<span style="width: 10%">{{$d+1}}</span>
+																							<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]">{{$key->description}}</textarea></div>
+																						</div>
+																					</div>
 
-																			</div>
+																					<div class="attribute item2 width-box" style="width: 10%;">
 
-																			<div class="attribute item3 height-box" style="width: 10%;">
+																						<div class="m-box">
+																							<input value="{{str_replace('.', ',',floatval($key->width))}}" style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
+																							<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
+																						</div>
 
-																				<div class="m-box">
-																					<input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
-																					<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
-																				</div>
+																					</div>
 
-																			</div>
+																					<div class="attribute item3 height-box" style="width: 10%;">
 
-																			<div class="attribute item4" style="width: 10%;">
+																						<div class="m-box">
+																							<input value="{{str_replace('.', ',',floatval($key->height))}}" style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
+																							<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
+																						</div>
 
-																				<div class="m-box">
-																					<input class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
-																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
-																				</div>
+																					</div>
 
-																			</div>
+																					<div class="attribute item4" style="width: 10%;">
 
-																			<div class="attribute item5 m2_box" style="width: 10%;">
+																						<div class="m-box">
+																							<input class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
+																							<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																						</div>
 
-																				<div class="m-box">
-																					<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
-																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
-																				</div>
+																					</div>
 
-																			</div>
+																					<div class="attribute item5 m2_box" style="width: 10%;">
 
-																			<div class="attribute item5 m1_box" style="width: 10%;display: none;">
+																						<div class="m-box">
+																							<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
+																							<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																						</div>
 
-																				<div style="display: flex;align-items: center;">
-																					<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" name="turn1[]">
-																						<option value="0">No</option>
-																						<option value="1">Yes</option>
-																					</select>
-																				</div>
+																					</div>
 
-																			</div>
+																					<div class="attribute item5 m1_box" style="width: 10%;display: none;">
 
-																			<div class="attribute item6 m1_box" style="width: 10%;display: none;">
+																						<div style="display: flex;align-items: center;">
+																							<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" name="turn1[]">
+																								<option value="0">No</option>
+																								<option value="1">Yes</option>
+																							</select>
+																						</div>
 
-																				<div style="display: flex;align-items: center;">
-																					<input type="number" name="max_width1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">
-																				</div>
+																					</div>
 
-																			</div>
+																					<div class="attribute item6 m1_box" style="width: 10%;display: none;">
 
-																			<div class="attribute item6 m2_box" style="width: 10%;">
+																						<div style="display: flex;align-items: center;">
+																							<input type="number" name="max_width1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">
+																						</div>
 
-																				<div class="m-box">
-																					<input class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;background: transparent;" readonly autocomplete="off" name="box_quantity_supplier1[]" type="number">
-																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
-																				</div>
+																					</div>
 
-																			</div>
+																					<div class="attribute item6 m2_box" style="width: 10%;">
 
-																			<div class="attribute item7" style="width: 10%;">
+																						<div class="m-box">
+																							<input class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;background: transparent;" readonly autocomplete="off" name="box_quantity_supplier1[]" type="number">
+																							<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																						</div>
 
-																				<div style="display: flex;align-items: center;">
-																					<input type="number" name="box_quantity1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">
-																				</div>
+																					</div>
 
-																			</div>
+																					<div class="attribute item7" style="width: 10%;">
 
-																			<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
-																				<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
+																						<div style="display: flex;align-items: center;">
+																							<input type="number" name="box_quantity1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">
+																						</div>
+
+																					</div>
+
+																					<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
+																						<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
 
 																				<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
 																					<span class="tooltiptext">Add</span>
 																				</span>
 
-																					<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																							<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
 																					<span class="tooltiptext">Remove</span>
 																				</span>
 
-																					<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																							<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
 																					<span class="tooltiptext">Copy</span>
 																				</span>
 
+																						</div>
+																					</div>
+
 																				</div>
+
+																			@endforeach
+
+																		@else
+
+																			<div class="attribute-content-div" data-id="1" data-main-id="0">
+
+																				<div class="attribute full-res item1" style="width: 22%;">
+																					<div style="display: flex;align-items: center;">
+																						<input type="hidden" class="calculator_row" name="calculator_row1[]" value="1">
+																						<span style="width: 10%">1</span>
+																						<div style="width: 90%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 40px;outline: none;" name="attribute_description1[]"></textarea></div>
+																					</div>
+																				</div>
+
+																				<div class="attribute item2 width-box" style="width: 10%;">
+
+																					<div class="m-box">
+																						<input style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width1[]" type="text">
+																						<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
+																					</div>
+
+																				</div>
+
+																				<div class="attribute item3 height-box" style="width: 10%;">
+
+																					<div class="m-box">
+																						<input style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height1[]" type="text">
+																						<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
+																					</div>
+
+																				</div>
+
+																				<div class="attribute item4" style="width: 10%;">
+
+																					<div class="m-box">
+																						<input class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage1[]" type="text">
+																						<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																					</div>
+
+																				</div>
+
+																				<div class="attribute item5 m2_box" style="width: 10%;">
+
+																					<div class="m-box">
+																						<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
+																						<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																					</div>
+
+																				</div>
+
+																				<div class="attribute item5 m1_box" style="width: 10%;display: none;">
+
+																					<div style="display: flex;align-items: center;">
+																						<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" name="turn1[]">
+																							<option value="0">No</option>
+																							<option value="1">Yes</option>
+																						</select>
+																					</div>
+
+																				</div>
+
+																				<div class="attribute item6 m1_box" style="width: 10%;display: none;">
+
+																					<div style="display: flex;align-items: center;">
+																						<input type="number" name="max_width1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control max_width res-white m-input">
+																					</div>
+
+																				</div>
+
+																				<div class="attribute item6 m2_box" style="width: 10%;">
+
+																					<div class="m-box">
+																						<input class="form-control box_quantity_supplier m-input" style="border: 1px solid #ccc;background: transparent;" readonly autocomplete="off" name="box_quantity_supplier1[]" type="number">
+																						<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
+																					</div>
+
+																				</div>
+
+																				<div class="attribute item7" style="width: 10%;">
+
+																					<div style="display: flex;align-items: center;">
+																						<input type="number" name="box_quantity1[]" readonly style="border: 1px solid #ccc;background: transparent;" class="form-control box_quantity res-white m-input">
+																					</div>
+
+																				</div>
+
+																				<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
+																					<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
+
+																				<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																					<span class="tooltiptext">Add</span>
+																				</span>
+
+																						<span id="next-row-span" class="tooltip1 remove-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																					<span class="tooltiptext">Remove</span>
+																				</span>
+
+																						<span id="next-row-span" class="tooltip1 copy-attribute-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
+																					<span class="tooltiptext">Copy</span>
+																				</span>
+
+																					</div>
+																				</div>
+
 																			</div>
 
-																		</div>
-
+																		@endif
 
 																	</section>
 
@@ -5246,38 +5360,41 @@
 									$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
 								}
 
-								if(data.measure != measure)
+								if(!$('#request_quotation').val())
 								{
-									$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
-									add_attribute_row(false, row_id);
-									$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(quote_qty);
-								}
-								else
-								{
-									if(measure == 'M1')
+									if(data.measure != measure)
 									{
-										if(max_width != data.max_width)
-										{
-											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
-
-												$(this).find('.max_width').val(data.max_width);
-												var row = $(this).data('id');
-												calculator(row_id,row);
-
-											});
-										}
+										$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
+										add_attribute_row(false, row_id);
+										$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(quote_qty);
 									}
-									else if(measure == 'M2')
+									else
 									{
-										if(box_quantity != data.estimated_price_quantity)
+										if(measure == 'M1')
 										{
-											$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
+											if(max_width != data.max_width)
+											{
+												$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
 
-												$(this).find('.box_quantity_supplier').val(data.estimated_price_quantity);
-												var row = $(this).data('id');
-												calculator(row_id,row);
+													$(this).find('.max_width').val(data.max_width);
+													var row = $(this).data('id');
+													calculator(row_id,row);
 
-											});
+												});
+											}
+										}
+										else if(measure == 'M2')
+										{
+											if(box_quantity != data.estimated_price_quantity)
+											{
+												$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find(`.attribute-content-div[data-main-id='0']`).each(function (i, obj) {
+
+													$(this).find('.box_quantity_supplier').val(data.estimated_price_quantity);
+													var row = $(this).data('id');
+													calculator(row_id,row);
+
+												});
+											}
 										}
 									}
 								}

@@ -258,6 +258,53 @@
                                             </div>
                                         </div>
 
+                                        @if($request->measure == 'M1' || $request->measure == 'Custom Sized')
+
+                                            <section class="attributes_table active" style="width: 80%;padding: 20px;margin: 50px auto auto auto;border: 1px solid #adadad;border-radius: 10px;">
+
+                                                <h3 style="border-bottom: 1px solid #b9b9b9;margin-bottom: 30px;padding-bottom: 10px;text-align: center;">Dimensions</h3>
+
+                                                <div class="header-div">
+                                                    <div class="headings" style="width: 50%;">Description</div>
+                                                    <div class="headings" style="width: 25%;">Width</div>
+                                                    <div class="headings" style="width: 25%;">Height</div>
+                                                </div>
+
+                                                @foreach($request->dimensions as $key)
+
+                                                    <div class="attribute-content-div">
+
+                                                        <div class="attribute full-res" style="width: 50%;">
+                                                            <div style="display: flex;align-items: center;">
+                                                                <div style="width: 100%;"><textarea class="form-control attribute_description" style="width: 90%;border-radius: 7px;resize: vertical;height: 80px;outline: none;" name="attribute_description[]">{{$key->description}}</textarea></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="attribute width-box" style="width: 25%;">
+
+                                                            <div class="m-box">
+                                                                <input value="{{str_replace('.', ',',floatval($key->width))}}" style="border: 1px solid #ccc;" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width[]" type="text">
+                                                                <input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit[]" class="measure-unit">
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="attribute height-box" style="width: 25%;">
+
+                                                            <div class="m-box">
+                                                                <input value="{{str_replace('.', ',',floatval($key->height))}}" style="border: 1px solid #ccc;" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height[]" type="text">
+                                                                <input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit[]" class="measure-unit">
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                @endforeach
+
+                                            </section>
+
+                                        @endif
 
                                         <hr>
                                         {{--<div class="add-product-footer">
@@ -280,8 +327,12 @@
     <script type="text/javascript" src="{{asset('assets/admin/js/nicEdit.js')}}"></script>
     <script type="text/javascript">
         //<![CDATA[
-        bkLib.onDomLoaded(function () {
-            nicEditors.allTextAreas()
+        bkLib.onDomLoaded(function() {
+            nicEditors.editors.push(
+                new nicEditor().panelInstance(
+                    document.getElementById('quote_description')
+                )
+            );
         });
         //]]>
     </script>
@@ -346,6 +397,90 @@
     </script>
 
     <style type="text/css">
+
+        .attributes_table
+        {
+            display: none;
+        }
+
+        .attributes_table.active
+        {
+            display: block;
+        }
+
+        .m-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .m-input {
+            border-radius: 5px !important;
+            width: 70%;
+            border: 0;
+            padding: 0 5px;
+            text-align: left;
+            height: 40px !important;
+        }
+
+        .m-input:focus{
+            background: #f6f6f6;
+        }
+
+        .measure-unit {
+            width: 50%;
+        }
+
+        .header-div, .content-div, .attribute-content-div
+        {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .header-div .headings
+        {
+            font-family: system-ui;
+            font-weight: 500;
+            border-bottom: 1px solid #ebebeb;
+            padding-bottom: 15px;
+            color: gray;
+            height: 40px;
+        }
+
+        .content-div, .attribute-content-div
+        {
+            margin-top: 15px;
+            flex-flow: wrap;
+            /*border-bottom: 1px solid #d0d0d0;*/
+            padding-bottom: 10px;
+        }
+
+        .content-div .content {
+            font-family: system-ui;
+            font-weight: 500;
+            padding: 0;
+            color: #3c3c3c;
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-div.active .content {
+            border-top: 2px solid #cecece;
+            border-bottom: 2px solid #cecece;
+        }
+
+        .content-div.active .content:first-child {
+            border-left: 2px solid #cecece;
+            border-bottom-left-radius: 4px;
+            border-top-left-radius: 4px;
+        }
+
+        .content-div.active .last-content {
+            border-right: 2px solid #cecece;
+            border-bottom-right-radius: 4px;
+            border-top-right-radius: 4px;
+        }
 
         .swal2-show {
             padding: 40px;

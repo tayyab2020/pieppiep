@@ -12,4 +12,9 @@ class quotes extends Model
     {
         return $this->hasMany(new_quotations::class, 'quote_request_id');
     }
+
+    public function dimensions()
+    {
+        return $this->hasMany(quote_dimensions::class, 'quote_id','id');
+    }
 }
