@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Category;
+use App\handyman_quotes;
 use App\Products;
 use App\Service;
 use App\terms_conditions;
@@ -82,6 +83,12 @@ class AppServiceProvider extends ServiceProvider
                 {
                     $user_id = $user->id;
                     $user_role = $user->role_id;
+
+                    if($user_role == 2)
+                    {
+                        $no_requests = handyman_quotes::leftjoin('quotes', 'quotes.id', '=', 'handyman_quotes.quote_id')->where('handyman_quotes.handyman_id', $user_id)->where('quotes.status',0)->get();
+                        $settings->with('no_requests', $no_requests);
+                    }
 
                     if($user_role == 4)
                     {

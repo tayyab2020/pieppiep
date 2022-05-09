@@ -1310,7 +1310,109 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                             @if(auth()->user()->role_id == 2 && auth()->user()->can('handyman-quotation-requests'))
 
-                                <li><a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotation Requests')}}</a></li>
+                                <li><a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotation Requests')}}
+                                        <main rel="main">
+                                            <div class="notification">
+                                                <svg viewbox="-10 0 35 35">
+                                                    <path class="notification--bell" d="M14 12v1H0v-1l0.73-0.58c0.77-0.77 0.81-3.55 1.19-4.42 0.77-3.77 4.08-5 4.08-5 0-0.55 0.45-1 1-1s1 0.45 1 1c0 0 3.39 1.23 4.16 5 0.38 1.88 0.42 3.66 1.19 4.42l0.66 0.58z"></path>
+                                                    <path class="notification--bellClapper" d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"></path>
+                                                </svg>
+                                                <span class="notification--num">{{count($no_requests)}}</span>
+                                            </div>
+                                        </main>
+                                    </a></li>
+
+                                <style>
+
+                                    main {
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        height: 100%;
+                                        position: relative;
+                                        float: right;
+                                    }
+                                    main .notification {
+                                        position: relative;
+                                        width: 4em;
+                                        height: 4em;
+                                    }
+                                    main .notification svg {
+                                        width: 100%;
+                                        height: 100%;
+                                    }
+                                    main .notification svg > path {
+                                        fill: black;
+                                    }
+                                    main .notification--bell {
+                                        animation: bell 2.2s linear infinite;
+                                        transform-origin: 50% 0%;
+                                    }
+                                    main .notification--bellClapper {
+                                        animation: bellClapper 2.2s 0.1s linear infinite;
+                                    }
+                                    main .notification--num {
+                                        position: absolute;
+                                        top: -18%;
+                                        left: 50%;
+                                        font-size: 13px;
+                                        border-radius: 50%;
+                                        width: 20px;
+                                        height: 20px;
+                                        background-color: #ff4c13;
+                                        border: 4px solid #ff4c13;
+                                        color: #fff;
+                                        text-align: center;
+                                        animation: notification 2.2s linear;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        font-weight: bold;
+                                    }
+                                    @keyframes bell {
+                                        0%, 25%, 75%, 100% {
+                                            transform: rotate(0deg);
+                                        }
+                                        40% {
+                                            transform: rotate(10deg);
+                                        }
+                                        45% {
+                                            transform: rotate(-10deg);
+                                        }
+                                        55% {
+                                            transform: rotate(8deg);
+                                        }
+                                        60% {
+                                            transform: rotate(-8deg);
+                                        }
+                                    }
+                                    @keyframes bellClapper {
+                                        0%, 25%, 75%, 100% {
+                                            transform: translateX(0);
+                                        }
+                                        40% {
+                                            transform: translateX(-0.15em);
+                                        }
+                                        45% {
+                                            transform: translateX(0.15em);
+                                        }
+                                        55% {
+                                            transform: translateX(-0.1em);
+                                        }
+                                        60% {
+                                            transform: translateX(0.1em);
+                                        }
+                                    }
+                                    @keyframes notification {
+                                        0%, 25%, 75%, 100% {
+                                            opacity: 1;
+                                        }
+                                        30%, 70% {
+                                            opacity: 0;
+                                        }
+                                    }
+
+                                </style>
 
                             @endif
 
