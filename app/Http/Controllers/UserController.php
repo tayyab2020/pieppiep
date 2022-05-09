@@ -3888,6 +3888,7 @@ class UserController extends Controller
             $order->amount = 0;
             $order->delivery_days = $request->delivery_days[$i];
             $order->delivery_date = $delivery_date;
+            $order->retailer_delivery_date = $delivery_date;
             $order->price_before_labor = 0;
             $order->labor_impact = 0;
             $order->discount = 0;
@@ -4612,6 +4613,7 @@ class UserController extends Controller
                     $order->amount = $request->total[$i];
                     $order->delivery_days = $request->delivery_days[$i];
                     $order->delivery_date = $delivery_date;
+                    $order->retailer_delivery_date = $delivery_date;
                     $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
                     $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                     $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
@@ -5824,6 +5826,52 @@ class UserController extends Controller
         }
 
         /*event(new \App\Events\SendOrder($id));*/
+    }
+
+    public function ViewDetails($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
+        $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('items', 'items.id', '=', 'new_quotations_data.item_id')->leftjoin('services', 'services.id', '=', 'new_quotations_data.service_id')->where('new_quotations.id',$id)->where('new_quotations.creator_id', $user_id)->where('new_quotations_data.product_id',0)->select('new_quotations.id as invoice_id','new_quotations_data.*','items.cat_name as item','services.title as service')->get();
+        $new_invoices = new_quotations::leftjoin('new_orders', 'new_orders.quotation_id', '=', 'new_quotations.id')->leftjoin('users', 'users.id', '=', 'new_orders.supplier_id')->leftjoin('products', 'products.id', '=', 'new_orders.product_id')->leftjoin('product_models', 'product_models.id', '=', 'new_orders.model_id')->leftjoin('colors', 'colors.id', '=', 'new_orders.color')->where('new_quotations.id',$id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.id as invoice_id','new_orders.*','users.company_name','products.title as product_title','product_models.model','colors.title as color_title')->get();
+
+        $invoices = $invoices->concat($new_invoices);
+
+        if(count($invoices) > 0)
+        {
+            return view('user.quotation_details',compact('invoices'));
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function UpdateDetails(Request $request)
+    {
+        $data_ids = $request->data_id;
+        $order_ids = $request->order_id;
+
+        foreach ($data_ids as $x => $key)
+        {
+            new_quotations_data::where('id',$key)->update(['order_date' => $request->order_dates[$x],'order_sent' => $request->order_sent[$x],'delivery_date' => $request->delivery_dates[$x]]);
+        }
+
+        foreach ($order_ids as $x => $key)
+        {
+            new_orders::where('id',$key)->update(['retailer_delivery_date' => $request->order_delivery_dates[$x]]);
+        }
+
+        Session::flash('success', 'Updated successfully.');
+        return redirect()->back();
     }
 
     public function ChangeDeliveryDates($id)

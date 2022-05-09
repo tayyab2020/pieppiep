@@ -76,6 +76,8 @@
   Route::get('/new-orders', 'UserController@NewOrders')->name('new-orders');
   Route::get('/new-invoices', 'UserController@NewInvoices')->name('new-invoices');
   Route::get('/view-new-quotation/{id}', 'UserController@EditNewQuotation')->name('view-new-quotation');
+  Route::get('/view-details/{id}', 'UserController@ViewDetails')->name('view-details');
+  Route::post('/update-details', 'UserController@UpdateDetails')->name('update-details');
   Route::get('/view-new-invoice/{id}', 'UserController@EditNewQuotation')->name('view-new-invoice');
   Route::get('/edit-order/{id}', 'UserController@EditOrder')->name('edit-order');
   Route::get('/view-order/{id}', 'UserController@EditOrder')->name('view-order');

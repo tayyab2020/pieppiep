@@ -402,6 +402,12 @@
 
                                                                                 <li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>
 
+                                                                                @if($key->accepted)
+
+                                                                                    <li><a href="{{ url('/aanbieder/view-details/'.$key->invoice_id) }}">View Details</a></li>
+
+                                                                                @endif
+
                                                                                 @if(!$key->invoice)
 
                                                                                     @if(!$key->quote_request_id || $key->paid)
