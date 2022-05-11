@@ -2762,7 +2762,7 @@
 
 		$(document).ready(function () {
 
-			if($('#request_quotation').val())
+			if($('#request_quotation').val() == 1)
 			{
 				var current = $(".quote-product");
 				var product_id = current.parents(".content-div").find('#product_id').val();
@@ -5360,7 +5360,7 @@
 									$('#products_table').find(`[data-id='${row_id}']`).find('#next-row-td').find('.yellow-circle').show();
 								}
 
-								if(!$('#request_quotation').val())
+								if($('#request_quotation').val() == 0)
 								{
 									if(data.measure != measure)
 									{
