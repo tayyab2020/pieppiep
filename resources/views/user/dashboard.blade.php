@@ -47,9 +47,9 @@
                                 <tr role="row" class="odd">
                                     <td>{{$key->name}}</td>
                                     <td>{{$key->quotation_invoice_number}}</td>
-                                    <td>{{$key->order_date}}</td>
+                                    <td>{{$key->order_date ? date('d-m-Y',strtotime($key->order_date)) : null}}</td>
                                     <td>{{$key->company_name}}</td>
-                                    <td>{{$key->approved ? $key->delivery_date : null}}</td>
+                                    <td>{{$key->approved ? ($key->delivery_date ? date('d-m-Y',strtotime($key->delivery_date)) : null) : null}}</td>
                                 </tr>
 
                             @endforeach

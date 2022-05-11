@@ -24,6 +24,20 @@
 
                                                 <h2>Quotation Details</h2>
 
+                                                <div style="background-color: black;border-radius: 10px;padding: 0 10px;">
+
+                                                    <span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+															<i class="fa fa-fw fa-save"></i>
+															<span class="tooltiptext">Save</span>
+                                                    </span>
+
+                                                    <a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
+                                                        <i class="fa fa-fw fa-close"></i>
+                                                        <span class="tooltiptext">Close</span>
+                                                    </a>
+
+                                                </div>
+
                                             </div>
                                             <hr>
                                             <div>
@@ -85,11 +99,11 @@
                                                                         <td>
                                                                             @if(isset($item->item_id) || isset($item->service_id))
 
-                                                                                <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->order_date}}" type="text" class="order_date" name="order_dates[]">
+                                                                                <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->order_date ? date('d-m-Y',strtotime($item->order_date)) : null}}" type="text" class="order_date" name="order_dates[]">
 
                                                                             @else
 
-                                                                                {{$item->order_date}}
+                                                                                {{$item->order_date ? date('d-m-Y',strtotime($item->order_date)) : null}}
 
                                                                             @endif
                                                                         </td>
@@ -119,18 +133,38 @@
                                                                         <td style="padding: 0;">
                                                                             @if(isset($item->item_id) || isset($item->service_id))
 
-                                                                                <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->delivery_date}}" type="text" class="delivery_date" name="delivery_dates[]">
+                                                                                <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->delivery_date ? date('d-m-Y',strtotime($item->delivery_date)) : null}}" type="text" class="delivery_date" name="delivery_dates[]">
 
                                                                             @else
 
-                                                                                <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->retailer_delivery_date}}" type="text" class="delivery_date" name="order_delivery_dates[]">
+                                                                                <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->retailer_delivery_date ? date('d-m-Y',strtotime($item->retailer_delivery_date)) : null}}" type="text" class="delivery_date" name="order_delivery_dates[]">
 
                                                                             @endif
                                                                         </td>
 
-                                                                        <td>{{isset($item->item_id) || isset($item->service_id) ? null : $item->delivery_date}}</td>
+                                                                        <td>{{isset($item->item_id) || isset($item->service_id) ? null : ($item->delivery_date ? date('d-m-Y',strtotime($item->delivery_date)) : null)}}</td>
 
-                                                                        <td>{{$item->company_name}}</td>
+                                                                        <td>
+                                                                            @if(isset($item->item_id) || isset($item->service_id))
+
+                                                                                <select class="form-control" name="suppliers[]">
+
+                                                                                    <option value="">Select Supplier</option>
+
+                                                                                    @foreach($suppliers as $key)
+
+                                                                                        <option {{$item->supplier_id == $key->id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
+
+                                                                                    @endforeach
+
+                                                                                </select>
+
+                                                                            @else
+
+                                                                                {{$item->company_name}}
+
+                                                                            @endif
+                                                                        </td>
 
                                                                     </tr>
 
@@ -154,10 +188,6 @@
                             </div>
                         </div>
                         <!-- Ending of Dashboard data-table area -->
-                    </div>
-
-                    <div style="display: flex;justify-content: center;margin-top: 20px;">
-                        <button style="outline: none;padding: 10px 30px;font-size: 16px;" type="button" class="btn btn-success save-data">Save</button>
                     </div>
 
                 </form>
@@ -1010,14 +1040,14 @@
 
             $('.delivery_date').datepicker({
 
-                format: 'yyyy-mm-dd',
+                format: 'dd-mm-yyyy',
                 startDate: new Date(),
 
             });
 
             $('.order_date').datepicker({
 
-                format: 'yyyy-mm-dd',
+                format: 'dd-mm-yyyy',
                 startDate: new Date(),
 
             });

@@ -5840,6 +5840,7 @@ class UserController extends Controller
             $user_id = $user->id;
         }
 
+        $suppliers = User::leftjoin('retailers_requests','retailers_requests.supplier_id','=','users.id')->where('retailers_requests.retailer_id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->select('users.*')->get();
         $invoices = new_quotations::leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('items', 'items.id', '=', 'new_quotations_data.item_id')->leftjoin('services', 'services.id', '=', 'new_quotations_data.service_id')->where('new_quotations.id',$id)->where('new_quotations.creator_id', $user_id)->where('new_quotations_data.product_id',0)->select('new_quotations.id as invoice_id','new_quotations_data.*','items.cat_name as item','services.title as service')->get();
         $new_invoices = new_quotations::leftjoin('new_orders', 'new_orders.quotation_id', '=', 'new_quotations.id')->leftjoin('users', 'users.id', '=', 'new_orders.supplier_id')->leftjoin('products', 'products.id', '=', 'new_orders.product_id')->leftjoin('product_models', 'product_models.id', '=', 'new_orders.model_id')->leftjoin('colors', 'colors.id', '=', 'new_orders.color')->where('new_quotations.id',$id)->where('new_quotations.creator_id', $user_id)->select('new_quotations.id as invoice_id','new_orders.*','users.company_name','products.title as product_title','product_models.model','colors.title as color_title')->get();
 
@@ -5847,7 +5848,7 @@ class UserController extends Controller
 
         if(count($invoices) > 0)
         {
-            return view('user.quotation_details',compact('invoices'));
+            return view('user.quotation_details',compact('invoices','suppliers'));
         }
         else
         {
@@ -5860,14 +5861,20 @@ class UserController extends Controller
         $data_ids = $request->data_id;
         $order_ids = $request->order_id;
 
-        foreach ($data_ids as $x => $key)
+        if($data_ids)
         {
-            new_quotations_data::where('id',$key)->update(['order_date' => $request->order_dates[$x],'order_sent' => $request->order_sent[$x],'delivery_date' => $request->delivery_dates[$x]]);
+            foreach ($data_ids as $x => $key)
+            {
+                new_quotations_data::where('id',$key)->update(['supplier_id' => $request->suppliers[$x] ? $request->suppliers[$x] : 0,'order_date' => $request->order_dates[$x],'order_sent' => $request->order_sent[$x],'delivery_date' => $request->delivery_dates[$x]]);
+            }
         }
 
-        foreach ($order_ids as $x => $key)
+        if($order_ids)
         {
-            new_orders::where('id',$key)->update(['retailer_delivery_date' => $request->order_delivery_dates[$x]]);
+            foreach ($order_ids as $x => $key)
+            {
+                new_orders::where('id',$key)->update(['retailer_delivery_date' => $request->order_delivery_dates[$x]]);
+            }
         }
 
         Session::flash('success', 'Updated successfully.');

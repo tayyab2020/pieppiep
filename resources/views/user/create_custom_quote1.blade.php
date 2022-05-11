@@ -449,7 +449,7 @@
 																	@if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
 
 																		<label>Delivery Date: </label>
-																		<input value="{{isset($invoice) ? $invoice[0]->retailer_delivery_date : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="retailer_delivery_date">
+																		<input value="{{isset($invoice) ? ($invoice[0]->retailer_delivery_date ? date('d-m-Y',strtotime($invoice[0]->retailer_delivery_date)) : null) : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="retailer_delivery_date">
 
 																	@endif
 																	
@@ -482,7 +482,7 @@
 
 																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
 																	<label>Installation Date: </label>
-																	<input value="{{isset($invoice) ? $invoice[0]->retailer_installation_date : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="installation_date" name="installation_date">
+																	<input value="{{isset($invoice) ? ($invoice[0]->retailer_installation_date ? date('d-m-Y',strtotime($invoice[0]->retailer_installation_date)) : null) : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="installation_date" name="installation_date">
 																</div>
 																<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
 																<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
@@ -2921,14 +2921,14 @@
 
 			$('.delivery_date').datepicker({
 
-				format: 'yyyy-mm-dd',
+				format: 'dd-mm-yyyy',
 				startDate: new Date(),
 
 			});
 
 			$('.installation_date').datepicker({
 
-				format: 'yyyy-mm-dd',
+				format: 'dd-mm-yyyy',
 				startDate: new Date(),
 
 			});
