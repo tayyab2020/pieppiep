@@ -65,44 +65,6 @@
 
 @section('scripts')
 
-    <script type="text/javascript" src="{{asset('assets/admin/js/nicEdit.js')}}"></script>
-    <script type="text/javascript">
-        //<![CDATA[
-        bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-        //]]>
-    </script>
-
-<script type="text/javascript">
-
-    $(".js-data-example-ajax").select2({
-        width: '100%',
-        height: '200px',
-        placeholder: "Select Color",
-        allowClear: true,
-    });
-
-  function uploadclick(){
-    $("#uploadFile").click();
-    $("#uploadFile").change(function(event) {
-          readURL(this);
-        $("#uploadTrigger").html($("#uploadFile").val());
-    });
-
-}
-
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#adminimg').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-</script>
-
 <style type="text/css">
 
     .select2-selection
@@ -147,16 +109,5 @@
   }
 
 </style>
-
-
-    <script>
-            $('#cp1').colorpicker();
-            $('#cp2').colorpicker();
-    </script>
-
-
-
-<script src="{{asset('assets/admin/js/jquery152.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/jqueryui.min.js')}}"></script>
 
 @endsection
