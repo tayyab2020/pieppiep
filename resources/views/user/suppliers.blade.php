@@ -12,7 +12,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
-                                        <h2>Suppliers</h2>
+                                        <h2>{{__('text.Suppliers')}}</h2>
                                     </div>
                                     <hr>
                                     <div>
@@ -23,14 +23,14 @@
                                                     <thead>
                                                     <tr role="row">
 
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Supplier ID</th>
-                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">Supplier's Photo</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Supplier's Company Name</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Email</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Status</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Products</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Categories</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">Actions</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Supplier ID')}}</th>
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">{{__('text.Supplier\'s Photo')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Supplier\'s Company Name')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Email')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Status')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Products')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Categories')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">{{__('text.Actions')}}</th>
 
                                                     </tr>
                                                     </thead>
@@ -52,17 +52,17 @@
 
                                                                 @if($user->status != 1)
 
-                                                                    <button class="btn btn-info">Not Requested</button>
+                                                                    <button class="btn btn-info">{{__('text.Not Requested')}}</button>
 
                                                                 @else
 
                                                                     @if($user->active != 1)
 
-                                                                        <button class="btn btn-warning">Suspended</button>
+                                                                        <button class="btn btn-warning">{{__('text.Suspended')}}</button>
 
                                                                     @else
 
-                                                                        <button class="btn btn-success">Active</button>
+                                                                        <button class="btn btn-success">{{__('text.Active')}}</button>
 
                                                                     @endif
 
@@ -111,7 +111,7 @@
 
                                                                 @if($user->status != 1)
 
-                                                                    <button data-id="{{$user->id}}" class="btn btn-success product-btn send-request"><i class="fa fa-check"></i> Send Request</button>
+                                                                    <button data-id="{{$user->id}}" class="btn btn-success product-btn send-request"><i class="fa fa-check"></i> {{__('text.Send Request')}}</button>
 
                                                                 @endif
 
@@ -120,8 +120,8 @@
 
                                                                         @if($user->active)
 
-                                                                            <a href="{{route('supplier-products',$user->id)}}" class="btn btn-success product-btn" style="margin: 5px !important;"><i class="fa fa-product-hunt" ></i> Products</a>
-                                                                            <a href="{{route('supplier-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;margin: 5px !important;"><i class="fa fa-user" ></i> Details</a>
+                                                                            <a href="{{route('supplier-products',$user->id)}}" class="btn btn-success product-btn" style="margin: 5px !important;"><i class="fa fa-product-hunt" ></i> {{__('text.Products')}}</a>
+                                                                            <a href="{{route('supplier-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;margin: 5px !important;"><i class="fa fa-user" ></i> {{__('text.Details')}}</a>
 
                                                                         @endif
 
@@ -166,14 +166,14 @@
 
                             <div style="width: 100%;">
 
-                                <h3 style="text-align: center;width: 95%;margin: auto;margin-bottom: 15px;">If you approve this action than you will agree to share your details with this supplier!</h3>
+                                <h3 style="text-align: center;width: 95%;margin: auto;margin-bottom: 15px;">{{__('text.If you approve this action than you will agree to share your details with this supplier!')}}</h3>
 
                             </div>
 
                         </div>
 
                         <div style="border: 0;text-align: center;" class="modal-footer">
-                            <button style="padding: 10px 30px;font-size: 20px;" type="submit" class="btn btn-success">Approve</button>
+                            <button style="padding: 10px 30px;font-size: 20px;" type="submit" class="btn btn-success">{{__('text.Approve')}}</button>
                         </div>
                     </div>
 

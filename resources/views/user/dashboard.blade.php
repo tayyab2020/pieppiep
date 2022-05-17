@@ -10,7 +10,7 @@
                     <!-- Starting of Dashboard header items area -->
                     <div class="panel panel-default admin">
 
-                        <div class="panel-heading admin-title">{{Auth::guard('user')->user()->role_id == 2 ? $user->company_name : 'Supplier Dashboard'}}</div>
+                        <div class="panel-heading admin-title">{{Auth::guard('user')->user()->role_id == 2 ? $user->company_name : __('text.Supplier Dashboard')}}</div>
 
                     </div>
                     <!-- Ending of Dashboard header items area -->
@@ -18,7 +18,7 @@
                     <!-- Starting of Dashboard Top reference + Most Used OS area -->
                     <div class="reference-OS-area">
 
-                        <h3 style="margin: 50px 0 20px 0;">Order status of last 10 orders</h3>
+                        <h3 style="margin: 50px 0 20px 0;">{{__('text.Order status of last 10 orders')}}</h3>
 
                         <table id="example" class="table table-striped table-hover products dt-responsive dataTable no-footer dtr-inline" role="grid" aria-describedby="product-table_wrapper_info" style="width: 100%;margin-top: 10px !important;margin-bottom: 50px !important;" width="100%" cellspacing="0">
 
@@ -26,15 +26,15 @@
 
                             <tr role="row">
 
-                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Consumer Name</th>
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Consumer Name')}}</th>
 
-                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Quote Number</th>
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Quote Number')}}</th>
 
-                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Order Date</th>
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Order Date')}}</th>
 
-                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Supplier</th>
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Supplier')}}</th>
 
-                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Delivery Date</th>
+                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Delivery Date')}}</th>
 
                             </tr>
 
@@ -62,14 +62,14 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
-                                <h3 style="text-align: center;">Quotes</h3>
+                                <h3 style="text-align: center;">{{__('text.Quotes')}}</h3>
                                 <div id="chart-bar"></div>
 
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 top-m">
 
-                                <h3 style="text-align: center;">Invoices</h3>
+                                <h3 style="text-align: center;">{{__('text.Invoices')}}</h3>
                                 <div id="chart"></div>
 
                             </div>
@@ -143,7 +143,7 @@
                 json:  <?php echo $quotes_chart; ?>,
                 keys: {
                     x: 'date',
-                    value: ['Quotes','Accepted'],
+                    value: ["{{__('text.Quotes')}}","{{__('text.Accepted')}}"],
                 }
             },
             axis: {
@@ -152,7 +152,7 @@
                     tick: {
                         format: function(time) {
                             var dat = new Date(time);
-                            var _months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+                            var _months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
                             var month = dat.getMonth();
                             return _months[month];
                         }
@@ -183,7 +183,7 @@
                 json:  <?php echo $invoices_chart; ?>,
                 keys: {
                     x: 'date',
-                    value: ['Invoices Total'],
+                    value: ["{{__('text.Invoices Total')}}"],
                 }
             },
             axis: {
@@ -192,7 +192,7 @@
                     tick: {
                         format: function(time) {
                             var dat = new Date(time);
-                            var _months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+                            var _months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
                             var month = dat.getMonth();
                             return _months[month];
                         }

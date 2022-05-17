@@ -155,9 +155,9 @@
 
 
                                                 <div class="form-group">
-                                                    <label for="phone" class="col-sm-3 control-label">Email*</label>
+                                                    <label for="phone" class="col-sm-3 control-label">{{__('text.Email')}}*</label>
                                                     <div class="col-sm-8">
-                                                        <input class="form-control" name="em" id="em" placeholder="Email" type="text" value="{{$user->email}}" readonly>
+                                                        <input class="form-control" name="em" id="em" placeholder="{{__('text.Email')}}" type="text" value="{{$user->email}}" readonly>
                                                     </div>
                                                 </div>
 
@@ -235,9 +235,9 @@
 
 
                                             <div class="form-group" @if(Route::currentRouteName() != 'user-profile') style="display:none;" @endif>
-                                                <label for="web" class="col-sm-3 control-label">Website</label>
+                                                <label for="web" class="col-sm-3 control-label">{{__('text.Website')}}</label>
                                                 <div class="col-sm-8">
-                                                    <input class="form-control" name="web" id="web" placeholder="Website" type="text" value="{{$user->web}}">
+                                                    <input class="form-control" name="web" id="web" placeholder="{{__('text.Website')}}" type="text" value="{{$user->web}}">
                                                 </div>
                                             </div>
 
