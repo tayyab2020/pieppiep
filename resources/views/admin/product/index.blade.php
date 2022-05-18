@@ -11,11 +11,11 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div style="justify-content: flex-end;" class="add-product-header products">
-                                        <h2 style="width: 100%;">{{auth()->user()->role_id == 4 ? 'My Products' : 'Supplier Products'}}</h2>
+                                        <h2 style="width: 100%;">{{auth()->user()->role_id == 4 ? __('text.My Products') : __('text.Supplier Products')}}</h2>
 
                                         @if(auth()->user()->role_id == 2)
 
-                                            <a href="{{route('reset-supplier-margins')}}" style="margin: auto;" class="btn btn-success"><i style="margin-right: 5px;" class="fa fa-refresh"></i> Reset Margins</a>
+                                            <a href="{{route('reset-supplier-margins')}}" style="margin: auto;" class="btn btn-success"><i style="margin-right: 5px;" class="fa fa-refresh"></i> {{__('text.Reset Margins')}}</a>
 
                                         @endif
 
@@ -25,7 +25,7 @@
 
                                                 @if(isset($supplier_global_categories[0]))
 
-                                                    <a style="margin-right: 10px;" href="{{$supplier_global_categories[0] ? route('admin-product-create',['cat' => $supplier_global_categories[0]->cat_name]) : route('admin-product-create',['cat' => $supplier_global_categories[1]->cat_name])}}" class="btn add-newProduct-btn"><i style="font-size: 12px;" class="fa fa-plus"></i> Add New Product</a>
+                                                    <a style="margin-right: 10px;" href="{{$supplier_global_categories[0] ? route('admin-product-create',['cat' => $supplier_global_categories[0]->cat_name]) : route('admin-product-create',['cat' => $supplier_global_categories[1]->cat_name])}}" class="btn add-newProduct-btn"><i style="font-size: 12px;" class="fa fa-plus"></i> {{__('text.Add New Product')}}</a>
 
                                                 @endif
 
@@ -34,14 +34,14 @@
                                             @if(auth()->user()->can('product-import'))
 
                                                 <a style="margin-right: 10px;background-color: #5cb85c !important;border-color: #5cb85c !important;" href="{{route('admin-product-import')}}" class="btn add-newProduct-btn">
-                                                    <i style="font-size: 12px;" class="fa fa-plus"></i> Import Products</a>
+                                                    <i style="font-size: 12px;" class="fa fa-plus"></i> {{__('text.Import Products')}}</a>
 
                                             @endif
 
                                             @if(auth()->user()->can('product-export'))
 
                                                 <a style="background-color: #5bc0de !important;border-color: #5bc0de !important;" href="{{route('admin-product-export')}}" class="btn add-newProduct-btn">
-                                                    <i style="font-size: 12px;" class="fa fa-plus"></i> Export Products</a>
+                                                    <i style="font-size: 12px;" class="fa fa-plus"></i> {{__('text.Export Products')}}</a>
 
                                             @endif
 
@@ -74,13 +74,13 @@
                                                                     aria-controls="product-table_wrapper" rowspan="1"
                                                                     colspan="1" style="width: 344px;" aria-sort="ascending"
                                                                     aria-label="Blood Group Name: activate to sort column descending">
-                                                                    Photo
+                                                                    {{__('text.Photo')}}
                                                                 </th>
                                                                 <th class="sorting_asc" tabindex="0"
                                                                     aria-controls="product-table_wrapper" rowspan="1"
                                                                     colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                     aria-label="Blood Group Name: activate to sort column descending">
-                                                                    Title
+                                                                    {{__('text.Title')}}
                                                                 </th>
 
                                                                 @if(auth()->user()->role_id == 4)
@@ -89,14 +89,14 @@
                                                                         aria-controls="product-table_wrapper" rowspan="1"
                                                                         colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                         aria-label="Blood Group Name: activate to sort column descending">
-                                                                        Description
+                                                                        {{__('text.Description')}}
                                                                     </th>
 
                                                                     <th class="sorting_asc" tabindex="0"
                                                                         aria-controls="product-table_wrapper" rowspan="1"
                                                                         colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                         aria-label="Blood Group Name: activate to sort column descending">
-                                                                        Margin (%)
+                                                                        {{__('text.Margin (%)')}}
                                                                     </th>
 
                                                                 @else
@@ -105,7 +105,7 @@
                                                                         aria-controls="product-table_wrapper" rowspan="1"
                                                                         colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                         aria-label="Blood Group Name: activate to sort column descending">
-                                                                        Supplier
+                                                                        {{__('text.Supplier')}}
                                                                     </th>
 
                                                                 @endif
@@ -114,13 +114,13 @@
                                                                     aria-controls="product-table_wrapper" rowspan="1"
                                                                     colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                     aria-label="Blood Group Name: activate to sort column descending">
-                                                                    Category
+                                                                    {{__('text.Category')}}
                                                                 </th>
                                                                 <th class="sorting_asc" tabindex="0"
                                                                     aria-controls="product-table_wrapper" rowspan="1"
                                                                     colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                     aria-label="Blood Group Name: activate to sort column descending">
-                                                                    Brand
+                                                                    {{__('text.Brand')}}
                                                                 </th>
                                                                 {{--<th class="sorting_asc" tabindex="0"
                                                                     aria-controls="product-table_wrapper" rowspan="1"
@@ -135,7 +135,7 @@
                                                                         aria-controls="product-table_wrapper" rowspan="1"
                                                                         colspan="1" style="width: 314px;"
                                                                         aria-label="Actions: activate to sort column ascending">
-                                                                        Actions
+                                                                        {{__('text.Actions')}}
                                                                     </th>
 
                                                                 @else
@@ -144,14 +144,14 @@
                                                                         aria-controls="product-table_wrapper" rowspan="1"
                                                                         colspan="1" style="width: 314px;"
                                                                         aria-label="Actions: activate to sort column ascending">
-                                                                        Retailer Margin (%)
+                                                                        {{__('text.Retailer Margin (%)')}}
                                                                     </th>
 
                                                                     <th class="sorting" tabindex="0"
                                                                         aria-controls="product-table_wrapper" rowspan="1"
                                                                         colspan="1" style="width: 314px;"
                                                                         aria-label="Actions: activate to sort column ascending">
-                                                                        Labor Cost
+                                                                        {{__('text.Labor Cost')}}
                                                                     </th>
 
                                                                 @endif
@@ -189,7 +189,7 @@
 
                                                                                 <a href="{{route('admin-product-edit',$cat->id)}}"
                                                                                    class="btn btn-primary product-btn"><i
-                                                                                        class="fa fa-edit"></i> Edit</a>
+                                                                                        class="fa fa-edit"></i> {{__('text.Edit')}}</a>
 
                                                                             @endif
 
@@ -197,7 +197,7 @@
 
                                                                                 <a href="{{route('admin-product-delete',$cat->id)}}"
                                                                                    class="btn btn-danger product-btn"><i
-                                                                                        class="fa fa-trash"></i> Remove</a>
+                                                                                        class="fa fa-trash"></i> {{__('text.Remove')}}</a>
 
                                                                             @endif
 
@@ -205,7 +205,7 @@
 
                                                                                     <a href="{{route('admin-product-copy',$cat->id)}}"
                                                                                        class="btn btn-success product-btn"><i
-                                                                                            class="fa fa-copy"></i> Copy</a>
+                                                                                            class="fa fa-copy"></i> {{__('text.Copy')}}</a>
 
                                                                             @endif
 
@@ -233,7 +233,7 @@
 
                                                             <div style="margin: 0 0 10px 0;text-align: center;" class="row">
 
-                                                                <button type="submit" style="margin: auto;" class="btn btn-success"><i class="fa fa-check"></i>  Submit</button>
+                                                                <button type="submit" style="margin: auto;" class="btn btn-success"><i class="fa fa-check"></i>  {{__('text.Submit')}}</button>
 
                                                             </div>
 

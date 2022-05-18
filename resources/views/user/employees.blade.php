@@ -12,11 +12,11 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
-                                        <h2>Employees</h2>
+                                        <h2>{{__('text.Employees')}}</h2>
 
                                         @if(auth()->user()->can('employee-create'))
 
-                                            <a href="{{route('employee-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Create Employee</a>
+                                            <a href="{{route('employee-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Create Employee')}}</a>
 
                                         @endif
 
@@ -33,8 +33,8 @@
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">{{__('text.Name')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Family Name')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Blood Group: activate to sort column ascending">{{__('text.Email')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Blood Group: activate to sort column ascending">Company Name</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="City: activate to sort column ascending">Permission(s)</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Blood Group: activate to sort column ascending">{{__('text.Company Name')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="City: activate to sort column ascending">{{__('text.Permission(s)')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending">{{__('text.Actions')}}</th>
                                                     </tr>
                                                     </thead>
@@ -76,7 +76,7 @@
                                                             <td>
                                                                 @if(auth()->user()->can('employee-permissions'))
 
-                                                                    <a href="{{route('employee-permissions',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> Edit Permissions</a>
+                                                                    <a href="{{route('employee-permissions',$user->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit Permissions')}}</a>
 
                                                                 @endif
 

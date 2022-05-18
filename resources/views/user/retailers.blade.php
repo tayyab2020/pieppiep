@@ -12,7 +12,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header products">
-                                        <h2>Retailers</h2>
+                                        <h2>{{__('text.Retailers')}}</h2>
                                     </div>
                                     <hr>
                                     <div>
@@ -23,12 +23,12 @@
                                                     <thead>
                                                     <tr role="row">
 
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Retailer ID</th>
-                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">Retailer's Photo</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">Retailer's Company Name</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">Email</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">Status</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">Actions</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Retailer ID')}}</th>
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending">{{__('text.Retailer\'s Photo')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Retailer\'s Company Name')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Email')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Status')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">{{__('text.Actions')}}</th>
 
                                                     </tr>
                                                     </thead>
@@ -52,17 +52,17 @@
 
                                                                     @if($user->active)
 
-                                                                        <button class="btn btn-success">Approved</button>
+                                                                        <button class="btn btn-success">{{__('text.Approved')}}</button>
 
                                                                     @else
 
-                                                                        <button class="btn btn-warning">Suspended</button>
+                                                                        <button class="btn btn-warning">{{__('text.Suspended')}}</button>
 
                                                                     @endif
 
                                                                 @else
 
-                                                                    <button class="btn btn-warning">Pending</button>
+                                                                    <button class="btn btn-warning">{{__('text.Pending')}}</button>
 
                                                                 @endif
 
@@ -73,27 +73,27 @@
 
                                                                 @if($user->status != 1)
 
-                                                                    <button data-id="{{$user->id}}" class="btn btn-success product-btn accept-request"><i class="fa fa-check"></i> Accept Request</button>
+                                                                    <button data-id="{{$user->id}}" class="btn btn-success product-btn accept-request"><i class="fa fa-check"></i> {{__('text.Accept Request')}}</button>
 
                                                                 @else
 
                                                                     @if($user->active)
 
-                                                                        <button data-active="0" data-id="{{$user->id}}" class="btn btn-warning product-btn suspend-request"><i class="fa fa-minus"></i> Suspend</button>
+                                                                        <button data-active="0" data-id="{{$user->id}}" class="btn btn-warning product-btn suspend-request"><i class="fa fa-minus"></i> {{__('text.Suspend')}}</button>
 
                                                                     @else
 
-                                                                        <button data-active="1" data-id="{{$user->id}}" class="btn btn-success product-btn suspend-request"><i class="fa fa-check"></i> Activate</button>
+                                                                        <button data-active="1" data-id="{{$user->id}}" class="btn btn-success product-btn suspend-request"><i class="fa fa-check"></i> {{__('text.Activate')}}</button>
 
                                                                     @endif
 
-                                                                    <button data-id="{{$user->id}}" class="btn btn-danger product-btn delete-request"><i class="fa fa-close"></i> Delete</button>
+                                                                    <button data-id="{{$user->id}}" class="btn btn-danger product-btn delete-request"><i class="fa fa-close"></i> {{__('text.Delete')}}</button>
 
                                                                 @endif
 
                                                                     @if(auth()->user()->can('retailer-details'))
 
-                                                                        <a href="{{route('retailer-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;margin: 5px !important;"><i class="fa fa-user" ></i> Details</a>
+                                                                        <a href="{{route('retailer-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;margin: 5px !important;"><i class="fa fa-user" ></i> {{__('text.Details')}}</a>
 
                                                                     @endif
 
@@ -136,14 +136,14 @@
 
                             <div style="width: 100%;">
 
-                                <h3 style="text-align: center;width: 95%;margin: auto;margin-bottom: 15px;">If you approve this action than you will agree to share your details with this retailer!</h3>
+                                <h3 style="text-align: center;width: 95%;margin: auto;margin-bottom: 15px;">{{__('text.If you approve this action than you will agree to share your details with this retailer!')}}</h3>
 
                             </div>
 
                         </div>
 
                         <div style="border: 0;text-align: center;" class="modal-footer">
-                            <button style="padding: 10px 30px;font-size: 20px;" type="submit" class="btn btn-success">Approve</button>
+                            <button style="padding: 10px 30px;font-size: 20px;" type="submit" class="btn btn-success">{{__('text.Approve')}}</button>
                         </div>
                     </div>
 
@@ -183,7 +183,7 @@
                         </div>
 
                         <div style="border: 0;text-align: center;" class="modal-footer">
-                            <button style="padding: 10px 30px;font-size: 20px;" type="submit" class="btn btn-success">Approve</button>
+                            <button style="padding: 10px 30px;font-size: 20px;" type="submit" class="btn btn-success">{{__('text.Approve')}}</button>
                         </div>
                     </div>
 
@@ -215,14 +215,14 @@
 
                             <div style="width: 100%;">
 
-                                <h3 style="text-align: center;width: 95%;margin: auto;margin-bottom: 15px;">If you approve this action than this retailer will be removed from your list!</h3>
+                                <h3 style="text-align: center;width: 95%;margin: auto;margin-bottom: 15px;">{{__('text.If you approve this action than this retailer will be removed from your list!')}}</h3>
 
                             </div>
 
                         </div>
 
                         <div style="border: 0;text-align: center;" class="modal-footer">
-                            <button style="padding: 10px 30px;font-size: 20px;" type="submit" class="btn btn-success">Approve</button>
+                            <button style="padding: 10px 30px;font-size: 20px;" type="submit" class="btn btn-success">{{__('text.Approve')}}</button>
                         </div>
                     </div>
 
@@ -281,12 +281,12 @@
                     if(active == 0)
                     {
                         $('#active').val(0);
-                        $('#suspend_form').find('.modal-body').find('h3').text('If you approve this action than this retailer will no longer be able to see your details!');
+                        $('#suspend_form').find('.modal-body').find('h3').text('{{__('text.If you approve this action than this retailer will no longer be able to see your details!')}}');
                     }
                     else
                     {
                         $('#active').val(1);
-                        $('#suspend_form').find('.modal-body').find('h3').text('If you approve this action than this retailer will be able to see your details!');
+                        $('#suspend_form').find('.modal-body').find('h3').text('{{__('text.If you approve this action than this retailer will be able to see your details!')}}');
                     }
 
                     $('#retailer_id1').val(id);

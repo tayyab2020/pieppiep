@@ -11,7 +11,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header">
-                                        <h2>Create Employee</h2>
+                                        <h2>{{isset($employee) ? __('text.Edit Employee') : __('text.Create Employee')}}</h2>
                                         <a href="{{route('employees')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
                                     <hr>
@@ -39,7 +39,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="">Registration Number*</label>
+                                            <label class="control-label col-sm-4" for="">{{__('text.Registration Number')}}*</label>
                                             <div class="col-sm-6">
                                                 <input class="form-control" value="{{isset($employee->registration_number) ? $employee->registration_number : old('registration_number')}}" name="registration_number" id="registration_number" placeholder="" required="" type="text">
                                             </div>
@@ -87,21 +87,21 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="email">Password</label>
+                                            <label class="control-label col-sm-4" for="email">{{__('text.Password')}}</label>
                                             <div class="col-sm-6">
                                                 <input class="form-control" name="password" id="password" placeholder="" type="text">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="email">Confirm Password</label>
+                                            <label class="control-label col-sm-4" for="email">{{__('text.Confirm Password')}}</label>
                                             <div class="col-sm-6">
                                                 <input class="form-control" name="password_confirmation" id="password_confirmation" placeholder="" type="text">
                                             </div>
                                         </div>
 
                                         <div class="add-product-footer">
-                                            <button name="addProduct_btn" id="submit" type="submit" class="btn add-product_btn">Create Employee</button>
+                                            <button name="addProduct_btn" id="submit" type="submit" class="btn add-product_btn">{{isset($employee) ? __('text.Edit Employee') : __('text.Create Employee')}}</button>
                                         </div>
                                     </form>
                                 </div>

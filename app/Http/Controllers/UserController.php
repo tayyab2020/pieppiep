@@ -722,7 +722,7 @@ class UserController extends Controller
                 ->setBody("Supplier Mr/Mrs " . $supplier_name . " has accepted your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
 
-        Session::flash('success', 'Request accepted successfully!');
+        Session::flash('success', __('text.Request accepted successfully!'));
 
         return redirect()->back();
     }
@@ -767,7 +767,7 @@ class UserController extends Controller
                     ->setBody("Supplier Mr/Mrs " . $supplier_name . " has suspended your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
             });
 
-            Session::flash('success', 'Request suspended successfully!');
+            Session::flash('success', __('text.Request suspended successfully!'));
         }
 
         return redirect()->back();
@@ -798,7 +798,7 @@ class UserController extends Controller
                 ->setBody("Supplier Mr/Mrs " . $supplier_name . " has deleted your request. You can no longer see details of this supplier.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
 
-        Session::flash('success', 'Request deleted successfully!');
+        Session::flash('success', __('text.Request deleted successfully!'));
 
         return redirect()->back();
     }
@@ -911,7 +911,7 @@ class UserController extends Controller
             });
         }
 
-        Session::flash('success', 'Request submitted successfully!');
+        Session::flash('success', __('text.Request submitted successfully!'));
 
         return redirect()->back();
     }
@@ -2226,7 +2226,7 @@ class UserController extends Controller
         {
             customers_details::where('id',$request->org_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone, 'email' => $request->email]);
 
-            Session::flash('success', 'Customer details updated successfully');
+            Session::flash('success', __('text.Customer details updated successfully'));
             return redirect()->route('customers');
         }
         else
@@ -2249,7 +2249,7 @@ class UserController extends Controller
 
                         if($check1)
                         {
-                            Session::flash('unsuccess', 'This email is already linked with your customer account. Kindly update that specific account from customers page.');
+                            Session::flash('unsuccess', __('text.This email is already linked with your customer account. Kindly update that specific account from customers page.'));
                             return redirect()->route('customers');
                         }
                         else
@@ -2267,14 +2267,14 @@ class UserController extends Controller
                             $details->phone = $request->phone;
                             $details->save();
 
-                            Session::flash('success', 'Customer account created successfully');
+                            Session::flash('success', __('text.Customer account created successfully'));
                             return redirect()->route('customers');
                         }
                     }
                 }
                 else
                 {
-                    Session::flash('unsuccess', 'This email address is already taken');
+                    Session::flash('unsuccess', __('text.This email address is already taken'));
                     return redirect()->route('customers');
                 }
             }
@@ -2340,7 +2340,7 @@ class UserController extends Controller
                         ->setBody($msg, 'text/html');
                 });
 
-                Session::flash('success', 'Customer account created successfully');
+                Session::flash('success', __('text.Customer account created successfully'));
                 return redirect()->route('customers');
             }
         }

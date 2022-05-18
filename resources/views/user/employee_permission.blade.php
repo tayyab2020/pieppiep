@@ -24,13 +24,13 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header">
                                         <h2>Assign permissions to {{$user->name . ' ' . $user->family_name . ' (' . $user->email . ')'}}</h2>
-                                        <a href="{{route('employees')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('employees')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
 
                                     <hr>
 
                                     <div style="display: inline-block;padding-top: 20px;">
-                                        <button id="select-all" style="margin-left: 10px;border-radius: 0;outline: none !important;border: 0;" class="btn btn-success">Select all</button>
+                                        <button id="select-all" style="margin-left: 10px;border-radius: 0;outline: none !important;border: 0;" class="btn btn-success">{{__('text.Select all')}}</button>
                                         <input type="hidden" value="0" id="current-select">
                                     </div>
 
@@ -56,7 +56,7 @@
 
                                         <hr>
                                         <div style="display: inline-block;width: 100%;padding-top: 20px;" class="add-product-footer">
-                                            <button type="submit" class="btn add-product_btn">Submit</button>
+                                            <button type="submit" class="btn add-product_btn">{{__('text.Submit')}}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -78,12 +78,12 @@
 
             if($('#current-select').val() == 1)
             {
-                $('input:checkbox').attr('checked', 0);
+                $('input:checkbox').prop('checked', false);
                 $('#current-select').val(0);
             }
             else
             {
-                $('input:checkbox').attr('checked', 1);
+                $('input:checkbox').prop('checked', true);
                 $('#current-select').val(1);
             }
         });
@@ -230,10 +230,5 @@
         }
 
     </style>
-
-
-
-    <script src="{{asset('assets/admin/js/jquery152.min.js')}}"></script>
-    <script src="{{asset('assets/admin/js/jqueryui.min.js')}}"></script>
 
 @endsection
