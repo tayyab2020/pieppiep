@@ -12,7 +12,7 @@
                                 <div class="add-product-box">
 
                                     <div class="add-product-header">
-                                        <h2>Prefix Settings</h2>
+                                        <h2>{{__('text.Prefix Settings')}}</h2>
                                     </div>
                                     
                                     <hr>
@@ -29,53 +29,53 @@
                                         @if($user->role_id == 2)
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Client ID in quotation number?</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Client ID in quotation number?')}}</label>
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="quotation_client_id">
-                                                        <option {{$user->quotation_client_id == 0 ? 'selected' : null}} value="0">No</option>
-                                                        <option {{$user->quotation_client_id == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                        <option {{$user->quotation_client_id == 0 ? 'selected' : null}} value="0">{{__('text.No')}}</option>
+                                                        <option {{$user->quotation_client_id == 1 ? 'selected' : null}} value="1">{{__('text.Yes')}}</option>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Quotation Prefix</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Quotation Prefix')}}</label>
                                                 <div class="col-sm-6">
-                                                    <input value="{{$user->quotation_prefix}}" class="form-control" name="quotation_prefix" placeholder="Enter Quotation Prefix" type="text">
+                                                    <input value="{{$user->quotation_prefix}}" class="form-control" name="quotation_prefix" placeholder="{{__('text.Enter Quotation Prefix')}}" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Client ID in Invoice number?</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Client ID in Invoice number?')}}</label>
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="invoice_client_id">
-                                                        <option {{$user->invoice_client_id == 0 ? 'selected' : null}} value="0">No</option>
-                                                        <option {{$user->invoice_client_id == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                        <option {{$user->invoice_client_id == 0 ? 'selected' : null}} value="0">{{__('text.No')}}</option>
+                                                        <option {{$user->invoice_client_id == 1 ? 'selected' : null}} value="1">{{__('text.Yes')}}</option>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Invoice Prefix</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Invoice Prefix')}}</label>
                                                 <div class="col-sm-6">
-                                                    <input value="{{$user->invoice_prefix}}" class="form-control" name="invoice_prefix" placeholder="Enter Invoice Prefix" type="text">
+                                                    <input value="{{$user->invoice_prefix}}" class="form-control" name="invoice_prefix" placeholder="{{__('text.Enter Invoice Prefix')}}" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name"></label>
                                                 <div class="col-sm-3">
-                                                    <label>Next Number</label>
+                                                    <label>{{__('text.Next Number')}}</label>
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <label>Last Number Used</label>
+                                                    <label>{{__('text.Last Number Used')}}</label>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Quotation Counter</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Quotation Counter')}}</label>
                                                 <div class="col-sm-3">
-                                                    <input value="{{sprintf('%06d', $user->counter)}}" id="my_number" class="form-control" name="quotation_counter" required placeholder="Enter Quotation Counter" type="text">
+                                                    <input value="{{sprintf('%06d', $user->counter)}}" id="my_number" class="form-control" name="quotation_counter" required placeholder="{{__('text.Enter Quotation Counter')}}" type="text">
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <input value="{{$last_quotation_number}}" class="form-control" readonly placeholder="" type="text">
@@ -83,9 +83,9 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Invoice Counter</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Invoice Counter')}}</label>
                                                 <div class="col-sm-3">
-                                                    <input value="{{sprintf('%06d', $user->counter_invoice)}}" id="my_number" class="form-control" name="invoice_counter" required placeholder="Enter Invoice Counter" type="text">
+                                                    <input value="{{sprintf('%06d', $user->counter_invoice)}}" id="my_number" class="form-control" name="invoice_counter" required placeholder="{{__('text.Enter Invoice Counter')}}" type="text">
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <input value="{{$last_invoice_number}}" class="form-control" readonly placeholder="" type="text">
@@ -95,36 +95,36 @@
                                         @else
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Client ID in Order number?</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Client ID in Order number?')}}</label>
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="order_client_id">
-                                                        <option {{$user->order_client_id == 0 ? 'selected' : null}} value="0">No</option>
-                                                        <option {{$user->order_client_id == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                        <option {{$user->order_client_id == 0 ? 'selected' : null}} value="0">{{__('text.No')}}</option>
+                                                        <option {{$user->order_client_id == 1 ? 'selected' : null}} value="1">{{__('text.Yes')}}</option>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Order Prefix</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Order Prefix')}}</label>
                                                 <div class="col-sm-6">
-                                                    <input value="{{$user->order_prefix}}" class="form-control" name="order_prefix" placeholder="Enter Order Prefix" type="text">
+                                                    <input value="{{$user->order_prefix}}" class="form-control" name="order_prefix" placeholder="{{__('text.Enter Order Prefix')}}" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name"></label>
                                                 <div class="col-sm-3">
-                                                    <label>Next Number</label>
+                                                    <label>{{__('text.Next Number')}}</label>
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <label>Last Number Used</label>
+                                                    <label>{{__('text.Last Number Used')}}</label>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Order Counter</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Order Counter')}}</label>
                                                 <div class="col-sm-3">
-                                                    <input value="{{sprintf('%06d', $user->counter_order)}}" id="my_number" class="form-control" name="order_counter" required placeholder="Enter Order Counter" type="text">
+                                                    <input value="{{sprintf('%06d', $user->counter_order)}}" id="my_number" class="form-control" name="order_counter" required placeholder="{{__('text.Enter Order Counter')}}" type="text">
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <input value="{{$last_order_number}}" class="form-control" readonly placeholder="" type="text">
@@ -136,7 +136,7 @@
                                         <hr>
 
                                         <div class="add-product-footer">
-                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">Save</button>
+                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{__('text.Save')}}</button>
                                         </div>
 
                                     </form>

@@ -5237,7 +5237,7 @@ class UserController extends Controller
         {
             email_templates::where('user_id',$user_id)->where('type',$type)->update(['subject' => $request->mail_subject, 'body' => $request->mail_body]);
 
-            Session::flash('success', 'Email template updated successfully!');
+            Session::flash('success', __('text.Email template updated successfully!'));
             return redirect()->back();
         }
         else
@@ -5249,7 +5249,7 @@ class UserController extends Controller
             $post->user_id = $user_id;
             $post->save();
 
-            Session::flash('success', 'Email template saved successfully!');
+            Session::flash('success', __('text.Email template saved successfully!'));
             return redirect()->back();
         }
     }
