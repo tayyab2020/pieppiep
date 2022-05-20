@@ -126,7 +126,7 @@
 
                                         <thead>
                                         <tr>
-                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product/Item/Service</th>
+                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Description</th>
                                             <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
                                             <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
                                             <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
@@ -252,7 +252,7 @@
 
                                                     <thead>
                                                     <tr>
-                                                        <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product/Item/Service</th>
+                                                        <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Description</th>
                                                         <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
                                                         @if($role == 'supplier')
@@ -284,7 +284,7 @@
 
                                                 <thead>
                                                 <tr>
-                                                    <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Product/Item/Service</th>
+                                                    <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Description</th>
                                                     <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
                                                     @if($role == 'supplier')
@@ -599,7 +599,7 @@
 
                                         @endif
 
-                                        @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+                                        <!-- @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                                             <table style="display: table;width: 100%;margin-top: 30px;">
 
@@ -646,7 +646,7 @@
 
                                             </table>
 
-                                        @endif
+                                        @endif -->
 
                                     </div>
                                 </div>
