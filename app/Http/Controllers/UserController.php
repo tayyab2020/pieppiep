@@ -4095,7 +4095,7 @@ class UserController extends Controller
             $file = public_path() . '/assets/Orders/' . $filename;
             $pdf->save($file);
 
-            Session::flash('success', 'Order has been updated successfully!');
+            Session::flash('success', __('text.Order has been updated successfully!'));
             return redirect()->route('customer-quotations');
         }
         else{
@@ -4213,7 +4213,7 @@ class UserController extends Controller
 
             $pdf->save($file);
 
-            Session::flash('success', 'Order has been updated successfully!');
+            Session::flash('success', __('text.Order has been updated successfully!'));
 
             if($user_role == 2)
             {
@@ -5117,7 +5117,7 @@ class UserController extends Controller
                     });
                 }
 
-                Session::flash('success',__('text.Quotation has been updated successfully. Order will be updated soon in background process.'));
+                Session::flash('success', __('text.Quotation has been updated successfully. Order will be updated soon in background process.'));
             }
             else
             {
@@ -5172,7 +5172,7 @@ class UserController extends Controller
                 $file = public_path() . '/assets/newInvoices/' . $filename;
                 $pdf->save($file);
 
-                Session::flash('success','Invoice has been updated successfully.');
+                Session::flash('success', __('text.Invoice has been updated successfully.'));
             }
             else
             {
@@ -5182,11 +5182,11 @@ class UserController extends Controller
 
                 if($request->negative_invoice_id)
                 {
-                    Session::flash('success','Negative Invoice has been updated successfully.');
+                    Session::flash('success', __('text.Negative Invoice has been updated successfully.'));
                 }
                 else
                 {
-                    Session::flash('success','Negative Invoice has been created successfully.');
+                    Session::flash('success', __('text.Negative Invoice has been created successfully.'));
                 }
             }
         }
@@ -5817,7 +5817,7 @@ class UserController extends Controller
 
             SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1);
 
-            Session::flash('success', 'Order will be sent to supplier(s) soon...');
+            Session::flash('success', __('text.Order will be sent to supplier(s) soon...'));
             return redirect()->route('customer-quotations');
         }
         else
@@ -5916,7 +5916,7 @@ class UserController extends Controller
 
         UpdateDates::dispatch($request->all(),$user);
 
-        Session::flash('success', 'Processing...');
+        Session::flash('success', __('text.Processing...'));
         return redirect()->route('customer-quotations');
     }
 
@@ -5967,7 +5967,7 @@ class UserController extends Controller
                     ->setBody("Recent activity: Hi ".$retailer_company.", order has been delivered by supplier <b>".$supplier_name."</b><br> Order No: <b>" . $order_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
 
-            Session::flash('success', 'Order marked as delivered.');
+            Session::flash('success', __('text.Order marked as delivered.'));
             return redirect()->back();
         }
         else
@@ -6345,7 +6345,7 @@ class UserController extends Controller
             $data->invoice = 1;
             $data->save();
 
-            Session::flash('success', 'Invoice created successfully!');
+            Session::flash('success', __('text.Invoice created successfully!'));
             return redirect()->back();
         }
         else

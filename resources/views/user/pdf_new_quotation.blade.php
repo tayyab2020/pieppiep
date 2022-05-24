@@ -60,11 +60,11 @@
                                     <thead>
                                     <tr>
                                         <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Qty')}}</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">Product</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Product')}}</th>
                                         @if($role == 'supplier2')
 
-                                            <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
-                                            <th class="border-0 text-uppercase small font-weight-bold">Order Number</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Supplier')}}</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Order Number')}}</th>
 
                                         @endif
                                         <th class="border-0 text-uppercase small font-weight-bold">Kleur - nummer</th>
@@ -92,7 +92,7 @@
 
                                             @endif
 
-                                            <th class="border-0 text-uppercase small font-weight-bold">Delivery Date</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Delivery Date')}}</th>
 
                                         @endif
 
@@ -122,7 +122,7 @@
 
                                             @if($role == 'retailer' || $role == 'supplier2')
 
-                                                <td><?php $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = isset($request->$childsafe_answer) ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = isset($request->$childsafe_answer) ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? __('text.Is childsafe').'<br>' : __('text.Not childsafe').'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 1){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 2){ $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id; $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
@@ -138,7 +138,7 @@
 
                                             @else
 
-                                                <td><?php $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = isset($comments[$i][$f]) ? ($comments[$i][$f] ? ', '.$comments[$i][$f] : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
+                                                <td><?php $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? __('text.Is childsafe').'<br>' : __('text.Not childsafe').'<br>') : null; ?> {!! $childsafe_answer !!} <?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 0){ $comment = isset($comments[$i][$f]) ? ($comments[$i][$f] ? ', '.$comments[$i][$f] : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 1){ $comment = isset($comments[$i][$f]) ? ($comments[$i][$f] ? ', '.$comments[$i][$f] : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if($feature){ if($feature->order_no == 2){ $comment = isset($comments[$i][$f]) ? ($comments[$i][$f] ? ', '.$comments[$i][$f] : null) : null; $string .= "<br>".preg_replace("/\([^)]+\)/","",$feature->title).$comment; } } } ?> {!! substr($string, 4) !!}</td>
                                                 <td><?php $string = ''; foreach($feature_sub_titles[$i] as $f => $feature){ if(!$feature){ if(isset($sub_titles[$i]->code)){ $string = $sub_titles[$i]->code . '<br>' . $sub_titles[$i]->size; } } } ?> {!! $string !!}</td>
@@ -173,7 +173,7 @@
 
                             @foreach($request->products as $i => $key)
 
-                                <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i]}} Calculations</h2>
+                                <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ' ' . __('text.Calculations')}}</h2>
 
                                 <table style="border: 1px solid #dee2e6;" class="table table1">
 
@@ -185,26 +185,26 @@
 
                                         <tr class="header">
                                             <td class="headings" style="width: 3%;">Sr.No</td>
-                                            <td class="headings" style="width: 22%;">Description</td>
-                                            <td class="headings" style="width: 13%;">Width</td>
-                                            <td class="headings" style="width: 13%;">Height</td>
-                                            <td class="headings" style="width: 13%;">Cutting lose</td>
-                                            <td class="headings" style="width: 13%;">Turn</td>
-                                            <td class="headings" style="width: 13%;">Max Width</td>
-                                            <td class="headings" style="width: 10%;">Total</td>
+                                            <td class="headings" style="width: 22%;">{{__('text.Description')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Width')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Height')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Cutting lose')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Turn')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Max Width')}}</td>
+                                            <td class="headings" style="width: 10%;">{{__('text.Total')}}</td>
                                         </tr>
 
                                     @else
 
                                         <tr class="header">
                                             <td class="headings" style="width: 3%;">Sr.No</td>
-                                            <td class="headings" style="width: 22%;">Description</td>
-                                            <td class="headings" style="width: 13%;">Width</td>
-                                            <td class="headings" style="width: 13%;">Height</td>
-                                            <td class="headings" style="width: 13%;">Cutting lose</td>
-                                            <td class="headings" style="width: 13%;">Total</td>
-                                            <td class="headings" style="width: 13%;">Box quantity</td>
-                                            <td class="headings" style="width: 10%;">Total boxes</td>
+                                            <td class="headings" style="width: 22%;">{{__('text.Description')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Width')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Height')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Cutting lose')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Total')}}</td>
+                                            <td class="headings" style="width: 13%;">{{__('text.Box quantity')}}</td>
+                                            <td class="headings" style="width: 10%;">{{__('text.Total boxes')}}</td>
                                         </tr>
 
                                     @endif
@@ -235,7 +235,7 @@
 
                                             @if($request->measure[$i] == 'M1')
 
-                                                <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
+                                                <td>{{$request->$turn[$c] == 0 ? __('text.No') : __('text.Yes')}}</td>
                                                 <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
 
                                             @else

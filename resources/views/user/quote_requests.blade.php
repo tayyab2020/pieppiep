@@ -111,7 +111,7 @@
 
                                                                         @elseif($invoices[$i]->approved)
 
-                                                                            <span class="btn btn-success">Quotation Sent</span>
+                                                                            <span class="btn btn-success">{{__('text.Quotation Sent')}}</span>
 
                                                                         @elseif($invoices[$i]->admin_quotation_sent)
 
@@ -119,7 +119,7 @@
 
                                                                         @else
 
-                                                                            <span class="btn btn-info">Quotation Created</span>
+                                                                            <span class="btn btn-info">{{__('text.Quotation Created')}}</span>
 
                                                                         @endif
 

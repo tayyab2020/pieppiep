@@ -107,7 +107,7 @@
 
                                                                                     @if($key->processing)
 
-                                                                                        <span class="btn btn-success">Order Processing</span>
+                                                                                        <span class="btn btn-success">{{__('text.Order Processing')}}</span>
 
                                                                                     @elseif($key->finished)
 
@@ -115,7 +115,7 @@
 
                                                                                             @if($key->retailer_delivered)
 
-                                                                                                <span class="btn btn-success">Delivered</span>
+                                                                                                <span class="btn btn-success">{{__('text.Delivered')}}</span>
 
                                                                                             @else
 
@@ -133,31 +133,31 @@
 
                                                                                                         @if($filteredData2->count() === $data->count())
 
-                                                                                                            <span class="btn btn-success">Delivered by supplier(s)</span>
+                                                                                                            <span class="btn btn-success">{{__('text.Delivered by supplier(s)')}}</span>
 
                                                                                                         @elseif($filteredData2->count() == 0)
 
-                                                                                                            <span class="btn btn-success">Confirmed by supplier(s)</span>
+                                                                                                            <span class="btn btn-success">{{__('text.Confirmed by supplier(s)')}}</span>
 
                                                                                                         @else
 
-                                                                                                            <span class="btn btn-success">{{$filteredData2->count()}}/{{$data->count()}} Delivered Order</span>
+                                                                                                            <span class="btn btn-success">{{$filteredData2->count()}}/{{$data->count()}} {{__('text.Delivered Order')}}</span>
 
                                                                                                         @endif
 
                                                                                                     @else
 
-                                                                                                        <span class="btn btn-success">Confirmed by supplier(s)</span>
+                                                                                                        <span class="btn btn-success">{{__('text.Confirmed by supplier(s)')}}</span>
 
                                                                                                     @endif
 
                                                                                                 @elseif($filteredData->count() == 0)
 
-                                                                                                    <span class="btn btn-warning">Confirmation Pending</span>
+                                                                                                    <span class="btn btn-warning">{{__('text.Confirmation Pending')}}</span>
 
                                                                                                 @else
 
-                                                                                                    <span class="btn btn-success">{{$filteredData->count()}}/{{$data->count()}} Confirmed</span>
+                                                                                                    <span class="btn btn-success">{{$filteredData->count()}}/{{$data->count()}} {{__('text.Confirmed')}}</span>
 
                                                                                                 @endif
 
@@ -167,19 +167,19 @@
 
                                                                                             @if($key->data_processing)
 
-                                                                                                <span class="btn btn-warning">Processing</span>
+                                                                                                <span class="btn btn-warning">{{__('text.Processing')}}</span>
 
                                                                                             @elseif($key->data_delivered)
 
-                                                                                                <span class="btn btn-success">Order Delivered</span>
+                                                                                                <span class="btn btn-success">{{__('text.Order Delivered')}}</span>
 
                                                                                             @elseif($key->data_approved)
 
-                                                                                                <span class="btn btn-success">Order Confirmed</span>
+                                                                                                <span class="btn btn-success">{{__('text.Order Confirmed')}}</span>
 
                                                                                             @else
 
-                                                                                                <span class="btn btn-warning">Confirmation Pending</span>
+                                                                                                <span class="btn btn-warning">{{__('text.Confirmation Pending')}}</span>
 
                                                                                             @endif
 
@@ -221,7 +221,7 @@
 
                                                                                 @if(Route::currentRouteName() == 'new-quotations')
 
-                                                                                    <span class="btn btn-success">Quotation Sent</span>
+                                                                                    <span class="btn btn-success">{{__('text.Quotation Sent')}}</span>
 
                                                                                 @else
 
@@ -389,25 +389,25 @@
                                                                                 <li><a href="{{ url('/aanbieder/view-new-invoice/'.$key->quotation_id) }}">{{__('text.View Invoice')}}</a></li>
 
                                                                                 @if(!$key->has_negative_invoice)
-                                                                                    <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->quotation_id) }}">Create Negative Invoice</a></li>
+                                                                                    <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->quotation_id) }}">{{__('text.Create Negative Invoice')}}</a></li>
                                                                                 @endif
 
-                                                                                <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">{{__('text.Download Invoice PDF')}}</a></li>
 
                                                                                 @if(!$key->invoice_sent)
 
-                                                                                    <li><a class="send-new-invoice" data-type="{{$key->quote_request_id ? 0 : 1}}" data-negative="0" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Invoice</a></li>
+                                                                                    <li><a class="send-new-invoice" data-type="{{$key->quote_request_id ? 0 : 1}}" data-negative="0" data-id="{{$key->quotation_id}}" href="javascript:void(0)">{{__('text.Send Invoice')}}</a></li>
 
                                                                                 @endif
 
                                                                             @else
 
-                                                                                <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->quotation_id) }}">View Negative Invoice</a></li>
-                                                                                <li><a href="{{ url('/aanbieder/download-negative-invoice-pdf/'.$key->quotation_id) }}">Download Negative Invoice PDF</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/create-new-negative-invoice/'.$key->quotation_id) }}">{{__('text.View Negative Invoice')}}</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/download-negative-invoice-pdf/'.$key->quotation_id) }}">{{__('text.Download Negative Invoice PDF')}}</a></li>
 
                                                                                 @if(!$key->negative_invoice_sent)
 
-                                                                                    <li><a class="send-negative-invoice" data-type="{{$key->quote_request_id ? 0 : 1}}" data-negative="1" data-id="{{$key->quotation_id}}" href="javascript:void(0)">Send Negative Invoice</a></li>
+                                                                                    <li><a class="send-negative-invoice" data-type="{{$key->quote_request_id ? 0 : 1}}" data-negative="1" data-id="{{$key->quotation_id}}" href="javascript:void(0)">{{__('text.Send Negative Invoice')}}</a></li>
 
                                                                                 @endif
 
@@ -472,27 +472,27 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Invoice Mail Body</h4>
+                        <h4 class="modal-title">{{__('text.Invoice Mail Body')}}</h4>
                     </div>
                     <div class="modal-body">
 
                         <div style="margin: 20px 0;" class="row">
                             <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label>To:</label>
+                                <label>{{__('text.To')}}:</label>
                                 <input type="text" name="mail_to2" class="form-control">
                             </div>
                         </div>
 
                         <div style="margin: 20px 0;" class="row">
                             <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label>Subject:</label>
+                                <label>{{__('text.Subject')}}:</label>
                                 <input type="text" name="mail_subject2" class="form-control">
                             </div>
                         </div>
 
                         <div style="margin: 20px 0;" class="row">
                             <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label>Text:</label>
+                                <label>{{__('text.Text')}}:</label>
                                 <input type="hidden" name="mail_body2">
                                 <div class="summernote"></div>
                             </div>
@@ -500,7 +500,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form2">Submit</button>
+                        <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form2">{{__('text.Submit')}}</button>
                     </div>
                 </div>
 
@@ -521,27 +521,27 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Invoice Mail Body</h4>
+                        <h4 class="modal-title">{{__('text.Invoice Mail Body')}}</h4>
                     </div>
                     <div class="modal-body">
 
                         <div style="margin: 20px 0;" class="row">
                             <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label>To:</label>
+                                <label>{{__('text.To')}}:</label>
                                 <input type="text" name="mail_to3" class="form-control">
                             </div>
                         </div>
 
                         <div style="margin: 20px 0;" class="row">
                             <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label>Subject:</label>
+                                <label>{{__('text.Subject')}}:</label>
                                 <input type="text" name="mail_subject3" class="form-control">
                             </div>
                         </div>
 
                         <div style="margin: 20px 0;" class="row">
                             <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label>Text:</label>
+                                <label>{{__('text.Text')}}:</label>
                                 <input type="hidden" name="mail_body3">
                                 <div class="summernote"></div>
                             </div>
@@ -549,7 +549,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form3">Submit</button>
+                        <button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form3">{{__('text.Submit')}}</button>
                     </div>
                 </div>
 

@@ -22,18 +22,18 @@
                                         <div style="box-shadow: none;" class="add-product-box">
                                             <div class="add-product-header products">
 
-                                                <h2>Quotation Details</h2>
+                                                <h2>{{__('text.Quotation Details')}}</h2>
 
                                                 <div style="background-color: black;border-radius: 10px;padding: 0 10px;">
 
                                                     <span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
 															<i class="fa fa-fw fa-save"></i>
-															<span class="tooltiptext">Save</span>
+															<span class="tooltiptext">{{__('text.Save')}}</span>
                                                     </span>
 
                                                     <a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
                                                         <i class="fa fa-fw fa-close"></i>
-                                                        <span class="tooltiptext">Close</span>
+                                                        <span class="tooltiptext">{{__('text.Close')}}</span>
                                                     </a>
 
                                                 </div>
@@ -62,13 +62,13 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th style="padding: 5px;"></th>
-                                                                    <th>Product</th>
-                                                                    <th>Qty</th>
-                                                                    <th>Order Date</th>
-                                                                    <th>Ordered</th>
-                                                                    <th>Delivery Date</th>
-                                                                    <th>Supplier Delivery Date</th>
-                                                                    <th>Supplier</th>
+                                                                    <th>{{__('text.Product')}}</th>
+                                                                    <th>{{__('text.Qty')}}</th>
+                                                                    <th>{{__('text.Order Date')}}</th>
+                                                                    <th>{{__('text.Ordered')}}</th>
+                                                                    <th>{{__('text.Delivery Date')}}</th>
+                                                                    <th>{{__('text.Supplier Delivery Date')}}</th>
+                                                                    <th>{{__('text.Supplier')}}</th>
                                                                 </tr>
                                                                 </thead>
 
@@ -115,8 +115,8 @@
 
                                                                                 <select class="form-control" name="order_sent[]">
 
-                                                                                    <option {{$item->order_sent == 0 ? 'selected' : null}} value="0">No</option>
-                                                                                    <option {{$item->order_sent == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                                                    <option {{$item->order_sent == 0 ? 'selected' : null}} value="0">{{__('text.No')}}</option>
+                                                                                    <option {{$item->order_sent == 1 ? 'selected' : null}} value="1">{{__('text.Yes')}}</option>
 
                                                                                 </select>
 
@@ -124,7 +124,7 @@
 
                                                                                 <input type="hidden" value="{{$item->id}}" name="order_id[]">
 
-                                                                                {{$item->order_sent ? 'Yes' : 'No'}}
+                                                                                {{$item->order_sent ? __('text.Yes') : __('text.No')}}
 
                                                                             @endif
 
@@ -149,7 +149,7 @@
 
                                                                                 <select class="form-control" name="suppliers[]">
 
-                                                                                    <option value="">Select Supplier</option>
+                                                                                    <option value="">{{__('text.Select Supplier')}}</option>
 
                                                                                     @foreach($suppliers as $key)
 
@@ -1076,7 +1076,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: '{{__('text.Oops...')}}',
-                        text: 'Delivery date should not be left empty!',
+                        text: '{{__('text.Delivery date should not be left empty!')}}',
                     });
                 }
 

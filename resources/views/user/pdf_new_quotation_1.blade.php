@@ -92,7 +92,7 @@
 
                                     @if($client)
 
-                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">Customer Details</p>
+                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">{{__('text.Customer Details')}}</p>
                                         <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
                                         <p style="font-size: 18px;" class="mb-1 m-rest">{{$client_address}}</p>
                                         <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
@@ -102,7 +102,7 @@
 
                                     @endif
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = ltrim(implode(',', $order_numbers_string), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">@if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = ltrim(implode(',', $order_numbers_string), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
 
                                     </div>
 
@@ -126,10 +126,10 @@
 
                                         <thead>
                                         <tr>
-                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Description</th>
+                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">{{__('text.Description')}}</th>
                                             <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
-                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
-                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
+                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
                                         </tr>
                                         </thead>
 
@@ -137,7 +137,7 @@
 
                                         <tr>
 
-                                            <td style="font-size: 20px;padding: 5px;">Service Fee</td>
+                                            <td style="font-size: 20px;padding: 5px;">{{__('text.Service Fee')}}</td>
                                             <td style="font-size: 20px;padding: 5px;">1</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format($service_fee, 2, ',', '.')}}</td>
                                             <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format($service_fee, 2, ',', '.')}}</td>
@@ -252,26 +252,26 @@
 
                                                     <thead>
                                                     <tr>
-                                                        <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Description</th>
+                                                        <th style="width: 60% !important;font-size: 20px;font-weight: 500;">{{__('text.Description')}}</th>
                                                         <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
                                                         @if($role == 'supplier')
 
-                                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">Delivery Date</th>
+                                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Delivery Date')}}</th>
 
                                                         @endif
 
                                                         @if($role == 'supplier2')
 
-                                                            <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
-                                                            <th class="border-0 text-uppercase small font-weight-bold">Order Number</th>
+                                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Supplier')}}</th>
+                                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Order Number')}}</th>
 
                                                         @endif
 
                                                         @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
-                                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
-                                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+                                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
+                                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
 
                                                         @endif
 
@@ -284,26 +284,26 @@
 
                                                 <thead>
                                                 <tr>
-                                                    <th style="width: 60% !important;font-size: 20px;font-weight: 500;">Description</th>
+                                                    <th style="width: 60% !important;font-size: 20px;font-weight: 500;">{{__('text.Description')}}</th>
                                                     <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
 
                                                     @if($role == 'supplier')
 
-                                                        <th style="width: 10% !important;font-size: 20px;font-weight: 500;">Delivery Date</th>
+                                                        <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Delivery Date')}}</th>
 
                                                     @endif
 
                                                     @if($role == 'supplier2')
 
-                                                        <th class="border-0 text-uppercase small font-weight-bold">Supplier</th>
-                                                        <th class="border-0 text-uppercase small font-weight-bold">Order Number</th>
+                                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Supplier')}}</th>
+                                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Order Number')}}</th>
 
                                                     @endif
 
                                                     @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
-                                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Prijs</th>
-                                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">Totaal</th>
+                                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
+                                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
 
                                                     @endif
 
@@ -464,7 +464,7 @@
 
                                         @if($form_type == 2)
 
-                                            <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">Features</h2>
+                                            <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{__('text.Features')}}</h2>
 
                                             <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
 
@@ -479,7 +479,7 @@
                                                 }
                                                 else {
 
-                                                    $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+                                                    $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? __('text.Is childsafe').'<br>' : __('text.Not childsafe').'<br>') : null;
 
                                                 }
 
@@ -511,7 +511,7 @@
                                                                 {
                                                                     if(isset($sub_titles[$i]->code))
                                                                     {
-                                                                        $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                        $string = __('text.Ladderband').': ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
                                                                     }
                                                                     else
                                                                     {
@@ -522,7 +522,7 @@
                                                                 {
                                                                     if($feature['childsafe'])
                                                                     {
-                                                                        $string = 'Childsafe: ' . $feature['childsafe_answer'];
+                                                                        $string = __('text.Childsafe').': ' . $feature['childsafe_answer'];
                                                                     }
                                                                     else {
                                                                         $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
@@ -542,18 +542,18 @@
                                                                 {
                                                                     if(isset($sub_titles[$i]->code))
                                                                     {
-                                                                        $string = 'Ladderband: ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                        $string = __('text.Ladderband').': ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
                                                                     }
                                                                     else
                                                                     {
-                                                                        $string = 'Ladderband: No';
+                                                                        $string = __('text.Ladderband').': No';
                                                                     }
                                                                 }
                                                                 else
                                                                 {
                                                                     if($feature['childsafe'])
                                                                     {
-                                                                        $string = 'Childsafe: ' . $feature['childsafe_answer'];
+                                                                        $string = __('text.Childsafe').': ' . $feature['childsafe_answer'];
                                                                     }
                                                                     else {
 
@@ -719,7 +719,7 @@
 
                                             @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0 && $request->measure[$i] != 'Per Piece')
 
-                                                <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}} Calculations</h2>
+                                                <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ' ' . __('text.Calculations')}}</h2>
 
                                                 <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
 
@@ -740,26 +740,26 @@
 
                                                         <tr class="header">
                                                             <td class="headings" style="width: 9%;">Sr.No</td>
-                                                            <td class="headings" style="width: 22%;">Description</td>
-                                                            <td class="headings" style="width: 13%;">Width</td>
-                                                            <td class="headings" style="width: 13%;">Height</td>
-                                                            <td class="headings" style="width: 10%;">Cutting lose</td>
-                                                            <td class="headings" style="width: 10%;">Turn</td>
-                                                            <td class="headings" style="width: 13%;">Max Width</td>
-                                                            <td class="headings" style="width: 10%;">Total</td>
+                                                            <td class="headings" style="width: 22%;">{{__('text.Description')}}</td>
+                                                            <td class="headings" style="width: 13%;">{{__('text.Width')}}</td>
+                                                            <td class="headings" style="width: 13%;">{{__('text.Height')}}</td>
+                                                            <td class="headings" style="width: 10%;">{{__('text.Cutting lose')}}</td>
+                                                            <td class="headings" style="width: 10%;">{{__('text.Turn')}}</td>
+                                                            <td class="headings" style="width: 13%;">{{__('text.Max Width')}}</td>
+                                                            <td class="headings" style="width: 10%;">{{__('text.Total')}}</td>
                                                         </tr>
 
                                                     @else
 
                                                         <tr class="header">
                                                             <td class="headings" style="width: 9%;">Sr.No</td>
-                                                            <td class="headings" style="width: 22%;">Description</td>
-                                                            <td class="headings" style="width: 13%;">Width</td>
-                                                            <td class="headings" style="width: 13%;">Height</td>
-                                                            <td class="headings" style="width: 10%;">Cutting lose</td>
-                                                            <td class="headings" style="width: 10%;">Total</td>
-                                                            <td class="headings" style="width: 13%;">Box quantity</td>
-                                                            <td class="headings" style="width: 10%;">Total boxes</td>
+                                                            <td class="headings" style="width: 22%;">{{__('text.Description')}}</td>
+                                                            <td class="headings" style="width: 13%;">{{__('text.Width')}}</td>
+                                                            <td class="headings" style="width: 13%;">{{__('text.Height')}}</td>
+                                                            <td class="headings" style="width: 10%;">{{__('text.Cutting lose')}}</td>
+                                                            <td class="headings" style="width: 10%;">{{__('text.Total')}}</td>
+                                                            <td class="headings" style="width: 13%;">{{__('text.Box quantity')}}</td>
+                                                            <td class="headings" style="width: 10%;">{{__('text.Total boxes')}}</td>
                                                         </tr>
 
                                                     @endif
@@ -778,7 +778,7 @@
 
                                                                 @if($request->measure[$i] == 'M1')
 
-                                                                    <td>{{$cal->turn == 0 ? 'No' : 'Yes'}}</td>
+                                                                    <td>{{$cal->turn == 0 ? __('text.No') : __('text.Yes')}}</td>
                                                                     <td>{{str_replace('.', ',',$cal->max_width)}}</td>
 
                                                                 @else
@@ -818,7 +818,7 @@
 
                                                                 @if($request->measure[$i] == 'M1')
 
-                                                                    <td>{{$request->$turn[$c] == 0 ? 'No' : 'Yes'}}</td>
+                                                                    <td>{{$request->$turn[$c] == 0 ? __('text.No') : __('text.Yes')}}</td>
                                                                     <td>{{str_replace('.', ',',$request->$max_width[$c])}}</td>
 
                                                                 @else

@@ -27,7 +27,7 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : (Route::currentRouteName() == 'create-new-negative-invoice' ? 'Create Negative Invoice' : __('text.View Invoice') )) : __('text.Create Quotation')}}</h2>
+											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : (Route::currentRouteName() == 'create-new-negative-invoice' ? __('text.Create Negative Invoice') : __('text.View Invoice') )) : __('text.Create Quotation')}}</h2>
 
 											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
 
@@ -37,7 +37,7 @@
 
 														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
 															<i class="fa fa-fw fa-save"></i>
-															<span class="tooltiptext">Save</span>
+															<span class="tooltiptext">{{__('text.Save')}}</span>
 														</span>
 
 													@endif
@@ -48,7 +48,7 @@
 
 														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
 															<i class="fa fa-fw fa-save"></i>
-															<span class="tooltiptext">Save</span>
+															<span class="tooltiptext">{{__('text.Save')}}</span>
 														</span>
 
 													@endif
@@ -57,7 +57,7 @@
 
 												<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
 													<i class="fa fa-fw fa-close"></i>
-													<span class="tooltiptext">Close</span>
+													<span class="tooltiptext">{{__('text.Close')}}</span>
 												</a>
 
 											</div>
@@ -69,7 +69,7 @@
 											<div class="col-md-5">
 												<div class="form-group" style="margin: 0;">
 
-													<label>Customer</label>
+													<label>{{__('text.Customer')}}</label>
 
 													<div id="cus-box" style="display: flex;">
 														<select class="customer-select form-control" name="customer"
@@ -128,14 +128,14 @@
 
                                                             <div class="header-div">
                                                                 <div class="headings" style="width: 2%;"></div>
-                                                                <div class="headings" style="width: 12%;" @if(auth()->user()->role_id == 4) style="display: none;" @endif>Supplier</div>
-																<div class="headings" style="width: 22%;">Product</div>
-																<div class="headings" style="width: 10%;">Width</div>
-																<div class="headings" style="width: 10%;">Height</div>
-																<div class="headings" style="width: 7%;">€ Art.</div>
-																<div class="headings" style="width: 7%;">€ Arb.</div>
-																<div class="headings" style="width: 10%;">Discount</div>
-																<div class="headings" style="width: 7%;">€ Total</div>
+                                                                <div class="headings" style="width: 12%;" @if(auth()->user()->role_id == 4) style="display: none;" @endif>{{__('text.Supplier')}}</div>
+																<div class="headings" style="width: 22%;">{{__('text.Product')}}</div>
+																<div class="headings" style="width: 10%;">{{__('text.Width')}}</div>
+																<div class="headings" style="width: 10%;">{{__('text.Height')}}</div>
+																<div class="headings" style="width: 7%;">{{__('text.€ Art.')}}</div>
+																<div class="headings" style="width: 7%;">{{__('text.€ Arb.')}}</div>
+																<div class="headings" style="width: 10%;">{{__('text.Discount')}}</div>
+																<div class="headings" style="width: 7%;">{{__('text.€ Total')}}</div>
 																<div class="headings" style="width: 13%;"></div>
                                                             </div>
 
@@ -266,26 +266,26 @@
 																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
 																				<div style="display: none;" class="green-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>
                                                                             	</div>
                                                                             	
 																				<div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
+                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>
                                                                             	</div>
 
 																				<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																					<span class="tooltiptext">Add</span>
+																					<span class="tooltiptext">{{__('text.Add')}}</span>
 																				</span>
 
 																				<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																					<span class="tooltiptext">Remove</span>
+																					<span class="tooltiptext">{{__('text.Remove')}}</span>
 																				</span>
 
 																				<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																					<span class="tooltiptext">Copy</span>
+																					<span class="tooltiptext">{{__('text.Copy')}}</span>
 																				</span>
 
 																				<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
@@ -307,7 +307,7 @@
 
                                                                         <div style="width: 25%;" class="color item12">
 
-                                                                            <label>Color</label>
+                                                                            <label>{{__('text.Color')}}</label>
 
 																		    <select name="colors[]" class="js-data-example-ajax2">
 
@@ -325,7 +325,7 @@
 
                                                                         <div style="width: 25%;margin-left: 10px;" class="model item13">
 
-                                                                            <label>Model</label>
+                                                                            <label>{{__('text.Model')}}</label>
 
                                                                             <select name="models[]" class="js-data-example-ajax3">
 
@@ -345,17 +345,17 @@
 
                                                                         <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
 
-                                                                            <label>Discount % </label>
+                                                                            <label>{{__('text.Discount')}} % </label>
 
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
+                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
 
                                                                         </div>
 
                                                                         <div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">
 
-                                                                            <label>Labor Discount % </label>
+                                                                            <label>{{__('text.Labor Discount')}} % </label>
 
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" value="{{$item->labor_discount}}" name="labor_discount[]">
+                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="{{$item->labor_discount}}" name="labor_discount[]">
 
                                                                         </div>
 
@@ -486,26 +486,26 @@
                                                                         <div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
 																			<div style="display: none;" class="green-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>
                                                                             </div>
 
                                                                             <div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
+                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>
                                                                             </div>
 
 																			<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																				<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																				<span class="tooltiptext">Add</span>
+																				<span class="tooltiptext">{{__('text.Add')}}</span>
 																			</span>
 
 																			<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																				<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																				<span class="tooltiptext">Remove</span>
+																				<span class="tooltiptext">{{__('text.Remove')}}</span>
 																			</span>
 
 																			<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
 																				<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																				<span class="tooltiptext">Copy</span>
+																				<span class="tooltiptext">{{__('text.Copy')}}</span>
 																			</span>
 
                                                                             <!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
@@ -523,7 +523,7 @@
 
                                                                         <div style="width: 25%;" class="color item12">
 
-                                                                            <label>Color</label>
+                                                                            <label>{{__('text.Color')}}</label>
 
 																		    <select name="colors[]" class="js-data-example-ajax2">
 
@@ -535,7 +535,7 @@
 
                                                                         <div style="width: 25%;margin-left: 10px;" class="model item13">
 
-                                                                            <label>Model</label>
+                                                                            <label>{{__('text.Model')}}</label>
 
                                                                             <select name="models[]" class="js-data-example-ajax3">
 
@@ -549,17 +549,17 @@
 
                                                                         <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
 
-                                                                            <label>Discount % </label>
+                                                                            <label>{{__('text.Discount')}} % </label>
 
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">
+                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="0" name="discount[]">
 
                                                                         </div>
 
                                                                         <div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">
 
-                                                                            <label>Labor Discount % </label>
+                                                                            <label>{{__('text.Labor Discount')}} % </label>
 
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" value="0" name="labor_discount[]">
+                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="0" name="labor_discount[]">
 
                                                                         </div>
 
@@ -576,10 +576,10 @@
 															<div style="display: flex;justify-content: center;">
 
 																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
-																	<label>Delivery Date: </label>
+																	<label>{{__('text.Delivery Date')}}: </label>
 																	<input value="{{isset($invoice) ? ($invoice[0]->retailer_delivery_date ? date('d-m-Y',strtotime($invoice[0]->retailer_delivery_date)) : null) : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="delivery_date">
 																</div>
-																<div class="headings1" style="width: 16%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">Totaal</span></div>
+																<div class="headings1" style="width: 16%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">{{__('text.Total')}}</span></div>
 																<div class="headings1" style="width: 7%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: center;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
@@ -615,7 +615,7 @@
 															<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
 																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
-																	<label>Installation Date: </label>
+																	<label>{{__('text.Installation Date')}}: </label>
 																	<input value="{{isset($invoice) ? ($invoice[0]->retailer_installation_date ? date('d-m-Y',strtotime($invoice[0]->retailer_installation_date)) : null) : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="installation_date" name="installation_date">
 																</div>
 																<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
@@ -661,11 +661,10 @@
 															<li style="margin-bottom: 0;" class="active"><a
 																	style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;"
 																	data-toggle="tab" href="#menu1"
-																	aria-expanded="false">Features</a></li>
+																	aria-expanded="false">{{__('text.Features')}}</a></li>
 														</ul>
 
-														<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;"
-															class="tab-content">
+														<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
 
 															<div id="menu1" class="tab-pane fade active in">
 
@@ -684,7 +683,7 @@
 																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Quantity</label>
+																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>
 																			@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
 																			<input value="{{$key1->qty}}"
 																				style="border: none;border-bottom: 1px solid lightgrey;"
@@ -716,34 +715,34 @@
 																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>
+																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>
 																			<select
 																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																				class="form-control childsafe-select"
 																				name="childsafe_option{{$x+1}}">
 
-																				<option value="">Select any option
+																				<option value="">{{__('text.Select any option')}}
 																				</option>
 
 																				@if($key1->childsafe_diff <= 150)
 																					<option {{$key1->childsafe_question
 																					== 1 ? 'selected' : null}}
-																					value="1">Please note not childsafe
+																					value="1">{{__('text.Please note not childsafe')}}
 																					</option>
 																					<option {{$key1->childsafe_question
 																						== 2 ? 'selected' : null}}
-																						value="2">Add childsafety clip
+																						value="2">{{__('text.Add childsafety clip')}}
 																					</option>
 
 																					@else
 
 																					<option {{$key1->childsafe_question
 																						== 2 ? 'selected' : null}}
-																						value="2">Add childsafety clip
+																						value="2">{{__('text.Add childsafety clip')}}
 																					</option>
 																					<option {{$key1->childsafe_question
 																						== 3 ? 'selected' : null}}
-																						value="3">Yes childsafe</option>
+																						value="3">{{__('text.Yes childsafe')}}</option>
 
 																					@endif
 
@@ -761,7 +760,7 @@
 																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Childsafe
+																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}
 																				Answer</label>
 																			<select
 																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
@@ -769,13 +768,11 @@
 																				name="childsafe_answer{{$x+1}}">
 																				@if($key1->childsafe_question == 1)
 																				<option {{$key1->childsafe_answer == 1 ?
-																					'selected' : null}} value="1">Make
-																					it childsafe</option>
+																					'selected' : null}} value="1">{{__('text.Make it childsafe')}}</option>
 																				<option {{$key1->childsafe_answer == 2 ?
-																					'selected' : null}} value="2">Yes i
-																					agree</option>
+																					'selected' : null}} value="2">{{__('text.Yes i agree')}}</option>
 																				@else
-																				<option selected value="3">Is childsafe
+																				<option selected value="3">{{__('text.Is childsafe')}}
 																				</option>
 																				@endif
 																			</select>
@@ -796,16 +793,16 @@
 																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>
+																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>
 																			<select
 																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																				class="form-control feature-select"
 																				name="features{{$x+1}}[]">
 																				<option {{$feature->ladderband == 0 ?
-																					'selected' : null}} value="0">No
+																					'selected' : null}} value="0">{{__('text.No')}}
 																				</option>
 																				<option {{$feature->ladderband == 1 ?
-																					'selected' : null}} value="1">Yes
+																					'selected' : null}} value="1">{{__('text.Yes')}}
 																				</option>
 																			</select>
 																			<input value="{{$feature->price}}"
@@ -823,7 +820,7 @@
 																		@if($feature->ladderband)
 
 																		<a data-id="{{$x + 1}}"
-																			class="info ladderband-btn">Info</a>
+																			class="info ladderband-btn">{{__('text.Info')}}</a>
 
 																		@endif
 
@@ -843,7 +840,7 @@
 																				class="form-control feature-select"
 																				name="features{{$x+1}}[]">
 
-																				<option value="0">Select Feature
+																				<option value="0">{{__('text.Select Feature')}}
 																				</option>
 
 																				@foreach($features[$f] as $temp)
@@ -873,7 +870,7 @@
 																		@if($feature->comment_box)
 
 																		<a data-feature="{{$feature->feature_id}}"
-																			class="info comment-btn">Info</a>
+																			class="info comment-btn">{{__('text.Info')}}</a>
 
 																		@endif
 
@@ -881,8 +878,7 @@
 
 																	@foreach($key1->sub_features as $sub_feature)
 
-																	@if($sub_feature->feature_id ==
-																	$feature->feature_sub_id)
+																	@if($sub_feature->feature_id == $feature->feature_sub_id)
 
 																	<div class="row sub-features"
 																		style="margin: 0;display: flex;align-items: center;">
@@ -896,7 +892,7 @@
 																				class="form-control feature-select"
 																				name="features{{$x+1}}[]">
 
-																				<option value="0">Select Feature
+																				<option value="0">{{__('text.Select Feature')}}
 																				</option>
 
 																				@foreach($sub_features[$s] as $temp)
@@ -970,7 +966,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">Sub Products Sizes</h4>
+								<h4 class="modal-title">{{__('text.Sub Products Sizes')}}</h4>
 							</div>
 							<div class="modal-body">
 								@if(isset($invoice))
@@ -984,9 +980,9 @@
 										<thead>
 											<tr>
 												<th>ID</th>
-												<th>Title</th>
-												<th>Size 38mm</th>
-												<th>Size 25mm</th>
+												<th>{{__('text.Title')}}</th>
+												<th>{{__('text.Size 38mm')}}</th>
+												<th>{{__('text.Size 25mm')}}</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -1048,7 +1044,7 @@
 								@endif
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
 							</div>
 						</div>
 
@@ -1062,7 +1058,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">Feature Comment</h4>
+								<h4 class="modal-title">{{__('text.Feature Comment')}}</h4>
 							</div>
 							<div class="modal-body">
 
@@ -1091,7 +1087,7 @@
 
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
 							</div>
 						</div>
 
@@ -2530,7 +2526,7 @@
 
 						$('.alert-box').html('<div class="alert alert-danger">\n' +
 								'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-								'                                            <p class="text-left">Email address is not valid...</p>\n' +
+								'                                            <p class="text-left">{{__('text.Email address is not valid...')}}</p>\n' +
 								'                                        </div>');
 						$('.alert-box').show();
 						$('.alert-box').delay(5000).fadeOut(400);
@@ -2590,7 +2586,7 @@
 
 								$('.alert-box').html('<div class="alert alert-danger">\n' +
 										'                                            <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
-										'                                            <p class="text-left">Something went wrong!</p>\n' +
+										'                                            <p class="text-left">{{__('text.Something went wrong!')}}</p>\n' +
 										'                                        </div>');
 								$('.alert-box').show();
 								$('.alert-box').delay(5000).fadeOut(400);
@@ -2847,18 +2843,18 @@
 						$('#products_table').find(`[data-id='${row_id}']`).find('.products').children('select').find('option')
 								.remove()
 								.end()
-								.append('<option value="">Select Product</option>' + options);
+								.append('<option value="">{{__('text.Select Product')}}</option>' + options);
 
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
 								.remove()
 								.end()
-								.append('<option value="">Select Color</option>');
+								.append('<option value="">{{__('text.Select Color')}}</option>');
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
 								.remove()
 								.end()
-								.append('<option value="">Select Model</option>');
+								.append('<option value="">{{__('text.Select Model')}}</option>');
 
 						$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
 						$('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
@@ -2956,12 +2952,12 @@
 							$('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
 									.remove()
 									.end()
-									.append('<option value="">Select Color</option>' + options);
+									.append('<option value="">{{__('text.Select Color')}}</option>' + options);
 
 							$('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
 									.remove()
 									.end()
-									.append('<option value="">Select Model</option>' + options1);
+									.append('<option value="">{{__('text.Select Model')}}</option>' + options1);
 
 							if ((typeof (data) != "undefined") && data.measure) {
 								$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val(data.measure);
@@ -2995,7 +2991,7 @@
 			$(".js-data-example-ajax1").select2({
 				width: '100%',
 				height: '200px',
-				placeholder: "Select Supplier",
+				placeholder: "{{__('text.Select Supplier')}}",
 				allowClear: true,
 				"language": {
 					"noResults": function () {
@@ -3007,7 +3003,7 @@
 			$(".js-data-example-ajax2").select2({
 				width: '100%',
 				height: '200px',
-				placeholder: "Select Color",
+				placeholder: "{{__('text.Select Color')}}",
 				allowClear: true,
 				"language": {
 					"noResults": function () {
@@ -3019,7 +3015,7 @@
 			$(".js-data-example-ajax3").select2({
 				width: '100%',
 				height: '200px',
-				placeholder: "Select Model",
+				placeholder: "{{__('text.Select Model')}}",
 				allowClear: true,
 				"language": {
 					"noResults": function () {
@@ -3077,7 +3073,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+										html: '{{__('text.Width & Height are greater than max values')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width + '<br> {{__('text.Max Height')}}: ' + data[0].max_height,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -3095,7 +3091,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+										html: '{{__('text.Width is greater than max value')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -3114,7 +3110,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+										html: '{{__('text.Height is greater than max value')}} <br> {{__('text.Max Height')}}: ' + data[0].max_height,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -3183,10 +3179,10 @@
 												'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
 												'</div></div>\n' +
 												'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-												'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>' +
 												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-												'<option value="">Select any option</option>\n' +
-												'<option value="2">Add childsafety clip</option>\n' +
+												'<option value="">{{__('text.Select any option')}}</option>\n' +
+												'<option value="2">{{__('text.Add childsafety clip')}}</option>\n' +
 												'</select>\n' +
 												'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
 												'</div></div>\n';
@@ -3198,16 +3194,16 @@
 									if (ladderband == 1) {
 
 										var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-												'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>' +
 												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-												'<option value="0">No</option>\n' +
-												'<option value="1">Yes</option>\n' +
+												'<option value="0">{{__('text.No')}}</option>\n' +
+												'<option value="1">{{__('text.Yes')}}</option>\n' +
 												'</select>\n' +
 												'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
 												'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
 												'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
 												'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-												'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+												'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">{{__('text.Info')}}</a></div>\n';
 
 										features = features + content;
 
@@ -3217,7 +3213,7 @@
 
 										count_features = count_features + 1;
 
-										var opt = '<option value="0">Select Feature</option>';
+										var opt = '<option value="0">{{__('text.Select Feature')}}</option>';
 
 										$.each(value.features, function (index1, value1) {
 
@@ -3226,7 +3222,7 @@
 										});
 
 										if (value.comment_box == 1) {
-											var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+											var icon = '<a data-feature="' + value.id + '" class="info comment-btn">{{__('text.Info')}}</a>';
 										}
 										else {
 											var icon = '';
@@ -3265,7 +3261,7 @@
 									$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
 											'\n' +
 											'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-											'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+											'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>' +
 											'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
 											'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
 											'</div></div>' + features +
@@ -3279,7 +3275,7 @@
 											Swal.fire({
 												icon: 'error',
 												title: '{{__('text.Oops...')}}',
-												text: 'Area is greater than max size: ' + max_size,
+												text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 											});
 
 											current.parent().find('.f_area').val(1);
@@ -3446,7 +3442,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+										html: '{{__('text.Width & Height are greater than max values')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width + '<br> {{__('text.Max Height')}}: ' + data[0].max_height,
 									});
 
 
@@ -3466,7 +3462,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+										html: '{{__('text.Width is greater than max value')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -3485,7 +3481,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+										html: '{{__('text.Height is greater than max value')}} <br> {{__('text.Max Height')}}: ' + data[0].max_height,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -3553,10 +3549,10 @@
 												'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
 												'</div></div>\n' +
 												'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-												'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>' +
 												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-												'<option value="">Select any option</option>\n' +
-												'<option value="2">Add childsafety clip</option>\n' +
+												'<option value="">{{__('text.Select any option')}}</option>\n' +
+												'<option value="2">{{__('text.Add childsafety clip')}}</option>\n' +
 												'</select>\n' +
 												'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
 												'</div></div>\n';
@@ -3568,16 +3564,16 @@
 									if (ladderband == 1) {
 
 										var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-												'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+												'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>' +
 												'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-												'<option value="0">No</option>\n' +
-												'<option value="1">Yes</option>\n' +
+												'<option value="0">{{__('text.No')}}</option>\n' +
+												'<option value="1">{{__('text.Yes')}}</option>\n' +
 												'</select>\n' +
 												'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
 												'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
 												'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
 												'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-												'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+												'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">{{__('text.Info')}}</a></div>\n';
 
 										features = features + content;
 
@@ -3587,7 +3583,7 @@
 
 										count_features = count_features + 1;
 
-										var opt = '<option value="0">Select Feature</option>';
+										var opt = '<option value="0">{{__('text.Select Feature')}}</option>';
 
 										$.each(value.features, function (index1, value1) {
 
@@ -3596,7 +3592,7 @@
 										});
 
 										if (value.comment_box == 1) {
-											var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+											var icon = '<a data-feature="' + value.id + '" class="info comment-btn">{{__('text.Info')}}</a>';
 										}
 										else {
 											var icon = '';
@@ -3635,7 +3631,7 @@
 									$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
 											'\n' +
 											'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-											'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+											'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>' +
 											'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
 											'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
 											'</div></div>' + features +
@@ -3650,7 +3646,7 @@
 											Swal.fire({
 												icon: 'error',
 												title: '{{__('text.Oops...')}}',
-												text: 'Area is greater than max size: ' + max_size,
+												text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 											});
 
 											current.parent().find('.f_area').val(1);
@@ -3823,7 +3819,7 @@
 							'\n' +
 							'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Supplier</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Supplier')}}</label>\n' +
 							'\n' +
 							'                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
 							'\n' +
@@ -3840,7 +3836,7 @@
 							'\n' +
 							'                                                            <div style="width: 22%;" class="products content item3 full-res">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Product</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Product')}}</label>\n' +
 							'\n' +
 							'                                                                <select name="products[]" class="js-data-example-ajax">\n' +
 							'\n' +
@@ -3857,7 +3853,7 @@
 							'\n' +
 							'                                                            <div class="width item4 content" style="width: 10%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Width</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Width')}}</label>\n' +
 							'\n' +
 							'                                                                <div class="m-box">\n' +
 							'                                                                	<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
@@ -3867,7 +3863,7 @@
 							'\n' +
 							'                                                            <div class="height item5 content" style="width: 10%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Height</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Height')}}</label>\n' +
 							'\n' +
 							'                                                                <div class="m-box">\n' +
 							'                                                                	<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
@@ -3877,7 +3873,7 @@
 							'\n' +
 							'                                                            <div class="content item6" style="width: 7%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">€ Art.</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.€ Art.')}}</label>\n' +
 							'\n' +
 							'																 <div style="display: flex;align-items: center;">\n' +
 							'																 	<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
@@ -3887,7 +3883,7 @@
 							'\n' +
 							'                                                            <div class="content item7" style="width: 7%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">€ Arb.</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.€ Arb.')}}</label>\n' +
 							'\n' +
 							'																 <div style="display: flex;align-items: center;">\n' +
 							'																 	<input type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">\n' +
@@ -3897,7 +3893,7 @@
 							'\n' +
 							'                                                            <div class="content item8" style="width: 10%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Discount</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Discount')}}</label>\n' +
 							'\n' +
 							'																<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
 							'																<input type="hidden" value="0" class="total_discount_old">\n' +
@@ -3905,7 +3901,7 @@
 							'\n' +
 							'                                                            <div style="width: 7%;" class="content item9">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">€ Total</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.€ Total')}}</label>\n' +
 							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-&nbsp;'; } ?>'+
 							'\n' +
 							'																<div class="price res-white"></div>\n' +
@@ -3916,18 +3912,18 @@
 							'                       									 	<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">\n' +
 							'\n' +
 							'																<div style="display: none;" class="green-circle tooltip1">\n' +
-							'																	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>\n' +
+							'																	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>\n' +
 							'																</div>\n' +
 							'\n' +
 							'																<div style="visibility: hidden;" class="yellow-circle tooltip1">\n' +
-							'																	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>\n' +
+							'																	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>\n' +
 							'																</div>\n' +
 							'\n' +
 							'																<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
 							'\n' +
 							'																	<i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
 							'\n' +
-							'																	<span class="tooltiptext">Add</span>\n' +
+							'																	<span class="tooltiptext">{{__('text.Add')}}</span>\n' +
 							'\n' +
 							'																</span>\n' +
 							'\n' +
@@ -3935,7 +3931,7 @@
 							'\n' +
 							'																	<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
 							'\n' +
-							'																	<span class="tooltiptext">Remove</span>\n' +
+							'																	<span class="tooltiptext">{{__('text.Remove')}}</span>\n' +
 							'\n' +
 							'																</span>\n' +
 							'\n' +
@@ -3943,7 +3939,7 @@
 							'\n' +
 							'																	<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
 							'\n' +
-							'																	<span class="tooltiptext">Copy</span>\n' +
+							'																	<span class="tooltiptext">{{__('text.Copy')}}</span>\n' +
 							'\n' +
 							'																</span>\n' +
 							'\n' +
@@ -3961,7 +3957,7 @@
 							'\n' +
 							'                       									 	<div style="width: 25%;" class="color item12">\n' +
 							'\n' +
-							'																	<label>Color</label>\n' +
+							'																	<label>{{__('text.Color')}}</label>\n' +
 							'\n' +
 							'                                                                	<select name="colors[]" class="js-data-example-ajax2">\n' +
 							'\n' +
@@ -3973,7 +3969,7 @@
 							'\n' +
 							'																<div style="width: 25%;margin-left: 10px;" class="model item13">\n' +
 							'\n' +
-							'																	<label>Model</label>\n' +
+							'																	<label>{{__('text.Model')}}</label>\n' +
 							'\n' +
 							'                                                                	<select name="models[]" class="js-data-example-ajax3">\n' +
 							'\n' +
@@ -3986,17 +3982,17 @@
 							'\n' +
 							'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
 							'\n' +
-							'																	<label>Discount %</label>\n' +
+							'																	<label>{{__('text.Discount')}} %</label>\n' +
 							'\n' +
-							'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
+							'																	<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
 							'\n' +
 							'																</div>\n' +
 							'\n' +
 							'																<div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">\n' +
 							'\n' +
-							'																	<label>Labor Discount %</label>\n' +
+							'																	<label>{{__('text.Labor Discount')}} %</label>\n' +
 							'\n' +
-							'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" value="0" name="labor_discount[]">\n' +
+							'																	<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="0" name="labor_discount[]">\n' +
 							'\n' +
 							'																</div>\n' +
 							'\n' +
@@ -4023,7 +4019,7 @@
 					last_row.find(".js-data-example-ajax1").select2({
 						width: '100%',
 						height: '200px',
-						placeholder: "Select Supplier",
+						placeholder: "{{__('text.Select Supplier')}}",
 						allowClear: true,
 						"language": {
 							"noResults": function () {
@@ -4035,7 +4031,7 @@
 					last_row.find(".js-data-example-ajax2").select2({
 						width: '100%',
 						height: '200px',
-						placeholder: "Select Color",
+						placeholder: "{{__('text.Select Color')}}",
 						allowClear: true,
 						"language": {
 							"noResults": function () {
@@ -4047,7 +4043,7 @@
 					last_row.find(".js-data-example-ajax3").select2({
 						width: '100%',
 						height: '200px',
-						placeholder: "Select Model",
+						placeholder: "{{__('text.Select Model')}}",
 						allowClear: true,
 						"language": {
 							"noResults": function () {
@@ -4083,7 +4079,7 @@
 							'\n' +
 							'                                                            <div style="width: 12%;" @if(auth()->user()->role_id == 4) class="suppliers content item2 full-res hide" @else class="suppliers content item2 full-res" @endif>\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Supplier</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Supplier')}}</label>\n' +
 							'\n' +
 							'                                                                <select name="suppliers[]" class="js-data-example-ajax1">\n' +
 							'\n' +
@@ -4095,7 +4091,7 @@
 							'\n' +
 							'                                                            <div style="width: 22%;" class="products content item3 full-res">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Product</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Product')}}</label>\n' +
 							'\n' +
 							'                                                                <select name="products[]" class="js-data-example-ajax">\n' +
 							'\n' +
@@ -4107,7 +4103,7 @@
 							'\n' +
 							'                                                            <div class="width item4 content" style="width: 10%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Width</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Width')}}</label>\n' +
 							'\n' +
 							'                                                                <div class="m-box">\n' +
 							'                                                                	<input ' + width_readonly + ' value="' + width + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">\n' +
@@ -4118,7 +4114,7 @@
 							'\n' +
 							'                                                            <div class="height item5 content" style="width: 10%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Height</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Height')}}</label>\n' +
 							'\n' +
 							'                                                                <div class="m-box">\n' +
 							'                                                                	<input ' + height_readonly + ' value="' + height + '" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">\n' +
@@ -4129,7 +4125,7 @@
 							'\n' +
 							'                                                            <div class="content item6" style="width: 7%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">€ Art.</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.€ Art.')}}</label>\n' +
 							'\n' +
 							'																 <div style="display: flex;align-items: center;">\n' +
 							'																 	<input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
@@ -4139,7 +4135,7 @@
 							'\n' +
 							'                                                            <div class="content item7" style="width: 7%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">€ Arb.</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.€ Arb.')}}</label>\n' +
 							'\n' +
 							'																 <div style="display: flex;align-items: center;">\n' +
 							'																 	<input value="' + labor_impact + '" type="text" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">\n' +
@@ -4149,7 +4145,7 @@
 							'\n' +
 							'                                                            <div class="content item8" style="width: 10%;">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">Discount</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.Discount')}}</label>\n' +
 							'\n' +
 							'																<input type="text" value="' + total_discount + '" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
 							'																<input type="hidden" value="' + total_discount_old + '" class="total_discount_old">\n' +
@@ -4157,7 +4153,7 @@
 							'\n' +
 							'                                                            <div style="width: 7%;" class="content item9">\n' +
 							'\n' +
-							'                       									 	<label class="content-label">€ Total</label>\n' +
+							'                       									 	<label class="content-label">{{__('text.€ Total')}}</label>\n' +
 							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-&nbsp;'; } ?>'+
 							'\n' +
 							'																<div class="price res-white">' + price_text + '</div>\n' +
@@ -4179,7 +4175,7 @@
 							'\n' +
 							'                       									 	<div style="width: 25%;" class="color item12">\n' +
 							'\n' +
-							'																	<label>Color</label>\n' +
+							'																	<label>{{__('text.Color')}}</label>\n' +
 							'\n' +
 							'                                                                	<select name="colors[]" class="js-data-example-ajax2">\n' +
 							'\n' +
@@ -4191,7 +4187,7 @@
 							'\n' +
 							'																<div style="width: 25%;margin-left: 10px;" class="model item13">\n' +
 							'\n' +
-							'																	<label>Model</label>\n' +
+							'																	<label>{{__('text.Model')}}</label>\n' +
 							'\n' +
 							'                                                                	<select name="models[]" class="js-data-example-ajax3">\n' +
 							'\n' +
@@ -4204,17 +4200,17 @@
 							'\n' +
 							'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
 							'\n' +
-							'																	<label>Discount %</label>\n' +
+							'																	<label>{{__('text.Discount')}} %</label>\n' +
 							'\n' +
-							'																	<input value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" name="discount[]">\n' +
+							'																	<input value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" name="discount[]">\n' +
 							'\n' +
 							'																</div>\n' +
 							'\n' +
 							'																<div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">\n' +
 							'\n' +
-							'																	<label>Labor Discount %</label>\n' +
+							'																	<label>{{__('text.Labor Discount')}} %</label>\n' +
 							'\n' +
-							'																	<input value="' + labor_discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control labor_discount_values" name="labor_discount[]">\n' +
+							'																	<input value="' + labor_discount + '" style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" name="labor_discount[]">\n' +
 							'\n' +
 							'																</div>\n' +
 							'\n' +
@@ -4313,7 +4309,7 @@
 					last_row.find(".js-data-example-ajax1").select2({
 						width: '100%',
 						height: '200px',
-						placeholder: "Select Supplier",
+						placeholder: "{{__('text.Select Supplier')}}",
 						allowClear: true,
 						"language": {
 							"noResults": function () {
@@ -4325,7 +4321,7 @@
 					last_row.find(".js-data-example-ajax2").select2({
 						width: '100%',
 						height: '200px',
-						placeholder: "Select Color",
+						placeholder: "{{__('text.Select Color')}}",
 						allowClear: true,
 						"language": {
 							"noResults": function () {
@@ -4337,7 +4333,7 @@
 					last_row.find(".js-data-example-ajax3").select2({
 						width: '100%',
 						height: '200px',
-						placeholder: "Select Model",
+						placeholder: "{{__('text.Select Model')}}",
 						allowClear: true,
 						"language": {
 							"noResults": function () {
@@ -4567,7 +4563,7 @@
 					Swal.fire({
 						icon: 'error',
 						title: '{{__('text.Oops...')}}',
-						text: 'Feature should not be empty!',
+						text: '{{__('text.Feature should not be empty!')}}',
 					});
 
 				}
@@ -4852,7 +4848,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+										html: '{{__('text.Width & Height are greater than max values')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width + '<br> {{__('text.Max Height')}}: ' + data[0].max_height,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -4871,7 +4867,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+										html: '{{__('text.Width is greater than max value')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -4890,7 +4886,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+										html: '{{__('text.Height is greater than max value')}} <br> {{__('text.Max Height')}}: ' + data[0].max_height,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -5054,7 +5050,7 @@
 											Swal.fire({
 												icon: 'error',
 												title: '{{__('text.Oops...')}}',
-												text: 'Area is greater than max size: ' + max_size,
+												text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 											});
 
 											current.parent().find('.f_area').val(1);
@@ -5218,7 +5214,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+										html: '{{__('text.Width & Height are greater than max values')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width + '<br> {{__('text.Max Height')}}: ' + data[0].max_height,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -5237,7 +5233,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+										html: '{{__('text.Width is greater than max value')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -5256,7 +5252,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+										html: '{{__('text.Height is greater than max value')}} <br> {{__('text.Max Height')}}: ' + data[0].max_height,
 									});
 
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val('');
@@ -5421,7 +5417,7 @@
 											Swal.fire({
 												icon: 'error',
 												title: '{{__('text.Oops...')}}',
-												text: 'Area is greater than max size: ' + max_size,
+												text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 											});
 
 											current.parent().find('.f_area').val(1);
@@ -5596,15 +5592,15 @@
 
 					if (diff <= 150) {
 
-						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1" selected>Please note not childsafe</option><option value="2">Add childsafety clip</option>');
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1" selected>{{__('text.Please note not childsafe')}}</option><option value="2">{{__('text.Add childsafety clip')}}</option>');
 
 						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
 								'\n' +
 								'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
+								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">{{__('text.Childsafe Answer')}}</label>\n' +
 								'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-								'                                                                                                    <option value="1">Make it childsafe</option>\n' +
-								'                                                                                                    <option value="2">Yes i agree</option>\n' +
+								'                                                                                                    <option value="1">{{__('text.Make it childsafe')}}</option>\n' +
+								'                                                                                                    <option value="2">{{__('text.Yes i agree')}}</option>\n' +
 								'                                                                                            </select>\n' +
 								'                                                                                        </div>\n' +
 								'\n' +
@@ -5613,14 +5609,14 @@
 					}
 					else {
 
-						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option><option value="3" selected>Yes childsafe</option>');
+						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">{{__('text.Add childsafety clip')}}</option><option value="3" selected>{{__('text.Yes childsafe')}}</option>');
 
 						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
 								'\n' +
 								'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
+								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe Answer')}}</label>\n' +
 								'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-								'                                                                                                    <option value="3">Is childsafe</option>\n' +
+								'                                                                                                    <option value="3">{{__('text.Is childsafe')}}</option>\n' +
 								'                                                                                            </select>\n' +
 								'                                                                                        </div>\n' +
 								'\n' +
@@ -5672,7 +5668,7 @@
 
 					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
 					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option>');
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">{{__('text.Add childsafety clip')}}</option>');
 				}
 
 			});
@@ -5694,9 +5690,9 @@
 						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
 								'\n' +
 								'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
+								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe Answer')}}</label>\n' +
 								'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-								'                                                                                                    <option value="3">Is childsafe</option>\n' +
+								'                                                                                                    <option value="3">{{__('text.Is childsafe')}}</option>\n' +
 								'                                                                                            </select>\n' +
 								'                                                                                        </div>\n' +
 								'\n' +
@@ -5708,10 +5704,10 @@
 						$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
 								'\n' +
 								'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
+								'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">{{__('text.Childsafe Answer')}}</label>\n' +
 								'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-								'                                                                                                    <option value="1">Make it childsafe</option>\n' +
-								'                                                                                                    <option value="2">Yes i agree</option>\n' +
+								'                                                                                                    <option value="1">{{__('text.Make it childsafe')}}</option>\n' +
+								'                                                                                                    <option value="2">{{__('text.Yes i agree')}}</option>\n' +
 								'                                                                                            </select>\n' +
 								'                                                                                        </div>\n' +
 								'\n' +
@@ -5724,7 +5720,7 @@
 					Swal.fire({
 						icon: 'error',
 						title: '{{__('text.Oops...')}}',
-						text: 'Kindly fill both childsafe values first.',
+						text: '{{__('text.Kindly fill both childsafe values first.')}}',
 					});
 				}
 
@@ -5837,9 +5833,9 @@
 										'<thead>\n' +
 										'<tr>\n' +
 										'<th>ID</th>\n' +
-										'<th>Title</th>\n' +
-										'<th>Size 38mm</th>\n' +
-										'<th>Size 25mm</th>\n' +
+										'<th>{{__('text.Title')}}</th>\n' +
+										'<th>{{__('text.Size 38mm')}}</th>\n' +
+										'<th>{{__('text.Size 25mm')}}</th>\n' +
 										'</tr>\n' +
 										'</thead>\n' +
 										'<tbody>\n' +
@@ -5925,7 +5921,7 @@
 							}
 
 							if (data[1].length > 0) {
-								var opt = '<option value="0">Select Feature</option>';
+								var opt = '<option value="0">{{__('text.Select Feature')}}</option>';
 
 								$.each(data[1], function (index, value) {
 
@@ -5951,7 +5947,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: '{{__('text.Oops...')}}',
-										text: 'Area is greater than max size: ' + max_size,
+										text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 									});
 
 									current.parent().find('.f_area').val(1);

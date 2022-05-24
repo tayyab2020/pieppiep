@@ -108,7 +108,7 @@
                                                 <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Category/Item')}}</th>
                                                 <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Brand')}}</th>
                                                 <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Model')}}</th>
-                                                <th class="border-0 text-uppercase small font-weight-bold">Type</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Type')}}</th>
                                                 <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Color')}}</th>
 
                                             @else
@@ -118,7 +118,7 @@
 
                                             @endif
 
-                                            <th class="border-0 text-uppercase small font-weight-bold">Qty</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Qty')}}</th>
 
                                             {{--<th class="border-0 text-uppercase small font-weight-bold">Street</th>
                                             <th class="border-0 text-uppercase small font-weight-bold">House Number</th>--}}

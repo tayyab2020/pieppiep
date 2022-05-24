@@ -36,11 +36,11 @@
 
                                             @if(Route::currentRouteName() == 'edit-order')
 
-                                                <h2 style="margin-top: 0;">Edit Order</h2>
+                                                <h2 style="margin-top: 0;">{{__('text.Edit Order')}}</h2>
 
                                             @else
 
-                                                <h2 style="margin-top: 0;">View Order</h2>
+                                                <h2 style="margin-top: 0;">{{__('text.View Order')}}</h2>
 
                                             @endif
 
@@ -50,7 +50,7 @@
 
 												@if(Route::currentRouteName() == 'view-order' && !$check->order_sent && $check->accepted && !$check->processing && !$check->finished)
 
-													<button type="button" class="btn btn-success send-order" style="margin-right: 10px;">Send Order</button>
+													<button type="button" class="btn btn-success send-order" style="margin-right: 10px;">{{__('text.Send Order')}}</button>
 
 												@endif
 												
@@ -60,14 +60,14 @@
 
 													<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
 														<i class="fa fa-fw fa-save"></i>
-														<span class="tooltiptext">Save</span>
+														<span class="tooltiptext">{{__('text.Save')}}</span>
 													</span>
 
 													@endif
 
 													<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
 														<i class="fa fa-fw fa-close"></i>
-														<span class="tooltiptext">Close</span>
+														<span class="tooltiptext">{{__('text.Close')}}</span>
 													</a>
 
 												</div>
@@ -101,19 +101,19 @@
 
                                                                 @if(Route::currentRouteName() == 'view-order')
 
-                                                                    <div class="headings" style="width: 11%;">Supplier</div>
-                                                                    <div class="headings" style="width: 11%;">Product</div>
+                                                                    <div class="headings" style="width: 11%;">{{__('text.Supplier')}}</div>
+                                                                    <div class="headings" style="width: 11%;">{{__('text.Product')}}</div>
 
                                                                 @else
 
-                                                                    <div class="headings" style="width: 22%;">Product</div>
+                                                                    <div class="headings" style="width: 22%;">{{__('text.Product')}}</div>
 
                                                                 @endif
 
-                                                                <div class="headings" style="width: 15%;">Color</div>
-                                                                <div class="headings" style="width: 15%;">Model</div>
-                                                                <div class="headings" style="width: 15%;">Width</div>
-                                                                <div class="headings" style="width: 15%;">Height</div>
+                                                                <div class="headings" style="width: 15%;">{{__('text.Color')}}</div>
+                                                                <div class="headings" style="width: 15%;">{{__('text.Model')}}</div>
+                                                                <div class="headings" style="width: 15%;">{{__('text.Width')}}</div>
+                                                                <div class="headings" style="width: 15%;">{{__('text.Height')}}</div>
                                                                 <div class="headings" style="width: 16%;"></div>
 
                                                             </div>
@@ -263,26 +263,26 @@
 																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
                                                                             	<div style="display: none;" class="green-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>
+                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>
                                                                             	</div>
                                                                             
 																				<div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>
+                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>
                                                                             	</div>
 
                                                                             	<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																					<span class="tooltiptext">Add</span>
+																					<span class="tooltiptext">{{__('text.Add')}}</span>
 																				</span>
 
                                                                             	<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																					<span class="tooltiptext">Remove</span>
+																					<span class="tooltiptext">{{__('text.Remove')}}</span>
 																				</span>
 
                                                                             	<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																					<span class="tooltiptext">Copy</span>
+																					<span class="tooltiptext">{{__('text.Copy')}}</span>
 																				</span>
 
                                                                             	<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
@@ -311,7 +311,7 @@
 															<li style="margin-bottom: 0;" class="active"><a
 																	style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;"
 																	data-toggle="tab" href="#menu1"
-																	aria-expanded="false">Features</a></li>
+																	aria-expanded="false">{{__('text.Features')}}</a></li>
 														</ul>
 
 														<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;"
@@ -334,7 +334,7 @@
 																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Quantity</label>
+																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>
 																			<input value="{{$key1->qty}}"
 																				style="border: none;border-bottom: 1px solid lightgrey;"
 																				maskedformat="9,1" name="qty[]"
@@ -365,34 +365,23 @@
 																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>
+																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>
 																			<select
 																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																				class="form-control childsafe-select"
 																				name="childsafe_option{{$x+1}}">
 
-																				<option value="">Select any option
-																				</option>
+																				<option value="">{{__('text.Select any option')}}</option>
 
 																				@if($key1->childsafe_diff <= 150)
-																					<option {{$key1->childsafe_question
-																					== 1 ? 'selected' : null}}
-																					value="1">Please note not childsafe
-																					</option>
-																					<option {{$key1->childsafe_question
-																						== 2 ? 'selected' : null}}
-																						value="2">Add childsafety clip
-																					</option>
+																					
+																					<option {{$key1->childsafe_question == 1 ? 'selected' : null}} value="1">{{__('text.Please note not childsafe')}}</option>
+																					<option {{$key1->childsafe_question == 2 ? 'selected' : null}} value="2">{{__('text.Add childsafety clip')}}</option>
 
 																					@else
 
-																					<option {{$key1->childsafe_question
-																						== 2 ? 'selected' : null}}
-																						value="2">Add childsafety clip
-																					</option>
-																					<option {{$key1->childsafe_question
-																						== 3 ? 'selected' : null}}
-																						value="3">Yes childsafe</option>
+																					<option {{$key1->childsafe_question == 2 ? 'selected' : null}} value="2">{{__('text.Add childsafety clip')}}</option>
+																					<option {{$key1->childsafe_question == 3 ? 'selected' : null}} value="3">{{__('text.Yes childsafe')}}</option>
 
 																					@endif
 
@@ -409,23 +398,17 @@
 
 																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Childsafe
-																				Answer</label>
+																			<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe Answer')}}</label>
 																			<select
 																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																				class="form-control childsafe-answer"
 																				name="childsafe_answer{{$x+1}}">
+																				
 																				@if($key1->childsafe_question == 1)
-																				<option {{$key1->childsafe_answer == 1 ?
-																					'selected' : null}} value="1">Make
-																					it childsafe</option>
-																				<option {{$key1->childsafe_answer == 2 ?
-																					'selected' : null}} value="2">Yes i
-																					agree</option>
+																				<option {{$key1->childsafe_answer == 1 ? 'selected' : null}} value="1">{{__('text.Make it childsafe')}}</option>
+																				<option {{$key1->childsafe_answer == 2 ? 'selected' : null}} value="2">{{__('text.Yes i agree')}}</option>
 																				@else
-																				<option selected value="3">Is childsafe
-																				</option>
+																				<option selected value="3">{{__('text.Is childsafe')}}</option>
 																				@endif
 																			</select>
 																		</div>
@@ -445,17 +428,13 @@
 																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>
+																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>
 																			<select
 																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																				class="form-control feature-select"
 																				name="features{{$x+1}}[]">
-																				<option {{$feature->ladderband == 0 ?
-																					'selected' : null}} value="0">No
-																				</option>
-																				<option {{$feature->ladderband == 1 ?
-																					'selected' : null}} value="1">Yes
-																				</option>
+																				<option {{$feature->ladderband == 0 ? 'selected' : null}} value="0">{{__('text.No')}}</option>
+																				<option {{$feature->ladderband == 1 ? 'selected' : null}} value="1">{{__('text.Yes')}}</option>
 																			</select>
 																			<input value="{{$feature->price}}"
 																				name="f_price{{$x + 1}}[]"
@@ -472,7 +451,7 @@
 																		@if($feature->ladderband)
 
 																		<a data-id="{{$x + 1}}"
-																			class="info ladderband-btn">Info</a>
+																			class="info ladderband-btn">{{__('text.Info')}}</a>
 
 																		@endif
 
@@ -492,8 +471,7 @@
 																				class="form-control feature-select"
 																				name="features{{$x+1}}[]">
 
-																				<option value="0">Select Feature
-																				</option>
+																				<option value="0">{{__('text.Select Feature')}}</option>
 
 																				@foreach($features[$f] as $temp)
 
@@ -522,7 +500,7 @@
 																		@if($feature->comment_box)
 
 																		<a data-feature="{{$feature->feature_id}}"
-																			class="info comment-btn">Info</a>
+																			class="info comment-btn">{{__('text.Info')}}</a>
 
 																		@endif
 
@@ -545,8 +523,7 @@
 																				class="form-control feature-select"
 																				name="features{{$x+1}}[]">
 
-																				<option value="0">Select Feature
-																				</option>
+																				<option value="0">{{__('text.Select Feature')}}</option>
 
 																				@foreach($sub_features[$s] as $temp)
 
@@ -619,7 +596,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">Sub Products Sizes</h4>
+								<h4 class="modal-title">{{__('text.Sub Products Sizes')}}</h4>
 							</div>
 							<div class="modal-body">
 								@if(isset($invoice))
@@ -633,9 +610,9 @@
 										<thead>
 											<tr>
 												<th>ID</th>
-												<th>Title</th>
-												<th>Size 38mm</th>
-												<th>Size 25mm</th>
+												<th>{{__('text.Title')}}</th>
+												<th>{{__('text.Size 38mm')}}</th>
+												<th>{{__('text.Size 25mm')}}</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -697,7 +674,7 @@
 								@endif
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
 							</div>
 						</div>
 
@@ -711,7 +688,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">Feature Comment</h4>
+								<h4 class="modal-title">{{__('text.Feature Comment')}}</h4>
 							</div>
 							<div class="modal-body">
 
@@ -740,7 +717,7 @@
 
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
 							</div>
 						</div>
 
@@ -767,20 +744,20 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Order Mail Body</h4>
+					<h4 class="modal-title">{{__('text.Order Mail Body')}}</h4>
 				</div>
 				<div class="modal-body">
 
 					<div style="margin: 20px 0;" class="row">
 						<div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<label>Subject:</label>
+							<label>{{__('text.Subject')}}:</label>
 							<input type="text" name="mail_subject1" class="form-control">
 						</div>
 					</div>
 
 					<div style="margin: 20px 0;" class="row">
 						<div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<label>Text:</label>
+							<label>{{__('text.Text')}}:</label>
 							<input type="hidden" name="mail_body1">
 							<div class="summernote"></div>
 						</div>
@@ -788,7 +765,7 @@
 
 				</div>
 				<div class="modal-footer">
-					<button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form1">Submit</button>
+					<button style="border: 0;outline: none;background-color: #5cb85c !important;" type="button" class="btn btn-primary submit-form1">{{__('text.Submit')}}</button>
 				</div>
 			</div>
 
@@ -1548,14 +1525,14 @@
             if(!flag)
             {
 				Swal.fire({
-					title: 'Are you sure?',
-					text: "Make sure to save your changes first before sending the order!",
+					title: '{{__('text.Are you sure?')}}',
+					text: '{{__('text.Make sure to save your changes first before sending the order!')}}',
 					icon: 'question',
 					showCancelButton: true,
 					confirmButtonColor: '#3085d6',
 					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes!',
-					cancelButtonText: 'Cancel',
+					confirmButtonText: '{{__('text.Yes')}}!',
+					cancelButtonText: '{{__('text.Cancel')}}',
 				}).then((result) => {
 					if (result.value) {
 		
@@ -1628,18 +1605,18 @@
                     $('#products_table').find(`[data-id='${row_id}']`).find('.products').children('select').find('option')
                         .remove()
                         .end()
-                        .append('<option value="">Select Product</option>' + options);
+                        .append('<option value="">{{__('text.Select Product')}}</option>' + options);
 
 
                     $('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
                         .remove()
                         .end()
-                        .append('<option value="">Select Color</option>');
+                        .append('<option value="">{{__('text.Select Color')}}</option>');
 
                     $('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
                         .remove()
                         .end()
-                        .append('<option value="">Select Model</option>');
+                        .append('<option value="">{{__('text.Select Model')}}</option>');
 
                     $('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val('');
                     $('#products_table').find(`[data-id='${row_id}']`).find('.height').find('.measure-unit').val('');
@@ -1721,12 +1698,12 @@
 						$('#products_table').find(`[data-id='${row_id}']`).find('.color').children('select').find('option')
 							.remove()
 							.end()
-							.append('<option value="">Select Color</option>' + options);
+							.append('<option value="">{{__('text.Select Color')}}</option>' + options);
 
 							$('#products_table').find(`[data-id='${row_id}']`).find('.model').children('select').find('option')
 							.remove()
 							.end()
-							.append('<option value="">Select Model</option>' + options1);
+							.append('<option value="">{{__('text.Select Model')}}</option>' + options1);
 
 						if ((typeof (data) != "undefined") && data.measure) {
 							$('#products_table').find(`[data-id='${row_id}']`).find('.width').find('.measure-unit').val(data.measure);
@@ -1750,7 +1727,7 @@
 		$(".js-data-example-ajax2").select2({
 			width: '100%',
 			height: '200px',
-			placeholder: "Select Color",
+			placeholder: "{{__('text.Select Color')}}",
 			allowClear: true,
 			"language": {
 				"noResults": function () {
@@ -1762,7 +1739,7 @@
 		$(".js-data-example-ajax3").select2({
 			width: '100%',
 			height: '200px',
-			placeholder: "Select Model",
+			placeholder: "{{__('text.Select Model')}}",
 			allowClear: true,
 			"language": {
 				"noResults": function () {
@@ -1807,7 +1784,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+									html: '{{__('text.Width & Height are greater than max values')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width + '<br> {{__('text.Max Height')}}: ' + data[0].max_height,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
@@ -1816,7 +1793,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+									html: '{{__('text.Width is greater than max value')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
@@ -1826,7 +1803,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+									html: '{{__('text.Height is greater than max value')}} <br> {{__('text.Max Height')}}: ' + data[0].max_height,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
@@ -1855,10 +1832,10 @@
 										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
 										'</div></div>\n' +
 										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
+										'<option value="">{{__('text.Select any option')}}</option>\n' +
+										'<option value="2">{{__('text.Add childsafety clip')}}</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
 										'</div></div>\n';
@@ -1870,16 +1847,16 @@
 								if (ladderband == 1) {
 
 									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
+										'<option value="0">{{__('text.No')}}</option>\n' +
+										'<option value="1">{{__('text.Yes')}}</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
 										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
 										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
 										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">{{__('text.Info')}}</a></div>\n';
 
 									features = features + content;
 
@@ -1898,7 +1875,7 @@
 									});
 
 									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">{{__('text.Info')}}</a>';
 									}
 									else {
 										var icon = '';
@@ -1937,7 +1914,7 @@
 								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
 									'\n' +
 									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+									'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>' +
 									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
 									'</div></div>' + features +
 									'</div>');
@@ -1950,7 +1927,7 @@
 										Swal.fire({
 											icon: 'error',
 											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
+											text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 										});
 
 										current.parent().find('.f_area').val(1);
@@ -2018,7 +1995,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+									html: '{{__('text.Quantity')}}Width & Height are greater than max values <br> {{__('text.Quantity')}}Max Width: ' + data[0].max_width + '<br> {{__('text.Quantity')}}Max Height: ' + data[0].max_height,
 								});
 
 
@@ -2029,7 +2006,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+									html: '{{__('text.Quantity')}}Width is greater than max value <br> {{__('text.Quantity')}}Max Width: ' + data[0].max_width,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
@@ -2039,7 +2016,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+									html: '{{__('text.Quantity')}}Height is greater than max value <br> {{__('text.Quantity')}}Max Height: ' + data[0].max_height,
 								});
 
 
@@ -2070,10 +2047,10 @@
 										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
 										'</div></div>\n' +
 										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
+										'<option value="">{{__('text.Select any option')}}</option>\n' +
+										'<option value="2">{{__('text.Add childsafety clip')}}</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
 										'</div></div>\n';
@@ -2085,16 +2062,16 @@
 								if (ladderband == 1) {
 
 									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
+										'<option value="0">{{__('text.No')}}</option>\n' +
+										'<option value="1">{{__('text.Yes')}}</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
 										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
 										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
 										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">{{__('text.Info')}}</a></div>\n';
 
 									features = features + content;
 
@@ -2104,7 +2081,7 @@
 
                                     count_features = count_features + 1;
 
-									var opt = '<option value="0">Select Feature</option>';
+									var opt = '<option value="0">{{__('text.Select Feature')}}</option>';
 
 									$.each(value.features, function (index1, value1) {
 
@@ -2113,7 +2090,7 @@
 									});
 
 									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">{{__('text.Info')}}</a>';
 									}
 									else {
 										var icon = '';
@@ -2152,7 +2129,7 @@
 								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
 									'\n' +
 									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+									'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>' +
 									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
 									'</div></div>' + features +
 									'</div>');
@@ -2166,7 +2143,7 @@
 										Swal.fire({
 											icon: 'error',
 											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
+											text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 										});
 
 										current.parent().find('.f_area').val(1);
@@ -2343,18 +2320,18 @@
 					'                       									 	<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">\n' +
 					'\n' +
 					'																<div style="display: none;" class="green-circle tooltip1">\n' +
-					'																	<span style="top: 45px;left: -40px;" class="tooltiptext">ALL features selected!</span>\n' +
+					'																	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>\n' +
 					'																</div>\n' +
 					'\n' +
 					'																<div style="visibility: hidden;" class="yellow-circle tooltip1">\n' +
-					'																	<span style="top: 45px;left: -40px;" class="tooltiptext">Select all features!</span>\n' +
+					'																	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>\n' +
 					'																</div>\n' +
 					'\n' +
 					'																<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">\n' +
 					'\n' +
 					'																	<i id="next-row-icon" class="fa fa-fw fa-plus"></i>\n' +
 					'\n' +
-					'																	<span class="tooltiptext">Add</span>\n' +
+					'																	<span class="tooltiptext">{{__('text.Add')}}</span>\n' +
 					'\n' +
 					'																</span>\n' +
 					'\n' +
@@ -2362,7 +2339,7 @@
 					'\n' +
 					'																	<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>\n' +
 					'\n' +
-					'																	<span class="tooltiptext">Remove</span>\n' +
+					'																	<span class="tooltiptext">{{__('text.Remove')}}</span>\n' +
 					'\n' +
 					'																</span>\n' +
 					'\n' +
@@ -2370,7 +2347,7 @@
 					'\n' +
 					'																	<i id="next-row-icon" class="fa fa-fw fa-copy"></i>\n' +
 					'\n' +
-					'																	<span class="tooltiptext">Copy</span>\n' +
+					'																	<span class="tooltiptext">{{__('text.Copy')}}</span>\n' +
 					'\n' +
 					'																</span>\n' +
 					'\n' +
@@ -2411,7 +2388,7 @@
 				last_row.find(".js-data-example-ajax2").select2({
 					width: '100%',
 					height: '200px',
-					placeholder: "Select Color",
+					placeholder: "{{__('text.Select Color')}}",
 					allowClear: true,
 					"language": {
 						"noResults": function () {
@@ -2423,7 +2400,7 @@
 				last_row.find(".js-data-example-ajax3").select2({
 					width: '100%',
 					height: '200px',
-					placeholder: "Select Model",
+					placeholder: "{{__('text.Select Model')}}",
 					allowClear: true,
 					"language": {
 						"noResults": function () {
@@ -2648,7 +2625,7 @@
 				last_row.find(".js-data-example-ajax2").select2({
 					width: '100%',
 					height: '200px',
-					placeholder: "Select Color",
+					placeholder: "{{__('text.Select Color')}}",
 					allowClear: true,
 					"language": {
 						"noResults": function () {
@@ -2660,7 +2637,7 @@
 				last_row.find(".js-data-example-ajax3").select2({
 					width: '100%',
 					height: '200px',
-					placeholder: "Select Model",
+					placeholder: "{{__('text.Select Model')}}",
 					allowClear: true,
 					"language": {
 						"noResults": function () {
@@ -2864,7 +2841,7 @@
 				Swal.fire({
 					icon: 'error',
 					title: '{{__('text.Oops...')}}',
-					text: 'Feature should not be empty!',
+					text: '{{__('text.Feature should not be empty!')}}',
 				});
 
 			}
@@ -3081,7 +3058,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+									html: '{{__('text.Width & Height are greater than max values')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width + '<br> {{__('text.Max Height')}}: ' + data[0].max_height,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
@@ -3091,7 +3068,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+									html: '{{__('text.Width is greater than max value')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
@@ -3101,7 +3078,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+									html: '{{__('text.Height is greater than max value')}} <br> {{__('text.Max Height')}}: ' + data[0].max_height,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
@@ -3130,10 +3107,10 @@
 										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
 										'</div></div>\n' +
 										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
+										'<option value="">{{__('text.Select any option')}}</option>\n' +
+										'<option value="2">{{__('text.Add childsafety clip')}}</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
 										'</div></div>\n';
@@ -3145,16 +3122,16 @@
 								if (ladderband == 1) {
 
 									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
+										'<option value="0">{{__('text.No')}}</option>\n' +
+										'<option value="1">{{__('text.Yes')}}</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
 										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
 										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
 										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">{{__('text.Info')}}</a></div>\n';
 
 									features = features + content;
 
@@ -3164,7 +3141,7 @@
 
                                     count_features = count_features + 1;
 
-									var opt = '<option value="0">Select Feature</option>';
+									var opt = '<option value="0">{{__('text.Select Feature')}}</option>';
 
 									$.each(value.features, function (index1, value1) {
 
@@ -3173,7 +3150,7 @@
 									});
 
 									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">{{__('text.Info')}}</a>';
 									}
 									else {
 										var icon = '';
@@ -3212,7 +3189,7 @@
 								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
 									'\n' +
 									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+									'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>' +
 									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
 									'</div></div>' + features +
 									'</div>');
@@ -3226,7 +3203,7 @@
 										Swal.fire({
 											icon: 'error',
 											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
+											text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 										});
 
 										current.parent().find('.f_area').val(1);
@@ -3291,7 +3268,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Width & Height are greater than max values <br> Max Width: ' + data[0].max_width + '<br> Max Height: ' + data[0].max_height,
+									html: '{{__('text.Width & Height are greater than max values')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width + '<br> {{__('text.Max Height')}}: ' + data[0].max_height,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(3);
@@ -3301,7 +3278,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Width is greater than max value <br> Max Width: ' + data[0].max_width,
+									html: '{{__('text.Width is greater than max value')}} <br> {{__('text.Max Width')}}: ' + data[0].max_width,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(1);
@@ -3311,7 +3288,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									html: 'Height is greater than max value <br> Max Height: ' + data[0].max_height,
+									html: '{{__('text.Height is greater than max value')}} <br> {{__('text.Max Height')}}: ' + data[0].max_height,
 								});
 
 								$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(2);
@@ -3341,10 +3318,10 @@
 										'<input style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y' + row_id + '">\n' +
 										'</div></div>\n' +
 										'<div class="row childsafe-question-box" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Childsafe</label>' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-select" name="childsafe_option' + row_id + '">\n' +
-										'<option value="">Select any option</option>\n' +
-										'<option value="2">Add childsafety clip</option>\n' +
+										'<option value="">{{__('text.Select any option')}}</option>\n' +
+										'<option value="2">{{__('text.Add childsafety clip')}}</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="childsafe_diff' + row_id + '" class="childsafe_diff" type="hidden">' +
 										'</div></div>\n';
@@ -3356,16 +3333,16 @@
 								if (ladderband == 1) {
 
 									var content = '<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-										'<label style="margin-right: 10px;margin-bottom: 0;">Ladderband</label>' +
+										'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>' +
 										'<select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control feature-select" name="features' + row_id + '[]">\n' +
-										'<option value="0">No</option>\n' +
-										'<option value="1">Yes</option>\n' +
+										'<option value="0">{{__('text.No')}}</option>\n' +
+										'<option value="1">{{__('text.Yes')}}</option>\n' +
 										'</select>\n' +
 										'<input value="0" name="f_price' + row_id + '[]" class="f_price" type="hidden">' +
 										'<input value="0" name="f_id' + row_id + '[]" class="f_id" type="hidden">' +
 										'<input value="0" name="f_area' + row_id + '[]" class="f_area" type="hidden">' +
 										'<input value="0" name="sub_feature' + row_id + '[]" class="sub_feature" type="hidden">' +
-										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">Info</a></div>\n';
+										'</div><a data-id="' + row_id + '" class="info ladderband-btn hide">{{__('text.Info')}}</a></div>\n';
 
 									features = features + content;
 
@@ -3375,7 +3352,7 @@
 
                                     count_features = count_features + 1;
 
-									var opt = '<option value="0">Select Feature</option>';
+									var opt = '<option value="0">{{__('text.Select Feature')}}</option>';
 
 									$.each(value.features, function (index1, value1) {
 
@@ -3384,7 +3361,7 @@
 									});
 
 									if (value.comment_box == 1) {
-										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">Info</a>';
+										var icon = '<a data-feature="' + value.id + '" class="info comment-btn">{{__('text.Info')}}</a>';
 									}
 									else {
 										var icon = '';
@@ -3423,7 +3400,7 @@
 								$('#menu1').append('<div data-id="' + row_id + '" style="margin: 0;" class="form-group">' +
 									'\n' +
 									'<div class="row" style="margin: 0;display: flex;align-items: center;"><div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-									'<label style="margin-right: 10px;margin-bottom: 0;">Quantity</label>' +
+									'<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>' +
 									'<input value="1" style="border: none;border-bottom: 1px solid lightgrey;" maskedformat="9,1" name="qty[]" class="form-control" type="text" /><span>pcs</span>' +
 									'</div></div>' + features +
 									'</div>');
@@ -3437,7 +3414,7 @@
 										Swal.fire({
 											icon: 'error',
 											title: '{{__('text.Oops...')}}',
-											text: 'Area is greater than max size: ' + max_size,
+											text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 										});
 
 										current.parent().find('.f_area').val(1);
@@ -3491,15 +3468,15 @@
 
 				if (diff <= 150) {
 
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1" selected>Please note not childsafe</option><option value="2">Add childsafety clip</option>');
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="1" selected>{{__('text.Please note not childsafe')}}</option><option value="2">{{__('text.Add childsafety clip')}}</option>');
 
 					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
 						'\n' +
 						'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
+						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">{{__('text.Childsafe Answer')}}</label>\n' +
 						'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-						'                                                                                                    <option value="1">Make it childsafe</option>\n' +
-						'                                                                                                    <option value="2">Yes i agree</option>\n' +
+						'                                                                                                    <option value="1">{{__('text.Make it childsafe')}}</option>\n' +
+						'                                                                                                    <option value="2">{{__('text.Yes i agree')}}</option>\n' +
 						'                                                                                            </select>\n' +
 						'                                                                                        </div>\n' +
 						'\n' +
@@ -3508,14 +3485,14 @@
 				}
 				else {
 
-					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option><option value="3" selected>Yes childsafe</option>');
+					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">{{__('text.Add childsafety clip')}}</option><option value="3" selected>{{__('text.Yes childsafe')}}</option>');
 
 					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
 						'\n' +
 						'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
+						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe Answer')}}</label>\n' +
 						'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-						'                                                                                                    <option value="3">Is childsafe</option>\n' +
+						'                                                                                                    <option value="3">{{__('text.Is childsafe')}}</option>\n' +
 						'                                                                                            </select>\n' +
 						'                                                                                        </div>\n' +
 						'\n' +
@@ -3567,7 +3544,7 @@
 
 				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-answer-box').remove();
 				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').find('option').not(':first').remove();
-				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">Add childsafety clip</option>');
+				$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').find('.childsafe-select').append('<option value="2">{{__('text.Add childsafety clip')}}</option>');
 			}
 
 		});
@@ -3589,9 +3566,9 @@
 					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
 						'\n' +
 						'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">Childsafe Answer</label>\n' +
+						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe Answer')}}</label>\n' +
 						'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-						'                                                                                                    <option value="3">Is childsafe</option>\n' +
+						'                                                                                                    <option value="3">{{__('text.Is childsafe')}}</option>\n' +
 						'                                                                                            </select>\n' +
 						'                                                                                        </div>\n' +
 						'\n' +
@@ -3603,10 +3580,10 @@
 					$('#menu1').find(`[data-id='${row_id}']`).find('.childsafe-question-box').after('<div class="row childsafe-answer-box" style="margin: 0;display: flex;align-items: center;">\n' +
 						'\n' +
 						'                                                                                        <div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">\n' +
-						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">Childsafe Answer</label>\n' +
+						'                                                                                            <label style="margin-right: 10px;margin-bottom: 0">{{__('text.Childsafe Answer')}}</label>\n' +
 						'                                                                                            <select style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;" class="form-control childsafe-answer" name="childsafe_answer' + row_id + '">\n' +
-						'                                                                                                    <option value="1">Make it childsafe</option>\n' +
-						'                                                                                                    <option value="2">Yes i agree</option>\n' +
+						'                                                                                                    <option value="1">{{__('text.Make it childsafe')}}</option>\n' +
+						'                                                                                                    <option value="2">{{__('text.Yes i agree')}}</option>\n' +
 						'                                                                                            </select>\n' +
 						'                                                                                        </div>\n' +
 						'\n' +
@@ -3619,7 +3596,7 @@
 				Swal.fire({
 					icon: 'error',
 					title: '{{__('text.Oops...')}}',
-					text: 'Kindly fill both childsafe values first.',
+					text: '{{__('text.Kindly fill both childsafe values first.')}}',
 				});
 			}
 
@@ -3661,9 +3638,9 @@
 								'<thead>\n' +
 								'<tr>\n' +
 								'<th>ID</th>\n' +
-								'<th>Title</th>\n' +
-								'<th>Size 38mm</th>\n' +
-								'<th>Size 25mm</th>\n' +
+								'<th>{{__('text.Title')}}</th>\n' +
+								'<th>{{__('text.Size 38mm')}}</th>\n' +
+								'<th>{{__('text.Size 25mm')}}</th>\n' +
 								'</tr>\n' +
 								'</thead>\n' +
 								'<tbody>\n' +
@@ -3734,7 +3711,7 @@
 
 						if (data[1].length > 0) {
 
-							var opt = '<option value="0">Select Feature</option>';
+							var opt = '<option value="0">{{__('text.Select Feature')}}</option>';
 
 							$.each(data[1], function (index, value) {
 
@@ -3761,7 +3738,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: '{{__('text.Oops...')}}',
-									text: 'Area is greater than max size: ' + max_size,
+									text: '{{__('text.Area is greater than max size')}}: ' + max_size,
 								});
 
 								current.parent().find('.f_area').val(1);

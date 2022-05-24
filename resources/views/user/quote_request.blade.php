@@ -94,7 +94,7 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm-4" for="blood_group_display_name">Type* </label>
+                                                    <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Type')}}* </label>
                                                     <div class="col-sm-6">
                                                         <p style="padding: 10px;" class="form-control">{{$request->type_title}}</p>
                                                     </div>
@@ -163,12 +163,12 @@
 
                                                 <section class="attributes_table active" style="width: 80%;padding: 20px;margin: 50px auto auto auto;border: 1px solid #adadad;border-radius: 10px;">
 
-                                                    <h3 style="border-bottom: 1px solid #b9b9b9;margin-bottom: 30px;padding-bottom: 10px;text-align: center;">Dimensions</h3>
+                                                    <h3 style="border-bottom: 1px solid #b9b9b9;margin-bottom: 30px;padding-bottom: 10px;text-align: center;">{{__('text.Dimensions')}}</h3>
 
                                                     <div class="header-div">
-                                                        <div class="headings" style="width: 50%;">Description</div>
-                                                        <div class="headings" style="width: 25%;">Width</div>
-                                                        <div class="headings" style="width: 25%;">Height</div>
+                                                        <div class="headings" style="width: 50%;">{{__('text.Description')}}</div>
+                                                        <div class="headings" style="width: 25%;">{{__('text.Width')}}</div>
+                                                        <div class="headings" style="width: 25%;">{{__('text.Height')}}</div>
                                                     </div>
 
                                                     @foreach($request->dimensions as $key)
@@ -327,9 +327,5 @@
         }
 
     </style>
-
-
-    <script src="{{asset('assets/admin/js/jquery152.min.js')}}"></script>
-    <script src="{{asset('assets/admin/js/jqueryui.min.js')}}"></script>
 
 @endsection

@@ -23,7 +23,7 @@
                                         <div style="box-shadow: none;" class="add-product-box">
                                             <div class="add-product-header products">
 
-                                                <h2>Update Delivery Date(s)</h2>
+                                                <h2>{{__('text.Update Delivery Date(s)')}}</h2>
 
                                             </div>
                                             <hr>
@@ -49,9 +49,9 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th style="padding: 5px;"></th>
-                                                                    <th>Product</th>
-                                                                    <th>Qty</th>
-                                                                    <th style="width: 200px;">Delivery Date</th>
+                                                                    <th>{{__('text.Product')}}</th>
+                                                                    <th>{{__('text.Qty')}}</th>
+                                                                    <th style="width: 200px;">{{__('text.Delivery Date')}}</th>
                                                                 </tr>
                                                                 </thead>
 
@@ -97,7 +97,7 @@
                     </div>
 
                     <div style="display: flex;justify-content: center;margin-top: 20px;">
-                        <button style="outline: none;padding: 10px 30px;font-size: 16px;" type="button" class="btn btn-success save-data">{{$invoice[0]->approved ? 'Update' : 'Approve Order'}}</button>
+                        <button style="outline: none;padding: 10px 30px;font-size: 16px;" type="button" class="btn btn-success save-data">{{$invoice[0]->approved ? __('text.Update') : __('text.Approve Order')}}</button>
                     </div>
 
                 </form>
@@ -977,7 +977,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: '{{__('text.Oops...')}}',
-                        text: 'Delivery date should not be left empty!',
+                        text: '{{__('text.Delivery date should not be left empty!')}}',
                     });
                 }
 

@@ -1118,21 +1118,21 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('retailer-suppliers'))
 
-                                    <li><a href="{{route('suppliers')}}"><i class="fa fa-angle-right"></i> Suppliers</a></li>
+                                    <li><a href="{{route('suppliers')}}"><i class="fa fa-angle-right"></i> {{__('text.Suppliers')}}</a></li>
 
                                 @endif
 
-                                    @if(auth()->user()->can('customers'))
+                                @if(auth()->user()->can('customers'))
 
-                                        <li><a href="{{route('customers')}}"><i class="fa fa-angle-right"></i> {{__('text.Customers')}}</a></li>
+                                    <li><a href="{{route('customers')}}"><i class="fa fa-angle-right"></i> {{__('text.Customers')}}</a></li>
 
-                                    @endif
+                                @endif
 
-                                    @if(auth()->user()->can('employees'))
+                                @if(auth()->user()->can('employees'))
 
-                                        <li><a href="{{route('employees')}}"><i class="fa fa-angle-right"></i> Employees</a></li>
+                                    <li><a href="{{route('employees')}}"><i class="fa fa-angle-right"></i> {{__('text.Employees')}}</a></li>
 
-                                    @endif
+                                @endif
 
                             </div>
 
@@ -1160,7 +1160,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('retailer-suppliers'))
 
-                                    <li><a href="{{route('retailers')}}"><i class="fa fa-angle-right"></i> Retailers</a></li>
+                                    <li><a href="{{route('retailers')}}"><i class="fa fa-angle-right"></i> {{__('text.Retailers')}}</a></li>
 
                                 @endif
 
@@ -1172,7 +1172,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('employees'))
 
-                                    <li><a href="{{route('employees')}}"><i class="fa fa-angle-right"></i> Employees</a></li>
+                                    <li><a href="{{route('employees')}}"><i class="fa fa-angle-right"></i> {{__('text.Employees')}}</a></li>
 
                                 @endif
 
@@ -1199,11 +1199,11 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                         <div style="overflow-y: auto;height: 100%;">
 
-                            <li><a href="{{route('retailer-company-info')}}"><i class="fa fa-angle-right"></i> Company Info</a></li>
+                            <li><a href="{{route('retailer-company-info')}}"><i class="fa fa-angle-right"></i> {{__('text.Company Info')}}</a></li>
 
-                            <li><a href="{{route('email-templates')}}"><i class="fa fa-angle-right"></i> Email Templates</a></li>
+                            <li><a href="{{route('email-templates')}}"><i class="fa fa-angle-right"></i> {{__('text.Email Templates')}}</a></li>
                             
-                            <li><a href="{{route('prefix-settings')}}"><i class="fa fa-angle-right"></i> Prefix Settings</a></li>
+                            <li><a href="{{route('prefix-settings')}}"><i class="fa fa-angle-right"></i> {{__('text.Prefix Settings')}}</a></li>
 
 
                         </div>
@@ -1224,7 +1224,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                         <div style="overflow-y: auto;height: 100%;">
                             
-                            <li><a href="{{route('prefix-settings')}}"><i class="fa fa-angle-right"></i> Prefix Settings</a></li>
+                            <li><a href="{{route('prefix-settings')}}"><i class="fa fa-angle-right"></i> {{__('text.Prefix Settings')}}</a></li>
 
                         </div>
 
@@ -1292,7 +1292,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->hasAnyPermission(['customer-quotations', 'customer-invoices', 'handyman-quotation-requests']))
 
-                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'handyman-quotation-requests') class="active1" @endif href="javascript:"><span class="icon sales-icon"></span> <span>{{__('text.Sales')}}</span></a>
+                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'new-orders' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'handyman-quotation-requests') class="active1" @endif href="javascript:"><span class="icon sales-icon"></span> <span>{{__('text.Sales')}}</span></a>
 
                     <ul class="hide">
 
@@ -1304,13 +1304,14 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                             @if(auth()->user()->can('create-new-quotation'))
 
-                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 2) New Quotations @else New Orders @endif</a></li>
+                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 2) {{__('text.New Quotations')}} @else {{__('text.New Orders')}} @endif</a></li>
 
                             @endif
 
                             @if(auth()->user()->role_id == 2 && auth()->user()->can('handyman-quotation-requests'))
 
-                                <li><a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotation Requests')}}
+                                <li>
+                                    <a href="{{route('handyman-quotation-requests')}}"><i class="fa fa-angle-right"></i> {{__('text.Quotation Requests')}}
                                         <main rel="main">
                                             <div class="notification">
                                                 <svg viewbox="-10 0 35 35">
@@ -1320,7 +1321,8 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                                                 <span class="notification--num">{{count($no_requests)}}</span>
                                             </div>
                                         </main>
-                                    </a></li>
+                                    </a>
+                                </li>
 
                                 <style>
 
@@ -1418,9 +1420,9 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                             @if(auth()->user()->role_id == 2)
 
-                                <li><a href="{{route('new-orders')}}"><i class="fa fa-angle-right"></i> New Orders</a></li>
+                                <li><a href="{{route('new-orders')}}"><i class="fa fa-angle-right"></i> {{__('text.New Orders')}}</a></li>
 
-                                <li><a href="{{route('customer-invoices')}}"><i class="fa fa-angle-right"></i> New Invoices</a></li>
+                                <li><a href="{{route('customer-invoices')}}"><i class="fa fa-angle-right"></i> {{__('text.New Invoices')}}</a></li>
 
                             @endif
 
@@ -1476,7 +1478,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->hasAnyPermission(['user-products', 'user-colors', 'user-price-tables', 'my-services', 'user-categories', 'user-brands', 'user-models', 'user-items', 'user-features']))
 
-                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'user-items' || Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'admin-feature-index' || Route::currentRouteName() == 'supplier-products' || Route::currentRouteName() == 'supplier-categories') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Products</span></a>
+                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'user-items' || Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'admin-feature-index' || Route::currentRouteName() == 'supplier-products' || Route::currentRouteName() == 'supplier-categories') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>{{__('text.Products')}}</span></a>
 
                     <ul class="hide">
 
@@ -1488,7 +1490,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                             @if(auth()->user()->can('user-products'))
 
-                                <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 4) My Products @else Suppliers Products @endif</a></li>
+                                <li><a href="{{route('admin-product-index')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 4) {{__('text.My Products')}} @else {{__('text.Suppliers Products')}} @endif</a></li>
 
                             @endif
 
@@ -1502,7 +1504,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('my-services'))
 
-                                    <li><a href="{{route('my-services')}}"><i class="fa fa-angle-right"></i> Services</a></li>
+                                    <li><a href="{{route('my-services')}}"><i class="fa fa-angle-right"></i> {{__('text.Services')}}</a></li>
 
                                 @endif
 
@@ -1512,13 +1514,13 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('user-colors'))
 
-                                    <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> Colors</a></li>
+                                    <li><a href="{{route('admin-color-index')}}"><i class="fa fa-angle-right"></i> {{__('text.Colors')}}</a></li>
 
                                 @endif
 
                                 @if(auth()->user()->can('user-price-tables'))
 
-                                    <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> Price Tables</a></li>
+                                    <li><a href="{{route('admin-price-tables')}}"><i class="fa fa-angle-right"></i> {{__('text.Price Tables')}}</a></li>
 
                                 @endif
 
@@ -1530,25 +1532,25 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('user-categories'))
 
-                                    <li><a href="{{route('supplier-categories')}}"><i class="fa fa-angle-right"></i> Categories</a></li>
+                                    <li><a href="{{route('supplier-categories')}}"><i class="fa fa-angle-right"></i> {{__('text.Categories')}}</a></li>
 
                                 @endif
 
                                 @if(auth()->user()->can('user-brands'))
 
-                                    <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> Brands</a></li>
+                                    <li><a href="{{route('admin-brand-index')}}"><i class="fa fa-angle-right"></i> {{__('text.Brands')}}</a></li>
 
                                 @endif
 
                                 @if(auth()->user()->can('user-models'))
 
-                                    <li><a href="{{route('predefined-model-index')}}"><i class="fa fa-angle-right"></i> Models</a></li>
+                                    <li><a href="{{route('predefined-model-index')}}"><i class="fa fa-angle-right"></i> {{__('text.Models')}}</a></li>
 
                                 @endif
 
                                 @if(auth()->user()->can('user-models'))
 
-                                    <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> Types</a></li>
+                                    <li><a href="{{route('admin-model-index')}}"><i class="fa fa-angle-right"></i> {{__('text.Types')}}</a></li>
 
                                 @endif
 
@@ -1560,7 +1562,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                                 @if(auth()->user()->can('user-features'))
 
-                                    <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> Features</a></li>
+                                    <li><a href="{{route('admin-feature-index')}}"><i class="fa fa-angle-right"></i> {{__('text.Features')}}</a></li>
 
                                 @endif
 
