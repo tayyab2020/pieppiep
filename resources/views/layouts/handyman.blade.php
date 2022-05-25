@@ -1330,7 +1330,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                                         display: flex;
                                         justify-content: center;
                                         align-items: center;
-                                        height: 100%;
+                                        /* height: 100%; */
                                         position: relative;
                                         float: right;
                                     }
