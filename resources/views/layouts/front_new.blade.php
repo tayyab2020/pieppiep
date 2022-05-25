@@ -1753,8 +1753,7 @@
 </footer>
 <section class="bottom-menu">
     <div class="container">
-        <div class="copyright">&copy; Exact
-            2021			</div>
+        <div class="copyright">&copy; Pieppiep 2022</div>
 
         <ul>
             <li><a href="/privacy-statement">Privacy statement</a></li>
