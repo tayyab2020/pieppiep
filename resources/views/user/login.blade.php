@@ -6,7 +6,7 @@
 
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 
-                        <div style="border: 0;border-radius: 10px;" class="login-form">
+                        <div style="border: 0;border-radius: 10px;box-shadow: 4px 2px 18px 5px #f1f1f1;" class="login-form">
 
                             <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 30px;">
                                 <a href="{{route('front.index')}}">
@@ -92,7 +92,7 @@
 
         html
         {
-            background-image: url({{asset('assets/images/background-login.jpg')}});
+            /* background-image: url({{asset('assets/images/background-login.jpg')}}); */
             background-repeat: no-repeat;
             background-size: cover;
             background-position: 50%;

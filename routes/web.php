@@ -67,6 +67,8 @@
   Route::get('/login', 'Auth\UserLoginController@showLoginForm')->name('user-login');
   Route::post('/login', 'Auth\UserLoginController@login')->name('user-login-submit');
   Route::get('/logout', 'Auth\UserLoginController@logout')->name('user-logout');
+  Route::get('/registreren', 'Auth\UserRegisterController@showHandymanRegisterForm')->name('handyman-register');
+  Route::post('/registreren', 'Auth\UserRegisterController@HandymanRegister')->name('handyman-register-submit');
   Route::get('/compress-images','UserController@compress_image');
 
 
@@ -227,9 +229,7 @@
   Route::post('/forgot', 'Auth\UserForgotController@forgot')->name('user-forgot-submit');
   Route::get('/register', 'Auth\UserRegisterController@showRegisterForm')->name('user-register');
   Route::get('/complete-profile', 'UserController@CompleteProfile')->name('user-complete-profile');
-  Route::get('/registreren-aanbieder', 'Auth\UserRegisterController@showHandymanRegisterForm')->name('handyman-register');
   Route::post('/register', 'Auth\UserRegisterController@register')->name('user-register-submit');
-  Route::post('/aanbieder-registreren', 'Auth\UserRegisterController@HandymanRegister')->name('handyman-register-submit');
   Route::post('/aanbieder-status-update', 'UserController@HandymanStatusUpdate')->name('handyman-status-update');
   Route::post('/client-status-update', 'UserController@ClientStatusUpdate')->name('client-status-update');
   Route::post('/add-cart', 'UserController@AddCart')->name('add-cart');

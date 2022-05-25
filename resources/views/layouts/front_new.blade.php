@@ -9,12 +9,30 @@
     <meta name="author" content="GeniusOcean">
     <title>{{$gs->title}}</title>
     <link href="{{asset('assets/images/'.$gs->favicon)}}" type="image/png" rel="icon"/>
+    <script src="{{ asset('assets/front/js/jquery.min.js') }}"></script>
+
+    @if($lang->lang == 'eng')
+
+        <script src="https://www.google.com/recaptcha/api.js?hl=eng" async defer></script>
+
+    @else
+
+        <script src="https://www.google.com/recaptcha/api.js?hl=nl" async defer></script>
+
+    @endif
 
 </head>
 
 <body class="frontend exact-ac">
 
 <style>
+
+    .mainmenu
+    {
+        text-align: left !important;
+        display: block !important;
+    }
+
     .sp-page-builder .page-content #header {
         padding-top: 125px;
         padding-right: 0px;
@@ -1694,7 +1712,7 @@
 
                 @endif
                 
-                <li class="item-7035"><a href="" class="btn-blue">Probeer nu</a></li>
+                <li class="item-7035"><a href="{{route('handyman-register')}}" class="btn-blue">Probeer nu</a></li>
             </ul>
 
         </div>
@@ -1781,12 +1799,10 @@
 
 <link href="{{ asset('assets/front/css/font-awesome.min.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/front/css/rainbow.min.css') }}" rel="stylesheet" type="text/css">
-
-<script src="{{ asset('assets/front/js/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/front/js/rainbow.min.js') }}"></script>
-
 <link href="{{ asset('assets/front/css/exact-ac.css') }}" rel="stylesheet" type="text/css">
-
+<link href="{{ asset('assets/front/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/front/css/responsive.css') }}" rel="stylesheet">
 
 </body>
 </html>
