@@ -183,8 +183,7 @@ class UserRegisterController extends Controller
 
     public function HandymanRegister(Request $request)
     {
-      // Validate the form data
-
+        // Validate the form data
 
         $secret_key = config('app.captcha_secret');
         $response_key = $_POST['g-recaptcha-response'];
@@ -222,7 +221,7 @@ class UserRegisterController extends Controller
                 'g-recaptcha-response' => 'required',
             ],
 
-          [
+            [
               'email.required' => $this->lang->erv,
               'email.unique' => $this->lang->euv,
               'name.required' => $this->lang->nrv,
@@ -243,44 +242,49 @@ class UserRegisterController extends Controller
               'password.min' => $this->lang->pamv,
               'password.confirmed' => $this->lang->pacv,
               'g-recaptcha-response.required' => $this->lang->grv,
-          ]);
+            ]);
 
-        $user = new User;
-        $input = $request->all();
+            $user = new User;
+            $input = $request->all();
+            $user_name = $input['name'];
+            $user_email = $input['email'];
+            $input['password'] = bcrypt($request['password']);
+            $input['status'] = 1;
+            $input['active'] = 0;
+            $input['is_featured'] = 1;
+            $input['featured'] = 0;
+            $user->fill($input)->save();
 
-        $user_name = $input['name'];
+            $user->givePermissionTo('show-dashboard');
 
-        $user_email = $input['email'];
+            /*Auth::guard('user')->login($user);*/
 
-        $input['password'] = bcrypt($request['password']);
-        $input['status'] = 1;
-        $input['active'] = 0;
-        $input['is_featured'] = 1;
-        $input['featured'] = 0;
-        $user->fill($input)->save();
+            $link = url('/').'/aanbieder/complete-profile';
 
-        $user->givePermissionTo('show-dashboard');
-
-        /*Auth::guard('user')->login($user);*/
-
-        $link = url('/').'/aanbieder/complete-profile';
-
-        /*$headers =  'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $subject = "Account Created!";
-        $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. Kindly go to this <a href='".$link."'>link</a> to complete your profile. You can get orders only after completing your profile.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
-        mail($user_email,$subject,$msg,$headers);*/
+            /*$headers =  'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $subject = "Account Created!";
+            $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. Kindly go to this <a href='".$link."'>link</a> to complete your profile. You can get orders only after completing your profile.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+            mail($user_email,$subject,$msg,$headers);*/
 
 
-        $headers =  'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $subject = "Welkom bij Vloerofferte";
-        $msg = "Beste ".$user_name.",<br><br>Welkom bij vloerofferte.nl<br><br>Je profiel is succesvol aangemaakt, bedankt! Je kan pas offerte aanvragen ontvangen, nadat je je profiel hebt geactiveerd. Klik dus snel op deze <a href='".$link."'>link</a> om je profiel te activeren.<br><br>Veel succes met jouw aanvraag!<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte<br><br>Voor de beste prijs.";
-        mail($user_email,$subject,$msg,$headers);
+            // $headers =  'MIME-Version: 1.0' . "\r\n";
+            // $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
+            // $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            // $subject = "Welkom bij Vloerofferte";
+            // $msg = "Beste ".$user_name.",<br><br>Welkom bij vloerofferte.nl<br><br>Je profiel is succesvol aangemaakt, bedankt! Je kan pas offerte aanvragen ontvangen, nadat je je profiel hebt geactiveerd. Klik dus snel op deze <a href='".$link."'>link</a> om je profiel te activeren.<br><br>Veel succes met jouw aanvraag!<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte<br><br>Voor de beste prijs.";
+            // mail($user_email,$subject,$msg,$headers);
 
-        return redirect()->route('user-login');
+            $headers =  'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'From: Pieppiep <info@pieppiep.com>' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $subject = "Account Created!";
+            $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. We will be reviewing your information within 24 hours. We will inform you when you can login. Thanks for your cooperation.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
+            mail($user_email,$subject,$msg,$headers);
+
+            Session::flash('message', __('text.Your account has been created. Kindly wait for verification email.'));
+            return redirect()->back();
 
         }
 

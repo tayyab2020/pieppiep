@@ -81,7 +81,7 @@
                                 <span></span>
                             </div>
 
-                            <div class="login-title text-center">{{$lang->signup_handyman}}</div>
+                            <div class="login-title text-center">{{__('text.Signup')}}</div>
 
                             <form action="{{route('handyman-register-submit')}}" method="POST">
                               {{csrf_field()}}
