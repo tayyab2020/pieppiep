@@ -833,9 +833,9 @@ class AdminUserController extends Controller
             $headers .= 'From: Pieppiep <info@pieppiep.com>' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
             $subject = "Account Verified";
-            $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been verified. Your account is ready to be used, kindly go to this <a href='".$link."'>link</a> to complete your profile.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
+            $msg = "Dear Mr/Mrs ".$user->name.",<br><br>Your account has been verified. Your account is ready to be used, kindly go to this <a href='".$link."'>link</a> to complete your profile.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
             mail($user->email,$subject,$msg,$headers);
-            
+
         }
 
         $user->active = $id2;
