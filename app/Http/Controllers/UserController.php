@@ -9090,13 +9090,14 @@ class UserController extends Controller
         $registration_fee = $this->gs->registration_fee;
 
         if ($registration_fee == '' || $registration_fee == 0) {
+            
             $registration_fee = "0.01";
-        } else {
 
+        } else {
+            
             $registration_fee = number_format((float)$registration_fee, 2, '.', '');
 
         }
-
 
         $consumerName = $input['full_name'];
         $current_date = date("Y-m-d");
@@ -9104,6 +9105,7 @@ class UserController extends Controller
 
         $user = Auth::guard('user')->user();
         $user_id = Auth::guard('user')->user()->id;
+        $role_id = $user->role_id;
         $api_key = Generalsetting::findOrFail(1);
         $mollie = new \Mollie\Api\MollieApiClient();
         $mollie->setApiKey($api_key->mollie);
@@ -9132,7 +9134,7 @@ class UserController extends Controller
                 "customer_id" => $customer->id,
                 "consumer_name" => $consumerName,
                 "user_id" => $user_id,
-
+                "role_id" => $role_id
             ],
         ]);
 

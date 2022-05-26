@@ -41,9 +41,17 @@ class UserLoginController extends Controller
             }
             else
             {
-                Auth::guard('user')->logout();
+              if(Auth::guard('user')->user()->verified == 0)
+              {
                 Session::flash('unsuccess',"You account is not verified by admin!");
-                return redirect()->back()->withInput($request->only('email'));
+              }
+              else
+              {
+                Session::flash('unsuccess',"You account is inactivated by admin!");
+              }
+                
+              Auth::guard('user')->logout();
+              return redirect()->back()->withInput($request->only('email'));
             }
 
         }

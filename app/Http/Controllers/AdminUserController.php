@@ -839,7 +839,7 @@ class AdminUserController extends Controller
         }
 
         $user->active = $id2;
-        $user->featured = $id2;
+        // $user->featured = $id2;
         $user->update();
         Session::flash('success', 'Status updated Successfully');
 

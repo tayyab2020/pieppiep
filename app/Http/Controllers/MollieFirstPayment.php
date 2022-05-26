@@ -31,6 +31,7 @@ class MollieFirstPayment extends Controller {
         $consumerName = $payment->metadata->consumer_name;
         $user_id = $payment->metadata->user_id;
         $status = $payment->status;
+        $role = $payment->metadata->role_id == 2 ? 'Retailer' : 'Supplier';
 
 
         if ($payment->isPaid()) {
@@ -38,10 +39,10 @@ class MollieFirstPayment extends Controller {
             $user = User::where('id','=',$user_id)->update(['mollie_customer_id' => $customerId, 'payment_id' => $request->id, 'payment_status' => $status, 'featured' => 1]);
 
             $headers =  'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
+            $headers .= 'From: Pieppiep <info@pieppiep.com>' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         	$subject = "Remaining Payment Received!";
-            $msg = "Dear Nordin Adoui, Recent Activity: Registration Fee has been received from a new handyman Mr/Mrs. ". $consumerName .". Kindly visit your admin panel in order to take action for status of this handyman in the handymen tab.";
+            $msg = "Dear Nordin Adoui, Recent Activity: Registration Fee has been received from a new ". $role ." Mr/Mrs. ". $consumerName .". Kindly visit your admin panel to view further details.";
             mail($sl->admin_email,$subject,$msg,$headers);
 
         }
