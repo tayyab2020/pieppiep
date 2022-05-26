@@ -251,7 +251,7 @@ class UserRegisterController extends Controller
             $input['featured'] = 0;
             $user->fill($input)->save();
 
-            $user->givePermissionTo('show-dashboard');
+            $user->givePermissionTo(['show-dashboard','user-complete-profile']);
 
             /*Auth::guard('user')->login($user);*/
 
