@@ -25,9 +25,7 @@ class UserRegisterController extends Controller
 
     public function __construct()
     {
-      $this->middleware('guest:user', ['except' => ['logout']]);
-
-
+        // $this->middleware('guest:user', ['except' => ['logout']]);
 
         if (!empty($_SERVER['HTTP_CLIENT_IP']))
         {
@@ -43,7 +41,6 @@ class UserRegisterController extends Controller
         {
             $ip_address = $_SERVER['REMOTE_ADDR'];
         }
-
 
 
         $language = user_languages::where('ip','=',$ip_address)->first();
@@ -80,15 +77,14 @@ class UserRegisterController extends Controller
 
  	public function showRegisterForm()
     {
-
-      return view('user.register');
+        return view('user.register');
     }
 
     public function showHandymanRegisterForm()
     {
         $terms = terms_conditions::where('role',1)->first();
 
-      return view('user.handyman_register',compact('terms'));
+        return view('user.handyman_register',compact('terms'));
     }
 
     public function register(Request $request)
@@ -283,7 +279,7 @@ class UserRegisterController extends Controller
             $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. We will be reviewing your information within 24 hours. We will inform you when you can login. Thanks for your cooperation.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
             mail($user_email,$subject,$msg,$headers);
 
-            Session::flash('message', __('text.Your account has been created. Kindly wait for verification email.'));
+            Session::flash('success', __('text.Your account has been created. Kindly wait for verification email.'));
             return redirect()->back();
 
         }

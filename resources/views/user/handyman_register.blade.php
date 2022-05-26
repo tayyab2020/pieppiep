@@ -1,10 +1,6 @@
 @extends('layouts.front_new')
 @section('content')
 
-@if (Session::has('message'))
-   <div class="alert alert-danger" style="font-size: 20px;margin-top: 30px;text-align: center;">{{ Session::get('message') }}</div>
-@endif
-
 @include('styles.design')
 
 <style>
@@ -66,6 +62,12 @@
   }
 
 </style>
+
+@if(Session::has('message'))
+   <div class="alert alert-danger" style="font-size: 20px;margin: 0;text-align: center;position: relative;top: 100px;">{{ Session::get('message') }}</div>
+@elseif(Session::has('success'))
+  <div class="alert alert-success" style="font-size: 20px;margin: 0;text-align: center;position: relative;top: 100px;">{{ Session::get('success') }}</div>
+@endif
 
 <section style="padding: 200px 0 0 0;" class="login-area">
 
