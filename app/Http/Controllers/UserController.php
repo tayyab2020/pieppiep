@@ -883,8 +883,10 @@ class UserController extends Controller
         $retailer_name = $retailer->name;
         $supplier = User::where('id',$request->supplier_id)->first();
         $supplier_email = $supplier->email;
+        $supplier_email = 'tayyabkhurram62@gmail.com';
 
         $check = retailers_requests::where('retailer_id',$user_id)->where('supplier_id',$request->supplier_id)->first();
+        $link = url('/') . '/aanbieder/retailers';
 
         if($check)
         {
@@ -892,7 +894,7 @@ class UserController extends Controller
                 $message->to($supplier_email)
                     ->from('info@vloerofferte.nl')
                     ->subject('Retailer Request!')
-                    ->setBody("Retailer Mr/Mrs " . $retailer_name . " request for the client role is pending for your further action. Visit your dashboard panel to view details.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("Retailer Mr/Mrs " . $retailer_name . " request for the client role is pending for your further action. Click <a href='" . $link . "'>here</a> to accept or ignore his request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
             });
         }
         else
@@ -907,7 +909,7 @@ class UserController extends Controller
                 $message->to($supplier_email)
                     ->from('info@vloerofferte.nl')
                     ->subject('Retailer Request!')
-                    ->setBody("A retailer Mr/Mrs " . $retailer_name . " submitted request to become your client. Visit your dashboard panel to view details.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("A retailer Mr/Mrs " . $retailer_name . " submitted a client request. Click <a href='" . $link . "'>here</a> to accept or ignore his request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
             });
         }
 
