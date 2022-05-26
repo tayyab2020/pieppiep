@@ -452,31 +452,31 @@
   Route::get('/send-quote-request/{id}', 'AdminUserController@SendQuoteRequest');
   Route::post('/send-quote-request', 'AdminUserController@SendQuoteRequestHandymen')->name('send-quote-request');
   Route::post('/approve-handyman-quotations', 'AdminUserController@ApproveHandymanQuotations')->name('approve-handyman-quotations');
-  Route::get('/handymans', 'AdminUserController@index')->name('admin-user-index');
+  Route::get('/retailers', 'AdminUserController@index')->name('admin-user-index');
   Route::get('/suppliers', 'AdminUserController@Suppliers')->name('admin-supplier-index');
   Route::get('/clients', 'AdminUserController@Clients')->name('admin-user-client');
   Route::get('/bookings', 'AdminUserController@UserBookings')->name('admin-user-bookings');
   Route::get('/user-requests', 'AdminUserController@UserRequests')->name('admin-user-requests');
   Route::get('/request/{id}', 'AdminUserController@UserRequest')->name('admin-user-request');
   Route::post('/request-update', 'AdminUserController@RequestProfileUpdate')->name('request-profile-update');
-  Route::get('/handymans/create', 'AdminUserController@create')->name('admin-user-create');
-  Route::post('/handymans/create', 'AdminUserController@store')->name('admin-user-store');
-  Route::get('/handymans/edit/{id}', 'AdminUserController@edit')->name('admin-user-edit');
-  Route::post('/handymans/update/{id}', 'AdminUserController@update')->name('admin-user-update');
-  Route::post('/handymans/insurance-update/{id}', 'AdminUserController@InsuranceUpdate')->name('admin-user-insurance-update');
-  Route::get('/handymans/delete/{id}', 'AdminUserController@destroy')->name('admin-user-delete');
-  Route::get('/handymans/insurance/{id}', 'AdminUserController@Insurance')->name('admin-user-insurance');
+  Route::get('/retailers/create', 'AdminUserController@create')->name('admin-user-create');
+  Route::post('/retailers/create', 'AdminUserController@store')->name('admin-user-store');
+  Route::get('/retailers/edit/{id}', 'AdminUserController@edit')->name('admin-user-edit');
+  Route::post('/retailers/update/{id}', 'AdminUserController@update')->name('admin-user-update');
+  Route::post('/retailers/insurance-update/{id}', 'AdminUserController@InsuranceUpdate')->name('admin-user-insurance-update');
+  Route::get('/retailers/delete/{id}', 'AdminUserController@destroy')->name('admin-user-delete');
+  Route::get('/retailers/insurance/{id}', 'AdminUserController@Insurance')->name('admin-user-insurance');
 
   Route::get('/suppliers/create', 'AdminUserController@createSupplier')->name('admin-supplier-create');
   Route::get('/suppliers/edit/{id}', 'AdminUserController@editSupplier')->name('admin-supplier-edit');
   Route::get('/suppliers/details/{id}', 'AdminUserController@DetailsSupplier')->name('admin-supplier-details');
   Route::get('/suppliers/products/{id}', 'ProductController@ProductsSupplier')->name('supplier-products');
 
-  Route::get('/handymans/details/{id}', 'AdminUserController@Details')->name('admin-user-details');
+  Route::get('/retailers/details/{id}', 'AdminUserController@Details')->name('admin-user-details');
 
-  Route::get('/handymans/client-details/{id}', 'AdminUserController@ClientDetails')->name('admin-user-client-details');
+  Route::get('/retailers/client-details/{id}', 'AdminUserController@ClientDetails')->name('admin-user-client-details');
 
-  Route::get('/handymans/status/{id1}/{id2}', 'AdminUserController@status')->name('admin-user-st');
+  Route::get('/retailers/status/{id1}/{id2}', 'AdminUserController@status')->name('admin-user-st');
 
   /*Route::get('/categories', 'CategoryController@index')->name('admin-cat-index');
   Route::get('/category/create', 'CategoryController@create')->name('admin-cat-create');

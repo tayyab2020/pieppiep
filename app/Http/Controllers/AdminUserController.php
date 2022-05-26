@@ -290,14 +290,14 @@ class AdminUserController extends Controller
 
     public function index()
     {
-        $users = User::where('role_id','=',2)->orderBy('created_at','desc')->get();
+        $users = User::where('role_id','=',2)->where('main_id',NULL)->orderBy('created_at','desc')->get();
 
         return view('admin.user.index',compact('users'));
     }
 
     public function Suppliers()
     {
-        $users = User::where('role_id','=',4)->orderBy('created_at','desc')->get();
+        $users = User::where('role_id','=',4)->where('main_id',NULL)->orderBy('created_at','desc')->get();
         $products = array();
 
         foreach ($users as $key) {

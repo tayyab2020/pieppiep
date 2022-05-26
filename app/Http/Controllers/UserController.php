@@ -2526,6 +2526,7 @@ class UserController extends Controller
             $user->active = 1;
             $user->is_featured = 1;
             $user->featured = 1;
+            $user->verified = 1;
             $user->save();
 
             $check_permission = Permission::where('name','=','show-dashboard')->first();
