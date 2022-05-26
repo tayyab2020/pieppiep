@@ -890,7 +890,7 @@ class UserController extends Controller
 
         if($check)
         {
-            \Mail::send(array(), array(), function ($message) use ($supplier_email, $retailer_name) {
+            \Mail::send(array(), array(), function ($message) use ($supplier_email, $retailer_name, $link) {
                 $message->to($supplier_email)
                     ->from('info@vloerofferte.nl')
                     ->subject('Retailer Request!')
@@ -905,7 +905,7 @@ class UserController extends Controller
             $post->status = 0;
             $post->save();
 
-            \Mail::send(array(), array(), function ($message) use ($supplier_email, $retailer_name) {
+            \Mail::send(array(), array(), function ($message) use ($supplier_email, $retailer_name, $link) {
                 $message->to($supplier_email)
                     ->from('info@vloerofferte.nl')
                     ->subject('Retailer Request!')
