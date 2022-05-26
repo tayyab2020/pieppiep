@@ -883,7 +883,6 @@ class UserController extends Controller
         $retailer_name = $retailer->name;
         $supplier = User::where('id',$request->supplier_id)->first();
         $supplier_email = $supplier->email;
-        $supplier_email = 'tayyabkhurram62@gmail.com';
 
         $check = retailers_requests::where('retailer_id',$user_id)->where('supplier_id',$request->supplier_id)->first();
         $link = url('/') . '/aanbieder/retailers';
