@@ -2350,6 +2350,7 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
+        $company = $user->company_name;
         $role_id = $user->role_id;
         $company_name = $user->company_name;
         $main_id = $user->main_id;
@@ -2522,9 +2523,9 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->main_id = $user_id;
             $user->status = 1;
-            $user->active = 0;
+            $user->active = 1;
             $user->is_featured = 1;
-            $user->featured = 0;
+            $user->featured = 1;
             $user->save();
 
             $check_permission = Permission::where('name','=','show-dashboard')->first();
@@ -2538,6 +2539,13 @@ class UserController extends Controller
                 Permission::create(['guard_name' => 'user', 'name' => 'show-dashboard']);
                 $user->givePermissionTo('show-dashboard');
             }
+
+            $headers =  'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'From: Pieppiep <info@pieppiep.com>' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $subject = "Account Created!";
+            $msg = "Dear Mr/Mrs ".$request->name.",<br><br>Your company <b>".$company_name."</b> has created an employee account for you. Here is your username and password <br>Username: ".$request->email."<br>Password: ".$request->password."<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
+            mail($request->email,$subject,$msg,$headers);
 
             Session::flash('success', 'Employee created successfully!');
             return redirect()->route('employees');
