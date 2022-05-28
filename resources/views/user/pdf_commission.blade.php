@@ -63,7 +63,7 @@
                                 <table class="table" style="border: 1px solid #e5e5e5;">
                                     <thead>
                                     <tr>
-                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Costs')}}</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Cost')}}</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Amount')}}</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">{{__('text.VAT')}} %</th>
                                         <th class="border-0 text-uppercase small font-weight-bold">{{__('text.VAT')}}</th>
@@ -189,6 +189,11 @@
 
 
     <style type="text/css">
+
+        body
+        {
+            background-color: #ffffff;
+        }
 
         @media (max-width: 768px) {
 

@@ -126,7 +126,7 @@ class ProductController extends Controller
         {
             if($user->role_id == 4)
             {
-                $cats = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('products.user_id',$user_id)->orderBy('products.id','desc')->select('products.*','categories.cat_name as category','brands.cat_name as brand','models.cat_name as model')->get();
+                $cats = Products::leftjoin('categories as t1','t1.id','=','products.category_id')->leftjoin('categories as t2','t2.id','=','products.sub_category_id')->leftjoin('brands','brands.id','=','products.brand_id')->leftjoin('models','models.id','=','products.model_id')->where('products.user_id',$user_id)->orderBy('products.id','desc')->select('products.*','t1.cat_name as category','t2.cat_name as sub_category','brands.cat_name as brand','models.cat_name as model')->get();
 
                 return view('admin.product.index',compact('cats'));
             }

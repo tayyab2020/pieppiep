@@ -20,6 +20,7 @@ use App\user_languages;
 use Auth;
 use App\how_it_works;
 use App\reasons_to_book;
+use App\retailers_requests;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -92,6 +93,9 @@ class AppServiceProvider extends ServiceProvider
 
                     if($user_role == 4)
                     {
+                        $no_retailers = retailers_requests::where('supplier_id', $user_id)->where('status',0)->get();
+                        $settings->with('no_retailers', $no_retailers);
+
                         $main_id = $user->main_id;
 
                         if($main_id)

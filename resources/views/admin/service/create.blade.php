@@ -141,6 +141,16 @@
                                             </div>
 
                                             <div class="form-group">
+                                                <label class="control-label col-sm-4" for="blood_group_slug">Show in vloerofferte?</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" id="show_vloerofferte" name="show_vloerofferte">
+                                                        <option {{isset($cats) && $cats->show_vloerofferte == 0 ? 'selected' : null}} value="0">No</option>
+                                                        <option {{isset($cats) && $cats->show_vloerofferte == 1 ? 'selected' : null}} value="1">Yes</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
                                                 <label class="control-label col-sm-4" for="service_description">Service Description*</label>
                                                 <div class="col-sm-6">
                                                     <textarea class="form-control" name="description" id="service_description" rows="5" style="resize: vertical;" placeholder="Enter Service Description">{{isset($cats) ? $cats->description : null}}</textarea>

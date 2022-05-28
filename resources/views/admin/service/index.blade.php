@@ -53,6 +53,12 @@
                                                             aria-controls="product-table_wrapper" rowspan="1"
                                                             colspan="1" style="width: 144px;" aria-sort="ascending"
                                                             aria-label="Blood Group Name: activate to sort column descending">
+                                                            Show in vloerofferte
+                                                        </th>
+                                                        <th class="sorting_asc" tabindex="0"
+                                                            aria-controls="product-table_wrapper" rowspan="1"
+                                                            colspan="1" style="width: 144px;" aria-sort="ascending"
+                                                            aria-label="Blood Group Name: activate to sort column descending">
                                                             Slug
                                                         </th>
                                                         <th class="sorting" tabindex="0"
@@ -73,6 +79,7 @@
                                                             </td>
                                                             <td>{{$cat->title}}</td>
                                                             <td>{!!$cat->description!!}</td>
+                                                            <td>{{$cat->show_vloerofferte ? 'Yes' : 'No'}}</td>
                                                             <td>{{$cat->slug}}</td>
                                                             <td>
 

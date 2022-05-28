@@ -1663,10 +1663,10 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav float-left menu">
-                <li class="item-6903"><a href="/nl/reeleezee/ondernemer">Ondernemer</a></li>
-                <li class="item-6925"><a href="/nl/reeleezee/accountancy">Accountancy</a></li>
-                <li class="item-6952"><a href="/nl/reeleezee/ondernemer/prijzen">Prijzen</a></li>
-                <li class="item-6967 deeper parent dropdown"><a href="/nl/reeleezee/contact" id="navbarDropdown-6967"
+                <li class="item-6903"><a href="#">Ondernemer</a></li>
+                <li class="item-6925"><a href="#">Accountancy</a></li>
+                <li class="item-6952"><a href="#">Prijzen</a></li>
+                <li class="item-6967 deeper parent dropdown"><a href="#" id="navbarDropdown-6967"
                                                                 role="button" data-toggle="dropdown"
                                                                 aria-haspopup="true" aria-expanded="false">Services</a>
                     <div class="mainmenu-dropdown dropdown-menu" aria-labelledby="navbarDropdown-6967">
@@ -1676,10 +1676,10 @@
                                 <div class="col-xs-12 col-sm-9 col-menu">
                                     <div class="row">
                                         <ul class="col-xs-12 col-md-4 nav-child nav flex-column">
-                                            <li class="item-6968"><a href="/nl/reeleezee/contact">Contact</a></li>
-                                            <li class="item-6969"><a href="https://www.reeleezee.nl/kennisbank/">Kennisbank</a>
+                                            <li class="item-6968"><a href="#">Contact</a></li>
+                                            <li class="item-6969"><a href="#">Kennisbank</a>
                                             </li>
-                                            <li class="item-7061"><a href="/nl/reeleezee/ondernemer/vind-een-adviseur">Vind
+                                            <li class="item-7061"><a href="#">Vind
                                                     een adviseur</a></li>
                                         </ul>
                                     </div>

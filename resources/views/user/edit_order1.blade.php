@@ -99,8 +99,14 @@
 																<div class="headings" style="width: 35%;">{{__('text.Product')}}</div>
 																<div class="headings" style="width: 18%;">{{__('text.Qty')}}</div>
 																<div class="headings" style="width: 18%;">{{__('text.€ Art.')}}</div>
-																<div class="headings" style="width: 13%;">{{__('text.Discount')}}</div>
-																<div class="headings" style="width: 13%;"></div>
+
+																@if(Auth::guard('user')->user()->role_id == 2)
+
+																	<div class="headings" style="width: 13%;">{{__('text.Discount')}}</div>
+
+																@endif
+
+																<div class="headings" @if(Auth::guard('user')->user()->role_id == 2) style="width: 13%;" @else style="width: 26%;" @endif></div>
                                                             </div>
 
 															@foreach($invoice as $i => $item)
@@ -177,15 +183,19 @@
 																		</div>
 																	</div>
 
-																	<div class="content item8" style="width: 13%;">
+																	@if(Auth::guard('user')->user()->role_id == 2)
 
-																		<label class="content-label">Discount</label>
+																		<div class="content item8" style="width: 13%;">
 
-																		<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
-																		<input type="hidden" value="{{$item->qty != 0 ? $item->total_discount/$item->qty : 0}}" class="total_discount_old">
-																	</div>
+																			<label class="content-label">Discount</label>
 
-																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
+																			<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
+																			<input type="hidden" value="{{$item->qty != 0 ? $item->total_discount/$item->qty : 0}}" class="total_discount_old">
+																		</div>
+
+																	@endif
+
+																	<div class="content item10 last-content" id="next-row-td" @if(Auth::guard('user')->user()->role_id == 2) style="padding: 0;width: 13%;" @else style="padding: 0;width: 26%;" @endif>
 
 																		@if(Auth::guard('user')->user()->role_id == 2 && !$check->order_sent && !$check->processing && !$check->finished)
 

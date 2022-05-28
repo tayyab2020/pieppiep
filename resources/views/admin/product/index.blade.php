@@ -89,7 +89,7 @@
                                                                         aria-controls="product-table_wrapper" rowspan="1"
                                                                         colspan="1" style="width: 144px;" aria-sort="ascending"
                                                                         aria-label="Blood Group Name: activate to sort column descending">
-                                                                        {{__('text.Description')}}
+                                                                        {{__('text.Sub Category')}}
                                                                     </th>
 
                                                                     <th class="sorting_asc" tabindex="0"
@@ -169,7 +169,7 @@
 
                                                                     @if(auth()->user()->role_id == 4)
 
-                                                                        <td>{!!$cat->description!!}</td>
+                                                                        <td>{{$cat->sub_category}}</td>
                                                                         <td>{{$cat->margin}}</td>
 
                                                                     @else

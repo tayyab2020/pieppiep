@@ -490,4 +490,8 @@ return [
     'Send Negative Invoice' => 'Send Negative Invoice',
     'Signup' => 'Signup',
     'Your account has been created. Kindly wait for verification email.' => 'Your account has been created. Kindly wait for verification email.',
+    'Sub Category' => 'Sub Category',
+    'Brands' => 'Brands',
+    'Models' => 'Models',
+    'Types' => 'Types',
 ];
