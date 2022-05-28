@@ -42,7 +42,7 @@
         margin-right: 0px;
         margin-bottom: 0px;
         margin-left: 0px;
-        background-image: url(/images/reeleezee/headers/header-homepage_.jpg);
+        background-image: url(/images/pieppiep/headers/header-homepage_.jpg);
         background-repeat: no-repeat;
         background-size: cover;
         background-attachment: inherit;
@@ -1663,10 +1663,10 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav float-left menu">
-                <li class="item-6903"><a href="#">Ondernemer</a></li>
-                <li class="item-6925"><a href="#">Accountancy</a></li>
+                <li class="item-6903"><a href="#">Retailer</a></li>
+                <li class="item-6925"><a href="#">Leverancier</a></li>
                 <li class="item-6952"><a href="#">Prijzen</a></li>
-                <li class="item-6967 deeper parent dropdown"><a href="#" id="navbarDropdown-6967"
+                <li class="item-6967 deeper parent dropdown"><a href="/nl/pieppiep/contact" id="navbarDropdown-6967"
                                                                 role="button" data-toggle="dropdown"
                                                                 aria-haspopup="true" aria-expanded="false">Services</a>
                     <div class="mainmenu-dropdown dropdown-menu" aria-labelledby="navbarDropdown-6967">
@@ -1676,10 +1676,10 @@
                                 <div class="col-xs-12 col-sm-9 col-menu">
                                     <div class="row">
                                         <ul class="col-xs-12 col-md-4 nav-child nav flex-column">
-                                            <li class="item-6968"><a href="#">Contact</a></li>
-                                            <li class="item-6969"><a href="#">Kennisbank</a>
+                                            <li class="item-6968"><a href="/nl/pieppiep/contact">Contact</a></li>
+                                            <li class="item-6969"><a href="https://www.pieppiep.nl/kennisbank/">Kennisbank</a>
                                             </li>
-                                            <li class="item-7061"><a href="#">Vind
+                                            <li class="item-7061"><a href="/nl/pieppiep/ondernemer/vind-een-adviseur">Vind
                                                     een adviseur</a></li>
                                         </ul>
                                     </div>
@@ -1738,7 +1738,7 @@
                 <div class="hidden-xs"  >
                     <ul>
                         <li><a href="tel:0201111111">020 - 1234 567</a></li>
-                        <li><a href="/nl/reeleezee/contact">Contactformulier</a></li>
+                        <li><a href="/nl/pieppiep/contact">Contactformulier</a></li>
                     </ul>
                 </div>
 
