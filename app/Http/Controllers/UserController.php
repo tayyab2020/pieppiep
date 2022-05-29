@@ -2734,7 +2734,7 @@ class UserController extends Controller
             $user = User::where('id',$main_id)->first();
         }
 
-        if($request->customer_type == 0)
+        if(isset($request->customer_type) && $request->customer_type == 0)
         {
             $data = new_quotations::leftjoin('quotes','quotes.id','=','new_quotations.quote_request_id')->where('new_quotations.id',$id)->select('new_quotations.*','quotes.quote_name as name','quotes.quote_email as email')->first();
         }

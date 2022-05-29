@@ -86,6 +86,7 @@ class CreateOrder implements ShouldQueue
         $sub_titles = $this->sub_titles;
         $date = $this->date;
         $client = $this->client;
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $client->id)->select('customers_details.*','users.email')->first();
         $user = $this->user;
         $request = $this->request;
         $request = (object) $request;
@@ -99,7 +100,7 @@ class CreateOrder implements ShouldQueue
 
         if($form_type == 1)
         {
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
         }
         else
         {

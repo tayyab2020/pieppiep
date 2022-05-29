@@ -208,435 +208,414 @@
 
                         @else
 
+                            <table style="display: table;width: 100%;">
+
+                                <thead>
+                                <tr>
+                                    <th style="width: 60% !important;font-size: 20px;font-weight: 500;">{{__('text.Description')}}</th>
+                                    <th style="width: 10% !important;font-size: 20px;font-weight: 500;text-align: center;">{{__('text.Qty')}}</th>
+
+                                    @if($role == 'supplier')
+
+                                        <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Delivery Date')}}</th>
+
+                                    @endif
+
+                                    @if($role == 'supplier2' || $role == 'order')
+
+                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Supplier')}}</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Order Number')}}</th>
+
+                                    @endif
+
+                                    @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+
+                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
+                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
+
+                                    @endif
+
+                                </tr>
+                                </thead>
+
+                            </table>
+
                             @foreach($request->products as $i => $key)
 
-                                <div class="row p-5" style="font-size: 15px;padding: 2rem !important;border-bottom: 2px solid black !important;">
-                                    <div class="col-md-12" style="padding: 0 !important;">
+                                <?php
 
-                                        @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+                                    $flag = 0;
 
-                                            <?php
+                                    if($role == 'order' || $role == 'supplier2' || $role == 'supplier3')
+                                        {
+                                            if(strpos($key, 'I') > -1 || strpos($key, 'S') > -1)
+                                                {
+                                                    $flag = 1;
+                                                }
+                                        }
 
-                                            if($form_type == 1)
-                                            {
-                                                $arb_discount = str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'));
-                                                $arb = $request->rate[$i];
-                                                $arb = number_format((float)($arb), 2, ',', '.');
-                                            }
-                                            else
-                                            {
-                                                $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
-                                                $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
-                                                $arb_price = number_format((float)($arb_price), 2, ',', '.');
-                                                $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
-                                                $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
-                                                $arb = $request->rate[$i] - $arb_discount;
-                                                $arb = number_format((float)($arb), 2, ',', '.');
-                                                $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
-                                                $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
-                                                $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
-                                                $total = $art + number_format((float)(str_replace(',', '.',$arb)), 2, '.', ',');
-                                                $art = number_format((float)($art), 2, ',', '.');
-                                                $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
-                                            }
+                                ?>
 
-                                            ?>
 
-                                        @endif
+                                    @if($flag == 0)
 
-                                        <table style="display: table;width: 100%;">
+                                        <div class="row p-5" style="font-size: 15px;padding: 2rem 0 !important;border-bottom: 2px solid black !important;margin: 0;">
+                                            <div class="col-md-12" style="padding: 0 !important;">
 
-                                            @if($role == 'order' || $role == 'supplier2' || $role == 'supplier3')
-
-                                                @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0)
-
-                                                    <thead>
-                                                    <tr>
-                                                        <th style="width: 60% !important;font-size: 20px;font-weight: 500;">{{__('text.Description')}}</th>
-                                                        <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
-
-                                                        @if($role == 'supplier')
-
-                                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Delivery Date')}}</th>
-
-                                                        @endif
-
-                                                        @if($role == 'supplier2')
-
-                                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Supplier')}}</th>
-                                                            <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Order Number')}}</th>
-
-                                                        @endif
-
-                                                        @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
-
-                                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
-                                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
-
-                                                        @endif
-
-                                                    </tr>
-                                                    </thead>
-
-                                                @endif
-
-                                            @else
-
-                                                <thead>
-                                                <tr>
-                                                    <th style="width: 60% !important;font-size: 20px;font-weight: 500;">{{__('text.Description')}}</th>
-                                                    <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
-
-                                                    @if($role == 'supplier')
-
-                                                        <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Delivery Date')}}</th>
-
-                                                    @endif
-
-                                                    @if($role == 'supplier2')
-
-                                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Supplier')}}</th>
-                                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Order Number')}}</th>
-
-                                                    @endif
-
-                                                    @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
-
-                                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
-                                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
-
-                                                    @endif
-
-                                                </tr>
-                                                </thead>
-
-                                            @endif
-
-                                            <tbody>
-
-                                            @if($role == 'order' || $role == 'supplier2' || $role == 'supplier3')
-
-                                                @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0)
-
-                                                    <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
-
-                                                    @foreach($calculator_row as $c => $cal)
-
-                                                        <?php
-
-                                                        $box_quantity = 'box_quantity'.$request->row_id[$i];
-
-                                                        ?>
-
-                                                        @if($request->$box_quantity[$c] || count($calculator_row) == 1)
-
-                                                            <tr>
-
-                                                                <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
-                                                                <td>{{count($calculator_row) == 1 ? $request->qty[$i] : str_replace('.', ',',$request->$box_quantity[$c])}}</td>
-
-                                                                @if($role == 'supplier2')
-
-                                                                    <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
-                                                                    <td>{{$order_numbers[$i]}}</td>
-
-                                                                @endif
-
-                                                            </tr>
-
-                                                        @endif
-
-                                                    @endforeach
-
-                                                @endif
-
-                                            @elseif($role == 'supplier' || $role == 'supplier1')
-
-                                                @foreach($calculator_rows[$i] as $c => $cal)
+                                                @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                                                     <?php
 
-                                                    $box_quantity = $cal->box_quantity;
+                                                    if($form_type == 1)
+                                                    {
+                                                        $arb_discount = str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'));
+                                                        $arb = $request->rate[$i];
+                                                        $arb = number_format((float)($arb), 2, ',', '.');
+                                                    }
+                                                    else
+                                                    {
+                                                        $arb_qty = $request->width[$i] == 0 ? 0 : (str_replace(',', '.',$request->width[$i])/100) * $request->qty[$i];
+                                                        $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
+                                                        $arb_price = number_format((float)($arb_price), 2, ',', '.');
+                                                        $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
+                                                        $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
+                                                        $arb = $request->rate[$i] - $arb_discount;
+                                                        $arb = number_format((float)($arb), 2, ',', '.');
+                                                        $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
+                                                        $art_labor_discount = str_replace(',', '.',$request->labor_impact[$i]) * ($request->labor_discount[$i] == 0 ? 0 : $request->labor_discount[$i]/100);
+                                                        $art = str_replace(',', '.',$request->labor_impact[$i]) - $art_labor_discount;
+                                                        $total = $art + number_format((float)(str_replace(',', '.',$arb)), 2, '.', ',');
+                                                        $art = number_format((float)($art), 2, ',', '.');
+                                                        $art_labor_discount = number_format((float)($art_labor_discount), 2, ',', '.');
+                                                    }
 
                                                     ?>
 
-                                                    @if($box_quantity || count($calculator_rows[$i]) == 1)
+                                                @endif
+
+                                                <table style="display: table;width: 100%;">
+
+                                                    <tbody>
+
+                                                    @if($role == 'order' || $role == 'supplier2' || $role == 'supplier3')
+
+                                                        <?php $calculator_row = 'calculator_row'.$request->row_id[$i]; $calculator_row = $request->$calculator_row; ?>
+
+                                                        @foreach($calculator_row as $c => $cal)
+
+                                                            <?php
+
+                                                            $box_quantity = 'box_quantity'.$request->row_id[$i];
+
+                                                            ?>
+
+                                                            @if($request->$box_quantity[$c] || count($calculator_row) == 1)
+
+                                                                <tr>
+
+                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                                    <td style="width: 10% !important;text-align: center;">{{count($calculator_row) == 1 ? $request->qty[$i] : str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+
+                                                                    @if($role == 'supplier2' || $role == 'order')
+
+                                                                        <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                                        <td>{{$order_numbers[$i]}}</td>
+
+                                                                    @endif
+
+                                                                </tr>
+
+                                                            @endif
+
+                                                        @endforeach
+
+                                                    @elseif($role == 'supplier' || $role == 'supplier1')
+
+                                                        @foreach($calculator_rows[$i] as $c => $cal)
+
+                                                            <?php
+
+                                                            $box_quantity = $cal->box_quantity;
+
+                                                            ?>
+
+                                                            @if($box_quantity || count($calculator_rows[$i]) == 1)
+
+                                                                <tr>
+
+                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                                    <td style="width: 10% !important;text-align: center;">{{count($calculator_rows[$i]) == 1 ? $request->qty[$i] : str_replace('.', ',',$box_quantity)}}</td>
+
+                                                                    @if($role == 'supplier')
+
+                                                                        <td style="width: 10% !important;">{{$request->delivery_date[$i]}}</td>
+
+                                                                    @endif
+
+                                                                </tr>
+
+                                                            @endif
+
+                                                        @endforeach
+
+                                                    @else
 
                                                         <tr>
 
-                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
-                                                            <td>{{count($calculator_rows[$i]) == 1 ? $request->qty[$i] : str_replace('.', ',',$box_quantity)}}</td>
+                                                            @if($form_type == 1)
 
-                                                            @if($role == 'supplier')
+                                                                @if(strpos($key, 'I') > -1 || (isset($key->item_id) && $key->item_id != 0))
 
-                                                                <td>{{$request->delivery_date[$i]}}</td>
+                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ' (Item)'}}</td>
+
+                                                                @elseif(strpos($key, 'S') > -1 || (isset($key->service_id) && $key->service_id != 0))
+
+                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ' (Service)'}}</td>
+
+                                                                @else
+
+                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+
+                                                                @endif
+
+                                                            @else
+
+                                                                <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
 
                                                             @endif
+
+                                                            <td style="font-size: 20px;width: 10% !important;text-align: center;">{{$request->negative_invoice ? '-' : null}} {{$request->qty[$i]}}</td>
+
+                                                            @if($role == 'supplier2')
+
+                                                                <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                                <td>{{$order_numbers[$i]}}</td>
+
+                                                            @endif
+
+                                                            <td style="font-size: 20px;text-align: center;width: 15% !important;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
+                                                            <td style="font-size: 20px;text-align: center;width: 15% !important;">{{$request->negative_invoice ? '-' : null}} {{$arb}}</td>
 
                                                         </tr>
 
                                                     @endif
 
-                                                @endforeach
+                                                    @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3' && $role != 'order')
 
-                                            @else
+                                                        @if($arb_discount != 0)
 
-                                                <tr>
-
-                                                    @if($form_type == 1)
-
-                                                        @if(strpos($key, 'I') > -1 || (isset($key->item_id) && $key->item_id != 0))
-
-                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Item)'}}</td>
-
-                                                        @elseif(strpos($key, 'S') > -1 || (isset($key->service_id) && $key->service_id != 0))
-
-                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ' (Service)'}}</td>
-
-                                                        @else
-
-                                                            <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                            <tr>
+                                                                <td style="font-size: 20px;padding: 5px 0;width: 60% !important;">Inclusief {{$request->negative_invoice ? '-' : null}} € {{$arb_discount}} korting</td>
+                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
+                                                            </tr>
 
                                                         @endif
 
-                                                    @else
+                                                    @endif
 
-                                                        <td style="font-size: 20px;padding: 5px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
+                                                    @if($form_type == 2)
+
+                                                        <tr>
+                                                            <td style="font-size: 20px;padding: 5px 0;width: 60% !important;">Installatie {{$product_titles[$i]}} per meter</td>
+                                                            <td style="font-size: 20px;padding: 5px 0;width: 10% !important;text-align: center;">{{$arb_qty}}</td>
+                                                            <td style="font-size: 20px;padding: 5px 0;text-align: center;width: 15% !important;">{{$arb_price}}</td>
+                                                            <td style="font-size: 20px;padding: 5px 0;text-align: center;width: 15% !important;">{{$art}}</td>
+                                                        </tr>
+
+                                                        @if($art_labor_discount != 0)
+
+                                                            <tr>
+                                                                <td style="font-size: 20px;padding: 5px 0;width: 60% !important;">Inclusief € {{$art_labor_discount}} korting</td>
+                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
+                                                            </tr>
+
+                                                        @endif
 
                                                     @endif
 
-                                                    <td style="font-size: 20px;padding: 5px;">{{$request->negative_invoice ? '-' : null}} {{$request->qty[$i]}}</td>
+                                                    </tbody>
 
-                                                    @if($role == 'supplier2')
+                                                </table>
 
-                                                        <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
-                                                        <td>{{$order_numbers[$i]}}</td>
+                                                @if($form_type == 2)
 
-                                                    @endif
+                                                    <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{__('text.Features')}}</h2>
 
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} {{$arb}}</td>
+                                                    <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
 
-                                                </tr>
+                                                        <tbody>
 
-                                            @endif
+                                                        <?php
 
-                                            @if($role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3' && $role != 'order')
+                                                        if($role == 'retailer' || $role == 'invoice1' || $role == 'order') {
 
-                                                @if($arb_discount != 0)
+                                                            $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = isset($request->$childsafe_answer) ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
 
-                                                    <tr>
-                                                        <td style="font-size: 20px;padding: 5px;">Inclusief {{$request->negative_invoice ? '-' : null}} € {{$arb_discount}} korting</td>
-                                                        <td style="font-size: 20px;padding: 5px;"></td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                    </tr>
+                                                        }
+                                                        else {
 
-                                                @endif
+                                                            $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? __('text.Is childsafe').'<br>' : __('text.Not childsafe').'<br>') : null;
 
-                                            @endif
+                                                        }
 
-                                            @if($form_type == 2)
+                                                        if($childsafe_answer)
+                                                        {
+                                                            $data = array (
+                                                                'childsafe' => 1,
+                                                                'childsafe_answer' => $childsafe_answer,
+                                                            );
+                                                            array_push($feature_sub_titles[$i],$data);
+                                                        }
 
-                                                <tr>
-                                                    <td style="font-size: 20px;padding: 5px;">Installatie {{$product_titles[$i]}} per meter</td>
-                                                    <td style="font-size: 20px;padding: 5px;">{{$arb_qty}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$arb_price}}</td>
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$art}}</td>
-                                                </tr>
+                                                        $cols = array_chunk($feature_sub_titles[$i], 3);
+                                                        ?>
 
-                                                @if($art_labor_discount != 0)
+                                                        <?php $d = 1; ?>
 
-                                                    <tr>
-                                                        <td style="font-size: 20px;padding: 5px;">Inclusief € {{$art_labor_discount}} korting</td>
-                                                        <td style="font-size: 20px;padding: 5px;"></td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                        <td style="font-size: 20px;padding: 5px;text-align: center;"></td>
-                                                    </tr>
+                                                        @foreach($cols as $f => $col)
 
-                                                @endif
+                                                            <tr>
 
-                                            @endif
+                                                                @foreach($col as $x => $feature)
 
-                                            </tbody>
+                                                                    @if($role == 'retailer' || $role == 'invoice1' || $role == 'order')
 
-                                        </table>
+                                                                        <?php
 
-                                        @if($form_type == 2)
+                                                                        if(!$feature)
+                                                                        {
+                                                                            if(isset($sub_titles[$i]->code))
+                                                                            {
+                                                                                $string = __('text.Ladderband').': ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                $string = 'Ladderband: No';
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if($feature['childsafe'])
+                                                                            {
+                                                                                $string = __('text.Childsafe').': ' . $feature['childsafe_answer'];
+                                                                            }
+                                                                            else {
+                                                                                $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
+                                                                                $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null;
+                                                                                $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
+                                                                                /*$string = substr($string, 4);*/
+                                                                            }
+                                                                        }
 
-                                            <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{__('text.Features')}}</h2>
+                                                                        ?>
 
-                                            <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
+                                                                    @else
 
-                                                <tbody>
+                                                                        <?php
 
-                                                <?php
+                                                                        if(!$feature)
+                                                                        {
+                                                                            if(isset($sub_titles[$i]->code))
+                                                                            {
+                                                                                $string = __('text.Ladderband').': ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                $string = __('text.Ladderband').': No';
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if($feature['childsafe'])
+                                                                            {
+                                                                                $string = __('text.Childsafe').': ' . $feature['childsafe_answer'];
+                                                                            }
+                                                                            else {
 
-                                                if($role == 'retailer' || $role == 'invoice1' || $role == 'order') {
+                                                                                $comment = isset($comments[$i][$d-1]) ? ($comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null) : null;
+                                                                                $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
+                                                                                /*$string = substr($string, 4);*/
 
-                                                    $childsafe_answer = 'childsafe_answer'.$request->row_id[$i]; $childsafe_answer = isset($request->$childsafe_answer) ? ($request->$childsafe_answer == 1 || $request->$childsafe_answer == 3 ? 'Is childsafe'.'<br>' : 'Not childsafe'.'<br>') : null;
+                                                                            }
+                                                                        }
 
-                                                }
-                                                else {
+                                                                        ?>
 
-                                                    $childsafe_answer = $key->childsafe_answer != 0 ? ($key->childsafe_answer == 1 || $key->childsafe_answer == 3 ? __('text.Is childsafe').'<br>' : __('text.Not childsafe').'<br>') : null;
+                                                                    @endif
 
-                                                }
+                                                                    <td style="text-align: left !important;">{!! $string !!}</td>
 
-                                                if($childsafe_answer)
-                                                {
-                                                    $data = array (
-                                                        'childsafe' => 1,
-                                                        'childsafe_answer' => $childsafe_answer,
-                                                    );
-                                                    array_push($feature_sub_titles[$i],$data);
-                                                }
+                                                                    @if(count($feature_sub_titles[$i]) == $d)
 
-                                                $cols = array_chunk($feature_sub_titles[$i], 3);
-                                                ?>
+                                                                        <?php $rem = 3 - ($x+1); ?>
 
-                                                <?php $d = 1; ?>
+                                                                    @else
 
-                                                @foreach($cols as $f => $col)
+                                                                        <?php $rem = 0; ?>
 
-                                                    <tr>
+                                                                    @endif
 
-                                                        @foreach($col as $x => $feature)
+                                                                    @for($p = 0;$p < $rem;$p++)
 
-                                                            @if($role == 'retailer' || $role == 'invoice1' || $role == 'order')
+                                                                        <td></td>
 
-                                                                <?php
+                                                                    @endfor
 
-                                                                if(!$feature)
-                                                                {
-                                                                    if(isset($sub_titles[$i]->code))
-                                                                    {
-                                                                        $string = __('text.Ladderband').': ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        $string = 'Ladderband: No';
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    if($feature['childsafe'])
-                                                                    {
-                                                                        $string = __('text.Childsafe').': ' . $feature['childsafe_answer'];
-                                                                    }
-                                                                    else {
-                                                                        $comment = 'comment-'.$request->row_id[$i].'-'.$feature->f_id;
-                                                                        $comment = isset($request->$comment) ? ($request->$comment ? ', '.$request->$comment : null) : null;
-                                                                        $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
-                                                                        /*$string = substr($string, 4);*/
-                                                                    }
-                                                                }
+                                                                    <?php $d = $d + 1; ?>
 
-                                                                ?>
+                                                                @endforeach
 
-                                                            @else
-
-                                                                <?php
-
-                                                                if(!$feature)
-                                                                {
-                                                                    if(isset($sub_titles[$i]->code))
-                                                                    {
-                                                                        $string = __('text.Ladderband').': ' . $sub_titles[$i]->code . ', ' . $sub_titles[$i]->size;
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        $string = __('text.Ladderband').': No';
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    if($feature['childsafe'])
-                                                                    {
-                                                                        $string = __('text.Childsafe').': ' . $feature['childsafe_answer'];
-                                                                    }
-                                                                    else {
-
-                                                                        $comment = isset($comments[$i][$d-1]) ? ($comments[$i][$d-1] ? ', '.$comments[$i][$d-1] : null) : null;
-                                                                        $string = $feature->main_title.": ".preg_replace("/\([^)]+\)/","",$feature->title).$comment;
-                                                                        /*$string = substr($string, 4);*/
-
-                                                                    }
-                                                                }
-
-                                                                ?>
-
-                                                            @endif
-
-                                                            <td style="text-align: left !important;">{!! $string !!}</td>
-
-                                                            @if(count($feature_sub_titles[$i]) == $d)
-
-                                                                <?php $rem = 3 - ($x+1); ?>
-
-                                                            @else
-
-                                                                <?php $rem = 0; ?>
-
-                                                            @endif
-
-                                                            @for($p = 0;$p < $rem;$p++)
-
-                                                                <td></td>
-
-                                                            @endfor
-
-                                                            <?php $d = $d + 1; ?>
+                                                            </tr>
 
                                                         @endforeach
 
+                                                        </tbody>
+                                                    </table>
+
+                                            @endif
+
+                                            <!-- @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+
+                                                <table style="display: table;width: 100%;margin-top: 30px;">
+
+                                                    <thead>
+                                                    <tr>
+
+@if($request->total_discount[$i] != 0)
+
+                                                    <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
+
+@endif
+
+                                                        <th style="width: 20% !important;font-size: 20px;font-weight: 500;text-align: center;">Exclusief BTW</th>
+                                                        <th style="width: 25% !important;font-size: 20px;text-align: center;font-weight: 500;">BTW</th>
+                                                        <th style="width: 35% !important;font-size: 20px;text-align: right;">Bedrag inc. btw</th>
+
                                                     </tr>
+                                                    </thead>
 
-                                                @endforeach
+                                                    <tbody>
 
-                                                </tbody>
-                                            </table>
+                                                    <tr>
 
-                                        @endif
+<?php
+                                                $ex_vat = ($request->rate[$i]/121)*100;
+                                                $vat = $request->rate[$i] - $ex_vat;
+                                                $vat = number_format((float)($vat), 2, ',', '.');
+                                                $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
+                                                ?>
 
-                                        <!-- @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
+                                                @if($request->total_discount[$i] != 0)
 
-                                            <table style="display: table;width: 100%;margin-top: 30px;">
-
-                                                <thead>
-                                                <tr>
-
-                                                    @if($request->total_discount[$i] != 0)
-
-                                                        <th style="width: 20% !important;font-size: 20px;">Totaal korting</th>
+                                                    <td style="font-size: 20px;padding: 5px;">{{$request->negative_invoice ? '-' : null}} € {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
 
                                                     @endif
 
-                                                    <th style="width: 20% !important;font-size: 20px;font-weight: 500;text-align: center;">Exclusief BTW</th>
-                                                    <th style="width: 25% !important;font-size: 20px;text-align: center;font-weight: 500;">BTW</th>
-                                                    <th style="width: 35% !important;font-size: 20px;text-align: right;">Bedrag inc. btw</th>
-
-                                                </tr>
-                                                </thead>
-
-                                                <tbody>
-
-                                                <tr>
-
-                                                    <?php
-                                                    $ex_vat = ($request->rate[$i]/121)*100;
-                                                    $vat = $request->rate[$i] - $ex_vat;
-                                                    $vat = number_format((float)($vat), 2, ',', '.');
-                                                    $ex_vat = number_format((float)($ex_vat), 2, ',', '.');
-                                                    ?>
-
-                                                    @if($request->total_discount[$i] != 0)
-
-                                                        <td style="font-size: 20px;padding: 5px;">{{$request->negative_invoice ? '-' : null}} € {{str_replace('-', '',number_format((float)(str_replace(',', '.',$request->total_discount[$i])), 2, ',', '.'))}}</td>
-
-                                                    @endif
-
-                                                    <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$ex_vat}}</td>
+                                                        <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$ex_vat}}</td>
                                                     <td style="font-size: 20px;padding: 5px;text-align: center;">{{$request->negative_invoice ? '-' : null}} € {{$vat}}</td>
                                                     <td style="font-size: 20px;padding: 5px;text-align: right;">{{$request->negative_invoice ? '-' : null}} € {{$form_type == 1 ? number_format((float)($request->rate[$i]), 2, ',', '.') : $total}}</td>
 
@@ -648,8 +627,10 @@
 
                                         @endif -->
 
-                                    </div>
-                                </div>
+                                            </div>
+                                        </div>
+
+                                    @endif
 
                             @endforeach
 

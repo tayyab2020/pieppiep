@@ -3043,7 +3043,11 @@
 						}
 
 						price = parseFloat(price).toFixed(2);
-						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+
+						if(qty != 0)
+						{
+							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+						}
 
 					}
 					else

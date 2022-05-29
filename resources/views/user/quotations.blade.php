@@ -495,7 +495,7 @@
 
                                                                             @else
 
-                                                                                @if(!$key->retailer_delivered)
+                                                                                @if($key->received && !$key->retailer_delivered)
 
                                                                                     <li><a href="{{ url('/aanbieder/retailer-mark-delivered/'.$key->invoice_id) }}">{{__('text.Mark as delivered')}}</a></li>
 
