@@ -5992,7 +5992,7 @@ class UserController extends Controller
         $user_id = $user->id;
         $retailer_company = $user->company_name;
 
-        $data = new_quotations::where('id',$id)->where('creator_id', $user_id)->where('delivered',1)->first();
+        $data = new_quotations::where('id',$id)->where('creator_id', $user_id)->first();
 
         if($data)
         {
