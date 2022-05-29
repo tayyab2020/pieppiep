@@ -33,9 +33,9 @@
 
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">@if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations' || Route::currentRouteName() == 'client-custom-quotations') {{__('text.Quotation Number')}} @else {{__('text.Invoice Number')}} @endif</th>
 
-                                                        @if(Route::currentRouteName() != 'client-custom-quotations' && Route::currentRouteName() != 'client-new-quotations')
+                                                        @if(Route::currentRouteName() != 'client-custom-quotations')
 
-                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending" id="photo">{{__('text.Request Number')}}</th>
+                                                            <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 239px;" aria-sort="ascending" aria-label="Donor's Photo: activate to sort column descending" id="photo">{{__('text.Request Number')}}</th>
 
                                                         @endif
 
@@ -49,17 +49,13 @@
 
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Current Stage')}}</th>
 
-                                                        @if(Route::currentRouteName() != 'client-new-quotations')
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Accepted Date')}}</th>
 
-                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Accepted Date')}}</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Delivery Date')}}</th>
 
-                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Delivery Date')}}</th>
+                                                        @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations')
 
-                                                        @endif
-
-                                                        @if(Route::currentRouteName() == 'client-quotations')
-
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Time Remaining')}}</th>
+                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Time Remaining')}}</th>
 
                                                         @endif
 
@@ -77,17 +73,34 @@
 
                                                             <td>{{$key->invoice_id}}</td>
 
-                                                            @if(Route::currentRouteName() == 'client-custom-quotations' || Route::currentRouteName() == 'client-new-quotations')
+                                                            @if(Route::currentRouteName() == 'client-custom-quotations')
 
                                                                 <td><a href="{{ url('/aanbieder/aangepaste-offerte/'.$key->invoice_id) }}">QUO# {{$key->quotation_invoice_number}}</a></td>
 
                                                             @else
 
-                                                                <td><a href="{{ url('/aanbieder/offerte/'.$key->invoice_id) }}">@if(Route::currentRouteName() == 'client-quotations') QUO# @else INV# @endif{{$key->quotation_invoice_number}}</a></td>
+                                                                <td>
+                                                                    @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations')
 
-                                                                <?php $requested_quote_number = $key->quote_number; ?>
+                                                                        <a href="{{ url('/aanbieder/offerte/'.$key->invoice_id) }}">QUO# {{$key->quotation_invoice_number}}</a></td>
 
-                                                                <td><a href="{{ url('/aanbieder/bekijk-offerte-aanvraag/'.$key->id) }}">{{$requested_quote_number}}</a></td>
+                                                                @else
+
+                                                                    <span>INV# {{$key->invoice_number}}</span></td>
+
+                                                                @endif
+
+                                                                @if($key->quote_request_id)
+
+                                                                    <?php $requested_quote_number = $key->quote_number; ?>
+
+                                                                    <td><a href="{{ url('/aanbieder/bekijk-offerte-aanvraag/'.$key->id) }}">{{$requested_quote_number}}</a></td>
+
+                                                                @else
+
+                                                                    <td></td>
+
+                                                                @endif
 
                                                             @endif
 
@@ -97,44 +110,48 @@
 
                                                             <td>{{$key->subtotal}}</td>--}}
 
-                                                            <td>{{number_format((float)$key->grand_total, 2, ',', '.')}}</td>
+                                                            <td>{{number_format((float)$key->grand_total, 2, ',','.')}}</td>
 
-                                                            <?php
+                                                            @if($key->quote_request_id)
 
-                                                            $date = strtotime($key->invoice_date);
-                                                            $date = date('d-m-Y',$date);
+                                                                <?php
 
-                                                            if($key->accept_date)
-                                                            {
-                                                                $accept_date = strtotime($key->accept_date);
-                                                                $accept_date = date('d-m-Y',$accept_date);
+                                                                $date = strtotime($key->invoice_date);
+                                                                $date = date('d-m-Y',$date);
 
-                                                                $cal_accept_date = strtotime($key->accept_date);
-                                                                $cal_accept_date = date('Y-m-d H:i:s',$cal_accept_date);
-                                                            }
-                                                            else{
-                                                                $accept_date = '-';
-                                                                $cal_accept_date = '-';
-                                                            }
+                                                                if($key->accept_date)
+                                                                {
+                                                                    $accept_date = strtotime($key->accept_date);
+                                                                    $accept_date = date('d-m-Y',$accept_date);
 
-                                                            $current_date = date('d-m-Y H:i:s', time());
+                                                                    $cal_accept_date = strtotime($key->accept_date);
+                                                                    $cal_accept_date = date('Y-m-d H:i:s',$cal_accept_date);
+                                                                }
+                                                                else{
+                                                                    $accept_date = '-';
+                                                                    $cal_accept_date = '-';
+                                                                }
 
-                                                            if($key->delivery_date)
-                                                            {
-                                                                $delivery_date = strtotime($key->delivery_date);
-                                                                $delivery_date = date('d-m-Y',$delivery_date);
+                                                                $current_date = date('d-m-Y H:i:s', time());
 
-                                                                $cal_delivery_date = strtotime($key->delivery_date);
-                                                                $cal_delivery_date = date('Y-m-d H:i:s',$cal_delivery_date);
-                                                            }
-                                                            else{
+                                                                if($key->delivery_date)
+                                                                {
+                                                                    $delivery_date = strtotime($key->delivery_date);
+                                                                    $delivery_date = date('d-m-Y',$delivery_date);
 
-                                                                $delivery_date = '-';
-                                                                $cal_delivery_date = '-';
+                                                                    $cal_delivery_date = strtotime($key->delivery_date);
+                                                                    $cal_delivery_date = date('Y-m-d H:i:s',$cal_delivery_date);
+                                                                }
+                                                                else{
 
-                                                            }
+                                                                    $delivery_date = '-';
+                                                                    $cal_delivery_date = '-';
 
-                                                            ?>
+                                                                }
+
+                                                                ?>
+
+                                                            @endif
 
                                                             <td class="current-stage">
 
@@ -142,25 +159,41 @@
 
                                                                     @if($key->status == 3)
 
-                                                                        @if($key->received)
+                                                                        @if($key->customer_received)
 
                                                                             <span class="btn btn-success">{{__('text.Goods Received')}}</span>
 
-                                                                        @elseif($key->delivered)
+                                                                        @elseif($key->retailer_delivered)
 
                                                                             <span class="btn btn-success">{{__('text.Goods Delivered')}}</span>
 
-                                                                        @else
+                                                                        @elseif($key->invoice_sent)
 
                                                                             <span class="btn btn-success">{{__('text.Invoice Generated')}}</span>
+
+                                                                        @else
+
+                                                                            <span class="btn btn-success">Paid</span>
 
                                                                         @endif
 
                                                                     @elseif($key->status == 2)
 
-                                                                        @if($key->accepted)
+                                                                        @if($key->customer_received)
 
-                                                                            @if(Route::currentRouteName() == 'client-custom-quotations' || Route::currentRouteName() == 'client-new-quotations')
+                                                                            <span class="btn btn-success">{{__('text.Goods Received')}}</span>
+
+                                                                        @elseif($key->retailer_delivered)
+
+                                                                            <span class="btn btn-success">{{__('text.Goods Delivered')}}</span>
+
+                                                                        @elseif($key->invoice_sent)
+
+                                                                            <span class="btn btn-success">{{__('text.Invoice Generated')}}</span>
+
+                                                                        @elseif($key->accepted)
+
+                                                                            @if(!$key->quote_request_id || Route::currentRouteName() == 'client-custom-quotations')
 
                                                                                 <span class="btn btn-success">{{__('text.Quotation Accepted')}}</span>
 
@@ -188,13 +221,17 @@
 
                                                                                 <a class="btn btn-primary1" href="{{ url('/aanbieder/eigen-offerte/accepteren-offerte/'.$key->invoice_id) }}">{{__('text.Accept')}}</a>
 
-                                                                            @elseif(Route::currentRouteName() == 'client-new-quotations')
-
-                                                                                <a class="btn btn-primary1" href="{{ url('/aanbieder/accept-new-quotation/'.$key->invoice_id) }}">{{__('text.Accept')}}</a>
-
                                                                             @else
 
-                                                                                <a class="btn btn-primary1" onclick="accept(this)" data-date="{{$delivery_date != '-' ? $delivery_date : null}}" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Accept')}}</a>
+                                                                                @if($key->quote_request_id)
+
+                                                                                    <a class="btn btn-primary1" onclick="accept(this)" data-date="{{$delivery_date != '-' ? $delivery_date : null}}" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Accept')}}</a>
+
+                                                                                @else
+
+                                                                                    <a class="btn btn-primary1" href="{{route('accept-new-quotation', ['id' => $key->invoice_id])}}">{{__('text.Accept')}}</a>
+
+                                                                                @endif
 
                                                                             @endif
 
@@ -220,25 +257,45 @@
 
                                                                 @endif
 
-                                                             </td>
+                                                            </td>
 
-                                                            @if(Route::currentRouteName() != 'client-new-quotations')
+                                                            <td class="accept_date">
 
-                                                                <td class="accept_date">
+                                                                @if($key->quote_request_id)
+
                                                                     <input type="hidden" id="accept_date" value="{{$cal_accept_date}}">
                                                                     {{$accept_date}}
-                                                                </td>
 
-                                                                <td class="delivery_date">
+                                                                @else
+
+                                                                    {{$key->accept_date ? date('d-m-Y',strtotime($key->accept_date)) : null}}
+
+                                                                @endif
+
+                                                            </td>
+
+                                                            <td class="delivery_date">
+
+                                                                @if($key->quote_request_id)
+
                                                                     <input type="hidden" id="delivery_date" value="{{$cal_delivery_date}}">
                                                                     {{$delivery_date}}
-                                                                </td>
 
-                                                            @endif
+                                                                @endif
 
-                                                            @if(Route::currentRouteName() == 'client-quotations')
+                                                            </td>
 
-                                                                <td class="interval"></td>
+                                                            @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations')
+
+                                                                @if($key->quote_request_id && !$key->paid)
+
+                                                                    <td class="interval"></td>
+
+                                                                @else
+
+                                                                    <td></td>
+
+                                                                @endif
 
                                                             @endif
 
@@ -255,7 +312,7 @@
 
                                                                             @if($key->status != 2 && $key->status != 3)
 
-                                                                                <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-type="2" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/aangepaste-offerte/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
+                                                                                <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/aangepaste-offerte/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
 
                                                                                 <li><a href="{{ url('/aanbieder/eigen-offerte/accepteren-offerte/'.$key->invoice_id) }}">{{__('text.Accept')}}</a></li>
 
@@ -269,50 +326,60 @@
 
                                                                         @else
 
-                                                                            @if(Route::currentRouteName() == 'client-new-quotations')
-
-                                                                                {{--<li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>--}}
-                                                                                <li><a href="{{ url('/aanbieder/download-client-new-quotation/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
-
-                                                                                @if($key->invoice_sent)
-
-                                                                                    <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
-
-                                                                                @endif
-
-                                                                                @if($key->status != 0 && $key->status != 2 && $key->status != 3)
-
-                                                                                    <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-type="3" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
-
-                                                                                    <li><a href="{{ url('/aanbieder/accept-new-quotation/'.$key->invoice_id) }}">{{__('text.Accept')}}</a></li>
-
-                                                                                @endif
-
-                                                                            @else
+                                                                            @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations')
 
                                                                                 <li><a href="{{ url('/aanbieder/offerte/'.$key->invoice_id) }}">{{__('text.View')}}</a></li>
-                                                                                <li><a href="{{ url('/aanbieder/bekijk-offerte-aanvraag/'.$key->id) }}">{{__('text.View Request')}}</a></li>
                                                                                 <li><a href="{{ url('/aanbieder/download-client-quote-invoice/'.$key->invoice_id) }}">{{__('text.Download PDF')}}</a></li>
 
-                                                                                @if($key->status != 0 && $key->status != 2 && $key->status != 3)
+                                                                            @endif
 
-                                                                                    <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-type="1" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
+                                                                            @if(Route::currentRouteName() == 'client-quotations-invoices')
+
+                                                                                @if($key->paid)
+
+                                                                                    <li><a href="{{ url('/aanbieder/download-service-fee-invoice/'.$key->invoice_id) }}">Download Service Fee PDF</a></li>
+
+                                                                                @endif
+
+                                                                            @endif
+
+                                                                            @if($key->quote_request_id)
+
+                                                                                <li><a href="{{ url('/aanbieder/bekijk-offerte-aanvraag/'.$key->id) }}">{{__('text.View Request')}}</a></li>
+
+                                                                            @endif
+
+                                                                            @if($key->invoice_sent)
+
+                                                                                <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+
+                                                                            @endif
+
+                                                                            @if($key->status != 0 && $key->status != 2 && $key->status != 3)
+
+                                                                                <li><a onclick="ask(this)" data-id="{{$key->invoice_id}}" data-text="{{$key->review_text}}" data-url="{{ url('/aanbieder/ask-customization/') }}" href="javascript:void(0)">{{__('text.Ask Again')}}</a></li>
+
+                                                                                @if($key->quote_request_id)
 
                                                                                     <li><a onclick="accept(this)" data-date="{{$delivery_date != '-' ? $delivery_date : null}}" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Accept')}}</a></li>
 
-                                                                                @endif
+                                                                                @else
 
-                                                                                @if($key->status == 2)
-
-                                                                                    <li><a class="pay_now" onclick="PayNow(this)" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Pay Now')}}</a></li>
+                                                                                    <li><a href="{{route('accept-new-quotation', ['id' => $key->invoice_id])}}">{{__('text.Accept')}}</a></li>
 
                                                                                 @endif
 
-                                                                                @if($key->delivered == 1 && $key->received == 0)
+                                                                            @endif
 
-                                                                                    <li><a href="{{ url('/aanbieder/mark-received/'.$key->invoice_id) }}">{{__('text.Mark as received')}}</a></li>
+                                                                            @if($key->quote_request_id && $key->status == 2)
 
-                                                                                @endif
+                                                                                <li><a class="pay_now" onclick="PayNow(this)" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Pay Now')}}</a></li>
+
+                                                                            @endif
+
+                                                                            @if($key->retailer_delivered == 1 && $key->customer_received == 0)
+
+                                                                                <li><a href="{{ url('/aanbieder/mark-received/'.$key->invoice_id) }}">{{__('text.Mark as received')}}</a></li>
 
                                                                             @endif
 
@@ -355,6 +422,8 @@
 
                     <div class="modal-body" id="myWizard">
 
+                        <h5 style="color: #f52c2c;font-family: sans-serif;font-size: 15px;">Note: By accepting this offer we charge you {{$service_fee}} euro service fee</h5>
+
                         <input type="hidden" name="invoice_id" id="invoice_id">
                         <label>{{__('text.Delivery Date')}} <span style="color: red;">*</span></label>
                         <input style="height: 45px;margin-bottom: 20px" type="text" name="delivery_date" id="delivery_date_picker" class="form-control" placeholder="{{__('text.Select Delivery Date')}}" required autocomplete="off">
@@ -364,49 +433,29 @@
                                 <div class="col-md-12">
                                     <div class="section over-hide z-bigger">
 
-                                        <div class="section over-hide z-bigger" style="margin-top: 20px;">
+                                        <div class="section over-hide z-bigger">
                                             <div class="container pb-5">
                                                 <div class="row justify-content-center pb-5">
 
-                                                    <div class="col-12 pt-5">
-                                                        <h4 style="color: black;text-align: center;" class="mb-4 pb-2">{{__('text.Do you want to change your delivery address?')}}</h4>
-                                                    </div>
+                                                    <div id="delivery_box">
 
+{{--                                                        <div class="col-12 pt-5">--}}
+{{--                                                            <h4 style="color: black;text-align: center;" class="mb-4 pb-2">{{__('text.Do you want this address to be updated in your profile?')}}</h4>--}}
+{{--                                                        </div>--}}
 
-                                                    <div class="col-12 pb-5" style="display: flex;justify-content: space-around;margin-top: 20px;">
+{{--                                                        <div class="col-12 pb-5" style="display: flex;justify-content: space-around;margin-top: 20px;">--}}
 
-                                                        <input class="checkbox-tools change-delivery" type="radio" name="change_address" id="tool-1" value="0" checked>
-                                                        <label class="for-checkbox-tools" for="tool-1">
-                                                            {{__('text.No')}}
-                                                        </label>
+{{--                                                            <input class="checkbox-tools" type="radio" name="update" id="tool-2" value="0" checked>--}}
+{{--                                                            <label class="for-checkbox-tools" for="tool-2">--}}
+{{--                                                                {{__('text.No')}}--}}
+{{--                                                            </label>--}}
 
-                                                        <input class="checkbox-tools change-delivery" type="radio" name="change_address" id="tool-4" value="1">
-                                                        <label class="for-checkbox-tools" for="tool-4">
-                                                            {{__('text.Yes')}}
-                                                        </label>
+{{--                                                            <input class="checkbox-tools" type="radio" name="update" id="tool-3" value="1">--}}
+{{--                                                            <label class="for-checkbox-tools" for="tool-3">--}}
+{{--                                                                {{__('text.Yes')}}--}}
+{{--                                                            </label>--}}
 
-                                                    </div>
-
-
-                                                    <div style="display: none;margin-top: 30px;" id="delivery_box">
-
-                                                        <div class="col-12 pt-5">
-                                                            <h4 style="color: black;text-align: center;" class="mb-4 pb-2">{{__('text.Do you want this address to be updated in your profile?')}}</h4>
-                                                        </div>
-
-                                                        <div class="col-12 pb-5" style="display: flex;justify-content: space-around;margin-top: 20px;">
-
-                                                            <input class="checkbox-tools" type="radio" name="update" id="tool-2" value="0" checked>
-                                                            <label class="for-checkbox-tools" for="tool-2">
-                                                                {{__('text.No')}}
-                                                            </label>
-
-                                                            <input class="checkbox-tools" type="radio" name="update" id="tool-3" value="1">
-                                                            <label class="for-checkbox-tools" for="tool-3">
-                                                                {{__('text.Yes')}}
-                                                            </label>
-
-                                                        </div>
+{{--                                                        </div>--}}
 
                                                         <div style="text-align: left;">
                                                             <label>{{__('text.Delivery Address')}} <span style="color: red;">*</span></label>
@@ -448,7 +497,6 @@
             <form id="ask-form" method="post" action="">
 
                 <input type="hidden" name="_token" value="{{@csrf_token()}}">
-                <input type="hidden" name="type" id="form_type">
 
                 <div class="modal-content">
 
@@ -1603,7 +1651,7 @@
 @section('scripts')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdCPSjhOgaYXo6twWkseoaSHc2Ipob024&libraries=places&callback=initMap" async defer></script>
 
     <script type="text/javascript">
 
@@ -1712,7 +1760,6 @@
             $('.submit-btn').click(function(){
                 var date = $('#delivery_date_picker').val();
                 var delivery_address = $('#delivery_address').val();
-                var change_delivery = $('.change-delivery:checked').val();
                 var flag = 0;
 
                 if(!date)
@@ -1725,17 +1772,10 @@
                     $('#delivery_date_picker').css('border','');
                 }
 
-                if(change_delivery == 1)
+                if(!delivery_address)
                 {
-                    if(!delivery_address)
-                    {
-                        $('#delivery_address').css('border','1px solid red');
-                        flag = 1;
-                    }
-                    else
-                    {
-                        $('#delivery_address').css('border','');
-                    }
+                    $('#delivery_address').css('border','1px solid red');
+                    flag = 1;
                 }
                 else
                 {
@@ -1764,21 +1804,6 @@
                 }
             });
 
-            $(".change-delivery").change(function() {
-
-                var value = $(this).val();
-
-                if(value == 1)
-                {
-                    $('#delivery_box').show();
-                }
-                else
-                {
-                    $('#delivery_box').hide();
-                }
-
-            });
-
             var todayDate = new Date().getDate();
             var endD = new Date(new Date().setDate(todayDate + 1));
 
@@ -1796,12 +1821,10 @@
             var invoice_id = $(e).data('id');
             var url = $(e).data('url');
             var text = $(e).data('text');
-            var type = $(e).data('type');
 
             $('#invoice_id1').val(invoice_id);
             $('#ask-form').attr('action', url);
             $('#review_text').val(text);
-            $('#form_type').val(type);
 
             $('#myModal1').modal('toggle');
         }
@@ -1812,7 +1835,6 @@
             var delivery_date = $(e).data('date');
 
             $('#invoice_id').val(invoice_id);
-            $('#delivery_box').hide();
 
             $("#delivery_date_picker").val(delivery_date);
             $("#tool-1").prop("checked", true);

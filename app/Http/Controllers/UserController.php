@@ -1117,15 +1117,43 @@ class UserController extends Controller
         return view('user.client_quote_invoices', compact('invoices'));
     }
 
-    public function ClientNewQuotations()
+    public function ClientNewQuotations($id = "")
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
+        $gs = Generalsetting::where('backend',1)->first();
+        $service_fee = $gs->service_fee;
 
-        $invoices = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.user_id', $user_id)->where('new_quotations.approved', 1)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+        if(\Route::currentRouteName() == 'client-quotations' || \Route::currentRouteName() == 'client-new-quotations')
+        {
+            if($id)
+            {
+                $invoices = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('quotes.user_id', $user_id)->where('new_quotations.quote_request_id', $id)->where('new_quotations.approved', 1)->where('new_quotations.quote_request_id','!=',NULL)->orderBy('new_quotations.created_at', 'desc')->select('quotes.*', 'new_quotations.retailer_delivered', 'new_quotations.customer_received', 'new_quotations.invoice_sent', 'new_quotations.paid', 'new_quotations.invoice','new_quotations.quote_request_id', 'new_quotations.review_text', 'new_quotations.ask_customization', 'new_quotations.approved', 'new_quotations.accepted', 'new_quotations.id as invoice_id', 'new_quotations.quotation_invoice_number', 'new_quotations.tax_amount as tax', 'new_quotations.subtotal', 'new_quotations.grand_total', 'new_quotations.created_at as invoice_date', 'new_quotations.accept_date', 'new_quotations.delivery_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+            }
+            else
+            {
+                $direct = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.user_id', $user_id)->where('new_quotations.approved', 1)->where('new_quotations.quote_request_id',NULL)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+                $in_direct = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('quotes.user_id', $user_id)->where('new_quotations.approved', 1)->where('new_quotations.quote_request_id','!=',NULL)->orderBy('new_quotations.created_at', 'desc')->select('quotes.*', 'new_quotations.retailer_delivered', 'new_quotations.customer_received', 'new_quotations.invoice_sent', 'new_quotations.paid', 'new_quotations.invoice', 'new_quotations.quote_request_id', 'new_quotations.review_text', 'new_quotations.ask_customization', 'new_quotations.approved', 'new_quotations.accepted', 'new_quotations.id as invoice_id', 'new_quotations.quotation_invoice_number', 'new_quotations.tax_amount as tax', 'new_quotations.subtotal', 'new_quotations.grand_total', 'new_quotations.created_at as invoice_date', 'new_quotations.accept_date', 'new_quotations.delivery_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
 
-        return view('user.client_quote_invoices', compact('invoices'));
+                $invoices = $direct->concat($in_direct);
+            }
+        }
+        else
+        {
+            if($id)
+            {
+                $invoices = new_invoices::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_invoices.creator_id')->where('quotes.user_id', $user_id)->where('quotes.status', '=', 3)->where('new_invoices.quote_request_id', $id)->where('new_invoices.approved', 1)->where('new_invoices.invoice_sent', 1)->where('new_invoices.quote_request_id','!=',NULL)->orderBy('new_invoices.created_at', 'desc')->select('quotes.*', 'new_invoices.retailer_delivered', 'new_invoices.customer_received', 'new_invoices.invoice_sent', 'new_invoices.paid', 'new_invoices.invoice','new_invoices.quote_request_id', 'new_invoices.review_text', 'new_invoices.ask_customization', 'new_invoices.approved', 'new_invoices.accepted', 'new_invoices.quotation_id as invoice_id', 'new_invoices.invoice_number', 'new_invoices.tax_amount as tax', 'new_invoices.subtotal', 'new_invoices.grand_total', 'new_invoices.created_at as invoice_date', 'new_invoices.accept_date', 'new_invoices.delivery_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+            }
+            else
+            {
+                $direct = new_invoices::leftjoin('users', 'users.id', '=', 'new_invoices.creator_id')->where('new_invoices.user_id', $user_id)->where('new_invoices.approved', 1)->where('new_invoices.invoice_sent', 1)->where('new_invoices.quote_request_id',NULL)->orderBy('new_invoices.created_at', 'desc')->select('new_invoices.*', 'new_invoices.quotation_id as invoice_id', 'new_invoices.created_at as invoice_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+                $in_direct = new_invoices::leftjoin('quotes', 'quotes.id', '=', 'new_invoices.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_invoices.creator_id')->where('quotes.user_id', $user_id)->where('quotes.status', '=', 3)->where('new_invoices.approved', 1)->where('new_invoices.invoice_sent', 1)->where('new_invoices.quote_request_id','!=',NULL)->orderBy('new_invoices.created_at', 'desc')->select('quotes.*', 'new_invoices.retailer_delivered', 'new_invoices.customer_received', 'new_invoices.invoice_sent', 'new_invoices.paid', 'new_invoices.invoice', 'new_invoices.quote_request_id', 'new_invoices.review_text', 'new_invoices.ask_customization', 'new_invoices.approved', 'new_invoices.accepted', 'new_invoices.quotation_id as invoice_id', 'new_invoices.invoice_number', 'new_invoices.tax_amount as tax', 'new_invoices.subtotal', 'new_invoices.grand_total', 'new_invoices.created_at as invoice_date', 'new_invoices.accept_date', 'new_invoices.delivery_date', 'users.name', 'users.family_name', 'users.address', 'users.postcode', 'users.city', 'users.phone')->get();
+
+                $invoices = $direct->concat($in_direct);
+            }
+        }
+        
+        return view('user.client_quote_invoices', compact('invoices','service_fee'));
     }
 
     public function CustomQuotations($id = '')
@@ -1340,17 +1368,29 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
-        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.id', $id)->where('quotes.user_id', $user_id)->first();
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.id', $id)->where(function($query) use ($user_id) {
+            $query->where('quotes.user_id', $user_id)->orWhere('new_quotations.user_id',$user_id);
+        })->first();
 
         if (!$invoice) {
-            return redirect()->route('client-quotations');
+            return redirect()->back();
         }
 
         $quotation_invoice_number = $invoice->quotation_invoice_number;
-
         $filename = $quotation_invoice_number . '.pdf';
 
-        return response()->download(public_path("assets/newQuotations/{$filename}"));
+        if(\Route::currentRouteName() == 'download-client-quote-invoice')
+        {
+            return response()->download(public_path("assets/newQuotations/{$filename}"));
+        }
+        elseif(\Route::currentRouteName() == 'download-invoice-pdf')
+        {
+            return response()->download(public_path("assets/newInvoices/{$filename}"));
+        }
+        else
+        {
+            return response()->download(public_path("assets/newQuotations/CustomerQuotations/{$filename}"));
+        }
     }
 
     public function DownloadClientCustomQuoteInvoice($id)
@@ -1381,47 +1421,34 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
-        if($request->type == 1)
-        {
-            $invoice = quotation_invoices::leftjoin('quotes', 'quotes.id', '=', 'quotation_invoices.quote_id')->leftjoin('users', 'users.id', '=', 'quotation_invoices.handyman_id')->where('quotation_invoices.id', $id)->where('quotes.user_id', $user_id)->first();
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.id', $id)->where(function($query) use ($user_id) {
+            $query->where('quotes.user_id', $user_id)->orWhere('new_quotations.user_id',$user_id);
+        })->first();
 
-            if (!$invoice) {
-                return redirect()->back();
-            }
-
-            quotation_invoices::where('id', $id)->update(['ask_customization' => 1, 'review_text' => $review_text]);
-        }
-        else
-        {
-            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.id', $id)->where('new_quotations.user_id', $user_id)->first();
-
-            if (!$invoice) {
-                return redirect()->back();
-            }
-
-            new_quotations::where('id', $id)->update(['ask_customization' => 1, 'review_text' => $review_text]);
+        if (!$invoice) {
+            return redirect()->back();
         }
 
-        $creator_email = $invoice->email;
-        $creator_name = $invoice->name;
+        new_quotations::where('id', $id)->update(['ask_customization' => 1, 'review_text' => $review_text]);
 
-        \Mail::send(array(), array(), function ($message) use ($creator_email, $creator_name, $invoice, $user) {
-            $message->to($creator_email)
-                ->from('info@vloerofferte.nl')
+        $retailer_email = $invoice->email;
+        $user_name = $invoice->name;
+
+        \Mail::send(array(), array(), function ($message) use ($retailer_email, $user_name, $invoice, $user) {
+            $message->to($retailer_email)
+                ->from('info@pieppiep.com')
                 ->subject(__('text.Quotation Review Request!'))
-                ->setBody("Dear Mr/Mrs " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " submitted review request against your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " submitted review request against your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
-
 
         $admin_email = $this->sl->admin_email;
 
-        \Mail::send(array(), array(), function ($message) use ($admin_email, $creator_name, $invoice, $user) {
+        \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice, $user) {
             $message->to($admin_email)
-                ->from('info@vloerofferte.nl')
+                ->from('info@pieppiep.com')
                 ->subject('Quotation Review Request!')
-                ->setBody("A quotation review request has been submitted by Mr/Mrs " . $user->name . " against quotation QUO# " . $invoice->quotation_invoice_number . "<br>Retailer: " . $creator_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("A quotation review request has been submitted by Mr/Mrs " . $user->name . " against quotation QUO# " . $invoice->quotation_invoice_number . "<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
         });
-
 
         Session::flash('success', __('text.Request submitted successfully!'));
 
@@ -1442,7 +1469,6 @@ class UserController extends Controller
         if (!$invoice) {
             return redirect()->back();
         }
-
 
         custom_quotations::where('id', $id)->update(['ask_customization' => 1, 'review_text' => $review_text]);
 
@@ -1473,6 +1499,165 @@ class UserController extends Controller
     }
 
 
+    public function AcceptQuotationPieppiep(Request $request)
+    {
+        $now = date('d-m-Y H:i:s');
+        $time = strtotime($now);
+        $time = date('H:i:s',$time);
+        $delivery_date = $request->delivery_date . ' ' . $time;
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
+
+        if (!$invoice) {
+            return redirect()->back();
+        }
+
+        quotes::where('id', $invoice[0]->quote_id)->update(['status' => 2,'quote_delivery' => $delivery_date,'quote_zipcode' => $request->delivery_address,'quote_postcode' => $request->postcode,'quote_city' => $request->city]);
+
+//        if($request->update == 1)
+//        {
+//            User::where('id',$user_id)->update(['address' => $request->delivery_address,'postcode' => $request->postcode,'city' => $request->city]);
+//        }
+
+        $quote = quotes::leftjoin('categories','categories.id','=','quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('product_models','product_models.id','=','quotes.quote_model')->leftjoin('models','models.id','=','quotes.quote_type')->leftjoin('colors','colors.id','=','quotes.quote_color')->leftjoin('services','services.id','=','quotes.quote_service1')->leftjoin('users','users.id','=','quotes.user_id')->where('quotes.id',$invoice[0]->quote_id)->select('quotes.*','categories.cat_name','services.title','brands.cat_name as brand_name','product_models.model as model_name','models.cat_name as type_title','colors.title as color','users.postcode','users.city','users.address')->first();
+
+        $quotation_invoice_number = $invoice[0]->quotation_invoice_number;
+        $filename = $quotation_invoice_number . '.pdf';
+        $service_fee = $this->gs->service_fee;
+
+        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date]);
+
+        $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
+        $user = $invoice[0];
+        $client = '';
+
+        $request->products = $request->data;
+        $request->retailer_delivery_date = $request->delivery_date;
+        $request->total_amount = $request->grand_total;
+
+        foreach ($request->products as $i => $key) {
+
+            $total_discount[$i] = str_replace('.', ',',$key->total_discount);
+            $request->total_discount = $total_discount;
+
+            $rate[$i] = $key->rate;
+            $request->rate = $rate;
+
+            $qty[$i] = str_replace('.', ',',$key->qty);
+            $request->qty = $qty;
+
+            $total[$i] = $key->total;
+            $request->total = $total;
+
+            $measure[$i] = $key->measure;
+            $request->measure = $measure;
+
+            if ($key->item_id != 0) {
+
+                $product_titles[] = items::where('id',$key->item_id)->pluck('cat_name')->first();
+                $color_titles[] = '';
+                $model_titles[] = '';
+
+            }
+            elseif ($key->service_id != 0) {
+
+                $product_titles[] = Service::where('id',$key->service_id)->pluck('title')->first();
+                $color_titles[] = '';
+                $model_titles[] = '';
+
+            }
+            else
+            {
+                $product_titles[] = product::where('id',$key->product_id)->pluck('title')->first();
+                $color_titles[] = colors::where('id',$key->color)->pluck('title')->first();
+                $model_titles[] = product_models::where('id',$key->model_id)->pluck('model')->first();
+            }
+
+            $calculations[$i] = $key->calculations()->get();
+            $request->calculations = $calculations;
+
+            if($key->item_id != 0)
+            {
+                $request->products[$i] = $key->item_id . 'I';
+            }
+            elseif($key->service_id != 0)
+            {
+                $request->products[$i] = $key->service_id . 'S';
+            }
+            else
+            {
+                $request->products[$i] = $key->product_id;
+            }
+        }
+
+        ini_set('max_execution_time', 180);
+
+        $date = $invoice[0]->created_at;
+        $role = 'retailer';
+        $form_type = 1;
+        $re_edit = 1;
+
+        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('re_edit','form_type','role','product_titles','color_titles','model_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+        $file = public_path() . '/assets/newQuotations/' . $filename;
+        $pdf->save($file);
+
+        $q_a = requests_q_a::where('request_id',$quote->id)->get();
+
+        $quote_number = $quote->quote_number;
+
+        $filename = $quote_number.'.pdf';
+
+        $role = 3;
+
+        ini_set('max_execution_time', 180);
+
+        $pdf = PDF::loadView('admin.user.pdf_quote',compact('delivery_date','quote','q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
+
+        $pdf->save(public_path().'/assets/adminQuotesPDF/'.$filename);
+
+        $role = 2;
+
+        $pdf = PDF::loadView('admin.user.pdf_quote',compact('delivery_date','quote','q_a','role'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 140,'isRemoteEnabled' => true]);
+
+        $pdf->save(public_path().'/assets/quotesPDF/'.$filename);
+
+        $retailer_email = $invoice[0]->email;
+        $user_name = $invoice[0]->name;
+
+        $link = url('/') . '/aanbieder/dashboard';
+
+        if($this->lang->lang == 'du')
+        {
+            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>Vloerofferte";
+        }
+        else
+        {
+            $msg = "Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+        }
+
+        \Mail::send(array(), array(), function ($message) use ($msg, $retailer_email, $user_name, $invoice) {
+            $message->to($retailer_email)
+                ->from('info@pieppiep.com')
+                ->subject(__('text.Quotation Accepted!'))
+                ->setBody($msg, 'text/html');
+        });
+
+        $admin_email = $this->sl->admin_email;
+
+        \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice) {
+            $message->to($admin_email)
+                ->from('info@pieppiep.com')
+                ->subject('Quotation Accepted!')
+                ->setBody("A quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted.<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+        });
+
+        Session::flash('success', __('text.Quotation accepted successfully!'));
+
+        return redirect()->back();
+    }
+
     public function AcceptQuotation($request,$user_id)
     {
         $now = date('d-m-Y H:i:s');
@@ -1488,10 +1673,10 @@ class UserController extends Controller
 
         quotes::where('id', $invoice[0]->quote_id)->update(['status' => 2,'quote_delivery' => $delivery_date,'quote_zipcode' => $request->delivery_address,'quote_postcode' => $request->postcode,'quote_city' => $request->city]);
 
-        if($request->update == 1)
-        {
-            User::where('id',$user_id)->update(['address' => $request->delivery_address,'postcode' => $request->postcode,'city' => $request->city]);
-        }
+//        if($request->update == 1)
+//        {
+//            User::where('id',$user_id)->update(['address' => $request->delivery_address,'postcode' => $request->postcode,'city' => $request->city]);
+//        }
 
         $quote = quotes::leftjoin('categories','categories.id','=','quotes.quote_service')->leftjoin('brands','brands.id','=','quotes.quote_brand')->leftjoin('product_models','product_models.id','=','quotes.quote_model')->leftjoin('models','models.id','=','quotes.quote_type')->leftjoin('colors','colors.id','=','quotes.quote_color')->leftjoin('services','services.id','=','quotes.quote_service1')->leftjoin('users','users.id','=','quotes.user_id')->where('quotes.id',$invoice[0]->quote_id)->select('quotes.*','categories.cat_name','services.title','brands.cat_name as brand_name','product_models.model as model_name','models.cat_name as type_title','colors.title as color','users.postcode','users.city','users.address')->first();
 
@@ -1628,7 +1813,6 @@ class UserController extends Controller
 
         return 'true';
     }
-
 
     public function PayQuotation($data,$pay_invoice_id,$language,$user_id)
     {
@@ -2750,7 +2934,7 @@ class UserController extends Controller
             if(!$mail_template)
             {
                 $mail_subject_template = 'Offerte: {offerte_nummer}';
-                $mail_body_template = '<div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Beste {aan_voornaam},</span></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;"><br></span></span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr;"><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px; color: windowtext; margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Hierbij de offerte met offertenummer {offerte_nummer}.</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><br></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 16px; font-variant-ligatures: none;">{Click here to accept this quote directly online}</span><br></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1287498014" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{217}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 12pt;">&nbsp;</span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="588099994" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{36}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Met vriendelijke groet,</span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_voornaam}</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_bedrijfsnaam}</span></span></p></div>';
+                $mail_body_template = '<div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Beste {aan_voornaam},</span></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;"><br></span></span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr;"><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px; color: windowtext; margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Hierbij de offerte met offertenummer {offerte_nummer}.</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><br></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 16px; font-variant-ligatures: none;">{Click here to accept this quote directly online or click here to view quotes in your account}</span><br></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1287498014" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{217}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 12pt;">&nbsp;</span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="588099994" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{36}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Met vriendelijke groet,</span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_voornaam}</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_bedrijfsnaam}</span></span></p></div>';
             }
             else
             {
@@ -2759,12 +2943,13 @@ class UserController extends Controller
             }
 
             $link = route('accept-new-quotation-mail', ['id' => Crypt::encrypt($data->id)]);
+            $quotations_link = route('client-new-quotations');
 
             $mail_subject_template = str_replace('{offerte_nummer}',$data->quotation_invoice_number,$mail_subject_template);
             $mail_body_template = str_replace('{aan_voornaam}',$data->name,$mail_body_template);
             $mail_body_template = str_replace('{offerte_nummer}',$data->quotation_invoice_number,$mail_body_template);
-            $mail_body_template = str_replace('{Click here to accept this quote directly online}','Click <a style="color: blue;" href="'.$link.'">here</a> to accept this quote directly online',$mail_body_template);
-            $mail_body_template = str_replace('{Klik hier om de offerte te accepteren}','Klik <a style="color: blue;" href="'.$link.'">hier</a> om de offerte te accepteren',$mail_body_template);
+            $mail_body_template = str_replace('{Click here to accept this quote directly online or click here to view quotes in your account}','Click <a style="color: blue;" href="'.$link.'">here</a> to accept this quote directly online or click <a style="color: blue;" href="'.$quotations_link.'">here</a> to view quotes in your account',$mail_body_template);
+            $mail_body_template = str_replace('{Klik hier om de offerte te accepteren of klik hier om de offerte in je account te bekijken}','Klik <a style="color: blue;" href="'.$link.'">hier</a> om de offerte te accepteren of klik <a style="color: blue;" href="'.$quotations_link.'">hier</a> hier om de offerte in je account te bekijken',$mail_body_template);
             $mail_body_template = str_replace('{van_voornaam}',$user->name,$mail_body_template);
             $mail_body_template = str_replace('{van_bedrijfsnaam}',$user->company_name,$mail_body_template);
         }

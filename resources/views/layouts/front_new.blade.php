@@ -31,6 +31,7 @@
     {
         text-align: left !important;
         display: block !important;
+        background-color: white !important;
     }
 
     .sp-page-builder .page-content #header {

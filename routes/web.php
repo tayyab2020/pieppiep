@@ -84,7 +84,8 @@
   Route::get('/edit-order/{id}', 'UserController@EditOrder')->name('edit-order');
   Route::get('/view-order/{id}', 'UserController@EditOrder')->name('view-order');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
-  Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadInvoicePDF');
+  Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadInvoicePDF')->name('download-invoice-pdf');
+  Route::get('/download-service-fee-invoice/{id}', 'UserController@DownloadClientQuoteInvoice')->name('download-service-fee-invoice');
   Route::get('/download-negative-invoice-pdf/{id}', 'UserController@DownloadNegativeInvoicePDF');
   Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');
   Route::get('/download-full-order-pdf/{id}', 'UserController@DownloadFullOrderPDF');
@@ -139,10 +140,10 @@
   Route::get('/download-quote-invoice/{id}', 'UserController@DownloadQuoteInvoice');
   Route::get('/download-commission-invoice/{id}', 'UserController@DownloadCommissionInvoice');
   Route::get('/download-custom-quotation/{id}', 'UserController@DownloadCustomQuotation');
-  Route::get('/download-client-quote-invoice/{id}', 'UserController@DownloadClientQuoteInvoice');
+  Route::get('/download-client-quote-invoice/{id}', 'UserController@DownloadClientQuoteInvoice')->name('download-client-quote-invoice');
   Route::get('/download-client-custom-quotation/{id}', 'UserController@DownloadClientCustomQuoteInvoice');
   Route::post('/ask-customization', 'UserController@AskCustomization');
-  Route::post('/accept-quotation', 'UserController@AcceptQuotation');
+  Route::post('/accept-quotation', 'UserController@AcceptQuotationPieppiep');
   Route::post('/pay-quotation', 'UserController@PayQuotation');
   Route::get('/quotation-payment-redirect-page/{id}', 'FrontendController@QuotationPaymentRedirectPage');
   Route::get('/versturen-eigen-offerte/{id}', 'UserController@SendCustomQuotation');

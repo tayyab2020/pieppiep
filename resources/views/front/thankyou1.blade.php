@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="jumbotron text-center" style="font-family: inherit;height: 470px;background-color: #e9ecef;padding-top: 100px;">
+    <div class="jumbotron text-center" style="font-family: inherit;background-color: #e9ecef;padding: 150px 0 50px 0;">
         <h1 class="display-3" style="font-weight: 300;">{{$lang->tyt}}</h1>
         {{--<p class="lead" style="font-size: 18px;width: 80%;margin: auto;padding-top: 55px;"><strong>{{$lang->cst}}</strong> {{$lang->tym}}</p>--}}
         <hr>
@@ -10,7 +10,7 @@
             {{$lang->htt}} <a href="{{route('front.contact')}}">{{$lang->cut}}</a>
         </p>
         <p class="lead">
-            <a class="btn btn-primary btn-sm" href="{{route('front.index')}}" role="button" style="font-size: 14px;background-color: #0069d9;border-color: #0062cc">{{$lang->ctht}}</a>
+            <a class="btn btn-primary btn-sm" href="{{route('front.index')}}" role="button" style="font-size: 14px;background-color: #0069d9;border-color: #0062cc;color: white;">{{$lang->ctht}}</a>
         </p>
 
         <svg id="successAnimation" class="animated" xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70">
@@ -25,11 +25,6 @@
 
         .subscribe-newsletter-wrapper
         {
-            background-color: #e9ecef;
-        }
-
-        body{
-
             background-color: #e9ecef;
         }
 
