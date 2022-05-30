@@ -6080,7 +6080,8 @@ class UserController extends Controller
                     'msg' => $msg,
                 ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$user_name,$user_email) {
                     $message->to($mail_to)
-                        ->from('info@woonkasteel.nl', 'Tayyab')
+                        ->cc([$user_email])
+                        ->from('noreply@pieppiep.com')
                         ->subject($subject)
                         ->attach($file, [
                             'as' => $filename,
