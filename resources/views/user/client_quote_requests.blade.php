@@ -70,17 +70,17 @@
                                                             <td>
                                                                 @if($key->status == 3)
 
-                                                                    @if($invoices[$i]->contains('received', 1))
-
-                                                                        <span class="btn btn-success">{{__('text.Goods Received')}}</span>
-
-                                                                    @elseif($invoices[$i]->contains('delivered', 1))
+                                                                    @if($invoices[$i]->contains('delivered', 1))
 
                                                                         <span class="btn btn-success">{{__('text.Goods Delivered')}}</span>
 
-                                                                    @else
+                                                                    @elseif($invoices[$i]->contains('invoice_sent', 1))
 
                                                                         <span class="btn btn-success">{{__('text.Invoice Generated')}}</span>
+    
+                                                                    @else
+
+                                                                        <span class="btn btn-success">Paid</span>
 
                                                                     @endif
 
