@@ -6081,6 +6081,7 @@ class UserController extends Controller
                 ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$user_name,$user_email) {
                     $message->to($mail_to)
                         ->cc(['info@pieppiep.com'])
+                        ->bcc('info@pieppiep.com')
                         ->from('noreply@pieppiep.com')
                         ->subject($subject)
                         ->attach($file, [
