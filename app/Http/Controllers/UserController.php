@@ -6053,6 +6053,7 @@ class UserController extends Controller
         {
             $user_name = $user->name;
             $user_email = $user->email;
+            $company = $user->company_name;
             $company_name = $user->company_name;
             $result = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.id', $request->quotation_id)->select('users.company_name', 'users.id', 'users.name', 'users.family_name', 'users.email', 'new_quotations.*')->first();
             $result->approved = 1;
@@ -6078,9 +6079,9 @@ class UserController extends Controller
             \Mail::send('user.global_mail',
                 array(
                     'msg' => $msg,
-                ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$user_name,$user_email) {
+                ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$user_name,$user_email,$company_name) {
                     $message->to($mail_to)
-                        ->from('noreply@pieppiep.com')
+                        ->from('noreply@pieppiep.com', $company_name)
                         ->replyTo($user_email, $user_name)
                         ->subject($subject)
                         ->attach($file, [
