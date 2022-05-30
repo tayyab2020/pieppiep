@@ -6053,6 +6053,9 @@ class UserController extends Controller
         {
             $user_name = $user->name;
             $user_email = $user->email;
+            var_dump($user_name);
+            var_dump($user_email);
+            exit();
             $company_name = $user->company_name;
             $result = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->where('new_quotations.id', $request->quotation_id)->select('users.company_name', 'users.id', 'users.name', 'users.family_name', 'users.email', 'new_quotations.*')->first();
             $result->approved = 1;
