@@ -6082,7 +6082,7 @@ class UserController extends Controller
                 ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$user_name,$user_email,$company_name) {
                     $message->to($mail_to)
                         ->from('noreply@pieppiep.com', $company_name)
-                        ->replyTo($user_email, $user_name)
+                        ->replyTo($user_email, $company_name)
                         ->subject($subject)
                         ->attach($file, [
                             'as' => $filename,
