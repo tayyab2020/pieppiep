@@ -1385,6 +1385,9 @@ class UserController extends Controller
         }
         elseif(\Route::currentRouteName() == 'download-invoice-pdf')
         {
+            $invoice_number = $invoice->invoice_number;
+            $filename = $invoice_number . '.pdf';
+            
             return response()->download(public_path("assets/newInvoices/{$filename}"));
         }
         else
