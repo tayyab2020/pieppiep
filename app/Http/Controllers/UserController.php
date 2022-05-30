@@ -1387,7 +1387,7 @@ class UserController extends Controller
         {
             $invoice_number = $invoice->invoice_number;
             $filename = $invoice_number . '.pdf';
-            
+
             return response()->download(public_path("assets/newInvoices/{$filename}"));
         }
         else
@@ -2055,6 +2055,7 @@ class UserController extends Controller
 
     public function AcceptNewQuotation($id)
     {
+        $now = date('d-m-Y H:i:s');
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $user_role = $user->role_id;
@@ -2075,7 +2076,7 @@ class UserController extends Controller
                 return redirect()->back();
             }
 
-            new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1]);
+            new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now]);
 
             $client_email = $invoice->email;
             $client_name = $invoice->name . ' ' . $invoice->family_name;
@@ -2095,7 +2096,7 @@ class UserController extends Controller
                 return redirect()->back();
             }
 
-            new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1]);
+            new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now]);
 
             $creator_email = $invoice->email;
             $creator_name = $invoice->name;
@@ -9555,35 +9556,35 @@ class UserController extends Controller
         $user_id = $user->id;
 
         $now = date('d-m-Y H:i:s');
-        $check = quotation_invoices::leftjoin('quotes','quotes.id','=','quotation_invoices.quote_id')->where('quotation_invoices.id',$id)->where('quotes.user_id',$user_id)->where('quotation_invoices.invoice',1)->update(['quotation_invoices.received' => 1,'quotation_invoices.received_date' => $now]);
+        $check = new_quotations::leftjoin('quotes','quotes.id','=','new_quotations.quote_request_id')->where('new_quotations.id',$id)->where('quotes.user_id',$user_id)->where('new_quotations.invoice',1)->update(['new_quotations.customer_received' => 1,'new_quotations.received_date' => $now]);
 
         iF($check)
         {
-            $handyman = quotation_invoices::leftjoin('users','users.id','=','quotation_invoices.handyman_id')->where('quotation_invoices.id',$id)->select('users.*','quotation_invoices.quotation_invoice_number')->first();
+            $retailer = new_quotations::leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id',$id)->select('users.*','new_quotations.quotation_invoice_number')->first();
 
             $admin_email = $this->sl->admin_email;
 
             if($this->lang->lang == 'du')
             {
-                $msg = "Beste $handyman->name,<br><br>Je klant heeft de status voor factuur INV# <b>" . $handyman->quotation_invoice_number . "</b> gewijzigd naar goederen ontvangen.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
+                $msg = "Beste $retailer->name,<br><br>Je klant heeft de status voor factuur INV# <b>" . $retailer->quotation_invoice_number . "</b> gewijzigd naar goederen ontvangen.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
             }
             else
             {
-                $msg = "Dear <b>Mr/Mrs " . $handyman->name . "</b>,<br><br>Goods for quotation INV# <b>" . $handyman->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+                $msg = "Dear <b>Mr/Mrs " . $retailer->name . "</b>,<br><br>Goods for quotation INV# <b>" . $retailer->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
             }
 
-            \Mail::send(array(), array(), function ($message) use ($msg,$handyman) {
-                $message->to($handyman->email)
-                    ->from('info@vloerofferte.nl')
+            \Mail::send(array(), array(), function ($message) use ($msg,$retailer) {
+                $message->to($retailer->email)
+                    ->from('info@pieppiep.com')
                     ->subject(__('text.Invoice Status Changed'))
                     ->setBody($msg, 'text/html');
             });
 
-            \Mail::send(array(), array(), function ($message) use ($admin_email, $handyman) {
+            \Mail::send(array(), array(), function ($message) use ($admin_email, $retailer) {
                 $message->to($admin_email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('info@pieppiep.com')
                     ->subject('Invoice Status Changed')
-                    ->setBody("Recent activity: Goods for quotation INV# <b>" . $handyman->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("Recent activity: Goods for quotation INV# <b>" . $retailer->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
             });
 
             Session::flash('success', __('text.Status Updated Successfully!'));
