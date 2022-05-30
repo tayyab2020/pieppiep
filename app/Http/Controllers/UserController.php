@@ -6078,9 +6078,9 @@ class UserController extends Controller
             \Mail::send('user.global_mail',
                 array(
                     'msg' => $msg,
-                ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$user_email) {
+                ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename) {
                     $message->to($mail_to)
-                        ->from($user_email)
+                        ->from('info@pieppiep.com')
                         ->subject($subject)
                         ->attach($file, [
                             'as' => $filename,
