@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Brand;
 use App\estimated_prices;
 use App\items;
+use App\new_quotations;
 use App\retailer_services;
 use App\Model1;
 use App\Products;
@@ -312,13 +313,12 @@ class FrontendController extends Controller
 
     public function QuotationPaymentRedirectPage($id)
     {
-
         $inv_decrypt = Crypt::decrypt($id);
 
         $invoice = new_quotations::where('id',$inv_decrypt)->first();
 
         if ($invoice == "") {
-            return view('front.index');
+            return redirect()->route('front.index');
         } else {
 
             if ($invoice->paid != 1) {
@@ -332,7 +332,6 @@ class FrontendController extends Controller
             }
 
         }
-
 
     }
 
