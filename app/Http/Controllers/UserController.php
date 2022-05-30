@@ -603,7 +603,6 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
-        $user_role = $user->role_id;
         $invoices = array();
 
         $requests = quotes::leftjoin('categories', 'categories.id', '=', 'quotes.quote_service')->leftjoin('services', 'services.id', '=', 'quotes.quote_service1')->where('quotes.user_id', $user_id)->select('quotes.*', 'categories.cat_name','services.title')->orderBy('quotes.created_at','desc')->get();
@@ -611,7 +610,6 @@ class UserController extends Controller
         foreach ($requests as $key) {
             $invoices[] = new_quotations::where('quote_request_id', $key->id)->where('approved', 1)->get();
         }
-
 
         return view('user.client_quote_requests', compact('requests', 'invoices'));
     }
