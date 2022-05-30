@@ -144,7 +144,7 @@
   Route::get('/download-client-custom-quotation/{id}', 'UserController@DownloadClientCustomQuoteInvoice');
   Route::post('/ask-customization', 'UserController@AskCustomization');
   Route::post('/accept-quotation', 'UserController@AcceptQuotationPieppiep');
-  Route::post('/pay-quotation', 'UserController@PayQuotation');
+  Route::post('/pay-quotation', 'UserController@PayQuotationPieppiep');
   Route::get('/quotation-payment-redirect-page/{id}', 'FrontendController@QuotationPaymentRedirectPage');
   Route::get('/versturen-eigen-offerte/{id}', 'UserController@SendCustomQuotation');
   Route::post('/send-new-quotation', 'UserController@SendNewQuotation')->name('send-new-quotation');

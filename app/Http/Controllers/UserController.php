@@ -1867,7 +1867,122 @@ class UserController extends Controller
         return redirect($payment->getCheckoutUrl(), 303);
     }
 
+    public function PayQuotationPieppiep(Request $request)
+    {
+        $pay_invoice_id = $request->pay_invoice_id;
+        $data = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.id', $pay_invoice_id)->select('quotes.*', 'new_quotations.service_fee', 'new_quotations.grand_total','new_quotations.creator_id','new_quotations.quotation_invoice_number','new_quotations.accept_date', 'new_quotations.delivery_date')->first();
 
+        $service_fee = $data->service_fee;
+        $accept_date = $data->accept_date;
+        $delivery_date = $data->delivery_date;
+
+        $second = 1000;
+        $minute = $second * 60;
+        $hour = $minute * 60;
+        $day = $hour * 24;
+
+        if($accept_date !== NULL && $delivery_date !== NULL)
+        {
+            $now1 = date("d-m-Y H:i:s", strtotime('+6 hours', strtotime($accept_date)));
+            $now1 = strtotime($now1) * 1000;
+
+            $countDown_accept = strtotime($accept_date) * 1000;
+            $countDown_delivery = strtotime($delivery_date) * 1000;
+
+            $dif = $countDown_delivery - $countDown_accept;
+
+            $now = date('d-m-Y H:i:s');
+            $now = strtotime($now) * 1000;
+            $distance = $countDown_delivery - $now;
+            $check = 0;
+
+            if (floor($dif / ($day)) >= 3) {
+
+                if ((floor($distance / ($day)) - 2) < 0) {
+
+                    $check = 1;
+
+                }
+
+            } else {
+
+                $distance1 = $now1 - $now;
+
+                if (floor(($distance1 % ($day)) / ($hour)) <= 0 && floor(($distance1 % ($hour)) / ($minute)) <= 0 && floor(($distance1 % ($minute)) / $second) <= 0) {
+
+                    $check = 1;
+
+                }
+            }
+
+        }
+        else
+        {
+            $check = 1;
+        }
+
+        if($check == 0)
+        {
+            $language = $this->lang->lang;
+            $quote_id = $data->id;
+            $retailer_id = $data->creator_id;
+            $quotation_invoice_number = $data->quotation_invoice_number;
+
+            $total_mollie = number_format((float)$data->grand_total, 2, '.', '');
+            $settings = Generalsetting::where('backend',1)->first();
+            $description = 'Payment for Quotation No. ' . $quotation_invoice_number;
+
+            $inv_encrypt = Crypt::encrypt($pay_invoice_id);
+            $commission_percentage = $settings->commission_percentage;
+            $commission = $total_mollie * ($commission_percentage/100);
+            $commission = number_format((float)$commission, 2, '.', '');
+//        $commission_vat = ($commission/(21 + 100)) * 100;
+//        $commission_vat = $commission - $commission_vat;
+
+            $total_receive = $total_mollie - $commission;
+            $total_receive = number_format((float)$total_receive, 2, '.', '');
+
+            $commission_invoice_number = explode('-',  $quotation_invoice_number);
+            unset($commission_invoice_number[1]);
+            $commission_invoice_number = implode("-",$commission_invoice_number);
+            $api_key = Generalsetting::where('backend',0)->pluck('mollie')->first();
+
+            $total_mollie = $total_mollie + $service_fee;
+            $total_mollie = number_format((float)$total_mollie, 2, '.', '');
+
+            $mollie = new \Mollie\Api\MollieApiClient();
+            $mollie->setApiKey($api_key);
+            $payment = $mollie->payments->create([
+                'amount' => [
+                    'currency' => 'EUR',
+                    'value' => $total_mollie, // You must send the correct number of decimals, thus we enforce the use of strings
+                ],
+                'description' => $description,
+                'webhookUrl' => route('webhooks.quotation_payment'),
+                'redirectUrl' => url('aanbieder/quotation-payment-redirect-page/' . $inv_encrypt),
+                "metadata" => [
+                    "invoice_id" => $pay_invoice_id,
+                    "quote_id" => $quote_id,
+                    "retailer_id" => $retailer_id,
+                    "quotation_invoice_number" => $quotation_invoice_number,
+                    "commission_invoice_number" => $commission_invoice_number,
+                    "paid_amount" => $total_mollie,
+                    "commission_percentage" => $commission_percentage,
+                    "commission" => $commission,
+                    "total_receive" => $total_receive,
+                    "language" => $language,
+                    "service_fee" => $service_fee
+                ],
+            ]);
+
+            return redirect($payment->getCheckoutUrl(), 303);
+        }
+        else
+        {
+            Session::flash('unsuccess', 'Quotation Expired!');
+            return redirect()->back();
+        }
+    }
 
     public function CustomQuotationAcceptQuotation($id)
     {
