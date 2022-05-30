@@ -5431,10 +5431,10 @@ class UserController extends Controller
             {
                 if($ask && !$request->quote_request_id)
                 {
-                    \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number) {
+                    \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number, $user_email) {
                         $message->to($client->email)
-                            ->from('info@vloerofferte.nl')
-                            ->subject('Quotation updated!')
+                            ->from($user_email)
+                            ->subject(__('text.Quotation updated!'))
                             ->setBody("Quotation QUO# <b>" . $quotation_invoice_number . "</b> have been updated by retailer on your review request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
                     });
                 }
@@ -6078,9 +6078,9 @@ class UserController extends Controller
             \Mail::send('user.global_mail',
                 array(
                     'msg' => $msg,
-                ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename) {
+                ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$user_email) {
                     $message->to($mail_to)
-                        ->from('info@pieppiep.com')
+                        ->from($user_email)
                         ->subject($subject)
                         ->attach($file, [
                             'as' => $filename,

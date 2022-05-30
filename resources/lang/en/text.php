@@ -494,4 +494,5 @@ return [
     'Brands' => 'Brands',
     'Models' => 'Models',
     'Types' => 'Types',
+    'Quotation updated!' => 'Quotation updated!',
 ];
