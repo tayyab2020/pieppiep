@@ -1383,12 +1383,16 @@ class UserController extends Controller
         $user_id = $user->id;
         $user_role = $user->role_id;
 
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
         $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.id', $id)->where(function($query) use ($user_id) {
             $query->where('quotes.user_id', $user_id)->orWhere('new_quotations.user_id',$user_id);
         })->first();
-
-        var_dump($invoice);
-        exit();
 
         if (!$invoice) {
             return redirect()->back();
