@@ -238,7 +238,7 @@ class SendOrder implements ShouldQueue
                 array(
                     'msg' => $mail_body,
                 ), function ($message) use ($sup,$mail_subject,$retailer_company,$retailer_email) {
-                    $message->to('tayyabkhurram62@gmail.com')
+                    $message->to($sup['email'])
                         ->from('noreply@pieppiep.com', $retailer_company)
                         ->replyTo($retailer_email, $retailer_company)
                         ->subject($mail_subject)
