@@ -1700,7 +1700,7 @@
                         <div class="dropdown">
                             <button style="padding: 10px;font-family: Apax,Arial,sans-serif;" class="dropbtn">Profile <i style="margin-left: 5px;" class="fa fa-angle-down"></i></button>
                             <div class="dropdown-content">
-                                <a href="{{route('user-dashboard')}}">{{Auth::guard('user')->user()->role_id == 2 ? 'Retailer Dashboard' : (Auth::guard('user')->user()->role_id == 4 ? 'Supplier Dashboard' : 'Customer Dashboard'))}}</a>
+                                <a href="{{route('user-dashboard')}}">{{Auth::guard('user')->user()->role_id == 2 ? 'Retailer Dashboard' : (Auth::guard('user')->user()->role_id == 4 ? 'Supplier Dashboard' : 'Customer Dashboard')}}</a>
                                 <a href="{{route('user-logout')}}">{{$lang->logout}}</a>
                             </div>
                         </div>
