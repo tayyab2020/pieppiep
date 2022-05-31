@@ -1387,9 +1387,6 @@ class UserController extends Controller
             $query->where('quotes.user_id', $user_id)->orWhere('new_quotations.user_id',$user_id);
         })->first();
 
-        var_dump($invoice);
-        exit();
-
         if (!$invoice) {
             return redirect()->back();
         }
