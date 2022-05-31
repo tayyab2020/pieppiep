@@ -9600,14 +9600,14 @@ class UserController extends Controller
 
             \Mail::send(array(), array(), function ($message) use ($msg,$retailer) {
                 $message->to($retailer->email)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com')
                     ->subject(__('text.Invoice Status Changed'))
                     ->setBody($msg, 'text/html');
             });
 
             \Mail::send(array(), array(), function ($message) use ($admin_email, $retailer) {
                 $message->to($admin_email)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com')
                     ->subject('Invoice Status Changed')
                     ->setBody("Recent activity: Goods for quotation INV# <b>" . $retailer->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
             });
