@@ -71,6 +71,7 @@ class SendOrder implements ShouldQueue
 
         $retailer_name = $user->name . ' ' . $user->family_name;
         $retailer_company = $user->company_name;
+        $retailer_email = $user->email;
 
         $check = new_quotations::where('id',$id)->where('creator_id',$user_id)->first();
 
@@ -236,9 +237,10 @@ class SendOrder implements ShouldQueue
             \Mail::send('user.global_mail',
                 array(
                     'msg' => $mail_body,
-                ), function ($message) use ($sup,$mail_subject) {
-                    $message->to($sup['email'])
-                        ->from('info@pieppiep.com')
+                ), function ($message) use ($sup,$mail_subject,$retailer_company,$retailer_email) {
+                    $message->to('tayyabkhurram62@gmail.com')
+                        ->from('noreply@pieppiep.com', $retailer_company)
+                        ->replyTo($retailer_email, $retailer_company)
                         ->subject($mail_subject)
                         ->attach($sup['file'], [
                             'as' => $sup['file_name'],
