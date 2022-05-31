@@ -30,7 +30,7 @@
                                     <br>
                                     @if($role != 'retailer' && $role != 'supplier1' && $role != 'supplier2') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> {{$user->quotation_prefix}}: {{$quotation_invoice_number}}</p> @endif
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @elseif($role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', $order_numbers_string), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}}@endif</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @elseif($role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', array_filter($order_numbers_string)), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}}@endif</p>
 
                                     <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 

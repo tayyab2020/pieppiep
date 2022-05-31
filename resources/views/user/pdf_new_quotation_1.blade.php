@@ -102,7 +102,7 @@
 
                                     @endif
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">@if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = ltrim(implode(',', $order_numbers_string), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
+                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">@if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = ltrim(implode(',', array_filter($order_numbers_string)), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
 
                                     </div>
 
