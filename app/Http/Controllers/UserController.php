@@ -2098,7 +2098,8 @@ class UserController extends Controller
 
             \Mail::send(array(), array(), function ($message) use ($client_email, $client_name, $invoice, $user) {
                 $message->to($client_email)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com', $user->company_name)
+                    ->replyTo($user->email, $user->company_name)
                     ->subject(__('text.Quotation Accepted!'))
                     ->setBody("Hi " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
@@ -2118,7 +2119,7 @@ class UserController extends Controller
 
             \Mail::send(array(), array(), function ($message) use ($creator_email, $creator_name, $invoice, $user) {
                 $message->to($creator_email)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com')
                     ->subject(__('text.Quotation Accepted!'))
                     ->setBody("Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
@@ -5431,9 +5432,10 @@ class UserController extends Controller
             {
                 if($ask && !$request->quote_request_id)
                 {
-                    \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number, $user_email) {
+                    \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number, $user_email, $company_name) {
                         $message->to($client->email)
-                            ->from($user_email)
+                            ->from('noreply@pieppiep.com', $company_name)
+                            ->replyTo($user_email, $company_name)
                             ->subject(__('text.Quotation updated!'))
                             ->setBody("Quotation QUO# <b>" . $quotation_invoice_number . "</b> have been updated by retailer on your review request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
                     });
