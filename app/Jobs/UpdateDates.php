@@ -67,6 +67,7 @@ class UpdateDates implements ShouldQueue
 
         $supplier_id = $supplier->id;
         $supplier_name = $supplier->name . ' ' . $supplier->family_name;
+        $supplier_email = $supplier->email;
         $user = User::where('id',$request['creator_id'])->first();
         $user_id = $user->id;
         $retailer_email = $user->email;
@@ -184,18 +185,20 @@ class UpdateDates implements ShouldQueue
 
         if($is_approved)
         {
-            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number) {
+            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
                 $message->to($retailer_email)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com', $supplier_name)
+                    ->replyTo($supplier_email, $supplier_name)
                     ->subject('Order Approved!')
                     ->setBody("Recent activity: Hi ".$retailer_company.", delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
         }
         else
         {
-            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number) {
-                $message->to($retailer_email)
-                    ->from('info@pieppiep.com')
+            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
+                $message->to('tayyabkhurram62@gmail.com')
+                    ->from('noreply@pieppiep.com', $supplier_name)
+                    ->replyTo($supplier_email, $supplier_name)
                     ->subject('Order Approved!')
                     ->setBody("Recent activity: Hi ".$retailer_company.", order has been approved by supplier <b>".$supplier_name."</b> for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
