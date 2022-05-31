@@ -1398,7 +1398,7 @@ class UserController extends Controller
         {
             return response()->download(public_path("assets/newQuotations/{$filename}"));
         }
-        elseif(\Route::currentRouteName() == 'download-invoice-pdf')
+        elseif(\Route::currentRouteName() == 'download-client-invoice-pdf')
         {
             $invoice_number = $invoice->invoice_number;
             $filename = $invoice_number . '.pdf';
@@ -6395,6 +6395,7 @@ class UserController extends Controller
         }
         
         $retailer_company = $user->company_name;
+        $retailer_email = $user->email;
         $invoice_number = $check->invoice_number;
         $filename = $invoice_number . '.pdf';
         $file = public_path() . '/assets/newInvoices/' . $filename;
@@ -6406,9 +6407,10 @@ class UserController extends Controller
         \Mail::send('user.global_mail',
             array(
                 'msg' => $msg,
-            ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename) {
+            ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$retailer_company,$retailer_email) {
                 $message->to($mail_to)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com', $retailer_company)
+                    ->replyTo($retailer_email, $retailer_company)
                     ->subject($subject)
                     ->attach($file, [
                         'as' => $filename,
