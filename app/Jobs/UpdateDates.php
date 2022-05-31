@@ -196,7 +196,7 @@ class UpdateDates implements ShouldQueue
         else
         {
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
-                $message->to('tayyabkhurram62@gmail.com')
+                $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)
                     ->replyTo($supplier_email, $supplier_name)
                     ->subject('Order Approved!')
