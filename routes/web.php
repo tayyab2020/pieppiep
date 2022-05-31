@@ -84,7 +84,8 @@
   Route::get('/edit-order/{id}', 'UserController@EditOrder')->name('edit-order');
   Route::get('/view-order/{id}', 'UserController@EditOrder')->name('view-order');
   Route::get('/download-new-quotation/{id}', 'UserController@DownloadNewQuotation');
-  Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadClientQuoteInvoice')->name('download-invoice-pdf');
+  Route::get('/download-client-invoice-pdf/{id}', 'UserController@DownloadClientQuoteInvoice')->name('download-client-invoice-pdf');
+  Route::get('/download-invoice-pdf/{id}', 'UserController@DownloadInvoicePDF')->name('download-invoice-pdf');
   Route::get('/download-service-fee-invoice/{id}', 'UserController@DownloadClientQuoteInvoice')->name('download-service-fee-invoice');
   Route::get('/download-negative-invoice-pdf/{id}', 'UserController@DownloadNegativeInvoicePDF');
   Route::get('/download-order-pdf/{id}', 'UserController@DownloadOrderPDF');

@@ -351,7 +351,7 @@
 
                                                                             @if($key->invoice_sent)
 
-                                                                                <li><a href="{{ url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/download-client-invoice-pdf/'.$key->invoice_id) }}">Download Invoice PDF</a></li>
 
                                                                             @endif
 

@@ -421,7 +421,7 @@
 
                                                                                     <li><a href="{{ url('/aanbieder/view-new-invoice/'.$key->invoice_id) }}">{{__('text.View Invoice')}}</a></li>
 
-                                                                                    <li><a href="{{ isset($key->invoices[0]) ? url('/aanbieder/download-invoice-pdf/'.$key->invoice_id) : null }}">{{__('text.Download Invoice PDF')}}</a></li>
+                                                                                    <li><a href="{{ isset($key->invoices[0]) ? url('/aanbieder/download-invoice-pdf/'.$key->invoices[0]->id) : null }}">{{__('text.Download Invoice PDF')}}</a></li>
 
                                                                                 @endif
 
