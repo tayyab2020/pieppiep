@@ -9581,7 +9581,7 @@ class UserController extends Controller
         $user_id = $user->id;
 
         $now = date('d-m-Y H:i:s');
-        $check = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.id', $id)->where('new_quotations.invoice',1)->where(function($query) use ($user_id) {
+        $check = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.id', $id)->where(function($query) use ($user_id) {
             $query->where('quotes.user_id', $user_id)->orWhere('new_quotations.user_id',$user_id);
         })->update(['new_quotations.customer_received' => 1,'new_quotations.received_date' => $now]);
 
