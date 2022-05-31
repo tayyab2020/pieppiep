@@ -6260,6 +6260,7 @@ class UserController extends Controller
 
         $user_id = $user->id;
         $supplier_name = $user->name . ' ' . $user->family_name;
+        $supplier_email = $user->email;
 
         $data = new_quotations::leftjoin('new_orders', 'new_orders.quotation_id', '=', 'new_quotations.id')->where('new_quotations.id',$id)->where('new_orders.supplier_id', $user_id)->where('new_orders.processing','!=',1)->where('new_orders.approved',1)->where('new_orders.delivered','!=',1)->select('new_quotations.*','new_orders.order_number')->first();
 
@@ -6288,10 +6289,11 @@ class UserController extends Controller
             $retailer_email = $retailer->email;
             $order_number = $data->order_number;
 
-            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $order_number) {
+            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $order_number, $supplier_email) {
                 $message->to($retailer_email)
-                    ->from('info@pieppiep.com')
-                    ->subject('Order marked as delivered by supplier!')
+                    ->from('noreply@pieppiep.com', $supplier_name)
+                    ->replyTo($supplier_email, $supplier_name)
+                    ->subject(__('text.Order marked as delivered by supplier!'))
                     ->setBody("Recent activity: Hi ".$retailer_company.", order has been delivered by supplier <b>".$supplier_name."</b><br> Order No: <b>" . $order_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
 
@@ -6316,6 +6318,7 @@ class UserController extends Controller
 
         $user_id = $user->id;
         $retailer_company = $user->company_name;
+        $retailer_email = $user->email;
 
         $data = new_quotations::where('id',$id)->where('creator_id', $user_id)->first();
 
@@ -6339,10 +6342,11 @@ class UserController extends Controller
 
             $quotation_invoice_number = $data->quotation_invoice_number;
 
-            \Mail::send(array(), array(), function ($message) use ($client_email, $retailer_company, $client_name, $quotation_invoice_number) {
+            \Mail::send(array(), array(), function ($message) use ($client_email, $retailer_company, $client_name, $quotation_invoice_number, $retailer_email) {
                 $message->to($client_email)
-                    ->from('info@pieppiep.com')
-                    ->subject('Quotation marked as delivered by retailer!')
+                    ->from('noreply@pieppiep.com', $retailer_company)
+                    ->replyTo($retailer_email, $retailer_company)
+                    ->subject(__('text.Quotation marked as delivered by retailer!'))
                     ->setBody("Recent activity: Hi ".$client_name.", quotation has been delivered by retailer <b>".$retailer_company."</b><br> Quotation No: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
 

@@ -189,7 +189,7 @@ class UpdateDates implements ShouldQueue
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)
                     ->replyTo($supplier_email, $supplier_name)
-                    ->subject('Order Approved!')
+                    ->subject(__('text.Order Approved!'))
                     ->setBody("Recent activity: Hi ".$retailer_company.", delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
         }
@@ -199,7 +199,7 @@ class UpdateDates implements ShouldQueue
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)
                     ->replyTo($supplier_email, $supplier_name)
-                    ->subject('Order Approved!')
+                    ->subject(__('text.Order Approved!'))
                     ->setBody("Recent activity: Hi ".$retailer_company.", order has been approved by supplier <b>".$supplier_name."</b> for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
         }
