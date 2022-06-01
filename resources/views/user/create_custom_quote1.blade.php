@@ -34,14 +34,10 @@
 
 												@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
 
-													@if(!$invoice[0]->invoice_sent || Route::currentRouteName() == 'create-new-negative-invoice')
-
-														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-															<i class="fa fa-fw fa-save"></i>
-															<span class="tooltiptext">{{__('text.Save')}}</span>
-														</span>
-
-													@endif
+													<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+														<i class="fa fa-fw fa-save"></i>
+														<span class="tooltiptext">{{__('text.Save')}}</span>
+													</span>
 
 												@else
 
@@ -54,7 +50,7 @@
 
 													@endif
 
-												@endif												
+												@endif
 
 												<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
 													<i class="fa fa-fw fa-close"></i>
@@ -93,11 +89,7 @@
 
 														@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
 
-															@if(!$invoice[0]->invoice_sent || Route::currentRouteName() == 'create-new-negative-invoice')
-
-																<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
-
-															@endif
+															<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
 
 														@else
 
@@ -221,12 +213,13 @@
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
 																		</div>
                                                                     </div>
-																	
+
 																	<div class="content item6" style="width: 17%;">
 
 																		<label class="content-label">{{__('text.€ Art.')}}</label>
 
 																		<div style="display: flex;align-items: center;">
+																			<span>€</span>
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																			<input type="hidden" value="{{$item->price_before_labor}}" class="price_before_labor_old">
 																		</div>
@@ -236,6 +229,7 @@
 
 																		<label class="content-label">{{__('text.Discount')}}</label>
 
+																		<span>€</span>
 																		<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
 																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
                                                                     </div>
@@ -250,14 +244,14 @@
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
 
-																		@if((Route::currentRouteName() == 'create-new-negative-invoice') || (isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+																		@if((Route::currentRouteName() == 'create-new-negative-invoice' || Route::currentRouteName() == 'view-new-invoice') || (isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
 
 																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
 																				<div style="display: none;" class="green-circle tooltip1">
                                                                                 	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>
                                                                             	</div>
-                                                                            	
+
 																				<div style="visibility: hidden;" class="yellow-circle tooltip1">
                                                                                 	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>
                                                                             	</div>
@@ -285,7 +279,7 @@
                                                                         	</div>
 
 																		@endif
-                                                                        
+
                                                                     </div>
 
                                                                     <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
@@ -365,6 +359,7 @@
 																		<label class="content-label">{{__('text.€ Art.')}}</label>
 
 																		<div style="display: flex;align-items: center;">
+																			<span>€</span>
 																			<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																			<input type="hidden" value="0" class="price_before_labor_old">
 																		</div>
@@ -374,6 +369,7 @@
 
 																		<label class="content-label">{{__('text.Discount')}}</label>
 
+																		<span>€</span>
 																		<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
 																		<input type="hidden" value="0" class="total_discount_old">
                                                                     </div>
@@ -452,7 +448,7 @@
 																		<input value="{{isset($invoice) ? ($invoice[0]->retailer_delivery_date ? date('d-m-Y',strtotime($invoice[0]->retailer_delivery_date)) : null) : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="retailer_delivery_date">
 
 																	@endif
-																	
+
 																</div>
 																<div class="headings1" style="width: 23%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">{{__('text.Total')}}</span></div>
 																<div class="headings1" style="width: 7%;display: flex;align-items: center;">
@@ -465,7 +461,7 @@
 																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
 																	</div>
 																</div>
-																
+
 																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Te betalen: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
@@ -523,11 +519,11 @@
 													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background: white;padding: 15px 0 0 0;">
 
 														<ul style="border: 0;" class="nav nav-tabs feature-tab">
-															
+
 															<li style="margin-bottom: 0;" class="active"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu2" aria-expanded="false">{{__('text.Calculator')}}</a></li>
 
 															<li style="margin-bottom: 0;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">{{__('text.Features')}}</a></li>
-														
+
 														</ul>
 
 														<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
@@ -996,7 +992,7 @@
 																					</div>
 
 																					<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
-																						
+
 																						<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
 
 																							<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
@@ -1106,7 +1102,7 @@
 																				</div>
 
 																				<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
-																					
+
 																					<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
 
 																						<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
@@ -5135,7 +5131,7 @@
 
 			});
 
-			function select_product(current,product_id,model_id,color_id,supplier_id,row_id,measure,box_quantity,max_width,quote_qty = null)
+			function select_product(current,product_id,model_id,color_id,supplier_id,row_id,measure,box_quantity,max_width,quote_qty = 1)
 			{
 				$('#products_table').find(`[data-id='${row_id}']`).find('#area_conflict').val(0);
 
@@ -5410,6 +5406,10 @@
 											}
 										}
 									}
+								}
+								else
+								{
+									$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(quote_qty);
 								}
 							}
 							else

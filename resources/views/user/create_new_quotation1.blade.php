@@ -33,14 +33,10 @@
 
 												@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
 
-													@if(!$invoice[0]->invoice_sent || Route::currentRouteName() == 'create-new-negative-invoice')
-
-														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-															<i class="fa fa-fw fa-save"></i>
-															<span class="tooltiptext">{{__('text.Save')}}</span>
-														</span>
-
-													@endif
+													<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+														<i class="fa fa-fw fa-save"></i>
+														<span class="tooltiptext">{{__('text.Save')}}</span>
+													</span>
 
 												@else
 
@@ -90,11 +86,7 @@
 
 														@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
 
-															@if(!$invoice[0]->invoice_sent || Route::currentRouteName() == 'create-new-negative-invoice')
-
-																<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
-
-															@endif
+															<button type="button" href="#myModal1" role="button" data-toggle="modal" style="outline: none;margin-left: 10px;" class="btn btn-primary">{{__('text.Add New Customer')}}</button>
 
 														@else
 
@@ -228,6 +220,7 @@
 																		<label class="content-label">€ Art.</label>
 
 																		<div style="display: flex;align-items: center;">
+																			<span>€</span>
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																			<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
 																		</div>
@@ -238,6 +231,7 @@
 																		<label class="content-label">€ Arb.</label>
 
 																		<div style="display: flex;align-items: center;">
+																			<span>€</span>
 																			<input type="text" value="{{str_replace('.', ',',floatval($item->labor_impact))}}" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
 																			<input type="hidden" value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
 																		</div>
@@ -247,6 +241,7 @@
 
 																		<label class="content-label">Discount</label>
 
+																		<span>€</span>
 																		<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
 																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
                                                                     </div>
@@ -261,7 +256,7 @@
 
 																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
 
-																		@if((Route::currentRouteName() == 'create-new-negative-invoice') || (isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+																		@if((Route::currentRouteName() == 'create-new-negative-invoice' || Route::currentRouteName() == 'view-new-invoice') || (isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
 
 																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
@@ -452,6 +447,7 @@
 																		<label class="content-label">€ Art.</label>
 
 																		<div style="display: flex;align-items: center;">
+																			<span>€</span>
 																			<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																			<input type="hidden" value="0" class="price_before_labor_old">
 																		</div>
@@ -462,6 +458,7 @@
 																		<label class="content-label">€ Arb.</label>
 
 																		<div style="display: flex;align-items: center;">
+																			<span>€</span>
 																			<input type="text" value="0" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
 																			<input type="hidden" value="0" class="labor_impact_old">
 																		</div>
@@ -471,6 +468,7 @@
 
 																		<label class="content-label">Discount</label>
 
+																		<span>€</span>
 																		<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
 																		<input type="hidden" value="0" class="total_discount_old">
                                                                     </div>

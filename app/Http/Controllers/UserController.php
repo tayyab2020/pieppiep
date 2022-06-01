@@ -2599,6 +2599,7 @@ class UserController extends Controller
                 $retailer = User::where('id',$user_id)->first();
                 $retailer_name = $retailer->name;
                 $company_name = $retailer->company_name;
+                $retailer_email = $retailer->email;
 
                 $org_password = Str::random(8);
                 $password = Hash::make($org_password);
@@ -2646,9 +2647,10 @@ class UserController extends Controller
                     $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
                 }
 
-                \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password) {
+                \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
                     $message->to($user_email)
-                        ->from('info@vloerofferte.nl')
+                        ->from('noreply@pieppiep.com', $company_name)
+                        ->replyTo($retailer_email, $company_name)
                         ->subject(__('text.Account Created!'))
                         ->setBody($msg, 'text/html');
                 });
@@ -2855,13 +2857,13 @@ class UserController extends Controller
             }
 
             $headers =  'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'From: Pieppiep <info@pieppiep.com>' . "\r\n";
+            $headers .= 'From: Pieppiep <noreply@pieppiep.com>' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
             $subject = "Account Created!";
             $msg = "Dear Mr/Mrs ".$request->name.",<br><br>Your company <b>".$company_name."</b> has created an employee account for you. Here is your username and password <br>Username: ".$request->email."<br>Password: ".$request->password."<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
             mail($request->email,$subject,$msg,$headers);
 
-            Session::flash('success', 'Employee created successfully!');
+            Session::flash('success', __('text.Employee created successfully!'));
             return redirect()->route('employees');
         }
     }
@@ -2963,6 +2965,7 @@ class UserController extends Controller
             $retailer = User::where('id',$user_id)->first();
             $retailer_name = $retailer->name;
             $company_name = $retailer->company_name;
+            $retailer_email = $retailer->email;
 
             $org_password = Str::random(8);
             $password = Hash::make($org_password);
@@ -3008,9 +3011,10 @@ class UserController extends Controller
                 $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
             }
 
-            \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password) {
+            \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
                 $message->to($user_email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('noreply@pieppiep.com', $company_name)
+                    ->replyTo($retailer_email, $company_name)
                     ->subject(__('text.Account Created!'))
                     ->setBody($msg, 'text/html');
             });
@@ -3059,7 +3063,7 @@ class UserController extends Controller
         }
         else
         {
-            $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->where('new_quotations.id',$id)->select('new_quotations.*','users.name','users.email')->first();
+            $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->leftjoin('customers_details','customers_details.user_id','=','users.id')->where('new_quotations.id',$id)->select('new_quotations.*','customers_details.name','users.email')->first();
         }
 
         if($req_type == 'quotation')
@@ -3761,7 +3765,7 @@ class UserController extends Controller
         }
 
         if($check)
-        {            
+        {
             $quotation_id = $check->quotation_id;
             $supplier_id = $check->supplier_id;
             
@@ -3796,7 +3800,23 @@ class UserController extends Controller
             }
             else
             {
-                $products = array();
+                if($user_role == 2)
+                {
+                    if($check->form_type == 1)
+                    {
+                        $floor_category_id = Category::where('cat_name','LIKE', '%Floors%')->orWhere('cat_name','LIKE', '%Vloeren%')->pluck('id')->first();
+                        $products = products::leftjoin('users','users.id','=','products.user_id')->where('user_id',$supplier_id)->where('products.category_id',$floor_category_id)->with('colors')->with('models')->select('products.*','users.name','users.family_name','users.company_name')->get();
+                    }
+                    else
+                    {
+                        $blinds_category_id = Category::where('cat_name','LIKE', '%Blinds%')->orWhere('cat_name','LIKE', '%Binnen zonwering%')->pluck('id')->first();
+                        $products = Products::where('user_id',$supplier_id)->where('category_id',$blinds_category_id)->with('colors')->with('models')->get();
+                    }
+                }
+                else
+                {
+                    $products = array();
+                }
 
                 if($check->form_type == 1)
                 {

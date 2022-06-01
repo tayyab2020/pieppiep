@@ -498,4 +498,5 @@ return [
     'Order Approved!' => 'Order Approved!',
     'Order marked as delivered by supplier!' => 'Order marked as delivered by supplier!',
     'Quotation marked as delivered by retailer!' => 'Quotation marked as delivered by retailer!',
+    'Employee created successfully!' => 'Employee created successfully!',
 ];
