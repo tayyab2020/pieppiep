@@ -3812,24 +3812,34 @@
 
 				$("[name='colors[]']").each(function (i, obj) {
 
-					if (!obj.value) {
-						flag = 1;
-						$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
-					}
-					else {
-						$(obj).parents('.products').find('#productInput').css('border', '0');
+					var product_id = $("[name='products[]']").eq(i).val();
+
+					if(!product_id.includes('S') && !product_id.includes('I'))
+					{
+						if (!obj.value) {
+							flag = 1;
+							$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
+						}
+						else {
+							$(obj).parents('.products').find('#productInput').css('border', '0');
+						}
 					}
 
 				});
 
 				$("[name='models[]']").each(function (i, obj) {
 
-					if (!obj.value) {
-						flag = 1;
-						$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
-					}
-					else {
-						$(obj).parents('.products').find('#productInput').css('border', '0');
+					var product_id = $("[name='products[]']").eq(i).val();
+
+					if(!product_id.includes('S') && !product_id.includes('I'))
+					{
+						if (!obj.value) {
+							flag = 1;
+							$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
+						}
+						else {
+							$(obj).parents('.products').find('#productInput').css('border', '0');
+						}
 					}
 
 				});

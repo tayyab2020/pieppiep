@@ -567,7 +567,7 @@
 
                                                                             @endif
 
-                                                                            @if(!$key->approved && !$key->quote_request_id)
+                                                                            @if(!$key->accepted && !$key->quote_request_id)
 
                                                                                 <li><a class="send-new-quotation" data-id="{{$key->invoice_id}}" href="javascript:void(0)">{{__('text.Send Quotation')}}</a></li>
 

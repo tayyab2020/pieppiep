@@ -86,7 +86,12 @@ class CreateOrder implements ShouldQueue
         $sub_titles = $this->sub_titles;
         $date = $this->date;
         $client = $this->client;
-        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $client->id)->select('customers_details.*','users.email')->first(); // refetching because of email issue
+
+        if($client)
+        {
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $client->id)->select('customers_details.*','users.email')->first(); // refetching because of email issue
+        }
+        
         $user = $this->user;
         $request = $this->request;
         $request = (object) $request;

@@ -519,7 +519,7 @@ class AdminUserController extends Controller
 
         $history = handyman_quotes::leftjoin('users','users.id','=','handyman_quotes.handyman_id')->where('handyman_quotes.quote_id',$id)->select('users.*','handyman_quotes.created_at as quote_date')->get();
 
-        if(($result['status']) != 'ZERO_RESULTS')
+        if(($result['status']) != 'ZERO_RESULTS' && $result['status'] != 'REQUEST_DENIED')
         {
             $user_latitude = $result['results'][0]['geometry']['location']['lat'];
             $user_longitude = $result['results'][0]['geometry']['location']['lng'];
@@ -589,7 +589,6 @@ class AdminUserController extends Controller
             $handymen = $handymen->sortBy('distance');
 
         }
-
         else
         {
             Session::flash('unsuccess', 'Invalid Postal code given in quote request!');
