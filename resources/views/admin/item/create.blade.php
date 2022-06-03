@@ -184,7 +184,17 @@
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Product</label>
                                                             <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
                                                                 <div style="padding: 0;" class="col-lg-8">
-                                                                    <input value="{{$key}}" class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">
+                                                                    <select class="form-control js-data-example-ajax11" name="products[]">
+
+                                                                        <option value="">Select Product</option>
+
+                                                                        @foreach($retailer_products as $temp)
+
+                                                                            <option {{$temp->id == $key ? 'selected' : null}} value="{{$temp->id}}">{{$temp->title}}</option>
+
+                                                                        @endforeach
+
+                                                                    </select>
                                                                 </div>
                                                                 <div style="display: flex;justify-content: flex-start;" class="col-lg-4">
                                                                     <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
@@ -201,7 +211,11 @@
                                                     <label class="control-label col-sm-4" for="blood_group_slug">Product</label>
                                                     <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
                                                         <div style="padding: 0;" class="col-lg-8">
-                                                            <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">
+                                                            <select class="form-control js-data-example-ajax11" name="products[]">
+
+                                                                <option value="">Select Product</option>
+
+                                                            </select>
                                                         </div>
                                                         <div style="display: flex;justify-content: flex-start;" class="col-lg-4">
                                                             <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
@@ -247,7 +261,13 @@
                 '                                                <label class="control-label col-sm-4" for="blood_group_slug">Product</label>\n' +
                 '                                                <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
                 '                                                    <div style="padding: 0;" class="col-lg-8">\n' +
-                '                                                        <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">\n' +
+                '\n' +
+                '                                                       <select class="form-control js-data-example-ajax11" name="products[]">\n' +
+                '\n' +
+                '                                                           <option value="">Select Product</option>\n' +
+                '\n' +
+                '                                                       </select>\n' +
+                '\n' +
                 '                                                    </div>\n' +
                 '                                                    <div style="display: flex;justify-content: flex-start;" class="col-lg-4">\n' +
                 '                                                        <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
@@ -255,6 +275,17 @@
                 '                                                    </div>\n' +
                 '                                                </div>\n' +
                 '                                            </div>');
+
+            var last_row = $('.products-box .js-data-example-ajax11:last');
+
+            last_row.select2({
+                width: '100%',
+                placeholder: "Select Product",
+                allowClear: true,
+            });
+
+            var id = $(".js-data-example-ajax9").val();
+            get_products_by_retailers(id,last_row);
 
         });
 
@@ -268,7 +299,13 @@
                     '                                                <label class="control-label col-sm-4" for="blood_group_slug">Product</label>\n' +
                     '                                                <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
                     '                                                    <div style="padding: 0;" class="col-lg-8">\n' +
-                    '                                                        <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">\n' +
+                    '\n' +
+                    '                                                       <select class="form-control js-data-example-ajax11" name="products[]">\n' +
+                    '\n' +
+                    '                                                           <option value="">Select Product</option>\n' +
+                    '\n' +
+                    '                                                       </select>\n' +
+                    '\n' +
                     '                                                    </div>\n' +
                     '                                                    <div style="display: flex;justify-content: flex-start;" class="col-lg-4">\n' +
                     '                                                        <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
@@ -276,6 +313,17 @@
                     '                                                    </div>\n' +
                     '                                                </div>\n' +
                     '                                            </div>');
+
+                var last_row = $('.products-box .js-data-example-ajax11:last');
+
+                last_row.select2({
+                    width: '100%',
+                    placeholder: "Select Product",
+                    allowClear: true,
+                });
+
+                var id = $(".js-data-example-ajax9").val();
+                get_products_by_retailers(id,last_row);
             }
 
         });
@@ -463,6 +511,43 @@
             });
         }
 
+        function get_products_by_retailers(id,last_row = null)
+        {
+            var options = '';
+
+            $.ajax({
+                type:"GET",
+                data: "id=" + id,
+                url: "<?php echo url('/logstof/get-products-by-retailer')?>",
+                success: function(data) {
+
+                    $.each(data, function(index, value) {
+
+                        var opt = '<option value="'+value.id+'" >'+value.title+'</option>';
+
+                        options = options + opt;
+
+                    });
+
+                    if(last_row)
+                    {
+                        last_row.find('option')
+                            .remove()
+                            .end()
+                            .append('<option value="">Select Product</option>'+options);
+                    }
+                    else
+                    {
+                        $('.js-data-example-ajax11').find('option')
+                            .remove()
+                            .end()
+                            .append('<option value="">Select Product</option>'+options);
+                    }
+
+                }
+            });
+        }
+
         $('body').on('change', '.js-data-example-ajax8' ,function(){
 
             var id = $(this).val();
@@ -471,9 +556,23 @@
 
         });
 
+        $('body').on('change', '.js-data-example-ajax9' ,function(){
+
+            var id = $(this).val();
+
+            get_products_by_retailers(id);
+
+        });
+
         $(".js-data-example-ajax9").select2({
             width: '100%',
             placeholder: "Select Retailer",
+            allowClear: true,
+        });
+
+        $(".js-data-example-ajax11").select2({
+            width: '100%',
+            placeholder: "Select Product",
             allowClear: true,
         });
 
@@ -485,7 +584,6 @@
             });
 
         }
-
 
         function readURL(input) {
             if (input.files && input.files[0]) {

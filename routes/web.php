@@ -329,13 +329,6 @@
   Route::post('/type/update/{id}', 'ModelController@update')->name('admin-model-update');
   Route::get('/type/delete/{id}', 'ModelController@destroy')->name('admin-model-delete');
 
-  Route::get('/items', 'ItemController@index')->name('admin-item-index');
-  Route::get('/item/create', 'ItemController@create')->name('admin-item-create');
-  Route::post('/item/create', 'ItemController@store')->name('admin-item-store');
-  Route::get('/item/edit/{id}', 'ItemController@edit')->name('admin-item-edit');
-  Route::post('/item/update/{id}', 'ItemController@update')->name('admin-item-update');
-  Route::get('/item/delete/{id}', 'ItemController@destroy')->name('admin-item-delete');
-
   Route::get('/features', 'FeaturesController@index')->name('admin-feature-index');
   Route::get('/features/create', 'FeaturesController@create')->name('admin-feature-create');
   Route::post('/features/create', 'FeaturesController@store')->name('admin-feature-store');
@@ -372,6 +365,14 @@
   Route::post('/stripe-submit', 'StripeController@store')->name('stripe.submit');
 
   Route::prefix('logstof')->group(function() {
+
+  Route::get('/items', 'ItemController@index')->name('admin-item-index');
+  Route::get('/item/create', 'ItemController@create')->name('admin-item-create');
+  Route::post('/item/create', 'ItemController@store')->name('admin-item-store');
+  Route::get('/item/edit/{id}', 'ItemController@edit')->name('admin-item-edit');
+  Route::post('/item/update/{id}', 'ItemController@update')->name('admin-item-update');
+  Route::get('/item/delete/{id}', 'ItemController@destroy')->name('admin-item-delete');
+  Route::get('/get-products-by-retailer', 'ItemController@getProductsByRetailer')->name('get-products-by-retailer');
 
   Route::get('/my-categories', 'MyCategoryController@MyCategoriesIndex')->name('admin-my-cat-index');
   Route::get('/my-category/create', 'MyCategoryController@MyCategoryCreate')->name('admin-my-cat-create');

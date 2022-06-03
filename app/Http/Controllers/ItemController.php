@@ -18,6 +18,8 @@ use App\service_types;
 use App\sub_services;
 use App\handyman_products;
 use App\carts;
+use App\Products;
+use App\retailers_requests;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ItemController extends Controller
@@ -29,7 +31,7 @@ class ItemController extends Controller
 
     public function index()
     {
-        $items = items::leftjoin('users','users.id','=','items.user_id')->select('items.*','users.name','users.family_name')->get();
+        $items = items::leftjoin('users','users.id','=','items.user_id')->orderBy('items.id','desc')->select('items.*','users.name','users.family_name')->get();
 
         return view('admin.item.index',compact('items'));
     }
@@ -91,7 +93,6 @@ class ItemController extends Controller
     {
         $item = items::where('id',$id)->first();
         $categories = Category::get();
-        $sub_categories = sub_categories::where('parent_id',$item->category_id)->get();
         $retailers = User::where('role_id',2)->where('status',1)->where('active',1)->get();
 
         if(!$item)
@@ -99,7 +100,18 @@ class ItemController extends Controller
             return redirect()->back();
         }
 
-        return view('admin.item.create',compact('item','categories','sub_categories','retailers'));
+        $sub_categories = sub_categories::where('parent_id',$item->category_id)->get();
+        $suppliers = retailers_requests::where('retailer_id',$item->user_id)->where('status',1)->where('active',1)->pluck('supplier_id');
+        $retailer_products = Products::whereIn('user_id',$suppliers)->select('products.*')->get();
+
+        return view('admin.item.create',compact('item','categories','sub_categories','retailers','retailer_products'));
+    }
+
+    public function getProductsByRetailer(Request $request)
+    {
+        $suppliers = retailers_requests::where('retailer_id',$request->id)->where('status',1)->where('active',1)->pluck('supplier_id');
+        $products = Products::whereIn('products.user_id',$suppliers)->get();
+        return $products;
     }
 
     public function update(UpdateValidationRequest $request, $id)
