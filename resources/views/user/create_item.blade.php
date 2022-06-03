@@ -170,7 +170,17 @@
                                                         <label class="control-label col-sm-4" for="blood_group_slug">Product</label>
                                                         <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
                                                             <div style="padding: 0;" class="col-lg-8">
-                                                                <input value="{{$key}}" class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">
+                                                                <select class="form-control js-data-example-ajax11" name="products[]">
+
+                                                                    <option value="">Select Product</option>
+
+                                                                    @foreach($retailer_products as $temp)
+
+                                                                        <option {{$temp->id == $key ? 'selected' : null}} value="{{$temp->id}}">{{$temp->title}}</option>
+
+                                                                    @endforeach
+
+                                                                </select>
                                                             </div>
                                                             <div style="display: flex;justify-content: flex-start;" class="col-lg-4">
                                                                 <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
@@ -187,7 +197,17 @@
                                                     <label class="control-label col-sm-4" for="blood_group_slug">Product</label>
                                                     <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
                                                         <div style="padding: 0;" class="col-lg-8">
-                                                            <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">
+                                                            <select class="form-control js-data-example-ajax11" name="products[]">
+
+                                                                <option value="">Select Product</option>
+
+                                                                @foreach($retailer_products as $key)
+
+                                                                    <option value="{{$key->id}}">{{$key->title}}</option>
+
+                                                                @endforeach
+
+                                                            </select>
                                                         </div>
                                                         <div style="display: flex;justify-content: flex-start;" class="col-lg-4">
                                                             <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>
@@ -233,7 +253,19 @@
                 '                                                <label class="control-label col-sm-4" for="blood_group_slug">Product</label>\n' +
                 '                                                <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
                 '                                                    <div style="padding: 0;" class="col-lg-8">\n' +
-                '                                                        <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">\n' +
+                '\n' +
+                '                                                       <select class="form-control js-data-example-ajax11" name="products[]">\n' +
+                '\n' +
+                '                                                           <option value="">Select Product</option>\n' +
+                '\n' +
+                '                                                               @foreach($retailer_products as $key)\n' +
+                '\n' +
+                '                                                                   <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+                '\n' +
+                '                                                               @endforeach\n' +
+                '\n' +
+                '                                                       </select>\n' +
+                '\n' +
                 '                                                    </div>\n' +
                 '                                                    <div style="display: flex;justify-content: flex-start;" class="col-lg-4">\n' +
                 '                                                        <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
@@ -241,6 +273,14 @@
                 '                                                    </div>\n' +
                 '                                                </div>\n' +
                 '                                            </div>');
+
+            var last_row = $('.products-box .js-data-example-ajax11:last');
+
+            last_row.select2({
+                width: '100%',
+                placeholder: "Select Product",
+                allowClear: true,
+            });
 
         });
 
@@ -254,7 +294,19 @@
                     '                                                <label class="control-label col-sm-4" for="blood_group_slug">Product</label>\n' +
                     '                                                <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
                     '                                                    <div style="padding: 0;" class="col-lg-8">\n' +
-                    '                                                        <input class="form-control" name="products[]" id="blood_group_slug" placeholder="Product" type="text">\n' +
+                    '\n' +
+                    '                                                       <select class="form-control js-data-example-ajax11" name="products[]">\n' +
+                    '\n' +
+                    '                                                           <option value="">Select Product</option>\n' +
+                    '\n' +
+                    '                                                               @foreach($retailer_products as $key)\n' +
+                    '\n' +
+                    '                                                                   <option value="{{$key->id}}">{{$key->title}}</option>\n' +
+                    '\n' +
+                    '                                                               @endforeach\n' +
+                    '\n' +
+                    '                                                       </select>\n' +
+                    '\n' +
                     '                                                    </div>\n' +
                     '                                                    <div style="display: flex;justify-content: flex-start;" class="col-lg-4">\n' +
                     '                                                        <span class="ui-close add-product" style="margin:0;position: relative;top: 0;background-color: #5cb85c;font-size: 22px;">+</span>\n' +
@@ -262,6 +314,14 @@
                     '                                                    </div>\n' +
                     '                                                </div>\n' +
                     '                                            </div>');
+
+                var last_row = $('.products-box .js-data-example-ajax11:last');
+
+                last_row.select2({
+                    width: '100%',
+                    placeholder: "Select Product",
+                    allowClear: true,
+                });
             }
 
         });
@@ -277,6 +337,12 @@
             width: '100%',
             height: '200px',
             placeholder: "Select Sub Category",
+            allowClear: true,
+        });
+
+        $(".js-data-example-ajax11").select2({
+            width: '100%',
+            placeholder: "Select Product",
             allowClear: true,
         });
 

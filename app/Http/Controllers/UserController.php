@@ -8674,11 +8674,20 @@ class UserController extends Controller
     public function CreateItem()
     {
         $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
 
         if($user->can('create-item'))
         {
             $categories = Category::get();
-            return view('user.create_item',compact('categories'));
+            $suppliers = retailers_requests::where('retailer_id',$user->id)->where('status',1)->where('active',1)->pluck('supplier_id');
+            $retailer_products = Products::whereIn('user_id',$suppliers)->select('products.*')->get();
+            return view('user.create_item',compact('categories','retailer_products'));
         }
         else
         {
@@ -8754,7 +8763,9 @@ class UserController extends Controller
             $item = items::where('id', $id)->where('user_id', $user_id)->first();
             $categories = Category::get();
             $sub_categories = sub_categories::where('parent_id',$item->category_id)->get();
-            return view('user.create_item', compact('item','categories','sub_categories'));
+            $suppliers = retailers_requests::where('retailer_id',$user->id)->where('status',1)->where('active',1)->pluck('supplier_id');
+            $retailer_products = Products::whereIn('user_id',$suppliers)->select('products.*')->get();
+            return view('user.create_item', compact('item','categories','sub_categories','retailer_products'));
         }
         else
         {
