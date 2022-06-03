@@ -2179,9 +2179,18 @@ class UserController extends Controller
 
             if($quote->quote_service)
             {
-                $model = product_models::where('id',$quote->quote_model)->pluck('model')->first();
                 $color = colors::where('id',$quote->quote_color)->pluck('title')->first();
-                $product_request = Products::leftjoin('product_models','product_models.product_id','=','products.id')->leftjoin('colors','colors.product_id','=','products.id')->leftjoin('users','users.id','=','products.user_id')->where('product_models.model',$model)->where('colors.title',$color)->where('products.sub_category_id',$quote->quote_service)->where('products.brand_id',$quote->quote_brand)->where('products.model_id',$quote->quote_type)->select('products.*','users.id as supplier_id','users.company_name','product_models.id as model_id','product_models.model','product_models.measure','product_models.estimated_price_per_box','product_models.estimated_price_quantity','product_models.estimated_price','product_models.max_width','colors.id as color_id','colors.title as color')->first();
+
+                if($quote->quote_model)
+                {
+                    $model = product_models::where('id',$quote->quote_model)->pluck('model')->first();
+                    $product_request = Products::leftjoin('product_models','product_models.product_id','=','products.id')->leftjoin('colors','colors.product_id','=','products.id')->leftjoin('users','users.id','=','products.user_id')->where('product_models.model',$model)->where('colors.title',$color)->where('products.sub_category_id',$quote->quote_service)->where('products.brand_id',$quote->quote_brand)->where('products.model_id',$quote->quote_type)->select('products.*','users.id as supplier_id','users.company_name','product_models.id as model_id','product_models.model','product_models.measure','product_models.estimated_price_per_box','product_models.estimated_price_quantity','product_models.estimated_price','product_models.max_width','colors.id as color_id','colors.title as color')->first();
+                }
+                else
+                {
+                    $product_request = Products::leftjoin('colors','colors.product_id','=','products.id')->leftjoin('users','users.id','=','products.user_id')->where('colors.title',$color)->where('products.sub_category_id',$quote->quote_service)->where('products.brand_id',$quote->quote_brand)->where('products.model_id',$quote->quote_type)->select('products.*','users.id as supplier_id','users.company_name','colors.id as color_id','colors.title as color')->first();
+                    $product_request->model_id = 0;
+                }
             }
             else
             {

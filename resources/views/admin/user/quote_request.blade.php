@@ -105,7 +105,7 @@
                                             </div>
                                         </div>
 
-                                        @if($request->quote_service != 0 && $request->quote_brand != 0 && $request->quote_model != 0 && $request->quote_type != 0 && $request->quote_color != 0)
+                                        @if($request->quote_service != 0 && $request->quote_brand != 0 && $request->quote_type != 0 && $request->quote_color != 0)
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Category* </label>
@@ -138,21 +138,24 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <label class="control-label col-sm-4"
-                                                       for="blood_group_display_name">Model* </label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" name="quote_service" id="quote_service"
-                                                            required="">
-                                                        @foreach($models as $key)
+                                            @if($request->quote_model != '')
 
-                                                            <option @if($quote_model->model == $key->model) selected
-                                                                    @endif value="{{$key->id}}">{{$key->model}}</option>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4"
+                                                        for="blood_group_display_name">Model </label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" name="quote_service" id="quote_service" required="">
+                                                            
+                                                            @foreach($models as $key)
 
-                                                        @endforeach
-                                                    </select>
+                                                                <option @if($quote_model->model == $key->model) selected @endif value="{{$key->id}}">{{$key->model}}</option>
+
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
+
+                                            @endif
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4"

@@ -70,7 +70,7 @@
                                         @endif
 
 
-                                            @if($request->cat_name != '' && $request->brand_name != '' && $request->model_name != '' && $request->type_title != '' && $request->color != '')
+                                            @if($request->cat_name != '' && $request->brand_name != '' && $request->type_title != '' && $request->color != '')
 
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Category')}}* </label>
@@ -86,12 +86,16 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Model')}}* </label>
-                                                    <div class="col-sm-6">
-                                                        <p style="padding: 10px;" class="form-control">{{$request->model_name}}</p>
+                                                @if($request->model_name != '')
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Model')}} </label>
+                                                        <div class="col-sm-6">
+                                                            <p style="padding: 10px;" class="form-control">{{$request->model_name}}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
+
+                                                @endif
 
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Type')}}* </label>
