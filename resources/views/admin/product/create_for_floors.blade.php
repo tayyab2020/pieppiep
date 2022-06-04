@@ -1290,7 +1290,7 @@
 
                                                                                             <div class="row" style="margin: auto;width: 70%;">
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: none;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>
                                                                                                     <input type="hidden" name="childsafe[]" id="childsafe" value="{{$mod->childsafe ? 1 : 0}}">
@@ -1304,7 +1304,7 @@
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 10px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>
                                                                                                     <input value="{{str_replace('.', ',', floatval($mod->estimated_price_per_box))}}" class="form-control estimated_price_per_box" id="estimated_price_per_box" name="estimated_price_per_box[]" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">
@@ -1421,7 +1421,7 @@
 
                                                                                             <div class="row" style="margin: auto;width: 70%;">
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: none;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>
                                                                                                     <input type="hidden" name="childsafe[]" id="childsafe" value="0">
@@ -1435,7 +1435,7 @@
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 10px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>
                                                                                                     <input class="form-control estimated_price_per_box" id="estimated_price_per_box" name="estimated_price_per_box[]" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">
@@ -1556,7 +1556,7 @@
 
                                                                                             <div class="row" style="margin: auto;width: 70%;">
 
-                                                                                                <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: none;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>
                                                                                                     <input type="hidden" name="childsafe[]" id="childsafe" value="0">
@@ -1570,7 +1570,7 @@
 
                                                                                                 </div>
 
-                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 10px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>
                                                                                                     <input class="form-control estimated_price_per_box" id="estimated_price_per_box" name="estimated_price_per_box[]" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">
@@ -2771,7 +2771,7 @@
                 '\n' +
                 '                                                                                        <div class="row" style="margin: auto;width: 70%;">\n' +
                 '\n' +
-                '                                                                                            <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '                                                                                            <div style="display: none;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                 '\n' +
                 '                                                                                                <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>\n' +
                 '                                                                                                   <input type="hidden" name="childsafe[]" id="childsafe" value="0">\n' +
@@ -2785,7 +2785,7 @@
                 '\n' +
                 '                                                                                            </div>\n' +
                 '\n' +
-                '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 10px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                 '\n' +
                 '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>\n' +
                 '                                                                                                    <input class="form-control estimated_price_per_box" name="estimated_price_per_box[]" id="estimated_price_per_box" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">\n' +
@@ -2938,7 +2938,7 @@
                     '\n' +
                     '                                                                                        <div class="row" style="margin: auto;width: 70%;">\n' +
                     '\n' +
-                    '                                                                                            <div style="display: flex;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '                                                                                            <div style="display: none;align-items: center;justify-content: flex-start;padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
                     '                                                                                                <label style="display: block;text-align: left;padding-top: 0;padding-right: 20px;color: red;" class="control-label">Childsafe:</label>\n' +
                     '                                                                                                   <input type="hidden" name="childsafe[]" id="childsafe" value="0">\n' +
@@ -2952,7 +2952,7 @@
                     '\n' +
                     '                                                                                            </div>\n' +
                     '\n' +
-                    '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 10px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
                     '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Advice Price Per Box:</label>\n' +
                     '                                                                                                    <input class="form-control estimated_price_per_box" id="estimated_price_per_box" name="estimated_price_per_box[]" maskedformat="9,1" placeholder="Advice Price Per Box" type="text">\n' +

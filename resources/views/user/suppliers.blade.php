@@ -28,8 +28,8 @@
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Supplier\'s Company Name')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Email')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Status')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Products')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Categories')}}</th>
+{{--                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Products')}}</th>--}}
+{{--                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Categories')}}</th>--}}
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">{{__('text.Actions')}}</th>
 
                                                     </tr>
@@ -70,62 +70,82 @@
 
                                                             </td>
 
+{{--                                                            <td>--}}
+
+{{--                                                                @if(count($products[$x]) > 0)--}}
+
+{{--                                                                    <select style="padding: 10px;">--}}
+
+{{--                                                                        @foreach($products[$x] as $product)--}}
+
+{{--                                                                            <option value="{{$product->title}}">{{$product->title}}</option>--}}
+
+{{--                                                                        @endforeach--}}
+
+{{--                                                                    </select>--}}
+
+{{--                                                                @endif--}}
+
+{{--                                                            </td>--}}
+
+{{--                                                            <td>--}}
+
+{{--                                                                @if(count($categories[$x]) > 0)--}}
+
+{{--                                                                    <select style="padding: 10px;">--}}
+
+{{--                                                                        @foreach($categories[$x] as $category)--}}
+
+{{--                                                                            <option value="{{$category->cat_name}}">{{$category->cat_name}}</option>--}}
+
+{{--                                                                        @endforeach--}}
+
+{{--                                                                    </select>--}}
+
+{{--                                                                @endif--}}
+
+{{--                                                            </td>--}}
+
+
                                                             <td>
 
-                                                                @if(count($products[$x]) > 0)
+                                                                <div class="dropdown">
 
-                                                                    <select style="padding: 10px;">
+                                                                    <button style="outline: none;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{__('text.Action')}}
+                                                                        <span class="caret"></span>
+                                                                    </button>
 
-                                                                        @foreach($products[$x] as $product)
+                                                                    <ul class="dropdown-menu">
 
-                                                                            <option value="{{$product->title}}">{{$product->title}}</option>
+                                                                        @if($user->status != 1)
 
-                                                                        @endforeach
-
-                                                                    </select>
-
-                                                                @endif
-
-                                                            </td>
-
-                                                            <td>
-
-                                                                @if(count($categories[$x]) > 0)
-
-                                                                    <select style="padding: 10px;">
-
-                                                                        @foreach($categories[$x] as $category)
-
-                                                                            <option value="{{$category->cat_name}}">{{$category->cat_name}}</option>
-
-                                                                        @endforeach
-
-                                                                    </select>
-
-                                                                @endif
-
-                                                            </td>
-
-
-                                                            <td>
-
-                                                                @if($user->status != 1)
-
-                                                                    <button data-id="{{$user->id}}" class="btn btn-success product-btn send-request"><i class="fa fa-check"></i> {{__('text.Send Request')}}</button>
-
-                                                                @endif
-
-
-                                                                @if(auth()->user()->can('supplier-details'))
-
-                                                                        @if($user->active)
-
-                                                                            <a href="{{route('supplier-products',$user->id)}}" class="btn btn-success product-btn" style="margin: 5px !important;"><i class="fa fa-product-hunt" ></i> {{__('text.Products')}}</a>
-                                                                            <a href="{{route('supplier-details',$user->id)}}" class="btn btn-primary product-btn" style="background-color: #1a969c;margin: 5px !important;"><i class="fa fa-user" ></i> {{__('text.Details')}}</a>
+                                                                            <li><a href="javascript:void(0)" data-id="{{$user->id}}" class="send-request">{{__('text.Send Request')}}</a></li>
 
                                                                         @endif
 
-                                                                @endif
+                                                                        @if(auth()->user()->can('supplier-details'))
+
+                                                                            @if($user->active)
+
+                                                                                @if(auth()->user()->can('edit-customer'))
+
+                                                                                    <li><a href="{{route('supplier-products',$user->id)}}">{{__('text.Products')}}</a></li>
+
+                                                                                @endif
+
+                                                                                @if(auth()->user()->can('delete-customer'))
+
+                                                                                    <li><a href="{{route('supplier-details',$user->id)}}">{{__('text.Details')}}</a></li>
+
+                                                                                @endif
+
+                                                                            @endif
+
+                                                                        @endif
+                                                                        
+                                                                    </ul>
+
+                                                                </div>
 
                                                             </td>
                                                         </tr>

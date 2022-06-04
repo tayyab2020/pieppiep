@@ -34,7 +34,7 @@
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">{{__('text.Family Name')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Email')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending">{{__('text.Business Name')}}</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Address')}}</th>
+{{--                                                        <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Address')}}</th>--}}
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 95px;" aria-label="City: activate to sort column ascending">{{__('text.Contact Number')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 240px;" aria-label="Actions: activate to sort column ascending">{{__('text.Actions')}}</th>
                                                     </tr>
@@ -56,22 +56,34 @@
 
                                                             <td>{{$user->business_name}}</td>
 
-                                                            <td>{{$user->address}}</td>
+{{--                                                            <td>{{$user->address}}</td>--}}
 
                                                             <td>{{$user->phone}}</td>
 
                                                             <td>
-                                                                    @if(auth()->user()->can('edit-customer'))
+                                                                <div class="dropdown">
 
-                                                                        <a href="{{route('edit-customer',$user->user_id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
+                                                                    <button style="outline: none;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{__('text.Action')}}
+                                                                        <span class="caret"></span>
+                                                                    </button>
 
-                                                                    @endif
+                                                                    <ul class="dropdown-menu">
 
-                                                                    @if(auth()->user()->can('delete-customer'))
+                                                                        @if(auth()->user()->can('edit-customer'))
 
-                                                                        <a href="{{route('delete-customer',$user->user_id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+                                                                            <li><a href="{{route('edit-customer',$user->user_id)}}">{{__('text.Edit')}}</a></li>
 
-                                                                    @endif
+                                                                        @endif
+
+                                                                        @if(auth()->user()->can('delete-customer'))
+
+                                                                            <li><a href="{{route('delete-customer',$user->user_id)}}">{{__('text.Remove')}}</a></li>
+
+                                                                        @endif
+
+                                                                    </ul>
+
+                                                                </div>
                                                             </td>
                                                         </tr>
 

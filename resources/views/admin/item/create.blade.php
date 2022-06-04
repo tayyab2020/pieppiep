@@ -244,7 +244,7 @@
 
                                         <hr>
                                         <div class="add-product-footer">
-                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">Add Item</button>
+                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($item) ? 'Edit Item' : 'Add Item'}}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -259,13 +259,6 @@
 @endsection
 
 @section('scripts')
-
-    <script type="text/javascript" src="{{asset('assets/admin/js/nicEdit.js')}}"></script>
-    <script type="text/javascript">
-        //<![CDATA[
-        bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-        //]]>
-    </script>
 
     <script type="text/javascript">
 

@@ -822,25 +822,25 @@ class UserController extends Controller
                 $join->where('retailers_requests.retailer_id',$user_id);
             })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
 
-            $products = array();
-            $categories = array();
+            // $products = array();
+            // $categories = array();
 
-            foreach ($users as $key) {
+            // foreach ($users as $key) {
 
-                if($key->status && $key->active)
-                {
-                    $products[] = Products::where('user_id',$key->id)->get();
-                    $categories[] = supplier_categories::leftjoin('categories','categories.id','=','supplier_categories.category_id')->where('supplier_categories.user_id',$key->id)->orderBy('categories.id','desc')->select('categories.cat_name')->get();
-                }
-                else
-                {
-                    $products[] = array();
-                    $categories[] = array();
-                }
+            //     if($key->status && $key->active)
+            //     {
+            //         $products[] = Products::where('user_id',$key->id)->get();
+            //         $categories[] = supplier_categories::leftjoin('categories','categories.id','=','supplier_categories.category_id')->where('supplier_categories.user_id',$key->id)->orderBy('categories.id','desc')->select('categories.cat_name')->get();
+            //     }
+            //     else
+            //     {
+            //         $products[] = array();
+            //         $categories[] = array();
+            //     }
 
-            }
+            // }
 
-            return view('user.suppliers',compact('users','products','categories'));
+            return view('user.suppliers',compact('users'));
         }
         else
         {

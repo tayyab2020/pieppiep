@@ -224,6 +224,11 @@
 
         <style type="text/css">
 
+            body
+            {
+                background-color: #ffffff;
+            }
+
             @media (max-width: 768px) {
 
                 .inv-rigth{
