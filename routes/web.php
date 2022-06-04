@@ -216,6 +216,9 @@
   Route::get('/edit-item/{id}', 'UserController@EditItem')->name('edit-item');
   Route::post('/update-item/{id}', 'UserController@UpdateItem')->name('update-item');
   Route::get('/delete-item/{id}', 'UserController@DestroyItem')->name('delete-item');
+  Route::get('/export-items', 'UserController@ExportItems')->name('export-items');
+  Route::get('/import-items', 'UserController@ImportItems')->name('import-items');
+  Route::post('/import-items', 'UserController@PostItemsImport')->name('post-import-items');
   Route::get('/my-subservices', 'UserController@MySubServices')->name('user-subservices');
   Route::get('/delete-services', 'UserController@DeleteServices');
   Route::get('/delete-subservices', 'UserController@DeleteSubServices');

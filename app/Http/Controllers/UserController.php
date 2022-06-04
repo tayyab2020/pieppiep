@@ -9,6 +9,8 @@ use App\custom_quotations;
 use App\custom_quotations_data;
 use App\customers_details;
 use App\email_templates;
+use App\Exports\ItemsExport;
+use App\Imports\ItemsImport;
 use App\Jobs\SendOrder;
 use App\Jobs\CreateOrder;
 use App\Jobs\UpdateDates;
@@ -85,6 +87,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Symfony\Component\Process\Process;
 use App\retailer_services;
+use Excel;
 
 class UserController extends Controller
 {
@@ -8661,7 +8664,7 @@ class UserController extends Controller
 
         if($user->can('user-items'))
         {
-            $items = items::where('user_id', $user_id)->get();
+            $items = items::where('user_id', $user_id)->orderBy('id','Desc')->get();
 
             return view('user.my_items', compact('user_id', 'items'));
         }
@@ -8742,6 +8745,8 @@ class UserController extends Controller
         $item->rate = str_replace(",",".",$request->rate);
         $item->sell_rate = str_replace(",",".",$request->sell_rate);
         $item->products = $products ? $products : NULL;
+        $item->product_id = $request->product_id;
+        $item->supplier = $request->supplier;
         $item->save();
 
         return redirect()->route('user-items');
@@ -8817,6 +8822,66 @@ class UserController extends Controller
             $item->delete();
             Session::flash('success', __('text.Item deleted successfully.'));
             return redirect()->route('user-items');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function importItems()
+    {
+        $user = Auth::guard('user')->user();
+
+        if($user->can('create-item'))
+        {
+            return view('user.import_item');
+        }
+        else
+        {
+            return redirect()->route('user-login');
+        }
+    }
+
+    public function PostItemsImport(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        $extension = strtolower($request->excel_file->getClientOriginalExtension());
+
+        if(!in_array($extension, ['xls', 'xlsx']))
+        {
+            return redirect()->back()->withErrors("File should be of format xlsx or xls")->withInput();
+        }
+
+        $import = new ItemsImport;
+        Excel::import($import,request()->file('excel_file'));
+
+//        if(count($import->data) > 0)
+//        {
+//            $product = items::where('excel',1)->whereNotIn('id', $import->data)->get();
+//
+//            foreach ($product as $key)
+//            {
+//                if($key->photo != null){
+//                    \File::delete(public_path() .'/assets/item_images/'.$key->photo);
+//                }
+//
+//                $key->delete();
+//            }
+//        }
+
+        Session::flash('success', 'Task completed successfully.');
+        return redirect()->route('user-items');
+    }
+
+    public function ExportItems()
+    {
+        $user = Auth::guard('user')->user();
+
+        if($user->can('create-item'))
+        {
+            ini_set('memory_limit', '-1');
+            return Excel::download(new ItemsExport(),'items.xlsx');
         }
         else
         {

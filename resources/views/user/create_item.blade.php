@@ -113,6 +113,20 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Product ID')}}</label>
+                                            <div class="col-sm-6">
+                                                <input value="{{isset($item) ? $item->product_id : null}}" class="form-control" name="product_id" id="blood_group_display_name" placeholder="{{__('text.Enter Product ID')}}" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Supplier')}}</label>
+                                            <div class="col-sm-6">
+                                                <input value="{{isset($item) ? $item->supplier : null}}" class="form-control" name="supplier" id="blood_group_display_name" placeholder="{{__('text.Enter Supplier Name')}}" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label class="control-label col-sm-4" for="blood_group_slug">VAT Percentage</label>
                                             <div class="col-sm-6">
                                                 <input readonly name="product_vat" value="21" class="form-control product_vat" id="blood_group_slug" type="text">
@@ -222,7 +236,7 @@
 
                                         <hr>
                                         <div class="add-product-footer">
-                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{__('text.Add Item')}}</button>
+                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($item) ? __('text.Edit Item') : __('text.Add Item')}}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -237,13 +251,6 @@
 @endsection
 
 @section('scripts')
-
-    <script type="text/javascript" src="{{asset('assets/admin/js/nicEdit.js')}}"></script>
-    <script type="text/javascript">
-        //<![CDATA[
-        bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-        //]]>
-    </script>
 
     <script type="text/javascript">
 

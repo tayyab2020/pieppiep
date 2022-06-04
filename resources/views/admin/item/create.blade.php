@@ -106,9 +106,9 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_display_name">Retailer*</label>
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">Retailer</label>
                                             <div class="col-sm-6">
-                                                <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="retailer_id" id="blood_grp" required>
+                                                <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="retailer_id" id="blood_grp">
 
                                                     <option value="">Select Retailer</option>
 
@@ -124,6 +124,20 @@
                                             <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
                                             <div class="col-sm-6">
                                                 <input value="{{isset($item) ? $item->cat_name : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Item Title" required="" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">Product ID</label>
+                                            <div class="col-sm-6">
+                                                <input value="{{isset($item) ? $item->product_id : null}}" class="form-control" name="product_id" id="blood_group_display_name" placeholder="Enter Product ID" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">Supplier</label>
+                                            <div class="col-sm-6">
+                                                <input value="{{isset($item) ? $item->supplier : null}}" class="form-control" name="supplier" id="blood_group_display_name" placeholder="Enter Supplier Name" type="text">
                                             </div>
                                         </div>
 

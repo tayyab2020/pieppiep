@@ -10,11 +10,19 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
-                                    <div class="add-product-header products">
-                                        <h2>{{__('text.Items')}}</h2>
+                                    <div style="justify-content: flex-end;" class="add-product-header products">
+                                        <h2 style="width: 100%;">{{__('text.Items')}}</h2>
 
                                         @if(auth()->user()->can('create-item'))
-                                            <a href="{{route('create-item')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Add New Item')}}</a>
+
+                                            <a style="margin-right: 10px;" href="{{route('create-item')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> {{__('text.Add New Item')}}</a>
+
+                                            <a style="margin-right: 10px;background-color: #5cb85c !important;border-color: #5cb85c !important;" href="{{route('import-items')}}" class="btn add-newProduct-btn">
+                                                <i style="font-size: 12px;" class="fa fa-plus"></i> {{__('text.Import Items')}}</a>
+
+                                            <a style="background-color: #5bc0de !important;border-color: #5bc0de !important;" href="{{route('export-items')}}" class="btn add-newProduct-btn">
+                                                <i style="font-size: 12px;" class="fa fa-plus"></i> {{__('text.Export Items')}}</a>
+
                                         @endif
 
                                     </div>

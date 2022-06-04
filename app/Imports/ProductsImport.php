@@ -358,6 +358,8 @@ class ProductsImport implements ToModel, WithStartRow
                     $check->excel = 1;
                     $check->save();
 
+                    $this->data[] = $check->id;
+
                 } else {
 
                     $category = Category::where('cat_name', $row[4])->first();
@@ -428,6 +430,8 @@ class ProductsImport implements ToModel, WithStartRow
                     $product->description = $row[16];
                     $product->excel = 1;
                     $product->save();
+
+                    $this->data[] = $product->id;
 
                     foreach ($pricesArray as $x => $price)
                     {

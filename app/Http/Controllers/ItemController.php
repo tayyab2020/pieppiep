@@ -62,7 +62,6 @@ class ItemController extends Controller
             Session::flash('success', 'New Item added successfully.');
         }
 
-        $input = $request->all();
         $photo = '';
 
         if ($file = $request->file('photo'))
@@ -76,7 +75,7 @@ class ItemController extends Controller
         $products = implode(',', $request->products);
 
         $item->cat_name = $request->title;
-        $item->user_id = $request->retailer_id;
+        $item->user_id = $request->retailer_id ? $request->retailer_id : Null;
         $item->category_id = $request->category_id;
         $item->sub_category_ids = $sub_categories ? $sub_categories : NULL;
         $item->photo = $photo;
@@ -84,6 +83,8 @@ class ItemController extends Controller
         $item->rate = str_replace(",",".",$request->rate);
         $item->sell_rate = str_replace(",",".",$request->sell_rate);
         $item->products = $products ? $products : NULL;
+        $item->product_id = $request->product_id;
+        $item->supplier = $request->supplier;
         $item->save();
 
         return redirect()->route('admin-item-index');

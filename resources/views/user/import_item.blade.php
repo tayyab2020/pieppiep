@@ -24,13 +24,13 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header">
                                         <h2>{{__('text.Upload Excel File')}}</h2>
-                                        <a href="{{route('admin-product-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
+                                        <a href="{{route('user-items')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
                                     <hr>
 
-                                    <h5 style="text-align: center;color: red;font-weight: 500;width: 70%;margin:20px auto 0 auto;">{{__('text.Note: Make sure to export latest products from database and make changes in that file to avoid creating same product twice. Than import that file.')}}</h5>
+                                    <h5 style="text-align: center;color: red;font-weight: 500;width: 70%;margin:20px auto 0 auto;">{{__('text.Note: Make sure to export latest items from database and make changes in that file to avoid creating same item twice. Than import that file.')}}</h5>
 
-                                    <form class="form-horizontal" action="{{route('admin-product-upload')}}" method="POST" enctype="multipart/form-data">
+                                    <form class="form-horizontal" action="{{route('post-import-items')}}" method="POST" enctype="multipart/form-data">
 
                                         @include('includes.form-error')
                                         @include('includes.form-success')
@@ -141,5 +141,6 @@
         }
 
     </style>
+
 
 @endsection
