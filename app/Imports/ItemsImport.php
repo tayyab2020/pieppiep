@@ -96,43 +96,21 @@ class ItemsImport implements ToModel, WithStartRow
 
                     if(!$check)
                     {
-                        $check1 = items::leftjoin('categories', 'categories.id', '=', 'items.category_id')->where('items.user_id',$user_id)->where('items.title', $row[3])->where('categories.cat_name', $row[1])->select('products.*')->first();
+                        $check = new items;
+                        $check->user_id = $user_id;
+                        $check->category_id = $category->id;
+                        $check->sub_category_ids = $sub_categories;
+                        $check->cat_name = $row[3];
+                        $check->description = $row[8];
+                        $check->rate = $row[6];
+                        $check->sell_rate = $row[7];
+                        $check->products = $related_products;
+                        $check->product_id = $row[4];
+                        $check->supplier = $row[5];
+                        $check->excel = 1;
+                        $check->save();
 
-                        if(!$check1)
-                        {
-                            $check = new items;
-                            $check->user_id = $user_id;
-                            $check->category_id = $category->id;
-                            $check->sub_category_ids = $sub_categories;
-                            $check->cat_name = $row[3];
-                            $check->description = $row[8];
-                            $check->rate = $row[6];
-                            $check->sell_rate = $row[7];
-                            $check->products = $related_products;
-                            $check->product_id = $row[4];
-                            $check->supplier = $row[5];
-                            $check->excel = 1;
-                            $check->save();
-
-                            $this->data[] = $check->id;
-                        }
-                        else
-                        {
-                            $check1->user_id = $user_id;
-                            $check1->category_id = $category->id;
-                            $check1->sub_category_ids = $sub_categories;
-                            $check1->cat_name = $row[3];
-                            $check1->description = $row[8];
-                            $check1->rate = $row[6];
-                            $check1->sell_rate = $row[7];
-                            $check1->products = $related_products;
-                            $check1->product_id = $row[4];
-                            $check1->supplier = $row[5];
-                            $check1->excel = 1;
-                            $check1->save();
-
-                            $this->data[] = $check1->id;
-                        }
+                        $this->data[] = $check->id;
                     }
                     else
                     {

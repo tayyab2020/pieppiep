@@ -137,7 +137,7 @@ class ProductsImport implements ToModel, WithStartRow
 
                 if(!$check)
                 {
-                    $check1 = Products::leftjoin('categories', 'categories.id', '=', 'products.category_id')->leftjoin('brands', 'brands.id', '=', 'products.brand_id')->leftjoin('models', 'models.id', '=', 'products.model_id')->where('products.title', 'LIKE', '%' . $row[2] . '%')->where('products.model_number', $row[7])->where('categories.cat_name', $row[4])->where('brands.cat_name', $row[5])->where('models.cat_name', $row[6])->select('products.*')->first();
+                    $check1 = Products::leftjoin('categories', 'categories.id', '=', 'products.category_id')->leftjoin('brands', 'brands.id', '=', 'products.brand_id')->leftjoin('models', 'models.id', '=', 'products.model_id')->where('products.title', 'LIKE', '%' . $row[2] . '%')->where('categories.cat_name', $row[4])->where('brands.cat_name', $row[5])->where('models.cat_name', $row[6])->select('products.*')->first();
 
                     if(!$check1)
                     {
@@ -299,7 +299,7 @@ class ProductsImport implements ToModel, WithStartRow
             }
             else {
 
-                $check = Products::leftjoin('categories', 'categories.id', '=', 'products.category_id')->leftjoin('brands', 'brands.id', '=', 'products.brand_id')->leftjoin('models', 'models.id', '=', 'products.model_id')->where('products.title', 'LIKE', '%' . $row[2] . '%')->where('products.model_number', $row[7])->where('categories.cat_name', $row[4])->where('brands.cat_name', $row[5])->where('models.cat_name', $row[6])->select('products.*')->first();
+                $check = Products::leftjoin('categories', 'categories.id', '=', 'products.category_id')->leftjoin('brands', 'brands.id', '=', 'products.brand_id')->leftjoin('models', 'models.id', '=', 'products.model_id')->where('products.title', 'LIKE', '%' . $row[2] . '%')->where('categories.cat_name', $row[4])->where('brands.cat_name', $row[5])->where('models.cat_name', $row[6])->select('products.*')->first();
 
                 if ($check) {
 
