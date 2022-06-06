@@ -1,5 +1,9 @@
 @extends('layouts.front_new')
 
+@section('head_title', '')
+@section('head_keywords', $seo->meta_keys)
+@section('head_description', '')
+
 @section('content')
 
 <div class="jumbotron text-center" style="font-family: inherit;background-color: #e9ecef;padding: 150px 0 50px 0;">

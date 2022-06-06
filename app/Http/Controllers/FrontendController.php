@@ -6,6 +6,7 @@ use App\Brand;
 use App\estimated_prices;
 use App\items;
 use App\new_quotations;
+use App\Pages;
 use App\retailer_services;
 use App\Model1;
 use App\Products;
@@ -152,6 +153,13 @@ class FrontendController extends Controller
     {
         $user_controller = new UserController();
         return $user_controller->AcceptQuotation((object)$request['request'],$request['user_id']);
+    }
+   
+    public function getPage($slug = null)
+    {
+        $page = Pages::where('page', $slug)->first();
+
+        return view('front.page',compact('page'));
     }
 
     function getOS()

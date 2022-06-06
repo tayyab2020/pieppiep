@@ -14,6 +14,7 @@
 				<input type="hidden" id="quote_request_id" name="quote_request_id" value="{{isset($request_id) ? $request_id : (isset($invoice) ? $invoice[0]->quote_request_id : null)}}">
 				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
 				<input type="hidden" name="is_invoice" value="{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? 0 : 1) : 0}}">
+				<input type="hidden" name="direct_invoice" value="{{Route::currentRouteName() == 'create-direct-invoice' ? 1 : 0}}">
 				<input type="hidden" name="negative_invoice" value="{{Route::currentRouteName() == 'create-new-negative-invoice' ? 1 : 0}}">
 				<input type="hidden" name="negative_invoice_id" value="{{isset($invoice) ? (Route::currentRouteName() == 'create-new-negative-invoice' ? ($invoice[0]->negative_invoice != 0 ? $invoice[0]->invoice_id : null) : null) : null}}">
 				<input type="hidden" value="{{isset($request_id) && $request_id ? 1 : 0}}" id="request_quotation">
@@ -28,7 +29,7 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : (Route::currentRouteName() == 'create-new-negative-invoice' ? __('text.Create Negative Invoice') : __('text.View Invoice') )) : __('text.Create Quotation')}}</h2>
+											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : (Route::currentRouteName() == 'create-new-negative-invoice' ? __('text.Create Negative Invoice') : __('text.View Invoice') )) : (Route::currentRouteName() == 'create-direct-invoice' ? __('text.Create Invoice') : __('text.Create Quotation'))}}</h2>
 
 											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
 

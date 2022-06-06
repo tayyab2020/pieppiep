@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="{{$seo->meta_keys}}">
+    <meta property="keywords" content="@yield('head_keywords')" />
+    <meta name="title" content="@yield('head_title')">
+    <meta name="description" content="@yield('head_description')">
     <meta name="author" content="GeniusOcean">
     <title>{{$gs->title}}</title>
     <link href="{{asset('assets/images/'.$gs->favicon)}}" type="image/png" rel="icon"/>
@@ -1651,8 +1653,8 @@
 
 <nav class="navbar fixed-top navbar-expand-lg mainmenu">
     <div class="container">
-        <a class="navbar-brand" href="https://www.exact.com/nl">
-            <img src="{{asset('assets/images/'.$gs->logo)}}" alt="Exact logo"/>
+        <a class="navbar-brand" href="{{url('/')}}">
+            <img src="{{asset('assets/images/'.$gs->logo)}}" alt="Pieppiep logo"/>
         </a>
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -1664,12 +1666,18 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav float-left menu">
-                <li class="item-6903"><a href="#">Retailer</a></li>
-                <li class="item-6925"><a href="#">Leverancier</a></li>
-                <li class="item-6952"><a href="#">Prijzen</a></li>
-                <li class="item-6967 deeper parent dropdown"><a href="/nl/pieppiep/contact" id="navbarDropdown-6967"
-                                                                role="button" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false">Services</a>
+                @foreach($menu as $m)
+
+                    <li class="item-6903"><a href="{{url($m->page)}}">{{$m->page}}</a></li>
+
+                @endforeach
+
+                    {{--                <li class="item-6903"><a href="#">Retailer</a></li>--}}
+{{--                <li class="item-6925"><a href="#">Leverancier</a></li>--}}
+{{--                <li class="item-6952"><a href="#">Prijzen</a></li>--}}
+{{--                <li class="item-6967 deeper parent dropdown"><a href="/nl/pieppiep/contact" id="navbarDropdown-6967"--}}
+{{--                                                                role="button" data-toggle="dropdown"--}}
+{{--                                                                aria-haspopup="true" aria-expanded="false">Services</a>--}}
                     <div class="mainmenu-dropdown dropdown-menu" aria-labelledby="navbarDropdown-6967">
                         <div class="container">
                             <div class="backbone-menu"></div>

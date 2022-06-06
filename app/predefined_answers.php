@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class predefined_answers extends Model
 {
 
-    protected  $table = 'predefined_answers';
+    protected $table = 'predefined_answers';
     public $timestamps = false;
 
     public function question(){

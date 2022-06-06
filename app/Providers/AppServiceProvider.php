@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Category;
 use App\handyman_quotes;
+use App\Pages;
 use App\Products;
 use App\Service;
 use App\terms_conditions;
@@ -145,7 +146,8 @@ class AppServiceProvider extends ServiceProvider
                 $settings->with('quote_services', $quote_services);
                 $settings->with('quote_data', $quote_data);
             }
-            
+
+            $settings->with('menu', Pages::orderBy('order_no','ASC')->get());
             $settings->with('sl', Sociallink::find(1));
             $settings->with('seo', Seotool::find(1));
             $settings->with('ps', Pagesetting::find(1));

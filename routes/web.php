@@ -383,6 +383,12 @@
   Route::get('/my-category/edit/{id}', 'MyCategoryController@MyCategoryEdit')->name('admin-my-cat-edit');
   Route::get('/my-category/delete/{id}', 'MyCategoryController@MyCategoryDestroy')->name('admin-my-cat-delete');
 
+  Route::get('/pages', 'PageSettingController@index')->name('admin-pages-index');
+  Route::get('/pages/create', 'PageSettingController@create')->name('admin-pages-create');
+  Route::post('/pages/create', 'PageSettingController@store')->name('admin-pages-store');
+  Route::get('/pages/edit/{id}', 'PageSettingController@edit')->name('admin-pages-edit');
+  Route::get('/pages/delete/{id}', 'PageSettingController@destroy')->name('admin-pages-delete');
+
   Route::get('/my-brands', 'MyBrandController@index')->name('admin-my-brand-index');
   Route::get('/my-brand/create', 'MyBrandController@create')->name('admin-my-brand-create');
   Route::post('/my-brand/create', 'MyBrandController@store')->name('admin-my-brand-store');
@@ -662,3 +668,7 @@
   Route::get('/languages', 'LanguageController@lang')->name('admin-lang-index');
   Route::post('/languages', 'LanguageController@langup')->name('admin-lang-submit');
   });
+
+  Route::get('{slug}', [
+    'uses' => 'FrontendController@getPage' 
+])->where('slug', '([A-Za-z0-9\-\/]+)');

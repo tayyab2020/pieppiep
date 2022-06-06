@@ -136,6 +136,7 @@
                                 <li>
                                     <a href="#pageSettings" data-toggle="collapse" aria-expanded="false"><i class="fa fa-fw fa-file-code-o"></i> Page Settings</a>
                                     <ul class="collapse list-unstyled submenu" id="pageSettings">
+                                        <li><a href="{{route('admin-pages-index')}}"><i class="fa fa-angle-right"></i> Pages</a></li>    
                                         <li><a href="{{route('admin-ps-about')}}"><i class="fa fa-angle-right"></i> About us page</a></li>
                                         <li><a href="{{route('admin-fq-index')}}"><i class="fa fa-angle-right"></i> FAQ page</a></li>
                                         <li><a href="{{route('admin-ps-contact')}}"><i class="fa fa-angle-right"></i> Contact us page</a></li>

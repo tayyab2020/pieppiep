@@ -1,4 +1,9 @@
 @extends('layouts.front_new')
+
+@section('head_title', '')
+@section('head_keywords', $seo->meta_keys)
+@section('head_description', '')
+
 @section('styles')
     <style type="text/css">
         /* Hide the list on focus of the input field */
