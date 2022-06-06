@@ -18,7 +18,7 @@ class ItemsExport implements FromCollection,WithHeadings
 
     public function headings(): array
     {
-        return ["DB ID", "Category", "Sub Category", "Title", "Product ID", "Supplier", "Price ex. VAT", "Selling Price", "Description", "Related Products"];
+        return ["Category", "Sub Category", "Title", "Product ID", "Supplier", "Price ex. VAT", "Selling Price", "Description", "Related Products"];
     }
 
     public function collection()
@@ -36,10 +36,13 @@ class ItemsExport implements FromCollection,WithHeadings
             $related_products = explode(',',$key->products);
             $key->related_products = product::whereIn('id',$related_products)->pluck('title')->toArray();
             $key->related_products = implode(",",$key->related_products);
+
+            $key->rate = number_format((float)$key->rate, 2, ',', '');
+            $key->sell_rate = number_format((float)$key->sell_rate, 2, ',', '');
         }
 
         $data = $data->map(function ($data) {
-            return $data->only(['id', 'category', 'sub_categories', 'cat_name', 'product_id', 'supplier', 'rate', 'sell_rate', 'description', 'related_products']);
+            return $data->only(['category', 'sub_categories', 'cat_name', 'product_id', 'supplier', 'rate', 'sell_rate', 'description', 'related_products']);
         });
 
         return $data;

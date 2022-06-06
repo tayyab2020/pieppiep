@@ -45,27 +45,31 @@ class ItemsImport implements ToModel, WithStartRow
 
         $suppliers = retailers_requests::where('retailer_id',$user_id)->where('status',1)->where('active',1)->pluck('supplier_id');
 
-        if($row[1] && $row[3] && $row[6] && $row[7])
+        if($row[0] && $row[2] && $row[6])
         {
-            if($row[2])
+            $sell_rate = number_format((float)$row[6], 2, '.', '');
+            $rate = $sell_rate/((100 + 21)/100);
+            $rate = number_format((float)$rate, 2, '.', '');
+
+            if($row[1])
             {
-                $sub_categories = explode(',', $row[2]);
+                $sub_categories = explode(',', $row[1]);
             }
             else
             {
                 $sub_categories = [];
             }
 
-            if($row[9])
+            if($row[8])
             {
-                $related_products = explode(',', $row[9]);
+                $related_products = explode(',', $row[8]);
             }
             else
             {
                 $related_products = [];
             }
 
-            $category = Category::where('cat_name', $row[1])->first();
+            $category = Category::where('cat_name', $row[0])->first();
             $sub_categories = sub_categories::whereIn('cat_name', $sub_categories)->pluck('id')->toArray();
 
             if(count($sub_categories) == 0)
@@ -90,63 +94,28 @@ class ItemsImport implements ToModel, WithStartRow
 
             if($category)
             {
-                if($row[0])
+                $check = items::where('category_id',$category->id)->where('cat_name',$row[2])->where('user_id',$user_id)->first();
+
+                if(!$check)
                 {
-                    $check = items::where('id',$row[0])->where('user_id',$user_id)->first();
-
-                    if(!$check)
-                    {
-                        $check = new items;
-                        $check->user_id = $user_id;
-                        $check->category_id = $category->id;
-                        $check->sub_category_ids = $sub_categories;
-                        $check->cat_name = $row[3];
-                        $check->description = $row[8];
-                        $check->rate = $row[6];
-                        $check->sell_rate = $row[7];
-                        $check->products = $related_products;
-                        $check->product_id = $row[4];
-                        $check->supplier = $row[5];
-                        $check->excel = 1;
-                        $check->save();
-
-                        $this->data[] = $check->id;
-                    }
-                    else
-                    {
-                        $check->user_id = $user_id;
-                        $check->category_id = $category->id;
-                        $check->sub_category_ids = $sub_categories;
-                        $check->cat_name = $row[3];
-                        $check->description = $row[8];
-                        $check->rate = $row[6];
-                        $check->sell_rate = $row[7];
-                        $check->products = $related_products;
-                        $check->product_id = $row[4];
-                        $check->supplier = $row[5];
-                        $check->excel = 1;
-                        $check->save();
-
-                        $this->data[] = $check->id;
-                    }
-
+                    $check = new items;
                 }
-                else {
 
-                    $item = new items;
-                    $item->user_id = $user_id;
-                    $item->category_id = $category->id;
-                    $item->sub_category_ids = $sub_categories;
-                    $item->cat_name = $row[3];
-                    $item->description = $row[8];
-                    $item->rate = $row[6];
-                    $item->sell_rate = $row[7];
-                    $item->products = $related_products;
-                    $item->product_id = $row[4];
-                    $item->supplier = $row[5];
-                    $item->excel = 1;
-                    $item->save();
-                }
+                $check->user_id = $user_id;
+                $check->category_id = $category->id;
+                $check->sub_category_ids = $sub_categories;
+                $check->cat_name = $row[2];
+                $check->description = $row[7];
+                $check->rate = $rate;
+                $check->sell_rate = $sell_rate;
+                $check->products = $related_products;
+                $check->product_id = $row[3];
+                $check->supplier = $row[4];
+                $check->excel = 1;
+                $check->save();
+
+                $this->data[] = $check->id;
+
             }
         }
     }
