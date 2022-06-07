@@ -2549,7 +2549,7 @@ class UserController extends Controller
 
         if($request->org_id)
         {
-            customers_details::where('id',$request->org_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone, 'email' => $request->email]);
+            customers_details::where('id',$request->org_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone]);
 
             Session::flash('success', __('text.Customer details updated successfully'));
             return redirect()->route('customers');
@@ -4613,13 +4613,13 @@ class UserController extends Controller
                 {
                     if(!$request->negative_invoice)
                     {
-                        new_invoices::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                        new_invoices::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                     }
                     else
                     {
                         if($request->negative_invoice_id)
                         {
-                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                         }
                     }
                 }
@@ -4627,13 +4627,13 @@ class UserController extends Controller
                 {
                     if(!$request->negative_invoice)
                     {
-                        new_invoices::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                        new_invoices::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                     }
                     else
                     {
                         if($request->negative_invoice_id)
                         {
-                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                         }
                     }
                 }
@@ -4675,6 +4675,7 @@ class UserController extends Controller
                         $org_invoice_data->subtotal = str_replace(',', '.',$request->total_amount);
                         $org_invoice_data->grand_total = str_replace(',', '.',$request->total_amount);
                         $org_invoice_data->price_before_labor_total = str_replace(',', '.',$request->price_before_labor_total);
+                        $org_invoice_data->description = $request->description;
 
                         if($form_type == 2)
                         {
@@ -4723,11 +4724,11 @@ class UserController extends Controller
 
                 if($form_type == 2)
                 {
-                    new_quotations::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                 }
                 else
                 {
-                    new_quotations::where('id',$request->quotation_id)->update(['delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                 }
 
                 $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
@@ -4769,6 +4770,7 @@ class UserController extends Controller
             $invoice->subtotal = str_replace(',', '.',$request->total_amount);
             $invoice->grand_total = str_replace(',', '.',$request->total_amount);
             $invoice->price_before_labor_total = str_replace(',', '.',$request->price_before_labor_total);
+            $invoice->description = $request->description;
 
             if($form_type == 2)
             {

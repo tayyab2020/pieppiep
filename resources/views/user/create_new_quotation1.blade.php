@@ -633,9 +633,9 @@
 
 															<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
-																<div class="headings1" style="width: 56%;"></div>
-																<div class="headings1" style="width: 7%;"></div>
-																<div class="headings1" style="width: 7%;"></div>
+																<div class="headings1" style="width: 70%;">
+																	<textarea name="description" style="width: 100%;border-radius: 5px;resize: vertical;" rows="5" class="form-control" placeholder="{{__('text.Enter Description')}}">{{isset($invoice) ? $invoice->description : ''}}</textarea>
+																</div>
 																<div class="headings2" style="width: 30%;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
 																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
