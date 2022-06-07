@@ -634,7 +634,7 @@
 															<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
 																<div class="headings1" style="width: 70%;">
-																	<textarea name="description" style="width: 100%;border-radius: 5px;resize: vertical;" rows="5" class="form-control" placeholder="{{__('text.Enter Description')}}">{{isset($invoice) ? $invoice->description : ''}}</textarea>
+																	<textarea name="description" style="width: 100%;border-radius: 5px;resize: vertical;" rows="5" class="form-control" placeholder="{{__('text.Enter Description')}}">{{isset($invoice) ? $invoice[0]->description : ''}}</textarea>
 																</div>
 																<div class="headings2" style="width: 30%;">
 																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
