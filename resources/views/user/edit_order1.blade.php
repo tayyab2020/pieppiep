@@ -86,6 +86,24 @@
 
 											@include('includes.form-success')
 
+											<select style="display: none;" class="form-control all-products" id="blood_grp">
+
+												@foreach($products as $key)
+
+													@foreach($key->models as $key1)
+
+														@foreach($key->colors as $key2)
+
+															<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')' . ' € ' . number_format((float)$key1->estimated_price_per_box, 2, ',', '') . ' per m&#178;, pakinhoud ' . number_format((float)$key1->estimated_price_quantity, 2, ',', '') . ' m&#178;'}}</option>
+
+														@endforeach
+
+													@endforeach
+
+												@endforeach
+
+											</select>
+
 											<div style="padding-bottom: 0;" class="form-horizontal">
 
 												<div style="margin: 0;border-top: 1px solid #eee;" class="row">
@@ -136,26 +154,8 @@
 																		<label class="content-label">Product</label>
 
 																		<div class="autocomplete" style="width:100%;">
-																			<input value="{{$product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')'}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																			<input value="{{$product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)$item->price_before_labor, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²'}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																		</div>
-
-																		<select style="display: none;" class="form-control all-products" id="blood_grp">
-
-																			@foreach($products as $key)
-
-																				@foreach($key->models as $key1)
-
-																					@foreach($key->colors as $key2)
-
-																						<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
-
-																					@endforeach
-
-																				@endforeach
-
-																			@endforeach
-
-																		</select>
 
 																		<input type="hidden" value="{{$item->product_id}}" name="products[]" id="product_id">
 																		<input type="hidden" value="{{$item->supplier_id}}" name="suppliers[]" id="supplier_id">
@@ -1837,7 +1837,7 @@
 			$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 		}
 
-		function add_row(copy = false, products = null, product = null, product_text = null, supplier = null, color = null, model = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_before_labor = null, price_before_labor_old = null, total_discount = null, total_discount_old= null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
+		function add_row(copy = false, product = null, product_text = null, supplier = null, color = null, model = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, price_before_labor = null, price_before_labor_old = null, total_discount = null, total_discount_old= null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
 
 			var rowCount = $('#products_table .content-div:last').data('id');
 			rowCount = rowCount + 1;
@@ -1875,24 +1875,6 @@
 					'																	<input id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
 					'\n' +
 					'                                                                </div>\n' +
-					'\n' +
-					'																 <select style="display: none;" class="form-control all-products" id="blood_grp">\n' +
-					'\n' +
-					'                                                                    @foreach($products as $key)\n' +
-					'\n' +
-					'                                                                    	@foreach($key->models as $key1)\n' +
-					'\n' +
-					'                                                                    		@foreach($key->colors as $key2)\n' +
-					'\n' +
-					'                                                                        		<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>\n' +
-					'\n' +
-					'                                                                    		@endforeach\n' +
-					'\n' +
-					'                                                                    	@endforeach\n' +
-					'\n' +
-					'                                                                    @endforeach\n' +
-					'\n' +
-					'                                                                </select>\n' +
 					'\n' +
 					'																<input type="hidden" name="products[]" id="product_id">\n' +
 					'																<input type="hidden" name="suppliers[]" id="supplier_id">\n' +
@@ -2026,12 +2008,6 @@
 					'																	<input id="productInput" value="'+product_text+'" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
 					'\n' +
 					'                                                                </div>\n' +
-					'\n' +
-					'																 <select style="display: none;" class="form-control all-products" id="blood_grp">\n' +
-					'\n' +
-					products +
-					'\n' +
-					'                                                                </select>\n' +
 					'\n' +
 					'																<input type="hidden" name="products[]" id="product_id" value="'+product+'">\n' +
 					'																<input type="hidden" name="suppliers[]" id="supplier_id" value="'+supplier+'">\n' +
@@ -2581,7 +2557,6 @@
 			var ladderband_impact_type = current.find('#ladderband_impact_type').val();
 			var area_conflict = current.find('#area_conflict').val();
 			var delivery_days = current.find('#delivery_days').val();
-			var products = current.find('.all-products').html();
 			var product = current.find('#product_id').val();
 			var product_text = current.find('#productInput').val();
 			var supplier = current.find('#supplier_id').val();
@@ -2607,7 +2582,7 @@
 			var measure = current.find('#measure').val();
 			var max_width = current.find('#max_width').val();
 
-			add_row(true, products, product, product_text, supplier, color, model, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_before_labor, price_before_labor_old, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
+			add_row(true, product, product_text, supplier, color, model, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, price_before_labor, price_before_labor_old, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
 
 		});
 
