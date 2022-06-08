@@ -416,6 +416,7 @@ return [
     'Create Negative Invoice' => 'Create Negative Invoice',
     'Product' => 'Product',
     '€ Art.' => '€ Art.',
+    '€ Arb.' => '€ Arb.',
     'Discount' => 'Discount',
     '€ Total' => '€ Total',
     'ALL features selected!' => 'ALL features selected!',
