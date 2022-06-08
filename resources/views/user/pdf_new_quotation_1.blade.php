@@ -692,6 +692,14 @@
 
                                 @endif
 
+                                @if($request->description)
+
+                                    <br><br><br>
+                                    <h3 style="text-align: center;">{{__('text.Description')}}</h3>
+                                    <p>{{$request->description}}</p>
+
+                                @endif
+
                                 @if($form_type == 1 && $role != 'invoice' && $role != 'invoice1' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                                     <div class="page_break">
