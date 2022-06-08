@@ -8207,21 +8207,21 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::guard('user')->user();
-        $user_id = Auth::guard('user')->user()->id;
 
         if ($user->role_id == 3) {
             return redirect()->route('user-login');
         }
 
-        if($user->can('edit-profile'))
+        $main_id = $user->main_id;
+
+        if(\Route::currentRouteName() == 'retailer-company-info' && $main_id)
         {
-            $cats = Category::all();
-            $services_selected = handyman_products::query()->where('handyman_id', '=', $user_id)->get();
+            $user = User::where('id',$main_id)->first();
+        }
 
-            $services = Category::leftjoin('handyman_products', 'handyman_products.product_id', '=', 'categories.id')->where('handyman_products.handyman_id', '=', $user_id)->get();
-
-
-            return view('user.profile', compact('user', 'cats', 'services_selected', 'services'));
+        if($user->can('edit-profile'))
+        {            
+            return view('user.profile', compact('user'));
         }
         else
         {
