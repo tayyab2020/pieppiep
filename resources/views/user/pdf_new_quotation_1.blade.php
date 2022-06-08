@@ -690,13 +690,13 @@
                                         </div>
                                     </div>
 
-                                @endif
+                                    @if($request->description)
 
-                                @if($request->description)
+                                        <br><br><br>
+                                        <h3 style="text-align: center;">{{__('text.Description')}}</h3>
+                                        <p style="font-size: 18px;">{{$request->description}}</p>
 
-                                    <br><br><br>
-                                    <h3 style="text-align: center;">{{__('text.Description')}}</h3>
-                                    <p>{{$request->description}}</p>
+                                    @endif
 
                                 @endif
 
