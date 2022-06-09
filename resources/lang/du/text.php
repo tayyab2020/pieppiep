@@ -510,4 +510,5 @@ return [
     'Upload Excel File' => 'Upload Excel File',
     'Note: Make sure to export latest items from database and make changes in that file to avoid creating same item twice. Than import that file.' => 'Note: Make sure to export latest items from database and make changes in that file to avoid creating same item twice. Than import that file.',
     'Note: Make sure to export latest products from database and make changes in that file to avoid creating same product twice. Than import that file.' => 'Note: Make sure to export latest products from database and make changes in that file to avoid creating same product twice. Than import that file.',
+    'Quotation Description' => 'Quotation Description',
 ];

@@ -94,7 +94,7 @@
 
 														@foreach($key->colors as $key2)
 
-															<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')' . ' € ' . number_format((float)$key1->estimated_price_per_box, 2, ',', '') . ' per m&#178;, pakinhoud ' . number_format((float)$key1->estimated_price_quantity, 2, ',', '') . ' m&#178;'}}</option>
+															<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')'}}</option>
 
 														@endforeach
 
@@ -154,7 +154,7 @@
 																		<label class="content-label">Product</label>
 
 																		<div class="autocomplete" style="width:100%;">
-																			<input value="{{$product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)$item->price_before_labor, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²'}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																			<input value="{{$product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')'}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																		</div>
 
 																		<input type="hidden" value="{{$item->product_id}}" name="products[]" id="product_id">

@@ -374,7 +374,22 @@
 
                                                                 @else
 
-                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                                    <?php
+
+                                                                        if($role == 'retailer')
+                                                                            {
+                                                                                $estimated_price = number_format((float)($request->total[$i]/$request->estimated_price_quantity[$i]), 2, ',', '');
+                                                                                $estimated_quantity = number_format((float)$request->estimated_price_quantity[$i], 2, ',', '');
+                                                                            }
+                                                                        else
+                                                                            {
+                                                                                $estimated_price = number_format((float)($key->price_before_labor/$key->box_quantity), 2, ',', '');
+                                                                                $estimated_quantity = number_format((float)$key->box_quantity, 2, ',', '');
+                                                                            }
+
+                                                                    ?>
+
+                                                                    <td style="font-size: 20px;width: 60% !important;">{!! $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . '<br> € ' . $estimated_price . ' per m², pakinhoud ' . $estimated_quantity . ' m²' !!}</td>
 
                                                                 @endif
 
@@ -693,8 +708,8 @@
                                     @if($request->description)
 
                                         <br><br><br>
-                                        <h3 style="text-align: center;">{{__('text.Description')}}</h3>
-                                        <p style="font-size: 18px;">{{$request->description}}</p>
+                                        <h3>{{__('text.Quotation Description')}}</h3>
+                                        <p style="font-size: 18px;">{!! nl2br($request->description) !!}</p>
 
                                     @endif
 

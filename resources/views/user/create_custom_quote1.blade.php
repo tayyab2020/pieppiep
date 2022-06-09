@@ -124,7 +124,7 @@
 
 														@foreach($key->colors as $key2)
 
-															<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')' . ' € ' . number_format((float)$key1->estimated_price_per_box, 2, ',', '') . ' per m&#178;, pakinhoud ' . number_format((float)$key1->estimated_price_quantity, 2, ',', '') . ' m&#178;'}}</option>
+															<option data-model="{{$key1->model}}" data-model-id="{{$key1->id}}" data-color="{{$key2->title}}" data-color-id="{{$key2->id}}" data-supplier-id="{{$key->user_id}}" value="{{$key->id}}">{{$key->title.', '.$key1->model.', '.$key2->title.', ('.$key->company_name.')' . ' € ' . number_format((float)$key1->estimated_price, 2, ',', '') . ' per m&#178;, pakinhoud ' . number_format((float)$key1->estimated_price_quantity, 2, ',', '') . ' m&#178;'}}</option>
 
 														@endforeach
 
@@ -195,7 +195,7 @@
 																		<label class="content-label">{{__('text.Product')}}</label>
 
 																		<div class="autocomplete" style="width:100%;">
-																			<input value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)$item->price_before_labor, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																			<input value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																		</div>
 
 																		<input type="hidden" value="{{$item->item_id != 0 ? $item->item_id.'I' : ($item->service_id != 0 ? $item->service_id.'S' : $item->product_id)}}" name="products[]" id="product_id">
@@ -336,7 +336,7 @@
 																		<label class="content-label">{{__('text.Product')}}</label>
 
 																		<div class="autocomplete" style="width:100%;">
-																			<input id="productInput" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.($product_request->model ? $product_request->model.', ' : null).$product_request->color.', ('.$product_request->company_name.')' . ' € ' . number_format((float)$product_request->estimated_price_per_box, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$product_request->estimated_price_quantity, 2, ',', '') . ' m²' : $product_request->title.', Service') : null}}" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																			<input id="productInput" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.($product_request->model ? $product_request->model.', ' : null).$product_request->color.', ('.$product_request->company_name.')' . ' € ' . number_format((float)$product_request->estimated_price, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$product_request->estimated_price_quantity, 2, ',', '') . ' m²' : $product_request->title.', Service') : null}}" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																		</div>
 
 																		<input type="hidden" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->id : $product_request->id.'S') : null}}" name="products[]" id="product_id">
