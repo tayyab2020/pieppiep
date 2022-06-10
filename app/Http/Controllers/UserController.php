@@ -41,6 +41,7 @@ use App\product;
 use App\product_features;
 use App\product_models;
 use App\Products;
+use App\quotation_appointments;
 use App\quotation_invoices_data;
 use App\quotation_invoices;
 use App\quotes;
@@ -2256,7 +2257,41 @@ class UserController extends Controller
                 $services = Service::leftjoin('retailer_services', 'retailer_services.service_id', '=', 'services.id')->where('retailer_services.retailer_id', $user_id)->select('services.*','retailer_services.sell_rate as rate')->get();
                 $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
 
-                return view('user.create_custom_quote1', compact('products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
+                $current_appointments = quotation_appointments::where('quotation_id',2)->select('id','title','start','end')->get();
+                $other_appointments = quotation_appointments::where('quotation_id','!=',2)->select('id','title','start','end')->get();
+
+                foreach($current_appointments as $i => $app) {
+
+                    if($i == 0)
+                    {
+                        $app->classNames = 'delivery_date';
+                        $app->durationEditable = false;
+                    }
+                    elseif($i == 1)
+                    {
+                        $app->classNames = 'installation_date';
+                    }
+
+                }
+
+                foreach($other_appointments as $row) {
+
+                    $row->classNames = 'non_removeables';
+                    $row->editable = false;
+                    $row->droppable = false;
+                    $row->eventStartEditable = false;
+                    $row->eventResizableFromStart = false;
+                    $row->eventDurationEditable = false;
+                    $row->color = 'green';
+
+                }
+
+                $current_appointments = json_encode($current_appointments);
+                $other_appointments = json_encode($other_appointments);
+
+                $appointments = json_encode(array_merge(json_decode($current_appointments, true),json_decode($other_appointments, true)));
+
+                return view('user.create_custom_quote1', compact('appointments','current_appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
             } else {
                 return redirect()->back();
             }
@@ -4586,6 +4621,17 @@ class UserController extends Controller
 
     public function StoreNewQuotation(Request $request)
     {
+
+        $array = json_decode($request->appointment_data, true);
+
+        foreach($array as $key)
+        {
+            var_dump($key);
+        }
+
+        
+        exit();
+
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
