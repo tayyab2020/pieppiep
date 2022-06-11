@@ -2257,22 +2257,13 @@ class UserController extends Controller
                 $services = Service::leftjoin('retailer_services', 'retailer_services.service_id', '=', 'services.id')->where('retailer_services.retailer_id', $user_id)->select('services.*','retailer_services.sell_rate as rate')->get();
                 $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
 
-                $current_appointments = quotation_appointments::where('quotation_id',2)->select('id','title','start','end')->get();
+                date_default_timezone_set('Europe/Amsterdam');
+                $date = date('Y-m-d H:i:s');
+
+                $appointments = [['classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'durationEditable' => false],['classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date]];
+                $appointments = json_encode($appointments);
+
                 $other_appointments = quotation_appointments::where('quotation_id','!=',2)->select('id','title','start','end')->get();
-
-                foreach($current_appointments as $i => $app) {
-
-                    if($i == 0)
-                    {
-                        $app->classNames = 'delivery_date';
-                        $app->durationEditable = false;
-                    }
-                    elseif($i == 1)
-                    {
-                        $app->classNames = 'installation_date';
-                    }
-
-                }
 
                 foreach($other_appointments as $row) {
 
@@ -2286,12 +2277,11 @@ class UserController extends Controller
 
                 }
 
-                $current_appointments = json_encode($current_appointments);
                 $other_appointments = json_encode($other_appointments);
 
-                $appointments = json_encode(array_merge(json_decode($current_appointments, true),json_decode($other_appointments, true)));
+                $appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
 
-                return view('user.create_custom_quote1', compact('appointments','current_appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
+                return view('user.create_custom_quote1', compact('appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
             } else {
                 return redirect()->back();
             }
@@ -3765,7 +3755,42 @@ class UserController extends Controller
                 {
                     $services = Service::leftjoin('retailer_services', 'retailer_services.service_id', '=', 'services.id')->where('retailer_services.retailer_id', $user_id)->select('services.*','retailer_services.sell_rate as rate')->get();
                     $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
-                    return view('user.create_custom_quote1', compact('products','product_titles','item_titles','service_titles','color_titles','model_titles','product_suppliers','features','sub_features','customers','invoice','sub_products','services','items'));
+
+                    $current_appointments = quotation_appointments::where('quotation_id',$id)->select('id','title','start','end')->get();
+                    $other_appointments = quotation_appointments::where('quotation_id','!=',$id)->where('user_id',$user_id)->select('id','title','start','end')->get();
+
+                    foreach($current_appointments as $i => $app) {
+
+                        if($i == 0)
+                        {
+                            $app->classNames = 'delivery_date';
+                            $app->durationEditable = false;
+                        }
+                        elseif($i == 1)
+                        {
+                            $app->classNames = 'installation_date';
+                        }
+
+                    }
+
+                    foreach($other_appointments as $row) {
+
+                        $row->classNames = 'non_removeables';
+                        $row->editable = false;
+                        $row->droppable = false;
+                        $row->eventStartEditable = false;
+                        $row->eventResizableFromStart = false;
+                        $row->eventDurationEditable = false;
+                        $row->color = 'green';
+
+                    }
+
+                    $current_appointments = json_encode($current_appointments);
+                    $other_appointments = json_encode($other_appointments);
+
+                    $appointments = json_encode(array_merge(json_decode($current_appointments, true),json_decode($other_appointments, true)));
+
+                    return view('user.create_custom_quote1', compact('appointments','current_appointments','products','product_titles','item_titles','service_titles','color_titles','model_titles','product_suppliers','features','sub_features','customers','invoice','sub_products','services','items'));
                 }
                 else
                 {
@@ -4621,17 +4646,6 @@ class UserController extends Controller
 
     public function StoreNewQuotation(Request $request)
     {
-
-        $array = json_decode($request->appointment_data, true);
-
-        foreach($array as $key)
-        {
-            var_dump($key);
-        }
-
-        
-        exit();
-
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
@@ -4649,6 +4663,10 @@ class UserController extends Controller
         $company_name = $user->company_name;
         $products = $request->products;
 
+        $installation_date = json_decode($request->installation_date,true);
+        $installation_date_start = $installation_date[0];
+        $installation_date_end = $installation_date[1];
+
         $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email')->first();
 
         if($request->quotation_id)
@@ -4659,13 +4677,13 @@ class UserController extends Controller
                 {
                     if(!$request->negative_invoice)
                     {
-                        new_invoices::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                        new_invoices::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                     }
                     else
                     {
                         if($request->negative_invoice_id)
                         {
-                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                         }
                     }
                 }
@@ -4673,13 +4691,13 @@ class UserController extends Controller
                 {
                     if(!$request->negative_invoice)
                     {
-                        new_invoices::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                        new_invoices::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                     }
                     else
                     {
                         if($request->negative_invoice_id)
                         {
-                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                            new_negative_invoices::where('id',$request->negative_invoice_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                         }
                     }
                 }
@@ -4739,7 +4757,8 @@ class UserController extends Controller
                         $org_invoice_data->net_amount = str_replace(',', '.',$request->net_amount);
                         $org_invoice_data->tax_amount = str_replace(',', '.',$request->tax_amount);
                         $org_invoice_data->delivery_date = $request->retailer_delivery_date;
-                        $org_invoice_data->installation_date = $request->installation_date;
+                        $org_invoice_data->installation_date = $installation_date_start;
+                        $org_invoice_data->installation_date_end = $installation_date_end;
                         $invoice = $org_invoice_data->replicate();
                         $invoice->setTable('new_invoices');
                         $invoice->save();
@@ -4770,11 +4789,11 @@ class UserController extends Controller
 
                 if($form_type == 2)
                 {
-                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => str_replace(',', '.',$request->labor_cost_total), 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                 }
                 else
                 {
-                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $request->installation_date,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
+                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $request->retailer_delivery_date,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',$request->price_before_labor_total), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',$request->net_amount), 'tax_amount' => str_replace(',', '.',$request->tax_amount), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',$request->total_amount), 'grand_total' => str_replace(',', '.',$request->total_amount), 'mail_to' => $request->mail_to]);
                 }
 
                 $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
@@ -4800,6 +4819,41 @@ class UserController extends Controller
 
                 $invoice = new_quotations::where('id',$request->quotation_id)->first();
                 $quotation_invoice_number = $invoice->quotation_invoice_number;
+            }
+
+            $appointments_data = json_decode($request->appointment_data, true);
+
+            if($appointments_data)
+            {
+                $ap_array = [];
+
+                foreach($appointments_data as $key)
+                {
+                    if(!isset($key['new']))
+                    {
+                        $check = quotation_appointments::where('id',$key['id'])->first();
+                        $check->title = $key['title'];
+                        $check->start = $key['start'];
+                        $check->end = $key['end'];
+                        $check->save();
+
+                        $ap_array[] = $check->id;
+                    }
+                    else
+                    {
+                        $appointment = new quotation_appointments;
+                        $appointment->quotation_id = $request->quotation_id;
+                        $appointment->user_id = $user_id;
+                        $appointment->title = $key['title'];
+                        $appointment->start = $key['start'];
+                        $appointment->end = $key['end'];
+                        $appointment->save();
+
+                        $ap_array[] = $appointment->id;
+                    }
+                }
+
+                quotation_appointments::whereNotIn('id',$ap_array)->where('title','!=','Delivery Date')->where('title','!=','Installation Date')->where('quotation_id',$request->quotation_id)->delete();
             }
 
         }
@@ -4834,8 +4888,40 @@ class UserController extends Controller
             $invoice->net_amount = str_replace(',', '.',$request->net_amount);
             $invoice->tax_amount = str_replace(',', '.',$request->tax_amount);
             $invoice->delivery_date = $request->retailer_delivery_date;
-            $invoice->installation_date = $request->installation_date;
+            $invoice->installation_date = $installation_date_start;
+            $invoice->installation_date_end = $installation_date_end ? $installation_date_end : NULL;
             $invoice->save();
+
+            $appointment = new quotation_appointments;
+            $appointment->quotation_id = $invoice->id;
+            $appointment->user_id = $user_id;
+            $appointment->title = 'Delivery Date';
+            $appointment->start = $request->retailer_delivery_date;
+            $appointment->save();
+
+            $appointment = new quotation_appointments;
+            $appointment->quotation_id = $invoice->id;
+            $appointment->user_id = $user_id;
+            $appointment->title = 'Installation Date';
+            $appointment->start = $installation_date_start;
+            $appointment->end = $installation_date_end;
+            $appointment->save();
+
+            $appointments_data = json_decode($request->appointment_data, true);
+
+            if($appointments_data)
+            {
+                foreach($appointments_data as $key)
+                {
+                    $appointment = new quotation_appointments;
+                    $appointment->quotation_id = $invoice->id;
+                    $appointment->user_id = $user_id;
+                    $appointment->title = $key['title'];
+                    $appointment->start = $key['start'];
+                    $appointment->end = $key['end'];
+                    $appointment->save();
+                }
+            }
 
             if($form_type == 1 && $request->quote_request_id)
             {

@@ -439,6 +439,14 @@
 
 															</section>
 
+															<?php if(isset($appointments)) {
+																$appointments_array = json_decode($appointments,true);
+																$installation_array = [];
+																$installation_array[0] = $appointments_array[1]['start'];
+																$installation_array[1] = isset($appointments_array[1]['end']) ? $appointments_array[1]['end'] : '';
+																$installation_obj = json_encode($installation_array);
+															} ?>
+
 															<div style="width: 100%;margin-top: 10px;">
 
 																<div style="display: flex;justify-content: center;">
@@ -449,7 +457,7 @@
 
 																		@if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
 
-																			<input value="{{isset($invoice) ? ($invoice[0]->retailer_delivery_date ? date('d-m-Y',strtotime($invoice[0]->retailer_delivery_date)) : null) : null}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
+																			<input value="{{isset($invoice) ? $invoice[0]->retailer_delivery_date : $appointments_array[0]['start']}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
 
 																		@endif
 
@@ -481,9 +489,21 @@
 																<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
 																	<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
-																		<input value="{{isset($invoice) ? ($invoice[0]->retailer_installation_date ? date('d-m-Y',strtotime($invoice[0]->retailer_installation_date)) : null) : null}}" type="hidden" class="installation_date" name="installation_date">
-																		<input type="hidden" class="appointment_data" name="appointment_data">
-																		<input type="hidden" value="1" class="appointment_id">
+																		<input value="{{isset($invoice) ? $installation_obj : null}}" type="hidden" class="installation_date" name="installation_date">
+
+																		<?php if(isset($current_appointments)) {
+
+																			$current_appointments = json_decode($current_appointments,true);
+																			$current_appointments = array_slice($current_appointments, 2);
+																			$count = count($current_appointments);
+																			$last_id = $count > 0 ? end($current_appointments)['id'] : 0;
+																			$last_id = $last_id + 1;
+																			$current_appointments = json_encode($current_appointments);
+
+																		} ?>
+
+																		<input type="hidden" value="{{isset($current_appointments) ? ($count > 0 ? $current_appointments : null) : null}}" class="appointment_data" name="appointment_data">
+																		<input type="hidden" value="{{isset($last_id) ? $last_id : 1}}" class="appointment_id">
 																	</div>
 																	<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
 																	<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
@@ -2772,7 +2792,7 @@
 						var curr_year = start_date.getFullYear();
 						var hour = (start_date.getHours()<10?'0':'') + start_date.getHours();
 						var minute = (start_date.getMinutes()<10?'0':'') + start_date.getMinutes();
-						start = curr_date+"-"+curr_month+"-"+curr_year+"T"+hour+":"+minute+":00";
+						start = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
 
 						var end_date = new Date(end);
 						var curr_date = (end_date.getDate()<10?'0':'') + end_date.getDate();
@@ -2781,13 +2801,14 @@
 						var curr_year = end_date.getFullYear();
 						var hour = (end_date.getHours()<10?'0':'') + end_date.getHours();
 						var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
-						end = curr_date+"-"+curr_month+"-"+curr_year+"T"+hour+":"+minute+":00";
+						end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
 
 						var obj = {};
 						obj['id'] = id;
 						obj['title'] = title;
 						obj['start'] = start;
 						obj['end'] = end;
+						obj['new'] = 1;
 						data_array.push(obj);
 
 						$('.appointment_data').val(JSON.stringify(data_array));
@@ -2809,7 +2830,7 @@
 						var curr_year = date.getFullYear();
 						var hour = (date.getHours()<10?'0':'') + date.getHours();
 						var minute = (date.getMinutes()<10?'0':'') + date.getMinutes();
-						var delivery_date = curr_date+"-"+curr_month+"-"+curr_year+"T"+hour+":"+minute+":00";
+						var delivery_date = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
 						$('.delivery_date').val(delivery_date);
 					}
 					else if(arg.event._def.ui.classNames == 'installation_date')
@@ -2821,7 +2842,7 @@
 						var curr_year = start_date.getFullYear();
 						var hour = (start_date.getHours()<10?'0':'') + start_date.getHours();
 						var minute = (start_date.getMinutes()<10?'0':'') + start_date.getMinutes();
-						var installation_date_start = curr_date+"-"+curr_month+"-"+curr_year+"T"+hour+":"+minute+":00";
+						var installation_date_start = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
 
 						var end_date = new Date(end);
 						var curr_date = (end_date.getDate()<10?'0':'') + end_date.getDate();
@@ -2830,7 +2851,7 @@
 						var curr_year = end_date.getFullYear();
 						var hour = (end_date.getHours()<10?'0':'') + end_date.getHours();
 						var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
-						var installation_date_end = curr_date+"-"+curr_month+"-"+curr_year+"T"+hour+":"+minute+":00";
+						var installation_date_end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
 
 						var installation_date = [installation_date_start,installation_date_end];
 						installation_date = JSON.stringify(installation_date);
@@ -2848,7 +2869,7 @@
 						var curr_year = start_date.getFullYear();
 						var hour = (start_date.getHours()<10?'0':'') + start_date.getHours();
 						var minute = (start_date.getMinutes()<10?'0':'') + start_date.getMinutes();
-						start = curr_date+"-"+curr_month+"-"+curr_year+"T"+hour+":"+minute+":00";
+						start = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
 
 						var end_date = new Date(end);
 						var curr_date = (end_date.getDate()<10?'0':'') + end_date.getDate();
@@ -2857,7 +2878,7 @@
 						var curr_year = end_date.getFullYear();
 						var hour = (end_date.getHours()<10?'0':'') + end_date.getHours();
 						var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
-						end = curr_date+"-"+curr_month+"-"+curr_year+"T"+hour+":"+minute+":00";
+						end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
 
 						for(var i = 0; i < appointments.length; i++) {
 							if(appointments[i].id == id) {
