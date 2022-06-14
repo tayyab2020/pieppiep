@@ -3,6 +3,9 @@
 @section('content')
 
 	<script src="{{asset('assets/admin/js/main1.js')}}"></script>
+	<script src="{{asset('assets/admin/js/bootstrap-tagsinput.js')}}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+	<script src="https://www.jqueryscript.net/demo/Date-Time-Picker-Bootstrap-4/build/js/bootstrap-datetimepicker.min.js"></script>
 
 	<div class="right-side">
 
@@ -441,9 +444,19 @@
 
 															<?php if(isset($appointments)) {
 																$appointments_array = json_decode($appointments,true);
+																
+																$delivery_array = [];
+																$delivery_array[0] = $appointments_array[0]['start'];
+																$delivery_array[1] = $appointments_array[0]['end'];
+																$delivery_array[2] = $appointments_array[0]['description'];
+																$delivery_array[3] = $appointments_array[0]['tags'];
+																$delivery_obj = json_encode($delivery_array);
+
 																$installation_array = [];
 																$installation_array[0] = $appointments_array[1]['start'];
-																$installation_array[1] = isset($appointments_array[1]['end']) ? $appointments_array[1]['end'] : '';
+																$installation_array[1] = $appointments_array[1]['end'];
+																$installation_array[2] = $appointments_array[1]['description'];
+																$installation_array[3] = $appointments_array[1]['tags'];
 																$installation_obj = json_encode($installation_array);
 															} ?>
 
@@ -457,7 +470,7 @@
 
 																		@if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
 
-																			<input value="{{isset($invoice) ? $invoice[0]->retailer_delivery_date : $appointments_array[0]['start']}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
+																			<input value="{{isset($appointments) ? $delivery_obj : null}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
 
 																		@endif
 
@@ -489,7 +502,7 @@
 																<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
 																	<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
-																		<input value="{{isset($invoice) ? $installation_obj : null}}" type="hidden" class="installation_date" name="installation_date">
+																		<input value="{{isset($appointments) ? $installation_obj : null}}" type="hidden" class="installation_date" name="installation_date">
 
 																		<?php if(isset($current_appointments)) {
 
@@ -1444,7 +1457,11 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">{{__('text.Appointments')}}</h4>
 				</div>
-				<div style="padding: 50px 0;" class="modal-body">
+				<div style="padding: 0 0 50px 0;" class="modal-body">
+
+					<div class="row" style="max-width: 1100px;margin: 20px auto;">
+						<button class="btn btn-success add-appointment"><i class="fa fa-plus"></i> Add Appointment</button>
+					</div>
 
 					<div id='calendar'></div>
 
@@ -1457,7 +1474,105 @@
 		</div>
 	</div>
 
+	<div id="addAppointmentModal" role="dialog" class="modal fade">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" data-dismiss="modal" class="close">×</button>
+					<h4 class="modal-title">Add Appointment</h4>
+				</div>
+
+				<div class="modal-body">
+
+					<div class="row">
+						<div class="form-group col-xs-12 col-sm-12 required">
+							<label>Title</label>
+							<input type="text" class="form-control appointment_title validation_required" />
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-4 required">
+							<label>Start</label>
+							<input type="text" class="form-control appointment_start validation_required" readonly="readonly">
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-4 required">
+							<label>End</label>
+							<input type="text" class="form-control appointment_end validation_required" readonly="readonly">
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-12">
+							<label>Description</label>
+							<textarea rows="4" class="form-control appointment_description"></textarea>
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-12 required">
+							<label>Tags</label>
+							<input type="text" data-role="tagsinput" class="form-control appointment_tags" />
+						</div>
+
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<input type="hidden" id="event_id">
+					<button type="button" class="btn btn-success pull-left submit_appointmentForm">Save</button>
+					<button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<style>
+
+		.bootstrap-tagsinput
+		{
+			width: 100%;
+		}
+
+		.fc-event:hover .fc-buttons
+		{
+			display: block;
+		}
+
+		.fc-event .fc-buttons
+		{
+			padding: 10px;
+			text-align: center;
+			display: none;
+			position: absolute;
+			background-color: #ffffff;
+			border: 1px solid #d7d7d7;
+			bottom: 100%;
+			z-index: 99999;
+			min-width: 80px;
+		}
+
+		.fc-event .fc-buttons:after,
+		.fc-event .fc-buttons:before {
+			top: 100%;
+			left: 8px;
+			border: solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+		}
+
+		.fc-event .fc-buttons:before {
+			border-color: rgba(119, 119, 119, 0);
+			border-top-color: #d7d7d7;
+			border-width: 6px;
+			margin-left: -6px;
+		}
+
+		.fc-event .fc-buttons:after {
+			border-color: rgba(255, 255, 255, 0);
+			border-top-color: #ffffff;
+			border-width: 5px;
+			margin-left: -5px;
+		}
 
 		.fc table
 		{
@@ -2170,7 +2285,7 @@
             overflow-x: auto;*/
 		}
 
-		table tr th {
+		table tr th:not(#addAppointmentModal table tr th) {
 			font-family: system-ui;
 			font-weight: 500;
 			border-bottom: 1px solid #ebebeb;
@@ -2178,549 +2293,70 @@
 			color: gray;
 		}
 
-		table tbody tr td {
+		table tbody tr td:not(#addAppointmentModal table tbody tr td) {
 			font-family: system-ui;
 			font-weight: 500;
 			padding: 0 10px;
 			color: #3c3c3c;
 		}
 
-		table tbody tr.active td {
+		table tbody tr.active td:not(#addAppointmentModal table tbody tr.active td) {
 			border-top: 2px solid #cecece;
 			border-bottom: 2px solid #cecece;
 		}
 
-		table tbody tr.active td:first-child {
+		table tbody tr.active td:first-child:not(#addAppointmentModal table tbody tr.active td:first-child) {
 			border-left: 2px solid #cecece;
 			border-bottom-left-radius: 4px;
 			border-top-left-radius: 4px;
 		}
 
-		table tbody tr.active td:last-child {
+		table tbody tr.active td:last-child:not(#addAppointmentModal table tbody tr.active td:last-child) {
 			border-right: 2px solid #cecece;
 			border-bottom-right-radius: 4px;
 			border-top-right-radius: 4px;
 		}
 
-		table {
+		table:not(#addAppointmentModal table) {
 			border-collapse: separate;
 			border-spacing: 0 1em;
 		}
 
-
-		.modal-body table tr th {
+		.modal-body table tr th:not(#addAppointmentModal .modal-body table tr th) {
 			border: 1px solid #ebebeb;
 			padding-bottom: 15px;
 			color: gray;
 		}
 
-		.modal-body table tbody tr td {
+		.modal-body table tbody tr td:not(#addAppointmentModal .modal-body table tbody tr td) {
 			border-left: 1px solid #ebebeb;
 			border-right: 1px solid #ebebeb;
 			border-bottom: 1px solid #ebebeb;
 		}
 
-		.modal-body table tbody tr td:first-child {
+		.modal-body table tbody tr td:first-child:not(#addAppointmentModal .modal-body table tbody tr td:first-child) {
 			border-right: 0;
 		}
 
-		.modal-body table tbody tr td:last-child {
+		.modal-body table tbody tr td:last-child:not(#addAppointmentModal .modal-body table tbody tr td:last-child) {
 			border-left: 0;
 		}
 
-		.modal-body table {
+		.modal-body table:not(#addAppointmentModal .modal-body table) {
 			border-collapse: separate;
 			border-spacing: 0;
 			margin: 20px 0;
 		}
 
-		.modal-body table tbody tr td,
-		.modal-body table thead tr th {
+		.modal-body table tbody tr td:not(#addAppointmentModal .modal-body table tbody tr td),
+		.modal-body table thead tr th:not(#addAppointmentModal .modal-body table thead tr th) {
 			padding: 5px 10px;
 		}
 
-		.datepicker {
-			padding: 4px;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			direction: ltr;
-		}
-		.datepicker-inline {
-			width: 220px;
-		}
-		.datepicker.datepicker-rtl {
-			direction: rtl;
-		}
-		.datepicker.datepicker-rtl table tr td span {
-			float: right;
-		}
-		.datepicker-dropdown {
-			top: 20% !important;
-			left: 30% !important;;
-			min-width: 30% !important;
-			height: auto;
-			overflow-y: auto;
-			z-index: 10000 !important;
-		}
-
-		.table-condensed{
-			width: 100%;
-		}
-
-		.datepicker td, .datepicker th
+		.bootstrap-datetimepicker-widget .row:first-child
 		{
-			font-size: 17px;
-		}
-
-		.datepicker-dropdown:before {
-			content: '';
-			display: inline-block;
-			border-left: 7px solid transparent;
-			border-right: 7px solid transparent;
-			border-bottom: 7px solid #999999;
-			border-top: 0;
-			border-bottom-color: rgba(0, 0, 0, 0.2);
-			position: absolute;
-		}
-		.datepicker-dropdown:after {
-			content: '';
-			display: inline-block;
-			border-left: 6px solid transparent;
-			border-right: 6px solid transparent;
-			border-bottom: 6px solid #ffffff;
-			border-top: 0;
-			position: absolute;
-		}
-		.datepicker-dropdown.datepicker-orient-left:before {
-			left: 6px;
-		}
-		.datepicker-dropdown.datepicker-orient-left:after {
-			left: 7px;
-		}
-		.datepicker-dropdown.datepicker-orient-right:before {
-			right: 6px;
-		}
-		.datepicker-dropdown.datepicker-orient-right:after {
-			right: 7px;
-		}
-		.datepicker-dropdown.datepicker-orient-bottom:before {
-			display: none;
-			top: -7px;
-		}
-		.datepicker-dropdown.datepicker-orient-bottom:after {
-			display: none;
-			top: -6px;
-		}
-		.datepicker-dropdown.datepicker-orient-top:before {
-			display: none;
-			bottom: -7px;
-			border-bottom: 0;
-			border-top: 7px solid #999999;
-		}
-		.datepicker-dropdown.datepicker-orient-top:after {
-			display: none;
-			bottom: -6px;
-			border-bottom: 0;
-			border-top: 6px solid #ffffff;
-		}
-		.datepicker > div {
-			display: none;
-		}
-		.datepicker table {
-			margin: 0;
-			-webkit-touch-callout: none;
-			-webkit-user-select: none;
-			-khtml-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			user-select: none;
-		}
-		.datepicker td,
-		.datepicker th {
-			text-align: center;
-			width: 20px;
-			height: 20px;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			border: none;
-		}
-		.table-striped .datepicker table tr td,
-		.table-striped .datepicker table tr th {
-			background-color: transparent;
-		}
-		.datepicker table tr td.day:hover,
-		.datepicker table tr td.day.focused {
-			background: #eeeeee;
-			cursor: pointer;
-		}
-		.datepicker table tr td.old,
-		.datepicker table tr td.new {
-			color: #999999;
-		}
-		.datepicker table tr td.disabled,
-		.datepicker table tr td.disabled:hover {
-			background: none;
-			color: #999999;
-			cursor: default;
-		}
-		.datepicker table tr td.highlighted {
-			background: #d9edf7;
-			border-radius: 0;
-		}
-		.datepicker table tr td.today,
-		.datepicker table tr td.today:hover,
-		.datepicker table tr td.today.disabled,
-		.datepicker table tr td.today.disabled:hover {
-			background-color: #fde19a;
-			background-image: -moz-linear-gradient(to bottom, #fdd49a, #fdf59a);
-			background-image: -ms-linear-gradient(to bottom, #fdd49a, #fdf59a);
-			background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
-			background-image: -webkit-linear-gradient(to bottom, #fdd49a, #fdf59a);
-			background-image: -o-linear-gradient(to bottom, #fdd49a, #fdf59a);
-			background-image: linear-gradient(to bottom, #fdd49a, #fdf59a);
-			background-repeat: repeat-x;
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
-			border-color: #fdf59a #fdf59a #fbed50;
-			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-			filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-			color: #000;
-		}
-		.datepicker table tr td.today:hover,
-		.datepicker table tr td.today:hover:hover,
-		.datepicker table tr td.today.disabled:hover,
-		.datepicker table tr td.today.disabled:hover:hover,
-		.datepicker table tr td.today:active,
-		.datepicker table tr td.today:hover:active,
-		.datepicker table tr td.today.disabled:active,
-		.datepicker table tr td.today.disabled:hover:active,
-		.datepicker table tr td.today.active,
-		.datepicker table tr td.today:hover.active,
-		.datepicker table tr td.today.disabled.active,
-		.datepicker table tr td.today.disabled:hover.active,
-		.datepicker table tr td.today.disabled,
-		.datepicker table tr td.today:hover.disabled,
-		.datepicker table tr td.today.disabled.disabled,
-		.datepicker table tr td.today.disabled:hover.disabled,
-		.datepicker table tr td.today[disabled],
-		.datepicker table tr td.today:hover[disabled],
-		.datepicker table tr td.today.disabled[disabled],
-		.datepicker table tr td.today.disabled:hover[disabled] {
-			background-color: #fdf59a;
-		}
-		.datepicker table tr td.today:active,
-		.datepicker table tr td.today:hover:active,
-		.datepicker table tr td.today.disabled:active,
-		.datepicker table tr td.today.disabled:hover:active,
-		.datepicker table tr td.today.active,
-		.datepicker table tr td.today:hover.active,
-		.datepicker table tr td.today.disabled.active,
-		.datepicker table tr td.today.disabled:hover.active {
-			background-color: #fbf069 \9;
-		}
-		.datepicker table tr td.today:hover:hover {
-			color: #000;
-		}
-		.datepicker table tr td.today.active:hover {
-			color: #fff;
-		}
-		.datepicker table tr td.range,
-		.datepicker table tr td.range:hover,
-		.datepicker table tr td.range.disabled,
-		.datepicker table tr td.range.disabled:hover {
-			background: #eeeeee;
-			-webkit-border-radius: 0;
-			-moz-border-radius: 0;
-			border-radius: 0;
-		}
-		.datepicker table tr td.range.today,
-		.datepicker table tr td.range.today:hover,
-		.datepicker table tr td.range.today.disabled,
-		.datepicker table tr td.range.today.disabled:hover {
-			background-color: #f3d17a;
-			background-image: -moz-linear-gradient(to bottom, #f3c17a, #f3e97a);
-			background-image: -ms-linear-gradient(to bottom, #f3c17a, #f3e97a);
-			background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
-			background-image: -webkit-linear-gradient(to bottom, #f3c17a, #f3e97a);
-			background-image: -o-linear-gradient(to bottom, #f3c17a, #f3e97a);
-			background-image: linear-gradient(to bottom, #f3c17a, #f3e97a);
-			background-repeat: repeat-x;
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
-			border-color: #f3e97a #f3e97a #edde34;
-			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-			filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-			-webkit-border-radius: 0;
-			-moz-border-radius: 0;
-			border-radius: 0;
-		}
-		.datepicker table tr td.range.today:hover,
-		.datepicker table tr td.range.today:hover:hover,
-		.datepicker table tr td.range.today.disabled:hover,
-		.datepicker table tr td.range.today.disabled:hover:hover,
-		.datepicker table tr td.range.today:active,
-		.datepicker table tr td.range.today:hover:active,
-		.datepicker table tr td.range.today.disabled:active,
-		.datepicker table tr td.range.today.disabled:hover:active,
-		.datepicker table tr td.range.today.active,
-		.datepicker table tr td.range.today:hover.active,
-		.datepicker table tr td.range.today.disabled.active,
-		.datepicker table tr td.range.today.disabled:hover.active,
-		.datepicker table tr td.range.today.disabled,
-		.datepicker table tr td.range.today:hover.disabled,
-		.datepicker table tr td.range.today.disabled.disabled,
-		.datepicker table tr td.range.today.disabled:hover.disabled,
-		.datepicker table tr td.range.today[disabled],
-		.datepicker table tr td.range.today:hover[disabled],
-		.datepicker table tr td.range.today.disabled[disabled],
-		.datepicker table tr td.range.today.disabled:hover[disabled] {
-			background-color: #f3e97a;
-		}
-		.datepicker table tr td.range.today:active,
-		.datepicker table tr td.range.today:hover:active,
-		.datepicker table tr td.range.today.disabled:active,
-		.datepicker table tr td.range.today.disabled:hover:active,
-		.datepicker table tr td.range.today.active,
-		.datepicker table tr td.range.today:hover.active,
-		.datepicker table tr td.range.today.disabled.active,
-		.datepicker table tr td.range.today.disabled:hover.active {
-			background-color: #efe24b \9;
-		}
-		.datepicker table tr td.selected,
-		.datepicker table tr td.selected:hover,
-		.datepicker table tr td.selected.disabled,
-		.datepicker table tr td.selected.disabled:hover {
-			background-color: #9e9e9e;
-			background-image: -moz-linear-gradient(to bottom, #b3b3b3, #808080);
-			background-image: -ms-linear-gradient(to bottom, #b3b3b3, #808080);
-			background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(#808080));
-			background-image: -webkit-linear-gradient(to bottom, #b3b3b3, #808080);
-			background-image: -o-linear-gradient(to bottom, #b3b3b3, #808080);
-			background-image: linear-gradient(to bottom, #b3b3b3, #808080);
-			background-repeat: repeat-x;
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
-			border-color: #808080 #808080 #595959;
-			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-			filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-			color: #fff;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-		}
-		.datepicker table tr td.selected:hover,
-		.datepicker table tr td.selected:hover:hover,
-		.datepicker table tr td.selected.disabled:hover,
-		.datepicker table tr td.selected.disabled:hover:hover,
-		.datepicker table tr td.selected:active,
-		.datepicker table tr td.selected:hover:active,
-		.datepicker table tr td.selected.disabled:active,
-		.datepicker table tr td.selected.disabled:hover:active,
-		.datepicker table tr td.selected.active,
-		.datepicker table tr td.selected:hover.active,
-		.datepicker table tr td.selected.disabled.active,
-		.datepicker table tr td.selected.disabled:hover.active,
-		.datepicker table tr td.selected.disabled,
-		.datepicker table tr td.selected:hover.disabled,
-		.datepicker table tr td.selected.disabled.disabled,
-		.datepicker table tr td.selected.disabled:hover.disabled,
-		.datepicker table tr td.selected[disabled],
-		.datepicker table tr td.selected:hover[disabled],
-		.datepicker table tr td.selected.disabled[disabled],
-		.datepicker table tr td.selected.disabled:hover[disabled] {
-			background-color: #808080;
-		}
-		.datepicker table tr td.selected:active,
-		.datepicker table tr td.selected:hover:active,
-		.datepicker table tr td.selected.disabled:active,
-		.datepicker table tr td.selected.disabled:hover:active,
-		.datepicker table tr td.selected.active,
-		.datepicker table tr td.selected:hover.active,
-		.datepicker table tr td.selected.disabled.active,
-		.datepicker table tr td.selected.disabled:hover.active {
-			background-color: #666666 \9;
-		}
-		.datepicker table tr td.active,
-		.datepicker table tr td.active:hover,
-		.datepicker table tr td.active.disabled,
-		.datepicker table tr td.active.disabled:hover {
-			background-color: #006dcc;
-			background-image: -moz-linear-gradient(to bottom, #0088cc, #0044cc);
-			background-image: -ms-linear-gradient(to bottom, #0088cc, #0044cc);
-			background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
-			background-image: -webkit-linear-gradient(to bottom, #0088cc, #0044cc);
-			background-image: -o-linear-gradient(to bottom, #0088cc, #0044cc);
-			background-image: linear-gradient(to bottom, #0088cc, #0044cc);
-			background-repeat: repeat-x;
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
-			border-color: #0044cc #0044cc #002a80;
-			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-			filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-			color: #fff;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-		}
-		.datepicker table tr td.active:hover,
-		.datepicker table tr td.active:hover:hover,
-		.datepicker table tr td.active.disabled:hover,
-		.datepicker table tr td.active.disabled:hover:hover,
-		.datepicker table tr td.active:active,
-		.datepicker table tr td.active:hover:active,
-		.datepicker table tr td.active.disabled:active,
-		.datepicker table tr td.active.disabled:hover:active,
-		.datepicker table tr td.active.active,
-		.datepicker table tr td.active:hover.active,
-		.datepicker table tr td.active.disabled.active,
-		.datepicker table tr td.active.disabled:hover.active,
-		.datepicker table tr td.active.disabled,
-		.datepicker table tr td.active:hover.disabled,
-		.datepicker table tr td.active.disabled.disabled,
-		.datepicker table tr td.active.disabled:hover.disabled,
-		.datepicker table tr td.active[disabled],
-		.datepicker table tr td.active:hover[disabled],
-		.datepicker table tr td.active.disabled[disabled],
-		.datepicker table tr td.active.disabled:hover[disabled] {
-			background-color: #0044cc;
-		}
-		.datepicker table tr td.active:active,
-		.datepicker table tr td.active:hover:active,
-		.datepicker table tr td.active.disabled:active,
-		.datepicker table tr td.active.disabled:hover:active,
-		.datepicker table tr td.active.active,
-		.datepicker table tr td.active:hover.active,
-		.datepicker table tr td.active.disabled.active,
-		.datepicker table tr td.active.disabled:hover.active {
-			background-color: #003399 \9;
-		}
-		.datepicker table tr td span {
-			display: block;
-			width: 23%;
-			height: 54px;
-			line-height: 54px;
-			float: left;
-			margin: 1%;
-			cursor: pointer;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-		}
-		.datepicker table tr td span:hover {
-			background: #eeeeee;
-		}
-		.datepicker table tr td span.disabled,
-		.datepicker table tr td span.disabled:hover {
-			background: none;
-			color: #999999;
-			cursor: default;
-		}
-		.datepicker table tr td span.active,
-		.datepicker table tr td span.active:hover,
-		.datepicker table tr td span.active.disabled,
-		.datepicker table tr td span.active.disabled:hover {
-			background-color: #006dcc;
-			background-image: -moz-linear-gradient(to bottom, #0088cc, #0044cc);
-			background-image: -ms-linear-gradient(to bottom, #0088cc, #0044cc);
-			background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
-			background-image: -webkit-linear-gradient(to bottom, #0088cc, #0044cc);
-			background-image: -o-linear-gradient(to bottom, #0088cc, #0044cc);
-			background-image: linear-gradient(to bottom, #0088cc, #0044cc);
-			background-repeat: repeat-x;
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
-			border-color: #0044cc #0044cc #002a80;
-			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-			filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-			color: #fff;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-		}
-		.datepicker table tr td span.active:hover,
-		.datepicker table tr td span.active:hover:hover,
-		.datepicker table tr td span.active.disabled:hover,
-		.datepicker table tr td span.active.disabled:hover:hover,
-		.datepicker table tr td span.active:active,
-		.datepicker table tr td span.active:hover:active,
-		.datepicker table tr td span.active.disabled:active,
-		.datepicker table tr td span.active.disabled:hover:active,
-		.datepicker table tr td span.active.active,
-		.datepicker table tr td span.active:hover.active,
-		.datepicker table tr td span.active.disabled.active,
-		.datepicker table tr td span.active.disabled:hover.active,
-		.datepicker table tr td span.active.disabled,
-		.datepicker table tr td span.active:hover.disabled,
-		.datepicker table tr td span.active.disabled.disabled,
-		.datepicker table tr td span.active.disabled:hover.disabled,
-		.datepicker table tr td span.active[disabled],
-		.datepicker table tr td span.active:hover[disabled],
-		.datepicker table tr td span.active.disabled[disabled],
-		.datepicker table tr td span.active.disabled:hover[disabled] {
-			background-color: #0044cc;
-		}
-		.datepicker table tr td span.active:active,
-		.datepicker table tr td span.active:hover:active,
-		.datepicker table tr td span.active.disabled:active,
-		.datepicker table tr td span.active.disabled:hover:active,
-		.datepicker table tr td span.active.active,
-		.datepicker table tr td span.active:hover.active,
-		.datepicker table tr td span.active.disabled.active,
-		.datepicker table tr td span.active.disabled:hover.active {
-			background-color: #003399 \9;
-		}
-		.datepicker table tr td span.old,
-		.datepicker table tr td span.new {
-			color: #999999;
-		}
-		.datepicker .datepicker-switch {
-			width: 145px;
-		}
-		.datepicker .datepicker-switch,
-		.datepicker .prev,
-		.datepicker .next,
-		.datepicker tfoot tr th {
-			cursor: pointer;
-		}
-		.datepicker .datepicker-switch:hover,
-		.datepicker .prev:hover,
-		.datepicker .next:hover,
-		.datepicker tfoot tr th:hover {
-			background: #eeeeee;
-		}
-		.datepicker .cw {
-			font-size: 10px;
-			width: 12px;
-			padding: 0 2px 0 5px;
-			vertical-align: middle;
-		}
-		.input-append.date .add-on,
-		.input-prepend.date .add-on {
-			cursor: pointer;
-		}
-		.input-append.date .add-on i,
-		.input-prepend.date .add-on i {
-			margin-top: 3px;
-		}
-		.input-daterange input {
-			text-align: center;
-		}
-		.input-daterange input:first-child {
-			-webkit-border-radius: 3px 0 0 3px;
-			-moz-border-radius: 3px 0 0 3px;
-			border-radius: 3px 0 0 3px;
-		}
-		.input-daterange input:last-child {
-			-webkit-border-radius: 0 3px 3px 0;
-			-moz-border-radius: 0 3px 3px 0;
-			border-radius: 0 3px 3px 0;
-		}
-		.input-daterange .add-on {
-			display: inline-block;
-			width: auto;
-			min-width: 16px;
-			height: 18px;
-			padding: 4px 5px;
-			font-weight: normal;
-			line-height: 18px;
-			text-align: center;
-			text-shadow: 0 1px 0 #ffffff;
-			vertical-align: middle;
-			background-color: #eeeeee;
-			border: 1px solid #ccc;
-			margin-left: -5px;
-			margin-right: -5px;
+			display: flex;
+			align-items: center;
 		}
 
 	</style>
@@ -2734,13 +2370,213 @@
 
 	<script type="text/javascript">
 
-		var calendar = '';
+		$(".submit_appointmentForm").click(function () {
+
+			var validation = $('#addAppointmentModal').find('.modal-body').find('.validation_required');
+
+			var flag = 0;
+
+			$(validation).each(function(){
+
+				if(!$(this).val())
+				{
+					$(this).css('border','1px solid red');
+					flag = 1;
+				}
+				else
+				{
+					$(this).css('border','');
+				}
+
+			});
+
+			if(!flag)
+			{
+				var id = $('#event_id').val();
+				var title = $('.appointment_title').val();
+				var appointment_start = $('.appointment_start').val();
+				var appointment_end = $('.appointment_end').val();
+				var format_start = new Date(appointment_start);
+				var format_end = new Date(appointment_end);
+				var appointment_desc = $('.appointment_description').val();
+				var appointment_tags = $('.appointment_tags').val();
+
+				if (format_start <= format_end){
+
+					$('.appointment_end').css('border','');
+
+					var appointments = $('.appointment_data').val();
+
+					if(appointments)
+					{
+						var data_array = JSON.parse(appointments);
+					}
+					else
+					{
+						var data_array = [];
+					}
+
+					if(id)
+					{
+						var event = calendar.getEventById(id);
+						event.setDates(appointment_start,appointment_end);
+						event.setProp('title', title);
+						event.setExtendedProp('description',appointment_desc);
+						event.setExtendedProp('tags',appointment_tags);
+
+					}
+					else
+					{
+						var id = parseInt($('.appointment_id').val());
+						$('.appointment_id').val(id+1);
+
+						calendar.addEvent({
+							id: id,
+							title: title,
+							start: appointment_start,
+							end: appointment_end,
+							description: appointment_desc,
+							tags: appointment_tags,
+						});
+
+						var obj = {};
+						obj['id'] = id;
+						obj['title'] = title;
+						obj['start'] = appointment_start;
+						obj['end'] = appointment_end;
+						obj['description'] = appointment_desc;
+						obj['tags'] = appointment_tags;
+						obj['new'] = 1;
+						data_array.push(obj);
+
+						$('.appointment_data').val(JSON.stringify(data_array));
+					}
+
+					$('#addAppointmentModal').modal('toggle');
+					$('#myModal3').modal('toggle');
+					$('#event_id').val('')
+					$('.appointment_title').val('');
+					$('.appointment_start').val('');
+					$('.appointment_end').val('');
+					$('.appointment_description').val('');
+					$('.appointment_tags').tagsinput('removeAll');
+
+				}
+				else
+				{
+					$('.appointment_end').css('border','1px solid red');
+				}
+			}
+
+			return false;
+
+		});
+
+		$('#myModal3').on('shown.bs.modal', function () {
+
+			$('body').addClass('modal-open');
+
+		});
+
+		$(".appointment_tags").tagsinput('items');
+
+		$(".add-appointment").click(function () {
+
+			$('.appointment_title').attr('readonly',false);
+			$('.submit_appointmentForm').show();
+			$('#event_id').val('');
+			$('.appointment_title').val('');
+			$('.appointment_start').val('');
+			$('.appointment_end').val('');
+			$('.appointment_description').val('');
+			$('.appointment_tags').tagsinput('removeAll');
+
+			$('#myModal3').modal('toggle');
+			$('#addAppointmentModal').modal('toggle');
+
+		});
+
+		function edit_appointment(id)
+		{
+			var event = calendar.getEventById(id);
+			var title = event.title;
+			var description = event._def.extendedProps.description;
+			var tags = event._def.extendedProps.tags;
+			var start = moment(event.start).format('YYYY-MM-DD hh:mm');
+			var end = event.end ? moment(event.end).format('YYYY-MM-DD hh:mm') : start;
+
+			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && jQuery.inArray("non_removeables", event._def.ui.classNames) != 0)
+			{
+				$('.appointment_title').attr('readonly',false);
+			}
+			else
+			{
+				$('.appointment_title').attr('readonly',true);
+
+				if(jQuery.inArray("non_removeables", event._def.ui.classNames) != 0)
+				{
+					$('.submit_appointmentForm').show();
+				}
+				else
+				{
+					$('.submit_appointmentForm').hide();
+				}
+			}
+
+			$('#event_id').val(id);
+			$('.appointment_title').val(title);
+			$('.appointment_start').val(start);
+			$('.appointment_end').val(end);
+			$('.appointment_description').val(description);
+			$('.appointment_tags').tagsinput('add',tags);
+
+			$('#myModal3').modal('toggle');
+			$('#addAppointmentModal').modal('toggle');
+		}
+
+		function remove_appointment(id)
+		{
+			var event = calendar.getEventById(id);
+
+			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && jQuery.inArray("non_removeables", event._def.ui.classNames) != 0)
+			{
+				event.remove();
+				var appointments = $('.appointment_data').val();
+
+				if(appointments)
+				{
+					appointments = JSON.parse(appointments);
+				}
+				else
+				{
+					appointments = [];
+				}
+
+				for(var i = 0; i < appointments.length; i++) {
+					if(appointments[i].id == id) {
+						appointments.splice(i, 1);
+						break;
+					}
+				}
+
+				if(jQuery.isEmptyObject(appointments))
+				{
+					$('.appointment_data').val('');
+				}
+				else
+				{
+					$('.appointment_data').val(JSON.stringify(appointments));
+				}
+			}
+		}
 
 		$('#myModal3').on('shown.bs.modal', function () {
 
 			calendar.render();
 
 		});
+
+		var calendar = '';
 
 		document.addEventListener('DOMContentLoaded', function() {
 
@@ -2757,180 +2593,102 @@
 				selectable: true,
 				selectMirror: true,
 				select: function(arg) {
-					var title = prompt('Event Title:');
-					if (title) {
-
-						var id = parseInt($('.appointment_id').val());
-						$('.appointment_id').val(id+1);
-
-						calendar.addEvent({
-							id: id,
-							title: title,
-							start: arg.start,
-							end: arg.end,
-							allDay: arg.allDay
-						});
-
-						var appointments = $('.appointment_data').val();
-
-						if(appointments)
-						{
-							var data_array = JSON.parse(appointments);
-						}
-						else
-						{
-							var data_array = [];
-						}
-
-						var start = arg.start;
-						var end = arg.end;
-
-						var start_date = new Date(start);
-						var curr_date = (start_date.getDate()<10?'0':'') + start_date.getDate();
-						var curr_month = start_date.getMonth() + 1;
-						curr_month = (curr_month<10?'0':'') + curr_month;
-						var curr_year = start_date.getFullYear();
-						var hour = (start_date.getHours()<10?'0':'') + start_date.getHours();
-						var minute = (start_date.getMinutes()<10?'0':'') + start_date.getMinutes();
-						start = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
-
-						var end_date = new Date(end);
-						var curr_date = (end_date.getDate()<10?'0':'') + end_date.getDate();
-						var curr_month = end_date.getMonth() + 1;
-						curr_month = (curr_month<10?'0':'') + curr_month;
-						var curr_year = end_date.getFullYear();
-						var hour = (end_date.getHours()<10?'0':'') + end_date.getHours();
-						var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
-						end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
-
-						var obj = {};
-						obj['id'] = id;
-						obj['title'] = title;
-						obj['start'] = start;
-						obj['end'] = end;
-						obj['new'] = 1;
-						data_array.push(obj);
-
-						$('.appointment_data').val(JSON.stringify(data_array));
-
-					}
+					
+					$(".add-appointment").trigger("click");
 					calendar.unselect()
 				},
 				eventChange: function(arg) {
 
+					var title = arg.event._def.title;
+					var description = arg.event._def.extendedProps.description;
+					var tags = arg.event._def.extendedProps.tags;
 					var start = new Date(arg.event._instance.range.start.toLocaleString('en-US', { timeZone: 'UTC' }));
 					var end = new Date(arg.event._instance.range.end.toLocaleString('en-US', { timeZone: 'UTC' }));
 
+					var start_date = new Date(start);
+					var curr_date = (start_date.getDate()<10?'0':'') + start_date.getDate();
+					var curr_month = start_date.getMonth() + 1;
+					curr_month = (curr_month<10?'0':'') + curr_month;
+					var curr_year = start_date.getFullYear();
+					var hour = (start_date.getHours()<10?'0':'') + start_date.getHours();
+					var minute = (start_date.getMinutes()<10?'0':'') + start_date.getMinutes();
+					start = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute;
+
+					var end_date = new Date(end);
+					var curr_date = (end_date.getDate()<10?'0':'') + end_date.getDate();
+					var curr_month = end_date.getMonth() + 1;
+					curr_month = (curr_month<10?'0':'') + curr_month;
+					var curr_year = end_date.getFullYear();
+					var hour = (end_date.getHours()<10?'0':'') + end_date.getHours();
+					var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
+					end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute;
+
 					if(arg.event._def.ui.classNames == 'delivery_date')
 					{
-						var date = new Date(start);
-						var curr_date = (date.getDate()<10?'0':'') + date.getDate();
-						var curr_month = date.getMonth() + 1;
-						curr_month = (curr_month<10?'0':'') + curr_month;
-						var curr_year = date.getFullYear();
-						var hour = (date.getHours()<10?'0':'') + date.getHours();
-						var minute = (date.getMinutes()<10?'0':'') + date.getMinutes();
-						var delivery_date = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
-						$('.delivery_date').val(delivery_date);
+						var delivery_data = [start,end,description,tags];
+						delivery_data = JSON.stringify(delivery_data);
+						$('.delivery_date').val(delivery_data);
 					}
 					else if(arg.event._def.ui.classNames == 'installation_date')
 					{
-						var start_date = new Date(start);
-						var curr_date = (start_date.getDate()<10?'0':'') + start_date.getDate();
-						var curr_month = start_date.getMonth() + 1;
-						curr_month = (curr_month<10?'0':'') + curr_month;
-						var curr_year = start_date.getFullYear();
-						var hour = (start_date.getHours()<10?'0':'') + start_date.getHours();
-						var minute = (start_date.getMinutes()<10?'0':'') + start_date.getMinutes();
-						var installation_date_start = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
-
-						var end_date = new Date(end);
-						var curr_date = (end_date.getDate()<10?'0':'') + end_date.getDate();
-						var curr_month = end_date.getMonth() + 1;
-						curr_month = (curr_month<10?'0':'') + curr_month;
-						var curr_year = end_date.getFullYear();
-						var hour = (end_date.getHours()<10?'0':'') + end_date.getHours();
-						var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
-						var installation_date_end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
-
-						var installation_date = [installation_date_start,installation_date_end];
-						installation_date = JSON.stringify(installation_date);
-						$('.installation_date').val(installation_date);
+						var installation_data = [start,end,description,tags];
+						installation_data = JSON.stringify(installation_data);
+						$('.installation_date').val(installation_data);
 					}
 					else
 					{
 						var id = arg.event._def.publicId;
-						var appointments = JSON.parse($('.appointment_data').val());
-
-						var start_date = new Date(start);
-						var curr_date = (start_date.getDate()<10?'0':'') + start_date.getDate();
-						var curr_month = start_date.getMonth() + 1;
-						curr_month = (curr_month<10?'0':'') + curr_month;
-						var curr_year = start_date.getFullYear();
-						var hour = (start_date.getHours()<10?'0':'') + start_date.getHours();
-						var minute = (start_date.getMinutes()<10?'0':'') + start_date.getMinutes();
-						start = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
-
-						var end_date = new Date(end);
-						var curr_date = (end_date.getDate()<10?'0':'') + end_date.getDate();
-						var curr_month = end_date.getMonth() + 1;
-						curr_month = (curr_month<10?'0':'') + curr_month;
-						var curr_year = end_date.getFullYear();
-						var hour = (end_date.getHours()<10?'0':'') + end_date.getHours();
-						var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
-						end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute+":00";
+						var data = $('.appointment_data').val();
+						var appointments = data ? JSON.parse(data) : '';
 
 						for(var i = 0; i < appointments.length; i++) {
+
 							if(appointments[i].id == id) {
-								appointments[i]['title'] = arg.event._def.title;
+
+								appointments[i]['title'] = title;
 								appointments[i]['start'] = start;
 								appointments[i]['end'] = end;
+								appointments[i]['description'] = description;
+								appointments[i]['tags'] = tags;
 
 								$('.appointment_data').val(JSON.stringify(appointments));
 								break;
 							}
+
 						}
 					}
 
 				},
-				eventClick: function(arg) {
+				eventContent: function (arg) {
+
+				},
+				eventDidMount: function (arg)
+				{
+					var actualAppointment = $(arg.el);
 
 					if(jQuery.inArray("delivery_date", arg.event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", arg.event._def.ui.classNames) != 0 && jQuery.inArray("non_removeables", arg.event._def.ui.classNames) != 0)
 					{
-						if (confirm('Are you sure you want to delete this event?')) {
-							arg.event.remove();
-
-							var id = arg.event._def.publicId;
-							var appointments = $('.appointment_data').val();
-
-							if(appointments)
-							{
-								appointments = JSON.parse(appointments);
-							}
-							else
-							{
-								appointments = [];
-							}
-
-							for(var i = 0; i < appointments.length; i++) {
-								if(appointments[i].id == id) {
-									appointments.splice(i, 1);
-									break;
-								}
-							}
-
-							if(jQuery.isEmptyObject(appointments))
-							{
-								$('.appointment_data').val('');
-							}
-							else
-							{
-								$('.appointment_data').val(JSON.stringify(appointments));
-							}
-						}
+						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
+					}
+					else
+					{
+						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '</div>';
 					}
 
+					actualAppointment.append(buttonsHtml);
+
+					actualAppointment.find(".edit-event").on('click', function () {
+						edit_appointment(arg.event.id);
+					});
+
+					actualAppointment.find(".remove-event").on('click', function () {
+						remove_appointment(arg.event.id);
+					});
 				},
+				eventClick: function(arg) {
+
+				},
+				displayEventEnd: true,
 				editable: true,
 				dayMaxEvents: true, // allow "more" link when too many events
 				events: {!! $appointments !!},
@@ -3256,35 +3014,20 @@
 				},
 			});
 
-			// var current_desc = '';
-			//
-			// $(".add-desc").click(function () {
-			// 	current_desc = $(this);
-			// 	var d = current_desc.prev('input').val();
-			// 	$('#description-text').val(d);
-			// 	$("#myModal").modal('show');
-			// });
-			//
-			// $(".submit-desc").click(function () {
-			// 	var desc = $('#description-text').val();
-			// 	current_desc.prev('input').val(desc);
-			// 	$('#description-text').val('');
-			// 	$("#myModal").modal('hide');
-			// });
 
-			// $('.delivery_date').datepicker({
-			//
-			// 	format: 'dd-mm-yyyy',
-			// 	startDate: new Date(),
-			//
-			// });
-			//
-			// $('.installation_date').datepicker({
-			//
-			// 	format: 'dd-mm-yyyy',
-			// 	startDate: new Date(),
-			//
-			// });
+			$('.appointment_start').datetimepicker({
+				format: 'YYYY-MM-DD HH:mm',
+				minDate: new Date(),
+				ignoreReadonly: true,
+				sideBySide: true,
+			});
+
+			$('.appointment_end').datetimepicker({
+				format: 'YYYY-MM-DD HH:mm',
+				minDate: new Date(),
+				ignoreReadonly: true,
+				sideBySide: true,
+			});
 
 			function calculate_total(qty_changed = 0,labor_changed = 0) {
 
@@ -5992,5 +5735,6 @@
 	</script>
 
 	<link href="{{asset('assets/admin/css/main.css')}}" rel="stylesheet">
+	<link href="{{asset('assets/admin/css/bootstrap-tagsinput.css')}}" rel="stylesheet">
 
 @endsection
