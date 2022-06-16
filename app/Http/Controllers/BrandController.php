@@ -331,12 +331,12 @@ class BrandController extends Controller
             return $validations;
         }
 
-        $validations = $this->CustomValidationsTypes($request->cat_id ? $request->type_ids : NULL,$user_id,$request->types,$request->type_slugs);
+        // $validations = $this->CustomValidationsTypes($request->cat_id ? $request->type_ids : NULL,$user_id,$request->types,$request->type_slugs);
 
-        if($validations)
-        {
-            return $validations;
-        }
+        // if($validations)
+        // {
+        //     return $validations;
+        // }
 
         if($request->cat_id)
         {
@@ -468,7 +468,7 @@ class BrandController extends Controller
 
                 \Mail::send(array(), array(), function ($message) use ($admin_email,$supplier_company,$brand) {
                     $message->to($admin_email)
-                        ->from('info@vloerofferte.nl')
+                        ->from('info@pieppiep.com')
                         ->subject('Brand Edit Request')
                         ->setBody('Dear Nordin Adoui, A new brand edit request has been submitted by <b>'.$supplier_company.'</b> for brand: <b>'.$brand.'</b>.', 'text/html');
                 });
