@@ -89,6 +89,7 @@ use Spatie\Permission\Models\Permission;
 use Symfony\Component\Process\Process;
 use App\retailer_services;
 use Excel;
+use App\planning_titles;
 
 class UserController extends Controller
 {
@@ -2269,25 +2270,27 @@ class UserController extends Controller
                 $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => ''],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => '']];
                 $appointments = json_encode($appointments);
 
-                $other_appointments = quotation_appointments::where('user_id',$user_id)->select('id','title','start','end')->get();
+                $other_appointments = quotation_appointments::where('user_id',$user_id)->select('id','title','start','end','description','tags')->get();
 
                 foreach($other_appointments as $row) {
 
-                    $row->classNames = 'non_removeables';
-                    $row->editable = false;
+                    $row->classNames = 'other';
+                    /*$row->editable = false;
                     $row->droppable = false;
                     $row->eventStartEditable = false;
                     $row->eventResizableFromStart = false;
-                    $row->eventDurationEditable = false;
+                    $row->eventDurationEditable = false;*/
                     $row->color = 'green';
 
                 }
 
                 $other_appointments = json_encode($other_appointments);
 
-                $appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
+                $current_appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
 
-                return view('user.create_custom_quote1', compact('appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
+                $event_titles = planning_titles::where('user_id',$user_id)->get();
+
+                return view('user.create_custom_quote1', compact('event_titles','current_appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
             } else {
                 return redirect()->back();
             }
@@ -3996,6 +3999,82 @@ class UserController extends Controller
         }
     }
 
+    public function PlanningTitles()
+    {
+        $titles = planning_titles::all();
+
+        return view('user.planning_titles',compact('titles'));
+    }
+
+    public function AddPlanningTitle($id = NULL)
+    {
+        if($id)
+        {
+            $title = planning_titles::where('id',$id)->first();
+
+            return view('user.create_planning_title',compact('title'));
+        }
+        else
+        {
+            return view('user.create_planning_title');
+        }
+    }
+
+    public function StorePlanningTitle(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        if($request->title_id)
+        {
+            $post = planning_titles::where('id',$request->title_id)->first();
+        }
+        else
+        {
+            $post = new planning_titles;
+            $post->user_id = $user_id;
+        }
+
+        $post->title = $request->title;
+        $post->save();
+
+        Session::flash('success', 'Task completed successfully.');
+        return redirect()->route('planning-titles');
+
+    }
+
+    public function DeletePlanningTitle($id)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $title = planning_titles::where('id',$id)->where('user_id',$user_id)->first();
+
+        if(!$title)
+        {
+            return redirect()->back();
+        }
+
+        planning_titles::where('id',$id)->delete();
+
+        Session::flash('success', 'Title deleted successfully.');
+        return redirect()->route('planning-titles');
+    }
+
     public function DownloadNewQuotation($id)
     {
         $user = Auth::guard('user')->user();
@@ -4952,14 +5031,24 @@ class UserController extends Controller
             {
                 foreach($appointments_data as $key)
                 {
-                    $appointment = new quotation_appointments;
-                    $appointment->quotation_id = $invoice->id;
-                    $appointment->user_id = $user_id;
+                    $is_new_event = isset($key['new']) ? true : false;
+
+                    if($is_new_event)
+                    {
+                        $appointment = new quotation_appointments;
+                        $appointment->quotation_id = $invoice->id;
+                        $appointment->user_id = $user_id;
+                    }
+                    else
+                    {
+                        $appointment = quotation_appointments::where('id',$key['id'])->first();
+                    }
+
                     $appointment->title = $key['title'];
                     $appointment->start = $key['start'];
                     $appointment->end = $key['end'];
-                    $appointment->description = $key['description'];
-                    $appointment->tags = $key['tags'];
+                    $appointment->description = $key['description'] ? $key['description'] : NULL;
+                    $appointment->tags = $key['tags'] ? $key['tags'] : NULL;
                     $appointment->save();
                 }
             }

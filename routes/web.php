@@ -350,6 +350,11 @@
   Route::post('/send-request-supplier', 'UserController@SendRequestSupplier')->name('send-request-supplier');
   Route::get('/suppliers/details/{id}', 'UserController@DetailsSupplier')->name('supplier-details');
 
+  Route::get('/planning-titles', 'UserController@PlanningTitles')->name('planning-titles');
+  Route::get('/add-title/{id?}', 'UserController@AddPlanningTitle')->name('add-planning-title');
+  Route::post('/store-title', 'UserController@StorePlanningTitle')->name('store-planning-title');
+  Route::get('/delete-title/{id}', 'UserController@DeletePlanningTitle')->name('delete-planning-title');
+
   Route::get('/retailers', 'UserController@Retailers')->name('retailers');
   Route::get('/retailers/details/{id}', 'UserController@DetailsRetailer')->name('retailer-details');
   Route::post('/accept-retailer-request', 'UserController@AcceptRetailerRequest')->name('accept-retailer-request');

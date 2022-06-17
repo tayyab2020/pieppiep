@@ -512,4 +512,12 @@ return [
     'Note: Make sure to export latest products from database and make changes in that file to avoid creating same product twice. Than import that file.' => 'Note: Make sure to export latest products from database and make changes in that file to avoid creating same product twice. Than import that file.',
     'Quotation Description' => 'Quotation Description',
     'Appointments' => 'Appointments',
+    'Relations' => 'Relations',
+    'Plannings' => 'Plannings',
+    'Planning Titles' => 'Planning Titles',
+    'Configurations' => 'Configurations',
+    'Add New Title' => 'Add New Title',
+    'Edit Title' => 'Edit Title',
+    'Enter Planning Title' => 'Enter Planning Title',
+    'Select Event Title' => 'Select Event Title',
 ];

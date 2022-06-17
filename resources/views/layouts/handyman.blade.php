@@ -1104,7 +1104,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                 @if(auth()->user()->hasAnyPermission(['retailer-suppliers', 'customers', 'employees']))
 
-                    <li><a @if(Route::currentRouteName() == 'suppliers' || Route::currentRouteName() == 'customers' || Route::currentRouteName() == 'employees') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>Relations</span></a>
+                    <li><a @if(Route::currentRouteName() == 'suppliers' || Route::currentRouteName() == 'customers' || Route::currentRouteName() == 'employees') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>{{__('text.Relations')}}</span></a>
 
                         <ul class="hide">
 
@@ -1140,13 +1140,31 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                 @endif
 
+                    <li><a @if(Route::currentRouteName() == 'planning-titles') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>{{__('text.Plannings')}}</span></a>
+
+                        <ul class="hide">
+
+                            <span class="toggle-aside-nav">
+                                <i class="icon accordian-left-icon"></i>
+                            </span>
+
+                            <div style="overflow-y: auto;height: 100%;">
+
+                                <li><a href="{{route('planning-titles')}}"><i class="fa fa-angle-right"></i> {{__('text.Planning Titles')}}</a></li>
+
+                            </div>
+
+                        </ul>
+
+                    </li>
+
             @endif
 
             @if(auth()->user()->role_id == 4)
 
                 @if(auth()->user()->hasAnyPermission(['supplier-retailers', 'customers', 'employees']))
 
-                    <li><a @if(Route::currentRouteName() == 'suppliers' || Route::currentRouteName() == 'customers' || Route::currentRouteName() == 'employees') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>Relations</span></a>
+                    <li><a @if(Route::currentRouteName() == 'suppliers' || Route::currentRouteName() == 'customers' || Route::currentRouteName() == 'employees') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>{{__('text.Relations')}}</span></a>
 
                         <ul class="hide">
 
@@ -1224,7 +1242,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @elseif(auth()->user()->role_id == 4)
 
-                <li><a @if(Route::currentRouteName() == 'prefix-settings') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>Configurations</span></a>
+                <li><a @if(Route::currentRouteName() == 'prefix-settings') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>{{__('text.Configurations')}}</span></a>
 
                     <ul class="hide">
 

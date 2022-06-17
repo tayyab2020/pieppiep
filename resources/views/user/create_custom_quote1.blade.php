@@ -442,8 +442,8 @@
 
 															</section>
 
-															<?php if(isset($appointments)) {
-																$appointments_array = json_decode($appointments,true);
+															<?php if(isset($current_appointments)) {
+																$appointments_array = json_decode($current_appointments,true);
 																
 																$delivery_array = [];
 																$delivery_array[0] = $appointments_array[0]['start'];
@@ -470,7 +470,7 @@
 
 																		@if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
 
-																			<input value="{{isset($appointments) ? $delivery_obj : null}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
+																			<input value="{{isset($current_appointments) ? $delivery_obj : null}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
 
 																		@endif
 
@@ -502,20 +502,20 @@
 																<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
 																	<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
-																		<input value="{{isset($appointments) ? $installation_obj : null}}" type="hidden" class="installation_date" name="installation_date">
+																		<input value="{{isset($current_appointments) ? $installation_obj : null}}" type="hidden" class="installation_date" name="installation_date">
 
 																		<?php if(isset($current_appointments)) {
 
-																			$current_appointments = json_decode($current_appointments,true);
-																			$current_appointments = array_slice($current_appointments, 2);
-																			$count = count($current_appointments);
-																			$last_id = $count > 0 ? end($current_appointments)['id'] : 0;
+																			$appointments = json_decode($current_appointments,true);
+																			$appointments = array_slice($appointments, 2);
+																			$count = count($appointments);
+																			$last_id = $count > 0 ? end($appointments)['id'] : 0;
 																			$last_id = $last_id + 1;
-																			$current_appointments = json_encode($current_appointments);
+																			$appointments = json_encode($appointments);
 
 																		} ?>
 
-																		<input type="hidden" value="{{isset($current_appointments) ? ($count > 0 ? $current_appointments : null) : null}}" class="appointment_data" name="appointment_data">
+																		<input type="hidden" value="{{isset($appointments) ? ($count > 0 ? $appointments : null) : null}}" class="appointment_data" name="appointment_data">
 																		<input type="hidden" value="{{isset($last_id) ? $last_id : 1}}" class="appointment_id">
 																	</div>
 																	<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
@@ -1486,9 +1486,19 @@
 				<div class="modal-body">
 
 					<div class="row">
-						<div class="form-group col-xs-12 col-sm-12 required">
+						<div class="form-group col-xs-12 col-sm-12 required appointment_title_box">
 							<label>Title</label>
-							<input type="text" class="form-control appointment_title validation_required" />
+							<select class="appointment_title">
+
+								<option value="">{{__('text.Select Event Title')}}</option>
+
+								@foreach($event_titles as $title)
+
+									<option value="{{$title->title}}">{{$title->title}}</option>
+
+								@endforeach
+
+							</select>
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-4 required">
@@ -1906,7 +1916,7 @@
 				border: 1px solid #d6d6d6;
 			}
 
-			:not(.color, .model) > .select2-container--default .select2-selection--single
+			:not(.color, .model, .appointment_title_box) > .select2-container--default .select2-selection--single
 			{
 				border: 1px solid #d6d6d6 !important;
 			}
@@ -2186,27 +2196,32 @@
 			z-index: 1000000;
 		}
 
-		#cus-box .select2-container--default .select2-selection--single .select2-selection__rendered {
+		#cus-box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_title_box .select2-container--default .select2-selection--single .select2-selection__rendered {
 			line-height: 28px;
 		}
 
-		#cus-box .select2-container--default .select2-selection--single {
+		#cus-box .select2-container--default .select2-selection--single, .appointment_title_box .select2-container--default .select2-selection--single {
 			border: 1px solid #cacaca;
 		}
 
-		#cus-box .select2-selection {
+		#cus-box .select2-selection, .appointment_title_box .select2-selection {
 			height: 40px !important;
 			padding-top: 5px !important;
 			outline: none;
 		}
 
-		#cus-box .select2-selection__arrow {
+		#cus-box .select2-selection__arrow, .appointment_title_box .select2-selection__arrow {
 			top: 7.5px !important;
 		}
 
-		#cus-box .select2-selection__clear {
-			display: none;
+		.appointment_start, .appointment_end
+		{
+			background-color: white !important;
 		}
+
+		/* #cus-box .select2-selection__clear, .appointment_title_box .select2-selection__clear {
+			display: none;
+		} */
 
 		.feature-tab li a[aria-expanded="false"]::before,
 		a[aria-expanded="true"]::before {
@@ -2223,7 +2238,7 @@
 			align-items: center;
 		}
 
-		:not(.color, .model) > .select2-container--default .select2-selection--single {
+		:not(.color, .model, .appointment_title_box) > .select2-container--default .select2-selection--single {
 			border: 0;
 		}
 
@@ -2376,6 +2391,16 @@
 
 			var flag = 0;
 
+			var title = $('.appointment_title').val();
+
+			if (!title) {
+				flag = 1;
+				$('.appointment_title_box .select2-container--default .select2-selection--single').css('border-color', 'red');
+			}
+			else {
+				$('.appointment_title_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+			}
+
 			$(validation).each(function(){
 
 				if(!$(this).val())
@@ -2423,7 +2448,6 @@
 						event.setProp('title', title);
 						event.setExtendedProp('description',appointment_desc);
 						event.setExtendedProp('tags',appointment_tags);
-
 					}
 					else
 					{
@@ -2454,12 +2478,13 @@
 
 					$('#addAppointmentModal').modal('toggle');
 					$('#myModal3').modal('toggle');
-					$('#event_id').val('')
+					$('#event_id').val('');
 					$('.appointment_title').val('');
 					$('.appointment_start').val('');
 					$('.appointment_end').val('');
 					$('.appointment_description').val('');
 					$('.appointment_tags').tagsinput('removeAll');
+					$('.appointment_title').trigger('change.select2');
 
 				}
 				else
@@ -2482,7 +2507,7 @@
 
 		$(".add-appointment").click(function () {
 
-			$('.appointment_title').attr('readonly',false);
+			$('.appointment_title').attr('disabled',false);
 			$('.submit_appointmentForm').show();
 			$('#event_id').val('');
 			$('.appointment_title').val('');
@@ -2490,6 +2515,7 @@
 			$('.appointment_end').val('');
 			$('.appointment_description').val('');
 			$('.appointment_tags').tagsinput('removeAll');
+			$('.appointment_title').trigger('change.select2');
 
 			$('#myModal3').modal('toggle');
 			$('#addAppointmentModal').modal('toggle');
@@ -2502,25 +2528,17 @@
 			var title = event.title;
 			var description = event._def.extendedProps.description;
 			var tags = event._def.extendedProps.tags;
-			var start = moment(event.start).format('YYYY-MM-DD hh:mm');
-			var end = event.end ? moment(event.end).format('YYYY-MM-DD hh:mm') : start;
+			var start = moment(event.start).format('YYYY-MM-DD HH:mm');
+			var end = event.end ? moment(event.end).format('YYYY-MM-DD HH:mm') : start;
 
-			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && jQuery.inArray("non_removeables", event._def.ui.classNames) != 0)
+			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0)
 			{
-				$('.appointment_title').attr('readonly',false);
+				$('.appointment_title').attr('disabled',false);
 			}
 			else
 			{
-				$('.appointment_title').attr('readonly',true);
-
-				if(jQuery.inArray("non_removeables", event._def.ui.classNames) != 0)
-				{
-					$('.submit_appointmentForm').show();
-				}
-				else
-				{
-					$('.submit_appointmentForm').hide();
-				}
+				$('.appointment_title').attr('disabled',true);
+				$('.submit_appointmentForm').show();
 			}
 
 			$('#event_id').val(id);
@@ -2528,7 +2546,9 @@
 			$('.appointment_start').val(start);
 			$('.appointment_end').val(end);
 			$('.appointment_description').val(description);
+			$('.appointment_tags').tagsinput('removeAll');
 			$('.appointment_tags').tagsinput('add',tags);
+			$('.appointment_title').trigger('change.select2');
 
 			$('#myModal3').modal('toggle');
 			$('#addAppointmentModal').modal('toggle');
@@ -2538,7 +2558,7 @@
 		{
 			var event = calendar.getEventById(id);
 
-			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && jQuery.inArray("non_removeables", event._def.ui.classNames) != 0)
+			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0)
 			{
 				event.remove();
 				var appointments = $('.appointment_data').val();
@@ -2666,7 +2686,7 @@
 				{
 					var actualAppointment = $(arg.el);
 
-					if(jQuery.inArray("delivery_date", arg.event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", arg.event._def.ui.classNames) != 0 && jQuery.inArray("non_removeables", arg.event._def.ui.classNames) != 0)
+					if(jQuery.inArray("delivery_date", arg.event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", arg.event._def.ui.classNames) != 0)
 					{
 						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
 					}
@@ -2691,7 +2711,7 @@
 				displayEventEnd: true,
 				editable: true,
 				dayMaxEvents: true, // allow "more" link when too many events
-				events: {!! $appointments !!},
+				events: {!! $current_appointments !!},
 				// events: [
 				// 	{
 				// 		id: 1,
@@ -3014,17 +3034,28 @@
 				},
 			});
 
+			$(".appointment_title").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Event Title')}}",
+				allowClear: true,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
 
 			$('.appointment_start').datetimepicker({
 				format: 'YYYY-MM-DD HH:mm',
-				minDate: new Date(),
+				defaultDate: new Date(),
 				ignoreReadonly: true,
 				sideBySide: true,
 			});
 
 			$('.appointment_end').datetimepicker({
 				format: 'YYYY-MM-DD HH:mm',
-				minDate: new Date(),
+				defaultDate: new Date(),
 				ignoreReadonly: true,
 				sideBySide: true,
 			});
