@@ -2219,14 +2219,29 @@
 			border: 1px solid #cacaca;
 		}
 
-		#cus-box .select2-selection, .appointment_title_box .select2-selection, .appointment_quotation_number_box .select2-selection {
+		#cus-box .select2-selection, .appointment_title_box .select2-selection {
 			height: 40px !important;
 			padding-top: 5px !important;
 			outline: none;
 		}
 
-		#cus-box .select2-selection__arrow, .appointment_title_box .select2-selection__arrow, .appointment_quotation_number_box .select2-selection__arrow {
+		.appointment_quotation_number_box .select2-selection
+		{
+			height: 35px !important;
+			padding-top: 0 !important;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		#cus-box .select2-selection__arrow, .appointment_title_box .select2-selection__arrow {
 			top: 7.5px !important;
+		}
+
+		.appointment_quotation_number_box .select2-selection__arrow
+		{
+			top: 0 !important;
+			position: relative;
 		}
 
 		.appointment_start, .appointment_end
@@ -2433,7 +2448,7 @@
 			if(!flag)
 			{
 				var id = $('#event_id').val();
-				var quotation_id = $('.appointment_quotation_number').val();
+				var appointment_quotation_id = $('.appointment_quotation_number').val();
 				var title = $('.appointment_title').val();
 				var appointment_start = $('.appointment_start').val();
 				var appointment_end = $('.appointment_end').val();
@@ -2461,17 +2476,18 @@
 					{
 						var event = calendar.getEventById(id);
 						event.setDates(appointment_start,appointment_end);
-						event.setExtendedProp('quotation_id', quotation_id);
+						event.setExtendedProp('quotation_id', appointment_quotation_id);
 						event.setProp('title', title);
 						event.setExtendedProp('description',appointment_desc);
 						event.setExtendedProp('tags',appointment_tags);
 					}
 					else
 					{
+						var quotation_id = $("input[name=quotation_id]").val();
 						var id = parseInt($('.appointment_id').val());
 						$('.appointment_id').val(id+1);
 
-						if(quotation_id == 0)
+						if(appointment_quotation_id == 0)
 						{
 							var color = '#3788d8';
 						}
@@ -2482,7 +2498,7 @@
 
 						calendar.addEvent({
 							id: id,
-							quotation_id: quotation_id,
+							quotation_id: appointment_quotation_id,
 							title: title,
 							start: appointment_start,
 							end: appointment_end,
@@ -2493,7 +2509,7 @@
 
 						var obj = {};
 						obj['id'] = id;
-						obj['quotation_id'] = quotation_id;
+						obj['quotation_id'] = appointment_quotation_id;
 						obj['title'] = title;
 						obj['start'] = appointment_start;
 						obj['end'] = appointment_end;
