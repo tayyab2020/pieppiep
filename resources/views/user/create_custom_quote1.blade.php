@@ -1511,6 +1511,21 @@
 							<input type="text" class="form-control appointment_end validation_required" readonly="readonly">
 						</div>
 
+						<div class="form-group col-xs-12 col-sm-4 appointment_quotation_number_box required">
+							<label>Quotation Number</label>
+							<select class="appointment_quotation_number">
+
+								<option value="0">{{__('text.Current Quotation')}}</option>
+
+								@foreach($quotation_ids as $key)
+
+									<option value="{{$key->id}}">{{$key->quotation_invoice_number}}</option>
+
+								@endforeach
+
+							</select>
+						</div>
+
 						<div class="form-group col-xs-12 col-sm-12">
 							<label>Description</label>
 							<textarea rows="4" class="form-control appointment_description"></textarea>
@@ -1916,7 +1931,7 @@
 				border: 1px solid #d6d6d6;
 			}
 
-			:not(.color, .model, .appointment_title_box) > .select2-container--default .select2-selection--single
+			:not(.color, .model, .appointment_title_box, .appointment_quotation_number_box) > .select2-container--default .select2-selection--single
 			{
 				border: 1px solid #d6d6d6 !important;
 			}
@@ -2196,21 +2211,21 @@
 			z-index: 1000000;
 		}
 
-		#cus-box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_title_box .select2-container--default .select2-selection--single .select2-selection__rendered {
+		#cus-box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_title_box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_quotation_number_box .select2-container--default .select2-selection--single .select2-selection__rendered {
 			line-height: 28px;
 		}
 
-		#cus-box .select2-container--default .select2-selection--single, .appointment_title_box .select2-container--default .select2-selection--single {
+		#cus-box .select2-container--default .select2-selection--single, .appointment_title_box .select2-container--default .select2-selection--single, .appointment_quotation_number_box .select2-container--default .select2-selection--single {
 			border: 1px solid #cacaca;
 		}
 
-		#cus-box .select2-selection, .appointment_title_box .select2-selection {
+		#cus-box .select2-selection, .appointment_title_box .select2-selection, .appointment_quotation_number_box .select2-selection {
 			height: 40px !important;
 			padding-top: 5px !important;
 			outline: none;
 		}
 
-		#cus-box .select2-selection__arrow, .appointment_title_box .select2-selection__arrow {
+		#cus-box .select2-selection__arrow, .appointment_title_box .select2-selection__arrow, .appointment_quotation_number_box .select2-selection__arrow {
 			top: 7.5px !important;
 		}
 
@@ -2219,7 +2234,7 @@
 			background-color: white !important;
 		}
 
-		/* #cus-box .select2-selection__clear, .appointment_title_box .select2-selection__clear {
+		/* #cus-box .select2-selection__clear, .appointment_title_box .select2-selection__clear, .appointment_quotation_number_box .select2-selection__clear {
 			display: none;
 		} */
 
@@ -2238,7 +2253,7 @@
 			align-items: center;
 		}
 
-		:not(.color, .model, .appointment_title_box) > .select2-container--default .select2-selection--single {
+		:not(.color, .model, .appointment_title_box, .appointment_quotation_number_box) > .select2-container--default .select2-selection--single {
 			border: 0;
 		}
 
@@ -2418,6 +2433,7 @@
 			if(!flag)
 			{
 				var id = $('#event_id').val();
+				var quotation_id = $('.appointment_quotation_number').val();
 				var title = $('.appointment_title').val();
 				var appointment_start = $('.appointment_start').val();
 				var appointment_end = $('.appointment_end').val();
@@ -2445,6 +2461,7 @@
 					{
 						var event = calendar.getEventById(id);
 						event.setDates(appointment_start,appointment_end);
+						event.setExtendedProp('quotation_id', quotation_id);
 						event.setProp('title', title);
 						event.setExtendedProp('description',appointment_desc);
 						event.setExtendedProp('tags',appointment_tags);
@@ -2454,23 +2471,36 @@
 						var id = parseInt($('.appointment_id').val());
 						$('.appointment_id').val(id+1);
 
+						if(quotation_id == 0)
+						{
+							var color = '#3788d8';
+						}
+						else
+						{
+							var color = 'green';
+						}
+
 						calendar.addEvent({
 							id: id,
+							quotation_id: quotation_id,
 							title: title,
 							start: appointment_start,
 							end: appointment_end,
 							description: appointment_desc,
 							tags: appointment_tags,
+							color: color
 						});
 
 						var obj = {};
 						obj['id'] = id;
+						obj['quotation_id'] = quotation_id;
 						obj['title'] = title;
 						obj['start'] = appointment_start;
 						obj['end'] = appointment_end;
 						obj['description'] = appointment_desc;
 						obj['tags'] = appointment_tags;
 						obj['new'] = 1;
+						obj['default_event'] = 0;
 						data_array.push(obj);
 
 						$('.appointment_data').val(JSON.stringify(data_array));
@@ -2479,12 +2509,14 @@
 					$('#addAppointmentModal').modal('toggle');
 					$('#myModal3').modal('toggle');
 					$('#event_id').val('');
+					$('.appointment_quotation_number').val(0);
 					$('.appointment_title').val('');
 					$('.appointment_start').val('');
 					$('.appointment_end').val('');
 					$('.appointment_description').val('');
 					$('.appointment_tags').tagsinput('removeAll');
 					$('.appointment_title').trigger('change.select2');
+					$('.appointment_quotation_number').trigger('change.select2');
 
 				}
 				else
@@ -2508,14 +2540,17 @@
 		$(".add-appointment").click(function () {
 
 			$('.appointment_title').attr('disabled',false);
+			$('.appointment_quotation_number').attr('disabled',false);
 			$('.submit_appointmentForm').show();
 			$('#event_id').val('');
+			$('.appointment_quotation_number').val(0);
 			$('.appointment_title').val('');
 			$('.appointment_start').val('');
 			$('.appointment_end').val('');
 			$('.appointment_description').val('');
 			$('.appointment_tags').tagsinput('removeAll');
 			$('.appointment_title').trigger('change.select2');
+			$('.appointment_quotation_number').trigger('change.select2');
 
 			$('#myModal3').modal('toggle');
 			$('#addAppointmentModal').modal('toggle');
@@ -2525,30 +2560,36 @@
 		function edit_appointment(id)
 		{
 			var event = calendar.getEventById(id);
+			var quotation_id = event._def.extendedProps.quotation_id;
 			var title = event.title;
 			var description = event._def.extendedProps.description;
 			var tags = event._def.extendedProps.tags;
 			var start = moment(event.start).format('YYYY-MM-DD HH:mm');
 			var end = event.end ? moment(event.end).format('YYYY-MM-DD HH:mm') : start;
 
-			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0)
-			{
-				$('.appointment_title').attr('disabled',false);
-			}
-			else
-			{
-				$('.appointment_title').attr('disabled',true);
-				$('.submit_appointmentForm').show();
-			}
-
 			$('#event_id').val(id);
+			$('.appointment_quotation_number').val(quotation_id);
 			$('.appointment_title').val(title);
 			$('.appointment_start').val(start);
 			$('.appointment_end').val(end);
 			$('.appointment_description').val(description);
 			$('.appointment_tags').tagsinput('removeAll');
 			$('.appointment_tags').tagsinput('add',tags);
+
+			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
+			{
+				$('.appointment_title').attr('disabled',false);
+				$('.appointment_quotation_number').attr('disabled',false);
+			}
+			else
+			{
+				$('.appointment_title').attr('disabled',true);
+				$('.appointment_quotation_number').attr('disabled',true);
+				$('.submit_appointmentForm').show();
+			}
+
 			$('.appointment_title').trigger('change.select2');
+			$('.appointment_quotation_number').trigger('change.select2');
 
 			$('#myModal3').modal('toggle');
 			$('#addAppointmentModal').modal('toggle');
@@ -2558,7 +2599,7 @@
 		{
 			var event = calendar.getEventById(id);
 
-			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0)
+			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
 			{
 				event.remove();
 				var appointments = $('.appointment_data').val();
@@ -2619,6 +2660,8 @@
 				},
 				eventChange: function(arg) {
 
+					var default_event = arg.event._def.extendedProps.default_event;
+					var quotation_id = arg.event._def.extendedProps.quotation_id;
 					var title = arg.event._def.title;
 					var description = arg.event._def.extendedProps.description;
 					var tags = arg.event._def.extendedProps.tags;
@@ -2645,13 +2688,13 @@
 
 					if(arg.event._def.ui.classNames == 'delivery_date')
 					{
-						var delivery_data = [start,end,description,tags];
+						var delivery_data = [start,end,description,tags,default_event,quotation_id];
 						delivery_data = JSON.stringify(delivery_data);
 						$('.delivery_date').val(delivery_data);
 					}
 					else if(arg.event._def.ui.classNames == 'installation_date')
 					{
-						var installation_data = [start,end,description,tags];
+						var installation_data = [start,end,description,tags,default_event,quotation_id];
 						installation_data = JSON.stringify(installation_data);
 						$('.installation_date').val(installation_data);
 					}
@@ -2670,6 +2713,8 @@
 								appointments[i]['end'] = end;
 								appointments[i]['description'] = description;
 								appointments[i]['tags'] = tags;
+								appointments[i]['default_event'] = default_event;
+								appointments[i]['quotation_id'] = quotation_id;
 
 								$('.appointment_data').val(JSON.stringify(appointments));
 								break;
@@ -2685,8 +2730,9 @@
 				eventDidMount: function (arg)
 				{
 					var actualAppointment = $(arg.el);
+					var event = arg.event;
 
-					if(jQuery.inArray("delivery_date", arg.event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", arg.event._def.ui.classNames) != 0)
+					if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
 					{
 						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
 					}
@@ -2698,11 +2744,11 @@
 					actualAppointment.append(buttonsHtml);
 
 					actualAppointment.find(".edit-event").on('click', function () {
-						edit_appointment(arg.event.id);
+						edit_appointment(event.id);
 					});
 
 					actualAppointment.find(".remove-event").on('click', function () {
-						remove_appointment(arg.event.id);
+						remove_appointment(event.id);
 					});
 				},
 				eventClick: function(arg) {
@@ -3039,6 +3085,18 @@
 				height: '200px',
 				placeholder: "{{__('text.Select Event Title')}}",
 				allowClear: true,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
+			$(".appointment_quotation_number").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Current Quotation')}}",
+				allowClear: false,
 				"language": {
 					"noResults": function () {
 						return '{{__('text.No results found')}}';

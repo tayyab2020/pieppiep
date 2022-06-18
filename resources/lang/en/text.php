@@ -520,4 +520,5 @@ return [
     'Edit Title' => 'Edit Title',
     'Enter Planning Title' => 'Enter Planning Title',
     'Select Event Title' => 'Select Event Title',
+    'Current Quotation' => 'Current Quotation',
 ];

@@ -2267,10 +2267,10 @@ class UserController extends Controller
                     $date = $next_hour_date;
                 }
 
-                $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => ''],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => '']];
+                $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => '', 'default_event' => 1],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => '', 'default_event' => 1]];
                 $appointments = json_encode($appointments);
 
-                $other_appointments = quotation_appointments::where('user_id',$user_id)->select('id','title','start','end','description','tags')->get();
+                $other_appointments = quotation_appointments::where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
 
                 foreach($other_appointments as $row) {
 
@@ -2289,8 +2289,9 @@ class UserController extends Controller
                 $current_appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
 
                 $event_titles = planning_titles::where('user_id',$user_id)->get();
+                $quotation_ids = new_quotations::where('creator_id',$user_id)->select('id','quotation_invoice_number')->get();
 
-                return view('user.create_custom_quote1', compact('event_titles','current_appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
+                return view('user.create_custom_quote1', compact('quotation_ids','event_titles','current_appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
             } else {
                 return redirect()->back();
             }
@@ -5013,6 +5014,7 @@ class UserController extends Controller
             $appointment->end = $delivery_date_end;
             $appointment->description = $delivery_desc;
             $appointment->tags = $delivery_tags;
+            $appointment->default_event = 1;
             $appointment->save();
 
             $appointment = new quotation_appointments;
@@ -5023,12 +5025,15 @@ class UserController extends Controller
             $appointment->end = $installation_date_end;
             $appointment->description = $installation_desc;
             $appointment->tags = $installation_tags;
+            $appointment->default_event = 1;
             $appointment->save();
 
             $appointments_data = json_decode($request->appointment_data, true);
 
             if($appointments_data)
             {
+                $ap_array = [];
+
                 foreach($appointments_data as $key)
                 {
                     $is_new_event = isset($key['new']) ? true : false;
@@ -5044,13 +5049,19 @@ class UserController extends Controller
                         $appointment = quotation_appointments::where('id',$key['id'])->first();
                     }
 
+                    $appointment->quotation_id = $key['quotation_id'];
+                    $appointment->default_event = $key['default_event'];
                     $appointment->title = $key['title'];
                     $appointment->start = $key['start'];
                     $appointment->end = $key['end'];
                     $appointment->description = $key['description'] ? $key['description'] : NULL;
                     $appointment->tags = $key['tags'] ? $key['tags'] : NULL;
                     $appointment->save();
+
+                    $ap_array[] = $appointment->id;
                 }
+
+                quotation_appointments::whereNotIn('id',$ap_array)->where('default_event',0)->where('user_id',$user_id)->delete();
             }
 
             if($form_type == 1 && $request->quote_request_id)
