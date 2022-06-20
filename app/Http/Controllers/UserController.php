@@ -4023,8 +4023,9 @@ class UserController extends Controller
         $plannings = json_encode($plannings);
         $quotation_ids = new_quotations::where('creator_id',$user_id)->select('id','quotation_invoice_number')->get();
         $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
+        $clients = customers_details::where('retailer_id',$user_id)->get();
 
-        return view('user.plannings',compact('event_titles','plannings','quotation_ids','last_event_id'));
+        return view('user.plannings',compact('clients','event_titles','plannings','quotation_ids','last_event_id'));
     }
 
     public function PlanningTitles()

@@ -1459,7 +1459,7 @@
 				<div style="padding: 0 0 50px 0;" class="modal-body">
 
 					<div class="row" style="max-width: 1100px;margin: 20px auto;">
-						<button class="btn btn-success add-appointment"><i class="fa fa-plus"></i> Add Appointment</button>
+						<button class="btn btn-success add-appointment"><i class="fa fa-plus"></i> {{__('text.Add Appointment')}}</button>
 					</div>
 
 					<div id='calendar'></div>
@@ -1479,14 +1479,14 @@
 
 				<div class="modal-header">
 					<button type="button" data-dismiss="modal" class="close">×</button>
-					<h4 class="modal-title">Add Appointment</h4>
+					<h4 class="modal-title">{{__('text.Add Appointment')}}</h4>
 				</div>
 
 				<div class="modal-body">
 
 					<div class="row">
 						<div class="form-group col-xs-12 col-sm-12 required appointment_title_box">
-							<label>Title</label>
+							<label>{{__('text.Select Event Title')}}</label>
 							<select class="appointment_title">
 
 								<option value="">{{__('text.Select Event Title')}}</option>
@@ -1503,17 +1503,17 @@
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-4 required">
-							<label>Start</label>
+							<label>{{__('Start')}}</label>
 							<input type="text" class="form-control appointment_start validation_required" readonly="readonly">
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-4 required">
-							<label>End</label>
+							<label>{{__('End')}}</label>
 							<input type="text" class="form-control appointment_end validation_required" readonly="readonly">
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-4 appointment_quotation_number_box required">
-							<label>Quotation Number</label>
+							<label>{{__('Quotation Number')}}</label>
 							<select class="appointment_quotation_number">
 
 								<option value="0">{{__('text.Current Quotation')}}</option>
@@ -1528,12 +1528,12 @@
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-12">
-							<label>Description</label>
+							<label>{{__('Description')}}</label>
 							<textarea rows="4" class="form-control appointment_description"></textarea>
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-12 required">
-							<label>Tags</label>
+							<label>{{__('Tags')}}</label>
 							<input type="text" data-role="tagsinput" class="form-control appointment_tags" />
 						</div>
 
@@ -2243,6 +2243,7 @@
 		{
 			top: 0 !important;
 			position: relative;
+			height: 100% !important;
 		}
 
 		.appointment_start, .appointment_end

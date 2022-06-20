@@ -521,4 +521,9 @@ return [
     'Enter Planning Title' => 'Enter Planning Title',
     'Select Event Title' => 'Select Event Title',
     'Current Quotation' => 'Current Quotation',
+    'Select Quotation' => 'Select Quotation',
+    'Select Event Type' => 'Select Event Type',
+    'For Quotation' => 'For Quotation',
+    'For Client' => 'For Client',
+    'Add Appointment' => 'Add Appointment',
 ];
