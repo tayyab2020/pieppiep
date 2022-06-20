@@ -4050,6 +4050,12 @@ class UserController extends Controller
 
     public function StorePlanningTitle(Request $request)
     {
+        if (str_contains(strtoupper($request->title), 'DELIVERY DATE') || str_contains(strtoupper($request->title), 'INSTALLATION DATE'))
+        {
+            Session::flash('unsuccess', 'This string is already reserved by admin.');
+            return redirect()->route('planning-titles');
+        }
+
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $user_role = $user->role_id;
