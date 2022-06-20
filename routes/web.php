@@ -350,6 +350,7 @@
   Route::post('/send-request-supplier', 'UserController@SendRequestSupplier')->name('send-request-supplier');
   Route::get('/suppliers/details/{id}', 'UserController@DetailsSupplier')->name('supplier-details');
 
+  Route::get('/plannings', 'UserController@Plannings')->name('plannings');
   Route::get('/planning-titles', 'UserController@PlanningTitles')->name('planning-titles');
   Route::get('/add-title/{id?}', 'UserController@AddPlanningTitle')->name('add-planning-title');
   Route::post('/store-title', 'UserController@StorePlanningTitle')->name('store-planning-title');

@@ -1140,7 +1140,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                 @endif
 
-                    <li><a @if(Route::currentRouteName() == 'planning-titles') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>{{__('text.Plannings')}}</span></a>
+                    <li><a @if(Route::currentRouteName() == 'plannings' || Route::currentRouteName() == 'planning-titles') class="active1" @endif href="javascript:"><span class="icon dashboard-icon"></span> <span>{{__('text.Plannings')}}</span></a>
 
                         <ul class="hide">
 
@@ -1150,6 +1150,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                             <div style="overflow-y: auto;height: 100%;">
 
+                                <li><a href="{{route('plannings')}}"><i class="fa fa-angle-right"></i> {{__('text.Plannings')}}</a></li>
                                 <li><a href="{{route('planning-titles')}}"><i class="fa fa-angle-right"></i> {{__('text.Planning Titles')}}</a></li>
 
                             </div>

@@ -2267,6 +2267,7 @@ class UserController extends Controller
                     $date = $next_hour_date;
                 }
 
+                $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
                 $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => '', 'default_event' => 1],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => '', 'default_event' => 1]];
                 $appointments = json_encode($appointments);
 
@@ -2291,7 +2292,7 @@ class UserController extends Controller
                 $event_titles = planning_titles::where('user_id',$user_id)->get();
                 $quotation_ids = new_quotations::where('creator_id',$user_id)->select('id','quotation_invoice_number')->get();
 
-                return view('user.create_custom_quote1', compact('quotation_ids','event_titles','current_appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
+                return view('user.create_custom_quote1', compact('last_event_id','quotation_ids','event_titles','current_appointments','products','customers','suppliers','user','services','items','request_id','product_request','quote_qty','quote'));
             } else {
                 return redirect()->back();
             }
@@ -3766,6 +3767,7 @@ class UserController extends Controller
                     $services = Service::leftjoin('retailer_services', 'retailer_services.service_id', '=', 'services.id')->where('retailer_services.retailer_id', $user_id)->select('services.*','retailer_services.sell_rate as rate')->get();
                     $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
 
+                    $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
                     $appointments = quotation_appointments::where('quotation_id',$id)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
                     $other_appointments = quotation_appointments::where('quotation_id','!=',$id)->where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
 
@@ -3803,7 +3805,7 @@ class UserController extends Controller
                     $event_titles = planning_titles::where('user_id',$user_id)->get();
                     $quotation_ids = new_quotations::where('creator_id',$user_id)->where('id','!=',$id)->select('id','quotation_invoice_number')->get();
 
-                    return view('user.create_custom_quote1', compact('quotation_ids','event_titles','current_appointments','products','product_titles','item_titles','service_titles','color_titles','model_titles','product_suppliers','features','sub_features','customers','invoice','sub_products','services','items'));
+                    return view('user.create_custom_quote1', compact('last_event_id','quotation_ids','event_titles','current_appointments','products','product_titles','item_titles','service_titles','color_titles','model_titles','product_suppliers','features','sub_features','customers','invoice','sub_products','services','items'));
                 }
                 else
                 {
@@ -4002,6 +4004,27 @@ class UserController extends Controller
         {
             return redirect()->back();
         }
+    }
+
+    public function Plannings()
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $event_titles = planning_titles::where('user_id',$user_id)->get();
+        $plannings = quotation_appointments::where('user_id',$user_id)->get();
+        $plannings = json_encode($plannings);
+        $quotation_ids = new_quotations::where('creator_id',$user_id)->select('id','quotation_invoice_number')->get();
+        $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
+
+        return view('user.plannings',compact('event_titles','plannings','quotation_ids','last_event_id'));
     }
 
     public function PlanningTitles()

@@ -509,14 +509,13 @@
 																			$appointments = json_decode($current_appointments,true);
 																			$appointments = array_slice($appointments, 2);
 																			$count = count($appointments);
-																			$last_id = $count > 0 ? end($appointments)['id'] : 0;
-																			$last_id = $last_id + 1;
+																			$last_event_id = $last_event_id + 1;
 																			$appointments = json_encode($appointments);
 
 																		} ?>
 
 																		<input type="hidden" value="{{isset($appointments) ? ($count > 0 ? $appointments : null) : null}}" class="appointment_data" name="appointment_data">
-																		<input type="hidden" value="{{isset($last_id) ? $last_id : 1}}" class="appointment_id">
+																		<input type="hidden" value="{{isset($last_event_id) ? $last_event_id : 1}}" class="appointment_id">
 																	</div>
 																	<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
 																	<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
@@ -1491,6 +1490,8 @@
 							<select class="appointment_title">
 
 								<option value="">{{__('text.Select Event Title')}}</option>
+								<option value="Delivery Date">{{__('text.Delivery Date')}}</option>
+								<option value="Installation Date">{{__('text.Installation Date')}}</option>
 
 								@foreach($event_titles as $title)
 
