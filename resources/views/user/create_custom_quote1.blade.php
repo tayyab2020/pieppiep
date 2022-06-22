@@ -2485,7 +2485,6 @@
 					}
 					else
 					{
-						var quotation_id = $("input[name=quotation_id]").val();
 						var id = parseInt($('.appointment_id').val());
 						$('.appointment_id').val(id+1);
 
@@ -2559,7 +2558,7 @@
 
 			$('.appointment_title').attr('disabled',false);
 			$('.appointment_quotation_number').attr('disabled',false);
-			$('.submit_appointmentForm').show();
+			// $('.submit_appointmentForm').show();
 			$('#event_id').val('');
 			$('.appointment_quotation_number').val(0);
 			$('.appointment_title').val('');
@@ -2603,7 +2602,7 @@
 			{
 				$('.appointment_title').attr('disabled',true);
 				$('.appointment_quotation_number').attr('disabled',true);
-				$('.submit_appointmentForm').show();
+				// $('.submit_appointmentForm').show();
 			}
 
 			$('.appointment_title').trigger('change.select2');

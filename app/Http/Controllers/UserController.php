@@ -4028,6 +4028,81 @@ class UserController extends Controller
         return view('user.plannings',compact('clients','event_titles','plannings','quotation_ids','last_event_id'));
     }
 
+    public function StorePlannings(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $appointments_data = json_decode($request->appointment_data, true);
+
+        if($appointments_data)
+        {
+            $ap_array = [];
+
+            foreach($appointments_data as $key)
+            {
+                if(!isset($key['new']))
+                {
+                    $check = quotation_appointments::where('id',$key['id'])->first();
+                    $check->quotation_id = $key['quotation_id'] ? $key['quotation_id'] : NULL;
+                    $check->default_event = $key['default_event'];
+                    $check->title = $key['title'];
+                    $check->start = $key['start'];
+                    $check->end = $key['end'];
+                    $check->description = $key['description'] ? $key['description'] : NULL;
+                    $check->tags = $key['tags'] ? $key['tags'] : NULL;
+                    $check->retailer_client_id = $key['retailer_client_id'] ? $key['retailer_client_id'] : NULL;
+                    $check->event_type = $key['event_type'];
+                    $check->save();
+
+                    $ap_array[] = $check->id;
+                }
+                else
+                {
+
+                    if($key['default_event'])
+                    {
+                        if($key['title'] == 'Delivery Date')
+                        {
+                            new_quotations::where('quotation_id',$key['quotation_id'])->update(['delivery_date' => $key['start'], 'delivery_date_end' => $key['end']]);
+                        }
+                        else
+                        {
+                            new_quotations::where('quotation_id',$key['quotation_id'])->update(['installation_date' => $key['start'], 'installation_date_end' => $key['end']]);
+                        }
+                    }
+
+                    $appointment = new quotation_appointments;
+                    $appointment->quotation_id = $key['quotation_id'] ? $key['quotation_id'] : NULL;
+                    $appointment->default_event = $key['default_event'];
+                    $appointment->user_id = $user_id;
+                    $appointment->title = $key['title'];
+                    $appointment->start = $key['start'];
+                    $appointment->end = $key['end'];
+                    $appointment->description = $key['description'] ? $key['description'] : NULL;
+                    $appointment->tags = $key['tags'] ? $key['tags'] : NULL;
+                    $appointment->retailer_client_id = $key['retailer_client_id'] ? $key['retailer_client_id'] : NULL;
+                    $appointment->event_type = $key['event_type'];
+                    $appointment->save();
+
+                    $ap_array[] = $appointment->id;
+                }
+            }
+
+            quotation_appointments::whereNotIn('id',$ap_array)->where('default_event',0)->where('user_id',$user_id)->delete();
+        }
+
+        Session::flash('success', 'Task completed successfully.');
+        return redirect()->back();
+    }
+
     public function PlanningTitles()
     {
         $titles = planning_titles::all();
