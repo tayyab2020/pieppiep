@@ -2271,7 +2271,7 @@ class UserController extends Controller
                 $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => '', 'default_event' => 1],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => '', 'tags' => '', 'default_event' => 1]];
                 $appointments = json_encode($appointments);
 
-                $other_appointments = quotation_appointments::where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
+                $other_appointments = quotation_appointments::where('user_id',$user_id)->where('event_type',1)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
 
                 foreach($other_appointments as $row) {
 
@@ -3768,8 +3768,8 @@ class UserController extends Controller
                     $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
 
                     $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
-                    $appointments = quotation_appointments::where('quotation_id',$id)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
-                    $other_appointments = quotation_appointments::where('quotation_id','!=',$id)->where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
+                    $appointments = quotation_appointments::where('quotation_id',$id)->where('event_type',1)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
+                    $other_appointments = quotation_appointments::where('quotation_id','!=',$id)->where('event_type',1)->where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event')->get();
 
                     foreach($appointments as $i => $app) {
 
@@ -5077,7 +5077,7 @@ class UserController extends Controller
                     }
                 }
 
-                quotation_appointments::whereNotIn('id',$ap_array)->where('default_event',0)->where('user_id',$user_id)->delete();
+                quotation_appointments::whereNotIn('id',$ap_array)->where('event_type',1)->where('default_event',0)->where('user_id',$user_id)->delete();
             }
 
         }
@@ -5172,7 +5172,7 @@ class UserController extends Controller
                     $ap_array[] = $appointment->id;
                 }
 
-                quotation_appointments::whereNotIn('id',$ap_array)->where('default_event',0)->where('user_id',$user_id)->delete();
+                quotation_appointments::whereNotIn('id',$ap_array)->where('event_type',1)->where('default_event',0)->where('user_id',$user_id)->delete();
             }
 
             if($form_type == 1 && $request->quote_request_id)
