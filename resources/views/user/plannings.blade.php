@@ -393,7 +393,6 @@
             if(!flag)
             {
                 var id = $('#event_id').val();
-                var title = $('.appointment_title').val();
                 var appointment_start = $('.appointment_start').val();
                 var appointment_end = $('.appointment_end').val();
                 var format_start = new Date(appointment_start);
@@ -475,7 +474,6 @@
                     $('.appointment_tags').tagsinput('removeAll');
                     $('.appointment_title').trigger('change.select2');
                     $('.appointment_quotation_number').trigger('change.select2');
-                    $('.appointment_type').trigger('change.select2');
                     $('.appointment_client').trigger('change.select2');
 
                 }

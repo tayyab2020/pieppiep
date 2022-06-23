@@ -443,21 +443,28 @@
 															</section>
 
 															<?php if(isset($current_appointments)) {
+
 																$appointments_array = json_decode($current_appointments,true);
-																
+
+																$delivery_key = array_search("delivery_date", array_column($appointments_array, 'classNames'));
 																$delivery_array = [];
-																$delivery_array[0] = $appointments_array[0]['start'];
-																$delivery_array[1] = $appointments_array[0]['end'];
-																$delivery_array[2] = $appointments_array[0]['description'];
-																$delivery_array[3] = $appointments_array[0]['tags'];
+																$delivery_array[0] = $appointments_array[$delivery_key]['start'];
+																$delivery_array[1] = $appointments_array[$delivery_key]['end'];
+																$delivery_array[2] = $appointments_array[$delivery_key]['description'];
+																$delivery_array[3] = $appointments_array[$delivery_key]['tags'];
 																$delivery_obj = json_encode($delivery_array);
 
+																$installation_key = array_search("delivery_date", array_column($appointments_array, 'classNames'));
 																$installation_array = [];
-																$installation_array[0] = $appointments_array[1]['start'];
-																$installation_array[1] = $appointments_array[1]['end'];
-																$installation_array[2] = $appointments_array[1]['description'];
-																$installation_array[3] = $appointments_array[1]['tags'];
+																$installation_array[0] = $appointments_array[$installation_key]['start'];
+																$installation_array[1] = $appointments_array[$installation_key]['end'];
+																$installation_array[2] = $appointments_array[$installation_key]['description'];
+																$installation_array[3] = $appointments_array[$installation_key]['tags'];
 																$installation_obj = json_encode($installation_array);
+
+																array_splice($appointments_array, $delivery_key, 1);
+																array_splice($appointments_array, $installation_key, 1);
+
 															} ?>
 
 															<div style="width: 100%;margin-top: 10px;">
@@ -506,11 +513,9 @@
 
 																		<?php if(isset($current_appointments)) {
 
-																			$appointments = json_decode($current_appointments,true);
-																			$appointments = array_slice($appointments, 2);
-																			$count = count($appointments);
+																			$count = count($appointments_array);
 																			$last_event_id = $last_event_id + 1;
-																			$appointments = json_encode($appointments);
+																			$appointments = json_encode($appointments_array);
 
 																		} ?>
 
@@ -1512,15 +1517,41 @@
 							<input type="text" class="form-control appointment_end validation_required" readonly="readonly">
 						</div>
 
+						<div class="form-group col-xs-12 appointment_type_box col-sm-4 required">
+							<label>{{__('Select Type')}}</label>
+							<select class="appointment_type">
+
+								<option value="1">{{__('text.For Quotation')}}</option>
+								<option value="2">{{__('text.For Client')}}</option>
+
+							</select>
+						</div>
+
 						<div class="form-group col-xs-12 col-sm-4 appointment_quotation_number_box required">
 							<label>{{__('Quotation Number')}}</label>
 							<select class="appointment_quotation_number">
 
+								<option value="">{{__('text.Select Quotation')}}</option>
 								<option value="0">{{__('text.Current Quotation')}}</option>
 
 								@foreach($quotation_ids as $key)
 
 									<option value="{{$key->id}}">{{$key->quotation_invoice_number}}</option>
+
+								@endforeach
+
+							</select>
+						</div>
+
+						<div style="display: none;" class="form-group appointment_customer_box col-xs-12 col-sm-4 required">
+							<label>{{__('Customer')}}</label>
+							<select class="appointment_client">
+
+								<option value="">{{__('text.Select Customer')}}</option>
+
+								@foreach($customers as $key)
+
+									<option value="{{$key->id}}">{{$key->name . ' ' . $key->family_name}}</option>
 
 								@endforeach
 
@@ -1932,7 +1963,7 @@
 				border: 1px solid #d6d6d6;
 			}
 
-			:not(.color, .model, .appointment_title_box, .appointment_quotation_number_box) > .select2-container--default .select2-selection--single
+			:not(.color, .model, .appointment_title_box, .appointment_quotation_number_box, .appointment_type_box, .appointment_customer_box) > .select2-container--default .select2-selection--single
 			{
 				border: 1px solid #d6d6d6 !important;
 			}
@@ -2212,11 +2243,11 @@
 			z-index: 1000000;
 		}
 
-		#cus-box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_title_box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_quotation_number_box .select2-container--default .select2-selection--single .select2-selection__rendered {
+		#cus-box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_title_box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_quotation_number_box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_type_box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_customer_box .select2-container--default .select2-selection--single .select2-selection__rendered {
 			line-height: 28px;
 		}
 
-		#cus-box .select2-container--default .select2-selection--single, .appointment_title_box .select2-container--default .select2-selection--single, .appointment_quotation_number_box .select2-container--default .select2-selection--single {
+		#cus-box .select2-container--default .select2-selection--single, .appointment_title_box .select2-container--default .select2-selection--single, .appointment_quotation_number_box .select2-container--default .select2-selection--single, .appointment_type_box .select2-container--default .select2-selection--single, .appointment_customer_box .select2-container--default .select2-selection--single {
 			border: 1px solid #cacaca;
 		}
 
@@ -2226,7 +2257,7 @@
 			outline: none;
 		}
 
-		.appointment_quotation_number_box .select2-selection
+		.appointment_quotation_number_box .select2-selection, .appointment_type_box .select2-selection, .appointment_customer_box .select2-selection
 		{
 			height: 35px !important;
 			padding-top: 0 !important;
@@ -2239,7 +2270,7 @@
 			top: 7.5px !important;
 		}
 
-		.appointment_quotation_number_box .select2-selection__arrow
+		.appointment_quotation_number_box .select2-selection__arrow, .appointment_type_box .select2-selection__arrow, .appointment_customer_box .select2-selection__arrow
 		{
 			top: 0 !important;
 			position: relative;
@@ -2251,7 +2282,7 @@
 			background-color: white !important;
 		}
 
-		/* #cus-box .select2-selection__clear, .appointment_title_box .select2-selection__clear, .appointment_quotation_number_box .select2-selection__clear {
+		/* #cus-box .select2-selection__clear, .appointment_title_box .select2-selection__clear, .appointment_quotation_number_box .select2-selection__clear, .appointment_type_box .select2-selection__clear, .appointment_customer_box .select2-selection__clear {
 			display: none;
 		} */
 
@@ -2270,7 +2301,7 @@
 			align-items: center;
 		}
 
-		:not(.color, .model, .appointment_title_box, .appointment_quotation_number_box) > .select2-container--default .select2-selection--single {
+		:not(.color, .model, .appointment_title_box, .appointment_quotation_number_box, .appointment_type_box, .appointment_customer_box) > .select2-container--default .select2-selection--single {
 			border: 0;
 		}
 
@@ -2417,6 +2448,29 @@
 
 	<script type="text/javascript">
 
+		$(".appointment_type").change(function () {
+
+			var type = $(this).val();
+
+			if(type == 1)
+			{
+				$('.appointment_customer_box').hide();
+				$('.appointment_quotation_number_box').show();
+
+				$('.appointment_client').val('');
+				$('.appointment_client').trigger('change.select2');
+			}
+			else
+			{
+				$('.appointment_quotation_number_box').hide();
+				$('.appointment_customer_box').show();
+
+				$('.appointment_quotation_number').val('');
+				$('.appointment_quotation_number').trigger('change.select2');
+			}
+
+		});
+
 		$(".submit_appointmentForm").click(function () {
 
 			var validation = $('#addAppointmentModal').find('.modal-body').find('.validation_required');
@@ -2424,6 +2478,9 @@
 			var flag = 0;
 
 			var title = $('.appointment_title').val();
+			var event_type = $('.appointment_type').val();
+			var appointment_quotation_id = $('.appointment_quotation_number').val();
+			var customer_id = $('.appointment_client').val();
 
 			if (!title) {
 				flag = 1;
@@ -2431,6 +2488,31 @@
 			}
 			else {
 				$('.appointment_title_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+			}
+
+			if(event_type == 1)
+			{
+				if(!appointment_quotation_id)
+				{
+					flag = 1;
+					$('.appointment_quotation_number_box .select2-container--default .select2-selection--single').css('border-color', 'red');
+				}
+				else
+				{
+					$('.appointment_quotation_number_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+				}
+			}
+			else
+			{
+				if(!customer_id)
+				{
+					flag = 1;
+					$('.appointment_customer_box .select2-container--default .select2-selection--single').css('border-color', 'red');
+				}
+				else
+				{
+					$('.appointment_customer_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+				}
 			}
 
 			$(validation).each(function(){
@@ -2450,8 +2532,6 @@
 			if(!flag)
 			{
 				var id = $('#event_id').val();
-				var appointment_quotation_id = $('.appointment_quotation_number').val();
-				var title = $('.appointment_title').val();
 				var appointment_start = $('.appointment_start').val();
 				var appointment_end = $('.appointment_end').val();
 				var format_start = new Date(appointment_start);
@@ -2479,6 +2559,8 @@
 						var event = calendar.getEventById(id);
 						event.setDates(appointment_start,appointment_end);
 						event.setExtendedProp('quotation_id', appointment_quotation_id);
+						event.setExtendedProp('event_type', event_type);
+						event.setExtendedProp('retailer_client_id', customer_id);
 						event.setProp('title', title);
 						event.setExtendedProp('description',appointment_desc);
 						event.setExtendedProp('tags',appointment_tags);
@@ -2505,7 +2587,9 @@
 							end: appointment_end,
 							description: appointment_desc,
 							tags: appointment_tags,
-							color: color
+							color: color,
+							event_type: event_type,
+							retailer_client_id: customer_id,
 						});
 
 						var obj = {};
@@ -2518,6 +2602,8 @@
 						obj['tags'] = appointment_tags;
 						obj['new'] = 1;
 						obj['default_event'] = 0;
+						obj['event_type'] = event_type;
+						obj['retailer_client_id'] = customer_id;
 						data_array.push(obj);
 
 						$('.appointment_data').val(JSON.stringify(data_array));
@@ -2526,14 +2612,16 @@
 					$('#addAppointmentModal').modal('toggle');
 					$('#myModal3').modal('toggle');
 					$('#event_id').val('');
-					$('.appointment_quotation_number').val(0);
+					$('.appointment_quotation_number').val('');
 					$('.appointment_title').val('');
 					$('.appointment_start').val('');
 					$('.appointment_end').val('');
 					$('.appointment_description').val('');
+					$('.appointment_client').val('');
 					$('.appointment_tags').tagsinput('removeAll');
 					$('.appointment_title').trigger('change.select2');
 					$('.appointment_quotation_number').trigger('change.select2');
+					$('.appointment_client').trigger('change.select2');
 
 				}
 				else
@@ -2558,16 +2646,20 @@
 
 			$('.appointment_title').attr('disabled',false);
 			$('.appointment_quotation_number').attr('disabled',false);
+			$('.appointment_type').attr('disabled',false);
 			// $('.submit_appointmentForm').show();
 			$('#event_id').val('');
-			$('.appointment_quotation_number').val(0);
+			$('.appointment_quotation_number').val('');
 			$('.appointment_title').val('');
 			$('.appointment_start').val('');
 			$('.appointment_end').val('');
 			$('.appointment_description').val('');
+			$('.appointment_client').val('');
 			$('.appointment_tags').tagsinput('removeAll');
 			$('.appointment_title').trigger('change.select2');
 			$('.appointment_quotation_number').trigger('change.select2');
+			$('.appointment_type').trigger('change.select2');
+			$('.appointment_client').trigger('change.select2');
 
 			$('#myModal3').modal('toggle');
 			$('#addAppointmentModal').modal('toggle');
@@ -2577,12 +2669,24 @@
 		function edit_appointment(id)
 		{
 			var event = calendar.getEventById(id);
-			var quotation_id = event._def.extendedProps.quotation_id;
+			var quotation_id = $('input[name="quotation_id"]').val();
+			var appointment_quotation_id = event._def.extendedProps.quotation_id;
 			var title = event.title;
 			var description = event._def.extendedProps.description;
 			var tags = event._def.extendedProps.tags;
 			var start = moment(event.start).format('YYYY-MM-DD HH:mm');
 			var end = event.end ? moment(event.end).format('YYYY-MM-DD HH:mm') : start;
+			var event_type = event._def.extendedProps.event_type;
+			var retailer_client_id = event._def.extendedProps.retailer_client_id;
+
+			if(quotation_id == appointment_quotation_id)
+			{
+				quotation_id = 0;
+			}
+			else
+			{
+				quotation_id = appointment_quotation_id;
+			}
 
 			$('#event_id').val(id);
 			$('.appointment_quotation_number').val(quotation_id);
@@ -2592,21 +2696,28 @@
 			$('.appointment_description').val(description);
 			$('.appointment_tags').tagsinput('removeAll');
 			$('.appointment_tags').tagsinput('add',tags);
+			$('.appointment_type').val(event_type);
+			$('.appointment_client').val(retailer_client_id);
 
 			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
 			{
 				$('.appointment_title').attr('disabled',false);
 				$('.appointment_quotation_number').attr('disabled',false);
+				$('.appointment_type').attr('disabled',false);
 			}
 			else
 			{
 				$('.appointment_title').attr('disabled',true);
 				$('.appointment_quotation_number').attr('disabled',true);
+				$('.appointment_type').attr('disabled',true);
 				// $('.submit_appointmentForm').show();
 			}
 
 			$('.appointment_title').trigger('change.select2');
 			$('.appointment_quotation_number').trigger('change.select2');
+			$('.appointment_type').trigger('change.select2');
+			$('.appointment_client').trigger('change.select2');
+			$('.appointment_type').trigger('change');
 
 			$('#myModal3').modal('toggle');
 			$('#addAppointmentModal').modal('toggle');
@@ -2684,6 +2795,8 @@
 					var tags = arg.event._def.extendedProps.tags;
 					var start = new Date(arg.event._instance.range.start.toLocaleString('en-US', { timeZone: 'UTC' }));
 					var end = new Date(arg.event._instance.range.end.toLocaleString('en-US', { timeZone: 'UTC' }));
+					var retailer_client_id = arg.event._def.extendedProps.retailer_client_id;
+					var event_type = arg.event._def.extendedProps.event_type;
 
 					var start_date = new Date(start);
 					var curr_date = (start_date.getDate()<10?'0':'') + start_date.getDate();
@@ -2705,13 +2818,13 @@
 
 					if(arg.event._def.ui.classNames == 'delivery_date')
 					{
-						var delivery_data = [start,end,description,tags,default_event,quotation_id];
+						var delivery_data = [start,end,description,tags];
 						delivery_data = JSON.stringify(delivery_data);
 						$('.delivery_date').val(delivery_data);
 					}
 					else if(arg.event._def.ui.classNames == 'installation_date')
 					{
-						var installation_data = [start,end,description,tags,default_event,quotation_id];
+						var installation_data = [start,end,description,tags];
 						installation_data = JSON.stringify(installation_data);
 						$('.installation_date').val(installation_data);
 					}
@@ -2732,6 +2845,8 @@
 								appointments[i]['tags'] = tags;
 								appointments[i]['default_event'] = default_event;
 								appointments[i]['quotation_id'] = quotation_id;
+								appointments[i]['event_type'] = event_type;
+								appointments[i]['retailer_client_id'] = retailer_client_id;
 
 								$('.appointment_data').val(JSON.stringify(appointments));
 								break;
@@ -3109,10 +3224,34 @@
 				},
 			});
 
+			$(".appointment_type").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Event Type')}}",
+				allowClear: false,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
 			$(".appointment_quotation_number").select2({
 				width: '100%',
 				height: '200px',
-				placeholder: "{{__('text.Current Quotation')}}",
+				placeholder: "{{__('text.Select Quotation')}}",
+				allowClear: false,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
+			$(".appointment_client").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Customer')}}",
 				allowClear: false,
 				"language": {
 					"noResults": function () {
