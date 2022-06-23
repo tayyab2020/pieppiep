@@ -475,11 +475,11 @@
 
 																		<button href="#myModal3" role="button" data-toggle="modal" style="font-size: 16px;" type="button" class="btn btn-success"><i class="fa fa-calendar-check-o" style="margin-right: 5px;"></i> Appointments</button>
 
-																		@if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
+																		<!-- @if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
 
-																			<input value="{{isset($current_appointments) ? $delivery_obj : null}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
+																		@endif -->
 
-																		@endif
+																		<input value="{{isset($current_appointments) ? $delivery_obj : null}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
 
 																	</div>
 																	<div class="headings1" style="visibility: hidden;width: 23%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">{{__('text.Total')}}</span></div>

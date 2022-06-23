@@ -2,65 +2,70 @@
 
 @section('content')
 
-<div class="right-side">
+	<script src="{{asset('assets/admin/js/main1.js')}}"></script>
+	<script src="{{asset('assets/admin/js/bootstrap-tagsinput.js')}}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+	<script src="https://www.jqueryscript.net/demo/Date-Time-Picker-Bootstrap-4/build/js/bootstrap-datetimepicker.min.js"></script>
 
-	<div class="container-fluid">
-		<div class="row">
+	<div class="right-side">
 
-			<form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}"
-				method="POST" enctype="multipart/form-data">
-				{{csrf_field()}}
+		<div class="container-fluid">
+			<div class="row">
 
-				<input type="hidden" name="form_type" value="2">
-				<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
-				<input type="hidden" name="is_invoice" value="{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? 0 : 1) : 0}}">
-				<input type="hidden" name="negative_invoice" value="{{Route::currentRouteName() == 'create-new-negative-invoice' ? 1 : 0}}">
-				<input type="hidden" name="negative_invoice_id" value="{{isset($invoice) ? (Route::currentRouteName() == 'create-new-negative-invoice' ? ($invoice[0]->negative_invoice != 0 ? $invoice[0]->invoice_id : null) : null) : null}}">
+				<form id="form-quote" style="padding: 0;" class="form-horizontal" action="{{route('store-new-quotation')}}"
+					  method="POST" enctype="multipart/form-data">
+					{{csrf_field()}}
 
-				<div style="margin: 0;" class="row">
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<!-- Starting of Dashboard data-table area -->
-						<div class="section-padding add-product-1" style="padding: 0;">
+					<input type="hidden" name="form_type" value="2">
+					<input type="hidden" name="quotation_id" value="{{isset($invoice) ? $invoice[0]->invoice_id : null}}">
+					<input type="hidden" name="is_invoice" value="{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? 0 : 1) : 0}}">
+					<input type="hidden" name="negative_invoice" value="{{Route::currentRouteName() == 'create-new-negative-invoice' ? 1 : 0}}">
+					<input type="hidden" name="negative_invoice_id" value="{{isset($invoice) ? (Route::currentRouteName() == 'create-new-negative-invoice' ? ($invoice[0]->negative_invoice != 0 ? $invoice[0]->invoice_id : null) : null) : null}}">
 
-							<div style="margin: 0;" class="row">
-								<div style="padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<div style="box-shadow: none;" class="add-product-box">
-										<div style="align-items: center;" class="add-product-header products">
+					<div style="margin: 0;" class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<!-- Starting of Dashboard data-table area -->
+							<div class="section-padding add-product-1" style="padding: 0;">
 
-											<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : (Route::currentRouteName() == 'create-new-negative-invoice' ? __('text.Create Negative Invoice') : __('text.View Invoice') )) : __('text.Create Quotation')}}</h2>
+								<div style="margin: 0;" class="row">
+									<div style="padding: 0;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+										<div style="box-shadow: none;" class="add-product-box">
+											<div style="align-items: center;" class="add-product-header products">
 
-											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
+												<h2 style="margin-top: 0;">{{isset($invoice) ? (Route::currentRouteName() == 'view-new-quotation' ? __('text.View Quotation') : (Route::currentRouteName() == 'create-new-negative-invoice' ? __('text.Create Negative Invoice') : __('text.View Invoice') )) : __('text.Create Quotation')}}</h2>
 
-												@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
+												<div style="background-color: black;border-radius: 10px;padding: 0 10px;">
 
-													<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+													@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
+
+														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
 														<i class="fa fa-fw fa-save"></i>
 														<span class="tooltiptext">{{__('text.Save')}}</span>
 													</span>
 
-												@else
+													@else
 
-													@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+														@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
 
-														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+															<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
 															<i class="fa fa-fw fa-save"></i>
 															<span class="tooltiptext">{{__('text.Save')}}</span>
 														</span>
 
+														@endif
+
 													@endif
 
-												@endif	
+													<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
+														<i class="fa fa-fw fa-close"></i>
+														<span class="tooltiptext">{{__('text.Close')}}</span>
+													</a>
 
-												<a href="{{route('customer-quotations')}}" class="tooltip1" style="cursor: pointer;font-size: 20px;color: white;">
-													<i class="fa fa-fw fa-close"></i>
-													<span class="tooltiptext">{{__('text.Close')}}</span>
-												</a>
+												</div>
 
 											</div>
 
-										</div>
-
-										<hr>
+											<hr>
 
 											<div class="col-md-5">
 												<div class="form-group" style="margin: 0;">
@@ -69,16 +74,16 @@
 
 													<div id="cus-box" style="display: flex;">
 														<select class="customer-select form-control" name="customer"
-															required>
+																required>
 
 															<option value="">{{__('text.Select Customer')}}</option>
 
 															@foreach($customers as $key)
 
-															<option {{isset($invoice) ? ($invoice[0]->user_id ==
+																<option {{isset($invoice) ? ($invoice[0]->user_id ==
 																$key->user_id ? 'selected' : null) : null}}
-																value="{{$key->id}}">{{$key->name}}
-																{{$key->family_name}}</option>
+																		value="{{$key->id}}">{{$key->name}}
+																	{{$key->family_name}}</option>
 
 															@endforeach
 
@@ -102,840 +107,882 @@
 												</div>
 											</div>
 
-										<div style="display: inline-block;width: 100%;">
+											<div style="display: inline-block;width: 100%;">
 
-											<div class="alert-box">
+												<div class="alert-box">
 
-											</div>
+												</div>
 
-											@include('includes.form-success')
+												@include('includes.form-success')
 
-											<div style="padding-bottom: 0;" class="form-horizontal">
+												<div style="padding-bottom: 0;" class="form-horizontal">
 
-												<div style="margin: 0;border-top: 1px solid #eee;" class="row">
+													<div style="margin: 0;border-top: 1px solid #eee;" class="row">
 
-													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="padding-bottom: 15px;">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 second-row" style="padding-bottom: 15px;">
 
-                                                        <section id="products_table" style="width: 100%;">
+															<section id="products_table" style="width: 100%;">
 
-                                                            <div class="header-div">
-                                                                <div class="headings" style="width: 2%;"></div>
-                                                                <div class="headings" style="width: 12%;" @if(auth()->user()->role_id == 4) style="display: none;" @endif>{{__('text.Supplier')}}</div>
-																<div class="headings" style="width: 22%;">{{__('text.Product')}}</div>
-																<div class="headings" style="width: 10%;">{{__('text.Width')}}</div>
-																<div class="headings" style="width: 10%;">{{__('text.Height')}}</div>
-																<div class="headings" style="width: 7%;">{{__('text.€ Art.')}}</div>
-																<div class="headings" style="width: 7%;">{{__('text.€ Arb.')}}</div>
-																<div class="headings" style="width: 10%;">{{__('text.Discount')}}</div>
-																<div class="headings" style="width: 7%;">{{__('text.€ Total')}}</div>
-																<div class="headings" style="width: 13%;"></div>
-                                                            </div>
+																<div class="header-div">
+																	<div class="headings" style="width: 2%;"></div>
+																	<div class="headings" style="width: 12%;" @if(auth()->user()->role_id == 4) style="display: none;" @endif>{{__('text.Supplier')}}</div>
+																	<div class="headings" style="width: 22%;">{{__('text.Product')}}</div>
+																	<div class="headings" style="width: 10%;">{{__('text.Width')}}</div>
+																	<div class="headings" style="width: 10%;">{{__('text.Height')}}</div>
+																	<div class="headings" style="width: 7%;">{{__('text.€ Art.')}}</div>
+																	<div class="headings" style="width: 7%;">{{__('text.€ Arb.')}}</div>
+																	<div class="headings" style="width: 10%;">{{__('text.Discount')}}</div>
+																	<div class="headings" style="width: 7%;">{{__('text.€ Total')}}</div>
+																	<div class="headings" style="width: 13%;"></div>
+																</div>
 
-															@if(isset($invoice))
+																@if(isset($invoice))
 
-																@foreach($invoice as $i => $item)
+																	@foreach($invoice as $i => $item)
 
-																<div @if($i==0) class="content-div active" @else class="content-div" @endif data-id="{{$i+1}}">
+																		<div @if($i==0) class="content-div active" @else class="content-div" @endif data-id="{{$i+1}}">
 
-                                                                    <div class="content full-res item1" style="width: 2%;">
-																		<label class="content-label">Sr. No</label>
-																		<div style="padding: 0 5px;" class="sr-res">{{$i+1}}</div>
-																	</div>
+																			<div class="content full-res item1" style="width: 2%;">
+																				<label class="content-label">Sr. No</label>
+																				<div style="padding: 0 5px;" class="sr-res">{{$i+1}}</div>
+																			</div>
 
-																	<input type="hidden" value="{{$item->order_number}}" id="order_number" name="order_number[]">
-																	<input type="hidden" value="{{$item->basic_price}}" id="basic_price" name="basic_price[]">
-																	<input type="hidden" value="{{$item->rate}}" id="rate" name="rate[]">
-																	<input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
-																	<input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
-																	<input type="hidden" value="{{$item->childsafe ? 1 : 0}}" id="childsafe" name="childsafe[]">
-																	<input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
-																	<input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
-																	<input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
-																	<input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
-																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
-																	<input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
-																	<input type="hidden" value="{{$item->price_based_option}}" id="price_based_option" name="price_based_option[]">
-																	<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
-                                                                    <input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
-                                                                    <input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
+																			<input type="hidden" value="{{$item->order_number}}" id="order_number" name="order_number[]">
+																			<input type="hidden" value="{{$item->basic_price}}" id="basic_price" name="basic_price[]">
+																			<input type="hidden" value="{{$item->rate}}" id="rate" name="rate[]">
+																			<input type="hidden" value="{{$item->amount}}" id="row_total" name="total[]">
+																			<input type="hidden" value="{{$i+1}}" id="row_id" name="row_id[]">
+																			<input type="hidden" value="{{$item->childsafe ? 1 : 0}}" id="childsafe" name="childsafe[]">
+																			<input type="hidden" value="{{$item->ladderband ? 1 : 0}}" id="ladderband" name="ladderband[]">
+																			<input type="hidden" value="{{$item->ladderband_value ? $item->ladderband_value : 0}}" id="ladderband_value" name="ladderband_value[]">
+																			<input type="hidden" value="{{$item->ladderband_price_impact ? $item->ladderband_price_impact : 0}}" id="ladderband_price_impact" name="ladderband_price_impact[]">
+																			<input type="hidden" value="{{$item->ladderband_impact_type ? $item->ladderband_impact_type : 0}}" id="ladderband_impact_type" name="ladderband_impact_type[]">
+																			<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+																			<input type="hidden" value="{{$item->delivery_days}}" id="delivery_days" name="delivery_days[]">
+																			<input type="hidden" value="{{$item->price_based_option}}" id="price_based_option" name="price_based_option[]">
+																			<input type="hidden" value="{{$item->base_price}}" id="base_price" name="base_price[]">
+																			<input type="hidden" value="{{$item->supplier_margin}}" id="supplier_margin" name="supplier_margin[]">
+																			<input type="hidden" value="{{$item->retailer_margin}}" id="retailer_margin" name="retailer_margin[]">
 
-																	<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
+																			<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
 
-																		<label class="content-label">Supplier</label>
+																				<label class="content-label">Supplier</label>
 
-																		<select name="suppliers[]" class="js-data-example-ajax1">
+																				<select name="suppliers[]" class="js-data-example-ajax1">
 
-																			<option value=""></option>
+																					<option value=""></option>
 
-																			@foreach($suppliers as $key)
+																					@foreach($suppliers as $key)
 
-																			<option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
+																						<option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
 
-																			@endforeach
+																					@endforeach
 
-																		</select>
+																				</select>
 
-                                                                    </div>
+																			</div>
 
-																	<div style="width: 22%;" class="products content item3 full-res">
+																			<div style="width: 22%;" class="products content item3 full-res">
 
-																		<label class="content-label">Product</label>
+																				<label class="content-label">Product</label>
 
-																		<select name="products[]" class="js-data-example-ajax">
+																				<select name="products[]" class="js-data-example-ajax">
 
-																			<option value=""></option>
+																					<option value=""></option>
 
-																			@foreach($supplier_products[$i] as $key)
+																					@foreach($supplier_products[$i] as $key)
 
-																			<option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+																						<option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
 
-																			@endforeach
+																					@endforeach
 
-																		</select>
+																				</select>
 
-                                                                    </div>
+																			</div>
 
-																	<div class="width item4 content" style="width: 10%;">
+																			<div class="width item4 content" style="width: 10%;">
 
-																		<label class="content-label">Width</label>
+																				<label class="content-label">Width</label>
 
-																		<div class="m-box">
-																			<input {{$item->price_based_option == 3 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-																			<input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="{{$item->width_unit}}">
-																		</div>
-                                                                    </div>
+																				<div class="m-box">
+																					<input {{$item->price_based_option == 3 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+																					<input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="{{$item->width_unit}}">
+																				</div>
+																			</div>
 
-																	<div class="height item5 content" style="width: 10%;">
+																			<div class="height item5 content" style="width: 10%;">
 
-																		<label class="content-label">Height</label>
+																				<label class="content-label">Height</label>
 
-																		<div class="m-box">
-																			<input {{$item->price_based_option == 2 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
-																			<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
-																		</div>
-                                                                    </div>
+																				<div class="m-box">
+																					<input {{$item->price_based_option == 2 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+																					<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
+																				</div>
+																			</div>
 
-																	<div class="content item6" style="width: 7%;">
+																			<div class="content item6" style="width: 7%;">
 
-																		<label class="content-label">€ Art.</label>
+																				<label class="content-label">€ Art.</label>
 
-																		<div style="display: flex;align-items: center;">
-																			<span>€</span>
-																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																			<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
-																		</div>
-                                                                    </div>
+																				<div style="display: flex;align-items: center;">
+																					<span>€</span>
+																					<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																					<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
+																				</div>
+																			</div>
 
-																	<div class="content item7" style="width: 7%;">
+																			<div class="content item7" style="width: 7%;">
 
-																		<label class="content-label">€ Arb.</label>
+																				<label class="content-label">€ Arb.</label>
 
-																		<div style="display: flex;align-items: center;">
-																			<span>€</span>
-																			<input type="text" value="{{str_replace('.', ',',floatval($item->labor_impact))}}" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
-																			<input type="hidden" value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
-																		</div>
-                                                                    </div>
+																				<div style="display: flex;align-items: center;">
+																					<span>€</span>
+																					<input type="text" value="{{str_replace('.', ',',floatval($item->labor_impact))}}" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
+																					<input type="hidden" value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
+																				</div>
+																			</div>
 
-																	<div class="content item8" style="width: 10%;">
+																			<div class="content item8" style="width: 10%;">
 
-																		<label class="content-label">Discount</label>
+																				<label class="content-label">Discount</label>
 
-																		<span>€</span>
-																		<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
-																		<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
-                                                                    </div>
+																				<span>€</span>
+																				<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
+																				<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
+																			</div>
 
-																	<div style="width: 7%;" class="content item9">
+																			<div style="width: 7%;" class="content item9">
 
-																		<label class="content-label">€ Total</label>
-																		@if(Route::currentRouteName() == 'create-new-negative-invoice') -&nbsp; @endif
-																		<div class="price res-white">€ {{str_replace('.', ',',floatval($item->rate))}}</div>
+																				<label class="content-label">€ Total</label>
+																				@if(Route::currentRouteName() == 'create-new-negative-invoice') -&nbsp; @endif
+																				<div class="price res-white">€ {{str_replace('.', ',',floatval($item->rate))}}</div>
 
-																	</div>
+																			</div>
 
-																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
+																			<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
 
-																		@if((Route::currentRouteName() == 'create-new-negative-invoice' || Route::currentRouteName() == 'view-new-invoice') || (isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
+																				@if((Route::currentRouteName() == 'create-new-negative-invoice' || Route::currentRouteName() == 'view-new-invoice') || (isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
 
-																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+																					<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
-																				<div style="display: none;" class="green-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>
-                                                                            	</div>
-                                                                            	
-																				<div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                	<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>
-                                                                            	</div>
+																						<div style="display: none;" class="green-circle tooltip1">
+																							<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>
+																						</div>
 
-																				<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																						<div style="visibility: hidden;" class="yellow-circle tooltip1">
+																							<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>
+																						</div>
+
+																						<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
 																					<span class="tooltiptext">{{__('text.Add')}}</span>
 																				</span>
 
-																				<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																						<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
 																					<span class="tooltiptext">{{__('text.Remove')}}</span>
 																				</span>
 
-																				<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																						<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
 																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
 																					<span class="tooltiptext">{{__('text.Copy')}}</span>
 																				</span>
 
-																				<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-																					<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-																					<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																				</span>-->
+																						<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+                                                                                            <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+                                                                                            <span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
+                                                                                        </span>-->
 
-                                                                        	</div>
+																					</div>
 
-																		@endif
-                                                                        
-                                                                    </div>
+																				@endif
 
-                                                                    <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
-                                                                        <button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo{{$i+1}}"></button>
-                                                                    </div>
+																			</div>
 
-                                                                    <div style="width: 100%;" id="demo{{$i+1}}" class="item16 collapse">
+																			<div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
+																				<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo{{$i+1}}"></button>
+																			</div>
 
-                                                                        <div style="width: 25%;" class="color item12">
+																			<div style="width: 100%;" id="demo{{$i+1}}" class="item16 collapse">
 
-                                                                            <label>{{__('text.Color')}}</label>
+																				<div style="width: 25%;" class="color item12">
 
-																		    <select name="colors[]" class="js-data-example-ajax2">
+																					<label>{{__('text.Color')}}</label>
 
-																			    <option value=""></option>
+																					<select name="colors[]" class="js-data-example-ajax2">
 
-																				@foreach($colors[$i] as $color)
+																						<option value=""></option>
 
-																				<option {{$color->id == $item->color ? 'selected' : null}} value="{{$color->id}}">{{$color->title}}</option>
+																						@foreach($colors[$i] as $color)
+
+																							<option {{$color->id == $item->color ? 'selected' : null}} value="{{$color->id}}">{{$color->title}}</option>
+
+																						@endforeach
+
+																					</select>
+
+																				</div>
+
+																				<div style="width: 25%;margin-left: 10px;" class="model item13">
+
+																					<label>{{__('text.Model')}}</label>
+
+																					<select name="models[]" class="js-data-example-ajax3">
+
+																						<option value=""></option>
+
+																						@foreach($models[$i] as $model)
+
+																							<option {{$model->id == $item->model_id ? 'selected' : null}} value="{{$model->id}}">{{$model->model}}</option>
+
+																						@endforeach
+
+																					</select>
+
+																					<input type="hidden" class="model_impact_value" name="model_impact_value[]" value="{{$item->model_impact_value}}">
+
+																				</div>
+
+																				<div style="width: 25%;margin-left: 10px;" class="discount-box item14">
+
+																					<label>{{__('text.Discount')}} % </label>
+
+																					<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
+
+																				</div>
+
+																				<div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">
+
+																					<label>{{__('text.Labor Discount')}} % </label>
+
+																					<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="{{$item->labor_discount}}" name="labor_discount[]">
+
+																				</div>
+
+																			</div>
+
+																		</div>
+
+																	@endforeach
+
+																@else
+
+																	<div class="content-div active" data-id="1">
+
+																		<div class="content full-res item1" style="width: 2%;">
+																			<label class="content-label">Sr. No</label>
+																			<div style="padding: 0 5px;" class="sr-res">1</div>
+																		</div>
+
+																		<input type="hidden" id="order_number" name="order_number[]">
+																		<input type="hidden" id="basic_price" name="basic_price[]">
+																		<input type="hidden" id="rate" name="rate[]">
+																		<input type="hidden" id="row_total" name="total[]">
+																		<input type="hidden" value="1" id="row_id" name="row_id[]">
+																		<input type="hidden" value="0" id="childsafe" name="childsafe[]">
+																		<input type="hidden" value="0" id="ladderband" name="ladderband[]">
+																		<input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
+																		<input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
+																		<input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
+																		<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
+																		<input type="hidden" id="delivery_days" name="delivery_days[]">
+																		<input type="hidden" id="price_based_option" name="price_based_option[]">
+																		<input type="hidden" id="base_price" name="base_price[]">
+																		<input type="hidden" id="supplier_margin" name="supplier_margin[]">
+																		<input type="hidden" id="retailer_margin" name="retailer_margin[]">
+
+																		<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
+
+																			<label class="content-label">Supplier</label>
+
+																			<select name="suppliers[]" class="js-data-example-ajax1">
+
+																				<option value=""></option>
+
+																				@foreach($suppliers as $key)
+
+																					<option value="{{$key->id}}">{{$key->company_name}}</option>
 
 																				@endforeach
 
-																		    </select>
+																			</select>
 
-                                                                        </div>
+																		</div>
 
-                                                                        <div style="width: 25%;margin-left: 10px;" class="model item13">
+																		<div style="width: 22%;" class="products content item3 full-res">
 
-                                                                            <label>{{__('text.Model')}}</label>
+																			<label class="content-label">Product</label>
 
-                                                                            <select name="models[]" class="js-data-example-ajax3">
+																			<select name="products[]" class="js-data-example-ajax">
 
-																			    <option value=""></option>
+																				<option value=""></option>
 
-																				@foreach($models[$i] as $model)
+																				@foreach($products as $key)
 
-																				<option {{$model->id == $item->model_id ? 'selected' : null}} value="{{$model->id}}">{{$model->model}}</option>
+																					<option value="{{$key->id}}">{{$key->title}}</option>
 
 																				@endforeach
 
-																		    </select>
+																			</select>
 
-                                                                            <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="{{$item->model_impact_value}}">
-
-                                                                        </div>
-
-                                                                        <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
-
-                                                                            <label>{{__('text.Discount')}} % </label>
-
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
-
-                                                                        </div>
-
-                                                                        <div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">
-
-                                                                            <label>{{__('text.Labor Discount')}} % </label>
-
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="{{$item->labor_discount}}" name="labor_discount[]">
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                            	</div>
-
-																@endforeach
-
-															@else
-
-															<div class="content-div active" data-id="1">
-
-                                                                    <div class="content full-res item1" style="width: 2%;">
-																		<label class="content-label">Sr. No</label>
-																		<div style="padding: 0 5px;" class="sr-res">1</div>
-																	</div>
-
-																	<input type="hidden" id="order_number" name="order_number[]">
-																	<input type="hidden" id="basic_price" name="basic_price[]">
-																	<input type="hidden" id="rate" name="rate[]">
-																	<input type="hidden" id="row_total" name="total[]">
-																	<input type="hidden" value="1" id="row_id" name="row_id[]">
-																	<input type="hidden" value="0" id="childsafe" name="childsafe[]">
-																	<input type="hidden" value="0" id="ladderband" name="ladderband[]">
-																	<input type="hidden" value="0" id="ladderband_value" name="ladderband_value[]">
-																	<input type="hidden" value="0" id="ladderband_price_impact" name="ladderband_price_impact[]">
-																	<input type="hidden" value="0" id="ladderband_impact_type" name="ladderband_impact_type[]">
-																	<input type="hidden" value="0" id="area_conflict" name="area_conflict[]">
-																	<input type="hidden" id="delivery_days" name="delivery_days[]">
-																	<input type="hidden" id="price_based_option" name="price_based_option[]">
-																	<input type="hidden" id="base_price" name="base_price[]">
-                                                                    <input type="hidden" id="supplier_margin" name="supplier_margin[]">
-                                                                    <input type="hidden" id="retailer_margin" name="retailer_margin[]">
-
-																	<div style="width: 12%;" @if(auth()->user()->role_id == 4) class="content item2 full-res suppliers hide" @else class="content item2 full-res suppliers" @endif>
-
-																		<label class="content-label">Supplier</label>
-
-																		<select name="suppliers[]" class="js-data-example-ajax1">
-
-																			<option value=""></option>
-
-																			@foreach($suppliers as $key)
-
-																			<option value="{{$key->id}}">{{$key->company_name}}</option>
-
-																			@endforeach
-
-																		</select>
-
-                                                                    </div>
-
-																	<div style="width: 22%;" class="products content item3 full-res">
-
-																		<label class="content-label">Product</label>
-
-																		<select name="products[]" class="js-data-example-ajax">
-
-																			<option value=""></option>
-
-																			@foreach($products as $key)
-
-																			<option value="{{$key->id}}">{{$key->title}}</option>
-
-																			@endforeach
-
-																		</select>
-
-                                                                    </div>
-
-																	<div class="width item4 content" style="width: 10%;">
-
-																		<label class="content-label">Width</label>
-
-																		<div class="m-box">
-																			<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
-																			<input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">
 																		</div>
-                                                                    </div>
 
-																	<div class="height item5 content" style="width: 10%;">
+																		<div class="width item4 content" style="width: 10%;">
 
-																		<label class="content-label">Height</label>
+																			<label class="content-label">Width</label>
 
-																		<div class="m-box">
-																			<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
-																			<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">
+																			<div class="m-box">
+																				<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+																				<input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="cm">
+																			</div>
 																		</div>
-                                                                    </div>
 
-																	<div class="content item6" style="width: 7%;">
+																		<div class="height item5 content" style="width: 10%;">
 
-																		<label class="content-label">€ Art.</label>
+																			<label class="content-label">Height</label>
 
-																		<div style="display: flex;align-items: center;">
+																			<div class="m-box">
+																				<input value="0" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+																				<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="cm">
+																			</div>
+																		</div>
+
+																		<div class="content item6" style="width: 7%;">
+
+																			<label class="content-label">€ Art.</label>
+
+																			<div style="display: flex;align-items: center;">
+																				<span>€</span>
+																				<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																				<input type="hidden" value="0" class="price_before_labor_old">
+																			</div>
+																		</div>
+
+																		<div class="content item7" style="width: 7%;">
+
+																			<label class="content-label">€ Arb.</label>
+
+																			<div style="display: flex;align-items: center;">
+																				<span>€</span>
+																				<input type="text" value="0" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
+																				<input type="hidden" value="0" class="labor_impact_old">
+																			</div>
+																		</div>
+
+																		<div class="content item8" style="width: 10%;">
+
+																			<label class="content-label">Discount</label>
+
 																			<span>€</span>
-																			<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																			<input type="hidden" value="0" class="price_before_labor_old">
+																			<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
+																			<input type="hidden" value="0" class="total_discount_old">
 																		</div>
-                                                                    </div>
 
-																	<div class="content item7" style="width: 7%;">
+																		<div style="width: 7%;" class="content item9">
 
-																		<label class="content-label">€ Arb.</label>
+																			<label class="content-label">€ Total</label>
+																			<div class="price res-white"></div>
 
-																		<div style="display: flex;align-items: center;">
-																			<span>€</span>
-																			<input type="text" value="0" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
-																			<input type="hidden" value="0" class="labor_impact_old">
 																		</div>
-                                                                    </div>
 
-																	<div class="content item8" style="width: 10%;">
+																		<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
+																			<div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
 
-																		<label class="content-label">Discount</label>
+																				<div style="display: none;" class="green-circle tooltip1">
+																					<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>
+																				</div>
 
-																		<span>€</span>
-																		<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
-																		<input type="hidden" value="0" class="total_discount_old">
-                                                                    </div>
+																				<div style="visibility: hidden;" class="yellow-circle tooltip1">
+																					<span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>
+																				</div>
 
-																	<div style="width: 7%;" class="content item9">
-
-																		<label class="content-label">€ Total</label>
-																		<div class="price res-white"></div>
-
-																	</div>
-
-																	<div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 13%;">
-                                                                        <div class="res-white" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-
-																			<div style="display: none;" class="green-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.ALL features selected!')}}</span>
-                                                                            </div>
-
-                                                                            <div style="visibility: hidden;" class="yellow-circle tooltip1">
-                                                                                <span style="top: 45px;left: -40px;" class="tooltiptext">{{__('text.Select all features!')}}</span>
-                                                                            </div>
-
-																			<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																				<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
 																				<span class="tooltiptext">{{__('text.Add')}}</span>
 																			</span>
 
-																			<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																				<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
 																				<span class="tooltiptext">{{__('text.Remove')}}</span>
 																			</span>
 
-																			<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
+																				<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
 																				<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
 																				<span class="tooltiptext">{{__('text.Copy')}}</span>
 																			</span>
 
-                                                                            <!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
-																			<i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
-																			<span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
-																			</span>-->
-                                                                        </div>
-                                                                    </div>
+																				<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
+                                                                                <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
+                                                                                <span style="top: 45px;left: -20px;" class="tooltiptext">Next</span>
+                                                                                </span>-->
+																			</div>
+																		</div>
 
-                                                                    <div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
-                                                                        <button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo"></button>
-                                                                    </div>
+																		<div class="item11" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;margin-top: 10px;">
+																			<button style="outline: none;" type="button" class="btn btn-info res-collapse collapsed" data-toggle="collapse" data-target="#demo"></button>
+																		</div>
 
-                                                                    <div style="width: 100%;" id="demo" class="item16 collapse">
+																		<div style="width: 100%;" id="demo" class="item16 collapse">
 
-                                                                        <div style="width: 25%;" class="color item12">
+																			<div style="width: 25%;" class="color item12">
 
-                                                                            <label>{{__('text.Color')}}</label>
+																				<label>{{__('text.Color')}}</label>
 
-																		    <select name="colors[]" class="js-data-example-ajax2">
+																				<select name="colors[]" class="js-data-example-ajax2">
 
-																			    <option value=""></option>
+																					<option value=""></option>
 
-																		    </select>
+																				</select>
 
-                                                                        </div>
+																			</div>
 
-                                                                        <div style="width: 25%;margin-left: 10px;" class="model item13">
+																			<div style="width: 25%;margin-left: 10px;" class="model item13">
 
-                                                                            <label>{{__('text.Model')}}</label>
+																				<label>{{__('text.Model')}}</label>
 
-                                                                            <select name="models[]" class="js-data-example-ajax3">
+																				<select name="models[]" class="js-data-example-ajax3">
 
-																			    <option value=""></option>
+																					<option value=""></option>
 
-																		    </select>
+																				</select>
 
-                                                                            <input type="hidden" class="model_impact_value" name="model_impact_value[]" value="0">
+																				<input type="hidden" class="model_impact_value" name="model_impact_value[]" value="0">
 
-                                                                        </div>
+																			</div>
 
-                                                                        <div style="width: 25%;margin-left: 10px;" class="discount-box item14">
+																			<div style="width: 25%;margin-left: 10px;" class="discount-box item14">
 
-                                                                            <label>{{__('text.Discount')}} % </label>
+																				<label>{{__('text.Discount')}} % </label>
 
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="0" name="discount[]">
+																				<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="0" name="discount[]">
 
-                                                                        </div>
+																			</div>
 
-                                                                        <div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">
+																			<div style="width: 25%;margin-left: 10px;" class="labor-discount-box item15">
 
-                                                                            <label>{{__('text.Labor Discount')}} % </label>
+																				<label>{{__('text.Labor Discount')}} % </label>
 
-                                                                            <input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="0" name="labor_discount[]">
+																				<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="0" name="labor_discount[]">
 
-                                                                        </div>
+																			</div>
 
-                                                                    </div>
+																		</div>
 
-                                                            </div>
-
-															@endif
-
-                                                        </section>
-
-														<div style="width: 100%;margin-top: 10px;">
-
-															<div style="display: flex;justify-content: center;">
-
-																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
-																	<label>{{__('text.Delivery Date')}}: </label>
-																	<input value="{{isset($invoice) ? ($invoice[0]->retailer_delivery_date ? date('d-m-Y',strtotime($invoice[0]->retailer_delivery_date)) : null) : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="delivery_date" name="delivery_date">
-																</div>
-																<div class="headings1" style="width: 16%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">{{__('text.Total')}}</span></div>
-																<div class="headings1" style="width: 7%;display: flex;align-items: center;">
-																	<div style="display: flex;align-items: center;justify-content: center;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
-																		<input name="price_before_labor_total"
-																			id="price_before_labor_total"
-																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
 																	</div>
-																</div>
-																<div class="headings1" style="width: 7%;display: flex;align-items: center;">
-																	<div style="display: flex;align-items: center;justify-content: center;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
-																		<input name="labor_cost_total"
-																			id="labor_cost_total"
-																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->labor_cost_total)) : 0}}">
+
+																@endif
+
+															</section>
+
+															<?php if(isset($current_appointments)) {
+
+																$appointments_array = json_decode($current_appointments,true);
+
+																$delivery_key = array_search("delivery_date", array_column($appointments_array, 'classNames'));
+																$delivery_array = [];
+																$delivery_array[0] = $appointments_array[$delivery_key]['start'];
+																$delivery_array[1] = $appointments_array[$delivery_key]['end'];
+																$delivery_array[2] = $appointments_array[$delivery_key]['description'];
+																$delivery_array[3] = $appointments_array[$delivery_key]['tags'];
+																$delivery_obj = json_encode($delivery_array);
+
+																$installation_key = array_search("delivery_date", array_column($appointments_array, 'classNames'));
+																$installation_array = [];
+																$installation_array[0] = $appointments_array[$installation_key]['start'];
+																$installation_array[1] = $appointments_array[$installation_key]['end'];
+																$installation_array[2] = $appointments_array[$installation_key]['description'];
+																$installation_array[3] = $appointments_array[$installation_key]['tags'];
+																$installation_obj = json_encode($installation_array);
+
+																array_splice($appointments_array, $delivery_key, 1);
+																array_splice($appointments_array, $installation_key, 1);
+
+															} ?>
+
+															<div style="width: 100%;margin-top: 10px;">
+
+																<div style="display: flex;justify-content: center;">
+
+																	<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
+
+																		<button href="#myModal3" role="button" data-toggle="modal" style="font-size: 16px;" type="button" class="btn btn-success"><i class="fa fa-calendar-check-o" style="margin-right: 5px;"></i> Appointments</button>
+
+																		<input value="{{isset($current_appointments) ? $delivery_obj : null}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
+
 																	</div>
-																</div>
-																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
-																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Te betalen: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
-																		<input name="total_amount" id="total_amount"
-																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->grand_total)) : 0}}">
+																	<div class="headings1" style="width: 16%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">{{__('text.Total')}}</span></div>
+																	<div class="headings1" style="width: 7%;display: flex;align-items: center;">
+																		<div style="display: flex;align-items: center;justify-content: center;">
+																			<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
+																			<input name="price_before_labor_total"
+																				   id="price_before_labor_total"
+																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																				   type="text" readonly
+																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
+																		</div>
 																	</div>
+																	<div class="headings1" style="width: 7%;display: flex;align-items: center;">
+																		<div style="display: flex;align-items: center;justify-content: center;">
+																			<span style="font-size: 14px;font-weight: 500;margin-right: 5px;">€</span>
+																			<input name="labor_cost_total"
+																				   id="labor_cost_total"
+																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																				   type="text" readonly
+																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->labor_cost_total)) : 0}}">
+																		</div>
+																	</div>
+																	<div class="headings2" style="width: 30%;display: flex;align-items: center;">
+																		<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
+																			<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Te betalen: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
+																			<input name="total_amount" id="total_amount"
+																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																				   type="text" readonly
+																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->grand_total)) : 0}}">
+																		</div>
+																	</div>
+
 																</div>
 
-															</div>
+																<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
-															<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
+																	<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
 
-																<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
-																	<label>{{__('text.Installation Date')}}: </label>
-																	<input value="{{isset($invoice) ? ($invoice[0]->retailer_installation_date ? date('d-m-Y',strtotime($invoice[0]->retailer_installation_date)) : null) : null}}" style="outline: none;width: 50%;border-radius: 5px;border: 1px solid #adadad;padding: 5px;" autocomplete="off" type="text" class="installation_date" name="installation_date">
-																</div>
-																<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
-																<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
-																<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
-																<div class="headings2" style="width: 30%;display: flex;align-items: center;">
-																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
+																		<input value="{{isset($current_appointments) ? $installation_obj : null}}" type="hidden" class="installation_date" name="installation_date">
+
+																		<?php if(isset($current_appointments)) {
+
+																			$count = count($appointments_array);
+																			$last_event_id = $last_event_id + 1;
+																			$appointments = json_encode($appointments_array);
+
+																		} ?>
+
+																		<input type="hidden" value="{{isset($appointments) ? ($count > 0 ? $appointments : null) : null}}" class="appointment_data" name="appointment_data">
+																		<input type="hidden" value="{{isset($last_event_id) ? $last_event_id : 1}}" class="appointment_id">
+
+																	</div>
+																	<div class="headings1" style="width: 16%;display: flex;align-items: center;"></div>
+																	<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
+																	<div class="headings1" style="width: 7%;display: flex;align-items: center;"></div>
+																	<div class="headings2" style="width: 30%;display: flex;align-items: center;">
+																		<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
+																			<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">Nettobedrag: @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
 																			<input name="net_amount" id="net_amount"
-																				style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																				type="text" readonly
-																				value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->net_amount)) : 0}}">
+																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																				   type="text" readonly
+																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->net_amount)) : 0}}">
+																		</div>
 																	</div>
+
 																</div>
 
-															</div>
+																<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
 
-															<div style="display: flex;justify-content: flex-end;margin-top: 20px;">
-
-																<div class="headings1" style="width: 70%;">
-																	<textarea name="description" style="width: 100%;border-radius: 5px;resize: vertical;" rows="5" class="form-control" placeholder="{{__('text.Enter Description')}}">{{isset($invoice) ? $invoice[0]->description : ''}}</textarea>
-																</div>
-																<div class="headings2" style="width: 30%;">
-																	<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
-																		<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
-																		<input name="tax_amount" id="tax_amount"
-																			style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
-																			type="text" readonly
-																			value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->tax_amount)) : 0}}">
+																	<div class="headings1" style="width: 70%;">
+																		<textarea name="description" style="width: 100%;border-radius: 5px;resize: vertical;" rows="5" class="form-control" placeholder="{{__('text.Enter Description')}}">{{isset($invoice) ? $invoice[0]->description : ''}}</textarea>
 																	</div>
+																	<div class="headings2" style="width: 30%;">
+																		<div style="display: flex;align-items: center;justify-content: flex-end;width: 60%;">
+																			<span style="font-size: 14px;font-weight: 500;margin-right: 5px;font-family: monospace;">BTW (21%): @if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif €</span>
+																			<input name="tax_amount" id="tax_amount"
+																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
+																				   type="text" readonly
+																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->tax_amount)) : 0}}">
+																		</div>
+																	</div>
+
 																</div>
 
 															</div>
 
 														</div>
 
-													</div>
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+															 style="background: white;padding: 15px 0 0 0;">
 
-													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
-														style="background: white;padding: 15px 0 0 0;">
+															<ul style="border: 0;" class="nav nav-tabs feature-tab">
+																<li style="margin-bottom: 0;" class="active"><a
+																			style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;"
+																			data-toggle="tab" href="#menu1"
+																			aria-expanded="false">{{__('text.Features')}}</a></li>
+															</ul>
 
-														<ul style="border: 0;" class="nav nav-tabs feature-tab">
-															<li style="margin-bottom: 0;" class="active"><a
-																	style="border: 0;border-bottom: 3px solid rgb(151, 140, 135);padding: 10px 30px;"
-																	data-toggle="tab" href="#menu1"
-																	aria-expanded="false">{{__('text.Features')}}</a></li>
-														</ul>
+															<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
 
-														<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
+																<div id="menu1" class="tab-pane fade active in">
 
-															<div id="menu1" class="tab-pane fade active in">
+																	@if(isset($invoice))
 
-																@if(isset($invoice))
+																		<?php $f = 0; $s = 0; ?>
 
-																<?php $f = 0; $s = 0; ?>
+																		@foreach($invoice as $x => $key1)
 
-																@foreach($invoice as $x => $key1)
+																			<div data-id="{{$x + 1}}" @if($x==0) style="margin: 0;"
+																				 @else style="margin: 0;display: none;" @endif
+																				 class="form-group">
 
-																<div data-id="{{$x + 1}}" @if($x==0) style="margin: 0;"
-																	@else style="margin: 0;display: none;" @endif
-																	class="form-group">
+																				<div class="row"
+																					 style="margin: 0;display: flex;align-items: center;">
+																					<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
+																						 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																						<label
+																								style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>
+																						@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
+																						<input value="{{$key1->qty}}"
+																							   style="border: none;border-bottom: 1px solid lightgrey;"
+																							   maskedformat="9,1" name="qty[]"
+																							   class="form-control"
+																							   type="text"><span>pcs</span>
+																					</div>
+																				</div>
 
-																	<div class="row"
-																		style="margin: 0;display: flex;align-items: center;">
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>
-																			@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
-																			<input value="{{$key1->qty}}"
-																				style="border: none;border-bottom: 1px solid lightgrey;"
-																				maskedformat="9,1" name="qty[]"
-																				class="form-control"
-																				type="text"><span>pcs</span>
-																		</div>
-																	</div>
+																				@if($key1->childsafe)
 
-																	@if($key1->childsafe)
+																					<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;">
+																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																							<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>
+																							<input value="{{$key1->childsafe_x}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
+																						</div>
+																					</div>
 
-																	<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;">
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>
-																			<input value="{{$key1->childsafe_x}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
-																		</div>
-																	</div>
+																					<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;">
+																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																							<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>
+																							<input value="{{$key1->childsafe_y}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
+																						</div>
+																					</div>
 
-																	<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;">
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>
-																			<input value="{{$key1->childsafe_y}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
-																		</div>
-																	</div>
+																					<div class="row childsafe-question-box"
+																						 style="margin: 0;display: flex;align-items: center;">
 
-																	<div class="row childsafe-question-box"
-																		style="margin: 0;display: flex;align-items: center;">
+																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
+																							 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																							<label
+																									style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>
+																							<select
+																									style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
+																									class="form-control childsafe-select"
+																									name="childsafe_option{{$x+1}}">
 
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control childsafe-select"
-																				name="childsafe_option{{$x+1}}">
+																								<option value="">{{__('text.Select any option')}}
+																								</option>
 
-																				<option value="">{{__('text.Select any option')}}
-																				</option>
-
-																				@if($key1->childsafe_diff <= 150)
-																					<option {{$key1->childsafe_question
+																								@if($key1->childsafe_diff <= 150)
+																									<option {{$key1->childsafe_question
 																					== 1 ? 'selected' : null}}
-																					value="1">{{__('text.Please note not childsafe')}}
-																					</option>
-																					<option {{$key1->childsafe_question
+																											value="1">{{__('text.Please note not childsafe')}}
+																									</option>
+																									<option {{$key1->childsafe_question
 																						== 2 ? 'selected' : null}}
-																						value="2">{{__('text.Add childsafety clip')}}
-																					</option>
+																											value="2">{{__('text.Add childsafety clip')}}
+																									</option>
+
+																								@else
+
+																									<option {{$key1->childsafe_question
+																						== 2 ? 'selected' : null}}
+																											value="2">{{__('text.Add childsafety clip')}}
+																									</option>
+																									<option {{$key1->childsafe_question
+																						== 3 ? 'selected' : null}}
+																											value="3">{{__('text.Yes childsafe')}}</option>
+
+																								@endif
+
+																							</select>
+																							<input value="{{$key1->childsafe_diff}}"
+																								   name="childsafe_diff{{$x + 1}}"
+																								   class="childsafe_diff" type="hidden">
+																						</div>
+
+																					</div>
+
+																					<div class="row childsafe-answer-box"
+																						 style="margin: 0;display: flex;align-items: center;">
+
+																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
+																							 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																							<label
+																									style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}
+																								Answer</label>
+																							<select
+																									style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
+																									class="form-control childsafe-answer"
+																									name="childsafe_answer{{$x+1}}">
+																								@if($key1->childsafe_question == 1)
+																									<option {{$key1->childsafe_answer == 1 ?
+																					'selected' : null}} value="1">{{__('text.Make it childsafe')}}</option>
+																									<option {{$key1->childsafe_answer == 2 ?
+																					'selected' : null}} value="2">{{__('text.Yes i agree')}}</option>
+																								@else
+																									<option selected value="3">{{__('text.Is childsafe')}}
+																									</option>
+																								@endif
+																							</select>
+																						</div>
+
+																					</div>
+
+																				@endif
+
+																				@foreach($key1->features as $feature)
+
+																					@if($feature->feature_id == 0 &&
+                                                                                    $feature->feature_sub_id == 0)
+
+																						<div class="row"
+																							 style="margin: 0;display: flex;align-items: center;">
+
+																							<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
+																								 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																								<label
+																										style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>
+																								<select
+																										style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
+																										class="form-control feature-select"
+																										name="features{{$x+1}}[]">
+																									<option {{$feature->ladderband == 0 ?
+																					'selected' : null}} value="0">{{__('text.No')}}
+																									</option>
+																									<option {{$feature->ladderband == 1 ?
+																					'selected' : null}} value="1">{{__('text.Yes')}}
+																									</option>
+																								</select>
+																								<input value="{{$feature->price}}"
+																									   name="f_price{{$x + 1}}[]"
+																									   class="f_price" type="hidden">
+																								<input value="0" name="f_id{{$x + 1}}[]"
+																									   class="f_id" type="hidden">
+																								<input value="0" name="f_area{{$x + 1}}[]"
+																									   class="f_area" type="hidden">
+																								<input value="0"
+																									   name="sub_feature{{$x + 1}}[]"
+																									   class="sub_feature" type="hidden">
+																							</div>
+
+																							@if($feature->ladderband)
+
+																								<a data-id="{{$x + 1}}"
+																								   class="info ladderband-btn">{{__('text.Info')}}</a>
+
+																							@endif
+
+																						</div>
 
 																					@else
 
-																					<option {{$key1->childsafe_question
-																						== 2 ? 'selected' : null}}
-																						value="2">{{__('text.Add childsafety clip')}}
-																					</option>
-																					<option {{$key1->childsafe_question
-																						== 3 ? 'selected' : null}}
-																						value="3">{{__('text.Yes childsafe')}}</option>
+																						<div class="row"
+																							 style="margin: 0;display: flex;align-items: center;">
+
+																							<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
+																								 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																								<label
+																										style="margin-right: 10px;margin-bottom: 0;">{{$feature->title}}</label>
+																								<select
+																										style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
+																										class="form-control feature-select"
+																										name="features{{$x+1}}[]">
+
+																									<option value="0">{{__('text.Select Feature')}}
+																									</option>
+
+																									@foreach($features[$f] as $temp)
+
+																										<option {{$temp->id ==
+																					$feature->feature_sub_id ?
+																					'selected' : null}}
+																												value="{{$temp->id}}">{{$temp->title}}
+																										</option>
+
+																									@endforeach
+
+																								</select>
+																								<input value="{{$feature->price}}"
+																									   name="f_price{{$x + 1}}[]"
+																									   class="f_price" type="hidden">
+																								<input value="{{$feature->feature_id}}"
+																									   name="f_id{{$x + 1}}[]" class="f_id"
+																									   type="hidden">
+																								<input value="0" name="f_area{{$x + 1}}[]"
+																									   class="f_area" type="hidden">
+																								<input value="0"
+																									   name="sub_feature{{$x + 1}}[]"
+																									   class="sub_feature" type="hidden">
+																							</div>
+
+																							@if($feature->comment_box)
+
+																								<a data-feature="{{$feature->feature_id}}"
+																								   class="info comment-btn">{{__('text.Info')}}</a>
+
+																							@endif
+
+																						</div>
+
+																						@foreach($key1->sub_features as $sub_feature)
+
+																							@if($sub_feature->feature_id == $feature->feature_sub_id)
+
+																								<div class="row sub-features"
+																									 style="margin: 0;display: flex;align-items: center;">
+
+																									<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
+																										 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+																										<label
+																												style="margin-right: 10px;margin-bottom: 0;">{{$sub_feature->title}}</label>
+																										<select
+																												style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
+																												class="form-control feature-select"
+																												name="features{{$x+1}}[]">
+
+																											<option value="0">{{__('text.Select Feature')}}
+																											</option>
+
+																											@foreach($sub_features[$s] as $temp)
+
+																												<option {{$temp->id ==
+																					$sub_feature->feature_sub_id ?
+																					'selected' : null}}
+																														value="{{$temp->id}}">{{$temp->title}}
+																												</option>
+
+																											@endforeach
+
+																										</select>
+																										<input value="{{$sub_feature->price}}"
+																											   name="f_price{{$x + 1}}[]"
+																											   class="f_price" type="hidden">
+																										<input value="{{$sub_feature->feature_id}}"
+																											   name="f_id{{$x + 1}}[]" class="f_id"
+																											   type="hidden">
+																										<input value="0" name="f_area{{$x + 1}}[]"
+																											   class="f_area" type="hidden">
+																										<input value="1"
+																											   name="sub_feature{{$x + 1}}[]"
+																											   class="sub_feature" type="hidden">
+																									</div>
+
+																								</div>
+
+																								<?php $s = $s + 1; ?>
+
+																							@endif
+
+																						@endforeach
 
 																					@endif
 
-																			</select>
-																			<input value="{{$key1->childsafe_diff}}"
-																				name="childsafe_diff{{$x + 1}}"
-																				class="childsafe_diff" type="hidden">
-																		</div>
-
-																	</div>
-
-																	<div class="row childsafe-answer-box"
-																		style="margin: 0;display: flex;align-items: center;">
-
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}
-																				Answer</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control childsafe-answer"
-																				name="childsafe_answer{{$x+1}}">
-																				@if($key1->childsafe_question == 1)
-																				<option {{$key1->childsafe_answer == 1 ?
-																					'selected' : null}} value="1">{{__('text.Make it childsafe')}}</option>
-																				<option {{$key1->childsafe_answer == 2 ?
-																					'selected' : null}} value="2">{{__('text.Yes i agree')}}</option>
-																				@else
-																				<option selected value="3">{{__('text.Is childsafe')}}
-																				</option>
-																				@endif
-																			</select>
-																		</div>
-
-																	</div>
-
-																	@endif
-
-																	@foreach($key1->features as $feature)
-
-																	@if($feature->feature_id == 0 &&
-																	$feature->feature_sub_id == 0)
-
-																	<div class="row"
-																		style="margin: 0;display: flex;align-items: center;">
-
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">{{__('text.Ladderband')}}</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control feature-select"
-																				name="features{{$x+1}}[]">
-																				<option {{$feature->ladderband == 0 ?
-																					'selected' : null}} value="0">{{__('text.No')}}
-																				</option>
-																				<option {{$feature->ladderband == 1 ?
-																					'selected' : null}} value="1">{{__('text.Yes')}}
-																				</option>
-																			</select>
-																			<input value="{{$feature->price}}"
-																				name="f_price{{$x + 1}}[]"
-																				class="f_price" type="hidden">
-																			<input value="0" name="f_id{{$x + 1}}[]"
-																				class="f_id" type="hidden">
-																			<input value="0" name="f_area{{$x + 1}}[]"
-																				class="f_area" type="hidden">
-																			<input value="0"
-																				name="sub_feature{{$x + 1}}[]"
-																				class="sub_feature" type="hidden">
-																		</div>
-
-																		@if($feature->ladderband)
-
-																		<a data-id="{{$x + 1}}"
-																			class="info ladderband-btn">{{__('text.Info')}}</a>
-
-																		@endif
-
-																	</div>
-
-																	@else
-
-																	<div class="row"
-																		style="margin: 0;display: flex;align-items: center;">
-
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">{{$feature->title}}</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control feature-select"
-																				name="features{{$x+1}}[]">
-
-																				<option value="0">{{__('text.Select Feature')}}
-																				</option>
-
-																				@foreach($features[$f] as $temp)
-
-																				<option {{$temp->id ==
-																					$feature->feature_sub_id ?
-																					'selected' : null}}
-																					value="{{$temp->id}}">{{$temp->title}}
-																				</option>
+																					<?php $f = $f + 1; ?>
 
 																				@endforeach
 
-																			</select>
-																			<input value="{{$feature->price}}"
-																				name="f_price{{$x + 1}}[]"
-																				class="f_price" type="hidden">
-																			<input value="{{$feature->feature_id}}"
-																				name="f_id{{$x + 1}}[]" class="f_id"
-																				type="hidden">
-																			<input value="0" name="f_area{{$x + 1}}[]"
-																				class="f_area" type="hidden">
-																			<input value="0"
-																				name="sub_feature{{$x + 1}}[]"
-																				class="sub_feature" type="hidden">
-																		</div>
+																			</div>
 
-																		@if($feature->comment_box)
-
-																		<a data-feature="{{$feature->feature_id}}"
-																			class="info comment-btn">{{__('text.Info')}}</a>
-
-																		@endif
-
-																	</div>
-
-																	@foreach($key1->sub_features as $sub_feature)
-
-																	@if($sub_feature->feature_id == $feature->feature_sub_id)
-
-																	<div class="row sub-features"
-																		style="margin: 0;display: flex;align-items: center;">
-
-																		<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
-																			class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																			<label
-																				style="margin-right: 10px;margin-bottom: 0;">{{$sub_feature->title}}</label>
-																			<select
-																				style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
-																				class="form-control feature-select"
-																				name="features{{$x+1}}[]">
-
-																				<option value="0">{{__('text.Select Feature')}}
-																				</option>
-
-																				@foreach($sub_features[$s] as $temp)
-
-                                                                                    <option {{$temp->id ==
-																					$sub_feature->feature_sub_id ?
-																					'selected' : null}}
-                                                                                            value="{{$temp->id}}">{{$temp->title}}
-                                                                                    </option>
-
-																				@endforeach
-
-																			</select>
-																			<input value="{{$sub_feature->price}}"
-																				name="f_price{{$x + 1}}[]"
-																				class="f_price" type="hidden">
-																			<input value="{{$sub_feature->feature_id}}"
-																				name="f_id{{$x + 1}}[]" class="f_id"
-																				type="hidden">
-																			<input value="0" name="f_area{{$x + 1}}[]"
-																				class="f_area" type="hidden">
-																			<input value="1"
-																				name="sub_feature{{$x + 1}}[]"
-																				class="sub_feature" type="hidden">
-																		</div>
-
-																	</div>
-
-                                                                                    <?php $s = $s + 1; ?>
+																		@endforeach
 
 																	@endif
-
-																	@endforeach
-
-																	@endif
-
-																	<?php $f = $f + 1; ?>
-
-																	@endforeach
 
 																</div>
-
-																@endforeach
-
-																@endif
 
 															</div>
 
@@ -946,1434 +993,1176 @@
 												</div>
 
 											</div>
-
 										</div>
 									</div>
 								</div>
+
+							</div>
+						</div>
+						<!-- Ending of Dashboard data-table area -->
+					</div>
+
+					<div id="myModal" class="modal fade" role="dialog">
+						<div class="modal-dialog">
+
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">{{__('text.Sub Products Sizes')}}</h4>
+								</div>
+								<div class="modal-body">
+									@if(isset($invoice))
+
+										@foreach($invoice as $x => $key1)
+
+											@if(isset($sub_products[$x]))
+
+												<div class="sub-tables" data-id="{{$x+1}}">
+													<table style="width: 100%;">
+														<thead>
+														<tr>
+															<th>ID</th>
+															<th>{{__('text.Title')}}</th>
+															<th>{{__('text.Size 38mm')}}</th>
+															<th>{{__('text.Size 25mm')}}</th>
+														</tr>
+														</thead>
+														<tbody>
+
+														@foreach($sub_products[$x] as $sub_product)
+
+															<tr>
+																<td><input type="hidden" class="sub_product_id"
+																		   name="sub_product_id{{$x+1}}[]"
+																		   value="{{$sub_product->sub_product_id}}">{{$sub_product->code}}
+																</td>
+																<td>{{$sub_product->title}}</td>
+																<td>
+																	@if($sub_product->size1_value == 'x')
+
+																		X<input class="sizeA" name="sizeA{{$x+1}}[]" type="hidden"
+																				value="x">
+
+																	@else
+
+																		<input {{$sub_product->size1_value ? 'checked' : null}}
+																			   data-id="{{$x + 1}}" class="cus_radio" name="cus_radio{{$x+1}}[]"
+																			   type="radio">
+																		<input class="cus_value sizeA" type="hidden"
+																			   value="{{$sub_product->size1_value ? 1 : 0}}"
+																			   name="sizeA{{$x+1}}[]">
+
+																	@endif
+																</td>
+																<td>
+																	@if($sub_product->size2_value == 'x')
+
+																		X<input class="sizeB" name="sizeB{{$x+1}}[]" type="hidden"
+																				value="x">
+
+																	@else
+
+																		<input {{$sub_product->size2_value ? 'checked' : null}}
+																			   data-id="{{$x + 1}}" class="cus_radio" name="cus_radio{{$x+1}}[]"
+																			   type="radio">
+																		<input class="cus_value sizeB" type="hidden"
+																			   value="{{$sub_product->size2_value ? 1 : 0}}"
+																			   name="sizeB{{$x+1}}[]">
+
+																	@endif
+																</td>
+															</tr>
+
+														@endforeach
+
+														</tbody>
+													</table>
+												</div>
+
+											@endif
+
+										@endforeach
+
+									@endif
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
+								</div>
 							</div>
 
 						</div>
 					</div>
-					<!-- Ending of Dashboard data-table area -->
-				</div>
 
-				<div id="myModal" class="modal fade" role="dialog">
-					<div class="modal-dialog">
+					<div id="myModal2" class="modal fade" role="dialog">
+						<div class="modal-dialog">
 
-						<!-- Modal content-->
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">{{__('text.Sub Products Sizes')}}</h4>
-							</div>
-							<div class="modal-body">
-								@if(isset($invoice))
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">{{__('text.Feature Comment')}}</h4>
+								</div>
+								<div class="modal-body">
 
-								@foreach($invoice as $x => $key1)
+									@if(isset($invoice))
 
-								@if(isset($sub_products[$x]))
+										@foreach($invoice as $x => $key1)
 
-								<div class="sub-tables" data-id="{{$x+1}}">
-									<table style="width: 100%;">
-										<thead>
-											<tr>
-												<th>ID</th>
-												<th>{{__('text.Title')}}</th>
-												<th>{{__('text.Size 38mm')}}</th>
-												<th>{{__('text.Size 25mm')}}</th>
-											</tr>
-										</thead>
-										<tbody>
+											@foreach($key1->features as $feature)
 
-											@foreach($sub_products[$x] as $sub_product)
+												@if($feature->comment)
 
-											<tr>
-												<td><input type="hidden" class="sub_product_id"
-														name="sub_product_id{{$x+1}}[]"
-														value="{{$sub_product->sub_product_id}}">{{$sub_product->code}}
-												</td>
-												<td>{{$sub_product->title}}</td>
-												<td>
-													@if($sub_product->size1_value == 'x')
+													<div class="comment-boxes" data-id="{{$x + 1}}">
+									<textarea
+											style="resize: vertical;width: 100%;border: 1px solid #c9c9c9;border-radius: 5px;outline: none;"
+											data-id="{{$feature->feature_id}}" rows="5"
+											name="comment-{{$x + 1}}-{{$feature->feature_id}}">{{$feature->comment}}</textarea>
+													</div>
 
-													X<input class="sizeA" name="sizeA{{$x+1}}[]" type="hidden"
-														value="x">
-
-													@else
-
-													<input {{$sub_product->size1_value ? 'checked' : null}}
-													data-id="{{$x + 1}}" class="cus_radio" name="cus_radio{{$x+1}}[]"
-													type="radio">
-													<input class="cus_value sizeA" type="hidden"
-														value="{{$sub_product->size1_value ? 1 : 0}}"
-														name="sizeA{{$x+1}}[]">
-
-													@endif
-												</td>
-												<td>
-													@if($sub_product->size2_value == 'x')
-
-													X<input class="sizeB" name="sizeB{{$x+1}}[]" type="hidden"
-														value="x">
-
-													@else
-
-													<input {{$sub_product->size2_value ? 'checked' : null}}
-													data-id="{{$x + 1}}" class="cus_radio" name="cus_radio{{$x+1}}[]"
-													type="radio">
-													<input class="cus_value sizeB" type="hidden"
-														value="{{$sub_product->size2_value ? 1 : 0}}"
-														name="sizeB{{$x+1}}[]">
-
-													@endif
-												</td>
-											</tr>
+												@endif
 
 											@endforeach
 
-										</tbody>
-									</table>
+										@endforeach
+
+									@endif
+
 								</div>
-
-								@endif
-
-								@endforeach
-
-								@endif
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
-							</div>
-						</div>
-
-					</div>
-				</div>
-
-				<div id="myModal2" class="modal fade" role="dialog">
-					<div class="modal-dialog">
-
-						<!-- Modal content-->
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">{{__('text.Feature Comment')}}</h4>
-							</div>
-							<div class="modal-body">
-
-								@if(isset($invoice))
-
-								@foreach($invoice as $x => $key1)
-
-								@foreach($key1->features as $feature)
-
-								@if($feature->comment)
-
-								<div class="comment-boxes" data-id="{{$x + 1}}">
-									<textarea
-										style="resize: vertical;width: 100%;border: 1px solid #c9c9c9;border-radius: 5px;outline: none;"
-										data-id="{{$feature->feature_id}}" rows="5"
-										name="comment-{{$x + 1}}-{{$feature->feature_id}}">{{$feature->comment}}</textarea>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
 								</div>
-
-								@endif
-
-								@endforeach
-
-								@endforeach
-
-								@endif
-
 							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
-							</div>
+
 						</div>
-
 					</div>
-				</div>
 
-			</form>
+				</form>
+
+			</div>
 
 		</div>
 
 	</div>
 
-</div>
+	<div id="cover"></div>
 
-<div id="cover"></div>
+	<div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
 
-<div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
+			<div class="modal-content">
 
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<button style="background-color: white !important;color: black !important;" type="button" class="close"
-					data-dismiss="modal" aria-hidden="true">×</button>
-				<h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
-			</div>
-
-			<div class="modal-body" id="myWizard" style="display: inline-block;">
-
-				<input type="hidden" id="token" name="token" value="{{csrf_token()}}">
-				<input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
-				<input type="hidden" id="handyman_name" name="handyman_name"
-					value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}"
-							type="text">
-					</div>
+				<div class="modal-header">
+					<button style="background-color: white !important;color: black !important;" type="button" class="close"
+							data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">{{__('text.Create Customer')}}</h3>
 				</div>
 
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
+				<div class="modal-body" id="myWizard" style="display: inline-block;">
+
+					<input type="hidden" id="token" name="token" value="{{csrf_token()}}">
+					<input type="hidden" id="handyman_id" name="handyman_id" value="{{Auth::user()->id}}">
+					<input type="hidden" id="handyman_name" name="handyman_name"
+						   value="<?php echo Auth::user()->name .' '. Auth::user()->family_name; ?>">
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+							<input id="name" name="name" class="form-control validation" placeholder="{{$lang->suf}}"
+								   type="text">
 						</div>
-						<input id="family_name" name="family_name" class="form-control validation"
-							placeholder="{{$lang->fn}}" type="text">
 					</div>
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+							<input id="family_name" name="family_name" class="form-control validation"
+								   placeholder="{{$lang->fn}}" type="text">
+						</div>
+					</div>
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+							<input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}"
+								   type="text">
+						</div>
+					</div>
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+							<input id="address" name="address" class="form-control" placeholder="{{$lang->ad}}" type="text">
+							<input type="hidden" id="check_address" value="0">
+						</div>
+					</div>
+
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+							<input id="postcode" name="postcode" class="form-control" readonly placeholder="{{$lang->pc}}"
+								   type="text">
+						</div>
+					</div>
+
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+							<input id="city" name="city" class="form-control" placeholder="{{$lang->ct}}" readonly
+								   type="text">
+						</div>
+					</div>
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-user"></i>
+							</div>
+							<input id="phone" name="phone" class="form-control" placeholder="{{$lang->pn}}" type="text">
+						</div>
+					</div>
+
+					<div class="form-group col-sm-6">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-envelope"></i>
+							</div>
+							<input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}"
+								   type="email">
+						</div>
+					</div>
+
 				</div>
 
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="business_name" name="business_name" class="form-control" placeholder="{{$lang->bn}}"
-							type="text">
-					</div>
+				<div class="modal-footer">
+					<button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;"
+							class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
 				</div>
 
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="address" name="address" class="form-control" placeholder="{{$lang->ad}}" type="text">
-						<input type="hidden" id="check_address" value="0">
-					</div>
-				</div>
-
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="postcode" name="postcode" class="form-control" readonly placeholder="{{$lang->pc}}"
-							type="text">
-					</div>
-				</div>
-
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="city" name="city" class="form-control" placeholder="{{$lang->ct}}" readonly
-							type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</div>
-						<input id="phone" name="phone" class="form-control" placeholder="{{$lang->pn}}" type="text">
-					</div>
-				</div>
-
-				<div class="form-group col-sm-6">
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-envelope"></i>
-						</div>
-						<input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}"
-							type="email">
-					</div>
-				</div>
-
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" style="border: 0;outline: none;background-color: #5cb85c !important;"
-					class="btn btn-primary submit-customer">{{__('text.Create')}}</button>
 			</div>
 
 		</div>
-
 	</div>
-</div>
 
-<style>
+	<div id="myModal3" class="modal fade" role="dialog">
+		<div style="width: 80%;" class="modal-dialog">
 
-	.res-collapse
-	{
-		box-shadow: none !important;
-		border: 0;
-		background: white !important;
-		color: black !important;
-		padding: 0;
-	}
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">{{__('text.Appointments')}}</h4>
+				</div>
+				<div style="padding: 0 0 50px 0;" class="modal-body">
 
-	button.btn.collapsed:before
-	{
-    	content: 'Toon alle velden' ;
-    	display: block;
-	}
+					<div class="row" style="max-width: 1100px;margin: 20px auto;">
+						<button class="btn btn-success add-appointment"><i class="fa fa-plus"></i> {{__('text.Add Appointment')}}</button>
+					</div>
 
-	button.res-collapse:before
-	{
-    	content: 'Toon minder velden' ;
-    	display: block;
-	}
+					<div id='calendar'></div>
 
-	.item1 { grid-area: item1; }
-	.item2 { grid-area: item2; }
-	.item3 { grid-area: item3; }
-	.item4 { grid-area: item4; }
-	.item5 { grid-area: item5; }
-	.item6 { grid-area: item6; }
-	.item7 { grid-area: item7; }
-	.item8 { grid-area: item8; }
-	.item9 { grid-area: item9; }
-	.item10 { grid-area: item10; }
-	.item11 { grid-area: item11; }
-	.item12 { grid-area: item12; }
-	.item13 { grid-area: item13; }
-	.item14 { grid-area: item14; }
-	.item15 { grid-area: item15; }
-	.item16 { grid-area: item16; }
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">{{__('text.Close')}}</button>
+				</div>
+			</div>
 
-	.content-label
-	{
-		display: none;
-	}
+		</div>
+	</div>
 
-	.m-input,
-	.labor_impact {
-		border-radius: 5px !important;
-		width: 70%;
-		border: 0;
-		padding: 0 5px;
-		text-align: left;
-		height: 30px !important;
-	}
+	<div id="addAppointmentModal" role="dialog" class="modal fade">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
 
-	.m-input:focus,
-	.labor_impact:focus {
-		background: #f6f6f6;
-	}
+				<div class="modal-header">
+					<button type="button" data-dismiss="modal" class="close">×</button>
+					<h4 class="modal-title">{{__('text.Add Appointment')}}</h4>
+				</div>
 
-	.measure-unit {
-		width: 50%;
-	}
+				<div class="modal-body">
 
-	.add-product-box hr
+					<div class="row">
+						<div class="form-group col-xs-12 col-sm-12 required appointment_title_box">
+							<label>{{__('text.Select Event Title')}}</label>
+							<select class="appointment_title">
+
+								<option value="">{{__('text.Select Event Title')}}</option>
+								<option value="Delivery Date">{{__('text.Delivery Date')}}</option>
+								<option value="Installation Date">{{__('text.Installation Date')}}</option>
+
+								@foreach($event_titles as $title)
+
+									<option value="{{$title->title}}">{{$title->title}}</option>
+
+								@endforeach
+
+							</select>
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-4 required">
+							<label>{{__('Start')}}</label>
+							<input type="text" class="form-control appointment_start validation_required" readonly="readonly">
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-4 required">
+							<label>{{__('End')}}</label>
+							<input type="text" class="form-control appointment_end validation_required" readonly="readonly">
+						</div>
+
+						<div class="form-group col-xs-12 appointment_type_box col-sm-4 required">
+							<label>{{__('Select Type')}}</label>
+							<select class="appointment_type">
+
+								<option value="1">{{__('text.For Quotation')}}</option>
+								<option value="2">{{__('text.For Client')}}</option>
+
+							</select>
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-4 appointment_quotation_number_box required">
+							<label>{{__('Quotation Number')}}</label>
+							<select class="appointment_quotation_number">
+
+								<option value="">{{__('text.Select Quotation')}}</option>
+								<option value="0">{{__('text.Current Quotation')}}</option>
+
+								@foreach($quotation_ids as $key)
+
+									<option value="{{$key->id}}">{{$key->quotation_invoice_number}}</option>
+
+								@endforeach
+
+							</select>
+						</div>
+
+						<div style="display: none;" class="form-group appointment_customer_box col-xs-12 col-sm-4 required">
+							<label>{{__('Customer')}}</label>
+							<select class="appointment_client">
+
+								<option value="">{{__('text.Select Customer')}}</option>
+
+								@foreach($customers as $key)
+
+									<option value="{{$key->id}}">{{$key->name . ' ' . $key->family_name}}</option>
+
+								@endforeach
+
+							</select>
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-12">
+							<label>{{__('Description')}}</label>
+							<textarea rows="4" class="form-control appointment_description"></textarea>
+						</div>
+
+						<div class="form-group col-xs-12 col-sm-12 required">
+							<label>{{__('Tags')}}</label>
+							<input type="text" data-role="tagsinput" class="form-control appointment_tags" />
+						</div>
+
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<input type="hidden" id="event_id">
+					<button type="button" class="btn btn-success pull-left submit_appointmentForm">Save</button>
+					<button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<style>
+
+		.bootstrap-tagsinput
 		{
-			margin-bottom: 20px;
+			width: 100%;
 		}
 
-	@media (max-width: 992px)
-	{
-
-		.headings1
+		.fc .fc-daygrid-day-events
 		{
-			width: 25% !important;
+			margin-top: 2px !important;
 		}
 
-		.headings1 input
+		.fc-event:hover .fc-buttons
 		{
-			width: 40% !important;
+			display: block;
 		}
 
-		.headings2
+		.fc-event .fc-buttons
 		{
-			width: 100% !important;
+			padding: 10px;
+			text-align: center;
+			display: none;
+			position: absolute;
+			background-color: #ffffff;
+			border: 1px solid #d7d7d7;
+			bottom: 100%;
+			z-index: 99999;
+			min-width: 80px;
 		}
 
-		.headings2 div
-		{
-			width: 100% !important;
+		.fc-event .fc-buttons:after,
+		.fc-event .fc-buttons:before {
+			top: 100%;
+			left: 8px;
+			border: solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
 		}
 
-		.headings2 input
-		{
-			width: 28% !important;
+		.fc-event .fc-buttons:before {
+			border-color: rgba(119, 119, 119, 0);
+			border-top-color: #d7d7d7;
+			border-width: 6px;
+			margin-left: -6px;
 		}
 
-		.add-product-box hr
-		{
-			margin-top: 0;
+		.fc-event .fc-buttons:after {
+			border-color: rgba(255, 255, 255, 0);
+			border-top-color: #ffffff;
+			border-width: 5px;
+			margin-left: -5px;
 		}
 
-		.header-div
+		.fc table
 		{
-			display:none !important;
+			margin: 0 !important;
 		}
 
-		.price
-		{
-			padding: 0 5px;
-			display: flex;
-			align-items: center;
-		}
-
-		.content-div
-		{
-			display: grid !important;
-  			grid-template-areas:'item1 item1 item1 item1 item1 item1'
-    		'item2 item2 item2 item2 item2 item2'
-    		'item3 item3 item3 item3 item3 item3'
-			'item16 item16 item16 item16 item16 item16'
-			'item12 item12 item12 item12 item12 item12'
-			'item13 item13 item13 item13 item13 item13'
-			'item14 item14 item14 item14 item14 item14'
-			'item15 item15 item15 item15 item15 item15'
-			'item4 item4 item4 item5 item5 item5'
-			'item6 item6 item6 item6 item6 item6'
-			'item7 item7 item7 item7 item7 item7'
-			'item8 item8 item8 item8 item8 item8'
-			'item9 item9 item9 item9 item9 item9'
-			'item10 item10 item10 item10 item10 item10'
-			'item11 item11 item11 item11 item11 item11';
-			grid-column-gap: 10px;
-  			/*grid-gap: 10px;*/
-			padding: 20px !important;
-			border: 1px solid #d0d0d0 !important;
-			border-radius: 5px;
-		}
-
-		.color .select2-container--default .select2-selection--single, .model .select2-container--default .select2-selection--single
-		{
-			border: 1px solid #d6d6d6 !important;
-		}
-
-		.m-box
-		{
-			border: 1px solid #d6d6d6;
-			border-radius: 4px;
-			padding: 0 10px;
-			background: white;
-		}
-
-		.content-div .collapse, .content-div .collapsing, .content-div .collapse.in
-		{
-			display: grid !important;
-			grid-template-areas: 'item12 item12 item12 item12 item12 item12'
-			'item13 item13 item13 item13 item13 item13'
-			'item14 item14 item14 item14 item14 item14'
-			'item15 item15 item15 item15 item15 item15';
-			margin-top: 0 !important;
-		}
-
-		.color, .model, .discount-box, .labor-discount-box
-		{
-			width: auto !important;
-			margin-left: 0 !important;
-			margin-top: 15px;
-		}
-
-		.content-div.active
-		{
-			background: #c6daef;
-			border: 0 !important;
-		}
-
-		.second-row
+		.fc .fc-scrollgrid-section-liquid > td, .fc .fc-scrollgrid-section > td, .fc-theme-standard td, .fc-theme-standard th
 		{
 			padding: 0 !important;
 		}
 
-		.content-div .content
+		.fc .fc-scrollgrid-section-liquid > td:first-child
 		{
-			border: 0 !important;
-			display: block !important;
-			height: auto !important;
-			width: auto !important;
+			border-right: 1px solid var(--fc-border-color, #ddd);
 		}
 
-		.content-div .content:not(:first-child)
-		{
-			margin-top: 15px;
+		#calendar {
+			max-width: 1100px;
+			margin: 0 auto;
 		}
 
-		.res-white
+		.appointment_start, .appointment_end
 		{
+			background-color: white !important;
+		}
+
+		.res-collapse
+		{
+			box-shadow: none !important;
+			border: 0;
 			background: white !important;
-			height: 35px !important;
-			width: 100% !important;
-			border-radius: 4px !important;
-			border: 1px solid #d6d6d6 !important;
+			color: black !important;
+			padding: 0;
 		}
 
-		.item11
+		button.btn.collapsed:before
 		{
-			display: none !important;
+			content: 'Toon alle velden' ;
+			display: block;
 		}
 
-		.m-input
+		button.res-collapse:before
 		{
-			border-radius: 0 !important;
-			width: 75%;
+			content: 'Toon minder velden' ;
+			display: block;
 		}
 
-		.measure-unit
-		{
-			height: 30px;
-			width: 25%;
-			padding-bottom: 3px;
-			border-radius: 0;
-		}
-
-		.full-res .select2-container .select2-selection--single, .full-res .select2-container--default .select2-selection--single .select2-selection__rendered, .full-res .select2-container--default .select2-selection--single .select2-selection__arrow
-		{
-			height: 35px;
-			line-height: 35px;
-			font-size: 10px;
-		}
-
-		:is(.color, .model) > .select2-container--default .select2-selection--single, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__arrow, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered
-		{
-			font-size: 10px;
-		}
-
-		.sr-res
-		{
-			background: white;
-			height: 35px;
-			display: flex;
-			align-items: center;
-			border-radius: 4px;
-			border: 1px solid #d6d6d6;
-		}
-
-		:not(.color, .model) > .select2-container--default .select2-selection--single
-		{
-			border: 1px solid #d6d6d6 !important;
-		}
+		.item1 { grid-area: item1; }
+		.item2 { grid-area: item2; }
+		.item3 { grid-area: item3; }
+		.item4 { grid-area: item4; }
+		.item5 { grid-area: item5; }
+		.item6 { grid-area: item6; }
+		.item7 { grid-area: item7; }
+		.item8 { grid-area: item8; }
+		.item9 { grid-area: item9; }
+		.item10 { grid-area: item10; }
+		.item11 { grid-area: item11; }
+		.item12 { grid-area: item12; }
+		.item13 { grid-area: item13; }
+		.item14 { grid-area: item14; }
+		.item15 { grid-area: item15; }
+		.item16 { grid-area: item16; }
 
 		.content-label
 		{
-			display: inline-block;
+			display: none;
 		}
-	}
 
-    .content-div .collapsing, .content-div .collapse.in
-    {
-        display: flex;
-    }
+		.m-input,
+		.labor_impact {
+			border-radius: 5px !important;
+			width: 70%;
+			border: 0;
+			padding: 0 5px;
+			text-align: left;
+			height: 30px !important;
+		}
 
-    .header-div, .content-div
-    {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
+		.m-input:focus,
+		.labor_impact:focus {
+			background: #f6f6f6;
+		}
 
-    .header-div .headings
-    {
-        font-family: system-ui;
-		font-weight: 500;
-		border-bottom: 1px solid #ebebeb;
-		padding-bottom: 15px;
-		color: gray;
-        height: 40px;
-    }
-
-    .content-div
-    {
-        margin-top: 15px;
-        flex-flow: wrap;
-		border-bottom: 1px solid #d0d0d0;
-		padding-bottom: 10px;
-    }
-
-    .content-div .content {
-		font-family: system-ui;
-		font-weight: 500;
-		padding: 0;
-		color: #3c3c3c;
-        height: 40px;
-        display: flex;
-        align-items: center;
-	}
-
-	.content-div.active .content {
-		border-top: 2px solid #cecece;
-		border-bottom: 2px solid #cecece;
-	}
-
-	.content-div.active .content:first-child {
-		border-left: 2px solid #cecece;
-		border-bottom-left-radius: 4px;
-		border-top-left-radius: 4px;
-	}
-
-	.content-div.active .last-content {
-		border-right: 2px solid #cecece;
-		border-bottom-right-radius: 4px;
-		border-top-right-radius: 4px;
-	}
-
-    .yellow-circle
-    {
-        background: #fae91a;width: 20px;height: 20px;border-radius: 50%;animation: yellow-glow 2s ease infinite;
-    }
-
-    @keyframes yellow-glow {
-        0% {
-            box-shadow: 0 0 #fae91a;
-        }
-
-        100% {
-            box-shadow: 0 0 10px 8px transparent;
-        }
-    }
-
-    .green-circle
-    {
-        background: #62e660;width: 20px;height: 20px;border-radius: 50%;animation: green-glow 2s ease infinite;
-    }
-
-    @keyframes green-glow {
-        0% {
-            box-shadow: 0 0 #62e660;
-        }
-
-        100% {
-            box-shadow: 0 0 10px 8px transparent;
-        }
-    }
-
-    /*.yellow-circle
-    {
-        background: #fae91a;width: 20px;height: 20px;border-radius: 50%;animation: anim-glow 2s linear infinite;
-    }
-
-    @keyframes anim-glow {
-        0% {
-            box-shadow: 0 0 9px 0px #ffec00;
-        }
-        25% {
-            box-shadow: 0 0 5px 0px #ffec00;
-        }
-        50% {
-            box-shadow: 0 0 0px 0px #ffec00;
-        }
-        75% {
-            box-shadow: 0 0 5px 0px #ffec00;
-        }
-        100% {
-            box-shadow: 0 0 9px 0px #ffec00;
-        }
-    }*/
-
-    .note-editor
-    {
-        width: 100%;
-    }
-
-    .note-toolbar
-    {
-        line-height: 1;
-    }
-
-	#menu1 .form-group {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-	}
-
-	#menu1 .form-group .row {
-		padding: 0 20px;
-		justify-content: flex-start;
-		border-right: 1px solid #dddddd;
-		height: 40px;
-		width: 33%;
-		margin: 15px 0 !important;
-	}
-
-	#menu1 .form-group .row:nth-child(3n + 1) {
-		padding-left: 0;
-	}
-
-	#menu1 .form-group .row:nth-child(3n) {
-		border-right: 0;
-		padding-right: 0;
-	}
-
-	@media (max-width: 992px) {
-		#menu1 .form-group .row {
+		.measure-unit {
 			width: 50%;
 		}
 
-		#menu1 .form-group .row:nth-child(3n + 1) {
-			padding-left: 20px;
+		.add-product-box hr
+		{
+			margin-bottom: 20px;
 		}
 
-		#menu1 .form-group .row:nth-child(3n) {
+		@media (max-width: 992px)
+		{
+
+			.headings1
+			{
+				width: 25% !important;
+			}
+
+			.headings1 input
+			{
+				width: 40% !important;
+			}
+
+			.headings2
+			{
+				width: 100% !important;
+			}
+
+			.headings2 div
+			{
+				width: 100% !important;
+			}
+
+			.headings2 input
+			{
+				width: 28% !important;
+			}
+
+			.add-product-box hr
+			{
+				margin-top: 0;
+			}
+
+			.header-div
+			{
+				display:none !important;
+			}
+
+			.price
+			{
+				padding: 0 5px;
+				display: flex;
+				align-items: center;
+			}
+
+			.content-div
+			{
+				display: grid !important;
+				grid-template-areas:'item1 item1 item1 item1 item1 item1'
+				'item2 item2 item2 item2 item2 item2'
+				'item3 item3 item3 item3 item3 item3'
+				'item16 item16 item16 item16 item16 item16'
+				'item12 item12 item12 item12 item12 item12'
+				'item13 item13 item13 item13 item13 item13'
+				'item14 item14 item14 item14 item14 item14'
+				'item15 item15 item15 item15 item15 item15'
+				'item4 item4 item4 item5 item5 item5'
+				'item6 item6 item6 item6 item6 item6'
+				'item7 item7 item7 item7 item7 item7'
+				'item8 item8 item8 item8 item8 item8'
+				'item9 item9 item9 item9 item9 item9'
+				'item10 item10 item10 item10 item10 item10'
+				'item11 item11 item11 item11 item11 item11';
+				grid-column-gap: 10px;
+				/*grid-gap: 10px;*/
+				padding: 20px !important;
+				border: 1px solid #d0d0d0 !important;
+				border-radius: 5px;
+			}
+
+			.color .select2-container--default .select2-selection--single, .model .select2-container--default .select2-selection--single
+			{
+				border: 1px solid #d6d6d6 !important;
+			}
+
+			.m-box
+			{
+				border: 1px solid #d6d6d6;
+				border-radius: 4px;
+				padding: 0 10px;
+				background: white;
+			}
+
+			.content-div .collapse, .content-div .collapsing, .content-div .collapse.in
+			{
+				display: grid !important;
+				grid-template-areas: 'item12 item12 item12 item12 item12 item12'
+				'item13 item13 item13 item13 item13 item13'
+				'item14 item14 item14 item14 item14 item14'
+				'item15 item15 item15 item15 item15 item15';
+				margin-top: 0 !important;
+			}
+
+			.color, .model, .discount-box, .labor-discount-box
+			{
+				width: auto !important;
+				margin-left: 0 !important;
+				margin-top: 15px;
+			}
+
+			.content-div.active
+			{
+				background: #c6daef;
+				border: 0 !important;
+			}
+
+			.second-row
+			{
+				padding: 0 !important;
+			}
+
+			.content-div .content
+			{
+				border: 0 !important;
+				display: block !important;
+				height: auto !important;
+				width: auto !important;
+			}
+
+			.content-div .content:not(:first-child)
+			{
+				margin-top: 15px;
+			}
+
+			.res-white
+			{
+				background: white !important;
+				height: 35px !important;
+				width: 100% !important;
+				border-radius: 4px !important;
+				border: 1px solid #d6d6d6 !important;
+			}
+
+			.item11
+			{
+				display: none !important;
+			}
+
+			.m-input
+			{
+				border-radius: 0 !important;
+				width: 75%;
+			}
+
+			.measure-unit
+			{
+				height: 30px;
+				width: 25%;
+				padding-bottom: 3px;
+				border-radius: 0;
+			}
+
+			.full-res .select2-container .select2-selection--single, .full-res .select2-container--default .select2-selection--single .select2-selection__rendered, .full-res .select2-container--default .select2-selection--single .select2-selection__arrow
+			{
+				height: 35px;
+				line-height: 35px;
+				font-size: 10px;
+			}
+
+			:is(.color, .model) > .select2-container--default .select2-selection--single, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__arrow, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered
+			{
+				font-size: 10px;
+			}
+
+			.sr-res
+			{
+				background: white;
+				height: 35px;
+				display: flex;
+				align-items: center;
+				border-radius: 4px;
+				border: 1px solid #d6d6d6;
+			}
+
+			:not(.color, .model, .appointment_title_box, .appointment_quotation_number_box, .appointment_type_box, .appointment_customer_box) > .select2-container--default .select2-selection--single
+			{
+				border: 1px solid #d6d6d6 !important;
+			}
+
+			.content-label
+			{
+				display: inline-block;
+			}
+		}
+
+		.content-div .collapsing, .content-div .collapse.in
+		{
+			display: flex;
+		}
+
+		.header-div, .content-div
+		{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		.header-div .headings
+		{
+			font-family: system-ui;
+			font-weight: 500;
+			border-bottom: 1px solid #ebebeb;
+			padding-bottom: 15px;
+			color: gray;
+			height: 40px;
+		}
+
+		.content-div
+		{
+			margin-top: 15px;
+			flex-flow: wrap;
+			border-bottom: 1px solid #d0d0d0;
+			padding-bottom: 10px;
+		}
+
+		.content-div .content {
+			font-family: system-ui;
+			font-weight: 500;
+			padding: 0;
+			color: #3c3c3c;
+			height: 40px;
+			display: flex;
+			align-items: center;
+		}
+
+		.content-div.active .content {
+			border-top: 2px solid #cecece;
+			border-bottom: 2px solid #cecece;
+		}
+
+		.content-div.active .content:first-child {
+			border-left: 2px solid #cecece;
+			border-bottom-left-radius: 4px;
+			border-top-left-radius: 4px;
+		}
+
+		.content-div.active .last-content {
+			border-right: 2px solid #cecece;
+			border-bottom-right-radius: 4px;
+			border-top-right-radius: 4px;
+		}
+
+		.yellow-circle
+		{
+			background: #fae91a;width: 20px;height: 20px;border-radius: 50%;animation: yellow-glow 2s ease infinite;
+		}
+
+		@keyframes yellow-glow {
+			0% {
+				box-shadow: 0 0 #fae91a;
+			}
+
+			100% {
+				box-shadow: 0 0 10px 8px transparent;
+			}
+		}
+
+		.green-circle
+		{
+			background: #62e660;width: 20px;height: 20px;border-radius: 50%;animation: green-glow 2s ease infinite;
+		}
+
+		@keyframes green-glow {
+			0% {
+				box-shadow: 0 0 #62e660;
+			}
+
+			100% {
+				box-shadow: 0 0 10px 8px transparent;
+			}
+		}
+
+		/*.yellow-circle
+        {
+            background: #fae91a;width: 20px;height: 20px;border-radius: 50%;animation: anim-glow 2s linear infinite;
+        }
+
+        @keyframes anim-glow {
+            0% {
+                box-shadow: 0 0 9px 0px #ffec00;
+            }
+            25% {
+                box-shadow: 0 0 5px 0px #ffec00;
+            }
+            50% {
+                box-shadow: 0 0 0px 0px #ffec00;
+            }
+            75% {
+                box-shadow: 0 0 5px 0px #ffec00;
+            }
+            100% {
+                box-shadow: 0 0 9px 0px #ffec00;
+            }
+        }*/
+
+		.note-editor
+		{
+			width: 100%;
+		}
+
+		.note-toolbar
+		{
+			line-height: 1;
+		}
+
+		#menu1 .form-group {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+
+		#menu1 .form-group .row {
+			padding: 0 20px;
+			justify-content: flex-start;
 			border-right: 1px solid #dddddd;
-			padding-right: 20px;
+			height: 40px;
+			width: 33%;
+			margin: 15px 0 !important;
 		}
 
-		#menu1 .form-group .row:nth-child(2n + 1) {
+		#menu1 .form-group .row:nth-child(3n + 1) {
 			padding-left: 0;
 		}
 
-		#menu1 .form-group .row:nth-child(2n) {
+		#menu1 .form-group .row:nth-child(3n) {
 			border-right: 0;
 			padding-right: 0;
 		}
 
-	}
+		@media (max-width: 992px) {
+			#menu1 .form-group .row {
+				width: 50%;
+			}
 
-	@media (max-width: 670px) {
-		#menu1 .form-group .row {
-			width: 100%;
+			#menu1 .form-group .row:nth-child(3n + 1) {
+				padding-left: 20px;
+			}
+
+			#menu1 .form-group .row:nth-child(3n) {
+				border-right: 1px solid #dddddd;
+				padding-right: 20px;
+			}
+
+			#menu1 .form-group .row:nth-child(2n + 1) {
+				padding-left: 0;
+			}
+
+			#menu1 .form-group .row:nth-child(2n) {
+				border-right: 0;
+				padding-right: 0;
+			}
+
 		}
 
-		#menu1 .form-group .row {
-			border-right: 0 !important;
-			padding-left: 20px !important;
-			padding-right: 20px !important;
+		@media (max-width: 670px) {
+			#menu1 .form-group .row {
+				width: 100%;
+			}
+
+			#menu1 .form-group .row {
+				border-right: 0 !important;
+				padding-left: 20px !important;
+				padding-right: 20px !important;
+			}
+
 		}
 
-	}
+		@media (max-width: 550px) {
 
-	@media (max-width: 550px) {
-
-		.add-product-header .col-md-5 {
-			padding: 0;
-			margin-top: 20px;
-			width: 100%;
+			.add-product-header .col-md-5 {
+				padding: 0;
+				margin-top: 20px;
+				width: 100%;
+			}
 		}
-	}
 
-	.swal2-html-container {
-		line-height: 2;
-	}
+		.swal2-html-container {
+			line-height: 2;
+		}
 
-	a.info {
-		vertical-align: bottom;
-		position: relative;
-		/* Anything but static */
-		width: 1.5em;
-		height: 1.5em;
-		text-indent: -9999em;
-		display: inline-block;
-		color: white;
-		font-weight: bold;
-		font-size: 1em;
-		line-height: 1em;
-		background-color: #628cb6;
-		cursor: pointer;
-		margin-top: 7px;
-		-webkit-border-radius: .75em;
-		-moz-border-radius: .75em;
-		border-radius: .75em;
-	}
+		a.info {
+			vertical-align: bottom;
+			position: relative;
+			/* Anything but static */
+			width: 1.5em;
+			height: 1.5em;
+			text-indent: -9999em;
+			display: inline-block;
+			color: white;
+			font-weight: bold;
+			font-size: 1em;
+			line-height: 1em;
+			background-color: #628cb6;
+			cursor: pointer;
+			margin-top: 7px;
+			-webkit-border-radius: .75em;
+			-moz-border-radius: .75em;
+			border-radius: .75em;
+		}
 
-	a.info:before {
-		content: "i";
-		position: absolute;
-		top: .25em;
-		left: 0;
-		text-indent: 0;
-		display: block;
-		width: 1.5em;
-		text-align: center;
-		font-family: monospace;
-	}
+		a.info:before {
+			content: "i";
+			position: absolute;
+			top: .25em;
+			left: 0;
+			text-indent: 0;
+			display: block;
+			width: 1.5em;
+			text-align: center;
+			font-family: monospace;
+		}
 
-	.ladderband-btn {
-		background-color: #494949 !important;
-	}
+		.ladderband-btn {
+			background-color: #494949 !important;
+		}
 
-	.childsafe-btn {
-		background-color: #56a63c !important;
-	}
+		.childsafe-btn {
+			background-color: #56a63c !important;
+		}
 
-	/*.select2-container--default .select2-selection--single .select2-selection__rendered {
-		line-height: 25px;
-	}*/
+		/*.select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 25px;
+        }*/
 
-	#cover {
-		background: url(<?php echo asset('assets/images/page-loader.gif');
+		#cover {
+			background: url(<?php echo asset('assets/images/page-loader.gif');
 		?>) no-repeat scroll center center #ffffff78;
-		position: fixed;
-		z-index: 100000;
-		height: 100%;
-		width: 100%;
-		margin: auto;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-		background-size: 8%;
-		display: none;
-	}
+			position: fixed;
+			z-index: 100000;
+			height: 100%;
+			width: 100%;
+			margin: auto;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			background-size: 8%;
+			display: none;
+		}
 
-	.pac-container {
-		z-index: 1000000;
-	}
+		.pac-container {
+			z-index: 1000000;
+		}
 
-	#cus-box .select2-container--default .select2-selection--single .select2-selection__rendered {
-		line-height: 28px;
-	}
+		#cus-box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_title_box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_quotation_number_box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_type_box .select2-container--default .select2-selection--single .select2-selection__rendered, .appointment_customer_box .select2-container--default .select2-selection--single .select2-selection__rendered {
+			line-height: 28px;
+		}
 
-	#cus-box .select2-container--default .select2-selection--single {
-		border: 1px solid #cacaca;
-	}
+		#cus-box .select2-container--default .select2-selection--single, .appointment_title_box .select2-container--default .select2-selection--single, .appointment_quotation_number_box .select2-container--default .select2-selection--single, .appointment_type_box .select2-container--default .select2-selection--single, .appointment_customer_box .select2-container--default .select2-selection--single {
+			border: 1px solid #cacaca;
+		}
 
-	#cus-box .select2-selection {
-		height: 40px !important;
-		padding-top: 5px !important;
-		outline: none;
-	}
+		#cus-box .select2-selection, .appointment_title_box .select2-selection {
+			height: 40px !important;
+			padding-top: 5px !important;
+			outline: none;
+		}
 
-	#cus-box .select2-selection__arrow {
-		top: 7.5px !important;
-	}
+		.appointment_quotation_number_box .select2-selection, .appointment_type_box .select2-selection, .appointment_customer_box .select2-selection
+		{
+			height: 35px !important;
+			padding-top: 0 !important;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
 
-	#cus-box .select2-selection__clear {
-		display: none;
-	}
+		#cus-box .select2-selection__arrow, .appointment_title_box .select2-selection__arrow {
+			top: 7.5px !important;
+		}
 
-	.feature-tab li a[aria-expanded="false"]::before,
-	a[aria-expanded="true"]::before {
-		display: none;
-	}
+		.appointment_quotation_number_box .select2-selection__arrow, .appointment_type_box .select2-selection__arrow, .appointment_customer_box .select2-selection__arrow
+		{
+			top: 0 !important;
+			position: relative;
+			height: 100% !important;
+		}
 
-	.m-box {
-		display: flex;
-		align-items: center;
-	}
+		/* #cus-box .select2-selection__clear, .appointment_title_box .select2-selection__clear, .appointment_quotation_number_box .select2-selection__clear, .appointment_type_box .select2-selection__clear, .appointment_customer_box .select2-selection__clear {
+			display: none;
+		} */
 
-	:not(.color, .model) > .select2-container--default .select2-selection--single {
-		border: 0;
-	}
+		.feature-tab li a[aria-expanded="false"]::before,
+		a[aria-expanded="true"]::before {
+			display: none;
+		}
 
-    :is(.color, .model) > .select2-container--default .select2-selection--single, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__arrow, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered
-    {
-        line-height: 35px;
-        height: 35px;
-    }
+		.m-box {
+			display: flex;
+			align-items: center;
+		}
 
-	.tooltip1 {
-		position: relative;
-		display: inline-block;
-		cursor: pointer;
-		font-size: 20px;
-	}
+		:not(.color, .model, .appointment_title_box, .appointment_quotation_number_box, .appointment_type_box, .appointment_customer_box) > .select2-container--default .select2-selection--single {
+			border: 0;
+		}
 
-	/* Tooltip text */
-	.tooltip1 .tooltiptext {
-		visibility: hidden;
-		width: auto;
-		min-width: 60px;
-		background-color: #7e7e7e;
-		color: #fff;
-		text-align: center;
-		padding: 10px;
-		border-radius: 6px;
-		position: absolute;
-		z-index: 1;
-		left: 0;
-		top: 55px;
-		font-size: 12px;
-        white-space: nowrap;
-	}
+		:is(.color, .model) > .select2-container--default .select2-selection--single, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__arrow, :is(.color, .model) > .select2-container--default .select2-selection--single .select2-selection__rendered
+		{
+			line-height: 35px;
+			height: 35px;
+		}
 
-	/* Show the tooltip text when you mouse over the tooltip container */
-	.tooltip1:hover .tooltiptext {
-		visibility: visible;
-	}
+		.tooltip1 {
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+			font-size: 20px;
+		}
 
-	.first-row {
-		flex-direction: row;
-		box-sizing: border-box;
-		display: flex;
-		background-color: rgb(151, 140, 135);
-		height: 50px;
-		color: white;
-		font-size: 13px;
-		align-items: center;
-		white-space: nowrap;
-		justify-content: space-between;
-	}
+		/* Tooltip text */
+		.tooltip1 .tooltiptext {
+			visibility: hidden;
+			width: auto;
+			min-width: 60px;
+			background-color: #7e7e7e;
+			color: #fff;
+			text-align: center;
+			padding: 10px;
+			border-radius: 6px;
+			position: absolute;
+			z-index: 1;
+			left: 0;
+			top: 55px;
+			font-size: 12px;
+			white-space: nowrap;
+		}
 
-	.second-row {
-		padding: 25px;
-		display: flex;
-		flex-direction: column;
-		background: #fff;
-		/*overflow-y: hidden;
-		overflow-x: auto;*/
-	}
+		/* Show the tooltip text when you mouse over the tooltip container */
+		.tooltip1:hover .tooltiptext {
+			visibility: visible;
+		}
 
-	table tr th {
-		font-family: system-ui;
-		font-weight: 500;
-		border-bottom: 1px solid #ebebeb;
-		padding-bottom: 15px;
-		color: gray;
-	}
+		.first-row {
+			flex-direction: row;
+			box-sizing: border-box;
+			display: flex;
+			background-color: rgb(151, 140, 135);
+			height: 50px;
+			color: white;
+			font-size: 13px;
+			align-items: center;
+			white-space: nowrap;
+			justify-content: space-between;
+		}
 
-	table tbody tr td {
-		font-family: system-ui;
-		font-weight: 500;
-		padding: 0 10px;
-		color: #3c3c3c;
-	}
+		.second-row {
+			padding: 25px;
+			display: flex;
+			flex-direction: column;
+			background: #fff;
+			/*overflow-y: hidden;
+            overflow-x: auto;*/
+		}
 
-	table tbody tr.active td {
-		border-top: 2px solid #cecece;
-		border-bottom: 2px solid #cecece;
-	}
+		table tr th:not(#addAppointmentModal table tr th) {
+			font-family: system-ui;
+			font-weight: 500;
+			border-bottom: 1px solid #ebebeb;
+			padding-bottom: 15px;
+			color: gray;
+		}
 
-	table tbody tr.active td:first-child {
-		border-left: 2px solid #cecece;
-		border-bottom-left-radius: 4px;
-		border-top-left-radius: 4px;
-	}
+		table tbody tr td:not(#addAppointmentModal table tbody tr td) {
+			font-family: system-ui;
+			font-weight: 500;
+			padding: 0 10px;
+			color: #3c3c3c;
+		}
 
-	table tbody tr.active td:last-child {
-		border-right: 2px solid #cecece;
-		border-bottom-right-radius: 4px;
-		border-top-right-radius: 4px;
-	}
+		table tbody tr.active td:not(#addAppointmentModal table tbody tr.active td) {
+			border-top: 2px solid #cecece;
+			border-bottom: 2px solid #cecece;
+		}
 
-	table {
-		border-collapse: separate;
-		border-spacing: 0 1em;
-	}
+		table tbody tr.active td:first-child:not(#addAppointmentModal table tbody tr.active td:first-child) {
+			border-left: 2px solid #cecece;
+			border-bottom-left-radius: 4px;
+			border-top-left-radius: 4px;
+		}
 
+		table tbody tr.active td:last-child:not(#addAppointmentModal table tbody tr.active td:last-child) {
+			border-right: 2px solid #cecece;
+			border-bottom-right-radius: 4px;
+			border-top-right-radius: 4px;
+		}
 
-	.modal-body table tr th {
-		border: 1px solid #ebebeb;
-		padding-bottom: 15px;
-		color: gray;
-	}
+		table:not(#addAppointmentModal table) {
+			border-collapse: separate;
+			border-spacing: 0 1em;
+		}
 
-	.modal-body table tbody tr td {
-		border-left: 1px solid #ebebeb;
-		border-right: 1px solid #ebebeb;
-		border-bottom: 1px solid #ebebeb;
-	}
+		.modal-body table tr th:not(#addAppointmentModal .modal-body table tr th) {
+			border: 1px solid #ebebeb;
+			padding-bottom: 15px;
+			color: gray;
+		}
 
-	.modal-body table tbody tr td:first-child {
-		border-right: 0;
-	}
+		.modal-body table tbody tr td:not(#addAppointmentModal .modal-body table tbody tr td) {
+			border-left: 1px solid #ebebeb;
+			border-right: 1px solid #ebebeb;
+			border-bottom: 1px solid #ebebeb;
+		}
 
-	.modal-body table tbody tr td:last-child {
-		border-left: 0;
-	}
+		.modal-body table tbody tr td:first-child:not(#addAppointmentModal .modal-body table tbody tr td:first-child) {
+			border-right: 0;
+		}
 
-	.modal-body table {
-		border-collapse: separate;
-		border-spacing: 0;
-		margin: 20px 0;
-	}
+		.modal-body table tbody tr td:last-child:not(#addAppointmentModal .modal-body table tbody tr td:last-child) {
+			border-left: 0;
+		}
 
-	.modal-body table tbody tr td,
-	.modal-body table thead tr th {
-		padding: 5px 10px;
-	}
+		.modal-body table:not(#addAppointmentModal .modal-body table) {
+			border-collapse: separate;
+			border-spacing: 0;
+			margin: 20px 0;
+		}
 
-	.datepicker {
-		padding: 4px;
-		-webkit-border-radius: 4px;
-		-moz-border-radius: 4px;
-		border-radius: 4px;
-		direction: ltr;
-	}
-	.datepicker-inline {
-		width: 220px;
-	}
-	.datepicker.datepicker-rtl {
-		direction: rtl;
-	}
-	.datepicker.datepicker-rtl table tr td span {
-		float: right;
-	}
-	.datepicker-dropdown {
-		top: 20% !important;
-		left: 30% !important;;
-		min-width: 30% !important;
-		height: auto;
-		overflow-y: auto;
-		z-index: 10000 !important;
-	}
+		.modal-body table tbody tr td:not(#addAppointmentModal .modal-body table tbody tr td),
+		.modal-body table thead tr th:not(#addAppointmentModal .modal-body table thead tr th) {
+			padding: 5px 10px;
+		}
 
-	.table-condensed{
-		width: 100%;
-	}
+		.bootstrap-datetimepicker-widget .row:first-child
+		{
+			display: flex;
+			align-items: center;
+		}
 
-	.datepicker td, .datepicker th
-	{
-		font-size: 17px;
-	}
-
-	.datepicker-dropdown:before {
-		content: '';
-		display: inline-block;
-		border-left: 7px solid transparent;
-		border-right: 7px solid transparent;
-		border-bottom: 7px solid #999999;
-		border-top: 0;
-		border-bottom-color: rgba(0, 0, 0, 0.2);
-		position: absolute;
-	}
-	.datepicker-dropdown:after {
-		content: '';
-		display: inline-block;
-		border-left: 6px solid transparent;
-		border-right: 6px solid transparent;
-		border-bottom: 6px solid #ffffff;
-		border-top: 0;
-		position: absolute;
-	}
-	.datepicker-dropdown.datepicker-orient-left:before {
-		left: 6px;
-	}
-	.datepicker-dropdown.datepicker-orient-left:after {
-		left: 7px;
-	}
-	.datepicker-dropdown.datepicker-orient-right:before {
-		right: 6px;
-	}
-	.datepicker-dropdown.datepicker-orient-right:after {
-		right: 7px;
-	}
-	.datepicker-dropdown.datepicker-orient-bottom:before {
-		display: none;
-		top: -7px;
-	}
-	.datepicker-dropdown.datepicker-orient-bottom:after {
-		display: none;
-		top: -6px;
-	}
-	.datepicker-dropdown.datepicker-orient-top:before {
-		display: none;
-		bottom: -7px;
-		border-bottom: 0;
-		border-top: 7px solid #999999;
-	}
-	.datepicker-dropdown.datepicker-orient-top:after {
-		display: none;
-		bottom: -6px;
-		border-bottom: 0;
-		border-top: 6px solid #ffffff;
-	}
-	.datepicker > div {
-		display: none;
-	}
-	.datepicker table {
-		margin: 0;
-		-webkit-touch-callout: none;
-		-webkit-user-select: none;
-		-khtml-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-	}
-	.datepicker td,
-	.datepicker th {
-		text-align: center;
-		width: 20px;
-		height: 20px;
-		-webkit-border-radius: 4px;
-		-moz-border-radius: 4px;
-		border-radius: 4px;
-		border: none;
-	}
-	.table-striped .datepicker table tr td,
-	.table-striped .datepicker table tr th {
-		background-color: transparent;
-	}
-	.datepicker table tr td.day:hover,
-	.datepicker table tr td.day.focused {
-		background: #eeeeee;
-		cursor: pointer;
-	}
-	.datepicker table tr td.old,
-	.datepicker table tr td.new {
-		color: #999999;
-	}
-	.datepicker table tr td.disabled,
-	.datepicker table tr td.disabled:hover {
-		background: none;
-		color: #999999;
-		cursor: default;
-	}
-	.datepicker table tr td.highlighted {
-		background: #d9edf7;
-		border-radius: 0;
-	}
-	.datepicker table tr td.today,
-	.datepicker table tr td.today:hover,
-	.datepicker table tr td.today.disabled,
-	.datepicker table tr td.today.disabled:hover {
-		background-color: #fde19a;
-		background-image: -moz-linear-gradient(to bottom, #fdd49a, #fdf59a);
-		background-image: -ms-linear-gradient(to bottom, #fdd49a, #fdf59a);
-		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
-		background-image: -webkit-linear-gradient(to bottom, #fdd49a, #fdf59a);
-		background-image: -o-linear-gradient(to bottom, #fdd49a, #fdf59a);
-		background-image: linear-gradient(to bottom, #fdd49a, #fdf59a);
-		background-repeat: repeat-x;
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
-		border-color: #fdf59a #fdf59a #fbed50;
-		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-		color: #000;
-	}
-	.datepicker table tr td.today:hover,
-	.datepicker table tr td.today:hover:hover,
-	.datepicker table tr td.today.disabled:hover,
-	.datepicker table tr td.today.disabled:hover:hover,
-	.datepicker table tr td.today:active,
-	.datepicker table tr td.today:hover:active,
-	.datepicker table tr td.today.disabled:active,
-	.datepicker table tr td.today.disabled:hover:active,
-	.datepicker table tr td.today.active,
-	.datepicker table tr td.today:hover.active,
-	.datepicker table tr td.today.disabled.active,
-	.datepicker table tr td.today.disabled:hover.active,
-	.datepicker table tr td.today.disabled,
-	.datepicker table tr td.today:hover.disabled,
-	.datepicker table tr td.today.disabled.disabled,
-	.datepicker table tr td.today.disabled:hover.disabled,
-	.datepicker table tr td.today[disabled],
-	.datepicker table tr td.today:hover[disabled],
-	.datepicker table tr td.today.disabled[disabled],
-	.datepicker table tr td.today.disabled:hover[disabled] {
-		background-color: #fdf59a;
-	}
-	.datepicker table tr td.today:active,
-	.datepicker table tr td.today:hover:active,
-	.datepicker table tr td.today.disabled:active,
-	.datepicker table tr td.today.disabled:hover:active,
-	.datepicker table tr td.today.active,
-	.datepicker table tr td.today:hover.active,
-	.datepicker table tr td.today.disabled.active,
-	.datepicker table tr td.today.disabled:hover.active {
-		background-color: #fbf069 \9;
-	}
-	.datepicker table tr td.today:hover:hover {
-		color: #000;
-	}
-	.datepicker table tr td.today.active:hover {
-		color: #fff;
-	}
-	.datepicker table tr td.range,
-	.datepicker table tr td.range:hover,
-	.datepicker table tr td.range.disabled,
-	.datepicker table tr td.range.disabled:hover {
-		background: #eeeeee;
-		-webkit-border-radius: 0;
-		-moz-border-radius: 0;
-		border-radius: 0;
-	}
-	.datepicker table tr td.range.today,
-	.datepicker table tr td.range.today:hover,
-	.datepicker table tr td.range.today.disabled,
-	.datepicker table tr td.range.today.disabled:hover {
-		background-color: #f3d17a;
-		background-image: -moz-linear-gradient(to bottom, #f3c17a, #f3e97a);
-		background-image: -ms-linear-gradient(to bottom, #f3c17a, #f3e97a);
-		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
-		background-image: -webkit-linear-gradient(to bottom, #f3c17a, #f3e97a);
-		background-image: -o-linear-gradient(to bottom, #f3c17a, #f3e97a);
-		background-image: linear-gradient(to bottom, #f3c17a, #f3e97a);
-		background-repeat: repeat-x;
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
-		border-color: #f3e97a #f3e97a #edde34;
-		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-		-webkit-border-radius: 0;
-		-moz-border-radius: 0;
-		border-radius: 0;
-	}
-	.datepicker table tr td.range.today:hover,
-	.datepicker table tr td.range.today:hover:hover,
-	.datepicker table tr td.range.today.disabled:hover,
-	.datepicker table tr td.range.today.disabled:hover:hover,
-	.datepicker table tr td.range.today:active,
-	.datepicker table tr td.range.today:hover:active,
-	.datepicker table tr td.range.today.disabled:active,
-	.datepicker table tr td.range.today.disabled:hover:active,
-	.datepicker table tr td.range.today.active,
-	.datepicker table tr td.range.today:hover.active,
-	.datepicker table tr td.range.today.disabled.active,
-	.datepicker table tr td.range.today.disabled:hover.active,
-	.datepicker table tr td.range.today.disabled,
-	.datepicker table tr td.range.today:hover.disabled,
-	.datepicker table tr td.range.today.disabled.disabled,
-	.datepicker table tr td.range.today.disabled:hover.disabled,
-	.datepicker table tr td.range.today[disabled],
-	.datepicker table tr td.range.today:hover[disabled],
-	.datepicker table tr td.range.today.disabled[disabled],
-	.datepicker table tr td.range.today.disabled:hover[disabled] {
-		background-color: #f3e97a;
-	}
-	.datepicker table tr td.range.today:active,
-	.datepicker table tr td.range.today:hover:active,
-	.datepicker table tr td.range.today.disabled:active,
-	.datepicker table tr td.range.today.disabled:hover:active,
-	.datepicker table tr td.range.today.active,
-	.datepicker table tr td.range.today:hover.active,
-	.datepicker table tr td.range.today.disabled.active,
-	.datepicker table tr td.range.today.disabled:hover.active {
-		background-color: #efe24b \9;
-	}
-	.datepicker table tr td.selected,
-	.datepicker table tr td.selected:hover,
-	.datepicker table tr td.selected.disabled,
-	.datepicker table tr td.selected.disabled:hover {
-		background-color: #9e9e9e;
-		background-image: -moz-linear-gradient(to bottom, #b3b3b3, #808080);
-		background-image: -ms-linear-gradient(to bottom, #b3b3b3, #808080);
-		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(#808080));
-		background-image: -webkit-linear-gradient(to bottom, #b3b3b3, #808080);
-		background-image: -o-linear-gradient(to bottom, #b3b3b3, #808080);
-		background-image: linear-gradient(to bottom, #b3b3b3, #808080);
-		background-repeat: repeat-x;
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
-		border-color: #808080 #808080 #595959;
-		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-		color: #fff;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	}
-	.datepicker table tr td.selected:hover,
-	.datepicker table tr td.selected:hover:hover,
-	.datepicker table tr td.selected.disabled:hover,
-	.datepicker table tr td.selected.disabled:hover:hover,
-	.datepicker table tr td.selected:active,
-	.datepicker table tr td.selected:hover:active,
-	.datepicker table tr td.selected.disabled:active,
-	.datepicker table tr td.selected.disabled:hover:active,
-	.datepicker table tr td.selected.active,
-	.datepicker table tr td.selected:hover.active,
-	.datepicker table tr td.selected.disabled.active,
-	.datepicker table tr td.selected.disabled:hover.active,
-	.datepicker table tr td.selected.disabled,
-	.datepicker table tr td.selected:hover.disabled,
-	.datepicker table tr td.selected.disabled.disabled,
-	.datepicker table tr td.selected.disabled:hover.disabled,
-	.datepicker table tr td.selected[disabled],
-	.datepicker table tr td.selected:hover[disabled],
-	.datepicker table tr td.selected.disabled[disabled],
-	.datepicker table tr td.selected.disabled:hover[disabled] {
-		background-color: #808080;
-	}
-	.datepicker table tr td.selected:active,
-	.datepicker table tr td.selected:hover:active,
-	.datepicker table tr td.selected.disabled:active,
-	.datepicker table tr td.selected.disabled:hover:active,
-	.datepicker table tr td.selected.active,
-	.datepicker table tr td.selected:hover.active,
-	.datepicker table tr td.selected.disabled.active,
-	.datepicker table tr td.selected.disabled:hover.active {
-		background-color: #666666 \9;
-	}
-	.datepicker table tr td.active,
-	.datepicker table tr td.active:hover,
-	.datepicker table tr td.active.disabled,
-	.datepicker table tr td.active.disabled:hover {
-		background-color: #006dcc;
-		background-image: -moz-linear-gradient(to bottom, #0088cc, #0044cc);
-		background-image: -ms-linear-gradient(to bottom, #0088cc, #0044cc);
-		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
-		background-image: -webkit-linear-gradient(to bottom, #0088cc, #0044cc);
-		background-image: -o-linear-gradient(to bottom, #0088cc, #0044cc);
-		background-image: linear-gradient(to bottom, #0088cc, #0044cc);
-		background-repeat: repeat-x;
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
-		border-color: #0044cc #0044cc #002a80;
-		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-		color: #fff;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	}
-	.datepicker table tr td.active:hover,
-	.datepicker table tr td.active:hover:hover,
-	.datepicker table tr td.active.disabled:hover,
-	.datepicker table tr td.active.disabled:hover:hover,
-	.datepicker table tr td.active:active,
-	.datepicker table tr td.active:hover:active,
-	.datepicker table tr td.active.disabled:active,
-	.datepicker table tr td.active.disabled:hover:active,
-	.datepicker table tr td.active.active,
-	.datepicker table tr td.active:hover.active,
-	.datepicker table tr td.active.disabled.active,
-	.datepicker table tr td.active.disabled:hover.active,
-	.datepicker table tr td.active.disabled,
-	.datepicker table tr td.active:hover.disabled,
-	.datepicker table tr td.active.disabled.disabled,
-	.datepicker table tr td.active.disabled:hover.disabled,
-	.datepicker table tr td.active[disabled],
-	.datepicker table tr td.active:hover[disabled],
-	.datepicker table tr td.active.disabled[disabled],
-	.datepicker table tr td.active.disabled:hover[disabled] {
-		background-color: #0044cc;
-	}
-	.datepicker table tr td.active:active,
-	.datepicker table tr td.active:hover:active,
-	.datepicker table tr td.active.disabled:active,
-	.datepicker table tr td.active.disabled:hover:active,
-	.datepicker table tr td.active.active,
-	.datepicker table tr td.active:hover.active,
-	.datepicker table tr td.active.disabled.active,
-	.datepicker table tr td.active.disabled:hover.active {
-		background-color: #003399 \9;
-	}
-	.datepicker table tr td span {
-		display: block;
-		width: 23%;
-		height: 54px;
-		line-height: 54px;
-		float: left;
-		margin: 1%;
-		cursor: pointer;
-		-webkit-border-radius: 4px;
-		-moz-border-radius: 4px;
-		border-radius: 4px;
-	}
-	.datepicker table tr td span:hover {
-		background: #eeeeee;
-	}
-	.datepicker table tr td span.disabled,
-	.datepicker table tr td span.disabled:hover {
-		background: none;
-		color: #999999;
-		cursor: default;
-	}
-	.datepicker table tr td span.active,
-	.datepicker table tr td span.active:hover,
-	.datepicker table tr td span.active.disabled,
-	.datepicker table tr td span.active.disabled:hover {
-		background-color: #006dcc;
-		background-image: -moz-linear-gradient(to bottom, #0088cc, #0044cc);
-		background-image: -ms-linear-gradient(to bottom, #0088cc, #0044cc);
-		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
-		background-image: -webkit-linear-gradient(to bottom, #0088cc, #0044cc);
-		background-image: -o-linear-gradient(to bottom, #0088cc, #0044cc);
-		background-image: linear-gradient(to bottom, #0088cc, #0044cc);
-		background-repeat: repeat-x;
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
-		border-color: #0044cc #0044cc #002a80;
-		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-		color: #fff;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	}
-	.datepicker table tr td span.active:hover,
-	.datepicker table tr td span.active:hover:hover,
-	.datepicker table tr td span.active.disabled:hover,
-	.datepicker table tr td span.active.disabled:hover:hover,
-	.datepicker table tr td span.active:active,
-	.datepicker table tr td span.active:hover:active,
-	.datepicker table tr td span.active.disabled:active,
-	.datepicker table tr td span.active.disabled:hover:active,
-	.datepicker table tr td span.active.active,
-	.datepicker table tr td span.active:hover.active,
-	.datepicker table tr td span.active.disabled.active,
-	.datepicker table tr td span.active.disabled:hover.active,
-	.datepicker table tr td span.active.disabled,
-	.datepicker table tr td span.active:hover.disabled,
-	.datepicker table tr td span.active.disabled.disabled,
-	.datepicker table tr td span.active.disabled:hover.disabled,
-	.datepicker table tr td span.active[disabled],
-	.datepicker table tr td span.active:hover[disabled],
-	.datepicker table tr td span.active.disabled[disabled],
-	.datepicker table tr td span.active.disabled:hover[disabled] {
-		background-color: #0044cc;
-	}
-	.datepicker table tr td span.active:active,
-	.datepicker table tr td span.active:hover:active,
-	.datepicker table tr td span.active.disabled:active,
-	.datepicker table tr td span.active.disabled:hover:active,
-	.datepicker table tr td span.active.active,
-	.datepicker table tr td span.active:hover.active,
-	.datepicker table tr td span.active.disabled.active,
-	.datepicker table tr td span.active.disabled:hover.active {
-		background-color: #003399 \9;
-	}
-	.datepicker table tr td span.old,
-	.datepicker table tr td span.new {
-		color: #999999;
-	}
-	.datepicker .datepicker-switch {
-		width: 145px;
-	}
-	.datepicker .datepicker-switch,
-	.datepicker .prev,
-	.datepicker .next,
-	.datepicker tfoot tr th {
-		cursor: pointer;
-	}
-	.datepicker .datepicker-switch:hover,
-	.datepicker .prev:hover,
-	.datepicker .next:hover,
-	.datepicker tfoot tr th:hover {
-		background: #eeeeee;
-	}
-	.datepicker .cw {
-		font-size: 10px;
-		width: 12px;
-		padding: 0 2px 0 5px;
-		vertical-align: middle;
-	}
-	.input-append.date .add-on,
-	.input-prepend.date .add-on {
-		cursor: pointer;
-	}
-	.input-append.date .add-on i,
-	.input-prepend.date .add-on i {
-		margin-top: 3px;
-	}
-	.input-daterange input {
-		text-align: center;
-	}
-	.input-daterange input:first-child {
-		-webkit-border-radius: 3px 0 0 3px;
-		-moz-border-radius: 3px 0 0 3px;
-		border-radius: 3px 0 0 3px;
-	}
-	.input-daterange input:last-child {
-		-webkit-border-radius: 0 3px 3px 0;
-		-moz-border-radius: 0 3px 3px 0;
-		border-radius: 0 3px 3px 0;
-	}
-	.input-daterange .add-on {
-		display: inline-block;
-		width: auto;
-		min-width: 16px;
-		height: 18px;
-		padding: 4px 5px;
-		font-weight: normal;
-		line-height: 18px;
-		text-align: center;
-		text-shadow: 0 1px 0 #ffffff;
-		vertical-align: middle;
-		background-color: #eeeeee;
-		border: 1px solid #ccc;
-		margin-left: -5px;
-		margin-right: -5px;
-	}
-
-</style>
+	</style>
 
 @endsection
 
@@ -2383,6 +2172,452 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
 	<script type="text/javascript">
+
+		$(".appointment_type").change(function () {
+
+			var type = $(this).val();
+
+			if(type == 1)
+			{
+				$('.appointment_customer_box').hide();
+				$('.appointment_quotation_number_box').show();
+
+				$('.appointment_client').val('');
+				$('.appointment_client').trigger('change.select2');
+			}
+			else
+			{
+				$('.appointment_quotation_number_box').hide();
+				$('.appointment_customer_box').show();
+
+				$('.appointment_quotation_number').val('');
+				$('.appointment_quotation_number').trigger('change.select2');
+			}
+
+		});
+
+		$(".submit_appointmentForm").click(function () {
+
+			var validation = $('#addAppointmentModal').find('.modal-body').find('.validation_required');
+
+			var flag = 0;
+
+			var title = $('.appointment_title').val();
+			var event_type = $('.appointment_type').val();
+			var appointment_quotation_id = $('.appointment_quotation_number').val();
+			var customer_id = $('.appointment_client').val();
+
+			if (!title) {
+				flag = 1;
+				$('.appointment_title_box .select2-container--default .select2-selection--single').css('border-color', 'red');
+			}
+			else {
+				$('.appointment_title_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+			}
+
+			if(event_type == 1)
+			{
+				if(!appointment_quotation_id)
+				{
+					flag = 1;
+					$('.appointment_quotation_number_box .select2-container--default .select2-selection--single').css('border-color', 'red');
+				}
+				else
+				{
+					$('.appointment_quotation_number_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+				}
+			}
+			else
+			{
+				if(!customer_id)
+				{
+					flag = 1;
+					$('.appointment_customer_box .select2-container--default .select2-selection--single').css('border-color', 'red');
+				}
+				else
+				{
+					$('.appointment_customer_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+				}
+			}
+
+			$(validation).each(function(){
+
+				if(!$(this).val())
+				{
+					$(this).css('border','1px solid red');
+					flag = 1;
+				}
+				else
+				{
+					$(this).css('border','');
+				}
+
+			});
+
+			if(!flag)
+			{
+				var id = $('#event_id').val();
+				var appointment_start = $('.appointment_start').val();
+				var appointment_end = $('.appointment_end').val();
+				var format_start = new Date(appointment_start);
+				var format_end = new Date(appointment_end);
+				var appointment_desc = $('.appointment_description').val();
+				var appointment_tags = $('.appointment_tags').val();
+
+				if (format_start <= format_end){
+
+					$('.appointment_end').css('border','');
+
+					var appointments = $('.appointment_data').val();
+
+					if(appointments)
+					{
+						var data_array = JSON.parse(appointments);
+					}
+					else
+					{
+						var data_array = [];
+					}
+
+					if(id)
+					{
+						var event = calendar.getEventById(id);
+						event.setDates(appointment_start,appointment_end);
+						event.setExtendedProp('quotation_id', appointment_quotation_id);
+						event.setExtendedProp('event_type', event_type);
+						event.setExtendedProp('retailer_client_id', customer_id);
+						event.setProp('title', title);
+						event.setExtendedProp('description',appointment_desc);
+						event.setExtendedProp('tags',appointment_tags);
+					}
+					else
+					{
+						var id = parseInt($('.appointment_id').val());
+						$('.appointment_id').val(id+1);
+
+						if(appointment_quotation_id == 0)
+						{
+							var color = '#3788d8';
+						}
+						else
+						{
+							var color = 'green';
+						}
+
+						calendar.addEvent({
+							id: id,
+							quotation_id: appointment_quotation_id,
+							title: title,
+							start: appointment_start,
+							end: appointment_end,
+							description: appointment_desc,
+							tags: appointment_tags,
+							color: color,
+							event_type: event_type,
+							retailer_client_id: customer_id,
+						});
+
+						var obj = {};
+						obj['id'] = id;
+						obj['quotation_id'] = appointment_quotation_id;
+						obj['title'] = title;
+						obj['start'] = appointment_start;
+						obj['end'] = appointment_end;
+						obj['description'] = appointment_desc;
+						obj['tags'] = appointment_tags;
+						obj['new'] = 1;
+						obj['default_event'] = 0;
+						obj['event_type'] = event_type;
+						obj['retailer_client_id'] = customer_id;
+						data_array.push(obj);
+
+						$('.appointment_data').val(JSON.stringify(data_array));
+					}
+
+					$('#addAppointmentModal').modal('toggle');
+					$('#myModal3').modal('toggle');
+					$('#event_id').val('');
+					$('.appointment_quotation_number').val('');
+					$('.appointment_title').val('');
+					$('.appointment_start').val('');
+					$('.appointment_end').val('');
+					$('.appointment_description').val('');
+					$('.appointment_client').val('');
+					$('.appointment_tags').tagsinput('removeAll');
+					$('.appointment_title').trigger('change.select2');
+					$('.appointment_quotation_number').trigger('change.select2');
+					$('.appointment_client').trigger('change.select2');
+
+				}
+				else
+				{
+					$('.appointment_end').css('border','1px solid red');
+				}
+			}
+
+			return false;
+
+		});
+
+		$('#myModal3').on('shown.bs.modal', function () {
+
+			$('body').addClass('modal-open');
+
+		});
+
+		$(".appointment_tags").tagsinput('items');
+
+		$(".add-appointment").click(function () {
+
+			$('.appointment_title').attr('disabled',false);
+			$('.appointment_quotation_number').attr('disabled',false);
+			$('.appointment_type').attr('disabled',false);
+			// $('.submit_appointmentForm').show();
+			$('#event_id').val('');
+			$('.appointment_quotation_number').val('');
+			$('.appointment_title').val('');
+			$('.appointment_start').val('');
+			$('.appointment_end').val('');
+			$('.appointment_description').val('');
+			$('.appointment_client').val('');
+			$('.appointment_tags').tagsinput('removeAll');
+			$('.appointment_title').trigger('change.select2');
+			$('.appointment_quotation_number').trigger('change.select2');
+			$('.appointment_type').trigger('change.select2');
+			$('.appointment_client').trigger('change.select2');
+
+			$('#myModal3').modal('toggle');
+			$('#addAppointmentModal').modal('toggle');
+
+		});
+
+		function edit_appointment(id)
+		{
+			var event = calendar.getEventById(id);
+			var quotation_id = $('input[name="quotation_id"]').val();
+			var appointment_quotation_id = event._def.extendedProps.quotation_id;
+			var title = event.title;
+			var description = event._def.extendedProps.description;
+			var tags = event._def.extendedProps.tags;
+			var start = moment(event.start).format('YYYY-MM-DD HH:mm');
+			var end = event.end ? moment(event.end).format('YYYY-MM-DD HH:mm') : start;
+			var event_type = event._def.extendedProps.event_type;
+			var retailer_client_id = event._def.extendedProps.retailer_client_id;
+
+			if(quotation_id == appointment_quotation_id)
+			{
+				quotation_id = 0;
+			}
+			else
+			{
+				quotation_id = appointment_quotation_id;
+			}
+
+			$('#event_id').val(id);
+			$('.appointment_quotation_number').val(quotation_id);
+			$('.appointment_title').val(title);
+			$('.appointment_start').val(start);
+			$('.appointment_end').val(end);
+			$('.appointment_description').val(description);
+			$('.appointment_tags').tagsinput('removeAll');
+			$('.appointment_tags').tagsinput('add',tags);
+			$('.appointment_type').val(event_type);
+			$('.appointment_client').val(retailer_client_id);
+
+			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
+			{
+				$('.appointment_title').attr('disabled',false);
+				$('.appointment_quotation_number').attr('disabled',false);
+				$('.appointment_type').attr('disabled',false);
+			}
+			else
+			{
+				$('.appointment_title').attr('disabled',true);
+				$('.appointment_quotation_number').attr('disabled',true);
+				$('.appointment_type').attr('disabled',true);
+				// $('.submit_appointmentForm').show();
+			}
+
+			$('.appointment_title').trigger('change.select2');
+			$('.appointment_quotation_number').trigger('change.select2');
+			$('.appointment_type').trigger('change.select2');
+			$('.appointment_client').trigger('change.select2');
+			$('.appointment_type').trigger('change');
+
+			$('#myModal3').modal('toggle');
+			$('#addAppointmentModal').modal('toggle');
+		}
+
+		function remove_appointment(id)
+		{
+			var event = calendar.getEventById(id);
+
+			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
+			{
+				event.remove();
+				var appointments = $('.appointment_data').val();
+
+				if(appointments)
+				{
+					appointments = JSON.parse(appointments);
+				}
+				else
+				{
+					appointments = [];
+				}
+
+				for(var i = 0; i < appointments.length; i++) {
+					if(appointments[i].id == id) {
+						appointments.splice(i, 1);
+						break;
+					}
+				}
+
+				if(jQuery.isEmptyObject(appointments))
+				{
+					$('.appointment_data').val('');
+				}
+				else
+				{
+					$('.appointment_data').val(JSON.stringify(appointments));
+				}
+			}
+		}
+
+		$('#myModal3').on('shown.bs.modal', function () {
+
+			calendar.render();
+
+		});
+
+		var calendar = '';
+
+		document.addEventListener('DOMContentLoaded', function() {
+
+			var calendarEl = document.getElementById('calendar');
+
+			calendar = new FullCalendar.Calendar(calendarEl, {
+				headerToolbar: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'dayGridMonth,timeGridWeek,timeGridDay'
+				},
+				initialDate: new Date(),
+				navLinks: true, // can click day/week names to navigate views
+				selectable: true,
+				selectMirror: true,
+				select: function(arg) {
+
+					$(".add-appointment").trigger("click");
+					calendar.unselect()
+				},
+				eventChange: function(arg) {
+
+					var default_event = arg.event._def.extendedProps.default_event;
+					var quotation_id = arg.event._def.extendedProps.quotation_id;
+					var title = arg.event._def.title;
+					var description = arg.event._def.extendedProps.description;
+					var tags = arg.event._def.extendedProps.tags;
+					var start = new Date(arg.event._instance.range.start.toLocaleString('en-US', { timeZone: 'UTC' }));
+					var end = new Date(arg.event._instance.range.end.toLocaleString('en-US', { timeZone: 'UTC' }));
+					var retailer_client_id = arg.event._def.extendedProps.retailer_client_id;
+					var event_type = arg.event._def.extendedProps.event_type;
+
+					var start_date = new Date(start);
+					var curr_date = (start_date.getDate()<10?'0':'') + start_date.getDate();
+					var curr_month = start_date.getMonth() + 1;
+					curr_month = (curr_month<10?'0':'') + curr_month;
+					var curr_year = start_date.getFullYear();
+					var hour = (start_date.getHours()<10?'0':'') + start_date.getHours();
+					var minute = (start_date.getMinutes()<10?'0':'') + start_date.getMinutes();
+					start = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute;
+
+					var end_date = new Date(end);
+					var curr_date = (end_date.getDate()<10?'0':'') + end_date.getDate();
+					var curr_month = end_date.getMonth() + 1;
+					curr_month = (curr_month<10?'0':'') + curr_month;
+					var curr_year = end_date.getFullYear();
+					var hour = (end_date.getHours()<10?'0':'') + end_date.getHours();
+					var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
+					end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute;
+
+					if(arg.event._def.ui.classNames == 'delivery_date')
+					{
+						var delivery_data = [start,end,description,tags];
+						delivery_data = JSON.stringify(delivery_data);
+						$('.delivery_date').val(delivery_data);
+					}
+					else if(arg.event._def.ui.classNames == 'installation_date')
+					{
+						var installation_data = [start,end,description,tags];
+						installation_data = JSON.stringify(installation_data);
+						$('.installation_date').val(installation_data);
+					}
+					else
+					{
+						var id = arg.event._def.publicId;
+						var data = $('.appointment_data').val();
+						var appointments = data ? JSON.parse(data) : '';
+
+						for(var i = 0; i < appointments.length; i++) {
+
+							if(appointments[i].id == id) {
+
+								appointments[i]['title'] = title;
+								appointments[i]['start'] = start;
+								appointments[i]['end'] = end;
+								appointments[i]['description'] = description;
+								appointments[i]['tags'] = tags;
+								appointments[i]['default_event'] = default_event;
+								appointments[i]['quotation_id'] = quotation_id;
+								appointments[i]['event_type'] = event_type;
+								appointments[i]['retailer_client_id'] = retailer_client_id;
+
+								$('.appointment_data').val(JSON.stringify(appointments));
+								break;
+							}
+
+						}
+					}
+
+				},
+				eventContent: function (arg) {
+
+				},
+				eventDidMount: function (arg)
+				{
+					var actualAppointment = $(arg.el);
+					var event = arg.event;
+
+					if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
+					{
+						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
+					}
+					else
+					{
+						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '</div>';
+					}
+
+					actualAppointment.append(buttonsHtml);
+
+					actualAppointment.find(".edit-event").on('click', function () {
+						edit_appointment(event.id);
+					});
+
+					actualAppointment.find(".remove-event").on('click', function () {
+						remove_appointment(event.id);
+					});
+				},
+				eventClick: function(arg) {
+
+				},
+				displayEventEnd: true,
+				editable: true,
+				dayMaxEvents: true, // allow "more" link when too many events
+				events: {!! $current_appointments !!},
+			});
+
+		});
 
 		function initMap() {
 
@@ -2627,18 +2862,66 @@
 			// 	$("#myModal").modal('hide');
 			// });
 
-			$('.delivery_date').datepicker({
-
-				format: 'dd-mm-yyyy',
-				startDate: new Date(),
-
+			$(".appointment_title").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Event Title')}}",
+				allowClear: true,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
 			});
 
-			$('.installation_date').datepicker({
+			$(".appointment_type").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Event Type')}}",
+				allowClear: false,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
 
-				format: 'dd-mm-yyyy',
-				startDate: new Date(),
+			$(".appointment_quotation_number").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Quotation')}}",
+				allowClear: false,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
 
+			$(".appointment_client").select2({
+				width: '100%',
+				height: '200px',
+				placeholder: "{{__('text.Select Customer')}}",
+				allowClear: false,
+				"language": {
+					"noResults": function () {
+						return '{{__('text.No results found')}}';
+					}
+				},
+			});
+
+			$('.appointment_start').datetimepicker({
+				format: 'YYYY-MM-DD HH:mm',
+				defaultDate: new Date(),
+				ignoreReadonly: true,
+				sideBySide: true,
+			});
+
+			$('.appointment_end').datetimepicker({
+				format: 'YYYY-MM-DD HH:mm',
+				defaultDate: new Date(),
+				ignoreReadonly: true,
+				sideBySide: true,
 			});
 
 			$(".js-data-example-ajax").select2({
@@ -6149,5 +6432,8 @@
 
 		});
 	</script>
+
+	<link href="{{asset('assets/admin/css/main.css')}}" rel="stylesheet">
+	<link href="{{asset('assets/admin/css/bootstrap-tagsinput.css')}}" rel="stylesheet">
 
 @endsection

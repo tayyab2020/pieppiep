@@ -181,7 +181,41 @@ class UserController extends Controller
                 $suppliers = array();*/
             }
 
-            return view('user.create_new_quotation1', compact('products','customers','suppliers'));
+            date_default_timezone_set('Europe/Amsterdam');
+            $date = date('Y-m-d H:i');
+            $next_hour_date = date("Y-m-d H:i", strtotime("+1 hours"));
+
+            if(date("d-m-Y", strtotime($date)) != date("d-m-Y", strtotime($next_hour_date))) //check if after next one hour if its same day or not (for delivery date to be in same day because of one hour default range in fullcalendar)
+            {
+                $date = $next_hour_date;
+            }
+
+            $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
+            $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => NULL, 'tags' => NULL, 'default_event' => 1, 'retailer_client_id' => NULL,'event_type' => 1],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => NULL, 'tags' => NULL, 'default_event' => 1, 'retailer_client_id' => NULL,'event_type' => 1]];
+            $appointments = json_encode($appointments);
+
+            $other_appointments = quotation_appointments::where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event','retailer_client_id','event_type')->get();
+
+            foreach($other_appointments as $row) {
+
+                $row->classNames = 'other';
+                /*$row->editable = false;
+                $row->droppable = false;
+                $row->eventStartEditable = false;
+                $row->eventResizableFromStart = false;
+                $row->eventDurationEditable = false;*/
+                $row->color = 'green';
+
+            }
+
+            $other_appointments = json_encode($other_appointments);
+
+            $current_appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
+
+            $event_titles = planning_titles::where('user_id',$user_id)->get();
+            $quotation_ids = new_quotations::where('creator_id',$user_id)->select('id','quotation_invoice_number')->get();
+
+            return view('user.create_new_quotation1', compact('last_event_id','quotation_ids','event_titles','current_appointments','products','customers','suppliers'));
         }
         else
         {
@@ -3760,54 +3794,57 @@ class UserController extends Controller
                 }
             }
 
+            if($user_role == 2)
+            {
+                $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
+                $appointments = quotation_appointments::where('quotation_id',$id)->select('id','quotation_id','title','start','end','description','tags','default_event','retailer_client_id','event_type')->get();
+                $other_appointments = quotation_appointments::where('quotation_id','!=',$id)->where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event','retailer_client_id','event_type')->get();
+
+                foreach($appointments as $i => $app) {
+
+                    if($app->title == 'Delivery Date' && $app->default_event)
+                    {
+                        $app->id = '1a';
+                        $app->classNames = 'delivery_date';
+                    }
+                    elseif($app->title == 'Installation Date' && $app->default_event)
+                    {
+                        $app->id = '1b';
+                        $app->classNames = 'installation_date';
+                    }
+                    else
+                    {
+                        $app->classNames = '';
+                    }
+
+                }
+
+                foreach($other_appointments as $row) {
+
+                    $row->classNames = 'other';
+//                        $row->editable = false;
+//                        $row->droppable = false;
+//                        $row->eventStartEditable = false;
+//                        $row->eventResizableFromStart = false;
+//                        $row->eventDurationEditable = false;
+                    $row->color = 'green';
+
+                }
+
+                $appointments = json_encode($appointments);
+                $other_appointments = json_encode($other_appointments);
+
+                $current_appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
+                $event_titles = planning_titles::where('user_id',$user_id)->get();
+                $quotation_ids = new_quotations::where('creator_id',$user_id)->where('id','!=',$id)->select('id','quotation_invoice_number')->get();
+            }
+
             if($check->form_type == 1)
             {
                 if($user_role == 2)
                 {
                     $services = Service::leftjoin('retailer_services', 'retailer_services.service_id', '=', 'services.id')->where('retailer_services.retailer_id', $user_id)->select('services.*','retailer_services.sell_rate as rate')->get();
                     $items = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.user_id',$user_id)->select('items.*','categories.cat_name as category')->get();
-
-                    $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
-                    $appointments = quotation_appointments::where('quotation_id',$id)->select('id','quotation_id','title','start','end','description','tags','default_event','retailer_client_id','event_type')->get();
-                    $other_appointments = quotation_appointments::where('quotation_id','!=',$id)->where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event','retailer_client_id','event_type')->get();
-
-                    foreach($appointments as $i => $app) {
-
-                        if($app->title == 'Delivery Date' && $app->default_event)
-                        {
-                            $app->id = '1a';
-                            $app->classNames = 'delivery_date';
-                        }
-                        elseif($app->title == 'Installation Date' && $app->default_event)
-                        {
-                            $app->id = '1b';
-                            $app->classNames = 'installation_date';
-                        }
-                        else
-                        {
-                            $app->classNames = '';
-                        }
-
-                    }
-
-                    foreach($other_appointments as $row) {
-
-                        $row->classNames = 'other';
-//                        $row->editable = false;
-//                        $row->droppable = false;
-//                        $row->eventStartEditable = false;
-//                        $row->eventResizableFromStart = false;
-//                        $row->eventDurationEditable = false;
-                        $row->color = 'green';
-
-                    }
-
-                    $appointments = json_encode($appointments);
-                    $other_appointments = json_encode($other_appointments);
-
-                    $current_appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
-                    $event_titles = planning_titles::where('user_id',$user_id)->get();
-                    $quotation_ids = new_quotations::where('creator_id',$user_id)->where('id','!=',$id)->select('id','quotation_invoice_number')->get();
 
                     return view('user.create_custom_quote1', compact('last_event_id','quotation_ids','event_titles','current_appointments','products','product_titles','item_titles','service_titles','color_titles','model_titles','product_suppliers','features','sub_features','customers','invoice','sub_products','services','items'));
                 }
@@ -3818,7 +3855,7 @@ class UserController extends Controller
             }
             else
             {
-                return view('user.create_new_quotation1', compact('products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
+                return view('user.create_new_quotation1', compact('last_event_id','quotation_ids','event_titles','current_appointments','products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
             }
         }
         else
