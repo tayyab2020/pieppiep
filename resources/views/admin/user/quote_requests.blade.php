@@ -55,7 +55,7 @@
 
                                                             <?php $requested_quote_number = $key->quote_number; ?>
 
-                                                            <td><a href="{{ url('/logstof/handyman-quotations/'.$key->id) }}">{{$requested_quote_number}}</a></td>
+                                                            <td><a href="{{ url('/logstof/retailer-quotations/'.$key->id) }}">{{$requested_quote_number}}</a></td>
 
                                                             <td>{{$key->quotations_count}}</td>
 
@@ -117,7 +117,7 @@
                                                                         <span class="caret"></span></button>
                                                                     <ul class="dropdown-menu">
                                                                         <li><a href="{{ url('/logstof/view-quote-request/'.$key->id) }}">View</a></li>
-                                                                        <li><a href="{{ url('/logstof/handyman-quotations/'.$key->id) }}">View Quotations</a></li>
+                                                                        <li><a href="{{ url('/logstof/retailer-quotations/'.$key->id) }}">View Quotations</a></li>
                                                                         <li><a href="{{ url('/logstof/download-quote-request/'.$key->id) }}">Download PDF</a></li>
 
                                                                         @if($key->status != 3)

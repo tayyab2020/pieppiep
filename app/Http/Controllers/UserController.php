@@ -4966,6 +4966,7 @@ class UserController extends Controller
 
                     $invoice = new_invoices::where('id',$request->quotation_id)->first();
                     $invoice_number = $invoice->invoice_number;
+                    $quotation_id = new_invoices::where('id',$request->quotation_id)->pluck('quotation_id')->first();
                 }
                 else
                 {
@@ -5010,11 +5011,13 @@ class UserController extends Controller
                         $invoice = $org_invoice_data->replicate();
                         $invoice->setTable('new_invoices');
                         $invoice->save();
+                        $quotation_id = new_invoices::where('id',$request->quotation_id)->pluck('quotation_id')->first();
                     }
                     else
                     {
                         $invoice = new_negative_invoices::where('id',$request->negative_invoice_id)->first();
                         $invoice_number = $invoice->invoice_number;
+                        $quotation_id = new_negative_invoices::where('id',$request->negative_invoice_id)->pluck('quotation_id')->first();
                     }
 
                     $data_ids = new_invoices_data::where('invoice_id',$request->negative_invoice_id)->pluck('id');
@@ -5067,16 +5070,17 @@ class UserController extends Controller
 
                 $invoice = new_quotations::where('id',$request->quotation_id)->first();
                 $quotation_invoice_number = $invoice->quotation_invoice_number;
+                $quotation_id = $request->quotation_id;
             }
 
-            $check_delivery = quotation_appointments::where('quotation_id',$request->quotation_id)->where('title','Delivery Date')->where('default_event',1)->first();
+            $check_delivery = quotation_appointments::where('quotation_id',$quotation_id)->where('title','Delivery Date')->where('default_event',1)->first();
             $check_delivery->start = $delivery_date_start;
             $check_delivery->end = $delivery_date_end;
             $check_delivery->description = $delivery_desc;
             $check_delivery->tags = $delivery_tags;
             $check_delivery->save();
 
-            $check_installation = quotation_appointments::where('quotation_id',$request->quotation_id)->where('title','Installation Date')->where('default_event',1)->first();
+            $check_installation = quotation_appointments::where('quotation_id',$quotation_id)->where('title','Installation Date')->where('default_event',1)->first();
             $check_installation->start = $installation_date_start;
             $check_installation->end = $installation_date_end;
             $check_installation->description = $installation_desc;
@@ -5092,7 +5096,7 @@ class UserController extends Controller
                 foreach($appointments_data as $key)
                 {
                     $is_new_event = isset($key['new']) ? true : false;
-                    $appointment_quotation_id = $key['quotation_id'] == 0 ? $request->quotation_id : ($key['quotation_id'] ? $key['quotation_id'] : NULL);
+                    $appointment_quotation_id = $key['quotation_id'] == 0 ? $quotation_id : ($key['quotation_id'] ? $key['quotation_id'] : NULL);
 
                     if(!$is_new_event)
                     {
