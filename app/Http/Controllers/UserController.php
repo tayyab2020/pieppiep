@@ -1589,9 +1589,11 @@ class UserController extends Controller
         $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
         $user = $invoice[0];
         $client = '';
+        $delivery_date = date('d-m-Y',strtotime($request->delivery_date)) . ' - ' . date('d-m-Y',strtotime($request->delivery_date_end));
+        $installation_date = date('d-m-Y',strtotime($request->installation_date)) . ' - ' . date('d-m-Y',strtotime($request->installation_date_end));
 
         $request->products = $request->data;
-        $request->retailer_delivery_date = $request->delivery_date;
+        // $request->retailer_delivery_date = $request->delivery_date;
         $request->total_amount = $request->grand_total;
 
         foreach ($request->products as $i => $key) {
@@ -1656,7 +1658,7 @@ class UserController extends Controller
         $form_type = 1;
         $re_edit = 1;
 
-        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('re_edit','form_type','role','product_titles','color_titles','model_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('delivery_date','installation_date','re_edit','form_type','role','product_titles','color_titles','model_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
         $file = public_path() . '/assets/newQuotations/' . $filename;
         $pdf->save($file);
 
@@ -1746,9 +1748,11 @@ class UserController extends Controller
         $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
         $user = $invoice[0];
         $client = '';
+        $delivery_date = date('d-m-Y',strtotime($request->delivery_date)) . ' - ' . date('d-m-Y',strtotime($request->delivery_date_end));
+        $installation_date = date('d-m-Y',strtotime($request->installation_date)) . ' - ' . date('d-m-Y',strtotime($request->installation_date_end));
 
         $request->products = $request->data;
-        $request->retailer_delivery_date = $request->delivery_date;
+        // $request->retailer_delivery_date = $request->delivery_date;
         $request->total_amount = $request->grand_total;
 
         foreach ($request->products as $i => $key) {
@@ -1813,7 +1817,7 @@ class UserController extends Controller
         $form_type = 1;
         $re_edit = 1;
 
-        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('re_edit','form_type','role','product_titles','color_titles','model_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+        $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('delivery_date','installation_date','re_edit','form_type','role','product_titles','color_titles','model_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
         $file = public_path() . '/assets/newQuotations/' . $filename;
         $pdf->save($file);
 
@@ -5918,6 +5922,9 @@ class UserController extends Controller
             }
         }
 
+        $delivery_date = date('d-m-Y',strtotime($delivery_date_start)) . ' - ' . date('d-m-Y',strtotime($delivery_date_end));
+        $installation_date = date('d-m-Y',strtotime($installation_date_start)) . ' - ' . date('d-m-Y',strtotime($installation_date_end));
+
         if(!$request->is_invoice)
         {
             $filename = $quotation_invoice_number . '.pdf';
@@ -5951,7 +5958,7 @@ class UserController extends Controller
             $date = $invoice->created_at;
             $role = 'retailer';
 
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('delivery_date','installation_date','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             $file = public_path() . '/assets/newQuotations/' . $filename;
             $pdf->save($file);
 
@@ -5986,7 +5993,7 @@ class UserController extends Controller
 
             if(!$request->negative_invoice)
             {
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('delivery_date','installation_date','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
                 $file = public_path() . '/assets/newInvoices/' . $filename;
                 $pdf->save($file);
 
@@ -5994,7 +6001,7 @@ class UserController extends Controller
             }
             else
             {
-                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+                $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('delivery_date','installation_date','form_type','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
                 $file = public_path() . '/assets/newNegativeInvoices/' . $filename;
                 $pdf->save($file);
 
@@ -7022,6 +7029,8 @@ class UserController extends Controller
 
             $request = new_quotations::where('id',$invoice_id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
             $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
+            $delivery_date = date('d-m-Y',strtotime($request->delivery_date)) . ' - ' . date('d-m-Y',strtotime($request->delivery_date_end));
+            $installation_date = date('d-m-Y',strtotime($request->installation_date)) . ' - ' . date('d-m-Y',strtotime($request->installation_date_end));
 
             $product_titles = array();
             $color_titles = array();
@@ -7160,7 +7169,7 @@ class UserController extends Controller
             $role = 'invoice';
             $form_type = $request->form_type;
 
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('delivery_date','installation_date','form_type','role','comments','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number','order_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             $pdf->save($file);
 
             $counter_invoice = $counter_invoice + 1;

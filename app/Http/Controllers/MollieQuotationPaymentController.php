@@ -74,6 +74,8 @@ class MollieQuotationPaymentController extends Controller {
 
             $request = new_quotations::leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $data->invoice_id)->where('new_quotations.quote_request_id', $data->quote_id)->with('data')->select('new_quotations.*','new_quotations.tax_amount as tax','new_quotations.description as other_info','users.compressed_photo', 'users.quotation_prefix', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->first();
             $user = $request;
+            $delivery_date = date('d-m-Y',strtotime($request->delivery_date)) . ' - ' . date('d-m-Y',strtotime($request->delivery_date_end));
+            $installation_date = date('d-m-Y',strtotime($request->installation_date)) . ' - ' . date('d-m-Y',strtotime($request->installation_date_end));
 
             $client = new \stdClass();
             $client->address = $quote->quote_zipcode;
@@ -84,7 +86,7 @@ class MollieQuotationPaymentController extends Controller {
             $client->email = $quote->quote_email;
 
             $request->products = $request->data;
-            $request->retailer_delivery_date = $request->delivery_date;
+            // $request->retailer_delivery_date = $request->delivery_date;
             $request->total_amount = $request->grand_total;
 
             foreach ($request->products as $i => $key) {
@@ -152,12 +154,12 @@ class MollieQuotationPaymentController extends Controller {
             $form_type = 1;
             $re_edit = 1;
 
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('re_edit','form_type','role','product_titles','color_titles','model_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('delivery_date','installation_date','re_edit','form_type','role','product_titles','color_titles','model_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             $file = public_path() . '/assets/newQuotations/' . $filename;
             $pdf->save($file);
 
             $customer_quotation = 1;
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('customer_quotation','service_fee','form_type','role','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('delivery_date','installation_date','customer_quotation','service_fee','form_type','role','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
             $file1 = public_path() . '/assets/newQuotations/CustomerQuotations/' . $filename;
             $pdf->save($file1);
 

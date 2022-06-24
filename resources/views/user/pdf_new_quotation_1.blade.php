@@ -662,7 +662,7 @@
                                                     <td style="width: 40%;padding: 5px;">
                                                         <div style="display: inline-block;width: 100%;">
                                                             <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Invoer:</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$request->retailer_delivery_date ? date('d-m-Y',strtotime($request->retailer_delivery_date)) : null}} @endif</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$delivery_date}} @endif</span>
                                                         </div>
                                                     </td>
                                                     <td style="width: 60%;padding: 5px;padding-left: 20px;">
@@ -677,7 +677,7 @@
                                                     <td style="width: 40%;padding: 5px;">
                                                         <div style="display: inline-block;width: 100%;">
                                                             <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Planning verzending:</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->installation_date}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$installation_date}}</span>
                                                         </div>
                                                     </td>
                                                     <td style="width: 60%;padding: 5px;padding-left: 20px;">
