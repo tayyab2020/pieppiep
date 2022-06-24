@@ -2410,7 +2410,7 @@
 			}
 			else
 			{
-				quotation_id = appointment_quotation_id;
+				quotation_id = appointment_quotation_id ? appointment_quotation_id : 0;
 			}
 
 			$('#event_id').val(id);
@@ -2513,7 +2513,6 @@
 				},
 				eventChange: function(arg) {
 
-					var default_event = arg.event._def.extendedProps.default_event;
 					var quotation_id = arg.event._def.extendedProps.quotation_id;
 					var title = arg.event._def.title;
 					var description = arg.event._def.extendedProps.description;
@@ -2568,7 +2567,6 @@
 								appointments[i]['end'] = end;
 								appointments[i]['description'] = description;
 								appointments[i]['tags'] = tags;
-								appointments[i]['default_event'] = default_event;
 								appointments[i]['quotation_id'] = quotation_id;
 								appointments[i]['event_type'] = event_type;
 								appointments[i]['retailer_client_id'] = retailer_client_id;

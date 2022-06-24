@@ -376,7 +376,7 @@
 
                                                                     <?php
 
-                                                                        if($role == 'retailer')
+                                                                        if($role == 'retailer' || $role == 'invoice1')
                                                                             {
                                                                                 $estimated_price = number_format((float)($request->total[$i]/$request->estimated_price_quantity[$i]), 2, ',', '');
                                                                                 $estimated_quantity = number_format((float)$request->estimated_price_quantity[$i], 2, ',', '');
