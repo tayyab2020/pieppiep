@@ -630,9 +630,6 @@ class UserController extends Controller
             $invoices_chart = json_encode($invoices_chart);
             $quotes_chart = json_encode($quotes_chart);
 
-            $invoices_chart = '[{"date":"2022-02-01","Invoices Total":0},{"date":"2022-03-01","Invoices Total":5652},{"date":"2022-04-01","Invoices Total":2074.71},{"date":"2022-05-01","Invoices Total":8506.54},{"date":"2022-06-01","Invoices Total":5874.28}]';
-            $quotes_chart = '[{"date":"2022-02-01","Quotes":25811.92,"Accepted":14274.96},{"date":"2022-03-01","Quotes":11835.77,"Accepted":8978.15},{"date":"2022-04-01","Quotes":12334.41,"Accepted":12334.41},{"date":"2022-05-01","Quotes":41419.26,"Accepted":21837.86},{"date":"2022-06-01","Quotes":22545.22,"Accepted":16042.78}]';
-
             return view('user.dashboard', compact('user','commission_percentage','invoices_chart','quotes_chart','orders'));
         }
         else

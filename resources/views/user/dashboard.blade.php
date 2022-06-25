@@ -62,14 +62,14 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
-                                <h3 style="text-align: center;">{{__('text.Quotes')}}</h3>
+                                <h3 style="text-align: center;">{{__('text.Quotes')}} {{$quotes_chart}}</h3>
                                 <div id="chart-bar"></div>
 
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 top-m">
 
-                                <h3 style="text-align: center;">{{__('text.Invoices')}}</h3>
+                                <h3 style="text-align: center;">{{__('text.Invoices')}} {{$invoices_chart}}</h3>
                                 <div id="chart"></div>
 
                             </div>
