@@ -209,7 +209,7 @@ window.onload = function () {
             info: false,
         });
 
-        window.onload = function () {
+        $(document).ready(function() {
 
             var chart = c3.generate({
                 bindto: '#chart-bar',
@@ -295,7 +295,7 @@ window.onload = function () {
                 }
             });
             
-        };
+        });
 
         $("#opt").change(function () {
 
