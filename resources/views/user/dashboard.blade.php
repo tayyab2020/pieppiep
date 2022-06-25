@@ -144,9 +144,6 @@
                     value: ["{{__('text.Quotes')}}","{{__('text.Accepted')}}"],
                 }
             },
-            transition: {
-                duration: 0
-            },
             axis: {
                 x: {
                     type: 'timeseries',
@@ -177,7 +174,7 @@
             }
         });
 
-        var chart = c3.generate({
+        var chart1 = c3.generate({
             bindto: '#chart',
             data: {
                 type: 'bar',
@@ -186,9 +183,6 @@
                     x: 'date',
                     value: ["{{__('text.Invoices Total')}}"],
                 }
-            },
-            transition: {
-                duration: 0
             },
             axis: {
                 x: {
