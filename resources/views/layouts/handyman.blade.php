@@ -38,8 +38,8 @@
     <!-- include summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-    <script src="{{ asset('assets/admin/js/c3.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/d3-5.8.2.min.js') }}"></script>
+    <script src="https://c3js.org/js/c3.min-d2a1f852.js"></script>
+    <script src="https://c3js.org/js/d3-5.8.2.min-c5268e33.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 
 @include('styles.admin-design')
