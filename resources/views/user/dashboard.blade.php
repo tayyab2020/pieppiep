@@ -150,17 +150,19 @@
                     cursor: "pointer",
                     verticalAlign: "center",
                     horizontalAlign: "right",
-                    itemclick: toggleDataSeries
+                    itemclick: toggleDataSeries,
                 },
                 data: [{
                     type: "column",
                     name: "Quotes",
+                    indexLabelFontSize: 12,
                     indexLabel: "{y}",
                     showInLegend: true,
                     dataPoints: <?php echo $quotes_chart; ?>
                 },{
                     type: "column",
                     name: "Accepted",
+                    indexLabelFontSize: 12,
                     indexLabel: "{y}",
                     showInLegend: true,
                     dataPoints: <?php echo $accepted_chart; ?>
