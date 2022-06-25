@@ -38,8 +38,6 @@
     <!-- include summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-    <script src="{{ asset('assets/admin/js/d3-5.8.2.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/c3.min.js') }}"></script>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 
 @include('styles.admin-design')
@@ -1856,6 +1854,8 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 <script src="{{asset('assets/admin/js/bootstrap-colorpicker.js')}}"></script>
 <script src="{{asset('assets/admin/js/main.js')}}"></script>
 <script src="{{asset('assets/admin/js/admin-main.js')}}"></script>
+<script src="{{ asset('assets/admin/js/d3-5.8.2.min.js') }}"></script>
+<script src="{{ asset('assets/admin/js/c3.min.js') }}"></script>
 
 @yield('scripts')
 

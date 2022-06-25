@@ -1,8 +1,6 @@
 @extends('layouts.handyman')
 @section('content')
 
-
-
     <div class="right-side">
         <div class="container-fluid">
             <div class="row">
