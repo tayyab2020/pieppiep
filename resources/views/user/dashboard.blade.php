@@ -58,17 +58,17 @@
 
                         <div style="margin: 0 0 50px 0;" class="row">
 
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div style="padding: 0;" class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
                                 <h3 style="text-align: center;">{{__('text.Quotes')}}</h3>
-                                <div id="quoteChart" style="width: 100%;height: 400px;"></div>
+                                <div id="quoteChart" style="width: 98%;height: 400px;"></div>
 
                             </div>
 
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 top-m">
+                            <div style="padding: 0;" class="col-lg-6 col-md-6 col-sm-12 col-xs-12 top-m">
 
                                 <h3 style="text-align: center;">{{__('text.Invoices')}}</h3>
-                                <div id="invoiceChart" style="width: 100%;height: 400px;"></div>
+                                <div id="invoiceChart" style="width: 98%;height: 400px;"></div>
 
                             </div>
 
