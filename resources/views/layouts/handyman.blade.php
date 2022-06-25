@@ -28,18 +28,18 @@
     <link href="{{ asset('assets/front/css/responsive.css') }}" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{asset('assets/images/'.$gs->favicon)}}">
     <link href="{{ asset('assets/front/select2/select2.min.css') }}" rel="stylesheet">
-    
-    
+    <script src="{{asset('assets/admin/js/jquery.min.js')}}"></script>
+    <script src="{{ asset('assets/front/select2/select2.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css">
     <!-- include summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-    
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script src="{{ asset('assets/admin/js/d3-5.8.2.min.js') }}"></script>
     <script src="{{ asset('assets/admin/js/c3.min.js') }}"></script>
-    <script src="{{asset('assets/admin/js/jquery.min.js')}}"></script>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 
 @include('styles.admin-design')
@@ -1847,7 +1847,15 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 </script>
 
 
-
+<script src="{{asset('assets/admin/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('assets/admin/js/perfect-scrollbar.jquery.min.js')}}"></script>
+<script src="{{asset('assets/admin/js/jquery.canvasjs.min.js')}}"></script>
+<script src="{{asset('assets/admin/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/admin/js/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{asset('assets/admin/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/admin/js/bootstrap-colorpicker.js')}}"></script>
+<script src="{{asset('assets/admin/js/main.js')}}"></script>
+<script src="{{asset('assets/admin/js/admin-main.js')}}"></script>
 
 @yield('scripts')
 
