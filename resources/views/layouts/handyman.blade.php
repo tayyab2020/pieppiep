@@ -1848,14 +1848,6 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
 
 
-<script src="{{asset('assets/admin/js/perfect-scrollbar.jquery.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/jquery.canvasjs.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/dataTables.bootstrap.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/bootstrap-colorpicker.js')}}"></script>
-<script src="{{asset('assets/admin/js/main.js')}}"></script>
-<script src="{{asset('assets/admin/js/admin-main.js')}}"></script>
 
 @yield('scripts')
 

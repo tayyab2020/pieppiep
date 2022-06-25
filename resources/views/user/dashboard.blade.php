@@ -127,12 +127,7 @@
 
     <script>
 
-        $('#example').DataTable({
-            order: [[0, 'desc']],
-            searching: false,
-            paging: false,
-            info: false,
-        });
+        
 
         $(document).ready(function() {
 
