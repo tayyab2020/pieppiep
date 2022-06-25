@@ -144,9 +144,6 @@
                     value: ["{{__('text.Quotes')}}","{{__('text.Accepted')}}"],
                 }
             },
-            transition: {
-                duration: 0
-            },
             axis: {
                 x: {
                     type: 'timeseries',
@@ -186,9 +183,6 @@
                     x: 'date',
                     value: ["{{__('text.Invoices Total')}}"],
                 }
-            },
-            transition: {
-                duration: 0
             },
             axis: {
                 x: {
