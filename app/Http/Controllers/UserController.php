@@ -627,8 +627,8 @@ class UserController extends Controller
             ini_set('precision', 10);
             ini_set('serialize_precision', 10);
 
-            $invoices_chart = json_encode($invoices_chart);
-            $quotes_chart = json_encode($quotes_chart);
+            $invoices_chart = json_encode($invoices_chart, JSON_NUMERIC_CHECK);
+            $quotes_chart = json_encode($quotes_chart, JSON_NUMERIC_CHECK);
 
             return view('user.dashboard', compact('user','commission_percentage','invoices_chart','quotes_chart','orders'));
         }
