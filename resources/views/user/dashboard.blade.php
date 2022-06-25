@@ -174,6 +174,9 @@
             }
         });
 
+        chart.resize();
+        chart.flush();
+
         var chart1 = c3.generate({
             bindto: '#chart',
             data: {
