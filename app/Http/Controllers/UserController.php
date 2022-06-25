@@ -587,6 +587,9 @@ class UserController extends Controller
 
             $invoices_chart = array();
             $quotes_chart = array();
+            $quotes_chart1 = array();
+            $accepted_chart = array();
+            $invoices_chart1 = array();
 
             $dates = array_reverse($dates);
 
@@ -597,7 +600,7 @@ class UserController extends Controller
                 $month_chart = new_quotations::where('creator_id', $user_id)->whereMonth('created_at', '=', $c_date)->get();
 
                 $invoice_total = 0;
-                $quotes_count = 0;
+                // $quotes_count = 0;
                 $quotes_total = 0;
                 $quotes_accepted_total = 0;
 
@@ -608,7 +611,7 @@ class UserController extends Controller
                         $invoice_total = $invoice_total + $value->grand_total;
                     }
 
-                    $quotes_count = $quotes_count + 1;
+                    // $quotes_count = $quotes_count + 1;
                     $quotes_total = $quotes_total + $value->grand_total;
 
                     if($value->accepted)
@@ -621,16 +624,22 @@ class UserController extends Controller
                 /*$invoice_total = number_format((float)$invoice_total, 2, ',', '.');*/
 
                 $quotes_chart[] = array('date' => $date, 'Quotes' => $quotes_total, 'Accepted' => $quotes_accepted_total);
+                $quotes_chart1[] = array('label' => Carbon::parse($date)->locale('nl')->isoFormat('MMM'), 'y' => $quotes_total);
+                $accepted_chart[] = array('label' => Carbon::parse($date)->locale('nl')->isoFormat('MMM'), 'y' => $quotes_accepted_total);
                 $invoices_chart[] = array('date' => $date, 'Invoices Total' => $invoice_total);
+                $invoices_chart1[] = array('label' => Carbon::parse($date)->locale('nl')->isoFormat('MMM'), 'y' => $invoice_total);
             }
 
             ini_set('precision', 10);
             ini_set('serialize_precision', 10);
 
-            $invoices_chart = json_encode($invoices_chart, JSON_NUMERIC_CHECK);
-            $quotes_chart = json_encode($quotes_chart, JSON_NUMERIC_CHECK);
+            $invoices_chart = json_encode($invoices_chart);
+            $quotes_chart = json_encode($quotes_chart);
+            $quotes_chart1 = json_encode($quotes_chart1);
+            $accepted_chart = json_encode($accepted_chart);
+            $invoices_chart1 = json_encode($invoices_chart1);
 
-            return view('user.dashboard', compact('user','commission_percentage','invoices_chart','quotes_chart','orders'));
+            return view('user.dashboard', compact('user','commission_percentage','invoices_chart','quotes_chart','quotes_chart1','accepted_chart','invoices_chart1','orders'));
         }
         else
         {

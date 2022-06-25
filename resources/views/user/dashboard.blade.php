@@ -57,8 +57,20 @@
                         </table>
 
                         <div style="margin: 0 0 50px 0;" class="row">
-                    
-                            <div id="chartContainer" style="width: 100%;"></div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                <h3 style="text-align: center;">{{__('text.Quotes')}}</h3>
+                                <div id="quoteChart" style="width: 100%;height: 400px;"></div>
+
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 top-m">
+
+                                <h3 style="text-align: center;">{{__('text.Invoices')}}</h3>
+                                <div id="invoiceChart" style="width: 100%;height: 400px;"></div>
+
+                            </div>
 
                         </div>
 
@@ -71,7 +83,7 @@
 
                             </div>
 
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 top-m">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
                                 <h3 style="text-align: center;">{{__('text.Invoices')}}</h3>
                                 <div id="chart"></div>
@@ -87,29 +99,6 @@
             </div>
         </div>
     </div>
-
-    <?php
- 
-$dataPoints1 = array(
-	array("label"=> "2010", "y"=> 36.12),
-	array("label"=> "2011", "y"=> 34.87),
-	array("label"=> "2012", "y"=> 40.30),
-	array("label"=> "2013", "y"=> 35.30),
-	array("label"=> "2014", "y"=> 39.50),
-	array("label"=> "2015", "y"=> 50.82),
-	array("label"=> "2016", "y"=> 74.70)
-);
-$dataPoints2 = array(
-	array("label"=> "2010", "y"=> 64.61),
-	array("label"=> "2011", "y"=> 70.55),
-	array("label"=> "2012", "y"=> 72.50),
-	array("label"=> "2013", "y"=> 81.30),
-	array("label"=> "2014", "y"=> 63.60),
-	array("label"=> "2015", "y"=> 69.38),
-	array("label"=> "2016", "y"=> 198.70)
-);
-	
-?>
 
     <style>
 
@@ -156,16 +145,23 @@ $dataPoints2 = array(
     <script>
 
         window.onload = function () {
+
+            CanvasJS.addCultureInfo("nl",
+            {
+                decimalSeparator: ",",
+                digitGroupSeparator: ".",
+            });
  
-            var chart = new CanvasJS.Chart("chartContainer", {
+            var chart = new CanvasJS.Chart("quoteChart", {
                 
+                culture:  "nl",
                 animationEnabled: true,
                 theme: "light2",
                 title:{
-                    text: "Quotes"
+                    text: ""
                 },
                 axisY:{
-                    includeZero: true
+                    includeZero: true,
                 },
                 legend:{
                     cursor: "pointer",
@@ -177,16 +173,14 @@ $dataPoints2 = array(
                     type: "column",
                     name: "Quotes",
                     indexLabel: "{y}",
-                    yValueFormatString: "$#0.##",
                     showInLegend: true,
-                    dataPoints: <?php echo json_encode($dataPoints1, JSON_NUMERIC_CHECK); ?>
+                    dataPoints: <?php echo $quotes_chart1; ?>
                 },{
                     type: "column",
                     name: "Accepted",
                     indexLabel: "{y}",
-                    yValueFormatString: "$#0.##",
                     showInLegend: true,
-                    dataPoints: <?php echo json_encode($dataPoints2, JSON_NUMERIC_CHECK); ?>
+                    dataPoints: <?php echo $accepted_chart; ?>
                 }]
             });
  
@@ -202,6 +196,28 @@ $dataPoints2 = array(
                 }
                 chart.render();
             }
+
+            var chart1 = new CanvasJS.Chart("invoiceChart", {
+                culture:  "nl",
+	            animationEnabled: true,
+	            theme: "light2", // "light1", "light2", "dark1", "dark2"
+	            title:{
+		            text: ""
+	            },
+	            axisY: {
+		            includeZero: true,
+	            },
+	            data: [{
+                    // color: '#8CDCBD',
+		            type: "column",
+		            showInLegend: true,
+		            legendMarkerColor: "gray",
+		            legendText: "Invoices Total",
+		            dataPoints: <?php echo $invoices_chart1; ?>
+	            }]
+            });
+        
+            chart1.render();
   
         }
 
