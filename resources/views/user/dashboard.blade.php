@@ -134,91 +134,92 @@
             info: false,
         });
 
-        var chart = c3.generate({
-            bindto: '#chart-bar',
-            data: {
-                type: 'bar',
-                json:  <?php echo $quotes_chart; ?>,
-                keys: {
-                    x: 'date',
-                    value: ["{{__('text.Quotes')}}","{{__('text.Accepted')}}"],
-                }
-            },
-            axis: {
-                x: {
-                    type: 'timeseries',
-                    tick: {
-                        format: function(time) {
-                            var dat = new Date(time);
-                            var _months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
-                            var month = dat.getMonth();
-                            return _months[month];
-                        }
-                    },
-                },
-                y: {
-                    tick: {
-                        format: function (d) {
-                            return '€ ' + d.toLocaleString("nl-NL");
-                        },
-                        width: 0
-                    }
-                }
-            },
-            bar: {
-                width: {
-                    ratio: 0.8 // this makes bar width 50% of length between ticks
-                }
-                // or
-                //width: 100 // this makes bar width 100px
-            }
-        });
+        $(document).ready(function() {
 
-        chart.resize();
-        chart.flush();
-
-        var chart1 = c3.generate({
-            bindto: '#chart',
-            data: {
-                type: 'bar',
-                json:  <?php echo $invoices_chart; ?>,
-                keys: {
-                    x: 'date',
-                    value: ["{{__('text.Invoices Total')}}"],
-                }
-            },
-            axis: {
-                x: {
-                    type: 'timeseries',
-                    tick: {
-                        format: function(time) {
-                            var dat = new Date(time);
-                            var _months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
-                            var month = dat.getMonth();
-                            return _months[month];
-                        }
-                    },
-                },
-                y: {
-                    padding: {
-                        bottom: 0,
-                        top: 0
-                    },
-                    tick: {
-                        format: function (d) {
-                            return '€ ' + d.toLocaleString("nl-NL");
-                        },
-                        width: 0
+            var chart = c3.generate({
+                bindto: '#chart-bar',
+                data: {
+                    type: 'bar',
+                    json:  <?php echo $quotes_chart; ?>,
+                    keys: {
+                        x: 'date',
+                        value: ["{{__('text.Quotes')}}","{{__('text.Accepted')}}"],
                     }
+                },
+                axis: {
+                    x: {
+                        type: 'timeseries',
+                        tick: {
+                            format: function(time) {
+                                var dat = new Date(time);
+                                var _months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
+                                var month = dat.getMonth();
+                                return _months[month];
+                            }
+                        },
+                    },
+                    y: {
+                        tick: {
+                            format: function (d) {
+                                return '€ ' + d.toLocaleString("nl-NL");
+                            },
+                            width: 0
+                        }
+                    }
+                },
+                bar: {
+                    width: {
+                        ratio: 0.8 // this makes bar width 50% of length between ticks
+                    }
+                    // or
+                    //width: 100 // this makes bar width 100px
                 }
-            },
-            bar: {
-                width: {
-                    ratio: 0.8 // this makes bar width 50% of length between ticks
+            });
+
+            var chart1 = c3.generate({
+                bindto: '#chart',
+                data: {
+                    type: 'bar',
+                    json:  <?php echo $invoices_chart; ?>,
+                    keys: {
+                        x: 'date',
+                        value: ["{{__('text.Invoices Total')}}"],
+                    }
+                },
+                axis: {
+                    x: {
+                        type: 'timeseries',
+                        tick: {
+                            format: function(time) {
+                                var dat = new Date(time);
+                                var _months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
+                                var month = dat.getMonth();
+                                return _months[month];
+                            }
+                        },
+                    },
+                    y: {
+                        padding: {
+                            bottom: 0,
+                            top: 0
+                        },
+                        tick: {
+                            format: function (d) {
+                                return '€ ' + d.toLocaleString("nl-NL");
+                            },
+                            width: 0
+                        }
+                    }
+                },
+                bar: {
+                    width: {
+                        ratio: 0.8 // this makes bar width 50% of length between ticks
+                    }
+                    // or
+                    //width: 100 // this makes bar width 100px
                 }
-                // or
-                //width: 100 // this makes bar width 100px
-            }
+            });
+            
         });
 
         $("#opt").change(function () {
