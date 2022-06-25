@@ -630,6 +630,10 @@ class UserController extends Controller
             $invoices_chart = json_encode($invoices_chart);
             $quotes_chart = json_encode($quotes_chart);
 
+            var_dump($invoices_chart);
+            var_dump($quotes_chart);
+            exit();
+
             return view('user.dashboard', compact('user','commission_percentage','invoices_chart','quotes_chart','orders'));
         }
         else
