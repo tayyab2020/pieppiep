@@ -74,24 +74,6 @@
 
                         </div>
 
-                        <div class="row" style="margin: 0 0 50px 0;">
-
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-                                <h3 style="text-align: center;">{{__('text.Quotes')}}</h3>
-                                <div id="chart-bar"></div>
-
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-                                <h3 style="text-align: center;">{{__('text.Invoices')}}</h3>
-                                <div id="chart"></div>
-
-                            </div>
-
-                        </div>
-
                     </div>
                     <!-- Ending of Dashboard Top reference + Most Used OS area -->
 
@@ -154,6 +136,7 @@
  
             var chart = new CanvasJS.Chart("quoteChart", {
                 
+                backgroundColor: "transparent",
                 culture:  "nl",
                 animationEnabled: true,
                 theme: "light2",
@@ -174,7 +157,7 @@
                     name: "Quotes",
                     indexLabel: "{y}",
                     showInLegend: true,
-                    dataPoints: <?php echo $quotes_chart1; ?>
+                    dataPoints: <?php echo $quotes_chart; ?>
                 },{
                     type: "column",
                     name: "Accepted",
@@ -198,6 +181,8 @@
             }
 
             var chart1 = new CanvasJS.Chart("invoiceChart", {
+                
+                backgroundColor: "transparent",
                 culture:  "nl",
 	            animationEnabled: true,
 	            theme: "light2", // "light1", "light2", "dark1", "dark2"
@@ -210,10 +195,10 @@
 	            data: [{
                     // color: '#8CDCBD',
 		            type: "column",
-		            showInLegend: true,
+		            showInLegend: false,
 		            legendMarkerColor: "gray",
 		            legendText: "Invoices Total",
-		            dataPoints: <?php echo $invoices_chart1; ?>
+		            dataPoints: <?php echo $invoices_chart; ?>
 	            }]
             });
         
@@ -226,94 +211,6 @@
             searching: false,
             paging: false,
             info: false,
-        });
-
-        $(document).ready(function() {
-
-            var chart = c3.generate({
-                bindto: '#chart-bar',
-                data: {
-                    type: 'bar',
-                    json:  <?php echo $quotes_chart; ?>,
-                    keys: {
-                        x: 'date',
-                        value: ["{{__('text.Quotes')}}","{{__('text.Accepted')}}"],
-                    }
-                },
-                axis: {
-                    x: {
-                        type: 'timeseries',
-                        tick: {
-                            format: function(time) {
-                                var dat = new Date(time);
-                                var _months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
-                                var month = dat.getMonth();
-                                return _months[month];
-                            }
-                        },
-                    },
-                    y: {
-                        tick: {
-                            format: function (d) {
-                                return '€ ' + d.toLocaleString("nl-NL");
-                            },
-                            width: 0
-                        }
-                    }
-                },
-                bar: {
-                    width: {
-                        ratio: 0.8 // this makes bar width 50% of length between ticks
-                    }
-                    // or
-                    //width: 100 // this makes bar width 100px
-                }
-            });
-
-            var chart1 = c3.generate({
-                bindto: '#chart',
-                data: {
-                    type: 'bar',
-                    json:  <?php echo $invoices_chart; ?>,
-                    keys: {
-                        x: 'date',
-                        value: ["{{__('text.Invoices Total')}}"],
-                    }
-                },
-                axis: {
-                    x: {
-                        type: 'timeseries',
-                        tick: {
-                            format: function(time) {
-                                var dat = new Date(time);
-                                var _months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dec"];
-                                var month = dat.getMonth();
-                                return _months[month];
-                            }
-                        },
-                    },
-                    y: {
-                        padding: {
-                            bottom: 0,
-                            top: 0
-                        },
-                        tick: {
-                            format: function (d) {
-                                return '€ ' + d.toLocaleString("nl-NL");
-                            },
-                            width: 0
-                        }
-                    }
-                },
-                bar: {
-                    width: {
-                        ratio: 0.8 // this makes bar width 50% of length between ticks
-                    }
-                    // or
-                    //width: 100 // this makes bar width 100px
-                }
-            });
-            
         });
 
         $("#opt").change(function () {

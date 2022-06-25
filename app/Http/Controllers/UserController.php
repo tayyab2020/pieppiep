@@ -585,11 +585,9 @@ class UserController extends Controller
                 $month = strtotime("-1 month", $month);
             }
 
-            $invoices_chart = array();
             $quotes_chart = array();
-            $quotes_chart1 = array();
             $accepted_chart = array();
-            $invoices_chart1 = array();
+            $invoices_chart = array();
 
             $dates = array_reverse($dates);
 
@@ -623,11 +621,9 @@ class UserController extends Controller
 
                 /*$invoice_total = number_format((float)$invoice_total, 2, ',', '.');*/
 
-                $quotes_chart[] = array('date' => $date, 'Quotes' => $quotes_total, 'Accepted' => $quotes_accepted_total);
-                $quotes_chart1[] = array('label' => Carbon::parse($date)->locale('nl')->isoFormat('MMM'), 'y' => $quotes_total);
+                $quotes_chart[] = array('label' => Carbon::parse($date)->locale('nl')->isoFormat('MMM'), 'y' => $quotes_total);
                 $accepted_chart[] = array('label' => Carbon::parse($date)->locale('nl')->isoFormat('MMM'), 'y' => $quotes_accepted_total);
-                $invoices_chart[] = array('date' => $date, 'Invoices Total' => $invoice_total);
-                $invoices_chart1[] = array('label' => Carbon::parse($date)->locale('nl')->isoFormat('MMM'), 'y' => $invoice_total);
+                $invoices_chart[] = array('label' => Carbon::parse($date)->locale('nl')->isoFormat('MMM'), 'y' => $invoice_total);
             }
 
             ini_set('precision', 10);
@@ -635,11 +631,9 @@ class UserController extends Controller
 
             $invoices_chart = json_encode($invoices_chart);
             $quotes_chart = json_encode($quotes_chart);
-            $quotes_chart1 = json_encode($quotes_chart1);
             $accepted_chart = json_encode($accepted_chart);
-            $invoices_chart1 = json_encode($invoices_chart1);
 
-            return view('user.dashboard', compact('user','commission_percentage','invoices_chart','quotes_chart','quotes_chart1','accepted_chart','invoices_chart1','orders'));
+            return view('user.dashboard', compact('user','commission_percentage','invoices_chart','quotes_chart','accepted_chart','orders'));
         }
         else
         {
