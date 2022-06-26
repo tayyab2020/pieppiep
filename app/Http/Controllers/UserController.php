@@ -4072,8 +4072,13 @@ class UserController extends Controller
         $quotation_ids = new_quotations::where('creator_id',$user_id)->select('id','quotation_invoice_number')->get();
         $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
         $clients = customers_details::where('retailer_id',$user_id)->get();
+        $suppliers = User::leftjoin('retailers_requests', function($join) use($user_id){
+            $join->on('users.id', '=', 'retailers_requests.supplier_id');
+            $join->where('retailers_requests.retailer_id',$user_id);
+        })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*')->get();
+        $employees = User::with('permissions')->where('role_id',2)->where('main_id',$user_id)->where('id','!=',$user->id)->get();
 
-        return view('user.plannings',compact('clients','event_titles','plannings','quotation_ids','last_event_id'));
+        return view('user.plannings',compact('employees','suppliers','clients','event_titles','plannings','quotation_ids','last_event_id'));
     }
 
     public function StorePlannings(Request $request)
@@ -4102,11 +4107,11 @@ class UserController extends Controller
                     {
                         if($key['title'] == 'Delivery Date')
                         {
-                            new_quotations::where('quotation_id',$key['quotation_id'])->update(['delivery_date' => $key['start'], 'delivery_date_end' => $key['end']]);
+                            new_quotations::where('id',$key['quotation_id'])->update(['delivery_date' => $key['start'], 'delivery_date_end' => $key['end']]);
                         }
                         else
                         {
-                            new_quotations::where('quotation_id',$key['quotation_id'])->update(['installation_date' => $key['start'], 'installation_date_end' => $key['end']]);
+                            new_quotations::where('id',$key['quotation_id'])->update(['installation_date' => $key['start'], 'installation_date_end' => $key['end']]);
                         }
                     }
 
@@ -4119,6 +4124,8 @@ class UserController extends Controller
                     $check->description = $key['description'] ? $key['description'] : NULL;
                     $check->tags = $key['tags'] ? $key['tags'] : NULL;
                     $check->retailer_client_id = $key['retailer_client_id'] ? $key['retailer_client_id'] : NULL;
+                    $check->supplier_id = $key['supplier_id'] ? $key['supplier_id'] : NULL;
+                    $check->employee_id = $key['employee_id'] ? $key['employee_id'] : NULL;
                     $check->event_type = $key['event_type'];
                     $check->save();
 
@@ -4137,6 +4144,8 @@ class UserController extends Controller
                     $appointment->description = $key['description'] ? $key['description'] : NULL;
                     $appointment->tags = $key['tags'] ? $key['tags'] : NULL;
                     $appointment->retailer_client_id = $key['retailer_client_id'] ? $key['retailer_client_id'] : NULL;
+                    $appointment->supplier_id = $key['supplier_id'] ? $key['supplier_id'] : NULL;
+                    $appointment->employee_id = $key['employee_id'] ? $key['employee_id'] : NULL;
                     $appointment->event_type = $key['event_type'];
                     $appointment->save();
 

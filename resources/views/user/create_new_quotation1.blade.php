@@ -1284,7 +1284,7 @@
 		</div>
 	</div>
 
-	<div id="addAppointmentModal" role="dialog" class="modal fade">
+	<div style="overflow-y: auto;" id="addAppointmentModal" role="dialog" class="modal fade">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 
@@ -1314,17 +1314,17 @@
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-4 required">
-							<label>{{__('Start')}}</label>
+							<label>{{__('text.Start')}}</label>
 							<input type="text" class="form-control appointment_start validation_required" readonly="readonly">
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-4 required">
-							<label>{{__('End')}}</label>
+							<label>{{__('text.End')}}</label>
 							<input type="text" class="form-control appointment_end validation_required" readonly="readonly">
 						</div>
 
 						<div class="form-group col-xs-12 appointment_type_box col-sm-4 required">
-							<label>{{__('Select Type')}}</label>
+							<label>{{__('text.Select Type')}}</label>
 							<select class="appointment_type">
 
 								<option value="1">{{__('text.For Quotation')}}</option>
@@ -1334,7 +1334,7 @@
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-4 appointment_quotation_number_box required">
-							<label>{{__('Quotation Number')}}</label>
+							<label>{{__('text.Quotation Number')}}</label>
 							<select class="appointment_quotation_number">
 
 								<option value="">{{__('text.Select Quotation')}}</option>
@@ -1350,7 +1350,7 @@
 						</div>
 
 						<div style="display: none;" class="form-group appointment_customer_box col-xs-12 col-sm-4 required">
-							<label>{{__('Customer')}}</label>
+							<label>{{__('text.Customer')}}</label>
 							<select class="appointment_client">
 
 								<option value="">{{__('text.Select Customer')}}</option>
@@ -1365,12 +1365,12 @@
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-12">
-							<label>{{__('Description')}}</label>
+							<label>{{__('text.Description')}}</label>
 							<textarea rows="4" class="form-control appointment_description"></textarea>
 						</div>
 
 						<div class="form-group col-xs-12 col-sm-12 required">
-							<label>{{__('Tags')}}</label>
+							<label>{{__('text.Tags')}}</label>
 							<input type="text" data-role="tagsinput" class="form-control appointment_tags" />
 						</div>
 
@@ -1379,8 +1379,8 @@
 
 				<div class="modal-footer">
 					<input type="hidden" id="event_id">
-					<button type="button" class="btn btn-success pull-left submit_appointmentForm">Save</button>
-					<button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+					<button type="button" class="btn btn-success pull-left submit_appointmentForm">{{__('text.Save')}}</button>
+					<button type="button" data-dismiss="modal" class="btn btn-default">{{__('text.Close')}}</button>
 				</div>
 			</div>
 		</div>
@@ -2608,6 +2608,11 @@
 				},
 				eventClick: function(arg) {
 
+				},
+				eventTimeFormat: { // like '14:30:00'
+    				hour: '2-digit',
+					minute: '2-digit',
+					hour12:false
 				},
 				displayEventEnd: true,
 				editable: true,

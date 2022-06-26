@@ -525,5 +525,12 @@ return [
     'Select Event Type' => 'Select Event Type',
     'For Quotation' => 'For Quotation',
     'For Client' => 'For Client',
+    'For Supplier' => 'For Supplier',
+    'For Employee' => 'For Employee',
     'Add Appointment' => 'Add Appointment',
+    'End' => 'End',
+    'Select Type' => 'Select Type',
+    'Employee' => 'Employee',
+    'Select Employee' => 'Select Employee',
+    'Tags' => 'Tags',
 ];

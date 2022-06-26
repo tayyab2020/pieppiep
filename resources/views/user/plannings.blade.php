@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <div id="addAppointmentModal" role="dialog" class="modal fade">
+    <div style="overflow-y: auto;" id="addAppointmentModal" role="dialog" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
@@ -57,7 +57,7 @@
 
                     <div class="row">
                         <div class="form-group col-xs-12 col-sm-12 required appointment_title_box">
-                            <label>{{__('Title')}}</label>
+                            <label>{{__('text.Title')}}</label>
                             <select class="appointment_title">
 
                                 <option value="">{{__('text.Select Event Title')}}</option>
@@ -74,27 +74,29 @@
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-4 required">
-                            <label>{{__('Start')}}</label>
+                            <label>{{__('text.Start')}}</label>
                             <input type="text" class="form-control appointment_start validation_required" readonly="readonly">
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-4 required">
-                            <label>{{__('End')}}</label>
+                            <label>{{__('text.End')}}</label>
                             <input type="text" class="form-control appointment_end validation_required" readonly="readonly">
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-4 required">
-                            <label>{{__('Select Type')}}</label>
+                            <label>{{__('text.Select Type')}}</label>
                             <select class="appointment_type">
 
                                 <option value="1">{{__('text.For Quotation')}}</option>
                                 <option value="2">{{__('text.For Client')}}</option>
+                                <option value="3">{{__('text.For Supplier')}}</option>
+                                <option value="4">{{__('text.For Employee')}}</option>
 
                             </select>
                         </div>
 
                         <div class="form-group col-xs-12 quotation_box col-sm-4 required">
-                            <label>{{__('Quotation Number')}}</label>
+                            <label>{{__('text.Quotation Number')}}</label>
                             <select class="appointment_quotation_number">
 
                                 <option value="">{{__('text.Select Quotation')}}</option>
@@ -109,7 +111,7 @@
                         </div>
 
                         <div style="display: none;" class="form-group customer_box col-xs-12 col-sm-4 required">
-                            <label>{{__('Customer')}}</label>
+                            <label>{{__('text.Customer')}}</label>
                             <select class="appointment_client">
 
                                 <option value="">{{__('text.Select Customer')}}</option>
@@ -123,13 +125,43 @@
                             </select>
                         </div>
 
+                        <div style="display: none;" class="form-group supplier_box col-xs-12 col-sm-4 required">
+                            <label>{{__('text.Supplier')}}</label>
+                            <select class="appointment_supplier">
+
+                                <option value="">{{__('text.Select Supplier')}}</option>
+
+                                @foreach($suppliers as $key)
+
+                                    <option value="{{$key->id}}">{{$key->company_name}}</option>
+
+                                @endforeach
+
+                            </select>
+                        </div>
+
+                        <div style="display: none;" class="form-group employee_box col-xs-12 col-sm-4 required">
+                            <label>{{__('text.Employee')}}</label>
+                            <select class="appointment_employee">
+
+                                <option value="">{{__('text.Select Employee')}}</option>
+
+                                @foreach($employees as $key)
+
+                                    <option value="{{$key->id}}">{{$key->name . ' ' . $key->family_name}}</option>
+
+                                @endforeach
+
+                            </select>
+                        </div>
+
                         <div class="form-group col-xs-12 col-sm-12">
-                            <label>{{__('Description')}}</label>
+                            <label>{{__('text.Description')}}</label>
                             <textarea rows="4" class="form-control appointment_description"></textarea>
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 required">
-                            <label>{{__('Tags')}}</label>
+                            <label>{{__('text.Tags')}}</label>
                             <input type="text" data-role="tagsinput" class="form-control appointment_tags" />
                         </div>
 
@@ -138,8 +170,8 @@
 
                 <div class="modal-footer">
                     <input type="hidden" id="event_id">
-                    <button type="button" class="btn btn-success pull-left submit_appointmentForm">{{__('Save')}}</button>
-                    <button type="button" data-dismiss="modal" class="btn btn-default">{{__('Close')}}</button>
+                    <button type="button" class="btn btn-success pull-left submit_appointmentForm">{{__('text.Save')}}</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-default">{{__('text.Close')}}</button>
                 </div>
             </div>
         </div>
@@ -316,18 +348,58 @@
             if(type == 1)
             {
                 $('.customer_box').hide();
+                $('.supplier_box').hide();
+                $('.employee_box').hide();
                 $('.quotation_box').show();
 
                 $('.appointment_client').val('');
+                $('.appointment_supplier').val('');
+                $('.appointment_employee').val('');
                 $('.appointment_client').trigger('change.select2');
+                $('.appointment_supplier').trigger('change.select2');
+                $('.appointment_employee').trigger('change.select2');
+            }
+            else if(type == 2)
+            {
+                $('.quotation_box').hide();
+                $('.supplier_box').hide();
+                $('.employee_box').hide();
+                $('.customer_box').show();
+
+                $('.appointment_quotation_number').val('');
+                $('.appointment_supplier').val('');
+                $('.appointment_employee').val('');
+                $('.appointment_quotation_number').trigger('change.select2');
+                $('.appointment_supplier').trigger('change.select2');
+                $('.appointment_employee').trigger('change.select2');
+            }
+            else if(type == 3)
+            {
+                $('.quotation_box').hide();
+                $('.customer_box').hide();
+                $('.employee_box').hide();
+                $('.supplier_box').show();
+
+                $('.appointment_quotation_number').val('');
+                $('.appointment_client').val('');
+                $('.appointment_employee').val('');
+                $('.appointment_quotation_number').trigger('change.select2');
+                $('.appointment_client').trigger('change.select2');
+                $('.appointment_employee').trigger('change.select2');
             }
             else
             {
                 $('.quotation_box').hide();
-                $('.customer_box').show();
+                $('.customer_box').hide();
+                $('.supplier_box').hide();
+                $('.employee_box').show();
 
                 $('.appointment_quotation_number').val('');
+                $('.appointment_client').val('');
+                $('.appointment_supplier').val('');
                 $('.appointment_quotation_number').trigger('change.select2');
+                $('.appointment_client').trigger('change.select2');
+                $('.appointment_supplier').trigger('change.select2');
             }
 
         });
@@ -342,6 +414,8 @@
             var event_type = $('.appointment_type').val();
             var appointment_quotation_id = $('.appointment_quotation_number').val();
             var customer_id = $('.appointment_client').val();
+            var supplier_id = $('.appointment_supplier').val();
+            var employee_id = $('.appointment_employee').val();
 
             if (!title) {
                 flag = 1;
@@ -363,7 +437,7 @@
                     $('.quotation_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
                 }
             }
-            else
+            else if(event_type == 2)
             {
                 if(!customer_id)
                 {
@@ -373,6 +447,30 @@
                 else
                 {
                     $('.customer_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+                }
+            }
+            else if(event_type == 3)
+            {
+                if(!supplier_id)
+                {
+                    flag = 1;
+                    $('.supplier_box .select2-container--default .select2-selection--single').css('border-color', 'red');
+                }
+                else
+                {
+                    $('.supplier_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
+                }
+            }
+            else
+            {
+                if(!employee_id)
+                {
+                    flag = 1;
+                    $('.employee_box .select2-container--default .select2-selection--single').css('border-color', 'red');
+                }
+                else
+                {
+                    $('.employee_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
                 }
             }
 
@@ -422,6 +520,8 @@
                         event.setExtendedProp('quotation_id', appointment_quotation_id);
                         event.setExtendedProp('event_type', event_type);
                         event.setExtendedProp('retailer_client_id', customer_id);
+                        event.setExtendedProp('supplier_id', supplier_id);
+                        event.setExtendedProp('employee_id', employee_id);
                         event.setProp('title', title);
                         event.setExtendedProp('description',appointment_desc);
                         event.setExtendedProp('tags',appointment_tags);
@@ -443,6 +543,8 @@
                             tags: appointment_tags,
                             event_type: event_type,
                             retailer_client_id: customer_id,
+                            supplier_id: supplier_id,
+                            employee_id: employee_id,
                             color: color
                         });
 
@@ -458,6 +560,8 @@
                         obj['default_event'] = 0;
                         obj['event_type'] = event_type;
                         obj['retailer_client_id'] = customer_id;
+                        obj['supplier_id'] = supplier_id;
+                        obj['employee_id'] = employee_id;
                         data_array.push(obj);
 
                         $('.appointment_data').val(JSON.stringify(data_array));
@@ -471,10 +575,14 @@
                     $('.appointment_end').val('');
                     $('.appointment_description').val('');
                     $('.appointment_client').val('');
+                    $('.appointment_supplier').val('');
+                    $('.appointment_employee').val('');
                     $('.appointment_tags').tagsinput('removeAll');
                     $('.appointment_title').trigger('change.select2');
                     $('.appointment_quotation_number').trigger('change.select2');
                     $('.appointment_client').trigger('change.select2');
+                    $('.appointment_supplier').trigger('change.select2');
+                    $('.appointment_employee').trigger('change.select2');
 
                 }
                 else
@@ -501,11 +609,15 @@
             $('.appointment_end').val('');
             $('.appointment_description').val('');
             $('.appointment_client').val('');
+            $('.appointment_supplier').val('');
+            $('.appointment_employee').val('');
             $('.appointment_tags').tagsinput('removeAll');
             $('.appointment_title').trigger('change.select2');
             $('.appointment_quotation_number').trigger('change.select2');
             $('.appointment_type').trigger('change.select2');
             $('.appointment_client').trigger('change.select2');
+            $('.appointment_supplier').trigger('change.select2');
+            $('.appointment_employee').trigger('change.select2');
 
             $('#addAppointmentModal').modal('toggle');
 
@@ -520,6 +632,8 @@
             var tags = event._def.extendedProps.tags;
             var event_type = event._def.extendedProps.event_type;
             var retailer_client_id = event._def.extendedProps.retailer_client_id;
+            var supplier_id = event._def.extendedProps.supplier_id;
+            var employee_id = event._def.extendedProps.employee_id;
             var start = moment(event.start).format('YYYY-MM-DD HH:mm');
             var end = event.end ? moment(event.end).format('YYYY-MM-DD HH:mm') : start;
 
@@ -531,6 +645,8 @@
             $('.appointment_description').val(description);
             $('.appointment_type').val(event_type);
             $('.appointment_client').val(retailer_client_id);
+            $('.appointment_supplier').val(supplier_id);
+            $('.appointment_employee').val(employee_id);
             $('.appointment_tags').tagsinput('removeAll');
             $('.appointment_tags').tagsinput('add',tags);
 
@@ -552,6 +668,8 @@
             $('.appointment_type').trigger('change.select2');
             $('.appointment_quotation_number').trigger('change.select2');
             $('.appointment_client').trigger('change.select2');
+            $('.appointment_supplier').trigger('change.select2');
+            $('.appointment_employee').trigger('change.select2');
             $('.appointment_type').trigger('change');
 
             $('#addAppointmentModal').modal('toggle');
@@ -622,6 +740,8 @@
                     var description = arg.event._def.extendedProps.description;
                     var tags = arg.event._def.extendedProps.tags;
                     var retailer_client_id = arg.event._def.extendedProps.retailer_client_id;
+                    var supplier_id = arg.event._def.extendedProps.supplier_id;
+                    var employee_id = arg.event._def.extendedProps.employee_id;
                     var event_type = arg.event._def.extendedProps.event_type;
                     var start = new Date(arg.event._instance.range.start.toLocaleString('en-US', { timeZone: 'UTC' }));
                     var end = new Date(arg.event._instance.range.end.toLocaleString('en-US', { timeZone: 'UTC' }));
@@ -657,10 +777,11 @@
                             appointments[i]['end'] = end;
                             appointments[i]['description'] = description;
                             appointments[i]['tags'] = tags;
-                            appointments[i]['default_event'] = default_event;
                             appointments[i]['quotation_id'] = quotation_id;
                             appointments[i]['event_type'] = event_type;
                             appointments[i]['retailer_client_id'] = retailer_client_id;
+                            appointments[i]['supplier_id'] = supplier_id;
+                            appointments[i]['employee_id'] = employee_id;
 
                             $('.appointment_data').val(JSON.stringify(appointments));
                             break;
@@ -699,85 +820,15 @@
                 eventClick: function(arg) {
 
                 },
+                eventTimeFormat: { // like '14:30:00'
+    				hour: '2-digit',
+					minute: '2-digit',
+					hour12:false
+				},
                 displayEventEnd: true,
                 editable: true,
                 dayMaxEvents: true, // allow "more" link when too many events
                 events: {!! $plannings !!},
-                // events: [
-                // 	{
-                // 		id: 1,
-                // 		title: 'All Day Event',
-                // 		start: '2022-06-01',
-                // 	},
-                // 	{
-                // 		id: 2,
-                // 		title: 'Long Event',
-                // 		start: '2022-06-07',
-                // 		end: '2022-06-10'
-                // 	},
-                // 	{
-                // 		id: 3,
-                // 		classNames: 'delivery_date',
-                // 		title: 'Delivery Date',
-                // 		start: '2022-06-09T16:00:00',
-                // 		durationEditable: false
-                // 	},
-                // 	{
-                // 		id: 4,
-                // 		classNames: 'non_removeables',
-                // 		title: 'Repeating Event',
-                // 		start: '2022-06-16T16:00:00',
-                // 		editable: false,
-                // 		droppable: false,
-                // 		eventStartEditable: false,
-                // 		eventResizableFromStart: false,
-                // 		eventDurationEditable: false
-                // 	},
-                // 	{
-                // 		id: 5,
-                // 		classNames: 'installation_date',
-                // 		title: 'Installation Date',
-                // 		start: '2022-06-11T00:00:00',
-                // 		end: '2022-06-13T00:00:00'
-                // 	},
-                // 	{
-                // 		id: 6,
-                // 		title: 'Meeting',
-                // 		start: '2022-06-12T10:30:00',
-                // 		end: '2022-06-12T12:30:00'
-                // 	},
-                // 	{
-                // 		id: 7,
-                // 		title: 'Lunch',
-                // 		start: '2022-06-12T12:00:00'
-                // 	},
-                // 	{
-                // 		id: 8,
-                // 		title: 'Meeting',
-                // 		start: '2022-06-12T14:30:00'
-                // 	},
-                // 	{
-                // 		id: 9,
-                // 		title: 'Happy Hour',
-                // 		start: '2022-06-12T17:30:00'
-                // 	},
-                // 	{
-                // 		id: 10,
-                // 		title: 'Dinner',
-                // 		start: '2022-06-12T20:00:00'
-                // 	},
-                // 	{
-                // 		id: 11,
-                // 		title: 'Birthday Party',
-                // 		start: '2022-06-13T07:00:00'
-                // 	},
-                // 	{
-                // 		id: 12,
-                // 		title: 'Click for Google',
-                // 		url: 'http://google.com/',
-                // 		start: '2022-06-28'
-                // 	}
-                // ]
             });
 
             calendar.render();
@@ -825,6 +876,30 @@
             width: '100%',
             height: '200px',
             placeholder: "{{__('text.Select Customer')}}",
+            allowClear: false,
+            "language": {
+                "noResults": function () {
+                    return '{{__('text.No results found')}}';
+                }
+            },
+        });
+
+        $(".appointment_supplier").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "{{__('text.Select Supplier')}}",
+            allowClear: false,
+            "language": {
+                "noResults": function () {
+                    return '{{__('text.No results found')}}';
+                }
+            },
+        });
+
+        $(".appointment_employee").select2({
+            width: '100%',
+            height: '200px',
+            placeholder: "{{__('text.Select Employee')}}",
             allowClear: false,
             "language": {
                 "noResults": function () {
