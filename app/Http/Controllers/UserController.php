@@ -4067,9 +4067,10 @@ class UserController extends Controller
         }
 
         $event_titles = planning_titles::where('user_id',$user_id)->get();
-        $plannings = quotation_appointments::where('user_id',$user_id)->get();
+        $plannings = quotation_appointments::leftjoin('new_quotations','new_quotations.id','=','quotation_appointments.quotation_id')->leftjoin('customers_details as t1','t1.id','=','new_quotations.customer_details')->leftjoin('customers_details as t2','t2.id','=','quotation_appointments.retailer_client_id')->leftjoin('users as t3','t3.id','=','quotation_appointments.supplier_id')->leftjoin('users as t4','t4.id','=','quotation_appointments.employee_id')->where('quotation_appointments.user_id',$user_id)->select('quotation_appointments.*','t1.name as client_quotation_fname','t1.family_name as client_quotation_lname','t2.name as client_fname','t2.family_name as client_lname','t3.company_name','t4.name as employee_fname','t4.family_name as employee_lname')->get();
+
         $plannings = json_encode($plannings);
-        $quotation_ids = new_quotations::where('creator_id',$user_id)->select('id','quotation_invoice_number')->get();
+        $quotation_ids = new_quotations::leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->where('new_quotations.creator_id',$user_id)->select('new_quotations.id','new_quotations.quotation_invoice_number','customers_details.name','customers_details.family_name')->get();
         $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
         $clients = customers_details::where('retailer_id',$user_id)->get();
         $suppliers = User::leftjoin('retailers_requests', function($join) use($user_id){

@@ -103,7 +103,7 @@
 
                                 @foreach($quotation_ids as $key)
 
-                                    <option value="{{$key->id}}">{{$key->quotation_invoice_number}}</option>
+                                    <option data-fname="{{$key->name}}" data-lname="{{$key->family_name}}" value="{{$key->id}}">{{$key->quotation_invoice_number}}</option>
 
                                 @endforeach
 
@@ -118,7 +118,7 @@
 
                                 @foreach($clients as $key)
 
-                                    <option value="{{$key->id}}">{{$key->name . ' ' . $key->family_name}}</option>
+                                    <option data-fname="{{$key->name}}" data-lname="{{$key->family_name}}" value="{{$key->id}}">{{$key->name . ' ' . $key->family_name}}</option>
 
                                 @endforeach
 
@@ -148,7 +148,7 @@
 
                                 @foreach($employees as $key)
 
-                                    <option value="{{$key->id}}">{{$key->name . ' ' . $key->family_name}}</option>
+                                    <option data-fname="{{$key->name}}" data-lname="{{$key->family_name}}" value="{{$key->id}}">{{$key->name . ' ' . $key->family_name}}</option>
 
                                 @endforeach
 
@@ -436,6 +436,14 @@
                 {
                     $('.quotation_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
                 }
+
+                var client_quotation_fname = $(".appointment_quotation_number option:selected").data('fname');
+                var client_quotation_lname = $(".appointment_quotation_number option:selected").data('lname');
+                var client_fname = '';
+                var client_lname = '';
+                var company_name = '';
+                var employee_fname = '';
+                var employee_lname = '';
             }
             else if(event_type == 2)
             {
@@ -448,6 +456,14 @@
                 {
                     $('.customer_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
                 }
+
+                var client_quotation_fname = '';
+                var client_quotation_lname = '';
+                var client_fname = $(".appointment_client option:selected").data('fname');
+                var client_lname = $(".appointment_client option:selected").data('lname');
+                var company_name = '';
+                var employee_fname = '';
+                var employee_lname = '';
             }
             else if(event_type == 3)
             {
@@ -460,6 +476,14 @@
                 {
                     $('.supplier_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
                 }
+
+                var client_quotation_fname = '';
+                var client_quotation_lname = '';
+                var client_fname = '';
+                var client_lname = '';
+                var company_name = $('.appointment_supplier option:selected').text();
+                var employee_fname = '';
+                var employee_lname = '';
             }
             else
             {
@@ -472,6 +496,14 @@
                 {
                     $('.employee_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
                 }
+
+                var client_quotation_fname = '';
+                var client_quotation_lname = '';
+                var client_fname = '';
+                var client_lname = '';
+                var company_name = '';
+                var employee_fname = $(".appointment_employee option:selected").data('fname');
+                var employee_lname = $(".appointment_employee option:selected").data('lname');
             }
 
             $(validation).each(function(){
@@ -493,8 +525,12 @@
                 var id = $('#event_id').val();
                 var appointment_start = $('.appointment_start').val();
                 var appointment_end = $('.appointment_end').val();
-                var format_start = new Date(appointment_start);
-                var format_end = new Date(appointment_end);
+                var dateAr = /(\d+)\-(\d+)\-(\d+)/.exec(appointment_start);
+                var timeAr = appointment_start.split(' ');
+                var format_start = dateAr[3] + '-' + dateAr[2] + '-' + dateAr[1] + ' ' + timeAr[1];
+                var dateAr = /(\d+)\-(\d+)\-(\d+)/.exec(appointment_end);
+                var timeAr = appointment_end.split(' ');
+                var format_end = dateAr[3] + '-' + dateAr[2] + '-' + dateAr[1] + ' ' + timeAr[1];
                 var appointment_desc = $('.appointment_description').val();
                 var appointment_tags = $('.appointment_tags').val();
 
@@ -516,7 +552,7 @@
                     if(id)
                     {
                         var event = calendar.getEventById(id);
-                        event.setDates(appointment_start,appointment_end);
+                        event.setDates(format_start,format_end);
                         event.setExtendedProp('quotation_id', appointment_quotation_id);
                         event.setExtendedProp('event_type', event_type);
                         event.setExtendedProp('retailer_client_id', customer_id);
@@ -525,6 +561,37 @@
                         event.setProp('title', title);
                         event.setExtendedProp('description',appointment_desc);
                         event.setExtendedProp('tags',appointment_tags);
+                        event.setExtendedProp('client_quotation_fname',client_quotation_fname);
+                        event.setExtendedProp('client_quotation_lname',client_quotation_lname);
+                        event.setExtendedProp('client_fname',client_fname);
+                        event.setExtendedProp('client_lname',client_lname);
+                        event.setExtendedProp('company_name',company_name);
+                        event.setExtendedProp('employee_fname',employee_fname);
+                        event.setExtendedProp('employee_lname',employee_lname);
+
+                        $('.fc-daygrid-event').each(function (i, obj) {
+
+                            if(appointment_quotation_id)
+                            {
+                                var extended_title = client_quotation_fname + ' ' + client_quotation_lname;
+                            }
+                            else if(customer_id)
+                            {
+                                var extended_title = client_fname + ' ' + client_lname;
+                            }
+                            else if(supplier_id)
+                            {
+                                var extended_title = company_name;
+                            }
+                            else
+                            {
+                                var extended_title = employee_fname + ' ' + employee_lname;
+                            }
+
+                            $(this).find(`.extended_title[data-id='${id}']`).text(extended_title);
+
+                        });
+
                     }
                     else
                     {
@@ -537,23 +604,30 @@
                             id: id,
                             quotation_id: appointment_quotation_id,
                             title: title,
-                            start: appointment_start,
-                            end: appointment_end,
+                            start: format_start,
+                            end: format_end,
                             description: appointment_desc,
                             tags: appointment_tags,
                             event_type: event_type,
                             retailer_client_id: customer_id,
                             supplier_id: supplier_id,
                             employee_id: employee_id,
-                            color: color
+                            color: color,
+                            client_quotation_fname: client_quotation_fname,
+                            client_quotation_lname: client_quotation_lname,
+                            client_fname: client_fname,
+                            client_lname: client_lname,
+                            company_name: company_name,
+                            employee_fname: employee_fname,
+                            employee_lname: employee_lname,
                         });
 
                         var obj = {};
                         obj['id'] = id;
                         obj['quotation_id'] = appointment_quotation_id;
                         obj['title'] = title;
-                        obj['start'] = appointment_start;
-                        obj['end'] = appointment_end;
+                        obj['start'] = format_start;
+                        obj['end'] = format_end;
                         obj['description'] = appointment_desc;
                         obj['tags'] = appointment_tags;
                         obj['new'] = 1;
@@ -634,8 +708,8 @@
             var retailer_client_id = event._def.extendedProps.retailer_client_id;
             var supplier_id = event._def.extendedProps.supplier_id;
             var employee_id = event._def.extendedProps.employee_id;
-            var start = moment(event.start).format('YYYY-MM-DD HH:mm');
-            var end = event.end ? moment(event.end).format('YYYY-MM-DD HH:mm') : start;
+            var start = moment(event.start).format('DD-MM-YYYY HH:mm');
+            var end = event.end ? moment(event.end).format('DD-MM-YYYY HH:mm') : start;
 
             $('#event_id').val(id);
             $('.appointment_quotation_number').val(quotation_id);
@@ -728,12 +802,12 @@
                 selectable: true,
                 selectMirror: true,
                 select: function(arg) {
-
                     $(".add-appointment").trigger("click");
                     calendar.unselect()
                 },
                 eventChange: function(arg) {
 
+                    var id = arg.event._def.publicId;
                     var default_event = arg.event._def.extendedProps.default_event;
                     var quotation_id = arg.event._def.extendedProps.quotation_id;
                     var title = arg.event._def.title;
@@ -764,7 +838,6 @@
                     var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
                     end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute;
 
-                    var id = arg.event._def.publicId;
                     var data = $('.appointment_data').val();
                     var appointments = data ? JSON.parse(data) : '';
 
@@ -797,6 +870,25 @@
                 {
                     var actualAppointment = $(arg.el);
                     var event = arg.event;
+
+                    var id = arg.event._def.publicId;
+
+                    if(event._def.extendedProps.quotation_id)
+                    {
+                        actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
+                    }
+                    else if(event._def.extendedProps.retailer_client_id)
+                    {
+                        actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_fname + ' ' + event._def.extendedProps.client_lname +'</span>');
+                    }
+                    else if(event._def.extendedProps.supplier_id)
+                    {
+                        actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.company_name +'</span>');
+                    }
+                    else
+                    {
+                        actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.employee_fname + ' ' + event._def.extendedProps.employee_lname +'</span>');
+                    }
 
                     if(event._def.extendedProps.default_event != 1)
                     {
@@ -909,14 +1001,14 @@
         });
 
         $('.appointment_start').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm',
+            format: 'DD-MM-YYYY HH:mm',
             defaultDate: new Date(),
             ignoreReadonly: true,
             sideBySide: true,
         });
 
         $('.appointment_end').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm',
+            format: 'DD-MM-YYYY HH:mm',
             defaultDate: new Date(),
             ignoreReadonly: true,
             sideBySide: true,
@@ -926,5 +1018,24 @@
 
     <link href="{{asset('assets/admin/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('assets/admin/css/bootstrap-tagsinput.css')}}" rel="stylesheet">
+
+    <style>
+
+        .fc-h-event
+        {
+            background-color: #5aa4ee;
+        }
+
+        .fc-daygrid-event-dot
+        {
+            margin: 6px 4px 0 4px;
+        }
+
+        .fc-daygrid-dot-event
+        {
+            align-items: flex-start;
+        }
+
+    </style>
 
 @endsection
