@@ -25,7 +25,7 @@
                         <?php
 
                         $appointments = json_decode($plannings,true);
-                        $appointments = array_slice($appointments, 2);
+                        // $appointments = array_slice($appointments, 2);
                         $count = count($appointments);
                         $last_event_id = $last_event_id + 1;
                         $appointments = json_encode($appointments);
@@ -341,6 +341,21 @@
 
     <script>
 
+        $('.appointment_start').on('dp.change', function(e) {
+        
+            var date = $(this).val();
+
+            if(date)
+            {
+                if(!$('.appointment_end').val())
+                {
+                    $('.appointment_end').val(date);
+                }
+            }
+
+        });
+        
+
         $(".appointment_type").change(function () {
 
             var type = $(this).val();
@@ -527,6 +542,7 @@
                 var appointment_end = $('.appointment_end').val();
                 var dateAr = /(\d+)\-(\d+)\-(\d+)/.exec(appointment_start);
                 var timeAr = appointment_start.split(' ');
+                var timeAr1 = /(\d+)\:(\d+)/.exec(timeAr);
                 var format_start = dateAr[3] + '-' + dateAr[2] + '-' + dateAr[1] + ' ' + timeAr[1];
                 var dateAr = /(\d+)\-(\d+)\-(\d+)/.exec(appointment_end);
                 var timeAr = appointment_end.split(' ');
@@ -605,7 +621,7 @@
                             quotation_id: appointment_quotation_id,
                             title: title,
                             start: format_start,
-                            end: format_end,
+                            end: format_end + ':01',
                             description: appointment_desc,
                             tags: appointment_tags,
                             event_type: event_type,

@@ -4102,17 +4102,20 @@ class UserController extends Controller
 
             foreach($appointments_data as $key)
             {
+
+                $end_date = date('s', strtotime($key['end'])) == '00' ? $key['end'] . ':01' : $key['end'];
+
                 if(!isset($key['new']))
                 {
                     if($key['default_event'])
                     {
-                        if($key['title'] == 'Delivery Date')
+                        if($key['delivery_date'] == 1)
                         {
-                            new_quotations::where('id',$key['quotation_id'])->update(['delivery_date' => $key['start'], 'delivery_date_end' => $key['end']]);
+                            new_quotations::where('id',$key['quotation_id'])->update(['delivery_date' => $key['start'], 'delivery_date_end' => $end_date]);
                         }
                         else
                         {
-                            new_quotations::where('id',$key['quotation_id'])->update(['installation_date' => $key['start'], 'installation_date_end' => $key['end']]);
+                            new_quotations::where('id',$key['quotation_id'])->update(['installation_date' => $key['start'], 'installation_date_end' => $end_date]);
                         }
                     }
 
@@ -4121,7 +4124,7 @@ class UserController extends Controller
                     $check->default_event = $key['default_event'];
                     $check->title = $key['title'];
                     $check->start = $key['start'];
-                    $check->end = $key['end'];
+                    $check->end = $end_date;
                     $check->description = $key['description'] ? $key['description'] : NULL;
                     $check->tags = $key['tags'] ? $key['tags'] : NULL;
                     $check->retailer_client_id = $key['retailer_client_id'] ? $key['retailer_client_id'] : NULL;
@@ -4141,7 +4144,7 @@ class UserController extends Controller
                     $appointment->user_id = $user_id;
                     $appointment->title = $key['title'];
                     $appointment->start = $key['start'];
-                    $appointment->end = $key['end'];
+                    $appointment->end = $end_date;
                     $appointment->description = $key['description'] ? $key['description'] : NULL;
                     $appointment->tags = $key['tags'] ? $key['tags'] : NULL;
                     $appointment->retailer_client_id = $key['retailer_client_id'] ? $key['retailer_client_id'] : NULL;
