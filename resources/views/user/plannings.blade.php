@@ -753,7 +753,6 @@
                 $('.appointment_type').attr('disabled',true);
             }
 
-
             $('.appointment_title').trigger('change.select2');
             $('.appointment_type').trigger('change.select2');
             $('.appointment_quotation_number').trigger('change.select2');
@@ -886,7 +885,6 @@
                 {
                     var actualAppointment = $(arg.el);
                     var event = arg.event;
-
                     var id = arg.event._def.publicId;
 
                     if(event._def.extendedProps.quotation_id)
