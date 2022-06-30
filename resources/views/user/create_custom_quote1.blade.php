@@ -2490,7 +2490,7 @@
 	<script type="text/javascript">
 
 		$('.appointment_start').on('dp.change', function(e) {
-        
+
 			var date = $(this).val();
 
 			if(date)
@@ -2796,8 +2796,8 @@
 						obj['id'] = id;
 						obj['quotation_id'] = appointment_quotation_id;
 						obj['title'] = title;
-						obj['start'] = appointment_start;
-						obj['end'] = appointment_end;
+						obj['start'] = format_start;
+						obj['end'] = format_end;
 						obj['description'] = appointment_desc;
 						obj['tags'] = appointment_tags;
 						obj['new'] = 1;

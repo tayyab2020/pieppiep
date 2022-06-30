@@ -194,7 +194,7 @@ class UserController extends Controller
             $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => NULL, 'tags' => NULL, 'default_event' => 1, 'retailer_client_id' => NULL,'event_type' => 1],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => NULL, 'tags' => NULL, 'default_event' => 1, 'retailer_client_id' => NULL,'event_type' => 1]];
             $appointments = json_encode($appointments);
 
-            $other_appointments = quotation_appointments::where('user_id',$user_id)->select('id','quotation_id','title','start','end','description','tags','default_event','retailer_client_id','event_type')->get();
+            $other_appointments = quotation_appointments::leftjoin('new_quotations','new_quotations.id','=','quotation_appointments.quotation_id')->leftjoin('customers_details as t1','t1.id','=','new_quotations.customer_details')->leftjoin('customers_details as t2','t2.id','=','quotation_appointments.retailer_client_id')->leftjoin('users as t3','t3.id','=','quotation_appointments.supplier_id')->leftjoin('users as t4','t4.id','=','quotation_appointments.employee_id')->where('quotation_appointments.user_id',$user_id)->select('quotation_appointments.*','t1.name as client_quotation_fname','t1.family_name as client_quotation_lname','t2.name as client_fname','t2.family_name as client_lname','t3.company_name','t4.name as employee_fname','t4.family_name as employee_lname')->get();
 
             foreach($other_appointments as $row) {
 
@@ -213,9 +213,14 @@ class UserController extends Controller
             $current_appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
 
             $event_titles = planning_titles::where('user_id',$user_id)->get();
-            $quotation_ids = new_quotations::where('creator_id',$user_id)->select('id','quotation_invoice_number')->get();
+            $quotation_ids = new_quotations::leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->where('new_quotations.creator_id',$user_id)->select('new_quotations.id','new_quotations.quotation_invoice_number','customers_details.name','customers_details.family_name')->get();
+            $suppliers = User::leftjoin('retailers_requests', function($join) use($user_id){
+                $join->on('users.id', '=', 'retailers_requests.supplier_id');
+                $join->where('retailers_requests.retailer_id',$user_id);
+            })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*')->get();
+            $employees = User::where('role_id',2)->where('main_id',$user_id)->where('id','!=',$user_id)->get();
 
-            return view('user.create_new_quotation1', compact('last_event_id','quotation_ids','event_titles','current_appointments','products','customers','suppliers'));
+            return view('user.create_new_quotation1', compact('employees','suppliers','last_event_id','quotation_ids','event_titles','current_appointments','products','customers','suppliers'));
         }
         else
         {
@@ -3885,7 +3890,7 @@ class UserController extends Controller
             }
             else
             {
-                return view('user.create_new_quotation1', compact('last_event_id','quotation_ids','event_titles','current_appointments','products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
+                return view('user.create_new_quotation1', compact('employees','suppliers','clients','last_event_id','quotation_ids','event_titles','current_appointments','products','supplier_products','suppliers','colors','models','features','sub_features','customers','invoice','sub_products'));
             }
         }
         else
