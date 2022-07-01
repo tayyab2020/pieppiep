@@ -311,12 +311,19 @@ class AdminUserController extends Controller
 
     public function SupplierManagePost(Request $request)
     {
-        foreach($request->suppliers as $key)
+        if($request->suppliers)
         {
-            User::where('id',$key)->update(['supplier_account_show' => 1]);
-        }
+            foreach($request->suppliers as $key)
+            {
+                User::where('id',$key)->update(['supplier_account_show' => 1]);
+            }
 
-        User::whereNotIn('id',$request->suppliers)->where('role_id',4)->update(['supplier_account_show' => 0]);
+            User::whereNotIn('id',$request->suppliers)->where('role_id',4)->update(['supplier_account_show' => 0]);
+        }
+        else
+        {
+            User::where('role_id',4)->update(['supplier_account_show' => 0]);
+        }
 
         Session::flash('success', 'Task completed successfully!');
         return redirect()->back();
