@@ -25,7 +25,7 @@
                                             <div>
 
                                                 <button style="border-radius: 20px;" type="button" class="btn btn-success submit-suppliers"><i class="fa fa-save"></i> Submit</button>
-                                                <input style="display: none;" {{$users->contains('supplier_account_show', 1) ? 'checked' : null}} type="checkbox" id="selectCheck">
+                                                <input style="display: none;" type="checkbox" id="selectCheck">
                                                 <label style="border-radius: 20px;" class="btn btn-success select-all" for="selectCheck">Select All</label>
 
                                                 <a href="{{route('admin-supplier-create')}}" class="btn add-newProduct-btn"><i class="fa fa-plus"></i> Add Supplier</a>
@@ -88,7 +88,9 @@
 
                                                                         <td>
                                                                             <div style="display: flex;align-items: center;justify-content: center;" class="custom-control custom-checkbox mb-3">
-                                                                                <input style="margin: 0;" {{$user->supplier_account_show == 1 ? 'checked' : null}} type="checkbox" class="custom-control-input" id="customCheck{{$user->id}}" value="{{$user->id}}" name="suppliers[]">
+                                                                                <input style="margin: 0;" {{$user->supplier_account_show == 1 ? 'checked' : null}} type="checkbox" class="custom-control-input" id="customCheck{{$user->id}}">
+                                                                                <input class="supplier_id" type="hidden" value="{{$user->id}}" name="suppliers[]">
+                                                                                <input class="supplier_account_show" type="hidden" value="{{$user->supplier_account_show}}" name="supplier_account_show[]">
                                                                                 <label style="margin: 0 0 0 5px;" class="custom-control-label" for="customCheck{{$user->id}}">{{$user->id}}</label>
                                                                             </div>
                                                                         </td>
@@ -228,9 +230,18 @@
 
     $(".select-all").click(function(){
 
-        var check = $(this).prev('input').is(":checked");
+        var check = $('.custom-control-input:checked').length > 0 ? true : false;
 
-        $('input[name="suppliers[]"]').prop('checked', !check);
+        $('.custom-control-input').prop('checked', !check);
+        $('.supplier_account_show').val(check ? 0 : 1);
+    });
+
+    $(".custom-control-input").change(function(){
+
+        var check = $(this).is(":checked");
+
+        $(this).parent().find('.supplier_account_show').val(check ? 1 : 0);
+
     });
 
     $('#example').DataTable({

@@ -864,7 +864,7 @@ class UserController extends Controller
             $users = User::leftjoin('retailers_requests', function($join) use($user_id){
                 $join->on('users.id', '=', 'retailers_requests.supplier_id');
                 $join->where('retailers_requests.retailer_id',$user_id);
-            })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
+            })->where('users.role_id','=',4)->where('users.supplier_account_show',1)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
 
             // $products = array();
             // $categories = array();
