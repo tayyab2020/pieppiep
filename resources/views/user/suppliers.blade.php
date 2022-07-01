@@ -251,7 +251,6 @@
                 { "sWidth": "200px" }, // 2nd column width
                 { "sWidth": "" },
                 { "sWidth": "" },
-                { "sWidth": "" },
                 { "sWidth": "100px" },
                 { "sWidth": "" },
 
