@@ -473,6 +473,7 @@
   Route::post('/approve-handyman-quotations', 'AdminUserController@ApproveHandymanQuotations')->name('approve-handyman-quotations');
   Route::get('/retailers', 'AdminUserController@index')->name('admin-user-index');
   Route::get('/suppliers', 'AdminUserController@Suppliers')->name('admin-supplier-index');
+  Route::post('/supplier-manage', 'AdminUserController@SupplierManagePost')->name('admin-supplier-manage-post');
   Route::get('/clients', 'AdminUserController@Clients')->name('admin-user-client');
   Route::get('/bookings', 'AdminUserController@UserBookings')->name('admin-user-bookings');
   Route::get('/user-requests', 'AdminUserController@UserRequests')->name('admin-user-requests');

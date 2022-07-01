@@ -41,7 +41,7 @@
 
                                                             <td>{{$user->id}}</td>
 
-                                                            <td tabindex="0" class="sorting_1"><img src="{{ $user->photo ? asset('assets/images/'.$user->photo) : asset('assets/default.jpg')}}" alt="User's Photo" style="height: 180px; width: 200px;"></td>
+                                                            <td tabindex="0" class="sorting_1"><img src="{{ $user->photo ? asset('assets/images/'.$user->photo) : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG'}}" alt="User's Photo" style="height: 180px; width: 200px;"></td>
                                                             <td>{{$user->company_name}}</td>
 
                                                             <td>{{$user->email}}</td>

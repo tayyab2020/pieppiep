@@ -309,6 +309,18 @@ class AdminUserController extends Controller
         return view('admin.user.index',compact('users','products'));
     }
 
+    public function SupplierManagePost(Request $request)
+    {
+        foreach($request->suppliers as $key)
+        {
+            User::where('id',$key)->update(['supplier_account_show' => 1]);
+        }
+
+        User::whereNotIn('id',$request->suppliers)->where('role_id',4)->update(['supplier_account_show' => 0]);
+
+        Session::flash('success', 'Task completed successfully!');
+        return redirect()->back();
+    }
 
     public function QuotationRequests()
     {
