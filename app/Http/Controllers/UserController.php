@@ -856,15 +856,28 @@ class UserController extends Controller
 
         if($main_id)
         {
-            $user_id = $main_id;
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
         }
+
+        $supplier_ids = $user->supplier_ids ? explode(',',$user->supplier_ids) : $user->supplier_ids;
 
         if($user->can('retailer-suppliers'))
         {
-            $users = User::leftjoin('retailers_requests', function($join) use($user_id){
-                $join->on('users.id', '=', 'retailers_requests.supplier_id');
-                $join->where('retailers_requests.retailer_id',$user_id);
-            })->where('users.role_id','=',4)->where('users.supplier_account_show',1)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
+            if($supplier_ids)
+            {
+                $users = User::leftjoin('retailers_requests', function($join) use($user_id){
+                    $join->on('users.id', '=', 'retailers_requests.supplier_id');
+                    $join->where('retailers_requests.retailer_id',$user_id);
+                })->where('users.role_id','=',4)->where('users.supplier_account_show',1)->whereIn('users.id',$supplier_ids)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
+            }
+            else
+            {
+                $users = User::leftjoin('retailers_requests', function($join) use($user_id){
+                    $join->on('users.id', '=', 'retailers_requests.supplier_id');
+                    $join->where('retailers_requests.retailer_id',$user_id);
+                })->where('users.role_id','=',4)->where('users.supplier_account_show',1)->orderBy('users.created_at','desc')->select('users.*','retailers_requests.status','retailers_requests.active')->get();
+            }
 
             // $products = array();
             // $categories = array();

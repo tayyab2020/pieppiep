@@ -1100,8 +1100,19 @@ class AdminUserController extends Controller
     public function Details($id)
     {
         $user = User::findOrFail($id);
+        $suppliers = User::where('role_id',4)->get();
 
-        return view('admin.user.details',compact('user'));
+        return view('admin.user.details',compact('user','suppliers'));
+    }
+
+    public function DetailsUpdate(Request $request)
+    {
+        $suppliers = $request->suppliers ? implode(',',$request->suppliers) : $request->suppliers;
+
+        User::where('id',$request->retailer_id)->update(['supplier_ids' => $suppliers]);
+        
+        Session::flash('success', 'Task completed successfully!');
+        return redirect()->back();
     }
 
     public function DetailsSupplier($id)

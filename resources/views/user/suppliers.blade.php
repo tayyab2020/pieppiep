@@ -253,7 +253,6 @@
                 { "sWidth": "" },
                 { "sWidth": "100px" },
                 { "sWidth": "" },
-
             ]
         });
     </script>

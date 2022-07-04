@@ -493,6 +493,7 @@
   Route::get('/suppliers/products/{id}', 'ProductController@ProductsSupplier')->name('supplier-products');
 
   Route::get('/retailers/details/{id}', 'AdminUserController@Details')->name('admin-user-details');
+  Route::post('/retailers/details', 'AdminUserController@DetailsUpdate')->name('admin-retailer-update');
 
   Route::get('/retailers/client-details/{id}', 'AdminUserController@ClientDetails')->name('admin-user-client-details');
 
