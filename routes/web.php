@@ -138,6 +138,7 @@
   Route::get('/Offerte-verkoopfactuur/{id?}', 'UserController@ClientNewQuotations')->name('client-quotations-invoices');
   Route::get('/bekijk-offerte-aanvraag/{id}', 'UserController@QuoteRequest');
   Route::get('/download-quote-request/{id}', 'UserController@DownloadQuoteRequest');
+  Route::get('/download-quote-request-file/{id}', 'UserController@DownloadQuoteRequestFile');
   Route::get('/download-quote-invoice/{id}', 'UserController@DownloadQuoteInvoice');
   Route::get('/download-commission-invoice/{id}', 'UserController@DownloadCommissionInvoice');
   Route::get('/download-custom-quotation/{id}', 'UserController@DownloadCustomQuotation');
@@ -466,6 +467,7 @@
   Route::get('/view-quote-request/{id}', 'AdminUserController@QuoteRequest');
   Route::get('/view-quotation/{id}', 'AdminUserController@ViewQuotation')->name('view-quotation');
   Route::get('/download-quote-request/{id}', 'AdminUserController@DownloadQuoteRequest');
+  Route::get('/download-quote-request-file/{id}', 'AdminUserController@DownloadQuoteRequestFile');
   Route::get('/download-quote-invoice/{id}', 'AdminUserController@DownloadQuoteInvoice');
   Route::get('/download-commission-invoice/{id}', 'AdminUserController@DownloadCommissionInvoice');
   Route::get('/send-quote-request/{id}', 'AdminUserController@SendQuoteRequest');

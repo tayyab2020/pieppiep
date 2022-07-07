@@ -120,6 +120,10 @@
                                                                         <li><a href="{{ url('/logstof/retailer-quotations/'.$key->id) }}">View Quotations</a></li>
                                                                         <li><a href="{{ url('/logstof/download-quote-request/'.$key->id) }}">Download PDF</a></li>
 
+                                                                        @if($key->quote_file1)
+                                                                            <li><a href="{{ url('/logstof/download-quote-request-file/'.$key->id) }}">Download File 1</a></li>
+                                                                        @endif
+
                                                                         @if($key->status != 3)
                                                                             <li><a href="{{ url('/logstof/send-quote-request/'.$key->id) }}">Send</a></li>
                                                                         @endif

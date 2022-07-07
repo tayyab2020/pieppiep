@@ -117,6 +117,9 @@
                                                                         <li><a href="{{ url('/aanbieder/bekijk-offerte-aanvraag/'.$key->id) }}">{{__('text.View')}}</a></li>
                                                                         <li><a href="{{ url('/aanbieder/offertes/'.$key->id) }}">{{__('text.View Quotations')}}</a></li>
                                                                         <li><a href="{{ url('/aanbieder/download-quote-request/'.$key->id) }}">{{__('text.Download PDF')}}</a></li>
+                                                                        @if($key->quote_file1)
+                                                                            <li><a href="{{ url('/aanbieder/download-quote-request-file/'.$key->id) }}">Download File 1</a></li>
+                                                                        @endif
                                                                     </ul>
                                                                 </div>
                                                             </td>

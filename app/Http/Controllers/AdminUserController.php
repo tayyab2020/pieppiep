@@ -476,6 +476,32 @@ class AdminUserController extends Controller
         return response()->download(public_path("assets/adminQuotesPDF/{$filename}"));
     }
 
+    public function DownloadQuoteRequestFile($id)
+    {
+        $whitelist = array(
+            '127.0.0.1',
+            '::1'
+        );
+
+        $quote = quotes::where('id', $id)->first();
+        $filename = $quote->quote_file1;
+
+        if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
+
+            $url = $this->gs1->site . 'public/assets/quotes_user_files/'.$filename;
+
+        }
+        else
+        {
+            $url = 'http://localhost/vloerofferte/public/assets/quotes_user_files/'.$filename;
+        }
+
+        $tempFile = tempnam(sys_get_temp_dir(), $filename);
+        copy($url, $tempFile);
+
+        return response()->download($tempFile, $filename);
+    }
+
     public function ViewQuotation($id)
     {
         $settings = Generalsetting::findOrFail(1);
