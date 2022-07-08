@@ -679,22 +679,27 @@ class BrandController extends Controller
             }
             else
             {
-                if($cat->other_suppliers)
-                {
-                    $cat->user_id = 0;
-                    $cat->save();
-                }
-                else
-                {
-                    if($cat->photo != null){
-                        \File::delete(public_path() .'/assets/images/'.$cat->photo);
-                    }
+                $cat->user_id = 0;
+                $cat->trademark = 0;
+                $cat->save();
+                    
+                // if($cat->other_suppliers)
+                // {
+                //     $cat->user_id = 0;
+                //     $cat->trademark = 0;
+                //     $cat->save();
+                // }
+                // else
+                // {
+                //     if($cat->photo != null){
+                //         \File::delete(public_path() .'/assets/images/'.$cat->photo);
+                //     }
 
-                    $cat->delete();
-                    Model1::where('brand_id',$id)->delete();
-                    brand_edit_requests::where('brand_id',$id)->delete();
-                    type_edit_requests::where('brand_id',$id)->delete();
-                }
+                //     $cat->delete();
+                //     Model1::where('brand_id',$id)->delete();
+                //     brand_edit_requests::where('brand_id',$id)->delete();
+                //     type_edit_requests::where('brand_id',$id)->delete();
+                // }
             }
 
             Session::flash('success', 'Brand deleted successfully.');

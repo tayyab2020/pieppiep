@@ -14,7 +14,6 @@
 
                                     <div class="add-product-header">
                                         <h2>Other Supplier Brands</h2>
-
                                         <a href="{{route('admin-brand-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
                                     </div>
 
@@ -23,6 +22,8 @@
                                         @include('includes.form-success')
 
                                         {{csrf_field()}}
+
+                                        <h4 style="color: #ea4444;padding: 0 15px;font-family: monospace;">Note: Keep holding CTRL/CMD button while selecting brands to keep previously selected brands otherwise they will be deselected.</h4>
 
                                         <div class="form-group">
                                                             
