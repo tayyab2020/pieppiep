@@ -860,7 +860,7 @@ class UserController extends Controller
             $user_id = $user->id;
         }
 
-        $supplier_ids = $user->supplier_ids ? explode(',',$user->supplier_ids) : $user->supplier_ids;
+        $supplier_ids = User::whereRaw("find_in_set('$user_id',retailer_ids)")->where('users.role_id','=',4)->pluck('id')->toArray();
 
         if($user->can('retailer-suppliers'))
         {

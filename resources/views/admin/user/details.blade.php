@@ -125,27 +125,27 @@
                                     </div>
                                 </div>
 
-                                @if(Route::currentRouteName() == 'admin-user-details' && count($suppliers) > 0)
+                                @if(Route::currentRouteName() == 'admin-supplier-details' && count($retailers) > 0)
 
                                     <div class="form-group" style="margin-top: 30px;display: inline-block;width: 100%;border: 1px solid #c1c1c1;border-radius: 10px;padding: 10px;">
 
-                                        <h4 style="text-align: center;">Select suppliers which should be visible in this retailer account</h4>
+                                        <h4 style="text-align: center;">Select retailers for which this supplier account will be enabled</h4>
 
-                                        <form action="{{route('admin-retailer-update')}}" method="POST">
+                                        <form action="{{route('admin-supplier-update')}}" method="POST">
 
                                             {{ csrf_field() }}
 
-                                            <input type="hidden" name="retailer_id" value="{{$user->id}}">
+                                            <input type="hidden" name="supplier_id" value="{{$user->id}}">
 
-                                            <?php $supplier_ids = explode(',',$user->supplier_ids); ?>
+                                            <?php $retailer_ids = explode(',',$user->retailer_ids); ?>
 
                                             <div style="margin: 0;" class="row">
 
-                                                @foreach($suppliers as $x => $key)
+                                                @foreach($retailers as $x => $key)
 
                                                     <div class="form-check">
-                                                        <input {{in_array($key->id, $supplier_ids) ? 'checked' : null}} class="form-check-input" type="checkbox" name="suppliers[]" value="{{$key->id}}" id="flexCheckChecked{{$x}}"/>
-                                                        <label class="form-check-label" for="flexCheckChecked{{$x}}">{{$key->company_name}}</label>
+                                                        <input {{in_array($key->id, $retailer_ids) ? 'checked' : null}} class="form-check-input" type="checkbox" name="retailers[]" value="{{$key->id}}" id="flexCheckChecked{{$x}}"/>
+                                                        <label class="form-check-label" for="flexCheckChecked{{$x}}">{{$key->name . ' ' . $key->family_name}}</label>
                                                     </div>
 
                                                 @endforeach

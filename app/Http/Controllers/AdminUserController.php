@@ -1126,16 +1126,15 @@ class AdminUserController extends Controller
     public function Details($id)
     {
         $user = User::findOrFail($id);
-        $suppliers = User::where('role_id',4)->get();
 
-        return view('admin.user.details',compact('user','suppliers'));
+        return view('admin.user.details',compact('user'));
     }
 
     public function DetailsUpdate(Request $request)
     {
-        $suppliers = $request->suppliers ? implode(',',$request->suppliers) : $request->suppliers;
+        $retailers = $request->retailers ? implode(',',$request->retailers) : $request->retailers;
 
-        User::where('id',$request->retailer_id)->update(['supplier_ids' => $suppliers]);
+        User::where('id',$request->supplier_id)->update(['retailer_ids' => $retailers]);
         
         Session::flash('success', 'Task completed successfully!');
         return redirect()->back();
@@ -1144,8 +1143,9 @@ class AdminUserController extends Controller
     public function DetailsSupplier($id)
     {
         $user = User::findOrFail($id);
+        $retailers = User::where('role_id',2)->get();
 
-        return view('admin.user.details',compact('user'));
+        return view('admin.user.details',compact('user','retailers'));
     }
 
     public function ClientDetails($id)

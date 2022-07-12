@@ -492,13 +492,11 @@
   Route::get('/suppliers/create', 'AdminUserController@createSupplier')->name('admin-supplier-create');
   Route::get('/suppliers/edit/{id}', 'AdminUserController@editSupplier')->name('admin-supplier-edit');
   Route::get('/suppliers/details/{id}', 'AdminUserController@DetailsSupplier')->name('admin-supplier-details');
+  Route::post('/suppliers/details', 'AdminUserController@DetailsUpdate')->name('admin-supplier-update');
   Route::get('/suppliers/products/{id}', 'ProductController@ProductsSupplier')->name('supplier-products');
 
   Route::get('/retailers/details/{id}', 'AdminUserController@Details')->name('admin-user-details');
-  Route::post('/retailers/details', 'AdminUserController@DetailsUpdate')->name('admin-retailer-update');
-
   Route::get('/retailers/client-details/{id}', 'AdminUserController@ClientDetails')->name('admin-user-client-details');
-
   Route::get('/retailers/status/{id1}/{id2}', 'AdminUserController@status')->name('admin-user-st');
 
   /*Route::get('/categories', 'CategoryController@index')->name('admin-cat-index');
