@@ -148,12 +148,12 @@ class MyBrandController extends Controller
             return $validations;
         }
 
-        $validations = $this->CustomValidationsTypes($request->brand_id ? $request->type_ids : NULL,$request->types,$request->type_slugs);
+        // $validations = $this->CustomValidationsTypes($request->brand_id ? $request->type_ids : NULL,$request->types,$request->type_slugs);
 
-        if($validations)
-        {
-            return $validations;
-        }
+        // if($validations)
+        // {
+        //     return $validations;
+        // }
 
         if($request->edit_request_id)
         {
