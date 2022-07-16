@@ -5,7 +5,7 @@
 	<script src="{{asset('assets/admin/js/main1.js')}}"></script>
 	<script src="{{asset('assets/admin/js/bootstrap-tagsinput.js')}}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
-	<script src="https://www.jqueryscript.net/demo/Date-Time-Picker-Bootstrap-4/build/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="{{asset('assets/admin/js/bootstrap-datetimepicker.min.js')}}"></script>
 
 	<div class="right-side">
 
