@@ -4976,6 +4976,8 @@ class UserController extends Controller
 
     public function StoreNewQuotation(Request $request)
     {
+        var_dump($request->estimated_price_quantity);
+        exit();
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
