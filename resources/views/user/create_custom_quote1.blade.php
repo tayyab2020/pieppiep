@@ -3086,7 +3086,14 @@
 					{
 						if(event._def.extendedProps.quotation_id)
                     	{
-                        	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
+							if(event._def.extendedProps.client_quotation_fname || event._def.extendedProps.client_quotation_lname)
+							{
+								actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
+							}
+							else
+							{
+								actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;"></span>');
+							}                        	
                     	}
                     	else if(event._def.extendedProps.retailer_client_id)
                     	{

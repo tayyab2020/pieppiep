@@ -860,7 +860,9 @@ class UserController extends Controller
             $user_id = $user->id;
         }
 
-        $supplier_ids = User::whereRaw("find_in_set('$user_id',retailer_ids)")->where('users.role_id','=',4)->pluck('id')->toArray();
+        $supplier_ids = User::whereRaw("find_in_set('$user_id',retailer_ids)")->orWhere(function($query) use ($user_id) {
+            $query->where('retailer_ids',NULL)->where('supplier_account_show',1);
+        })->where('users.role_id','=',4)->pluck('id')->toArray();
 
         if($user->can('retailer-suppliers'))
         {
@@ -1663,11 +1665,17 @@ class UserController extends Controller
             $qty[$i] = str_replace('.', ',',$key->qty);
             $request->qty = $qty;
 
-            $total[$i] = $key->total;
+            $total[$i] = $key->amount;
             $request->total = $total;
 
             $measure[$i] = $key->measure;
             $request->measure = $measure;
+
+            $price_before_labor[$i] = $key->price_before_labor;
+            $request->price_before_labor = $price_before_labor;
+
+            $estimated_price_quantity[$i] = $key->box_quantity;
+            $request->estimated_price_quantity = $estimated_price_quantity;
 
             if ($key->item_id != 0) {
 
@@ -1780,6 +1788,10 @@ class UserController extends Controller
         $time = date('H:i:s',$time);
         $delivery_date = $request->delivery_date . ' ' . $time;
 
+        $time1 = strtotime($now);
+        $time1 = date('H:i',$time1);
+        $delivery_date1 = date('Y-m-d',strtotime($request->delivery_date)) . ' ' . $time1;
+
         $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
         if (count($invoice) == 0) {
@@ -1799,7 +1811,7 @@ class UserController extends Controller
         $filename = $quotation_invoice_number . '.pdf';
         $service_fee = $this->gs->service_fee;
 
-        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date]);
+        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date1]);
 
         $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
         $user = $invoice[0];
@@ -1822,14 +1834,17 @@ class UserController extends Controller
             $qty[$i] = str_replace('.', ',',$key->qty);
             $request->qty = $qty;
 
-            $total[$i] = $key->total;
+            $total[$i] = $key->amount;
             $request->total = $total;
 
             $measure[$i] = $key->measure;
             $request->measure = $measure;
 
-            $box_quantity[$i] = $key->box_quantity;
-            $request->box_quantity = $box_quantity;
+            $price_before_labor[$i] = $key->price_before_labor;
+            $request->price_before_labor = $price_before_labor;
+
+            $estimated_price_quantity[$i] = $key->box_quantity;
+            $request->estimated_price_quantity = $estimated_price_quantity;
 
             if ($key->item_id != 0) {
 
@@ -4576,22 +4591,13 @@ class UserController extends Controller
             $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
             $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
 
-            date_default_timezone_set('Europe/Amsterdam');
-            $delivery_date = date('Y-m-d', strtotime( $request->retailer_delivery_date . ' -1 day' ));
-            $is_weekend = date('N', strtotime($delivery_date)) >= 6;
-
-            while($is_weekend)
-            {
-                $delivery_date = date('Y-m-d', strtotime($delivery_date. '- 1 day'));
-                $is_weekend = date('N', strtotime($delivery_date)) >= 6;
-            }
-
-            // $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
+            // date_default_timezone_set('Europe/Amsterdam');
+            // $delivery_date = date('Y-m-d', strtotime( $request->retailer_delivery_date . ' -1 day' ));
             // $is_weekend = date('N', strtotime($delivery_date)) >= 6;
 
             // while($is_weekend)
             // {
-            //     $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 days'));
+            //     $delivery_date = date('Y-m-d', strtotime($delivery_date. '- 1 day'));
             //     $is_weekend = date('N', strtotime($delivery_date)) >= 6;
             // }
 
@@ -4636,9 +4642,9 @@ class UserController extends Controller
             $order->basic_price = 0;
             $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
             $order->amount = 0;
-            $order->delivery_days = $request->delivery_days[$i];
-            $order->delivery_date = $delivery_date;
-            $order->retailer_delivery_date = $delivery_date;
+            // $order->delivery_days = $request->delivery_days[$i];
+            // $order->delivery_date = $delivery_date;
+            // $order->retailer_delivery_date = $delivery_date;
             $order->price_before_labor = 0;
             $order->labor_impact = 0;
             $order->discount = 0;
@@ -5396,7 +5402,7 @@ class UserController extends Controller
             }
 
             date_default_timezone_set('Europe/Amsterdam');
-            $delivery_date = date('Y-m-d', strtotime( $request->retailer_delivery_date . ' -1 day' ));
+            $delivery_date = date('Y-m-d', strtotime( $delivery_date_start . ' -1 day' ));
             $is_weekend = date('N', strtotime($delivery_date)) >= 6;
 
             while($is_weekend)

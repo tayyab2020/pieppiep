@@ -378,16 +378,8 @@
 
                                                                         if($role == 'retailer' || $role == 'invoice1')
                                                                             {
-                                                                                if(isset($re_edit) && $form_type == 1)
-                                                                                {
-                                                                                    $estimated_price = number_format((float)($request->total[$i]/$request->box_quantity[$i]), 2, ',', '');
-                                                                                    $estimated_quantity = number_format((float)$request->box_quantity[$i], 2, ',', '');
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    $estimated_price = number_format((float)($request->total[$i]/$request->estimated_price_quantity[$i]), 2, ',', '');
-                                                                                    $estimated_quantity = number_format((float)$request->estimated_price_quantity[$i], 2, ',', '');
-                                                                                }
+                                                                                $estimated_price = number_format((float)(str_replace(',', '.',$request->price_before_labor[$i])/$request->estimated_price_quantity[$i]), 2, ',', '');
+                                                                                $estimated_quantity = number_format((float)$request->estimated_price_quantity[$i], 2, ',', '');
                                                                             }
                                                                         else
                                                                             {

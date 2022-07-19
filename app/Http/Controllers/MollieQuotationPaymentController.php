@@ -103,11 +103,17 @@ class MollieQuotationPaymentController extends Controller {
                 $qty[$i] = str_replace('.', ',',$key->qty);
                 $request->qty = $qty;
 
-                $total[$i] = $key->total;
+                $total[$i] = $key->amount;
                 $request->total = $total;
 
                 $measure[$i] = $key->measure;
                 $request->measure = $measure;
+
+                $price_before_labor[$i] = $key->price_before_labor;
+                $request->price_before_labor = $price_before_labor;
+
+                $estimated_price_quantity[$i] = $key->box_quantity;
+                $request->estimated_price_quantity = $estimated_price_quantity;
 
                 if ($key->item_id != 0) {
 
