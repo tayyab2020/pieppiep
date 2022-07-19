@@ -1828,6 +1828,9 @@ class UserController extends Controller
             $measure[$i] = $key->measure;
             $request->measure = $measure;
 
+            $box_quantity[$i] = $key->box_quantity;
+            $request->box_quantity = $box_quantity;
+
             if ($key->item_id != 0) {
 
                 $product_titles[] = items::where('id',$key->item_id)->pluck('cat_name')->first();
