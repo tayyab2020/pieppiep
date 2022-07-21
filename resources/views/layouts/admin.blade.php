@@ -176,9 +176,9 @@
 
                                         <li><a href="{{route('admin-gs-vats')}}"><i class="fa fa-angle-right"></i> VAT Settings</a></li>
 
-                                        <li><a href="{{route('admin-handyman-terms')}}"><i class="fa fa-angle-right"></i> Handyman Terms & Conditions</a></li>
+                                        <!-- <li><a href="{{route('admin-handyman-terms')}}"><i class="fa fa-angle-right"></i> Handyman Terms & Conditions</a></li>
 
-                                        <li><a href="{{route('admin-client-terms')}}"><i class="fa fa-angle-right"></i> Client Terms & Conditions</a></li>
+                                        <li><a href="{{route('admin-client-terms')}}"><i class="fa fa-angle-right"></i> Client Terms & Conditions</a></li> -->
 
                                         <li><a href="{{route('admin-instruction-manual')}}"><i class="fa fa-angle-right"></i> Instruction Manual</a></li>
 

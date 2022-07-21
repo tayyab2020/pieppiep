@@ -1620,6 +1620,11 @@ class UserController extends Controller
         $time = strtotime($now);
         $time = date('H:i:s',$time);
         $delivery_date = $request->delivery_date . ' ' . $time;
+
+        $time1 = strtotime($now);
+        $time1 = date('H:i',$time1);
+        $delivery_date1 = date('Y-m-d',strtotime($request->delivery_date)) . ' ' . $time1;
+        
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
@@ -1642,7 +1647,7 @@ class UserController extends Controller
         $filename = $quotation_invoice_number . '.pdf';
         $service_fee = $this->gs->service_fee;
 
-        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date]);
+        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date1]);
 
         $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
         $user = $invoice[0];
