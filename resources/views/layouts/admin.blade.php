@@ -168,7 +168,7 @@
                                     <a href="#generalSettings" data-toggle="collapse" aria-expanded="false"><i class="fa fa-fw fa-cogs"></i> General Settings</a>
                                     <ul class="collapse list-unstyled submenu" id="generalSettings">
 
-                                        <li><a href="{{route('admin-lang-index')}}"><i class="fa fa-fw fa-language"></i>  Language Settings</a></li>
+                                        <li><a href="{{route('admin-lang-index')}}"><i class="fa fa-fw fa-language"></i> Language Settings</a></li>
 
                                         <li><a href="{{route('admin-filter-settings')}}"><i class="fa fa-fw fa-cogs"></i> Filter settings</a></li>
 
