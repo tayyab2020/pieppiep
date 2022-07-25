@@ -1613,7 +1613,6 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-
     public function AcceptQuotationPieppiep(Request $request)
     {
         $now = date('d-m-Y H:i:s');
@@ -1624,15 +1623,24 @@ class UserController extends Controller
         $time1 = strtotime($now);
         $time1 = date('H:i',$time1);
         $delivery_date1 = date('Y-m-d',strtotime($request->delivery_date)) . ' ' . $time1;
+
+        $time2 = strtotime($now);
+        $time2 = date('H:i:s',$time2);
+        $delivery_date2 = date('Y-m-d',strtotime($request->delivery_date)) . ' ' . $time2;
         
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'new_quotations.delivery_date as date_start', 'new_quotations.delivery_date_end as date_end', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
         if (!$invoice) {
             return redirect()->back();
         }
+
+        // $ds = $invoice[0]->date_start;
+        // $de = $invoice[0]->date_end;
+
+        // $find_appointment = quotation_appointments::where('quotation_id',$request->invoice_id)->where('start',$ds)->where('end',$de)->where('title','Delivery Date')->latest('id')->first();
 
         quotes::where('id', $invoice[0]->quote_id)->update(['status' => 2,'quote_delivery' => $delivery_date,'quote_zipcode' => $request->delivery_address,'quote_postcode' => $request->postcode,'quote_city' => $request->city]);
 
@@ -1647,7 +1655,7 @@ class UserController extends Controller
         $filename = $quotation_invoice_number . '.pdf';
         $service_fee = $this->gs->service_fee;
 
-        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date1]);
+        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date1, 'delivery_date_end' => $delivery_date2]);
 
         $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
         $user = $invoice[0];
@@ -1797,6 +1805,10 @@ class UserController extends Controller
         $time1 = date('H:i',$time1);
         $delivery_date1 = date('Y-m-d',strtotime($request->delivery_date)) . ' ' . $time1;
 
+        $time2 = strtotime($now);
+        $time2 = date('H:i:s',$time2);
+        $delivery_date2 = date('Y-m-d',strtotime($request->delivery_date)) . ' ' . $time2;
+
         $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
         if (count($invoice) == 0) {
@@ -1816,7 +1828,7 @@ class UserController extends Controller
         $filename = $quotation_invoice_number . '.pdf';
         $service_fee = $this->gs->service_fee;
 
-        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date1]);
+        new_quotations::where('id', $request->invoice_id)->update(['service_fee' => $service_fee, 'status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now, 'delivery_date' => $delivery_date1, 'delivery_date_end' => $delivery_date2]);
 
         $request = new_quotations::where('id', $request->invoice_id)->with('data')->first();
         $user = $invoice[0];
