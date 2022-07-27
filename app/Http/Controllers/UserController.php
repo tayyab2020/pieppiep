@@ -6760,7 +6760,7 @@ class UserController extends Controller
             $check->processing = 1;
             $check->save();
 
-            SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1);
+            SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1,$request->delivery_date);
 
             Session::flash('success', __('text.Order will be sent to supplier(s) soon...'));
             return redirect()->route('customer-quotations');

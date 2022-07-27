@@ -33,6 +33,7 @@ class SendOrder implements ShouldQueue
     private $mail_to = null;
     private $mail_subject = null;
     private $mail_body = null;
+    private $retailer_delivery_date = null;
     public $timeout = 0;
 
     /**
@@ -40,12 +41,13 @@ class SendOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($id,$user,$mail_subject,$mail_body)
+    public function __construct($id,$user,$mail_subject,$mail_body,$retailer_delivery_date)
     {
         $this->id = $id;
         $this->user = $user;
         $this->mail_subject = $mail_subject;
         $this->mail_body = $mail_body;
+        $this->retailer_delivery_date = $retailer_delivery_date;
     }
 
     /**
@@ -61,6 +63,7 @@ class SendOrder implements ShouldQueue
         $main_id = $user->main_id;
         $mail_subject = $this->mail_subject;
         $mail_body = $this->mail_body;
+        $retailer_delivery_date = $this->retailer_delivery_date;
         $sup_mail = array();
 
         if($main_id)
@@ -199,7 +202,7 @@ class SendOrder implements ShouldQueue
             $file = public_path() . '/assets/supplierQuotations/' . $filename;
 
             // new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d')]);
-            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d')]);
+            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d'),'retailer_delivery_date' => $retailer_delivery_date]);
 
             ini_set('max_execution_time', 180);
 
