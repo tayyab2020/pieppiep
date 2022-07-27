@@ -181,18 +181,18 @@ class UserController extends Controller
                 $suppliers = array();*/
             }
 
-            date_default_timezone_set('Europe/Amsterdam');
-            $date = date('Y-m-d H:i');
-            $next_hour_date = date("Y-m-d H:i", strtotime("+1 hours"));
+            // date_default_timezone_set('Europe/Amsterdam');
+            // $date = date('Y-m-d H:i');
+            // $next_hour_date = date("Y-m-d H:i", strtotime("+1 hours"));
 
-            if(date("d-m-Y", strtotime($date)) != date("d-m-Y", strtotime($next_hour_date))) //check if after next one hour if its same day or not (for delivery date to be in same day because of one hour default range in fullcalendar)
-            {
-                $date = $next_hour_date;
-            }
+            // if(date("d-m-Y", strtotime($date)) != date("d-m-Y", strtotime($next_hour_date))) //check if after next one hour if its same day or not (for delivery date to be in same day because of one hour default range in fullcalendar)
+            // {
+            //     $date = $next_hour_date;
+            // }
 
             $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
-            $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => NULL, 'tags' => NULL, 'default_event' => 1, 'retailer_client_id' => NULL,'event_type' => 1],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => NULL, 'tags' => NULL, 'default_event' => 1, 'retailer_client_id' => NULL,'event_type' => 1]];
-            $appointments = json_encode($appointments);
+            // $appointments = [['id' => '1a', 'classNames' => 'delivery_date', 'title' => 'Delivery Date', 'start' => $date, 'end' => $date, 'description' => NULL, 'tags' => NULL, 'default_event' => 1, 'retailer_client_id' => NULL,'event_type' => 1],['id' => '1b', 'classNames' => 'installation_date', 'title' => 'Installation Date', 'start' => $date, 'end' => $date, 'description' => NULL, 'tags' => NULL, 'default_event' => 1, 'retailer_client_id' => NULL,'event_type' => 1]];
+            // $appointments = json_encode($appointments);
 
             $other_appointments = quotation_appointments::leftjoin('new_quotations','new_quotations.id','=','quotation_appointments.quotation_id')->leftjoin('customers_details as t1','t1.id','=','new_quotations.customer_details')->leftjoin('customers_details as t2','t2.id','=','quotation_appointments.retailer_client_id')->leftjoin('users as t3','t3.id','=','quotation_appointments.supplier_id')->leftjoin('users as t4','t4.id','=','quotation_appointments.employee_id')->where('quotation_appointments.user_id',$user_id)->select('quotation_appointments.*','t1.name as client_quotation_fname','t1.family_name as client_quotation_lname','t2.name as client_fname','t2.family_name as client_lname','t3.company_name','t4.name as employee_fname','t4.family_name as employee_lname')->get();
 
@@ -210,8 +210,10 @@ class UserController extends Controller
 
             $other_appointments = json_encode($other_appointments);
 
-            $current_appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
+            // $current_appointments = json_encode(array_merge(json_decode($appointments, true),json_decode($other_appointments, true)));
+            $current_appointments = $other_appointments;
 
+            $clients = customers_details::where('retailer_id',$user_id)->get();
             $event_titles = planning_titles::where('user_id',$user_id)->get();
             $quotation_ids = new_quotations::leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->where('new_quotations.creator_id',$user_id)->select('new_quotations.id','new_quotations.quotation_invoice_number','customers_details.name','customers_details.family_name')->get();
             $suppliers = User::leftjoin('retailers_requests', function($join) use($user_id){
@@ -220,7 +222,7 @@ class UserController extends Controller
             })->where('users.role_id','=',4)->orderBy('users.created_at','desc')->select('users.*')->get();
             $employees = User::where('role_id',2)->where('main_id',$user_id)->where('id','!=',$user_id)->get();
 
-            return view('user.create_new_quotation1', compact('employees','suppliers','last_event_id','quotation_ids','event_titles','current_appointments','products','customers','suppliers'));
+            return view('user.create_new_quotation1', compact('clients','employees','suppliers','last_event_id','quotation_ids','event_titles','current_appointments','products','customers','suppliers'));
         }
         else
         {
@@ -1631,16 +1633,30 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'new_quotations.delivery_date as date_start', 'new_quotations.delivery_date_end as date_end', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'new_quotations.creator_id', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
-        if (!$invoice) {
+        if (count($invoice) == 0) {
             return redirect()->back();
         }
 
-        // $ds = $invoice[0]->date_start;
-        // $de = $invoice[0]->date_end;
+        $find_appointment = quotation_appointments::where('quotation_id',$request->invoice_id)->where('title','Delivery Date')->latest('id')->first();
 
-        // $find_appointment = quotation_appointments::where('quotation_id',$request->invoice_id)->where('start',$ds)->where('end',$de)->where('title','Delivery Date')->latest('id')->first();
+        if($find_appointment)
+        {
+            $find_appointment->start = $delivery_date1;
+            $find_appointment->end = $delivery_date2;
+            $find_appointment->save();
+        }
+        else
+        {
+            $delivery_appointment = new quotation_appointments;
+            $delivery_appointment->quotation_id = $request->invoice_id;
+            $delivery_appointment->user_id = $invoice[0]->creator_id;
+            $delivery_appointment->title = 'Delivery Date';
+            $delivery_appointment->start = $delivery_date1;
+            $delivery_appointment->end = $delivery_date2;
+            $delivery_appointment->save();
+        }
 
         quotes::where('id', $invoice[0]->quote_id)->update(['status' => 2,'quote_delivery' => $delivery_date,'quote_zipcode' => $request->delivery_address,'quote_postcode' => $request->postcode,'quote_city' => $request->city]);
 
@@ -1809,10 +1825,29 @@ class UserController extends Controller
         $time2 = date('H:i:s',$time2);
         $delivery_date2 = date('Y-m-d',strtotime($request->delivery_date)) . ' ' . $time2;
 
-        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('new_quotations_data', 'new_quotations_data.quotation_id', '=', 'new_quotations.id')->leftjoin('users','users.id','=','new_quotations.creator_id')->where('new_quotations.id', $request->invoice_id)->where('quotes.user_id', $user_id)->select('new_quotations_data.*', 'new_quotations.created_at', 'new_quotations.quote_request_id as quote_id','new_quotations.description as other_info', 'new_quotations.tax_amount as tax', 'new_quotations.grand_total', 'new_quotations.quotation_invoice_number', 'new_quotations.creator_id', 'users.compressed_photo', 'users.quotation_prefix', 'users.name', 'users.family_name', 'users.company_name','users.address','users.postcode','users.city','users.tax_number','users.registration_number','users.email','users.phone')->get();
 
         if (count($invoice) == 0) {
             return 'false';
+        }
+
+        $find_appointment = quotation_appointments::where('quotation_id',$request->invoice_id)->where('title','Delivery Date')->latest('id')->first();
+
+        if($find_appointment)
+        {
+            $find_appointment->start = $delivery_date1;
+            $find_appointment->end = $delivery_date2;
+            $find_appointment->save();
+        }
+        else
+        {
+            $delivery_appointment = new quotation_appointments;
+            $delivery_appointment->quotation_id = $request->invoice_id;
+            $delivery_appointment->user_id = $invoice[0]->creator_id;
+            $delivery_appointment->title = 'Delivery Date';
+            $delivery_appointment->start = $delivery_date1;
+            $delivery_appointment->end = $delivery_date2;
+            $delivery_appointment->save();
         }
 
         quotes::where('id', $invoice[0]->quote_id)->update(['status' => 2,'quote_delivery' => $delivery_date,'quote_zipcode' => $request->delivery_address,'quote_postcode' => $request->postcode,'quote_city' => $request->city]);
@@ -4190,21 +4225,17 @@ class UserController extends Controller
 
                 if(!isset($key['new']))
                 {
-                    if($key['default_event'])
+                    if($key['title'] == 'Delivery Date')
                     {
-                        if($key['title'] == 'Delivery Date')
-                        {
-                            new_quotations::where('id',$key['quotation_id'])->update(['delivery_date' => $key['start'], 'delivery_date_end' => $end_date]);
-                        }
-                        else
-                        {
-                            new_quotations::where('id',$key['quotation_id'])->update(['installation_date' => $key['start'], 'installation_date_end' => $end_date]);
-                        }
+                        new_quotations::where('id',$key['quotation_id'])->update(['delivery_date' => $key['start'], 'delivery_date_end' => $end_date]);
+                    }
+                    elseif($key['title'] == 'Installation Date')
+                    {
+                        new_quotations::where('id',$key['quotation_id'])->update(['installation_date' => $key['start'], 'installation_date_end' => $end_date]);
                     }
 
                     $check = quotation_appointments::where('id',$key['id'])->first();
                     $check->quotation_id = $key['quotation_id'] ? $key['quotation_id'] : NULL;
-                    $check->default_event = $key['default_event'];
                     $check->title = $key['title'];
                     $check->start = $key['start'];
                     $check->end = $end_date;
@@ -4220,10 +4251,8 @@ class UserController extends Controller
                 }
                 else
                 {
-
                     $appointment = new quotation_appointments;
                     $appointment->quotation_id = $key['quotation_id'] ? $key['quotation_id'] : NULL;
-                    $appointment->default_event = $key['default_event'];
                     $appointment->user_id = $user_id;
                     $appointment->title = $key['title'];
                     $appointment->start = $key['start'];

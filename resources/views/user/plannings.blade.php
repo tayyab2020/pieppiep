@@ -5,7 +5,7 @@
     <script src="{{asset('assets/admin/js/main1.js')}}"></script>
     <script src="{{asset('assets/admin/js/bootstrap-tagsinput.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
-    <script src="https://www.jqueryscript.net/demo/Date-Time-Picker-Bootstrap-4/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="{{asset('assets/admin/js/bootstrap-datetimepicker.min.js')}}"></script>
 
     <div class="right-side">
         <div class="container-fluid">
@@ -452,8 +452,8 @@
                     $('.quotation_box .select2-container--default .select2-selection--single').css('border-color', '#cacaca');
                 }
 
-                var client_quotation_fname = $(".appointment_quotation_number option:selected").data('fname');
-                var client_quotation_lname = $(".appointment_quotation_number option:selected").data('lname');
+                var client_quotation_fname = $(".appointment_quotation_number option:selected").data('fname') != undefined ? $(".appointment_quotation_number option:selected").data('fname') : '';
+                var client_quotation_lname = $(".appointment_quotation_number option:selected").data('lname') != undefined ? $(".appointment_quotation_number option:selected").data('lname') : '';
                 var client_fname = '';
                 var client_lname = '';
                 var company_name = '';
@@ -474,8 +474,8 @@
 
                 var client_quotation_fname = '';
                 var client_quotation_lname = '';
-                var client_fname = $(".appointment_client option:selected").data('fname');
-                var client_lname = $(".appointment_client option:selected").data('lname');
+                var client_fname = $(".appointment_client option:selected").data('fname') != undefined ? $(".appointment_client option:selected").data('fname') : '';
+                var client_lname = $(".appointment_client option:selected").data('lname') != undefined ? $(".appointment_client option:selected").data('lname') : '';
                 var company_name = '';
                 var employee_fname = '';
                 var employee_lname = '';
@@ -517,8 +517,8 @@
                 var client_fname = '';
                 var client_lname = '';
                 var company_name = '';
-                var employee_fname = $(".appointment_employee option:selected").data('fname');
-                var employee_lname = $(".appointment_employee option:selected").data('lname');
+                var employee_fname = $(".appointment_employee option:selected").data('fname') != undefined ? $(".appointment_employee option:selected").data('fname') : '';
+                var employee_lname = $(".appointment_employee option:selected").data('lname') != undefined ? $(".appointment_employee option:selected").data('lname') : '';
             }
 
             $(validation).each(function(){
@@ -542,7 +542,7 @@
                 var appointment_end = $('.appointment_end').val();
                 var dateAr = /(\d+)\-(\d+)\-(\d+)/.exec(appointment_start);
                 var timeAr = appointment_start.split(' ');
-                var timeAr1 = /(\d+)\:(\d+)/.exec(timeAr);
+                // var timeAr1 = /(\d+)\:(\d+)/.exec(timeAr);
                 var format_start = dateAr[3] + '-' + dateAr[2] + '-' + dateAr[1] + ' ' + timeAr[1];
                 var dateAr = /(\d+)\-(\d+)\-(\d+)/.exec(appointment_end);
                 var timeAr = appointment_end.split(' ');
@@ -647,7 +647,6 @@
                         obj['description'] = appointment_desc;
                         obj['tags'] = appointment_tags;
                         obj['new'] = 1;
-                        obj['default_event'] = 0;
                         obj['event_type'] = event_type;
                         obj['retailer_client_id'] = customer_id;
                         obj['supplier_id'] = supplier_id;
@@ -662,7 +661,9 @@
                     $('.appointment_quotation_number').val('');
                     $('.appointment_title').val('');
                     $('.appointment_start').val('');
+                    $('.appointment_start').data("DateTimePicker").clear();
                     $('.appointment_end').val('');
+                    $('.appointment_end').data("DateTimePicker").clear();
                     $('.appointment_description').val('');
                     $('.appointment_client').val('');
                     $('.appointment_supplier').val('');
@@ -689,14 +690,13 @@
 
         $(".add-appointment").click(function () {
 
-            $('.appointment_title').attr('disabled',false);
-            $('.appointment_quotation_number').attr('disabled',false);
-            $('.appointment_type').attr('disabled',false);
             $('#event_id').val('');
             $('.appointment_quotation_number').val('');
             $('.appointment_title').val('');
             $('.appointment_start').val('');
+            $('.appointment_start').data("DateTimePicker").clear();
             $('.appointment_end').val('');
+            $('.appointment_end').data("DateTimePicker").clear();
             $('.appointment_description').val('');
             $('.appointment_client').val('');
             $('.appointment_supplier').val('');
@@ -740,19 +740,6 @@
             $('.appointment_tags').tagsinput('removeAll');
             $('.appointment_tags').tagsinput('add',tags);
 
-            if(event._def.extendedProps.default_event != 1)
-            {
-                $('.appointment_title').attr('disabled',false);
-                $('.appointment_quotation_number').attr('disabled',false);
-                $('.appointment_type').attr('disabled',false);
-            }
-            else
-            {
-                $('.appointment_title').attr('disabled',true);
-                $('.appointment_quotation_number').attr('disabled',true);
-                $('.appointment_type').attr('disabled',true);
-            }
-
             $('.appointment_title').trigger('change.select2');
             $('.appointment_type').trigger('change.select2');
             $('.appointment_quotation_number').trigger('change.select2');
@@ -768,35 +755,32 @@
         {
             var event = calendar.getEventById(id);
 
-            if(event._def.extendedProps.default_event != 1)
+            event.remove();
+            var appointments = $('.appointment_data').val();
+
+            if(appointments)
             {
-                event.remove();
-                var appointments = $('.appointment_data').val();
+                appointments = JSON.parse(appointments);
+            }
+            else
+            {
+                appointments = [];
+            }
 
-                if(appointments)
-                {
-                    appointments = JSON.parse(appointments);
+            for(var i = 0; i < appointments.length; i++) {
+                if(appointments[i].id == id) {
+                    appointments.splice(i, 1);
+                    break;
                 }
-                else
-                {
-                    appointments = [];
-                }
+            }
 
-                for(var i = 0; i < appointments.length; i++) {
-                    if(appointments[i].id == id) {
-                        appointments.splice(i, 1);
-                        break;
-                    }
-                }
-
-                if(jQuery.isEmptyObject(appointments))
-                {
-                    $('.appointment_data').val('');
-                }
-                else
-                {
-                    $('.appointment_data').val(JSON.stringify(appointments));
-                }
+            if(jQuery.isEmptyObject(appointments))
+            {
+                $('.appointment_data').val('');
+            }
+            else
+            {
+                $('.appointment_data').val(JSON.stringify(appointments));
             }
         }
 
@@ -823,7 +807,6 @@
                 eventChange: function(arg) {
 
                     var id = arg.event._def.publicId;
-                    var default_event = arg.event._def.extendedProps.default_event;
                     var quotation_id = arg.event._def.extendedProps.quotation_id;
                     var title = arg.event._def.title;
                     var description = arg.event._def.extendedProps.description;
@@ -889,7 +872,14 @@
 
                     if(event._def.extendedProps.quotation_id)
                     {
-                        actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
+                        if(event._def.extendedProps.client_quotation_fname || event._def.extendedProps.client_quotation_lname)
+						{
+							actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
+						}
+						else
+						{
+							actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;"></span>');
+						}
                     }
                     else if(event._def.extendedProps.retailer_client_id)
                     {
@@ -904,14 +894,7 @@
                         actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.employee_fname + ' ' + event._def.extendedProps.employee_lname +'</span>');
                     }
 
-                    if(event._def.extendedProps.default_event != 1)
-                    {
-                        var buttonsHtml = '<div class="fc-buttons">' + '<button type="button" class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
-                    }
-                    else
-                    {
-                        var buttonsHtml = '<div class="fc-buttons">' + '<button type="button" class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '</div>';
-                    }
+                    var buttonsHtml = '<div class="fc-buttons">' + '<button type="button" class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
 
                     actualAppointment.append(buttonsHtml);
 
@@ -1016,14 +999,14 @@
 
         $('.appointment_start').datetimepicker({
             format: 'DD-MM-YYYY HH:mm',
-            defaultDate: new Date(),
+            defaultDate: '',
             ignoreReadonly: true,
             sideBySide: true,
         });
 
         $('.appointment_end').datetimepicker({
             format: 'DD-MM-YYYY HH:mm',
-            defaultDate: new Date(),
+            defaultDate: '',
             ignoreReadonly: true,
             sideBySide: true,
         });

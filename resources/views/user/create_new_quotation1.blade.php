@@ -574,40 +574,6 @@
 
 															</section>
 
-															<?php if(isset($current_appointments)) {
-
-																$appointments_array = json_decode($current_appointments,true);
-
-																if(count($appointments_array) > 0)
-																	{
-																		$delivery_key = array_search("delivery_date", array_column($appointments_array, 'classNames'));
-																		$delivery_array = [];
-																		$delivery_array[0] = $appointments_array[$delivery_key]['start'];
-																		$delivery_array[1] = $appointments_array[$delivery_key]['end'];
-																		$delivery_array[2] = $appointments_array[$delivery_key]['description'];
-																		$delivery_array[3] = $appointments_array[$delivery_key]['tags'];
-																		$delivery_obj = json_encode($delivery_array);
-
-																		array_splice($appointments_array, $delivery_key, 1);
-
-																		$installation_key = array_search("installation_date", array_column($appointments_array, 'classNames'));
-																		$installation_array = [];
-																		$installation_array[0] = $appointments_array[$installation_key]['start'];
-																		$installation_array[1] = $appointments_array[$installation_key]['end'];
-																		$installation_array[2] = $appointments_array[$installation_key]['description'];
-																		$installation_array[3] = $appointments_array[$installation_key]['tags'];
-																		$installation_obj = json_encode($installation_array);
-
-																		array_splice($appointments_array, $installation_key, 1);
-																	}
-																else
-																	{
-																		$delivery_obj = '';
-																		$installation_obj = '';
-																	}
-
-															} ?>
-
 															<div style="width: 100%;margin-top: 10px;">
 
 																<div style="display: flex;justify-content: center;">
@@ -616,7 +582,9 @@
 
 																		<button href="#myModal3" role="button" data-toggle="modal" style="font-size: 16px;" type="button" class="btn btn-success"><i class="fa fa-calendar-check-o" style="margin-right: 5px;"></i> Appointments</button>
 
-																		<input value="{{isset($current_appointments) ? $delivery_obj : null}}" type="hidden" class="delivery_date" name="retailer_delivery_date">
+																		<!-- @if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
+
+																		@endif -->
 
 																	</div>
 																	<div class="headings1" style="width: 16%;display: flex;justify-content: flex-end;align-items: center;padding-right: 15px;"><span style="font-size: 14px;font-weight: bold;font-family: monospace;">{{__('text.Total')}}</span></div>
@@ -656,10 +624,9 @@
 
 																	<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
 
-																		<input value="{{isset($current_appointments) ? $installation_obj : null}}" type="hidden" class="installation_date" name="installation_date">
-
 																		<?php if(isset($current_appointments)) {
 
+																			$appointments_array = json_decode($current_appointments,true);
 																			$count = count($appointments_array);
 																			$last_event_id = $last_event_id + 1;
 																			$appointments = json_encode($appointments_array);
@@ -1344,12 +1311,14 @@
 							</select>
 						</div>
 
+						<?php if(isset($invoice)){ $client = $clients->where('id',$invoice[0]->customer_details)->first(); } ?>
+
 						<div class="form-group col-xs-12 col-sm-4 appointment_quotation_number_box required">
 							<label>{{__('text.Quotation Number')}}</label>
 							<select class="appointment_quotation_number">
 
 								<option value="">{{__('text.Select Quotation')}}</option>
-								<option value="0">{{__('text.Current Quotation')}}</option>
+								<option @if(isset($invoice) && $client) data-fname="{{$client->name}}" data-lname="{{$client->family_name}}" @endif value="0">{{__('text.Current Quotation')}}</option>
 
 								@foreach($quotation_ids as $key)
 
@@ -2414,7 +2383,7 @@
 				var appointment_end = $('.appointment_end').val();
 				var dateAr = /(\d+)\-(\d+)\-(\d+)/.exec(appointment_start);
                 var timeAr = appointment_start.split(' ');
-                var timeAr1 = /(\d+)\:(\d+)/.exec(timeAr);
+                // var timeAr1 = /(\d+)\:(\d+)/.exec(timeAr);
                 var format_start = dateAr[3] + '-' + dateAr[2] + '-' + dateAr[1] + ' ' + timeAr[1];
                 var dateAr = /(\d+)\-(\d+)\-(\d+)/.exec(appointment_end);
                 var timeAr = appointment_end.split(' ');
@@ -2526,7 +2495,6 @@
 						obj['description'] = appointment_desc;
 						obj['tags'] = appointment_tags;
 						obj['new'] = 1;
-						obj['default_event'] = 0;
 						obj['event_type'] = event_type;
 						obj['retailer_client_id'] = customer_id;
 						obj['supplier_id'] = supplier_id;
@@ -2542,7 +2510,9 @@
 					$('.appointment_quotation_number').val('');
 					$('.appointment_title').val('');
 					$('.appointment_start').val('');
+					$('.appointment_start').data("DateTimePicker").clear();
 					$('.appointment_end').val('');
+					$('.appointment_end').data("DateTimePicker").clear();
 					$('.appointment_description').val('');
 					$('.appointment_client').val('');
 					$('.appointment_supplier').val('');
@@ -2575,15 +2545,14 @@
 
 		$(".add-appointment").click(function () {
 
-			$('.appointment_title').attr('disabled',false);
-			$('.appointment_quotation_number').attr('disabled',false);
-			$('.appointment_type').attr('disabled',false);
 			// $('.submit_appointmentForm').show();
 			$('#event_id').val('');
 			$('.appointment_quotation_number').val('');
 			$('.appointment_title').val('');
 			$('.appointment_start').val('');
+			$('.appointment_start').data("DateTimePicker").clear();
 			$('.appointment_end').val('');
+			$('.appointment_end').data("DateTimePicker").clear();
 			$('.appointment_description').val('');
 			$('.appointment_client').val('');
 			$('.appointment_supplier').val('');
@@ -2638,20 +2607,6 @@
 			$('.appointment_supplier').val(supplier_id);
             $('.appointment_employee').val(employee_id);
 
-			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
-			{
-				$('.appointment_title').attr('disabled',false);
-				$('.appointment_quotation_number').attr('disabled',false);
-				$('.appointment_type').attr('disabled',false);
-			}
-			else
-			{
-				$('.appointment_title').attr('disabled',true);
-				$('.appointment_quotation_number').attr('disabled',true);
-				$('.appointment_type').attr('disabled',true);
-				// $('.submit_appointmentForm').show();
-			}
-
 			$('.appointment_title').trigger('change.select2');
 			$('.appointment_quotation_number').trigger('change.select2');
 			$('.appointment_type').trigger('change.select2');
@@ -2668,8 +2623,6 @@
 		{
 			var event = calendar.getEventById(id);
 
-			if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
-			{
 				event.remove();
 				var appointments = $('.appointment_data').val();
 
@@ -2698,7 +2651,6 @@
 					$('.appointment_data').val(JSON.stringify(appointments));
 				}
 			}
-		}
 
 		$('#myModal3').on('shown.bs.modal', function () {
 
@@ -2757,20 +2709,6 @@
 					var minute = (end_date.getMinutes()<10?'0':'') + end_date.getMinutes();
 					end = curr_year+"-"+curr_month+"-"+curr_date+" "+hour+":"+minute;
 
-					if(arg.event._def.ui.classNames == 'delivery_date')
-					{
-						var delivery_data = [start,end,description,tags];
-						delivery_data = JSON.stringify(delivery_data);
-						$('.delivery_date').val(delivery_data);
-					}
-					else if(arg.event._def.ui.classNames == 'installation_date')
-					{
-						var installation_data = [start,end,description,tags];
-						installation_data = JSON.stringify(installation_data);
-						$('.installation_date').val(installation_data);
-					}
-					else
-					{
 						var id = arg.event._def.publicId;
 						var data = $('.appointment_data').val();
 						var appointments = data ? JSON.parse(data) : '';
@@ -2795,7 +2733,6 @@
 							}
 
 						}
-					}
 
 				},
 				eventContent: function (arg) {
@@ -2807,8 +2744,6 @@
 					var event = arg.event;
 					var id = arg.event._def.publicId;
 
-					if(id != '1a' && id != '1b')
-					{
 						if(event._def.extendedProps.quotation_id)
                     	{
 							if(event._def.extendedProps.client_quotation_fname || event._def.extendedProps.client_quotation_lname)
@@ -2832,16 +2767,8 @@
                     	{
                         	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.employee_fname + ' ' + event._def.extendedProps.employee_lname +'</span>');
                     	}
-					}
 
-					if(jQuery.inArray("delivery_date", event._def.ui.classNames) != 0 && jQuery.inArray("installation_date", event._def.ui.classNames) != 0 && event._def.extendedProps.default_event != 1)
-					{
 						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
-					}
-					else
-					{
-						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '</div>';
-					}
 
 					actualAppointment.append(buttonsHtml);
 
@@ -3186,14 +3113,14 @@
 
 			$('.appointment_start').datetimepicker({
 				format: 'DD-MM-YYYY HH:mm',
-				defaultDate: new Date(),
+				defaultDate: '',
 				ignoreReadonly: true,
 				sideBySide: true,
 			});
 
 			$('.appointment_end').datetimepicker({
 				format: 'DD-MM-YYYY HH:mm',
-				defaultDate: new Date(),
+				defaultDate: '',
 				ignoreReadonly: true,
 				sideBySide: true,
 			});
