@@ -1499,6 +1499,9 @@ class ProductController extends Controller
 
             }])->where('product_id',$id)->get();
 
+            var_dump($categories[0]);
+            exit();
+
             if($categories[0]->cat_name == 'Blinds' || $categories[0]->cat_name == 'Binnen zonwering')
             {
                 return view('admin.product.create',compact('ladderband_data','cats','categories','sub_categories','brands','models','tables','colors_data','features_data','sub_features_data','features_headings','predefined_models'));
