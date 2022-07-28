@@ -1480,7 +1480,7 @@ class ProductController extends Controller
             $sub_features_data = product_features::where('product_id',$id)->where('sub_feature',1)->get();
             $ladderband_data = product_ladderbands::where('product_id',$id)->get();
             $categories = Category::leftjoin('supplier_categories','supplier_categories.category_id','=','categories.id')->where('supplier_categories.user_id',$user_id)->where('categories.id',$cats->category_id)->select('categories.*')->get();
-            var_dump($categories);
+            var_dump($categories[0]);
             exit();
             $category_id = $categories[0]->id;
             $predefined_models = predefined_models::whereRaw("find_in_set('$category_id',category_ids)")->where('user_id',$user_id)->get();
