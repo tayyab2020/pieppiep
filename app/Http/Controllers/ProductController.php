@@ -1256,9 +1256,7 @@ class ProductController extends Controller
             }
             $input['user_id'] = $user_id;
 
-            $check = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->where('products.user_id',$user_id)->where('products.title', 'LIKE', '%'.$request->title.'%')->where('categories.id',$request->category_id)->where('brands.id',$request->brand_id)->where('products.deleted_at',NULL)->select('products.*')->first();
-            var_dump($check);
-            exit();
+            $check = Products::leftjoin('categories','categories.id','=','products.category_id')->leftjoin('brands','brands.id','=','products.brand_id')->where('products.user_id',$user_id)->where('products.title',$request->title)->where('categories.id',$request->category_id)->where('brands.id',$request->brand_id)->select('products.*')->first();
             
             if(!$check)
             {
