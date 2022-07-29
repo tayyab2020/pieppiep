@@ -308,9 +308,18 @@ class UserController extends Controller
 
     public function GetColors(Request $request)
     {
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
         if($request->type == 'service')
         {
-            $data = Service::leftjoin('retailer_services','retailer_services.service_id','=','services.id')->where('services.id',$request->id)->select('services.*','retailer_services.sell_rate')->first();
+            $data = Service::leftjoin('retailer_services','retailer_services.service_id','=','services.id')->where('services.id',$request->id)->where('retailer_services.retailer_id',$user_id)->select('services.*','retailer_services.sell_rate')->first();
         }
         elseif($request->type == 'item')
         {
