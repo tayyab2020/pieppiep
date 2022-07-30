@@ -533,4 +533,6 @@ return [
     'Employee' => 'Employee',
     'Select Employee' => 'Select Employee',
     'Tags' => 'Tags',
+    'PDF Delivery Date' => 'Delivery Date',
+    'PDF Installation Date' => 'Installation Date',
 ];

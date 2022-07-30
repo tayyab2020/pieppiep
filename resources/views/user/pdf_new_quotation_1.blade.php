@@ -661,7 +661,7 @@
                                                 <tr>
                                                     <td style="width: 40%;padding: 5px;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Invoer:</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">@if(($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') && $delivery_date) {{__('text.PDF Delivery Date')}}: @endif</span>
                                                             <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$delivery_date}} @endif</span>
                                                         </div>
                                                     </td>
@@ -676,7 +676,7 @@
                                                 <tr>
                                                     <td style="width: 40%;padding: 5px;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Planning verzending:</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">@if($installation_date) {{__('text.PDF Installation Date')}}: @endif</span>
                                                             <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$installation_date}}</span>
                                                         </div>
                                                     </td>

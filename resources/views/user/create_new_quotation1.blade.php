@@ -2189,10 +2189,7 @@
 
 			if(date)
 			{
-				if(!$('.appointment_end').val())
-				{
-					$('.appointment_end').val(date);
-				}
+				$('.appointment_end').val(date);
 			}
 
 		});
