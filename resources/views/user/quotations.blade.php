@@ -916,7 +916,7 @@
 
     <style type="text/css">
 
-.datepicker {
+        .datepicker {
             padding: 4px;
             -webkit-border-radius: 4px;
             -moz-border-radius: 4px;
