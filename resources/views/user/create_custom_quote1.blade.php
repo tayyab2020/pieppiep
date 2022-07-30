@@ -5118,7 +5118,7 @@
 					}
 					else
 					{
-						if(width && height && box_quantity && total_quantity)
+						if(box_quantity && total_quantity)
 						{
 							var total_boxes = total_quantity/box_quantity;
 							total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));

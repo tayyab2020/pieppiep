@@ -2768,7 +2768,6 @@ class UserController extends Controller
 
             if($check)
             {
-
                 if($check->role_id == 3)
                 {
                     if($check->parent_id == $user_id)
