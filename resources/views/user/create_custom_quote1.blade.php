@@ -5095,23 +5095,42 @@
 
 					if(cutting_change != 0)
 					{
-						if(width && height && box_quantity && cutting_lose_percentage) 
-						{
-							var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
-							total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
-							var total_boxes = total_quantity/box_quantity;
-							total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
-							total_quantity = total_boxes * box_quantity;
-							total_quantity = ~~total_quantity;
+						if(total_quantity)
+							{
+								if(box_quantity && cutting_lose_percentage)
+								{
+									var total_quantity = parseInt(total_quantity) * ((100 + parseInt(cutting_lose_percentage))/100);
+									console.log(total_quantity);
+									total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
+									var total_boxes = total_quantity/box_quantity;
+									total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+								}
+								else
+								{
+									$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+									$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
+								}
+							}
+							else
+							{
+								if(width && height && box_quantity && cutting_lose_percentage)
+								{
+									var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
+									total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
+									var total_boxes = total_quantity/box_quantity;
+									total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+									total_quantity = total_boxes * box_quantity;
+									total_quantity = ~~total_quantity;
+								}
+								else
+								{
+									$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+									$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
+								}
+							}
 							
 							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity);
 							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
-						}
-						else
-						{
-							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
-							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
-						}
 					}
 					else
 					{

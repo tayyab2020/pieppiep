@@ -109,8 +109,8 @@
                                                                         <div class="sppb-addon-content">
                                                                             <div class="sppb-addon-single-image-container">
                                                                                 <img class="img-responsive lazyload"
-                                                                                     data-src="https://www.PiepPiep.com/images/PiepPiep/screens/screens-app-general.png"
-                                                                                     src="/images/misc/placeholder.png"
+                                                                                     data-src="{{asset('assets/images/Dashboard_Pieppiep.png')}}" width="700" height="1100"
+                                                                                     src=""
                                                                                      alt="PiepPiep apps"></div>
                                                                         </div>
                                                                     </div>
@@ -145,12 +145,7 @@
                                                                     <div
                                                                             class="sppb-addon sppb-addon-text-block text-left ">
                                                                         <h3 class="sppb-addon-title ">Gemakkelijk</h3>
-                                                                        <div class="sppb-addon-content"><p>PiepPiep maakt
-                                                                                bestellen Ã©cht makkelijk. Het is simpel in
-                                                                                gebruik, overal toegankelijk en je hebt geen
-                                                                                inkoopkennis nodig. Lastige
-                                                                                opties? Daar doen we niet aan â€“ we
-                                                                                houden het simpel.</p></div>
+                                                                        <div class="sppb-addon-content"><p>PiepPiep maakt bestellen écht makkelijk. Het is simpel in gebruik, overal toegankelijk en je hebt geen inkoopkennis nodig. Lastige opties? Daar doen we niet aan - we houden het simpel.</p></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -159,7 +154,7 @@
                                                                 <div id="sppb-addon-1623828553887" class="clearfix ">
                                                                     <div
                                                                             class="sppb-addon sppb-addon-text-block text-left ">
-                                                                        <h3 class="sppb-addon-title ">IntuÃ¯tief</h3>
+                                                                        <h3 class="sppb-addon-title ">Intuïtief</h3>
                                                                         <div class="sppb-addon-content"><p>Je kunt direct
                                                                                 aan de slag met PiepPiep. Ons
                                                                                 ordersoftware is ontwikkeld om het
@@ -194,7 +189,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
+               </section>   <!--
             <section id="section-id-1623828553997" class="sppb-section">
                 <div class="container">
                     <div class="row">
@@ -520,7 +515,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> -->
             <section id="section-id-1623746996115" class="sppb-section">
                 <div class="container">
                     <div class="row">
@@ -538,7 +533,7 @@
                                                         class="sppb-addon-title ">Probeer het zelf</h2>
                                                 <div class="sppb-addon-content"><p>Wil jij ook minder tijd kwijt zijn aan bestellen
                                                         van goederen? Maak dan nu een account aan en probeer PiepPiep 30
-                                                        dagen gratis uit. Je offerte wordt in no time omgezet in een bestelling â€“ Pieppiep zo gepiept!</p></div>
+                                                        dagen gratis uit. Je offerte wordt in no time omgezet in een bestelling - Pieppiep zo gepiept!</p></div>
                                             </div>
                                         </div>
                                     </div>
