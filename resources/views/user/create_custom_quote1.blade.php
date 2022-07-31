@@ -41,18 +41,18 @@
 													@if(Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice')
 
 														<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
-														<i class="fa fa-fw fa-save"></i>
-														<span class="tooltiptext">{{__('text.Save')}}</span>
-													</span>
-
-													@else
-
-														@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->ask_customization)) || !isset($invoice))
-
-															<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
 															<i class="fa fa-fw fa-save"></i>
 															<span class="tooltiptext">{{__('text.Save')}}</span>
 														</span>
+
+													@else
+
+														@if((isset($invoice) && ($invoice[0]->status == 0 || $invoice[0]->status == 1 || $invoice[0]->status == 2 || $invoice[0]->ask_customization)) || !isset($invoice))
+
+															<span class="tooltip1 save-data" style="cursor: pointer;font-size: 20px;margin-right: 10px;color: white;">
+																<i class="fa fa-fw fa-save"></i>
+																<span class="tooltiptext">{{__('text.Save')}}</span>
+															</span>
 
 														@endif
 
@@ -5100,7 +5100,6 @@
 								if(box_quantity && cutting_lose_percentage)
 								{
 									var total_quantity = parseInt(total_quantity) * ((100 + parseInt(cutting_lose_percentage))/100);
-									console.log(total_quantity);
 									total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
 									var total_boxes = total_quantity/box_quantity;
 									total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
