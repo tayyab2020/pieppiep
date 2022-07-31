@@ -4277,7 +4277,7 @@ class UserController extends Controller
                 }
             }
 
-            quotation_appointments::whereNotIn('id',$ap_array)->where('default_event',0)->where('user_id',$user_id)->delete();
+            quotation_appointments::whereNotIn('id',$ap_array)->where('user_id',$user_id)->delete();
         }
 
         Session::flash('success', 'Task completed successfully.');
@@ -5127,7 +5127,7 @@ class UserController extends Controller
                         $ap_array[] = $appointment->id;
                     }
                 }
-                quotation_appointments::whereNotIn('id',$ap_array)->where('default_event',0)->where('user_id',$user_id)->delete();
+                quotation_appointments::whereNotIn('id',$ap_array)->where('user_id',$user_id)->delete();
             }
 
             if($request->is_invoice)
@@ -5376,7 +5376,7 @@ class UserController extends Controller
                     $ap_array[] = $appointment->id;
                 }
 
-                quotation_appointments::whereNotIn('id',$ap_array)->where('default_event',0)->where('user_id',$user_id)->delete();
+                quotation_appointments::whereNotIn('id',$ap_array)->where('user_id',$user_id)->delete();
             }
 
             if($form_type == 1 && $request->quote_request_id)

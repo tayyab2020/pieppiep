@@ -9,6 +9,7 @@ use App\Products;
 use App\sub_categories;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Auth;
 
 class ItemsExport implements FromCollection,WithHeadings
 {
@@ -23,7 +24,16 @@ class ItemsExport implements FromCollection,WithHeadings
 
     public function collection()
     {
-        $data = items::get();
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user_id = $main_id;
+        }
+
+        $data = items::where('user_id',$user_id)->get();
 
         foreach ($data as $key)
         {
