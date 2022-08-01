@@ -538,7 +538,7 @@
 																						<div class="attribute item5 m2_box" @if($key->measure == 'M1') style="width: 10%;display: none;" @else style="width: 10%;" @endif>
 
 																							<div class="m-box">
-																								<input value="{{$temp->total_boxes}}" class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes{{$i+1}}[]" type="number">
+																								<input value="{{$temp->total_boxes}}" class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" autocomplete="off" name="total_boxes{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																							</div>
 
@@ -671,7 +671,7 @@
 																			<div class="attribute item5 m2_box" style="width: 10%;">
 
 																				<div class="m-box">
-																					<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" readonly autocomplete="off" name="total_boxes1[]" type="number">
+																					<input class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" autocomplete="off" name="total_boxes1[]" type="text">
 																					<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																				</div>
 
@@ -2220,7 +2220,7 @@
 					'\n' +
 					'                       									 	<div class="m-box">\n' +
 					'\n' +
-					'                                                                <input style="border: 1px solid #ccc;background: transparent;" class="form-control total_boxes m-input" readonly autocomplete="off" name="total_boxes'+product_row+'[]" type="number">\n' +
+					'                                                                <input style="border: 1px solid #ccc;background: transparent;" class="form-control total_boxes m-input" autocomplete="off" name="total_boxes'+product_row+'[]" type="text">\n' +
 					'\n' +
 					'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 					'\n' +
@@ -2708,7 +2708,7 @@
 			}
 		});
 
-		function calculator(product_row,row_id)
+		function calculator(product_row,row_id,cutting_change = null,total_boxes_change = null)
 		{
 			var measure = $("#products_table").find(`.content-div[data-id='${product_row}']`).find('#measure').val();
 			var width = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.width').val();
@@ -2716,6 +2716,7 @@
 			var height = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.height').val();
 			height = height.replace(/\,/g, '.');
 			var cutting_lose_percentage = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.cutting_lose_percentage').val();
+			var total_quantity = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val();
 
 			if(measure == "M1")
 			{
@@ -2863,7 +2864,7 @@
 										'\n' +
 										'                       									 	<div class="m-box">\n' +
 										'\n' +
-										'                                                                <input style="border: 1px solid #ccc;background: transparent;" class="form-control total_boxes m-input" readonly autocomplete="off" name="total_boxes'+product_row+'[]" type="number">\n' +
+										'                                                                <input style="border: 1px solid #ccc;background: transparent;" class="form-control total_boxes m-input" autocomplete="off" name="total_boxes'+product_row+'[]" type="text">\n' +
 										'\n' +
 										'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 										'\n' +
@@ -3069,7 +3070,7 @@
 										'\n' +
 										'                       									 	<div class="m-box">\n' +
 										'\n' +
-										'                                                                <input style="border: 1px solid #ccc;background: transparent;" class="form-control total_boxes m-input" readonly autocomplete="off" name="total_boxes'+product_row+'[]" type="number">\n' +
+										'                                                                <input style="border: 1px solid #ccc;background: transparent;" class="form-control total_boxes m-input" autocomplete="off" name="total_boxes'+product_row+'[]" type="text">\n' +
 										'\n' +
 										'                                                                <input style="border: 0;outline: none;" readonly type="text" class="measure-unit">\n' +
 										'\n' +
@@ -3144,36 +3145,93 @@
 			{
 				var box_quantity = $('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity_supplier').val();
 
-				if (width && height && cutting_lose_percentage && box_quantity) {
+				if(cutting_change != 0)
+				{
+					if(total_quantity)
+					{
+						if(box_quantity && cutting_lose_percentage)
+						{
+							var total_quantity = parseInt(total_quantity) * ((100 + parseInt(cutting_lose_percentage))/100);
+							total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
+							var total_boxes = total_quantity/box_quantity;
+							total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
 
-					var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
-					total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
-					var total_boxes = total_quantity/box_quantity;
-					total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
-					total_quantity = total_boxes * box_quantity;
-					total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity);
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
+						}
+						else
+						{
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
+						}
+					}
+					else
+					{
+						if(width && height && box_quantity && cutting_lose_percentage)
+						{
+							var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
+							total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
+							var total_boxes = total_quantity/box_quantity;
+							total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+							total_quantity = total_boxes * box_quantity;
+							total_quantity = ~~total_quantity;
 
-					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
-					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity);
-
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity);
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
+						}
+						else
+						{
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
+						}
+					}
 				}
 				else
-            	{
-                	$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
-					$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val('');
-            	}
+				{
+					if(box_quantity && total_quantity)
+					{
+						var total_boxes = total_quantity/box_quantity;
+						total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+
+						$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
+					}
+					else
+					{
+						$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val('');
+					}
+				}
 			}
 
 			calculate_qty(product_row);
 		}
 
-		$(document).on('input', ".width, .height, .cutting_lose_percentage", function (e) {
+		$(document).on('input', ".width, .height", function (e) {
 
 			var current = $(this);
 			var product_row = current.parents(".attributes_table").data('id');
 			var row_id = current.parents(".attribute-content-div").data('id');
 
 			calculator(product_row,row_id);
+
+		});
+
+		$(document).on('input', ".cutting_lose_percentage", function (e) {
+
+			var current = $(this);
+			var product_row = current.parents(".attributes_table").data('id');
+			var row_id = current.parents(".attribute-content-div").data('id');
+
+			calculator(product_row,row_id,1,0);
+
+		});
+
+		$(document).on('input', ".total_boxes", function (e) {
+
+			var current = $(this);
+			var product_row = current.parents(".attributes_table").data('id');
+			var row_id = current.parents(".attribute-content-div").data('id');
+
+			calculator(product_row,row_id,0,1);
 
 		});
 
