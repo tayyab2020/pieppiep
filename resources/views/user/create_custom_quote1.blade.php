@@ -236,7 +236,7 @@
 																				<label class="content-label">{{__('text.Discount')}}</label>
 
 																				<span>€</span>
-																				<input type="text" value="{{$item->total_discount}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
+																				<input type="text" value="{{str_replace('.', ',',floatval($item->total_discount))}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
 																				<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
 																			</div>
 
@@ -296,8 +296,26 @@
 
 																				<div style="width: 25%;margin-left: 10px;" class="discount-box item14">
 
-																					<label>{{__('text.Discount')}} % </label>
+																					<div style="margin: 10px 0;display: flex;align-items: center;" class="form-group">
 
+                                                            							<label style="padding: 0;width: 100%;text-align: left;" class="control-label">{{__('text.Discount')}} <span class="discount-sign">{{$item->discount_option ? '€' : '%'}}</span></label>
+
+																						<div style="display: flex;align-items: center;">
+
+																							<span style="font-size: 15px;padding-right: 10px;font-weight: 600;">%</span>
+                                                            							
+																							<label style="margin: 0;" class="switch">
+                                                                								<input {{$item->discount_option ? 'checked' : null}} class="discount_option" type="checkbox">
+                                                                								<span class="slider round"></span>
+                                                            								</label>
+                                                            						
+																							<span style="font-size: 15px;padding-left: 10px;">€</span>
+
+																						</div>
+																					
+																					</div>
+
+																					<input value="{{$item->discount_option}}" class="discount_option_values" name="discount_option_values[]" type="hidden">
 																					<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
 
 																				</div>
@@ -428,8 +446,26 @@
 
 																			<div style="width: 25%;margin-left: 10px;" class="discount-box item14">
 
-																				<label>{{__('text.Discount')}} % </label>
+																				<div style="margin: 10px 0;display: flex;align-items: center;" class="form-group">
 
+                                                            						<label style="padding: 0;width: 100%;text-align: left;" class="control-label">{{__('text.Discount')}} <span class="discount-sign">%</span></label>
+
+																					<div style="display: flex;align-items: center;">
+
+																						<span style="font-size: 15px;padding-right: 10px;font-weight: 600;">%</span>
+                                                            							
+																						<label style="margin: 0;" class="switch">
+                                                                							<input class="discount_option" name="discount_option[]" type="checkbox">
+                                                                							<span class="slider round"></span>
+                                                            							</label>
+                                                            						
+																						<span style="font-size: 15px;padding-left: 10px;">€</span>
+
+																					</div>
+																					
+																				</div>
+
+																				<input value="0" class="discount_option_values" name="discount_option_values[]" type="hidden">
 																				<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="0" name="discount[]">
 
 																			</div>
@@ -1588,6 +1624,25 @@
 	</div>
 
 	<style>
+
+		.switch
+		{
+			width: 60px;
+			height: 25px;
+		}
+
+		.slider:before
+		{
+			height: 16px;
+			width: 16px;
+		}
+
+		input:checked + .slider:before
+		{
+			-webkit-transform: translateX(33px);
+			-ms-transform: translateX(33px);
+			transform: translateX(33px);
+		}
 
 		.bootstrap-tagsinput
 		{
@@ -3469,6 +3524,23 @@
 				sideBySide: true,
 			});
 
+			$(document).on('change', ".discount_option", function (e) {
+
+				if($(this).is(":checked"))
+				{
+					$(this).parents('.discount-box').find('.discount-sign').text('€');
+					$(this).parents('.discount-box').find('.discount_option_values').val(1);
+				}
+				else
+				{
+					$(this).parents('.discount-box').find('.discount-sign').text('%');
+					$(this).parents('.discount-box').find('.discount_option_values').val(0);
+				}
+
+				calculate_total();
+
+			});
+
 			function calculate_total(qty_changed = 0,labor_changed = 0) {
 
 				var total = 0;
@@ -3525,6 +3597,7 @@
 
 						rate = rate - old_discount;
 
+						var discount_option = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_option_values').val();
 						var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
 						// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
 
@@ -3538,7 +3611,15 @@
 						// 	labor_discount = 0;
 						// }
 
-						var discount_val = parseFloat(rate) * (discount/100);
+						if(discount_option == 1)
+						{
+							var discount_val = discount;
+						}
+						else
+						{
+							var discount_val = parseFloat(rate) * (discount/100);
+						}
+						
 						// var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
 
 						// var total_discount = discount_val + labor_discount_val;
@@ -3672,7 +3753,7 @@
 				$('#products_table .content-div').each(function (index, tr) { $(this).find('.content:eq(0)').find('.sr-res').text(index + 1); });
 			}
 
-			function add_row(copy = false, rate = null, basic_price = null, price = null, product = null, product_text = null, supplier = null, color = null, model = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, base_price = null, supplier_margin = null, retailer_margin = null, price_before_labor = null, price_before_labor_old = null, discount = null, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
+			function add_row(copy = false, rate = null, basic_price = null, price = null, product = null, product_text = null, supplier = null, color = null, model = null, price_text = null, features = null, features_selects = null, childsafe_question = null, childsafe_answer = null, qty = null, childsafe = 0, ladderband = 0, ladderband_value = 0, ladderband_price_impact = 0, ladderband_impact_type = 0, area_conflict = 0, subs = null, childsafe_x = null, childsafe_y = null, delivery_days = null, base_price = null, supplier_margin = null, retailer_margin = null, price_before_labor = null, price_before_labor_old = null, discount = null, discount_option = null, discount_option_val, total_discount = null, total_discount_old = null, last_column = null, menu2 = null, estimated_price_quantity = null, turns = null, measure = null, max_width = null) {
 
 				var rowCount = $('#products_table .content-div:last').data('id');
 				rowCount = rowCount + 1;
@@ -3810,8 +3891,26 @@
 							'\n' +
 							'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
 							'\n' +
-							'																	<label>{{__('text.Discount')}} %</label>\n' +
+							'																	<div style="margin: 10px 0;display: flex;align-items: center;" class="form-group">\n' +
 							'\n' +
+                            '                                										<label style="padding: 0;width: 100%;text-align: left;" class="control-label">{{__('text.Discount')}} <span class="discount-sign">%</span></label>\n' +
+							'\n' +
+							'																		<div style="display: flex;align-items: center;">\n' +
+							'\n' +
+							'																			<span style="font-size: 15px;padding-right: 10px;font-weight: 600;">%</span>\n' +
+							'\n' +                  							
+							'																			<label style="margin: 0;" class="switch">\n' +
+                            '                                    											<input class="discount_option" name="discount_option[]" type="checkbox">\n' +
+                            '                                    											<span class="slider round"></span>\n' +
+                            '                                											</label>\n' +
+							'\n' +                                                            						
+							'																			<span style="font-size: 15px;padding-left: 10px;">€</span>\n' +
+							'\n' +
+							'																		</div>\n' +
+							'\n' +																					
+							'																	</div>\n' +
+							'\n' +
+							'                                    								<input value="0" class="discount_option_values" name="discount_option_values[]" type="hidden">\n' +
 							'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
 							'\n' +
 							'																</div>\n' +
@@ -3942,8 +4041,26 @@
 							'\n' +
 							'																<div style="width: 25%;margin-left: 10px;" class="discount-box item14">\n' +
 							'\n' +
-							'																	<label>Discount %</label>\n' +
+							'																	<div style="margin: 10px 0;display: flex;align-items: center;" class="form-group">\n' +
 							'\n' +
+                            '                                										<label style="padding: 0;width: 100%;text-align: left;" class="control-label">{{__('text.Discount')}} <span class="discount-sign">%</span></label>\n' +
+							'\n' +
+							'																		<div style="display: flex;align-items: center;">\n' +
+							'\n' +
+							'																			<span style="font-size: 15px;padding-right: 10px;font-weight: 600;">%</span>\n' +
+							'\n' +                  							
+							'																			<label style="margin: 0;" class="switch">\n' +
+                            '                                    											<input ' + discount_option + ' class="discount_option" name="discount_option[]" type="checkbox">\n' +
+                            '                                    											<span class="slider round"></span>\n' +
+                            '                                											</label>\n' +
+							'\n' +                                                            						
+							'																			<span style="font-size: 15px;padding-left: 10px;">€</span>\n' +
+							'\n' +
+							'																		</div>\n' +
+							'\n' +																					
+							'																	</div>\n' +
+							'\n' +
+							'                                    								<input value="' + discount_option_val + '" class="discount_option_values" name="discount_option_values[]" type="hidden">\n' +
 							'																	<input value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" name="discount[]">\n' +
 							'\n' +
 							'																</div>\n' +
@@ -4507,6 +4624,8 @@
 				var price_before_labor = current.find('.price_before_labor').val();
 				var price_before_labor_old = current.find('.price_before_labor_old').val();
 				var discount = current.find('.discount-box').find('.discount_values').val();
+				var discount_option = current.find('.discount-box').find('.discount_option').is(":checked") ? 'checked' : null;
+				var discount_option_val = current.find('.discount-box').find('.discount_option_values').val();
 				// var labor_discount = current.find('.labor-discount-box').find('.labor_discount_values').val();
 				var total_discount = current.find('.total_discount').val();
 				var total_discount_old = current.find('.total_discount_old').val();
@@ -4517,7 +4636,7 @@
 				var measure = current.find('#measure').val();
 				var max_width = current.find('#max_width').val();
 
-				add_row(true, rate, basic_price, price, product, product_text, supplier, color, model, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, base_price, supplier_margin, retailer_margin, price_before_labor, price_before_labor_old, discount, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
+				add_row(true, rate, basic_price, price, product, product_text, supplier, color, model, price_text, features, features_selects, childsafe_question, childsafe_answer, qty, childsafe, ladderband, ladderband_value, ladderband_price_impact, ladderband_impact_type, area_conflict, subs, childsafe_x, childsafe_y, delivery_days, base_price, supplier_margin, retailer_margin, price_before_labor, price_before_labor_old, discount, discount_option, discount_option_val, total_discount, total_discount_old, last_column, menu2, estimated_price_quantity, turns, measure, max_width);
 
 			});
 
