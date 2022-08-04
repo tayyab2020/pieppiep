@@ -535,4 +535,14 @@ return [
     'Tags' => 'Tags',
     'PDF Delivery Date' => 'Delivery Date',
     'PDF Installation Date' => 'Installation Date',
+    'Retailer Dashboard' => 'Dashboard',
+    'Supplier Dashboard' => 'Dashboard',
+    'Customer Dashboard' => 'Dashboard',
+    'Credentials doesn\'t match' => 'Credentials doesn\'t match',
+    'Advice Price Per Box' => 'Advice Price Per Box',
+    'Advice Price Per Box' => 'Fill in price',
+    'Advice Price Quantity' => 'Advice Price Quantity',
+    'Advice Price Quantity Placeholder' => 'Advice Price Quantity Placeholder',
+    'Advice Price' => 'Advice price',
+    'Advice Price Placeholder' => 'Advice price placeholder'
 ];
