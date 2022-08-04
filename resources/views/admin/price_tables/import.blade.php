@@ -24,7 +24,7 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header">
                                         <h2>Upload Excel File</h2>
-                                        <a href="{{route('admin-price-tables')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('admin-price-tables')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
                                     <hr>
 

@@ -20,7 +20,7 @@
                                     <div class="add-product-box">
                                         <div class="add-product-header">
                                             <h2>Handyman Insurance</h2>
-                                            <a href="{{route('admin-user-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>  
+                                            <a href="{{route('admin-user-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>  
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-user-insurance-update',$user->id)}}" method="POST" enctype="multipart/form-data">

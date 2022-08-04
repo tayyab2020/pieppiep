@@ -544,5 +544,22 @@ return [
     'Advice Price Quantity' => 'Advice Price Quantity',
     'Advice Price Quantity Placeholder' => 'Advice Price Quantity Placeholder',
     'Advice Price' => 'Advice price',
-    'Advice Price Placeholder' => 'Advice price placeholder'
+    'Advice Price Placeholder' => 'Advice price placeholder',
+    'Max Width' => 'Max Width',
+    'Max Width Placeholder' => 'Max Width Placeholder',
+    'Max Height' => 'Max Height',
+    'Max Height Placeholder' => 'Max Height Placeholder',
+    'Heading' => 'Heading',
+    'Feature' => 'Feature',
+    'Save' => 'Save',
+    'Add Product' => 'Add Product',
+    'Add More Models' => 'Add more models',
+    'Edit Product' => 'Edit Product',
+    'Add More Headings' => 'Add More Headings',
+    'Model' => 'Model',
+    'Measure' => 'Measure',
+    'Action' => 'Action',
+    'Other Supplier Brands' => 'Other Supplier Brands',
+    'Back' => 'Back',
+
 ];

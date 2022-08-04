@@ -15,7 +15,7 @@
                                     <div class="add-product-header">
                                         <h2>Other Supplier Types</h2>
 
-                                        <a href="{{route('admin-model-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('admin-model-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
 
                                     <div style="margin-top: 30px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

@@ -14,7 +14,7 @@
 
                                     <div class="add-product-header">
                                         <h2>{{isset($model) ? 'Edit Model' : 'Add Model'}}</h2>
-                                        <a href="{{route('predefined-model-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('predefined-model-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
 
                                     <form class="form-horizontal" action="{{route('predefined-model-store')}}" method="POST" enctype="multipart/form-data">

@@ -24,7 +24,7 @@
                                     <div class="add-product-box">
                                         <div class="add-product-header">
                                             <h2>Edit Service</h2>
-                                            <a href="{{route('admin-cat-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <a href="{{route('admin-cat-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-cat-update',$cat->id)}}" method="POST" enctype="multipart/form-data">

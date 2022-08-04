@@ -24,7 +24,7 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header">
                                         <h2>{{isset($my_service) ? 'Edit Service' : 'Add Service'}}</h2>
-                                        <a href="{{route('my-services')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('my-services')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
                                     <hr>
                                     <form class="form-horizontal" action="{{route('service-store')}}" method="POST" enctype="multipart/form-data">

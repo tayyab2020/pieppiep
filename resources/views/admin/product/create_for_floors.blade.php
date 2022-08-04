@@ -24,8 +24,8 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="add-product-box">
                                         <div class="add-product-header">
-                                            <h2>{{isset($cats) ? 'Edit Product' : 'Add Product'}}</h2>
-                                            <a href="{{route('admin-product-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <h2>{{isset($cats) ?  __('text.Edit Product') :  __('text.Add Product')}}</h2>
+                                            <a href="{{route('admin-product-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                         </div>
 
                                         <hr>
@@ -1168,7 +1168,7 @@
                                                             <label class="control-label col-sm-3" for=""></label>
 
                                                             <div class="col-sm-12 text-center">
-                                                                <button class="btn btn-default featured-btn" type="button" id="add-feature-btn"><i class="fa fa-plus"></i> Add More Headings</button>
+                                                                <button class="btn btn-default featured-btn" type="button" id="add-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Heading')}}</button>
                                                             </div>
                                                         </div>
 
@@ -1181,15 +1181,15 @@
                                                             <div class="row" style="margin: 0;">
 
                                                                 <div style="font-family: monospace;" class="col-sm-4">
-                                                                    <h4>Model</h4>
+                                                                    <h4>{{__('text.Model')}}</h4>
                                                                 </div>
 
                                                                 <div style="font-family: monospace;" class="col-sm-4">
-                                                                    <h4>Measure</h4>
+                                                                    <h4>{{__('text.Measure')}}</h4>
                                                                 </div>
 
                                                                 <div style="font-family: monospace;text-align: center;" class="col-sm-2">
-                                                                    <h4>Action</h4>
+                                                                    <h4>{{__('text.Action')}}</h4>
                                                                 </div>
 
                                                             </div>
@@ -1334,15 +1334,15 @@
 
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
-                                                                                                    <input value="{{str_replace('.',',',$mod->max_width)}}" class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Max Width')}}:</label>
+                                                                                                    <input value="{{str_replace('.',',',$mod->max_width)}}" class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="{{__('text.Max Width Placeholder')}}" type="text">
 
                                                                                                 </div>
 
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
-                                                                                                    <input value="{{str_replace('.',',',$mod->max_height)}}" class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Max Height')}}:</label>
+                                                                                                    <input value="{{str_replace('.',',',$mod->max_height)}}" class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="{{__('text.Max Height Placeholder')}}" type="text">
 
                                                                                                 </div>
 
@@ -1354,8 +1354,8 @@
                                                                                             <thead>
                                                                                             <tr>
                                                                                                 <th></th>
-                                                                                                <th>Heading</th>
-                                                                                                <th>Feature</th>
+                                                                                                <th>{{__('text.Heading')}}</th>
+                                                                                                <th>{{__('text.Feature')}}</th>
                                                                                             </tr>
                                                                                             </thead>
 
@@ -1389,7 +1389,7 @@
                                                                                 </div>
 
                                                                                 <div style="text-align: center;margin-top: 25px;">
-                                                                                    <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">Save</button>
+                                                                                    <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">{{__('text.Save')}}</button>
                                                                                 </div>
 
                                                                             </div>
@@ -1524,7 +1524,7 @@
                                                                                         </table>
 
                                                                                         <div style="text-align: center;margin-top: 25px;">
-                                                                                            <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">Save</button>
+                                                                                            <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">{{__('text.Save')}}</button>
                                                                                         </div>
 
                                                                                     </div>
@@ -1600,15 +1600,15 @@
 
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Width:</label>
-                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Max Width')}}:</label>
+                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="{{__('text.Max Width')}}" type="text">
 
                                                                                                 </div>
 
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Height:</label>
-                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Max Height')}}:</label>
+                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="{{__('text.Max Height Placeholder')}}" type="text">
 
                                                                                                 </div>
 
@@ -1620,8 +1620,8 @@
                                                                                             <thead>
                                                                                             <tr>
                                                                                                 <th></th>
-                                                                                                <th>Heading</th>
-                                                                                                <th>Feature</th>
+                                                                                                <th>{{__('text.Heading')}}</th>
+                                                                                                <th>{{__('text.Feature')}}</th>
                                                                                             </tr>
                                                                                             </thead>
 
@@ -1633,7 +1633,7 @@
                                                                                     </div>
 
                                                                                     <div style="text-align: center;margin-top: 25px;">
-                                                                                        <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">Save</button>
+                                                                                        <button class="btn btn-success" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 5px 25px;font-size: 16px;">{{__('text.Save')}}</button>
                                                                                     </div>
 
                                                                                 </div>
@@ -1653,7 +1653,7 @@
                                                             <label class="control-label col-sm-3" for=""></label>
 
                                                             <div class="col-sm-12 text-center">
-                                                                <button class="btn btn-default featured-btn" type="button" id="add-model-btn"><i class="fa fa-plus"></i> Add More Models</button>
+                                                                <button class="btn btn-default featured-btn" type="button" id="add-model-btn"><i class="fa fa-plus"></i> {{__('text.Add More Models')}}</button>
                                                             </div>
                                                         </div>
 
@@ -1662,7 +1662,7 @@
                                                     <hr style="margin: 30px 0;">
 
                                                     <div style="padding: 0;" class="add-product-footer">
-                                                        <button name="addProduct_btn" type="button" class="btn add-product_btn">{{isset($cats) ? 'Edit Product' : 'Add Product'}}</button>
+                                                        <button name="addProduct_btn" type="button" class="btn add-product_btn">{{isset($cats) ?  __('text.Edit Product') :  __('text.Add Product')}}</button>
                                                     </div>
 
                                                 </div>
@@ -2982,15 +2982,15 @@
                     '\n' +
                     '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
-                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Width:</label>\n' +
-                    '                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Width" type="text">\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Max Width')}}:</label>\n' +
+                    '                                                                                                    <input class="form-control model_max_width" name="model_max_width[]" maskedformat="9,1" id="blood_group_slug" placeholder="{{__('text.Max Width Placeholder')}}" type="text">\n' +
                     '\n' +
                     '                                                                                                </div>\n' +
                     '\n' +
                     '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
-                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">Max Height:</label>\n' +
-                    '                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Max Height')}}:</label>\n' +
+                    '                                                                                                    <input class="form-control model_max_height" name="model_max_height[]" maskedformat="9,1" id="blood_group_slug" placeholder="{{__('text.Max Height Placeholder')}}" type="text">\n' +
                     '\n' +
                     '                                                                                                </div>\n' +
                     '\n' +

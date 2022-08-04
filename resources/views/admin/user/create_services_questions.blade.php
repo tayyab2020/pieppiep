@@ -24,7 +24,7 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header">
                                         <h2>Add Services Question</h2>
-                                        <a href="{{route('services-quotation-questions')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('services-quotation-questions')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i>{{__('text.Back')}}</a>
                                     </div>
                                     <hr>
                                     <form class="form-horizontal" action="{{route('save-services-question')}}" method="POST" enctype="multipart/form-data">

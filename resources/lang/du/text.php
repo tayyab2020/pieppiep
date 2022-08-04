@@ -544,6 +544,22 @@ return [
     'Advice Price Quantity' => 'Pakinhoud',
     'Advice Price Quantity Placeholder' => 'Vul hier pak- of rolinhoud',
     'Advice Price' => 'Advies verkoopprijs per eenheid',
-    'Advice Price Placeholder' => 'Verkoopprijs per stuk, m² etc'
+    'Advice Price Placeholder' => 'Verkoopprijs per stuk, m² etc',
+    'Max Width' => 'Maximale breedte',
+    'Max Width Placeholder' => 'Vul maximale breedte in',
+    'Max Height' => 'Maximale hoogte',
+    'Max Height Placeholder' => 'Vul maximale hoogte in',
+    'Heading' => 'Naam',
+    'Feature' => 'Atribuut',
+    'Save' => 'Opslaan',
+    'Add Product' => 'Product toevoegen',
+    'Add More Models' => 'Extra model toevoegen',
+    'Edit Product' => 'Bewerk Product',
+    'Add More Headings' => 'Meer titels toevoegen',
+    'Model' => 'Model',
+    'Measure' => 'Maateenheid',
+    'Action' => 'Actie',
+    'Other Supplier Brands' => 'Merken leveranciers',
+    'Back' => 'Terug',
     
 ];

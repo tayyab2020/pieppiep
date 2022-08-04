@@ -23,8 +23,8 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="add-product-box">
                                     <div class="add-product-header">
-                                        <h2>{{isset($my_product) ? 'Edit Product' : 'Add Product'}}</h2>
-                                        <a href="{{route('user-products')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <h2>{{isset($my_product) ?  __('text.Edit Product') :  __('text.Add Product')}}</h2>
+                                        <a href="{{route('user-products')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i>{{__('text.Back')}}</a>
                                     </div>
                                     <hr>
                                     <form class="form-horizontal" action="{{route('product-store')}}" method="POST" enctype="multipart/form-data">
@@ -236,7 +236,7 @@
                                         <hr>
 
                                         <div class="add-product-footer">
-                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($my_product) ? 'Edit Product' : 'Add Product'}}</button>
+                                            <button name="addProduct_btn" type="submit" class="btn add-product_btn">{{isset($my_product) ?  __('text.Edit Product') :  __('text.Add Product')}}</button>
                                         </div>
 
                                     </form>

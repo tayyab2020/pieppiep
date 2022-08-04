@@ -24,7 +24,7 @@
                                     <div class="add-product-box">
                                         <div class="add-product-header">
                                             <h2>{{isset($page) ? 'Edit Page' : 'Add Page'}}</h2>
-                                            <a href="{{route('admin-pages-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <a href="{{route('admin-pages-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i>{{__('text.Back')}}</a>
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-pages-store')}}" method="POST" enctype="multipart/form-data">
