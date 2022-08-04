@@ -46,10 +46,10 @@
                                             <div class="sppb-addon sppb-addon-button-group text-left">
                                                 <div class="sppb-addon-content nav"><a onclick="myFunction()"
                                                                                        id="btn-1623675747037"
-                                                                                       href="/nl/PiepPiep/probeer/order-software"
+                                                                                       href="/nl/PiepPiep/registreren"
                                                                                        class="nav-link btn btn-blue">Probeer
                                                         30 dagen gratis</a><a onclick="myFunction()" id="btn-1623675747038"
-                                                                              href="/nl/PiepPiep/bestellen/order-software"
+                                                                              href="/nl/PiepPiep/registreren"
                                                                               class="nav-link btn link-blue">of bestel
                                                         direct</a></div>
                                             </div>
@@ -78,7 +78,7 @@
                                                         class="sppb-addon-title ">Makkelijk en snel een offerte opstellen en deze omtoveren in een order,<span
                                                             class="mobile"><br></span> <span>waar & wanneer</span> jij dat wilt
                                                 </h2>
-                                                <div class="sppb-addon-content"><p>PiepPiep verbindt retailers in de woonbranche met hun klanten en leveranciers. Alle informatie van offerte tot factuur is terug te vinden in je eigen dashboard. Als retailer beschik je over alle actuele producten en prijzen van je leverancier. Zo heb je meer tijd voor je klant en verkoop je nooit meer nÃ©Ã©. </p></div>
+                                                <div class="sppb-addon-content"><p>PiepPiep verbindt retailers in de woonbranche met hun klanten en leveranciers. Alle informatie van offerte tot factuur is terug te vinden in je eigen dashboard. Als retailer beschik je over alle actuele producten en prijzen van je leverancier. Zo heb je meer tijd voor je klant en verkoop je nooit meer néé. </p></div>
                                             </div>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
                                                                         <div class="sppb-addon-content nav"><a
                                                                                     onclick="myFunction()"
                                                                                     id="btn-1623828553890"
-                                                                                    href="/nl/PiepPiep/features"
+                                                                                    href="/nl/PiepPiep"
                                                                                     class="nav-link btn btn-blue">Bekijk alle
                                                                                 functies</a></div>
                                                                     </div>
@@ -542,7 +542,7 @@
                                             <div class="sppb-addon sppb-addon-button-group text-center">
                                                 <div class="sppb-addon-content nav"><a onclick="myFunction()"
                                                                                        id="btn-1623746996126"
-                                                                                       href="/nl/PiepPiep/probeer/order-software"
+                                                                                       href="/nl/PiepPiep/registreren"
                                                                                        class="nav-link btn btn-blue">Probeer
                                                         30 dagen gratis</a></div>
                                             </div>
