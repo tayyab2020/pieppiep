@@ -298,7 +298,7 @@
 
                                                 <li>
                                                     <input type="checkbox">
-                                                    <h2>Configurations <i class="arrow"></i></h2>
+                                                    <h2>{{__('text.Configurations')}} <i class="arrow"></i></h2>
                                                     <div class="accordion-content">
 
                                                         {{--<div class="form-group">

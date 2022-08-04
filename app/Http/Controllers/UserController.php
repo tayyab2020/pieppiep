@@ -2292,11 +2292,12 @@ class UserController extends Controller
                $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep";
            }
    
-           \Mail::send(array(), array(), function ($message) use ($msg,$creator_email, $creator_name, $invoice) {
-               $message->to($creator_email)
-                   ->from('info@pieppiep.com')
-                   ->subject(__('text.Quotation Accepted!'))
-                   ->setBody($msg,'text/html');
+           \Mail::send(array(), array(), function ($message) use ($msg, $client_email, $client_name, $invoice, $user) {
+                $message
+                    ->to($client_email)->from('noreply@pieppiep.com', $user->company_name)
+                    ->replyTo($user->email, $user->company_name)
+                    ->subject(__('text.Quotation Accepted!'))
+                    ->setBody($msg,'text/html');
            });
         }
         else
@@ -2323,7 +2324,7 @@ class UserController extends Controller
     
             \Mail::send(array(), array(), function ($message) use ($msg,$creator_email, $creator_name, $invoice, $user) {
                 $message->to($creator_email)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com')
                     ->subject(__('text.Quotation Accepted!'))
                     ->setBody($msg,'text/html');
                 });
@@ -6111,10 +6112,11 @@ class UserController extends Controller
                         $msg = "Quotation QUO# <b>" . $quotation_invoice_number . "</b> have been updated by retailer on your review request.<br><br>Kind regards,<br><br>Customer service<br><br> Vloerofferte";
                     }
             
-                    \Mail::send(array(), array(), function ($message) use ($msg,$creator_email, $creator_name, $invoice) {
-                        $message->to($creator_email)
-                            ->from('info@pieppiep.com')
-                            ->subject(__('text.Quotation Accepted!'))
+                    \Mail::send(array(), array(), function ($message) use ($msg, $client, $quotation_invoice_number, $user_email, $company_name) {
+                        $message->to($client->email)
+                            ->from('noreply@pieppiep.com', $company_name)
+                            ->replyTo($user_email, $company_name)
+                            ->subject(__('text.Quotation updated!'))
                             ->setBody($msg,'text/html');
                     });
                 }
@@ -6715,10 +6717,10 @@ class UserController extends Controller
             $sub_mail = "Quotation waiting for approval"; 
         }
 
-        \Mail::send(array(), array(), function ($message) use ($admin_email,$quotation) {
-            $message->to($creator_email)
+        \Mail::send(array(), array(), function ($message) use ($msg, $sub_mail, $admin_email,$quotation) {
+            $message->to($admin_email)
                 ->from('info@pieppiep.com')
-                ->subject($sub_mail,'text/html')
+                ->subject($sub_mail)
                 ->setBody($msg,'text/html');
         });
         
@@ -6987,11 +6989,11 @@ class UserController extends Controller
                 $sub_mail = "Order marked as delivered by supplier!"; 
             }
     
-            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $order_number, $supplier_email) {
+            \Mail::send(array(), array(), function ($message) use ($msg, $sub_mail, $retailer_email, $retailer_company, $supplier_name, $order_number, $supplier_email) {
                 $message->to($retailer_email)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com', $supplier_name)
                     ->replyTo($supplier_email, $supplier_name)
-                    ->subject($sub_mail, 'text/html')
+                    ->subject($sub_mail)
                     ->setBody($msg,'text/html');
             });
 
@@ -7052,11 +7054,11 @@ class UserController extends Controller
                 $sub_mail = "Quotation marked as delivered by retailer!";
             }
 
-            \Mail::send(array(), array(), function ($message) use ($client_email, $retailer_company, $client_name, $quotation_invoice_number, $retailer_email) {
+            \Mail::send(array(), array(), function ($message) use ($msg, $sub_mail, $client_email, $retailer_company, $client_name, $quotation_invoice_number, $retailer_email) {
                 $message->to($client_email)
                     ->from('noreply@pieppiep.com', $retailer_company)
                     ->replyTo($retailer_email, $retailer_company)
-                    ->subject($sub_mail, 'text/html')
+                    ->subject($sub_mail)
                     ->setBody($msg, 'text/html');
             });
 
