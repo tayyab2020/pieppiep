@@ -2236,11 +2236,20 @@ class UserController extends Controller
         $creator_email = $invoice->email;
         $creator_name = $invoice->name;
 
-        \Mail::send(array(), array(), function ($message) use ($creator_email, $creator_name, $invoice) {
+        if($this->lang->lang == 'du')
+        {
+            $msg = "Gefeliciteerd! Beste heer/mevrouw " . $creator_name . ",<br><br> Quotation QUO# " . $invoice->quotation_invoice_number . " is geacepteerd.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
+        }
+        else
+        {
+            $msg = "Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br> Quotation QUO# " . $invoice->quotation_invoice_number . " has been accepted.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep";
+        }
+
+        \Mail::send(array(), array(), function ($message) use ($msg,$creator_email, $creator_name, $invoice) {
             $message->to($creator_email)
                 ->from('info@pieppiep.com')
                 ->subject(__('text.Quotation Accepted!'))
-                ->setBody("Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br> Quotation QUO# " . $invoice->quotation_invoice_number . " has been accepted.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+                ->setBody($msg,'text/html');
         });
 
         return view('front.thankyou1');
@@ -2274,13 +2283,22 @@ class UserController extends Controller
             $client_email = $invoice->email;
             $client_name = $invoice->name . ' ' . $invoice->family_name;
 
-            \Mail::send(array(), array(), function ($message) use ($client_email, $client_name, $invoice, $user) {
-                $message->to($client_email)
-                    ->from('noreply@pieppiep.com', $user->company_name)
+           if($this->lang->lang == 'du')
+           {
+               $msg = "Beste " . $client_name . ",<br><br><b>" . $user->company_name . "</b> heeft je offerte geaccepteerd <b>" . $invoice->quotation_invoice_number . "</b> namens jouw.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
+           }
+           else
+           {
+               $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep";
+           }
+   
+           \Mail::send(array(), array(), function ($message) use ($msg, $client_email, $client_name, $invoice, $user) {
+                $message
+                    ->to($client_email)->from('noreply@pieppiep.com', $user->company_name)
                     ->replyTo($user->email, $user->company_name)
                     ->subject(__('text.Quotation Accepted!'))
-                    ->setBody("Hi " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
-            });
+                    ->setBody($msg,'text/html');
+           });
         }
         else
         {
@@ -2295,12 +2313,21 @@ class UserController extends Controller
             $creator_email = $invoice->email;
             $creator_name = $invoice->name;
 
-            \Mail::send(array(), array(), function ($message) use ($creator_email, $creator_name, $invoice, $user) {
+            if($this->lang->lang == 'du')
+            {
+                $msg = "Gefeliciteerd! Beste heer/mevrouw " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " heeft offerte QUO# geaccepteerd" . $invoice->quotation_invoice_number . "<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
+            }
+            else
+            {
+                $msg = "Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep";
+            }
+    
+            \Mail::send(array(), array(), function ($message) use ($msg,$creator_email, $creator_name, $invoice, $user) {
                 $message->to($creator_email)
                     ->from('noreply@pieppiep.com')
                     ->subject(__('text.Quotation Accepted!'))
-                    ->setBody("Congratulations! Dear Mr/Mrs " . $creator_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
-            });
+                    ->setBody($msg,'text/html');
+                });
 
 
             /*$admin_email = $this->sl->admin_email;
@@ -6076,12 +6103,21 @@ class UserController extends Controller
             {
                 if($ask && !$request->quote_request_id)
                 {
-                    \Mail::send(array(), array(), function ($message) use ($client, $quotation_invoice_number, $user_email, $company_name) {
+                    if($this->lang->lang == 'du')
+                    {
+                        $msg = "Offerte QUO# <b>" . $quotation_invoice_number . "</b> is op je verzoek aangepast door de retailer.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Vloerofferte";
+                    }
+                    else
+                    {
+                        $msg = "Quotation QUO# <b>" . $quotation_invoice_number . "</b> have been updated by retailer on your review request.<br><br>Kind regards,<br><br>Customer service<br><br> Vloerofferte";
+                    }
+            
+                    \Mail::send(array(), array(), function ($message) use ($msg, $client, $quotation_invoice_number, $user_email, $company_name) {
                         $message->to($client->email)
                             ->from('noreply@pieppiep.com', $company_name)
                             ->replyTo($user_email, $company_name)
                             ->subject(__('text.Quotation updated!'))
-                            ->setBody("Quotation QUO# <b>" . $quotation_invoice_number . "</b> have been updated by retailer on your review request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                            ->setBody($msg,'text/html');
                     });
                 }
 
@@ -6670,13 +6706,24 @@ class UserController extends Controller
 
         $admin_email = $this->sl->admin_email;
 
-        \Mail::send(array(), array(), function ($message) use ($admin_email,$quotation) {
+        if($this->lang->lang == 'du')
+        {
+            $msg = "Nieuwe update: nieuwe offerte QUO# <b>" . $quotation->quotation_invoice_number . "</b> is ter goedkeuring verstuurd.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
+            $sub_mail = "Offerte ter goedkeuring"; 
+        }
+        else
+        {
+            $msg = "Recent activity: New quotation QUO# <b>" . $quotation->quotation_invoice_number . "</b> has been submitted for approval.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep";
+            $sub_mail = "Quotation waiting for approval"; 
+        }
+
+        \Mail::send(array(), array(), function ($message) use ($msg, $sub_mail, $admin_email,$quotation) {
             $message->to($admin_email)
                 ->from('info@pieppiep.com')
-                ->subject('Quotation waiting for approval')
-                ->setBody("Recent activity: New quotation QUO# <b>" . $quotation->quotation_invoice_number . "</b> has been submitted for approval.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+                ->subject($sub_mail)
+                ->setBody($msg,'text/html');
         });
-
+        
         Session::flash('success', 'Quotation submitted for approval.');
         return redirect()->back();
     }
@@ -6931,13 +6978,25 @@ class UserController extends Controller
             $retailer_email = $retailer->email;
             $order_number = $data->order_number;
 
-            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $order_number, $supplier_email) {
+            if($this->lang->lang == 'du')
+            {
+                $msg = "Status update: Beste ".$retailer_company.", goederen zijn geleverd door leverancier <b>".$supplier_name."</b><br> Order No: <b>" . $order_number . "</b>.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
+                $sub_mail = "Order is gemarkeerd als bezorgd"; 
+            }
+            else
+            {
+                $msg = "Recent activity: Dear ".$retailer_company.", order has been delivered by supplier <b>".$supplier_name."</b><br> Order No: <b>" . $order_number . "</b>.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep";
+                $sub_mail = "Order marked as delivered by supplier!"; 
+            }
+    
+            \Mail::send(array(), array(), function ($message) use ($msg, $sub_mail, $retailer_email, $retailer_company, $supplier_name, $order_number, $supplier_email) {
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)
                     ->replyTo($supplier_email, $supplier_name)
-                    ->subject(__('text.Order marked as delivered by supplier!'))
-                    ->setBody("Recent activity: Hi ".$retailer_company.", order has been delivered by supplier <b>".$supplier_name."</b><br> Order No: <b>" . $order_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+                    ->subject($sub_mail)
+                    ->setBody($msg,'text/html');
             });
+
 
             Session::flash('success', __('text.Order marked as delivered.'));
             return redirect()->back();
@@ -6984,12 +7043,23 @@ class UserController extends Controller
 
             $quotation_invoice_number = $data->quotation_invoice_number;
 
-            \Mail::send(array(), array(), function ($message) use ($client_email, $retailer_company, $client_name, $quotation_invoice_number, $retailer_email) {
+            if($this->lang->lang == 'du')
+            {
+                $msg = "Status update: beste ".$client_name.", goederen zijn bezorgd <b>".$retailer_company."</b><br> Offerte nummer: <b>" . $quotation_invoice_number . "</b>.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
+                $sub_mail = "Status gewijzigd naar bezorgd";
+            }
+            else
+            {
+                $msg = "Recent activity: Hi ".$client_name.", quotation has been delivered by retailer <b>".$retailer_company."</b><br> Quotation No: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep";
+                $sub_mail = "Quotation marked as delivered by retailer!";
+            }
+
+            \Mail::send(array(), array(), function ($message) use ($msg, $sub_mail, $client_email, $retailer_company, $client_name, $quotation_invoice_number, $retailer_email) {
                 $message->to($client_email)
                     ->from('noreply@pieppiep.com', $retailer_company)
                     ->replyTo($retailer_email, $retailer_company)
-                    ->subject(__('text.Quotation marked as delivered by retailer!'))
-                    ->setBody("Recent activity: Hi ".$client_name.", quotation has been delivered by retailer <b>".$retailer_company."</b><br> Quotation No: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+                    ->subject($sub_mail)
+                    ->setBody($msg, 'text/html');
             });
 
             Session::flash('success', 'Quotation marked as delivered.');
