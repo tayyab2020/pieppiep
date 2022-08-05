@@ -1313,7 +1313,7 @@
 
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity)}}:</label>
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity')}}:</label>
                                                                                                     <input value="{{str_replace('.', ',', floatval($mod->estimated_price_quantity))}}" class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity Placeholder')}}" type="text">
 
                                                                                                 </div>
@@ -1444,8 +1444,8 @@
 
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity)}}:</label>
-                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity Placeholder)}}" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity')}}:</label>
+                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity Placeholder')}}" type="text">
 
                                                                                                 </div>
 
@@ -1579,8 +1579,8 @@
 
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity)}}:</label>
-                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity)}}" type="text">
+                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity')}}:</label>
+                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity')}}" type="text">
 
                                                                                                 </div>
 
@@ -2794,8 +2794,8 @@
                 '\n' +
                 '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                 '\n' +
-                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity)}}:</label>\n' +
-                '                                                                                                    <input class="form-control estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" id="estimated_price_quantity" placeholder="{{__('text.Advice Price Quantity Placeholder)}}" type="text">\n' +
+                '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity')}}:</label>\n' +
+                '                                                                                                    <input class="form-control estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" id="estimated_price_quantity" placeholder="{{__('text.Advice Price Quantity Placeholder')}}" type="text">\n' +
                 '\n' +
                 '                                                                                                </div>\n' +
                 '\n' +
@@ -2961,8 +2961,8 @@
                     '\n' +
                     '                                                                                                <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
                     '\n' +
-                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity)}}</label>\n' +
-                    '                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity Placeholder)}}" type="text">\n' +
+                    '                                                                                                    <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity')}}</label>\n' +
+                    '                                                                                                    <input class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity Placeholder')}}" type="text">\n' +
                     '\n' +
                     '                                                                                                </div>\n' +
                     '\n' +
