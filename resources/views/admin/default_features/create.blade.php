@@ -200,7 +200,7 @@
                                                                                 <input value="{{$key1->value}}" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
                                                                             </td>
                                                                             <td>
-                                                                                <button data-id="{{$f1+1}}" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
+                                                                                <button data-id="{{$f1+1}}" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>
                                                                             </td>
                                                                             <td>
                                                                                 <select class="form-control" name="price_impact[]">
@@ -250,7 +250,7 @@
                                                                             <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
                                                                         </td>
                                                                         <td>
-                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
+                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>
                                                                         </td>
                                                                         <td>
                                                                             <select class="form-control" name="price_impact[]">
@@ -1150,7 +1150,7 @@
             '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
-            '                                                                                            <button data-id="'+feature_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+            '                                                                                            <button data-id="'+feature_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
             '\n' +
@@ -1300,7 +1300,7 @@
                 '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '\n' +
