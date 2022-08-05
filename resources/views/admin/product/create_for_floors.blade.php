@@ -1314,7 +1314,7 @@
                                                                                                 <div style="display: flex;align-items: flex-start;padding: 0;margin-top: 20px;flex-direction: column;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                                                                     <label style="display: block;text-align: left;padding-top: 0;color: red;white-space: nowrap;" class="control-label">{{__('text.Advice Price Quantity)}}:</label>
-                                                                                                    <input value="{{str_replace('.', ',', floatval($mod->estimated_price_quantity))}}" class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity Placeholder)}}" type="text">
+                                                                                                    <input value="{{str_replace('.', ',', floatval($mod->estimated_price_quantity))}}" class="form-control estimated_price_quantity" id="estimated_price_quantity" name="estimated_price_quantity[]" maskedformat="9,1" placeholder="{{__('text.Advice Price Quantity Placeholder')}}" type="text">
 
                                                                                                 </div>
 
