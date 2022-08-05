@@ -1217,8 +1217,7 @@
 							<div class="input-group-addon">
 								<i class="fa fa-envelope"></i>
 							</div>
-							<input id="email" name="email" class="form-control validation" placeholder="{{$lang->sue}}"
-								   type="email">
+							<input id="email" name="email" class="form-control" placeholder="{{$lang->sue}}" type="email">
 						</div>
 					</div>
 
@@ -2912,6 +2911,7 @@
 				var validation = $('.modal-body').find('.validation');
 
 				var flag = 0;
+				var email_flag = 0;
 
 				$(validation).each(function () {
 
@@ -2926,9 +2926,18 @@
 				});
 
 				if (!flag) {
-					var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-					if (!regex.test(email)) {
+					if(email)
+					{
+						var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+						if(!regex.test(email))
+						{
+							email_flag = 1;
+						}
+					}
+					
+					if (email_flag) {
 						$('#email').css('border', '1px solid red');
 
 						$('.alert-box').html('<div class="alert alert-danger">\n' +
