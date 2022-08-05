@@ -55,7 +55,7 @@
                                                     <div style="padding: 30px 0;" class="tab-pane active" id="tabs-1" role="tabpanel">
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">Title*</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('Title')}}</label>
                                                             <div class="col-sm-6">
                                                                 <input {{isset($brand) && $brand->edit_request_id ? 'readonly' : null}} value="{{isset($brand) ? $brand->cat_name : null}}" class="form-control" name="cat_name" id="blood_group_display_name" placeholder="Enter Brand title" required="" type="text">
                                                             </div>
@@ -129,11 +129,11 @@
                                                         @if(isset($brand) && !$brand->edit_request_id)
 
                                                             <div class="form-group">
-                                                                <label class="control-label col-sm-4" for="profile_photo">Add Photo</label>
+                                                                <label class="control-label col-sm-4" for="profile_photo">{{__('text.Add photo')}}</label>
                                                                 <div class="col-sm-6">
                                                                     <input type="file" id="uploadFile" class="hidden" name="photo" value="">
                                                                     <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i> Add Brand Photo</button>
-                                                                    <p>Prefered Size: (600x600) or Square Sized Image</p>
+                                                                    <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                                                 </div>
                                                             </div>
 
@@ -153,7 +153,7 @@
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label class="control-label col-sm-4" for="blood_group_display_name">Title*</label>
+                                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('Title')}}</label>
                                                                 <div class="col-sm-6">
                                                                     <input value="{{$brand->edit_title}}" class="form-control" name="edit_title" id="blood_group_display_name" placeholder="Enter Brand title" required="" type="text">
                                                                 </div>
@@ -184,11 +184,11 @@
 
 
                                                             <div class="form-group">
-                                                                <label class="control-label col-sm-4" for="profile_photo">Add Photo</label>
+                                                                <label class="control-label col-sm-4" for="profile_photo">{{__('text.Add photo')}}</label>
                                                                 <div class="col-sm-6">
                                                                     <input type="file" id="uploadFile1" class="hidden" name="edit_photo" value="">
                                                                     <button type="button" id="uploadTrigger1" onclick="uploadclick1()" class="form-control"><i class="fa fa-download"></i> Add Brand Photo</button>
-                                                                    <p>Prefered Size: (600x600) or Square Sized Image</p>
+                                                                    <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                                                 </div>
                                                             </div>
 

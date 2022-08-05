@@ -32,7 +32,7 @@
                                             <th>Type</th>
                                             <th>Material</th>
                                             <th>Fabric</th>
-                                            <th>Size</th>
+                                            <th>{{__('text.Size')}}</th>
                                             <th>Brand</th>
                                             <th>Category</th>
                                             <th>Price</th>

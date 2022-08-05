@@ -39,7 +39,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
                                                 <div class="col-sm-6">
-                                                    <input value="{{isset($cats) ? $cats->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Product title" required="" type="text">
+                                                    <input value="{{isset($cats) ? $cats->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="{{__('text.Enter Product Title')}}" required="" type="text">
                                                 </div>
                                             </div>
 

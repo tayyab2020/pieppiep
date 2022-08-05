@@ -194,10 +194,10 @@
                                                                             <td>
                                                                                 <input value="{{$f1+1}}" type="hidden" name="f_rows[]" class="f_row">
                                                                                 <input value="{{$key1->id}}" type="hidden" name="feature_ids[]">
-                                                                                <input value="{{$key1->title}}" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                <input value="{{$key1->title}}" class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">
                                                                             </td>
                                                                             <td>
-                                                                                <input value="{{$key1->value}}" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                <input value="{{$key1->value}}" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">
                                                                             </td>
                                                                             <td>
                                                                                 <button data-id="{{$f1+1}}" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>
@@ -244,10 +244,10 @@
                                                                         <td>
                                                                             <input type="hidden" name="f_rows[]" class="f_row" value="1">
                                                                             <input type="hidden" name="feature_ids[]">
-                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">
                                                                         </td>
                                                                         <td>
-                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">
                                                                         </td>
                                                                         <td>
                                                                             <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>
@@ -438,10 +438,10 @@
                                                                                                 <td>
                                                                                                     <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
                                                                                                     <input type="hidden" name="feature_row_ids{{$s+1}}[]" value="{{$key1->id}}">
-                                                                                                    <input value="{{$key1->title}}" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                                    <input value="{{$key1->title}}" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input value="{{$key1->value}}" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                                    <input value="{{$key1->value}}" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <select class="form-control" name="price_impact{{$s+1}}[]">
@@ -477,10 +477,10 @@
                                                                                         <td>
                                                                                             <input type="hidden" name="f_rows{{$s+1}}[]" class="f_row1" value="{{$s1}}">
                                                                                             <input type="hidden" name="feature_row_ids{{$s+1}}[]">
-                                                                                            <input value="" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                            <input value="" class="form-control feature_title1" name="features{{$s+1}}[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">
                                                                                         </td>
                                                                                         <td>
-                                                                                            <input value="" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                            <input value="" class="form-control feature_value1" name="feature_values{{$s+1}}[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">
                                                                                         </td>
                                                                                         <td>
                                                                                             <select class="form-control" name="price_impact{{$s+1}}[]">
@@ -512,7 +512,7 @@
                                                                             </table>
 
                                                                             <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                <button data-id="{{$s+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>
+                                                                                <button data-id="{{$s+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>
                                                                             </div>
                                                                         </div>
 
@@ -539,10 +539,10 @@
                                                                             <td>
                                                                                 <input type="hidden" name="f_rows1[]" class="f_row1" value="1">
                                                                                 <input type="hidden" name="feature_row_ids1[]">
-                                                                                <input class="form-control feature_title1" name="features1[]" id="blood_group_slug" placeholder="Feature Title" type="text">
+                                                                                <input class="form-control feature_title1" name="features1[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">
                                                                             </td>
                                                                             <td>
-                                                                                <input class="form-control feature_value1" name="feature_values1[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                <input class="form-control feature_value1" name="feature_values1[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">
                                                                             </td>
                                                                             <td>
                                                                                 <select class="form-control" name="price_impact1[]">
@@ -570,7 +570,7 @@
                                                                     </table>
 
                                                                     <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>
+                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>
                                                                     </div>
                                                                 </div>
 
@@ -1033,10 +1033,10 @@
             '                                                                                        <td>\n' +
             '                                                                                            <input type="hidden" name="f_rows'+id+'[]" class="f_row1" value="'+feature_row+'">' +
             '                                                                                            <input type="hidden" name="feature_row_ids'+id+'[]">' +
-            '                                                                                            <input class="form-control feature_title1" name="features'+id+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+            '                                                                                            <input class="form-control feature_title1" name="features'+id+'[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
-            '                                                                                            <input class="form-control feature_value1" name="feature_values'+id+'[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+            '                                                                                            <input class="form-control feature_value1" name="feature_values'+id+'[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
             '                                                                                            <select class="form-control" name="price_impact'+id+'[]">\n' +
@@ -1088,10 +1088,10 @@
                 '                                                                                        <td>\n' +
                 '                                                                                            <input type="hidden" name="f_rows'+heading_id+'[]" class="f_row1" value="'+f_row+'">' +
                 '                                                                                            <input type="hidden" name="feature_row_ids'+heading_id+'[]">' +
-                '                                                                                            <input class="form-control feature_title1" name="features'+heading_id+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '                                                                                            <input class="form-control feature_title1" name="features'+heading_id+'[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <input class="form-control feature_value1" name="feature_values'+heading_id+'[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                            <input class="form-control feature_value1" name="feature_values'+heading_id+'[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <select class="form-control" name="price_impact'+heading_id+'[]">\n' +
@@ -1144,10 +1144,10 @@
             '                                                                                        <td>\n' +
             '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+feature_row+'">' +
             '                                                                                            <input type="hidden" name="feature_ids[]">' +
-            '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+            '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
-            '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+            '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
             '                                                                                            <button data-id="'+feature_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
@@ -1222,10 +1222,10 @@
             '                                                                                        <td>\n' +
             '                                                                                            <input type="hidden" name="f_rows'+feature_row+'[]" class="f_row1" value="'+feature_row1+'">' +
             '                                                                                            <input type="hidden" name="feature_row_ids'+feature_row+'[]">' +
-            '                                                                                            <input class="form-control feature_title1" name="features'+feature_row+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+            '                                                                                            <input class="form-control feature_title1" name="features'+feature_row+'[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
-            '                                                                                            <input class="form-control feature_value1" name="feature_values'+feature_row+'[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+            '                                                                                            <input class="form-control feature_value1" name="feature_values'+feature_row+'[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">\n' +
             '                                                                                        </td>\n' +
             '                                                                                        <td>\n' +
             '                                                                                            <select class="form-control" name="price_impact'+feature_row+'[]">\n' +
@@ -1249,7 +1249,7 @@
             '                                                                                        </td>\n' +
             '                                                                                    </tr></tbody></table>' +
             '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-            '                                                                                            <button data-id="'+feature_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
+            '                                                                                            <button data-id="'+feature_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
             '                                                                                        </div></div>');
 
 
@@ -1294,10 +1294,10 @@
                 '                                                                                        <td>\n' +
                 '                                                                                            <input type="hidden" name="f_rows[]" class="f_row" value="'+f_row+'">' +
                 '                                                                                            <input type="hidden" name="feature_ids[]">' +
-                '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '                                                                                            <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
@@ -1372,10 +1372,10 @@
                 '                                                                                        <td>\n' +
                 '                                                                                            <input type="hidden" name="f_rows'+f_row+'[]" class="f_row1" value="'+f_row1+'">' +
                 '                                                                                            <input type="hidden" name="feature_row_ids'+f_row+'[]">' +
-                '                                                                                            <input class="form-control feature_title1" name="features'+f_row+'[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +
+                '                                                                                            <input class="form-control feature_title1" name="features'+f_row+'[]" id="blood_group_slug" placeholder="{{__('text.Feature Title')}}" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <input class="form-control feature_value1" name="feature_values'+f_row+'[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                            <input class="form-control feature_value1" name="feature_values'+f_row+'[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <select class="form-control" name="price_impact'+f_row+'[]">\n' +
@@ -1399,7 +1399,7 @@
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr></tbody></table>' +
                 '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> Add More Sub Features</button>\n' +
+                '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
                 '                                                                                        </div></div>');
 
 

@@ -96,7 +96,7 @@
                                                                                 <input value="{{$key1->model}}" class="form-control size_title" name="sizes[]" id="blood_group_slug" placeholder="Size Title" type="text">
                                                                             </td>
                                                                             <td>
-                                                                                <input value="{{$key1->value}}" class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                                <input value="{{$key1->value}}" class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">
                                                                             </td>
                                                                             <td>
                                                                                 <select class="form-control" name="size_measure[]">
@@ -149,7 +149,7 @@
                                                                             <input class="form-control size_title" name="sizes[]" id="blood_group_slug" placeholder="Size Title" type="text">
                                                                         </td>
                                                                         <td>
-                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="Value" type="text">
+                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">
                                                                         </td>
                                                                         <td>
                                                                             <select class="form-control" name="size_measure[]">
@@ -395,7 +395,7 @@
                 '                                                                                            <input class="form-control size_title" name="sizes[]" id="blood_group_slug" placeholder="Size Title" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                '                                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                            <select class="form-control" name="size_measure[]">\n' +
@@ -460,7 +460,7 @@
                     '                                                                                            <input class="form-control size_title" name="sizes[]" id="blood_group_slug" placeholder="Size Title" type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
-                    '                                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
+                    '                                                                                            <input class="form-control size_value" name="size_values[]" id="blood_group_slug" placeholder="{{__('text.Value Placeholder')}}"  type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
                     '                                                                            <select class="form-control" name="size_measure[]">\n' +

@@ -56,7 +56,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
                                                 <div class="col-sm-6">
-                                                    <input readonly value="{{isset($my_product) ? $my_product->title : null}}" class="form-control product_title" name="title" id="blood_group_display_name" placeholder="Enter Product title" required="" type="text">
+                                                    <input readonly value="{{isset($my_product) ? $my_product->title : null}}" class="form-control product_title" name="title" id="blood_group_display_name" placeholder="{{__('text.Enter Product Title')}}" required="" type="text">
                                                 </div>
                                             </div>
 
@@ -68,7 +68,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Category*</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Category*')}}</label>
                                                 <div class="col-sm-6">
                                                     <input value="{{isset($my_product) ? $my_product->category_id : null}}" class="form-control category_id" name="category_id" id="blood_group_slug" type="hidden">
                                                     <input readonly value="{{isset($my_product) ? $my_product->category : null}}" class="form-control product_category" id="blood_group_slug" placeholder="Enter Product Category" required="" type="text">
@@ -76,7 +76,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Brand*</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Brand*')}}</label>
                                                 <div class="col-sm-6">
                                                     <input value="{{isset($my_product) ? $my_product->brand_id : null}}" class="form-control brand_id" name="brand_id" id="blood_group_slug" type="hidden">
                                                     <input readonly value="{{isset($my_product) ? $my_product->brand : null}}" class="form-control product_brand" id="blood_group_slug" placeholder="Enter Product Brand" required="" type="text">
@@ -95,7 +95,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="service_description">Product Description*</label>
                                                 <div class="col-sm-6">
-                                                    <textarea readonly class="form-control product_description" id="service_description" name="description" rows="5" style="resize: vertical;" placeholder="Enter Product Description">{{isset($my_product) ? $my_product->description : null}}</textarea>
+                                                    <textarea readonly class="form-control product_description" id="service_description" name="description" rows="5" style="resize: vertical;" placeholder="{{__('text.Enter Product Description')}}">{{isset($my_product) ? $my_product->description : null}}</textarea>
                                                 </div>
                                             </div>
 
@@ -107,14 +107,14 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Model Number</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Model number')}}</label>
                                                 <div class="col-sm-6">
                                                     <input readonly name="model_number" value="{{isset($my_product) ? $my_product->model_number : null}}" class="form-control" id="blood_group_slug" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Size</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Size')}}</label>
                                                 <div class="col-sm-6">
                                                     <input readonly name="size" value="{{isset($my_product) ? $my_product->size : null}}" class="form-control" id="blood_group_slug" type="text">
                                                 </div>
@@ -135,7 +135,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Additional Info</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Additional info')}}</label>
                                                 <div class="col-sm-6">
                                                     <input readonly name="additional_info" value="{{isset($my_product) ? $my_product->additional_info : null}}" class="form-control" id="blood_group_slug" type="text">
                                                 </div>
