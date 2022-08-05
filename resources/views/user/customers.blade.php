@@ -52,7 +52,7 @@
 
                                                             <td>{{$user->family_name}}</td>
 
-                                                            <td>{{$user->email}}</td>
+                                                            <td>{{!$user->fake_email ? $user->email : null}}</td>
 
                                                             <td>{{$user->business_name}}</td>
 

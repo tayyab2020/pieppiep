@@ -70,17 +70,17 @@
 
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="phone">{{__('text.Contact Number')}}*</label>
+                                            <label class="control-label col-sm-4" for="phone">{{__('text.Contact Number')}}</label>
                                             <div class="col-sm-6">
-                                                <input class="form-control" value="{{isset($customer->phone) ? $customer->phone : null}}" name="phone" id="phone" placeholder="" required="" type="text">
+                                                <input class="form-control" value="{{isset($customer->phone) ? $customer->phone : null}}" name="phone" id="phone" placeholder="" type="text">
                                             </div>
                                         </div>
 
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="email">{{__('text.Email')}}*</label>
+                                            <label class="control-label col-sm-4" for="email">{{__('text.Email')}}</label>
                                             <div class="col-sm-6">
-                                                <input class="form-control" value="{{isset($customer->email) ? $customer->email : null}}" {{isset($customer) ? 'readonly' : null}} name="email" id="email" placeholder="" required="" type="email">
+                                                <input class="form-control" value="{{isset($customer->email) ? (!$customer->fake_email ? $customer->email : null) : null}}" {{isset($customer) ? 'readonly' : null}} name="email" id="email" placeholder="" type="email">
                                             </div>
                                         </div>
 

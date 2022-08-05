@@ -90,7 +90,6 @@ use Symfony\Component\Process\Process;
 use App\retailer_services;
 use Excel;
 use App\planning_titles;
-use Faker\Generator as Faker;
 
 class UserController extends Controller
 {
@@ -2330,6 +2329,7 @@ class UserController extends Controller
                     ->setBody($msg,'text/html');
                 });
 
+
             /*$admin_email = $this->sl->admin_email;
 
             \Mail::send(array(), array(), function ($message) use($admin_email,$user_name,$invoice,$user) {
@@ -2516,7 +2516,7 @@ class UserController extends Controller
 
         if($user->can('customers'))
         {
-            $customers = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.retailer_id',$user_id)->select('customers_details.*','users.email','users.fake_email')->get();
+            $customers = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.retailer_id',$user_id)->select('customers_details.*','users.email')->get();
 
             return view('user.customers',compact('customers'));
         }
@@ -2648,7 +2648,7 @@ class UserController extends Controller
                 $user_id = $main_id;
             }
 
-            $customer = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.user_id',$id)->where('customers_details.retailer_id', $user_id)->select('customers_details.*','users.email','users.fake_email')->first();
+            $customer = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.user_id',$id)->where('customers_details.retailer_id', $user_id)->select('customers_details.*','users.email')->first();
 
             if($customer)
             {
@@ -2840,16 +2840,7 @@ class UserController extends Controller
             else
             {
                 $user_name = $request->name;
-                
-                if(!$request->email)
-                {
-                    $faker = \Faker\Factory::create();
-                    $user_email = $faker->unique()->email;
-                }
-                else
-                {
-                    $user_email = $request->email;
-                }
+                $user_email = $request->email;
 
                 $retailer = User::where('id',$user_id)->first();
                 $retailer_name = $retailer->name;
@@ -2870,10 +2861,9 @@ class UserController extends Controller
                 $user->postcode = $request->postcode;
                 $user->city = $request->city;
                 $user->phone = $request->phone;
-                $user->email = $user_email;
+                $user->email = $request->email;
                 $user->parent_id = $user_id;
                 $user->allowed = 0;
-                $user->fake_email = !$request->email ? 1 : 0;
                 $user->save();
 
                 $details = new customers_details();
@@ -2892,27 +2882,24 @@ class UserController extends Controller
 
                 $input['id'] = $user->id;
 
-                if($request->email)
+                $link = url('/') . '/aanbieder/client-new-quotations';
+
+                if($this->lang->lang == 'du')
                 {
-                    $link = url('/') . '/aanbieder/client-new-quotations';
-
-                    if($this->lang->lang == 'du')
-                    {
-                        $msg = "Beste $user_name,<br><br>Er is een account voor je gecreëerd door " . $company_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>$user_name<br><br>Klantenservice<br><br>$company_name";
-                    }
-                    else
-                    {
-                        $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
-                    }
-
-                    \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
-                        $message->to($user_email)
-                            ->from('noreply@pieppiep.com',$company_name)
-                            ->replyTo($retailer_email,$company_name)
-                            ->subject(__('text.Account Created!'))
-                            ->setBody($msg,'text/html');
-                    });
+                    $msg = "Beste $user_name,<br><br>Er is een account voor je gecreÃ«erd door " . $retailer_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br>$company_name";
                 }
+                else
+                {
+                    $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
+                }
+
+                \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
+                    $message->to($user_email)
+                        ->from('noreply@pieppiep.com', $company_name)
+                        ->replyTo($retailer_email, $company_name)
+                        ->subject(__('text.Account Created!'))
+                        ->setBody($msg, 'text/html');
+                });
 
                 Session::flash('success', __('text.Customer account created successfully'));
                 return redirect()->route('customers');
@@ -3219,16 +3206,7 @@ class UserController extends Controller
             $user = new User;
 
             $user_name = $request->name;
-            
-            if(!$request->email)
-            {
-                $faker = \Faker\Factory::create();
-                $user_email = $faker->unique()->email;
-            }
-            else
-            {
-                $user_email = $request->email;
-            }
+            $user_email = $request->email;
 
             $retailer = User::where('id',$user_id)->first();
             $retailer_name = $retailer->name;
@@ -3247,11 +3225,10 @@ class UserController extends Controller
             $user->address = $request->address;
             $user->city = $request->city;
             $user->phone = $request->phone;
-            $user->email = $user_email;
+            $user->email = $request->email;
             $user->password = $password;
             $user->parent_id = $user_id;
             $user->allowed = 0;
-            $user->fake_email = !$request->email ? 1 : 0;
             $user->save();
 
             $details = new customers_details();
@@ -3269,29 +3246,24 @@ class UserController extends Controller
 
             $input['id'] = $details->id;
 
-            if($request->email)
+            $link = url('/') . '/aanbieder/client-new-quotations';
+
+            if($this->lang->lang == 'du')
             {
-                $link = url('/') . '/aanbieder/client-new-quotations';
-
-                if($this->lang->lang == 'du')
-                {
-                    $msg = "Beste $user_name,<br><br>Er is een account voor je gecreëerd door " . $company_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>$user_name<br><br>Klantenservice<br><br>$company_name";
-                }
-                else
-                {
-                    $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
-                }
-
-                \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
-                    $message->to($user_email)
-                        ->from('noreply@pieppiep.com', $company_name)
-                        ->replyTo($retailer_email, $company_name)
-                        ->subject(__('text.Account Created!'))
-                        ->setBody($msg, 'text/html');
-                });
-
+                $msg = "Beste $user_name,<br><br>Er is een account voor je gecreÃ«erd door " . $retailer_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br>$company_name";
+            }
+            else
+            {
+                $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
             }
 
+            \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
+                $message->to($user_email)
+                    ->from('noreply@pieppiep.com', $company_name)
+                    ->replyTo($retailer_email, $company_name)
+                    ->subject(__('text.Account Created!'))
+                    ->setBody($msg, 'text/html');
+            });
         }
 
         if($flag1)
@@ -8501,7 +8473,7 @@ class UserController extends Controller
                 return $data;
             }
 
-            if ($size > '2097152‬') {
+            if ($size > '2097152â€¬') {
                 $msg = $this->lang->tpe;
                 $type = 1;
                 $cart = carts::where('user_ip', '=', $ip_address)->get();
