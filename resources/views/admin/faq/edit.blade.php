@@ -12,7 +12,7 @@
                                     <div class="add-product-box">
                                         <div class="add-product-header">
                                             <h2>Edit Faq</h2>
-                                            <a href="{{route('admin-fq-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>  
+                                            <a href="{{route('admin-fq-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>  
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-fq-update',$faq->id)}}" method="POST">

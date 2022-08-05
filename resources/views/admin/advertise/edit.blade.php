@@ -13,7 +13,7 @@
                                     <div class="add-product-box">
                                         <div class="add-product-header">
                                             <h2>Edit Advertisement</h2>
-                                            <a href="{{route('admin-adv-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>  
+                                            <a href="{{route('admin-adv-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>  
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-adv-update',$ad->id)}}" method="POST" enctype="multipart/form-data">

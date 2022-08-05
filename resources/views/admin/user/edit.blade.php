@@ -20,7 +20,7 @@
                                     <div class="add-product-box">
                                         <div class="add-product-header">
                                             <h2>@if(Route::currentRouteName() == 'admin-user-edit') Edit Retailer @else Edit Supplier @endif</h2>
-                                            <a href="{{url()->previous()}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <a href="{{url()->previous()}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i>{{__('text.Back')}}</a>
                                         </div>
                                         <hr>
                                         <form class="form-horizontal" action="{{route('admin-user-update',$user->id)}}" method="POST" enctype="multipart/form-data">

@@ -24,7 +24,7 @@
                                 <div class="add-product-box">
                                     <div class="add-product-header">
                                         <h2>Assign permissions to {{$user->name . ' ' . $user->family_name . ' (' . $user->email . ')'}}</h2>
-                                        <a href="{{route('admin-assign-permissions')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('admin-assign-permissions')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
 
                                     <hr>

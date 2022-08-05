@@ -12,7 +12,7 @@
                                 <div style="box-shadow: none;" class="add-product-box">
                                     <div class="add-product-header">
                                         <h2>Send Quote Request</h2>
-                                        <a href="{{route('quotation-requests')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <a href="{{route('quotation-requests')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
                                     <hr>
                                     <form class="form-horizontal" id="handyman_form" action="{{route('send-quote-request')}}" method="POST" enctype="multipart/form-data">

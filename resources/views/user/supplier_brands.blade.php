@@ -13,8 +13,8 @@
                                 <div class="add-product-box">
 
                                     <div class="add-product-header">
-                                        <h2>Other Supplier Brands</h2>
-                                        <a href="{{route('admin-brand-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                                        <h2>{{__('text.Other Supplier Brands')}}</h2>
+                                        <a href="{{route('admin-brand-index')}}" class="btn add-back-btn"><i class="fa fa-arrow-left"></i> {{__('text.Back')}}</a>
                                     </div>
 
                                     <form class="form-horizontal" action="{{route('supplier-brands-store')}}" method="POST" enctype="multipart/form-data">
@@ -27,7 +27,7 @@
 
                                         <div class="form-group">
                                                             
-                                            <label class="control-label col-sm-4" for="blood_group_slug">Brands</label>
+                                            <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Brands')}}</label>
 
                                             <div class="col-sm-6">
 
