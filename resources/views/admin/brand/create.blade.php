@@ -149,14 +149,14 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="profile_photo">Add Photo</label>
+                                                            <label class="control-label col-sm-4" for="profile_photo">{{__('text.Add photo')}}</label>
                                                             <div class="col-sm-6">
                                                                 <input type="file" id="uploadFile" class="hidden" name="photo" value="">
                                                                 <button type="button" id="uploadTrigger" onclick="uploadclick()"
                                                                         class="form-control"><i class="fa fa-download"></i> Add Category
                                                                     Photo
                                                                 </button>
-                                                                <p>Prefered Size: (600x600) or Square Sized Image</p>
+                                                                <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                                             </div>
                                                         </div>
 

@@ -54,7 +54,7 @@
                                           </div>
 
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="edit_current_photo">Current Photo*</label>
+                                            <label class="control-label col-sm-4" for="edit_current_photo">{{__('text.Current photo*')}}</label>
                                             <div class="col-sm-6">
 
                                               <img width="130px" height="90px" id="adminimg" src="{{ $user->photo ? asset('assets/images/'.$user->photo):'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG'}}" alt="" id="adminimg">
@@ -65,7 +65,7 @@
                                             <div class="col-sm-6">
                                                 <input type="file" id="uploadFile" class="hidden" name="photo" value="">
                                               <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i> Edit Profile Photo</button>
-                                              <p>Prefered Size: (600x600) or Square Sized Image</p>
+                                              <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                             </div>
                                           </div>
                                           <div class="form-group">

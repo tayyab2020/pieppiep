@@ -65,7 +65,7 @@
                                             <div class="col-sm-6">
                                                 <input type="file" id="uploadFile" class="hidden" name="photo" value="">
                                                 <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i> Edit Item Photo</button>
-                                                <p>Prefered Size: (600x600) or Square Sized Image</p>
+                                                <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                             </div>
                                         </div>
 

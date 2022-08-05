@@ -60,12 +60,12 @@
                                                     @foreach($sub_category_id as $key)
 
                                                         <div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>
                                                             <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
                                                                 <div style="padding: 0;" class="col-lg-10">
                                                                     <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">
 
-                                                                        <option value="">Select Sub Category</option>
+                                                                        <option value="{{__('text.Select sub category')}}"/option>
 
                                                                         @foreach($sub_categories as $sub_cat)
 
@@ -87,12 +87,12 @@
                                                 @else
 
                                                     <div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">
-                                                        <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>
+                                                        <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>
                                                         <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
                                                             <div style="padding: 0;" class="col-lg-10">
                                                                 <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">
 
-                                                                    <option value="">Select Sub Category</option>
+                                                                    <option value="{{__('text.Select sub category')}}"/option>
 
                                                                 </select>
                                                             </div>
@@ -108,7 +108,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">Title*</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('Title')}}</label>
                                                 <div class="col-sm-6">
                                                     <input value="{{isset($cats) ? $cats->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Service title" required="" type="text">
                                                 </div>
@@ -158,18 +158,18 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="current_photo">Current Photo*</label>
+                                                <label class="control-label col-sm-4" for="current_photo">{{__('text.Current photo*')}}</label>
                                                 <div class="col-sm-6">
                                                     <img width="130px" height="90px" id="adminimg" src="{{isset($cats->photo) ? asset('assets/images/'.$cats->photo):'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG'}}" alt="">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="profile_photo">Add Photo</label>
+                                                <label class="control-label col-sm-4" for="profile_photo">{{__('text.Add photo')}}</label>
                                                 <div class="col-sm-6">
                                                     <input type="file" id="uploadFile" class="hidden" name="photo" value="">
                                                     <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i> Add Service Photo</button>
-                                                    <p>Prefered Size: (600x600) or Square Sized Image</p>
+                                                    <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                                 </div>
                                             </div>
 
@@ -206,14 +206,14 @@
         $(".js-data-example-ajax8").select2({
             width: '100%',
             height: '200px',
-            placeholder: "Select Category",
+            placeholder: "{{__('text.Select category placeholder')}}",
             allowClear: true,
         });
 
         $(".js-data-example-ajax9").select2({
             width: '100%',
             height: '200px',
-            placeholder: "Select Sub Category",
+            placeholder: "{{__('text.Select sub category')}}",
             allowClear: true,
         });
 
@@ -222,12 +222,12 @@
             var id = $('.js-data-example-ajax8').val();
 
             $(".sub-categories-box").append('<div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">\n' +
-                '                                                    <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>\n' +
+                '                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>\n' +
                 '                                                    <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
                 '                                                        <div style="padding: 0;" class="col-lg-10">\n' +
                 '                                                            <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">\n' +
                 '\n' +
-                '                                                            <option value="">Select Sub Category</option>\n' +
+                '                                                            <option value="{{__('text.Select sub category')}}"/option>\n' +
                 '\n' +
                 '                                                            </select>\n' +
                 '                                                        </div>\n' +
@@ -243,7 +243,7 @@
             $(".js-data-example-ajax9").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "Select Sub Category",
+                placeholder: "{{__('text.Select sub category')}}",
                 allowClear: true,
             });
 
@@ -257,12 +257,12 @@
             if($(".sub-categories-box .sub-category-box").length == 0)
             {
                 $(".sub-categories-box").append('<div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">\n' +
-                    '                                                    <label class="control-label col-sm-4" for="blood_group_slug">Sub Category</label>\n' +
+                    '                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>\n' +
                     '                                                    <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
                     '                                                        <div style="padding: 0;" class="col-lg-10">\n' +
                     '                                                            <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">\n' +
                     '\n' +
-                    '                                                            <option value="">Select Sub Category</option>\n' +
+                    '                                                            <option value="{{__('text.Select sub category')}}"/option>\n' +
                     '\n' +
                     '                                                            </select>\n' +
                     '                                                        </div>\n' +
@@ -278,7 +278,7 @@
                 $(".js-data-example-ajax9").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "Select Sub Category",
+                    placeholder: "{{__('text.Select sub category')}}",
                     allowClear: true,
                 });
             }
@@ -315,7 +315,7 @@
                     current.find('option')
                         .remove()
                         .end()
-                        .append('<option value="">Select Sub Category</option>'+options);
+                        .append('<option value="{{__('text.Select sub category')}}"/option>'+options);
 
                 }
             });

@@ -855,14 +855,14 @@
             $(".js-data-example-ajax").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "Select Category",
+                placeholder: "{{__('text.Select category placeholder')}}",
                 allowClear: true,
             });
 
             $(".js-data-example-ajax1").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "Select Brand",
+                placeholder: "{{__('text.Select Brand placeholder')}}",
                 allowClear: true,
             });
 
@@ -1029,14 +1029,14 @@
                 $(".js-data-example-ajax").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "Select Category",
+                    placeholder: "{{__('text.Select category placeholder')}}",
                     allowClear: true,
                 });
 
                 $(".js-data-example-ajax1").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "Select Brand",
+                    placeholder: "{{__('text.Select Brand placeholder')}}",
                     allowClear: true,
                 });
 

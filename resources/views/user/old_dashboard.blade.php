@@ -216,8 +216,8 @@
                                 <div class="form-group col-md-8 col-md-offset-2">
                                     <select name="featured" class="form-control" id="opt" required>
                                         <option value="">Select Option</option>
-                                        <option value="no">Normal Profile</option>
-                                        <option value="yes">Featured Profile</option>
+                                        <option value="{{__('text.No')}}">Normal Profile</option>
+                                        <option value="{{__('text.Yes')}}">Featured Profile</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-8 col-md-offset-2">
