@@ -244,7 +244,7 @@
 
 																				<label class="content-label">{{__('text.€ Total')}}</label>
 																				@if(Route::currentRouteName() == 'create-new-negative-invoice') -&nbsp; @endif
-																				<div class="price res-white">€ {{str_replace('.', ',',floatval($item->rate))}}</div>
+																				<div class="price res-white">€ {{number_format((float)$item->rate, 2, ',', '.')}}</div>
 
 																			</div>
 
@@ -499,7 +499,7 @@
 																				   id="price_before_labor_total"
 																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																				   type="text" readonly
-																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->price_before_labor_total)) : 0}}">
+																				   value="{{isset($invoice) ? number_format((float)$invoice[0]->price_before_labor_total, 2, ',', '.') : 0}}">
 																		</div>
 																	</div>
 
@@ -509,7 +509,7 @@
 																			<input name="total_amount" id="total_amount"
 																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																				   type="text" readonly
-																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->grand_total)) : 0}}">
+																				   value="{{isset($invoice) ? number_format((float)$invoice[0]->grand_total, 2, ',', '.') : 0}}">
 																		</div>
 																	</div>
 
@@ -540,7 +540,7 @@
 																			<input name="net_amount" id="net_amount"
 																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																				   type="text" readonly
-																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->net_amount)) : 0}}">
+																				   value="{{isset($invoice) ? number_format((float)$invoice[0]->net_amount, 2, ',', '.') : 0}}">
 																		</div>
 																	</div>
 
@@ -559,7 +559,7 @@
 																			<input name="tax_amount" id="tax_amount"
 																				   style="border: 0;font-size: 14px;font-weight: 500;width: 75px;outline: none;"
 																				   type="text" readonly
-																				   value="{{isset($invoice) ? str_replace('.', ',',floatval($invoice[0]->tax_amount)) : 0}}">
+																				   value="{{isset($invoice) ? number_format((float)$invoice[0]->tax_amount, 2, ',', '.') : 0}}">
 																		</div>
 																	</div>
 
@@ -3705,8 +3705,7 @@
 					}
 
 					$(this).parent().find('#rate').val(rate);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + rate.replace(/\./g, ','));
-
+					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + new Intl.NumberFormat('nl-NL').format(rate));
 
 					var art = price_before_labor;
 					price_before_labor_total = parseFloat(price_before_labor_total) + parseFloat(art);
@@ -3729,11 +3728,11 @@
 				var tax_amount = total - net_amount;
 				tax_amount = parseFloat(tax_amount).toFixed(2);
 
-				$('#total_amount').val(total.replace(/\./g, ','));
-				$('#price_before_labor_total').val(price_before_labor_total.replace(/\./g, ','));
+				$('#total_amount').val(new Intl.NumberFormat('nl-NL').format(total));
+				$('#price_before_labor_total').val(new Intl.NumberFormat('nl-NL').format(price_before_labor_total));
 				// $('#labor_cost_total').val(labor_cost_total.replace(/\./g, ','));
-				$('#net_amount').val(net_amount.replace(/\./g, ','));
-				$('#tax_amount').val(tax_amount.replace(/\./g, ','));
+				$('#net_amount').val(new Intl.NumberFormat('nl-NL').format(net_amount));
+				$('#tax_amount').val(new Intl.NumberFormat('nl-NL').format(tax_amount));
 			}
 
 			function focus_row(last_row) {
