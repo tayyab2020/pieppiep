@@ -266,7 +266,7 @@
                                                         <div class="wrapper1">
                                                             <div class="file-upload">
                                                                 <input id="upload" type="file"  name="files[]">
-                                                                <i style="font-size: 15px;margin-right: 15px;" class="fa fa-arrow-up"></i> Import Colors
+                                                                <i style="font-size: 15px;margin-right: 15px;" class="fa fa-arrow-up"></i> {{__('text.Import Colors')}}
                                                             </div>
                                                         </div>
 
@@ -350,19 +350,19 @@
                                                                                     '\n' +
                                                                                     '                                                                <div class="col-sm-3">\n' +
                                                                                     '\n' +
-                                                                                    '                                                                    <input class="form-control color_title" name="colors[]" value="'+color_title+'" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
+                                                                                    '                                                                    <input class="form-control color_title" name="colors[]" value="'+color_title+'" id="blood_group_slug" placeholder="{{__('text.Color Title')}}" type="text">\n' +
                                                                                     '\n' +
                                                                                     '                                                                </div>\n' +
                                                                                     '\n' +
                                                                                     '                                                                <div class="col-sm-3">\n' +
                                                                                     '\n' +
-                                                                                    '                                                                    <input class="form-control color_code" name="color_codes[]" value="'+color_code+'" id="blood_group_slug" placeholder="Color Code" type="text">\n' +
+                                                                                    '                                                                    <input class="form-control color_code" name="color_codes[]" value="'+color_code+'" id="blood_group_slug" placeholder="{{__('text.Color Code')}}" type="text">\n' +
                                                                                     '\n' +
                                                                                     '                                                                </div>\n' +
                                                                                     '\n' +
                                                                                     '                                                                <div class="col-sm-2">\n' +
                                                                                     '\n' +
-                                                                                    '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" value="'+max_height+'" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
+                                                                                    '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" value="'+max_height+'" id="blood_group_slug" placeholder="{{__('text.Max Height')}}" type="text">\n' +
                                                                                     '\n' +
                                                                                     '                                                                </div>\n' +
                                                                                     '\n' +
@@ -477,19 +477,19 @@
 
                                                                         <div class="col-sm-3">
 
-                                                                            <input value="{{$key->color}}" class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">
+                                                                            <input value="{{$key->color}}" class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="{{__('text.Color Title')}}" type="text">
 
                                                                         </div>
 
                                                                         <div class="col-sm-3">
 
-                                                                            <input value="{{$key->color_code}}" class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">
+                                                                            <input value="{{$key->color_code}}" class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="{{__('text.Color Code')}}" type="text">
 
                                                                         </div>
 
                                                                         <div class="col-sm-2">
 
-                                                                            <input class="form-control color_max_height" value="{{str_replace(".",",",$key->max_height)}}" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="Max Height" type="text">
+                                                                            <input class="form-control color_max_height" value="{{str_replace(".",",",$key->max_height)}}" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="{{__('text.Max Height')}}" type="text">
 
                                                                         </div>
 
@@ -523,19 +523,19 @@
 
                                                                     <div class="col-sm-3">
 
-                                                                        <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">
+                                                                        <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="{{__('text.Color Title')}}" type="text">
 
                                                                     </div>
 
                                                                     <div class="col-sm-3">
 
-                                                                        <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">
+                                                                        <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="{{__('text.Color Code')}}" type="text">
 
                                                                     </div>
 
                                                                     <div class="col-sm-2">
 
-                                                                        <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="Max Height" type="text">
+                                                                        <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="{{__('text.Max Height')}}" type="text">
 
                                                                     </div>
 
@@ -913,7 +913,7 @@
 
                                                                                 <select class="form-control validate js-data-example-ajax5">
 
-                                                                                    <option value="">Select Feature Heading</option>
+                                                                                    <option value="">{{__('text.Select Feature Heading Placeholder')}}</option>
 
                                                                                     @foreach($features_headings as $heading)
 
@@ -927,7 +927,7 @@
 
                                                                             <div style="display:flex;" class="col-sm-5">
 
-                                                                                <button data-id="{{$f+1}}" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>
+                                                                                <button data-id="{{$f+1}}" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">{{__('text.Create/Edit Features')}}</button>
 
                                                                                 <span class="ui-close remove-feature" data-id="{{$f+1}}" style="margin:0;position: relative;left: 0;right: 0;">X</span>
 
@@ -1010,7 +1010,7 @@
 
                                                                         <div style="display:flex;" class="col-sm-5">
 
-                                                                            <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>
+                                                                            <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">{{__('text.Create/Edit Features')}}</button>
 
                                                                             <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>
 
@@ -1090,12 +1090,12 @@
                                                                                             <table style="margin: auto;width: 95%;border-collapse: separate;">
                                                                                                 <thead>
                                                                                                 <tr>
-                                                                                                    <th>Feature</th>
-                                                                                                    <th>Value</th>
-                                                                                                    <th>Sub Feature</th>
-                                                                                                    <th>Price Impact</th>
-                                                                                                    <th>Impact Type</th>
-                                                                                                    <th>Remove</th>
+                                                                                                    <th>{{__('text.Feature')}}</th>
+                                                                                                    <th>{{__('text.Value')}}</th>
+                                                                                                    <th>{{__('text.Sub Feature')}}</th>
+                                                                                                    <th>{{__('text.Price Impact')}}</th>
+                                                                                                    <th>{{__('text.Impact Type')}}</th>
+                                                                                                    <th>{{__('text.Remove')}}</th>
                                                                                                 </tr>
                                                                                                 </thead>
 
@@ -1115,7 +1115,7 @@
                                                                                                                 <input value="{{$key1->value}}" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
                                                                                                             </td>
                                                                                                             <td>
-                                                                                                                <button data-id="{{$f1+1}}" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
+                                                                                                                <button data-id="{{$f1+1}}" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 <select class="form-control" name="price_impact[]">
@@ -1205,7 +1205,7 @@
                                                                                                     <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>
+                                                                                                    <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <select class="form-control" name="price_impact[]">
@@ -1274,11 +1274,12 @@
                                                                                             <table style="margin: auto;width: 95%;border-collapse: separate;">
                                                                                                 <thead>
                                                                                                 <tr>
-                                                                                                    <th>Feature</th>
-                                                                                                    <th>Value</th>
-                                                                                                    <th>Price Impact</th>
-                                                                                                    <th>Impact Type</th>
-                                                                                                    <th>Remove</th>
+                                                                                                    <th>{{__('text.Feature')}}</th>
+                                                                                                    <th>{{__('text.Value')}}</th>
+                                                                                                    <th>{{__('text.Sub Feature')}}</th>
+                                                                                                    <th>{{__('text.Price Impact')}}</th>
+                                                                                                    <th>{{__('text.Impact Type')}}</th>
+                                                                                                    <th>{{__('text.Remove')}}</th>
                                                                                                 </tr>
                                                                                                 </thead>
 
@@ -1404,11 +1405,12 @@
                                                                                         <table style="margin: auto;width: 95%;border-collapse: separate;">
                                                                                             <thead>
                                                                                             <tr>
-                                                                                                <th>Feature</th>
-                                                                                                <th>Value</th>
-                                                                                                <th>Price Impact</th>
-                                                                                                <th>Impact Type</th>
-                                                                                                <th>Remove</th>
+                                                                                                    <th>{{__('text.Feature')}}</th>
+                                                                                                    <th>{{__('text.Value')}}</th>
+                                                                                                    <th>{{__('text.Sub Feature')}}</th>
+                                                                                                    <th>{{__('text.Price Impact')}}</th>
+                                                                                                    <th>{{__('text.Impact Type')}}</th>
+                                                                                                    <th>{{__('text.Remove')}}</th>
                                                                                             </tr>
                                                                                             </thead>
 
@@ -2424,7 +2426,7 @@
                     '\n' +
                     '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
                     '\n' +
-                    '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
+                    '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">{{__('text.Create/Edit Features')}}</button>\n' +
                     '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
                     '\n' +
                     '                                                                    </div>\n' +
@@ -2457,7 +2459,7 @@
                     '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
-                    '                                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                    '                                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -2537,7 +2539,7 @@
                 $(".js-data-example-ajax5").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "Select Feature Heading",
+                    placeholder: "{{__('text.Select Feature Heading Placeholder')}}",
                     allowClear: false,
                 });
 
@@ -2589,7 +2591,7 @@
                     '\n' +
                     '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
                     '\n' +
-                    '                                                                        <button data-id="' + heading_row + '" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
+                    '                                                                        <button data-id="' + heading_row + '" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">{{__('text.Create/Edit Features')}}</button>\n' +
                     '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
                     '\n' +
                     '                                                                    </div>\n' +
@@ -2626,7 +2628,7 @@
                         '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                         '                                                                                        </td>\n' +
                         '                                                                                        <td>\n' +
-                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                         '                                                                                        </td>\n' +
                         '                                                                                        <td>\n' +
                         '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -2762,7 +2764,7 @@
                             '                                                                                            <input value="'+value1.value+'" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                             '                                                                                        </td>\n' +
                             '                                                                                        <td>\n' +
-                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                             '                                                                                        </td>\n' +
                             '                                                                                        <td>\n' +
                             '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -2958,7 +2960,7 @@
                 $('.js-data-example-ajax5').select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "Select Feature Heading",
+                    placeholder: "{{__('text.Select Feature Heading Placeholder')}}",
                     allowClear: false,
                 });
 
@@ -3525,7 +3527,7 @@
                                     '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                                     '                                                                                        </td>\n' +
                                     '                                                                                        <td>\n' +
-                                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                                     '                                                                                        </td>\n' +
                                     '                                                                                        <td>\n' +
                                     '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -3652,7 +3654,7 @@
                                         '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                                         '                                                                                        </td>\n' +
                                         '                                                                                        <td>\n' +
-                                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                                         '                                                                                        </td>\n' +
                                         '                                                                                        <td>\n' +
                                         '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -3788,7 +3790,7 @@
                                             '                                                                                            <input value="'+value1.value+'" class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                                             '                                                                                        </td>\n' +
                                             '                                                                                        <td>\n' +
-                                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                                             '                                                                                        </td>\n' +
                                             '                                                                                        <td>\n' +
                                             '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -4673,19 +4675,19 @@
                 '\n' +
                 '                                                                <div class="col-sm-3">\n' +
                 '\n' +
-                '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
+                '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="{{__('text.Color Title')}}" type="text">\n' +
                 '\n' +
                 '                                                                </div>\n' +
                 '\n' +
                 '                                                                <div class="col-sm-3">\n' +
                 '\n' +
-                '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">\n' +
+                '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="{{__('text.Color Code')}}" type="text">\n' +
                 '\n' +
                 '                                                                </div>\n' +
                 '\n' +
                 '                                                                <div class="col-sm-2">\n' +
                 '\n' +
-                '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
+                '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="{{__('text.Max Height')}}" type="text">\n' +
                 '\n' +
                 '                                                                </div>\n' +
                 '\n' +
@@ -4749,7 +4751,7 @@
                 '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <button data-id="'+feature_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                '                                                                                            <button data-id="'+feature_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -4927,7 +4929,7 @@
                 '\n' +
                 '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
                 '\n' +
-                '                                                                        <button data-id="' + heading_row + '" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
+                '                                                                        <button data-id="' + heading_row + '" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">{{__('text.Create/Edit Features')}}</button>\n' +
                 '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
                 /*'                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +*/
                 '\n' +
@@ -5003,7 +5005,7 @@
                 '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
-                '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                 '                                                                                        </td>\n' +
                 '                                                                                        <td>\n' +
                 '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -5096,7 +5098,7 @@
             $(".js-data-example-ajax5").select2({
                 width: '100%',
                 height: '200px',
-                placeholder: "Select Feature Heading",
+                placeholder: "{{__('text.Select Feature Heading Placeholder')}}",
                 allowClear: false,
             });
 
@@ -5149,7 +5151,7 @@
         $(".js-data-example-ajax5").select2({
             width: '100%',
             height: '200px',
-            placeholder: "Select Feature Heading",
+            placeholder: "{{__('text.Select Feature Heading Placeholder')}}",
             allowClear: false,
         });
 
@@ -5236,19 +5238,19 @@
                     '\n' +
                     '                                                                <div class="col-sm-3">\n' +
                     '\n' +
-                    '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="Color Title" type="text">\n' +
+                    '                                                                    <input class="form-control color_title" name="colors[]" id="blood_group_slug" placeholder="{{__('text.Color Title')}}" type="text">\n' +
                     '\n' +
                     '                                                                </div>\n' +
                     '\n' +
                     '                                                                <div class="col-sm-3">\n' +
                     '\n' +
-                    '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="Color Code" type="text">\n' +
+                    '                                                                    <input class="form-control color_code" name="color_codes[]" id="blood_group_slug" placeholder="{{__('text.Color Code')}}" type="text">\n' +
                     '\n' +
                     '                                                                </div>\n' +
                     '\n' +
                     '                                                                <div class="col-sm-2">\n' +
                     '\n' +
-                    '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="Max Height" type="text">\n' +
+                    '                                                                    <input class="form-control color_max_height" maskedformat="9,1" name="color_max_height[]" id="blood_group_slug" placeholder="{{__('text.Max Height')}}" type="text">\n' +
                     '\n' +
                     '                                                                </div>\n' +
                     '\n' +
@@ -5404,7 +5406,7 @@
                     '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
-                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -5561,7 +5563,7 @@
                     '\n' +
                     '                                                                    <div style="display: flex;" class="col-sm-5">\n' +
                     '\n' +
-                    '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">Create/Edit Features</button>\n' +
+                    '                                                                        <button data-id="1" style="margin-right: 10px;" class="btn btn-success create-feature-btn" type="button">{{__('text.Create/Edit Features')}}</button>\n' +
                     '                                                                        <span class="ui-close remove-feature" data-id="" style="margin:0;position: relative;left: 0;right: 0;">X</span>\n' +
                     /*'                                                                        <input class="form-control feature_title" name="features[]" id="blood_group_slug" placeholder="Feature Title" type="text">\n' +*/
                     '\n' +
@@ -5638,7 +5640,7 @@
                     '                                                                                            <input class="form-control feature_value" name="feature_values[]" id="blood_group_slug" placeholder="Value" type="text">\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
-                    '                                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">Create/Edit Sub Features</button>\n' +
+                    '                                                                                            <button data-id="1" class="btn btn-success create-sub-feature-btn" type="button">{{__('text.Create/Edit Sub Features')}}</button>\n' +
                     '                                                                                        </td>\n' +
                     '                                                                                        <td>\n' +
                     '                                                                                            <select class="form-control" name="price_impact[]">\n\n' +
@@ -5718,7 +5720,7 @@
                 $(".js-data-example-ajax5").select2({
                     width: '100%',
                     height: '200px',
-                    placeholder: "Select Feature Heading",
+                    placeholder: "{{__('text.Select Feature Heading Placeholder')}}",
                     allowClear: false,
                 });
 

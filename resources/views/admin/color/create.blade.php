@@ -39,28 +39,28 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Title* <span>(In Any Language)</span></label>
                                                 <div class="col-sm-6">
-                                                    <input value="{{isset($color) ? $color->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="Enter Color title" required="" type="text">
+                                                    <input value="{{isset($color) ? $color->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="{{__('text.Enter Color Code')}}" required="" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Color Code*</label>
                                                 <div class="col-sm-6">
-                                                    <input value="{{isset($color) ? $color->color_code : null}}" class="form-control" name="color_code" id="blood_group_display_name" placeholder="Enter Color Code" required="" type="text">
+                                                    <input value="{{isset($color) ? $color->color_code : null}}" class="form-control" name="color_code" id="blood_group_display_name" placeholder="{{__('text.Enter Color Code')}}" required="" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Product*</label>
                                                 <div class="col-sm-6">
-                                                    <input value="{{isset($color) ? $color->product : null}}" class="form-control" name="product" id="blood_group_display_name" placeholder="Product Title" required="" type="text">
+                                                    <input value="{{isset($color) ? $color->product : null}}" class="form-control" name="product" id="blood_group_display_name" placeholder="{{__('text.Product Title')}}" required="" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_display_name">Table*</label>
                                                 <div class="col-sm-6">
-                                                    <input value="{{isset($color) ? $color->table : null}}" class="form-control" name="table" id="blood_group_display_name" placeholder="Price Table" required="" type="text">
+                                                    <input value="{{isset($color) ? $color->table : null}}" class="form-control" name="table" id="blood_group_display_name" placeholder="{{__('text.Price Table')}}" required="" type="text">
                                                 </div>
                                             </div>
 
