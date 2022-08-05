@@ -2509,7 +2509,6 @@ class UserController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
         $main_id = $user->main_id;
-        $event_titles = planning_titles::where('user_id111',$user_id)->get();
 
         if($main_id)
         {
