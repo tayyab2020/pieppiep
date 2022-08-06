@@ -63,7 +63,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4" for="blood_group_slug">Slug* <span>(In English)</span></label>
                                                 <div class="col-sm-6">
-                                                    <input readonly value="{{isset($my_product) ? $my_product->slug : null}}" class="form-control product_slug" name="slug" id="blood_group_slug" placeholder="Enter Product Slug" required="" type="text">
+                                                    <input readonly value="{{isset($my_product) ? $my_product->slug : null}}" class="form-control product_slug" name="slug" id="blood_group_slug" placeholder="{{__('text.Enter Product Slug')}}" required="" type="text">
                                                 </div>
                                             </div>
 
@@ -142,14 +142,14 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Floor Type</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Floor Type')}}</label>
                                                 <div class="col-sm-6">
                                                     <input readonly name="floor_type" value="{{isset($my_product) ? $my_product->floor_type : null}}" class="form-control" id="blood_group_slug" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Floor Type 2</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Floor Type 2')}}</label>
                                                 <div class="col-sm-6">
                                                     <input readonly name="floor_type2" value="{{isset($my_product) ? $my_product->floor_type2 : null}}" class="form-control" id="blood_group_slug" type="text">
                                                 </div>

@@ -181,7 +181,7 @@
                                             <label class="control-label col-sm-4" for="profile_photo">{{__('text.Add photo')}}</label>
                                             <div class="col-sm-6">
                                                 <input type="file" id="uploadFile" class="hidden" name="photo" value="">
-                                              <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i> Add Category Photo</button>
+                                              <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i>{{__('text.Add Category Photo')}}</button>
                                               <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                             </div>
                                           </div>

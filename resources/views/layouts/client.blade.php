@@ -122,7 +122,7 @@
                         </li>--}}
 
                         <li>
-                            <a href="{{route('client-new-quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span>Quotations</span></a>
+                            <a href="{{route('client-new-quotations')}}"><i class="fa fa-fw fa-file-text"></i> <span> {{__('text.Quotations')}}</span></a>
                         </li>
 
                         <li>

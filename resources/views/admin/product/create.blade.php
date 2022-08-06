@@ -136,7 +136,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4" for="blood_group_slug">Slug*</label>
                                                             <div class="col-sm-6">
-                                                                <input value="{{isset($cats) ? $cats->slug : null}}" class="form-control" name="slug" id="blood_group_slug" placeholder="Enter Product Slug" required="" type="text">
+                                                                <input value="{{isset($cats) ? $cats->slug : null}}" class="form-control" name="slug" id="blood_group_slug" placeholder="{{__('text.Enter Product Slug')}}" required="" type="text">
                                                             </div>
                                                         </div>
 
@@ -220,7 +220,7 @@
                                                             <label class="control-label col-sm-4" for="profile_photo">{{__('text.Add photo')}}</label>
                                                             <div class="col-sm-6">
                                                                 <input type="file" id="uploadFile" class="hidden" name="photo" value="">
-                                                                <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i> Add Category Photo</button>
+                                                                <button type="button" id="uploadTrigger" onclick="uploadclick()" class="form-control"><i class="fa fa-download"></i> {{__('text.Add Category Photo')}}</button>
                                                                 <p>{{__('text.Prefered Size: (600x600) or Square Sized Image')}}</p>
                                                             </div>
                                                         </div>
@@ -569,7 +569,7 @@
                                                             <label class="control-label col-sm-3" for=""></label>
 
                                                             <div class="col-sm-12 text-center">
-                                                                <button class="btn btn-default featured-btn" type="button" id="add-color-btn"><i class="fa fa-plus"></i> Add More Colors</button>
+                                                                <button class="btn btn-default featured-btn" type="button" id="add-color-btn"><i class="fa fa-plus"></i> {{__('text.Add More Colors')}}</button>
                                                             </div>
                                                         </div>
 
@@ -1148,7 +1148,7 @@
                                                                                             </table>
 
                                                                                             <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                                <button data-id="{{$f+1}}" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                                                                <button data-id="{{$f+1}}" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Features')}}</button>
                                                                                             </div>
                                                                                         </div>
 
@@ -1234,7 +1234,7 @@
                                                                                         </table>
 
                                                                                         <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>
+                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Features')}}</button>
                                                                                         </div>
                                                                                     </div>
 
@@ -1427,10 +1427,10 @@
                                                                                                 <td>
                                                                                                     <select class="form-control" name="price_impact1[]">
 
-                                                                                                        <option value="0">No</option>
-                                                                                                        <option value="1">Fixed</option>
-                                                                                                        <option value="2">m¹ Impact</option>
-                                                                                                        <option value="3">m² Impact</option>
+                                                                                                        <option value="0">{{__('text.No')}}</option>
+                                                                                                        <option value="1">{{__('text.Fixed')}}</option>
+                                                                                                        <option value="2">{{__('text.m¹ Impact')}}</option>
+                                                                                                        <option value="3">{{__('text.m² Impact')}}/option>
 
                                                                                                     </select>
                                                                                                 </td>
@@ -2484,7 +2484,7 @@
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr></tbody></table>' +
                     '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                    '                                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                    '                                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Features')}}</button>\n' +
                     '                                                                                    </div></div>');
 
 
@@ -2954,7 +2954,7 @@
                     features +
                     '                                                                                    </tbody></table>' +
                     '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                    '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                    '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Features')}}</button>\n' +
                     '                                                                                    </div></div>');
 
                 $('.js-data-example-ajax5').select2({
@@ -3552,7 +3552,7 @@
                                     '                                                                                        </td>\n' +
                                     '                                                                                    </tr></tbody></table>' +
                                     '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                                    '                                                                                        <button data-id="'+id+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                                    '                                                                                        <button data-id="'+id+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Features')}}</button>\n' +
                                     '                                                                                    </div></div>');
 
                                 var sub_row = null;
@@ -3980,7 +3980,7 @@
                                     features +
                                     '                                                                                    </tbody></table>' +
                                     '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                                    '                                                                                        <button data-id="'+id+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                                    '                                                                                        <button data-id="'+id+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Features')}}</button>\n' +
                                     '                                                                                    </div></div>');
 
                                 $('.feature_title').each(function (index,value) {
@@ -5030,7 +5030,7 @@
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr></tbody></table>' +
                 '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                '                                                                                        <button data-id="'+heading_row+'" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Features')}}</button>\n' +
                 '                                                                                    </div></div>');
 
             var feature_row1 = null;
@@ -5665,7 +5665,7 @@
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr></tbody></table>' +
                     '                                                                                    <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                    '                                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> Add More Features</button>\n' +
+                    '                                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-primary-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add More Features')}}</button>\n' +
                     '                                                                                    </div></div>');
 
 
