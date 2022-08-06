@@ -511,7 +511,7 @@
                                                                             </table>
 
                                                                             <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                <button data-id="{{$s+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>
+                                                                                <button data-id="{{$s+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>
                                                                             </div>
                                                                         </div>
 
@@ -569,7 +569,7 @@
                                                                     </table>
 
                                                                     <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>
+                                                                        <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>
                                                                     </div>
                                                                 </div>
 
@@ -1247,7 +1247,7 @@
             '                                                                                        </td>\n' +
             '                                                                                    </tr></tbody></table>' +
             '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-            '                                                                                            <button data-id="'+feature_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+            '                                                                                            <button data-id="'+feature_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
             '                                                                                        </div></div>');
 
         $('#sub-categories').append('<div data-id="'+feature_row+'" class="sub-category-table-container table1">\n' +
@@ -1396,7 +1396,7 @@
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr></tbody></table>' +
                 '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                 '                                                                                        </div></div>');
 
             $('#sub-categories').append('<div data-id="'+f_row+'" class="sub-category-table-container table1">\n' +

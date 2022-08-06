@@ -37,7 +37,7 @@
                                             <input type="hidden" name="cat_id" value="{{isset($cats) ? $cats->id : null}}" />
 
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('Title')}}</label>
+                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Title')}}</label>
                                             <div class="col-sm-6">
                                               <input value="{{isset($cats) ? $cats->cat_name : null}}" class="form-control" name="cat_name" id="blood_group_display_name" placeholder="Enter Category title" required="" type="text">
                                             </div>

@@ -75,12 +75,12 @@
                                                 @foreach($sub_category_id as $key)
 
                                                     <div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">
-                                                        <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>
+                                                        <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Sub Category')}}</label>
                                                         <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
                                                             <div style="padding: 0;" class="col-lg-10">
                                                                 <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">
 
-                                                                    <option value="{{__('text.Select sub category')}}"/option>
+                                                                    <option value="">{{__('text.Select sub category')}}</option>
 
                                                                     @foreach($sub_categories as $sub_cat)
 
@@ -102,12 +102,12 @@
                                             @else
 
                                                 <div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">
-                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>
+                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Sub Category')}}</label>
                                                     <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">
                                                         <div style="padding: 0;" class="col-lg-10">
                                                             <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">
 
-                                                                <option value="{{__('text.Select sub category')}}"/option>
+                                                                <option value="">{{__('text.Select sub category')}}</option>
 
                                                             </select>
                                                         </div>
@@ -125,7 +125,7 @@
                                         <div class="service_details" @if(!isset($my_service)) style="display: none;" @endif>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('Title')}}</label>
+                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Title')}}</label>
                                                 <div class="col-sm-6">
                                                     <input readonly value="{{isset($my_service) ? $my_service->title : null}}" class="form-control service_title" name="title" id="blood_group_display_name" placeholder="Enter Service title" required="" type="text">
                                                 </div>
@@ -258,12 +258,12 @@
             var id = $('.js-data-example-ajax8').val();
 
             $(".sub-categories-box").append('<div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">\n' +
-                '                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>\n' +
+                '                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Sub Category')}}</label>\n' +
                 '                                                    <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
                 '                                                        <div style="padding: 0;" class="col-lg-10">\n' +
                 '                                                            <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">\n' +
                 '\n' +
-                '                                                            <option value="{{__('text.Select sub category')}}"/option>\n' +
+                '                                                            <option value="">{{__('text.Select sub category')}}</option>\n' +
                 '\n' +
                 '                                                            </select>\n' +
                 '                                                        </div>\n' +
@@ -293,12 +293,12 @@
             if($(".sub-categories-box .sub-category-box").length == 0)
             {
                 $(".sub-categories-box").append('<div style="display: inline-block;width: 100%;margin: 10px 0;" class="sub-category-box">\n' +
-                    '                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>\n' +
+                    '                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Sub Category')}}</label>\n' +
                     '                                                    <div style="display: flex;align-items: center;justify-content: space-between;" class="col-sm-6">\n' +
                     '                                                        <div style="padding: 0;" class="col-lg-10">\n' +
                     '                                                            <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id[]" id="blood_grp">\n' +
                     '\n' +
-                    '                                                            <option value="{{__('text.Select sub category')}}"/option>\n' +
+                    '                                                            <option value="">{{__('text.Select sub category')}}</option>\n' +
                     '\n' +
                     '                                                            </select>\n' +
                     '                                                        </div>\n' +
@@ -351,7 +351,7 @@
                     current.find('option')
                         .remove()
                         .end()
-                        .append('<option value="{{__('text.Select sub category')}}"/option>'+options);
+                        .append('<option value="">{{__('text.Select sub category')}}</option>'+options);
 
                 }
             });

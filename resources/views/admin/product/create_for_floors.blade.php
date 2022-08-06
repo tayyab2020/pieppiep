@@ -81,11 +81,11 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">{{__('text. Sub Category')}}</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Sub Category')}}</label>
                                                             <div class="col-sm-6">
                                                                 <select class="js-data-example-ajax9 form-control" style="height: 40px;" name="sub_category_id" id="blood_grp">
 
-                                                                    <option value="{{__('text.Select sub category')}}"/option>
+                                                                    <option value="">{{__('text.Select sub category')}}</option>
 
                                                                     @if(isset($sub_categories))
 
@@ -146,7 +146,7 @@
 
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('Title')}}</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Title')}}</label>
                                                             <div class="col-sm-6">
                                                                 <input value="{{isset($cats) ? $cats->title : null}}" class="form-control" name="title" id="blood_group_display_name" placeholder="{{__('text.Enter Product Title')}}" required="" type="text">
                                                             </div>
@@ -911,7 +911,7 @@
                                                                                                         <option value="0">{{__('text.No')}}</option>
                                                                                                         <option value="1">{{__('text.Fixed')}}</option>
                                                                                                         <option value="2">{{__('text.m¹ Impact')}}</option>
-                                                                                                        <option value="3">{{__('text.m² Impact')}</option>
+                                                                                                        <option value="3">{{__('text.m² Impact')}}</option>
 
                                                                                                     </select>
                                                                                                 </td>
@@ -1067,7 +1067,7 @@
                                                                                             </table>
 
                                                                                             <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                                <button data-id="{{$s+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>
+                                                                                                <button data-id="{{$s+1}}" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>
                                                                                             </div>
                                                                                         </div>
 
@@ -1148,7 +1148,7 @@
                                                                                         </table>
 
                                                                                         <div style="margin-top: 20px;" class="col-sm-12 text-center">
-                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>
+                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>
                                                                                         </div>
                                                                                     </div>
 
@@ -2150,7 +2150,7 @@
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr></tbody></table>' +
                     '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                    '                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                    '                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                     '                                                                                        </div></div>');
 
                 $(".js-data-example-ajax5").select2({
@@ -2335,7 +2335,7 @@
                         sub_features +
                         '                                                                                    </tbody></table>' +
                         '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                         '                                                                                        </div></div>');
                 }
                 else
@@ -2546,7 +2546,7 @@
                             sub_features +
                             '                                                                                    </tbody></table>' +
                             '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                             '                                                                                        </div></div>');
 
                     });
@@ -2615,7 +2615,7 @@
                     $('.js-data-example-ajax9').find('option')
                         .remove()
                         .end()
-                        .append('<option value="{{__('text.Select sub category')}}"/option>'+options);
+                        .append('<option value="">{{__('text.Select sub category')}}</option>'+options);
 
                 }
             });
@@ -3240,7 +3240,7 @@
                                     '                                                                                        </td>\n' +
                                     '                                                                                    </tr></tbody></table>' +
                                     '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                                     '                                                                                        </div></div>');
 
 
@@ -3368,7 +3368,7 @@
                                         sub_features +
                                         '                                                                                    </tbody></table>' +
                                         '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                                        '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                                         '                                                                                        </div></div>');
                                 }
                                 else
@@ -3579,7 +3579,7 @@
                                             sub_features +
                                             '                                                                                    </tbody></table>' +
                                             '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                                            '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                                             '                                                                                        </div></div>');
 
                                     });
@@ -4507,7 +4507,7 @@
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr></tbody></table>' +
                 '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                '                                                                                            <button data-id="'+feature_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                '                                                                                            <button data-id="'+feature_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                 '                                                                                        </div></div>');
 
         });
@@ -4763,7 +4763,7 @@
                 '                                                                                        </td>\n' +
                 '                                                                                    </tr></tbody></table>' +
                 '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                 '                                                                                        </div></div>');
 
             $(".js-data-example-ajax5").select2({
@@ -5154,7 +5154,7 @@
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr></tbody></table>' +
                     '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                    '                                                                                            <button data-id="'+f_row+'" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                     '                                                                                        </div></div>');
 
             }
@@ -5378,7 +5378,7 @@
                     '                                                                                        </td>\n' +
                     '                                                                                    </tr></tbody></table>' +
                     '                                                                                        <div style="margin-top: 20px;" class="col-sm-12 text-center">\n' +
-                    '                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features)}}</button>\n' +
+                    '                                                                                            <button data-id="1" class="btn btn-default featured-btn" type="button" id="add-sub-feature-btn"><i class="fa fa-plus"></i> {{__('text.Add more sub features')}}</button>\n' +
                     '                                                                                        </div></div>');
 
                 $(".js-data-example-ajax5").select2({

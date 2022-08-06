@@ -55,7 +55,7 @@
                                                     <div style="padding: 30px 0;" class="tab-pane active" id="tabs-1" role="tabpanel">
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('Title')}}</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Title')}}</label>
                                                             <div class="col-sm-6">
                                                                 <input {{isset($brand) && $brand->edit_request_id ? 'readonly' : null}} value="{{isset($brand) ? $brand->cat_name : null}}" class="form-control" name="cat_name" id="blood_group_display_name" placeholder="Enter Brand title" required="" type="text">
                                                             </div>
@@ -153,7 +153,7 @@
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('Title')}}</label>
+                                                                <label class="control-label col-sm-4" for="blood_group_display_name">{{__('text.Title')}}</label>
                                                                 <div class="col-sm-6">
                                                                     <input value="{{$brand->edit_title}}" class="form-control" name="edit_title" id="blood_group_display_name" placeholder="Enter Brand title" required="" type="text">
                                                                 </div>

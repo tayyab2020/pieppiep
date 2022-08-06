@@ -21,7 +21,7 @@
                                           @include('includes.form-success')
                                           {{csrf_field()}}
                                           <div class="form-group">
-                                            <label class="control-label col-sm-4" for="edit_title">{{__('Title')}}</label>
+                                            <label class="control-label col-sm-4" for="edit_title">{{__('text.Title')}}</label>
                                             <div class="col-sm-6">
                                               <input class="form-control" name="title" id="edit_title" placeholder="Enter Title " required="" type="text" value="">
                                             </div>
