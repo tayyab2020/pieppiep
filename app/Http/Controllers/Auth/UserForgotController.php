@@ -91,7 +91,7 @@ $language = user_languages::where('ip','=',$ip_address)->first();
 
                 \Mail::send(array(), array(), function ($message) use ($name, $autopass, $request) {
                     $message->to($request->email)
-                        ->from('info@vloerofferte.nl')
+                        ->from('noreply@pieppiep.com')
                         ->subject('Reset Password Request')
                         ->setBody("Dear Mr/Mrs ". $name .",<br><br>Your New Password is : ".$autopass."<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
                 });
@@ -102,7 +102,7 @@ $language = user_languages::where('ip','=',$ip_address)->first();
 
                 \Mail::send(array(), array(), function ($message) use ($name, $autopass, $request) {
                     $message->to($request->email)
-                        ->from('info@vloerofferte.nl')
+                        ->from('noreply@pieppiep.com')
                         ->subject('Wachtwoord wijzigen')
                         ->setBody("Beste ". $name .",<br><br>Je hebt zojuist een nieuw wachtwoord aangevraagd, indien jij niet de aanvrager bent neem contact met ons. Hierbij je nieuw wachtwoord : ".$autopass."<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
                 });
@@ -111,7 +111,7 @@ $language = user_languages::where('ip','=',$ip_address)->first();
 
 
             Session::flash('success', $this->lang->prst);
-    		return redirect()->route('user-forgot');
+    		    return redirect()->route('user-forgot');
 
         }
         else{
