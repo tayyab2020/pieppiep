@@ -2790,6 +2790,8 @@
 				events: {!! $current_appointments !!},
 			});
 
+			calendar.setOption('locale', 'nl');
+			
 		});
 
 		function initMap() {

@@ -920,6 +920,7 @@
                 events: {!! $plannings !!},
             });
 
+            calendar.setOption('locale', 'nl');
             calendar.render();
 
         });

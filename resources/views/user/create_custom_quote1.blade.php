@@ -3192,6 +3192,8 @@
 				// ]
 			});
 
+			calendar.setOption('locale', 'nl');
+
 		});
 
 		function initMap() {
