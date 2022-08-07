@@ -278,7 +278,7 @@
                                                         $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
                                                         $arb_price = number_format((float)($arb_price), 2, ',', '.');
                                                         $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
-                                                        $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
+                                                        $arb_discount = str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
                                                         $arb = $request->rate[$i] - $arb_discount;
                                                         $arb = number_format((float)($arb), 2, ',', '.');
                                                         $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
@@ -378,7 +378,7 @@
 
                                                                         if($role == 'retailer' || $role == 'invoice1')
                                                                             {
-                                                                                $estimated_price = number_format((float)(str_replace(',', '.',$request->price_before_labor[$i])/$request->estimated_price_quantity[$i]), 2, ',', '');
+                                                                                $estimated_price = number_format((float)(str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i]))/$request->estimated_price_quantity[$i]), 2, ',', '');
                                                                                 $estimated_quantity = number_format((float)$request->estimated_price_quantity[$i], 2, ',', '');
                                                                             }
                                                                         else
@@ -668,7 +668,7 @@
                                                     <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                         <div style="display: inline-block;width: 100%;">
                                                             <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{$request->net_amount}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -682,8 +682,8 @@
                                                     </td>
                                                     <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{number_format((float)(str_replace(',', '.',$request->net_amount)), 2, ',', '.')}}</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->tax_amount)), 2, ',', '.')}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{$request->net_amount}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{$request->tax_amount}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -693,7 +693,7 @@
                                                     <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
                                                         <div style="display: inline-block;width: 100%;">
                                                             <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Te betalen</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{number_format((float)(str_replace(',', '.',$request->total_amount)), 2, ',', '.')}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{$request->total_amount}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>

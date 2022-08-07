@@ -226,7 +226,7 @@
 
 																				<div style="display: flex;align-items: center;">
 																					<span>€</span>
-																					<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																					<input type="text" value="{{number_format((float)$item->price_before_labor, 2, ',', '.')}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																					<input type="hidden" value="{{$item->price_before_labor}}" class="price_before_labor_old">
 																				</div>
 																			</div>
@@ -263,19 +263,19 @@
 																						</div>
 
 																						<span id="next-row-span" class="tooltip1 add-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
-																					<span class="tooltiptext">{{__('text.Add')}}</span>
-																				</span>
+																							<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
+																							<span class="tooltiptext">{{__('text.Add')}}</span>
+																						</span>
 
 																						<span id="next-row-span" class="tooltip1 remove-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
-																					<span class="tooltiptext">{{__('text.Remove')}}</span>
-																				</span>
+																							<i id="next-row-icon" class="fa fa-fw fa-trash-o"></i>
+																							<span class="tooltiptext">{{__('text.Remove')}}</span>
+																						</span>
 
 																						<span id="next-row-span" class="tooltip1 copy-row" style="cursor: pointer;font-size: 20px;margin: 0 10px;width: 20px;height: 20px;line-height: 20px;">
-																					<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
-																					<span class="tooltiptext">{{__('text.Copy')}}</span>
-																				</span>
+																							<i id="next-row-icon" class="fa fa-fw fa-copy"></i>
+																							<span class="tooltiptext">{{__('text.Copy')}}</span>
+																						</span>
 
 																						<!--<span id="next-row-span" class="tooltip1 next-row" style="cursor: pointer;font-size: 20px;">
                                                                                             <i id="next-row-icon" style="color: #868686;" class="fa fa-fw fa-chevron-right"></i>
@@ -3707,7 +3707,7 @@
 					}
 
 					$(this).parent().find('#rate').val(rate);
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + new Intl.NumberFormat('nl-NL').format(rate));
+					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(rate));
 
 					var art = price_before_labor;
 					price_before_labor_total = parseFloat(price_before_labor_total) + parseFloat(art);
@@ -3730,11 +3730,11 @@
 				var tax_amount = total - net_amount;
 				tax_amount = parseFloat(tax_amount).toFixed(2);
 
-				$('#total_amount').val(new Intl.NumberFormat('nl-NL').format(total));
-				$('#price_before_labor_total').val(new Intl.NumberFormat('nl-NL').format(price_before_labor_total));
+				$('#total_amount').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(total));
+				$('#price_before_labor_total').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(price_before_labor_total));
 				// $('#labor_cost_total').val(labor_cost_total.replace(/\./g, ','));
-				$('#net_amount').val(new Intl.NumberFormat('nl-NL').format(net_amount));
-				$('#tax_amount').val(new Intl.NumberFormat('nl-NL').format(tax_amount));
+				$('#net_amount').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(net_amount));
+				$('#tax_amount').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(tax_amount));
 			}
 
 			function focus_row(last_row) {
@@ -3830,6 +3830,7 @@
 							'                       									 	<label class="content-label">€ Art.</label>\n' +
 							'\n' +
 							'																 <div style="display: flex;align-items: center;">\n' +
+							'																	<span>€</span>\n' +
 							'																 	<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
 							'																	<input type="hidden" class="price_before_labor_old">\n' +
 							'																 </div>\n' +
@@ -3839,8 +3840,10 @@
 							'\n' +
 							'                       									 	<label class="content-label">Discount</label>\n' +
 							'\n' +
+							'																<span>€</span>\n' +
 							'																<input type="text" value="0" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
 							'																<input type="hidden" value="0" class="total_discount_old">\n' +
+							'\n' +
 							'                                                            </div>\n' +
 							'\n' +
 							'                                                            <div style="width: 7%;" class="content item9">\n' +
@@ -4014,6 +4017,7 @@
 							'                       									 	<label class="content-label">€ Art.</label>\n' +
 							'\n' +
 							'																 <div style="display: flex;align-items: center;">\n' +
+							'																	<span>€</span>\n' +
 							'																 	<input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
 							'																	<input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
 							'																 </div>\n' +
@@ -4023,8 +4027,10 @@
 							'\n' +
 							'                       									 	<label class="content-label">Discount</label>\n' +
 							'\n' +
+							'																<span>€</span>\n' +
 							'																<input type="text" value="' + total_discount + '" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;" class="form-control total_discount res-white">\n' +
 							'																<input type="hidden" value="' + total_discount_old + '" class="total_discount_old">\n' +
+							'\n' +
 							'                                                            </div>\n' +
 							'\n' +
 							'                                                            <div style="width: 7%;" class="content item9">\n' +
@@ -5912,7 +5918,7 @@
 								if(data.estimated_price_per_box)
 								{
 									var estimated_price_per_box = data.estimated_price_per_box;
-									estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
+									// estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
 									var estimated_price_per_box_old = data.estimated_price_per_box;
 								}
 								else
@@ -5932,7 +5938,7 @@
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(estimated_price_per_box));
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
@@ -6145,7 +6151,7 @@
 								if(data.sell_rate)
 								{
 									var estimated_price_per_box = parseFloat(data.sell_rate).toFixed(2);
-									estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
+									// estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
 									var estimated_price_per_box_old = data.sell_rate;
 								}
 								else
@@ -6161,7 +6167,7 @@
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(estimated_price_per_box));
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');

@@ -4728,7 +4728,7 @@ class UserController extends Controller
             // $order->delivery_days = $request->delivery_days[$i];
             // $order->delivery_date = $delivery_date;
             // $order->retailer_delivery_date = $delivery_date;
-            $order->price_before_labor = 0;
+            $order->price_before_labor = str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i]));
             $order->labor_impact = 0;
             $order->discount = 0;
             $order->labor_discount = 0;
@@ -5610,7 +5610,7 @@ class UserController extends Controller
                 $invoice_items->amount = $request->total[$i];
                 $invoice_items->delivery_days = $request->delivery_days[$i] ? $request->delivery_days[$i] : 1;
                 $invoice_items->delivery_date = $delivery_date;
-                $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
+                $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
                 $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                 $invoice_items->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
@@ -5632,7 +5632,7 @@ class UserController extends Controller
                     $order->delivery_days = $request->delivery_days[$i];
                     $order->delivery_date = $delivery_date;
                     $order->retailer_delivery_date = $delivery_date;
-                    $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
+                    $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
                     $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                     $order->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                     $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
@@ -5953,7 +5953,7 @@ class UserController extends Controller
                 $invoice_items->amount = $request->total[$i];
                 $invoice_items->delivery_days = $request->delivery_days[$i];
                 $invoice_items->delivery_date = $delivery_date;
-                $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
+                $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
                 $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                 $invoice_items->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;

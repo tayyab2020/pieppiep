@@ -178,8 +178,8 @@
 																		<label class="content-label">€ Art.</label>
 
 																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																			<input type="hidden" value="{{$item->qty != 0 ? $item->price_before_labor/$item->qty : 0}}" class="price_before_labor_old">
+																			<input type="text" value="{{number_format((float)$item->price_before_labor, 2, ',', '.')}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																			<input type="hidden" value="{{$item->price_before_labor}}" class="price_before_labor_old">
 																		</div>
 																	</div>
 
@@ -3754,7 +3754,7 @@
 										if(data.estimated_price_per_box)
 										{
 											var estimated_price_per_box = data.estimated_price_per_box;
-											estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
+											// estimated_price_per_box = estimated_price_per_box.replace(/\./g, ',');
 											var estimated_price_per_box_old = data.estimated_price_per_box;
 										}
 										else
@@ -3771,7 +3771,7 @@
 										$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val(data.max_width);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val(data.measure);
 										$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
-										$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box);
+										$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(estimated_price_per_box));
 										$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#delivery_days').val(data.delivery_days);
 										$('#products_table').find(`[data-id='${row_id}']`).find('#ladderband').val(data.ladderband);
