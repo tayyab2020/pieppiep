@@ -616,4 +616,5 @@ return [
     'Add More Colors' => 'Add More Colors',
     'Add More Features' => 'Add More Features',
     'Credentials doesn\'t match' => 'Credentials doesn\'t match',
+    'filtered from' => 'filtered from',
 ];

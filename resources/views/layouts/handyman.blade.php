@@ -1416,7 +1416,7 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
             @if(auth()->user()->hasAnyPermission(['user-products', 'user-colors', 'user-price-tables', 'my-services', 'user-categories', 'user-brands', 'user-models', 'user-items', 'user-features']))
 
-                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'user-items' || Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'admin-feature-index' || Route::currentRouteName() == 'supplier-products' || Route::currentRouteName() == 'supplier-categories') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>{{__('text.Products')}}</span></a>
+                <li><a @if(Route::currentRouteName() == 'admin-product-index' || Route::currentRouteName() == 'admin-brand-index' || Route::currentRouteName() == 'admin-model-index' || Route::currentRouteName() == 'admin-item-index' || Route::currentRouteName() == 'user-items' || Route::currentRouteName() == 'my-services' || Route::currentRouteName() == 'admin-feature-index' || Route::currentRouteName() == 'supplier-products' || Route::currentRouteName() == 'supplier-categories' || Route::currentRouteName() == 'admin-color-index' || Route::currentRouteName() == 'admin-price-tables' || Route::currentRouteName() == 'predefined-model-index') class="active1" @endif href="javascript:"><span class="icon catalog-icon"></span> <span>{{__('text.Products')}}</span></a>
 
                     <ul class="hide">
 

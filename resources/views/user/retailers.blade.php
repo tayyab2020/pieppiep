@@ -315,7 +315,20 @@
                         { "sWidth": "100px" },
                         { "sWidth": "" },
 
-                    ]
+                    ],
+                    "oLanguage": {
+                        "sLengthMenu": "<?php echo __('text.Show') . ' _MENU_ ' . __('text.records'); ?>",
+                        "sSearch": "<?php echo __('text.Search') . ':' ?>",
+                        "sInfo": "<?php echo __('text.Showing') . ' _START_ ' . __('text.to') . ' _END_ ' . __('text.of') . ' _TOTAL_ ' . __('text.items'); ?>",
+                        "sInfoEmpty": "<?php echo __('text.No data available in table'); ?>",
+                        "sZeroRecords": "<?php echo __('text.No data available in table'); ?>",
+                        "sInfoFiltered": "<?php echo '- ' . __('text.filtered from') . ' _MAX_ ' . __('text.records'); ?>",
+                        "oPaginate": {
+                            "sPrevious": "<?php echo __('text.Previous'); ?>",
+                            "sNext": "<?php echo __('text.Next'); ?>"
+                        },
+                        "sEmptyTable": '<?php echo __('text.No data available in table'); ?>'
+                    }
                 });
             </script>
 

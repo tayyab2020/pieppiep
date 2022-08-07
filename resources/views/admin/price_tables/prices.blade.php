@@ -93,11 +93,3 @@
     </style>
 
 @endsection
-
-@section('scripts')
-
-    <script type="text/javascript">
-        $('#example').DataTable();
-    </script>
-
-@endsection

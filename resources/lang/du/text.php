@@ -616,5 +616,6 @@ return [
     'Add More Colors' => 'Kleur toevoegen',
     'Add More Features' => 'Attribuut toevoegen',
     'Credentials doesn\'t match' => 'De combinatie van gebruikersnaam en wachtwoord is niet correct',
+    'filtered from' => 'filtered from',
     
 ];
