@@ -589,7 +589,7 @@ return [
     'Select sub category placeholder' => 'Selecteer sub categorie',
     'Select sub category' => 'Selecteer sub categorie', 
     'Select Measure placeholder' => 'Selecteer maateenheid',
-    'Select Category placeholder' => 'Selecteer categorie',
+    'Select category placeholder' => 'Selecteer categorie',
     'Select Brand placeholder' => 'Selecteer merk',
     'Select Type placeholder' => 'Selecteer type',
     'Category*' => 'Hoofd categorie',
@@ -600,7 +600,7 @@ return [
     'Brand*' => 'Merk*',
     'Current photo*' => 'Huidige foto*',
     'Add photo' => 'Voeg foto toe',
-    'Add category photo' => 'Voeg categorie foto toe',
+    'Add Category Photo' => 'Voeg categorie foto toe',
     'Additional info' => 'Extra informatie',
     'Delivery Time (In Days)*' => 'Levertijd in dagen*',
     'Product Description' => 'Product omschrijving',
@@ -612,5 +612,9 @@ return [
     'Enter Floor type' => 'Type vloer',
     'Enter Floor type 2' => 'Type vloer',
     'Enter Additional info' => 'Vul extra informatie in',
-    'Enter Product Description' => 'Vul product omschrijving in',  
+    'Enter Product Description' => 'Vul product omschrijving in', 
+    'Add More Colors' => 'Kleur toevoegen',
+    'Add More Features' => 'Attribuut toevoegen',
+    'Credentials doesn\'t match' => 'De combinatie van gebruikersnaam en wachtwoord is niet correct',
+    
 ];
