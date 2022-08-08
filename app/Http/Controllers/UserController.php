@@ -7163,7 +7163,7 @@ class UserController extends Controller
         new_quotations::where('id', $request->quotation_id2)->update(['mail_invoice_to' => $request->mail_to2]);
         new_invoices::where('quotation_id', $request->quotation_id2)->update(['mail_invoice_to' => $request->mail_to2]);
 
-        Session::flash("success", "{{__('text.Invoice sent to customer successfully!')}} ");
+        Session::flash("success", __('text.Invoice sent to customer successfully!'));
         return redirect()->back();
     }
 
@@ -7221,7 +7221,7 @@ class UserController extends Controller
         new_invoices::where('quotation_id', $request->quotation_id3)->update(['mail_negative_invoice_to' => $request->mail_to3]);
         new_negative_invoices::where('quotation_id', $request->quotation_id3)->update(['mail_negative_invoice_to' => $request->mail_to3]);
 
-        Session::flash("success", "{{__('text.Negative Invoice sent to customer successfully!')}} ");
+        Session::flash("success", __('text.Negative Invoice sent to customer successfully!'));
         return redirect()->back();
     }
 
