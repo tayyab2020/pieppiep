@@ -617,4 +617,6 @@ return [
     'Add More Features' => 'Add More Features',
     'Credentials doesn\'t match' => 'Credentials doesn\'t match',
     'filtered from' => 'filtered from',
+    'Negative Invoice sent to customer successfully!' => 'Negative Invoice sent to customer successfully!',
+    'Invoice sent to customer successfully!' => 'Invoice sent to customer successfully!',
 ];
