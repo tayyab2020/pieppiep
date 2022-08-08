@@ -226,7 +226,7 @@
 
 																				<div style="display: flex;align-items: center;">
 																					<span>€</span>
-																					<input type="text" value="{{number_format((float)$item->price_before_labor, 2, ',', '')}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																					<input type="text" value="{{number_format((float)$item->price_before_labor, 2, ',', '.')}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																					<input type="hidden" value="{{$item->price_before_labor/$item->qty}}" class="price_before_labor_old">
 																				</div>
 																			</div>
@@ -3184,7 +3184,7 @@
 					price_before_labor = price_before_labor * qty;
 					price_before_labor = parseFloat(price_before_labor).toFixed(2);
 					/*price_before_labor = Math.round(price_before_labor);*/
-					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+					$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(price_before_labor));
 
 					if(qty_changed == 0)
 					{
@@ -3838,7 +3838,7 @@
 
 									labor = parseFloat(labor).toFixed(2);
 
-									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(price_before_labor));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
 									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
@@ -4209,7 +4209,7 @@
 
 									labor = parseFloat(labor).toFixed(2);
 
-									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(price_before_labor));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
 									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
@@ -5621,7 +5621,7 @@
 
 									labor = parseFloat(labor).toFixed(2);
 
-									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(price_before_labor));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
 									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
@@ -5989,7 +5989,7 @@
 
 									labor = parseFloat(labor).toFixed(2);
 
-									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
+									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(price_before_labor));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(price_before_labor);
 									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val(labor.replace(/\./g, ','));
 									$('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val(labor);
@@ -6036,6 +6036,7 @@
 				value = value.replace(/\,/g, '.');
 				var row_id = $(this).parents(".content-div").data('id');
 				var price_before_labor = $('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val();
+				price_before_labor = price_before_labor.replace(/\./g, '');
 				price_before_labor = price_before_labor.replace(/\,/g, '.');
 				var qty = $('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val();
 				var total_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();

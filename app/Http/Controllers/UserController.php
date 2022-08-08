@@ -2273,7 +2273,7 @@ class UserController extends Controller
                 $user_id = $user->id;
             }
 
-            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('users.email','customers_details.name','customers_details.family_name')->first();
+            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('new_quotations.quotation_invoice_number','users.email','customers_details.name','customers_details.family_name')->first();
 
             if (!$invoice) {
                 return redirect()->back();
@@ -4728,7 +4728,6 @@ class UserController extends Controller
             // $order->delivery_days = $request->delivery_days[$i];
             // $order->delivery_date = $delivery_date;
             // $order->retailer_delivery_date = $delivery_date;
-            $order->price_before_labor = str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i]));
             $order->labor_impact = 0;
             $order->discount = 0;
             $order->labor_discount = 0;
@@ -4746,6 +4745,7 @@ class UserController extends Controller
                 $order->box_quantity = NULL;
                 $order->measure = NULL;
                 $order->max_width = NULL;
+                $order->price_before_labor = 0;
             }
             else
             {
@@ -4756,6 +4756,7 @@ class UserController extends Controller
                 $order->box_quantity = $request->estimated_price_quantity[$i];
                 $order->measure = $request->measure[$i];
                 $order->max_width = $request->max_width[$i];
+                $order->price_before_labor = str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i]));
             }
 
             if($request->childsafe[$i])
@@ -5602,6 +5603,7 @@ class UserController extends Controller
                     $invoice_items->box_quantity = $request->estimated_price_quantity[$i] ? $request->estimated_price_quantity[$i] : 0;
                     $invoice_items->measure = $request->measure[$i] ? $request->measure[$i] : 0;
                     $invoice_items->max_width = $request->max_width[$i] ? $request->max_width[$i] : 0;
+                    $invoice_items->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                 }
 
                 $invoice_items->row_id = $row_id;
@@ -5612,7 +5614,6 @@ class UserController extends Controller
                 $invoice_items->delivery_date = $delivery_date;
                 $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
                 $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
-                $invoice_items->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                 $invoice_items->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
 
@@ -5634,7 +5635,6 @@ class UserController extends Controller
                     $order->retailer_delivery_date = $delivery_date;
                     $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
                     $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
-                    $order->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                     $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                     $order->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
 
@@ -5697,6 +5697,7 @@ class UserController extends Controller
                         $order->box_quantity = $request->estimated_price_quantity[$i];
                         $order->measure = $request->measure[$i];
                         $order->max_width = $request->max_width[$i];
+                        $order->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                     }
 
                     $invoice_items->save();
