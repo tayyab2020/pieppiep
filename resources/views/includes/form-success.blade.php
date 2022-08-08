@@ -19,6 +19,6 @@
 @if(session('message')==='Failed!')
       <div class="alert alert-danger validation">
       <button type="button" class="close cl-btn" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <p>{{__("text.Credentials doesn\'t match")}}</p>
+            <p>{{__('text.Credentials doesn\'t match')}}</p>
       </div>
 @endif

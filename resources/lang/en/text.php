@@ -538,7 +538,6 @@ return [
     'Retailer Dashboard' => 'Dashboard',
     'Supplier Dashboard' => 'Dashboard',
     'Customer Dashboard' => 'Dashboard',
-    'Credentials doesn\'t match' => 'Credentials doesn\'t match',
     'Advice Price Per Box' => 'Advice Price Per Box',
     'Advice Price Per Box Placeholder' => 'Fill in price',
     'Advice Price Quantity' => 'Advice Price Quantity',

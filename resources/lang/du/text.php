@@ -538,7 +538,6 @@ return [
     'Retailer Dashboard' => 'Dashboard',
     'Supplier Dashboard' => 'Dashboard',
     'Customer Dashboard' => 'Dashboard',
-    'Credentials doesn\'t match' => 'Wachtwoord en/of gebruiksnaam zijn incorrect',
     'Advice Price Per Box' => 'Advies verkoopprijs',
     'Advice Price Per Box Placeholder' => 'Vul hier in de prijs',
     'Advice Price Quantity' => 'Pakinhoud',
