@@ -126,10 +126,10 @@
 
                                         <thead>
                                         <tr>
-                                            <th style="width: 60% !important;font-size: 20px;font-weight: 500;">{{__('text.Description')}}</th>
-                                            <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Qty')}}</th>
-                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
-                                            <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
+                                            <th style="width: 60% !important;font-size: 26px;">{{__('text.Description')}}</th>
+                                            <th style="width: 10% !important;font-size: 26px;">{{__('text.Qty')}}</th>
+                                            <th style="width: 15% !important;font-size: 26px;text-align: center;">{{__('text.Cost')}}</th>
+                                            <th style="width: 15% !important;font-size: 26px;text-align: center;">{{__('text.Total')}}</th>
                                         </tr>
                                         </thead>
 
@@ -137,10 +137,10 @@
 
                                         <tr>
 
-                                            <td style="font-size: 20px;padding: 5px;">{{__('text.Service Fee')}}</td>
-                                            <td style="font-size: 20px;padding: 5px;">1</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format($service_fee, 2, ',', '.')}}</td>
-                                            <td style="font-size: 20px;padding: 5px;text-align: center;">{{number_format($service_fee, 2, ',', '.')}}</td>
+                                            <td style="font-size: 22px;padding: 5px;">{{__('text.Service Fee')}}</td>
+                                            <td style="font-size: 22px;padding: 5px;">1</td>
+                                            <td style="font-size: 22px;padding: 5px;text-align: center;">{{number_format($service_fee, 2, ',', '.')}}</td>
+                                            <td style="font-size: 22px;padding: 5px;text-align: center;">{{number_format($service_fee, 2, ',', '.')}}</td>
 
                                         </tr>
 
@@ -171,8 +171,8 @@
                                             </td>
                                             <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                 <div style="display: inline-block;width: 100%;">
-                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{$ex_vat}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;">TOTAALPRIJS EX. BTW</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">€ {{$ex_vat}}</span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -183,18 +183,18 @@
                                             </td>
                                             <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                 <div style="display: inline-block;width: 100%;">
-                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{$ex_vat}}</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{$vat}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;">BTW 21% over € {{$ex_vat}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">€ {{$vat}}</span>
                                                 </div>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <td style="width: 40%;font-size: 20px;padding: 5px;"></td>
-                                            <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
+                                            <td style="width: 40%;padding: 5px;"></td>
+                                            <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                 <div style="display: inline-block;width: 100%;">
-                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Te betalen</span>
-                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">€ {{number_format($service_fee, 2, ',', '.')}}</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;">Te betalen</span>
+                                                    <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">€ {{number_format($service_fee, 2, ',', '.')}}</span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -212,26 +212,26 @@
 
                                 <thead>
                                 <tr>
-                                    <th style="width: 60% !important;font-size: 26px;font-weight: 500;">{{__('text.Description')}}</th>
-                                    <th style="width: 10% !important;font-size: 26px;font-weight: 500;text-align: center;">{{__('text.Qty')}}</th>
+                                    <th style="width: 60% !important;font-size: 26px;">{{__('text.Description')}}</th>
+                                    <th style="width: 10% !important;font-size: 26px;text-align: center;">{{__('text.Qty')}}</th>
 
                                     @if($role == 'supplier')
 
-                                        <th style="width: 10% !important;font-size: 26px;font-weight: 500;">{{__('text.Delivery Date')}}</th>
+                                        <th style="width: 10% !important;font-size: 26px;">{{__('text.Delivery Date')}}</th>
 
                                     @endif
 
                                     @if($role == 'supplier2' || $role == 'order')
 
-                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Supplier')}}</th>
-                                        <th class="border-0 text-uppercase small font-weight-bold">{{__('text.Order Number')}}</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold" style="font-size: 26px;">{{__('text.Supplier')}}</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold" style="font-size: 26px;">{{__('text.Order Number')}}</th>
 
                                     @endif
 
                                     @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
-                                        <th style="width: 15% !important;font-size: 26px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
-                                        <th style="width: 15% !important;font-size: 26px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
+                                        <th style="width: 15% !important;font-size: 26px;text-align: center;">{{__('text.Cost')}}</th>
+                                        <th style="width: 15% !important;font-size: 26px;text-align: center;">{{__('text.Total')}}</th>
 
                                     @endif
 
@@ -313,13 +313,13 @@
 
                                                                 <tr>
 
-                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
-                                                                    <td style="width: 10% !important;text-align: center;">{{count($calculator_row) == 1 ? $request->qty[$i] : str_replace('.', ',',$request->$box_quantity[$c])}}</td>
+                                                                    <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                                    <td style="font-size: 22px;width: 10% !important;text-align: center;">{{count($calculator_row) == 1 ? $request->qty[$i] : str_replace('.', ',',$request->$box_quantity[$c])}}</td>
 
                                                                     @if($role == 'supplier2' || $role == 'order')
 
-                                                                        <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
-                                                                        <td>{{$order_numbers[$i]}}</td>
+                                                                        <td style="font-size: 22px;">{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                                        <td style="font-size: 22px;">{{$order_numbers[$i]}}</td>
 
                                                                     @endif
 
@@ -343,12 +343,12 @@
 
                                                                 <tr>
 
-                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
-                                                                    <td style="width: 10% !important;text-align: center;">{{count($calculator_rows[$i]) == 1 ? $request->qty[$i] : str_replace('.', ',',$box_quantity)}}</td>
+                                                                    <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
+                                                                    <td style="font-size: 22px;width: 10% !important;text-align: center;">{{count($calculator_rows[$i]) == 1 ? $request->qty[$i] : str_replace('.', ',',$box_quantity)}}</td>
 
                                                                     @if($role == 'supplier')
 
-                                                                        <td style="width: 10% !important;">{{$request->delivery_date[$i]}}</td>
+                                                                        <td style="font-size: 22px;width: 10% !important;">{{$request->delivery_date[$i]}}</td>
 
                                                                     @endif
 
@@ -366,11 +366,11 @@
 
                                                                 @if(strpos($key, 'I') > -1 || (isset($key->item_id) && $key->item_id != 0))
 
-                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ' (Item)'}}</td>
+                                                                    <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i] . ' (Item)'}}</td>
 
                                                                 @elseif(strpos($key, 'S') > -1 || (isset($key->service_id) && $key->service_id != 0))
 
-                                                                    <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ' (Service)'}}</td>
+                                                                    <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i] . ' (Service)'}}</td>
 
                                                                 @else
 
@@ -389,17 +389,17 @@
 
                                                                     ?>
 
-                                                                    <td style="font-size: 20px;width: 60% !important;">{!! $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . '<br> € ' . $estimated_price . ' per m², pakinhoud ' . $estimated_quantity . ' m²' !!}</td>
+                                                                    <td style="font-size: 22px;width: 60% !important;">{!! $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . '<br> € ' . $estimated_price . ' per m², pakinhoud ' . $estimated_quantity . ' m²' !!}</td>
 
                                                                 @endif
 
                                                             @else
 
-                                                                <td style="font-size: 20px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
+                                                                <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ', afm. ' . $request->width[$i] . $request->width_unit[$i] . 'x' . $request->height[$i] . $request->height_unit[$i] . ' bxh'}}</td>
 
                                                             @endif
 
-                                                            <td style="font-size: 20px;width: 10% !important;text-align: center;">{{$request->negative_invoice ? '-' : null}} {{$request->qty[$i]}}</td>
+                                                            <td style="font-size: 22px;width: 10% !important;text-align: center;">{{$request->negative_invoice ? '-' : null}} {{$request->qty[$i]}}</td>
 
                                                             @if($role == 'supplier2')
 
@@ -408,8 +408,8 @@
 
                                                             @endif
 
-                                                            <td style="font-size: 20px;text-align: center;width: 15% !important;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
-                                                            <td style="font-size: 20px;text-align: center;width: 15% !important;">{{$request->negative_invoice ? '-' : null}} {{$arb}}</td>
+                                                            <td style="font-size: 22px;text-align: center;width: 15% !important;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
+                                                            <td style="font-size: 22px;text-align: center;width: 15% !important;">{{$request->negative_invoice ? '-' : null}} {{$arb}}</td>
 
                                                         </tr>
 
@@ -420,10 +420,10 @@
                                                         @if($arb_discount != 0)
 
                                                             <tr>
-                                                                <td style="font-size: 20px;padding: 5px 0;width: 60% !important;">Inclusief {{$request->negative_invoice ? '-' : null}} € {{$arb_discount}} korting</td>
-                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
-                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
-                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 22px;padding: 5px 0;width: 60% !important;">Inclusief {{$request->negative_invoice ? '-' : null}} € {{$arb_discount}} korting</td>
+                                                                <td style="font-size: 22px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 22px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 22px;padding: 5px 0;"></td>
                                                             </tr>
 
                                                         @endif
@@ -433,19 +433,19 @@
                                                     @if($form_type == 2)
 
                                                         <tr>
-                                                            <td style="font-size: 20px;padding: 5px 0;width: 60% !important;">Installatie {{$product_titles[$i]}} per meter</td>
-                                                            <td style="font-size: 20px;padding: 5px 0;width: 10% !important;text-align: center;">{{$arb_qty}}</td>
-                                                            <td style="font-size: 20px;padding: 5px 0;text-align: center;width: 15% !important;">{{$arb_price}}</td>
-                                                            <td style="font-size: 20px;padding: 5px 0;text-align: center;width: 15% !important;">{{$art}}</td>
+                                                            <td style="font-size: 22px;padding: 5px 0;width: 60% !important;">Installatie {{$product_titles[$i]}} per meter</td>
+                                                            <td style="font-size: 22px;padding: 5px 0;width: 10% !important;text-align: center;">{{$arb_qty}}</td>
+                                                            <td style="font-size: 22px;padding: 5px 0;text-align: center;width: 15% !important;">{{$arb_price}}</td>
+                                                            <td style="font-size: 22px;padding: 5px 0;text-align: center;width: 15% !important;">{{$art}}</td>
                                                         </tr>
 
                                                         @if($art_labor_discount != 0)
 
                                                             <tr>
-                                                                <td style="font-size: 20px;padding: 5px 0;width: 60% !important;">Inclusief € {{$art_labor_discount}} korting</td>
-                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
-                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
-                                                                <td style="font-size: 20px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 22px;padding: 5px 0;width: 60% !important;">Inclusief € {{$art_labor_discount}} korting</td>
+                                                                <td style="font-size: 22px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 22px;padding: 5px 0;"></td>
+                                                                <td style="font-size: 22px;padding: 5px 0;"></td>
                                                             </tr>
 
                                                         @endif
@@ -458,7 +458,7 @@
 
                                                 @if($form_type == 2)
 
-                                                    <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{__('text.Features')}}</h2>
+                                                    <h2 style="font-size: 26px;text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{__('text.Features')}}</h2>
 
                                                     <table style="border: 1px solid #dee2e6;display: table;margin-bottom: 50px;" class="table table1">
 
@@ -562,7 +562,7 @@
 
                                                                     @endif
 
-                                                                    <td style="text-align: left !important;">{!! $string !!}</td>
+                                                                    <td style="font-size: 22px;text-align: left !important;">{!! $string !!}</td>
 
                                                                     @if(count($feature_sub_titles[$i]) == $d)
 
@@ -661,14 +661,14 @@
                                                 <tr>
                                                     <td style="width: 40%;padding: 5px;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">@if(($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') && $delivery_date) {{__('text.PDF Delivery Date')}}: @endif</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$delivery_date}} @endif</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 26px;font-weight: bold;">@if(($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') && $delivery_date) {{__('text.PDF Delivery Date')}}: @endif</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 22px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$delivery_date}} @endif</span>
                                                         </div>
                                                     </td>
                                                     <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">TOTAALPRIJS EX. BTW</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{$request->net_amount}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;font-weight: bold;">TOTAALPRIJS EX. BTW</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">{{$request->negative_invoice ? '-' : null}} € {{$request->net_amount}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -676,14 +676,14 @@
                                                 <tr>
                                                     <td style="width: 40%;padding: 5px;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">@if($installation_date) {{__('text.PDF Installation Date')}}: @endif</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$installation_date}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;font-weight: bold;">@if($installation_date) {{__('text.PDF Installation Date')}}: @endif</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">{{$installation_date}}</span>
                                                         </div>
                                                     </td>
                                                     <td style="width: 60%;padding: 5px;padding-left: 20px;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">BTW 21% over € {{$request->net_amount}}</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{$request->tax_amount}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;font-weight: bold;">BTW 21% over € {{$request->net_amount}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">{{$request->negative_invoice ? '-' : null}} € {{$request->tax_amount}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -692,8 +692,8 @@
                                                     <td style="width: 40%;font-size: 20px;padding: 5px;"></td>
                                                     <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 20px;font-weight: 500;">Te betalen</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 18px;">{{$request->negative_invoice ? '-' : null}} € {{$request->total_amount}}</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;font-weight: bold;">Te betalen</span>
+                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">{{$request->negative_invoice ? '-' : null}} € {{$request->total_amount}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -709,7 +709,7 @@
 
                                         <br><br><br>
                                         <h3>{{__('text.Quotation Description')}}</h3>
-                                        <p style="font-size: 18px;">{!! nl2br($request->description) !!}</p>
+                                        <p style="font-size: 20px;">{!! nl2br($request->description) !!}</p>
 
                                     @endif
 
