@@ -185,22 +185,40 @@ class UpdateDates implements ShouldQueue
 
         if($is_approved)
         {
-            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
+            if($this->lang->lang == 'du')
+            {
+                $msg = " Beste".$retailer_company.", <br><br>Update: leverdatum is bijgewerkt door ".$supplier_name." voor offerte: <b>" . $quotation_invoice_number . "</b>.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
+            }
+
+        else
+
+        {
+            $msg = " Dear ".$retailer_company.", <br><br>Recent activity: delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer sercvice<br><br> Pieppiep";
+        }
+            \Mail::send(array(), array(), function ($message) use ($retailer_email, $msg, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)
                     ->replyTo($supplier_email, $supplier_name)
                     ->subject(__('text.Order Approved!'))
-                    ->setBody("Recent activity: Hi ".$retailer_company.", delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+                    ->setBody($msg, 'text/html');
             });
         }
         else
         {
-            \Mail::send(array(), array(), function ($message) use ($retailer_email, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
+            if($this->lang->lang == 'du')
+            {
+                $msg= "Beste ".$retailer_company.", <br><br> Update: je bestelling is bevestigd door <b>".$supplier_name."</b> voor offerte: <b>" . $quotation_invoice_number . "</b>.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
+            } 
+            else
+            {
+                $msg= "Dear ".$retailer_company.", <br><br> Recent activity: order has been approved by supplier <b>".$supplier_name."</b> for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep"; 
+            }
+            \Mail::send(array(), array(), function ($message) use ($retailer_email, $msg, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)
                     ->replyTo($supplier_email, $supplier_name)
                     ->subject(__('text.Order Approved!'))
-                    ->setBody("Recent activity: Hi ".$retailer_company.", order has been approved by supplier <b>".$supplier_name."</b> for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+                    ->setBody($msg, 'text/html');
             });
         }
 

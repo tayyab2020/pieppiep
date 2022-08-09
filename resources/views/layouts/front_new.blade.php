@@ -1747,7 +1747,7 @@
                 <div class="hidden-xs"  >
                     <ul>
                         <li><a href="tel:0201111111">020 - 1234 567</a></li>
-                        <li><a href="/nl/pieppiep/contact">Contactformulier</a></li>
+                        <li><a href="/contact">Contactformulier</a></li>
                     </ul>
                 </div>
 
