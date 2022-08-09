@@ -247,6 +247,7 @@ class UpdateDates implements ShouldQueue
             {
                 $msg= "Dear ".$retailer_company.", <br><br> Recent activity: order has been approved by supplier <b>".$supplier_name."</b> for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep"; 
             }
+            
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $msg, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)

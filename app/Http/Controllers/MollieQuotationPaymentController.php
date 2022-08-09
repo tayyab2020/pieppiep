@@ -218,9 +218,9 @@ class MollieQuotationPaymentController extends Controller {
 
             \Mail::send(array(), array(), function ($message) use ($file, $filename, $admin_email, $quotation_invoice_number, $paid_amount) {
                 $message->to($admin_email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('noreply@pieppiep.com')
                     ->subject('Payment Received!')
-                    ->setBody("Payment received for quotation # " . $quotation_invoice_number . "<br>Total amount : €" . $paid_amount . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("Payment received for quotation # " . $quotation_invoice_number . "<br>Total amount : €" . $paid_amount . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
 
                 $message->attach($file, [
                     'as' => $filename,

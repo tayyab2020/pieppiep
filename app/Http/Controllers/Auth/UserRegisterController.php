@@ -152,18 +152,18 @@ class UserRegisterController extends Controller
 
 
             /*$headers =  'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
+            $headers .= 'From: Pieppiep <noreply@pieppiep.com>' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
             $subject = "Account Created!";
-            $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. You can go to your dashboard through <a href='".$link."'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+            $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. You can go to your dashboard through <a href='".$link."'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
             mail($user_email,$subject,$msg,$headers);*/
 
 
             $headers =  'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
+            $headers .= 'From: Pieppiep <noreply@pieppiep.com>' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-            $subject = "Welkom bij Vloerofferte!";
-            $msg = "Beste ".$user_name.",<br><br>Je account is succesvol aangemaakt. Je kan vanaf nu binnen paar klikken een stoffeerder reserveren. Klik op account om je profiel te bezoeken <a href='".$link."'>account.</a><br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
+            $subject = "Welkom bij Pieppiep!";
+            $msg = "Beste ".$user_name.",<br><br>Je account is succesvol aangemaakt. Je kan vanaf nu binnen paar klikken een stoffeerder reserveren. Klik op account om je profiel te bezoeken <a href='".$link."'>account.</a><br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Pieppiep";
             mail($user_email,$subject,$msg,$headers);
 
             return redirect()->route('client-quotation-requests');
@@ -258,22 +258,22 @@ class UserRegisterController extends Controller
             $link = url('/').'/aanbieder/complete-profile';
 
             /*$headers =  'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
+            $headers .= 'From: Pieppiep <noreply@pieppiep.com>' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
             $subject = "Account Created!";
-            $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. Kindly go to this <a href='".$link."'>link</a> to complete your profile. You can get orders only after completing your profile.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+            $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. Kindly go to this <a href='".$link."'>link</a> to complete your profile. You can get orders only after completing your profile.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
             mail($user_email,$subject,$msg,$headers);*/
 
 
             // $headers =  'MIME-Version: 1.0' . "\r\n";
-            // $headers .= 'From: Vloerofferte <info@vloerofferte.nl>' . "\r\n";
+            // $headers .= 'From: Pieppiep <noreply@pieppiep.com>' . "\r\n";
             // $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-            // $subject = "Welkom bij Vloerofferte";
-            // $msg = "Beste ".$user_name.",<br><br>Welkom bij vloerofferte.nl<br><br>Je profiel is succesvol aangemaakt, bedankt! Je kan pas offerte aanvragen ontvangen, nadat je je profiel hebt geactiveerd. Klik dus snel op deze <a href='".$link."'>link</a> om je profiel te activeren.<br><br>Veel succes met jouw aanvraag!<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte<br><br>Voor de beste prijs.";
+            // $subject = "Welkom bij Pieppiep";
+            // $msg = "Beste ".$user_name.",<br><br>Welkom bij pieppiep.com<br><br>Je profiel is succesvol aangemaakt, bedankt! Je kan pas offerte aanvragen ontvangen, nadat je je profiel hebt geactiveerd. Klik dus snel op deze <a href='".$link."'>link</a> om je profiel te activeren.<br><br>Veel succes met jouw aanvraag!<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Pieppiep<br><br>Voor de beste prijs.";
             // mail($user_email,$subject,$msg,$headers);
 
             $headers =  'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'From: Pieppiep <info@pieppiep.com>' . "\r\n";
+            $headers .= 'From: Pieppiep <noreply@pieppiep.com>' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
             $subject = "Account Created!";
             $msg = "Dear Mr/Mrs ".$user_name.",<br><br>Your account has been created. We will be reviewing your information within 24 hours. We will inform you when you can login. Thanks for your cooperation.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";

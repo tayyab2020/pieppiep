@@ -14,7 +14,7 @@ class ListenSendOrder implements ShouldQueue
 
         \Mail::send(array(), array(), function ($message) use ($msg) {
             $message->to('tayyabkhurram62@gmail.com')
-                ->from('info@vloerofferte.nl')
+                ->from('info@pieppiep.com')
                 ->subject(__('text.Invoice Status Changed'))
                 ->setBody($msg, 'text/html');
         });
