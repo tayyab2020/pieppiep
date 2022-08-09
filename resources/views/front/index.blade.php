@@ -46,10 +46,10 @@
                                             <div class="sppb-addon sppb-addon-button-group text-left">
                                                 <div class="sppb-addon-content nav"><a onclick="myFunction()"
                                                                                        id="btn-1623675747037"
-                                                                                       href="/nl/PiepPiep/registreren"
+                                                                                       href="/registreren"
                                                                                        class="nav-link btn btn-blue">Probeer
                                                         30 dagen gratis</a><a onclick="myFunction()" id="btn-1623675747038"
-                                                                              href="/nl/PiepPiep/registreren"
+                                                                              href="/registreren"
                                                                               class="nav-link btn link-blue">of bestel
                                                         direct</a></div>
                                             </div>
@@ -543,7 +543,7 @@
                                             <div class="sppb-addon sppb-addon-button-group text-center">
                                                 <div class="sppb-addon-content nav"><a onclick="myFunction()"
                                                                                        id="btn-1623746996126"
-                                                                                       href="/nl/PiepPiep/registreren"
+                                                                                       href="/registreren"
                                                                                        class="nav-link btn btn-blue">Probeer
                                                         30 dagen gratis</a></div>
                                             </div>
