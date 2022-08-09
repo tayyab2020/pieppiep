@@ -113,10 +113,8 @@ class UserController extends Controller
             $ip_address = $_SERVER['REMOTE_ADDR'];
         }
 
-
         $language = user_languages::where('ip', '=', $ip_address)->first();
         $this->sl = Sociallink::findOrFail(1);
-
 
         if ($language == '') {
 
@@ -124,8 +122,8 @@ class UserController extends Controller
             $language->ip = $ip_address;
             $language->lang = 'eng';
             $language->save();
+        
         }
-
 
         if ($language->lang == 'eng') {
 

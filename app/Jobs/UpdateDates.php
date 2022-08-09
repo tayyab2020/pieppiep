@@ -224,12 +224,11 @@ class UpdateDates implements ShouldQueue
             {
                 $msg = " Beste".$retailer_company.", <br><br>Update: leverdatum is bijgewerkt door ".$supplier_name." voor offerte: <b>" . $quotation_invoice_number . "</b>.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
             }
-
-        else
-
-        {
-            $msg = " Dear ".$retailer_company.", <br><br>Recent activity: delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer sercvice<br><br> Pieppiep";
-        }
+            else
+            {
+                $msg = " Dear ".$retailer_company.", <br><br>Recent activity: delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer sercvice<br><br> Pieppiep";
+            }
+            
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $msg, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)
