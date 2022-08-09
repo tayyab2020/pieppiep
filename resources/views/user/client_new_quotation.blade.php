@@ -20,7 +20,7 @@
 									<div style="box-shadow: none;" class="add-product-box">
 										<div style="align-items: center;" class="add-product-header products">
 
-											<h2 style="margin-top: 0;">View Quotation</h2>
+											<h2 style="margin-top: 0;">{{__('text.View Quotation')}}</h2>
 
 											<div style="background-color: black;border-radius: 10px;padding: 0 10px;">												
 

@@ -64,22 +64,22 @@
                                     @if($client || $role == 'supplier1' || $role == 'supplier')
 
                                         <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
-                                            {{--<p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>--}}
-                                            <p style="margin: 0">{{$user->company_name}}</p>
-                                            <p style="margin: 0">{{$address}}</p>
-                                            <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
-                                            <p style="margin: 0">TEL: {{$user->phone}}</p>
-                                            <p style="margin: 0">{{$user->email}}</p>
+                                            {{--<p style="margin: 0;font-size: 22px;"><b>{{$user->name}} {{$user->family_name}}</b></p>--}}
+                                            <p style="margin: 0;font-size: 22px;">{{$user->company_name}}</p>
+                                            <p style="margin: 0;font-size: 22px;">{{$address}}</p>
+                                            <p style="margin: 0;font-size: 22px;">{{$user->postcode}} {{$user->city}}</p>
+                                            <p style="margin: 0;font-size: 22px;">TEL: {{$user->phone}}</p>
+                                            <p style="margin: 0;font-size: 22px;">{{$user->email}}</p>
                                         </div>
 
                                     @else
 
                                         <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
-                                            <p style="margin: 0">{!! $gs1->street !!}</p>
-                                            <p style="margin: 0">BTW: NL001973883B94</p>
-                                            <p style="margin: 0">TEL: {{$gs1->phone}}</p>
-                                            <p style="margin: 0">IBAN: NL87ABNA0825957680</p>
-                                            <p style="margin: 0">KvK-nummer: 70462623</p>
+                                            <p style="margin: 0;font-size: 22px;">{!! $gs1->street !!}</p>
+                                            <p style="margin: 0;font-size: 22px;">BTW: NL001973883B94</p>
+                                            <p style="margin: 0;font-size: 22px;">TEL: {{$gs1->phone}}</p>
+                                            <p style="margin: 0;font-size: 22px;">IBAN: NL87ABNA0825957680</p>
+                                            <p style="margin: 0;font-size: 22px;">KvK-nummer: 70462623</p>
                                         </div>
 
                                     @endif
@@ -92,23 +92,23 @@
 
                                     @if($client)
 
-                                        <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">{{__('text.Customer Details')}}</p>
-                                        <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
-                                        <p style="font-size: 18px;" class="mb-1 m-rest">{{$client_address}}</p>
-                                        <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
-                                        <p style="font-size: 18px;" class="mb-1 m-rest">{{$client->email}}</p>
+                                        <p style="font-size: 26px;" class="font-weight-bold mb-4 m-heading">{{__('text.Customer Details')}}</p>
+                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
+                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client_address}}</p>
+                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
+                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->email}}</p>
                                         <br>
                                         <br>
 
                                     @endif
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading">@if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = ltrim(implode(',', array_filter($order_numbers_string)), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
+                                    <p style="font-size: 26px;" class="font-weight-bold mb-4 m-heading">@if($role == 'retailer') {{$user->quotation_prefix}}: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1' || $role == 'supplier3') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice' || $role == 'invoice1') {{$user->invoice_prefix}}: {{$role == 'invoice' ? $order_number : $invoice_number}} @elseif($role == 'order' || $role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = ltrim(implode(',', array_filter($order_numbers_string)), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}} @endif</p>
 
                                     </div>
 
                                     <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
                                         <br><br><br><br><br>
-                                        <p class="text-muted" style="font-size: 15px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
+                                        <p class="text-muted" style="font-size: 22px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
                                     </div>
 
                                 </div>
@@ -212,12 +212,12 @@
 
                                 <thead>
                                 <tr>
-                                    <th style="width: 60% !important;font-size: 20px;font-weight: 500;">{{__('text.Description')}}</th>
-                                    <th style="width: 10% !important;font-size: 20px;font-weight: 500;text-align: center;">{{__('text.Qty')}}</th>
+                                    <th style="width: 60% !important;font-size: 26px;font-weight: 500;">{{__('text.Description')}}</th>
+                                    <th style="width: 10% !important;font-size: 26px;font-weight: 500;text-align: center;">{{__('text.Qty')}}</th>
 
                                     @if($role == 'supplier')
 
-                                        <th style="width: 10% !important;font-size: 20px;font-weight: 500;">{{__('text.Delivery Date')}}</th>
+                                        <th style="width: 10% !important;font-size: 26px;font-weight: 500;">{{__('text.Delivery Date')}}</th>
 
                                     @endif
 
@@ -230,8 +230,8 @@
 
                                     @if($role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
-                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
-                                        <th style="width: 15% !important;font-size: 20px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
+                                        <th style="width: 15% !important;font-size: 26px;text-align: center;font-weight: 500;">{{__('text.Cost')}}</th>
+                                        <th style="width: 15% !important;font-size: 26px;text-align: center;font-weight: 500;">{{__('text.Total')}}</th>
 
                                     @endif
 
