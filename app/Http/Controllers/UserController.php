@@ -5492,12 +5492,12 @@ class UserController extends Controller
             }
 
             date_default_timezone_set('Europe/Amsterdam');
-            $delivery_date = date('Y-m-d', strtotime($delivery_date_start . ' -1 day'));
+            $delivery_date = date('Y-m-d', strtotime($delivery_date_start . ' +1 day'));
             $is_weekend = date('N', strtotime($delivery_date)) >= 6;
 
             while($is_weekend)
             {
-                $delivery_date = date('Y-m-d', strtotime($delivery_date. '- 1 day'));
+                $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 day'));
                 $is_weekend = date('N', strtotime($delivery_date)) >= 6;
             }
 

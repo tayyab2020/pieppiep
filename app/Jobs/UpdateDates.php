@@ -23,6 +23,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\user_languages;
+use App\Language;
 
 class UpdateDates implements ShouldQueue
 {
@@ -31,6 +33,7 @@ class UpdateDates implements ShouldQueue
     private $request = null;
     private $user = null;
     public $timeout = 0;
+    public $lang;
 
     /**
      * Create a new job instance.
@@ -41,6 +44,38 @@ class UpdateDates implements ShouldQueue
     {
         $this->request = $request;
         $this->user = $user;
+
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+        } //whether ip is from proxy
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } //whether ip is from remote address
+        else {
+            $ip_address = $_SERVER['REMOTE_ADDR'];
+        }
+
+        $language = user_languages::where('ip', '=', $ip_address)->first();
+
+        if ($language == '') {
+
+            $language = new user_languages;
+            $language->ip = $ip_address;
+            $language->lang = 'eng';
+            $language->save();
+
+        }
+
+        if ($language->lang == 'eng') {
+
+            $this->lang = Language::where('lang', '=', 'eng')->first();
+
+        } else {
+
+            $this->lang = Language::where('lang', '=', 'du')->first();
+
+        }
+
     }
 
     /**
