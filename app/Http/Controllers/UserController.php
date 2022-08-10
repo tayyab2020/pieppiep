@@ -1627,6 +1627,13 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function Messages($id)
+    {
+        $messages = client_quotation_msgs::leftjoin('new_quotations','new_quotations.id','=','client_quotation_msgs.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->where('client_quotation_msgs.quotation_id',$id)->select('customers_details.name','customers_details.family_name','client_quotation_msgs.*','new_quotations.quotation_invoice_number')->get();
+        
+        return view('user.messages',compact('messages'));
+    }
+
     public function CustomQuotationAskCustomization(Request $request)
     {
         $id = $request->invoice_id;
