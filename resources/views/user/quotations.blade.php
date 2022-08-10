@@ -687,6 +687,16 @@
 
                         <div style="margin: 20px 0;" class="row">
                             <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label>{{__('text.Deliver To')}}</label>
+                                <select name="deliver_to" id="deliver_to">
+                                    <option value="1">{{__('text.Retailer')}}</option>
+                                    <option value="2">{{__('text.Customer')}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="margin: 20px 0;" class="row">
+                            <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>{{__('text.Delivery Date')}}</label>
                                 <input style="height: 45px;margin-bottom: 20px;background: white;" type="text" name="delivery_date" id="delivery_date_picker" class="form-control" placeholder="{{__('text.Select Delivery Date')}}" readonly autocomplete="off">
                             </div>
@@ -1460,6 +1470,20 @@
 
         }
 
+        .select2-container--default .select2-selection--single {
+			border: 1px solid #ccc;
+		}
+
+        .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__rendered, .select2-container--default .select2-selection--single .select2-selection__arrow, .select2-container--default .select2-selection--single .select2-selection__rendered
+		{
+			line-height: 40px;
+			height: 40px;
+		}
+
+        .select2-container
+        {
+            margin-bottom: 20px;
+        }
 
     </style>
 
@@ -1470,6 +1494,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
     <script type="text/javascript">
+
+        $("#deliver_to").select2({
+			width: '100%',
+			height: '200px',
+			placeholder: "{{__('text.Deliver To')}}",
+			allowClear: false,
+			"language": {
+				"noResults": function () {
+					return '{{__('text.No results found')}}';
+				}
+			},
+		});
 
         var todayDate = new Date().getDate();
         var endD = new Date(new Date().setDate(todayDate + 1));

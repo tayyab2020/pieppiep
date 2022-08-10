@@ -5312,7 +5312,7 @@ class UserController extends Controller
                 {
                     if(new_quotations::where('id',$request->quotation_id)->pluck('status')->first() == 2)
                     {
-                        new_quotations::where('id',$request->quotation_id)->update(['status' => 1,'accepted' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
+                        new_quotations::where('id',$request->quotation_id)->update(['status' => 1,'finished' => 0,'accepted' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
                     }
                     else
                     {
@@ -5323,7 +5323,7 @@ class UserController extends Controller
                 {
                     if(new_quotations::where('id',$request->quotation_id)->pluck('status')->first() == 2)
                     {
-                        new_quotations::where('id',$request->quotation_id)->update(['status' => 1,'accepted' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
+                        new_quotations::where('id',$request->quotation_id)->update(['status' => 1,'finished' => 0,'accepted' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
                     }
                     else
                     {
@@ -6866,7 +6866,7 @@ class UserController extends Controller
             $check->processing = 1;
             $check->save();
 
-            SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1,$request->delivery_date);
+            SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1,$request->delivery_date,$request->deliver_to);
 
             Session::flash('success', __('text.Order will be sent to supplier(s) soon...'));
             return redirect()->route('customer-quotations');

@@ -618,4 +618,6 @@ return [
     'filtered from' => 'filtered from',
     'Negative Invoice sent to customer successfully!' => 'Negative Invoice sent to customer successfully!',
     'Invoice sent to customer successfully!' => 'Invoice sent to customer successfully!',
+    'Deliver To' => 'Deliver To',
+    'Retailer' => 'Retailer',
 ];

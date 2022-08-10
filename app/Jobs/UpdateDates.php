@@ -137,6 +137,7 @@ class UpdateDates implements ShouldQueue
         $delivery = array();
         $feature_sub_titles = array();
         $calculator_rows = array();
+        $deliver_to = array();
 
         foreach ($request->products as $x => $temp)
         {
@@ -150,6 +151,7 @@ class UpdateDates implements ShouldQueue
             $height[] = $temp->height;
             $height_unit[] = $temp->height_unit;
             $delivery[] = $delivery_dates[$x];
+            $deliver_to[] = $temp->deliver_to;
 
             if($form_type == 1)
             {
@@ -196,6 +198,7 @@ class UpdateDates implements ShouldQueue
         $request->height = $height;
         $request->height_unit = $height_unit;
         $request->delivery_date = $delivery;
+        $request->deliver_to = $deliver_to;
 
         $quotation_invoice_number = $request->quotation_invoice_number;
         $filename = $order_number . '.pdf';

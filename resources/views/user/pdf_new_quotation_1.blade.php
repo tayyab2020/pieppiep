@@ -94,9 +94,15 @@
 
                                         <p style="font-size: 26px;" class="font-weight-bold mb-4 m-heading">{{__('text.Customer Details')}}</p>
                                         <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
-                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client_address}}</p>
-                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
-                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->email}}</p>
+                                        
+                                        @if($role != 'supplier1' || (isset($request->deliver_to[0]) && $request->deliver_to[0] == 2))
+
+                                            <p style="font-size: 22px;" class="mb-1 m-rest">{{$client_address}}</p>
+                                            <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
+                                            <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->email}}</p>
+
+                                        @endif
+                                        
                                         <br>
                                         <br>
 

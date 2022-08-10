@@ -618,5 +618,7 @@ return [
     'filtered from' => 'filtered from',
     'Negative Invoice sent to customer successfully!' => 'Creditnota is verstuurd!',
     'Invoice sent to customer successfully!' => 'Verkoopfactuur is verstuurd!',
+    'Deliver To' => 'Deliver To',
+    'Retailer' => 'Retailer',
     
 ];
