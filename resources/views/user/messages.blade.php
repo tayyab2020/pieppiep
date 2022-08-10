@@ -113,7 +113,7 @@
     
 </style>
 
-<div class="container">
+<div style="height: 100%;" class="container">
 
     @if(count($messages) > 0)
 
@@ -131,7 +131,9 @@
 
     @else
 
-        <h2 style="text-align: center;padding: 30px 0;">{{__('text.No messages found....')}}</h2>
+        <div style="display: flex;align-items: center;height: 100%;">
+            <h2 style="text-align: center;width: 100%;">{{__('text.No messages found....')}}</h2>
+        </div>
 
     @endif
   
