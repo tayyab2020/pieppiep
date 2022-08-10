@@ -333,6 +333,12 @@
 
                                                                             @endif
 
+                                                                            @if(Route::currentRouteName() == 'client-new-quotations')
+
+                                                                                <li><a onclick="msg(this)" data-id="{{$key->invoice_id}}" data-url="{{ url('/aanbieder/send-msg/') }}" href="javascript:void(0)">{{__('text.Send Message')}}</a></li>
+
+                                                                            @endif
+
                                                                             @if(Route::currentRouteName() == 'client-quotations-invoices')
 
                                                                                 @if($key->paid)
@@ -512,6 +518,43 @@
                         <label>{{__('text.Review Reason')}} <span style="color: red;">*</span></label>
 
                         <textarea rows="5" style="resize: vertical;" type="text" name="review_text" id="review_text" class="form-control" required autocomplete="off"></textarea>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" aria-label="Close" style="border: 0;outline: none;background-color: #e5e5e5 !important;color: black !important;" class="btn back">{{__('text.Close')}}</button>
+                        <button type="submit" style="border: 0;outline: none;background-color: #5cb85c !important;color: white;" class="btn btn-primary">{{__('text.Continue')}}</button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+
+            <form id="msg-form" method="post" action="">
+
+                <input type="hidden" name="_token" value="{{@csrf_token()}}">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button style="font-size: 32px;background-color: white !important;color: black !important;" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 style="margin: 10px 0;" id="myModalLabel">{{__('text.Enter your message')}}</h3>
+                    </div>
+
+                    <div class="modal-body" id="myWizard">
+
+                        <input type="hidden" name="invoice_id" id="invoice_id2">
+
+                        <label>{{__('text.Message')}} <span style="color: red;">*</span></label>
+
+                        <textarea rows="5" style="resize: vertical;" type="text" name="msg" id="msg" class="form-control" required autocomplete="off"></textarea>
 
                     </div>
 
@@ -1827,6 +1870,17 @@
             $('#review_text').val(text);
 
             $('#myModal1').modal('toggle');
+        }
+
+        function msg(e)
+        {
+            var invoice_id = $(e).data('id');
+            var url = $(e).data('url');
+
+            $('#invoice_id2').val(invoice_id);
+            $('#msg-form').attr('action', url);
+
+            $('#myModal2').modal('toggle');
         }
 
         function accept(e)

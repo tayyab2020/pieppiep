@@ -91,6 +91,7 @@ use App\retailer_services;
 use Excel;
 use App\planning_titles;
 use Faker\Generator as Faker;
+use App\client_quotation_msgs;
 
 class UserController extends Controller
 {
@@ -1576,6 +1577,52 @@ class UserController extends Controller
         });
 
         Session::flash('success', __('text.Request submitted successfully!'));
+
+        return redirect()->back();
+    }
+
+    public function SendMsg(Request $request)
+    {
+        $id = $request->invoice_id;
+        $msg = $request->msg;
+
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.id', $id)->where(function($query) use ($user_id) {
+            $query->where('quotes.user_id', $user_id)->orWhere('new_quotations.user_id',$user_id);
+        })->first();
+
+        if (!$invoice) {
+            return redirect()->back();
+        }
+
+        $post = new client_quotation_msgs;
+        $post->text = $msg;
+        $post->quotation_id = $id;
+        $post->save();
+
+        $retailer_email = $invoice->email;
+        $user_name = $invoice->name;
+
+        \Mail::send(array(), array(), function ($message) use ($retailer_email, $user_name, $invoice, $user) {
+            $message->to($retailer_email)
+                ->from('noreply@pieppiep.com')
+                ->subject(__('text.Message for quotation'))
+                ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " sent a message regarding your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+        });
+
+        $admin_email = $this->sl->admin_email;
+
+        \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice, $user) {
+            $message->to($admin_email)
+                ->from('noreply@pieppiep.com')
+                ->subject('Quotation Review Request!')
+                ->setBody("A message was delivered by Mr/Mrs " . $user->name . " against quotation QUO# " . $invoice->quotation_invoice_number . "<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+        });
+
+        Session::flash('success', __('text.Message delivered successfully!'));
 
         return redirect()->back();
     }

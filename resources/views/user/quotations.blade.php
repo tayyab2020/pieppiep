@@ -401,6 +401,7 @@
 
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
+                                                                                <li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.See Messages')}}</a></li>
                                                                                 <li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>
 
                                                                                 @if($key->accepted)

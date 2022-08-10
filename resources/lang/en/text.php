@@ -620,4 +620,9 @@ return [
     'Invoice sent to customer successfully!' => 'Invoice sent to customer successfully!',
     'Deliver To' => 'Deliver To',
     'Retailer' => 'Retailer',
+    'Enter your message' => 'Enter your message',
+    'Message' => 'Message',
+    'Message for quotation' => 'Message for quotation',
+    'Message delivered successfully!' => 'Message delivered successfully!',
+    'See Messages' => 'See Messages',
 ];
