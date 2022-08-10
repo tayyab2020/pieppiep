@@ -1629,8 +1629,8 @@ class UserController extends Controller
 
     public function Messages($id)
     {
-        $messages = client_quotation_msgs::leftjoin('new_quotations','new_quotations.id','=','client_quotation_msgs.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->where('client_quotation_msgs.quotation_id',$id)->select('customers_details.name','customers_details.family_name','client_quotation_msgs.*','new_quotations.quotation_invoice_number')->get();
-        
+        $messages = client_quotation_msgs::where('quotation_id',$id)->get();
+
         return view('user.messages',compact('messages'));
     }
 

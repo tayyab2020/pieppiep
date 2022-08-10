@@ -625,4 +625,5 @@ return [
     'Message for quotation' => 'Message for quotation',
     'Message delivered successfully!' => 'Message delivered successfully!',
     'See Messages' => 'See Messages',
+    'No messages found....' => 'No messages found....',
 ];
