@@ -484,7 +484,7 @@
 
 																	<div class="headings1" style="width: 40%;display: flex;flex-direction: column;align-items: flex-start;">
 
-																		<button href="#myModal3" role="button" data-toggle="modal" style="font-size: 16px;" type="button" class="btn btn-success"><i class="fa fa-calendar-check-o" style="margin-right: 5px;"></i> Appointments</button>
+																		<button href="#myModal3" role="button" data-toggle="modal" style="font-size: 16px;" type="button" class="btn btn-success"><i class="fa fa-calendar-check-o" style="margin-right: 5px;"></i> {{__('text.Appointments')}}</button>
 
 																		<!-- @if((isset($invoice) && !$invoice[0]->quote_request_id) || (isset($request_id) && !$request_id))
 

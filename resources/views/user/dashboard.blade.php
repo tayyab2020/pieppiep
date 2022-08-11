@@ -154,14 +154,14 @@
                 },
                 data: [{
                     type: "column",
-                    name: "Quotes",
+                    name: "{{__('text.Quotes')}}",
                     // indexLabelFontSize: 12,
                     // indexLabel: "{y}",
                     showInLegend: true,
                     dataPoints: <?php echo $quotes_chart; ?>
                 },{
                     type: "column",
-                    name: "Accepted",
+                    name: "{{__('text.Accepted')}}",
                     // indexLabelFontSize: 12,
                     // indexLabel: "{y}",
                     showInLegend: true,
