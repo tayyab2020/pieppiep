@@ -466,7 +466,7 @@
 
                                                                             @else
 
-                                                                                <li><a href="{{ url('/aanbieder/edit-order/'.$key->invoice_id) }}">{{__('text.View Order')}}</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">{{__('text.View Order')}}</a></li>
 
                                                                             @endif
 

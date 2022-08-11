@@ -4139,7 +4139,14 @@ class UserController extends Controller
         }
         else
         {
-            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            if($user_role == 2)
+            {
+                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            }
+            else
+            {
+                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            }
         }
 
         if($check)
