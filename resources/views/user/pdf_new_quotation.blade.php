@@ -46,7 +46,7 @@
 
                                     <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
                                     
-                                    @if($role != 'supplier1' || (isset($request->deliver_to[0]) && $request->deliver_to[0] == 2))
+                                    @if(($role != 'supplier' && $role != 'supplier1') || (isset($request->deliver_to[0]) && $request->deliver_to[0] == 2))
 
                                         <p style="font-size: 22px;" class="mb-1 m-rest">{{$client_address}}</p>
                                         <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>

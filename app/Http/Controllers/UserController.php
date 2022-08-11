@@ -1847,11 +1847,11 @@ class UserController extends Controller
 
         if($this->lang->lang == 'du')
         {
-            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>$retailer_name<br><br>$company_name";
+            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>Pieppiep";
         }
         else
         {
-            $msg = "Dear " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br>$retailer_name<br><br>$company_name";
+            $msg = "Dear " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br>Pieppiep";
         }
 
         \Mail::send(array(), array(), function ($message) use ($msg, $retailer_email, $user_name, $invoice) {
@@ -2042,11 +2042,11 @@ class UserController extends Controller
 
         if($this->lang->lang == 'du')
         {
-            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>$retailer_name<br><br>$company_name";
+            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>Pieppiep";
         }
         else
         {
-            $msg = "Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br>$retailer_name<br><br>$company_name";
+            $msg = "Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br>Pieppiep";
         }
 
         \Mail::send(array(), array(), function ($message) use ($msg, $retailer_email, $user_name, $invoice) {
@@ -2331,6 +2331,8 @@ class UserController extends Controller
                 $user_id = $user->id;
             }
 
+            $retailer_name = $user->name;
+
             $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('new_quotations.quotation_invoice_number','users.email','customers_details.name','customers_details.family_name')->first();
 
             if (!$invoice) {
@@ -2340,15 +2342,15 @@ class UserController extends Controller
             new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now]);
 
             $client_email = $invoice->email;
-            $client_name = $invoice->name . ' ' . $invoice->family_name;
+            $client_name = $invoice->name;
 
            if($this->lang->lang == 'du')
            {
-               $msg = "Beste " . $client_name . ",<br><br><b>" . $user->company_name . "</b> heeft namens jou je offerte met offertenummer <b>" . $invoice->quotation_invoice_number . "</b> geaccepteerd.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> $user->company_name";
+               $msg = "Beste " . $client_name . ",<br><br><b>" . $user->company_name . "</b> heeft namens jou je offerte met offertenummer <b>" . $invoice->quotation_invoice_number . "</b> geaccepteerd.<br><br>Met vriendelijke groet,<br><br>$retailer_name<br><br>$user->company_name";
            }
            else
            {
-               $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>Customer service<br><br> $user->company_name";
+               $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>$retailer_name<br><br>$user->company_name";
            }
    
            \Mail::send(array(), array(), function ($message) use ($msg, $client_email, $client_name, $invoice, $user) {
@@ -5019,6 +5021,7 @@ class UserController extends Controller
             $total = array();
             $total_discount = array();
             $feature_sub_titles = array();
+            $deliver_to = array();
 
             foreach ($request->products as $x => $temp)
             {
@@ -5039,6 +5042,7 @@ class UserController extends Controller
                 $labor_discount[] = $temp->labor_discount;
                 $total[] = $temp->amount;
                 $total_discount[] = $temp->total_discount;
+                $deliver_to[] = $temp->deliver_to;
 
                 $features = new_orders_features::where('order_data_id',$temp->id)->get();
 
@@ -5087,6 +5091,7 @@ class UserController extends Controller
             $request->labor_discount = $labor_discount;
             $request->total = $total;
             $request->total_discount = $total_discount;
+            $request->deliver_to = $deliver_to;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
             $filename = $order_number . '.pdf';
