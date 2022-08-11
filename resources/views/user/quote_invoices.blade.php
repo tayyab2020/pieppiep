@@ -1715,6 +1715,14 @@
 			},
 		});
 
+        $.fn.datepicker.dates['du'] = {
+            days: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"],
+            daysShort: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+            daysMin: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+            months: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
+            monthsShort: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
+        };
+
         var todayDate = new Date().getDate();
         var endD = new Date(new Date().setDate(todayDate + 1));
 
@@ -1722,6 +1730,7 @@
 
             format: 'yyyy-mm-dd',
             startDate: endD,
+            language: 'du'
 
         });
 

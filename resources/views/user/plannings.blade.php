@@ -338,6 +338,7 @@
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/nl.js"></script>
 
     <script>
 
@@ -1003,6 +1004,7 @@
             defaultDate: '',
             ignoreReadonly: true,
             sideBySide: true,
+            locale:'du'
         });
 
         $('.appointment_end').datetimepicker({
@@ -1010,6 +1012,7 @@
             defaultDate: '',
             ignoreReadonly: true,
             sideBySide: true,
+            locale:'du'
         });
 
     </script>

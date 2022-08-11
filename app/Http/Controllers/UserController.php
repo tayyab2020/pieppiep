@@ -1608,7 +1608,7 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($retailer_email, $user_name, $invoice, $user) {
             $message->to($retailer_email)
-                ->from('noreply@pieppiep.com')
+                ->from('info@pieppiep.com')
                 ->subject(__('text.Message for quotation'))
                 ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " sent a message regarding your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });

@@ -2179,6 +2179,7 @@
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap" defer></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/nl.js"></script>
 
 	<script type="text/javascript">
 
@@ -3124,6 +3125,7 @@
 				defaultDate: '',
 				ignoreReadonly: true,
 				sideBySide: true,
+				locale:'du'
 			});
 
 			$('.appointment_end').datetimepicker({
@@ -3131,6 +3133,7 @@
 				defaultDate: '',
 				ignoreReadonly: true,
 				sideBySide: true,
+				locale:'du'
 			});
 
 			$(".js-data-example-ajax").select2({
