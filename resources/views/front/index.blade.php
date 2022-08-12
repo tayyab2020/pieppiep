@@ -170,12 +170,12 @@
                                                                 <div id="sppb-addon-1623828553890" class="clearfix ">
                                                                     <div
                                                                             class="sppb-addon sppb-addon-button-group text-left">
-                                                                        <div class="sppb-addon-content nav"><a
+                                                                        <!-- <div class="sppb-addon-content nav"><a
                                                                                     onclick="myFunction()"
                                                                                     id="btn-1623828553890"
                                                                                     href="/nl/PiepPiep"
                                                                                     class="nav-link btn btn-blue">Bekijk alle
-                                                                                functies</a></div>
+                                                                                functies</a></div> -->
                                                                     </div>
                                                                 </div>
                                                             </div>

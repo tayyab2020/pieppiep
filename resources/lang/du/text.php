@@ -628,4 +628,8 @@ return [
     'No messages found....' => 'No messages found....',
     'Retailer Delivery Date' => 'Retailer Delivery Date',
     'Tax number' => 'Tax number',
+    'today' => 'today',
+    'day' => 'day',
+    'week' => 'week',
+    'month' => 'month',
 ];

@@ -2994,6 +2994,12 @@
 					center: 'title',
 					right: 'dayGridMonth,timeGridWeek,timeGridDay'
 				},
+				buttonText: {
+                    today: '{{__('text.today')}}',
+                    day: '{{__('text.day')}}',
+                    week:'{{__('text.week')}}',
+                    month:'{{__('text.month')}}'
+                },
 				initialDate: new Date(),
 				navLinks: true, // can click day/week names to navigate views
 				selectable: true,

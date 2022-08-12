@@ -114,7 +114,7 @@
                                             <td>{{$product_titles[$i]}}</td>
                                             @if($role == 'supplier2')
 
-                                                <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                <td>{{$suppliers[$i]->company_name}}</td>
                                                 <td>{{$order_numbers[$i]}}</td>
 
                                             @endif
