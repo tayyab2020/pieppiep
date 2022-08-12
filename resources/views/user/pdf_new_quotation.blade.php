@@ -27,12 +27,14 @@
                                     <p style="margin: 0;font-size: 22px;">{{$user->postcode}} {{$user->city}}</p>
                                     <p style="margin: 0;font-size: 22px;">TEL: {{$user->phone}}</p>
                                     <p style="margin: 0;font-size: 22px;">{{$user->email}}</p>
+                                    <p style="margin: 0;font-size: 22px;">IBAN: {{$user->bank_account}}</p>
+                                    <p style="margin: 0;font-size: 22px;">BTW: {{$user->tax_number}}</p>
                                     <br>
                                     @if($role != 'retailer' && $role != 'supplier1' && $role != 'supplier2') <p style="font-size: 26px;" class="font-weight-bold mb-4 m-heading"> {{$user->quotation_prefix}}: {{$quotation_invoice_number}}</p> @endif
 
                                     <p style="font-size: 26px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @elseif($role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', array_filter($order_numbers_string)), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}}@endif</p>
 
-                                    <p class="text-muted" style="font-size: 22px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
+                                    <p style="font-size: 22px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 
                                 </div>
 

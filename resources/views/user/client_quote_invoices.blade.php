@@ -55,6 +55,7 @@
 
                                                         @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations')
 
+                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Retailer Delivery Date')}}</th>
                                                             <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="client">{{__('text.Time Remaining')}}</th>
 
                                                         @endif
@@ -286,6 +287,8 @@
                                                             </td>
 
                                                             @if(Route::currentRouteName() == 'client-quotations' || Route::currentRouteName() == 'client-new-quotations')
+
+                                                                <td>{{$key->delivery_date ? date('d-m-Y',strtotime($key->delivery_date)) : null}}</td>
 
                                                                 @if($key->quote_request_id && !$key->paid)
 

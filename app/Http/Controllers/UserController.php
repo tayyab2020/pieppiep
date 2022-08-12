@@ -3690,69 +3690,70 @@ class UserController extends Controller
 
         if($check)
         {
-            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->select('new_quotations.*','new_quotations_data.item_id','new_quotations_data.service_id','new_quotations.delivery_date as retailer_delivery_date','new_quotations.installation_date as retailer_installation_date','new_quotations.id as invoice_id','new_quotations_data.box_quantity','new_quotations_data.measure','new_quotations_data.max_width','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
-                ->with(['features' => function($query)
-                {
-                    $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
-                        /*->where('new_quotations_features.sub_feature',0)*/
-                        ->select('new_quotations_features.*','features.title','features.comment_box');
-                }])
-                ->with(['sub_features' => function($query)
-                {
-                    $query->leftjoin('product_features','product_features.id','=','new_quotations_features.feature_id')
-                        /*->where('new_quotations_features.sub_feature',1)*/
-                        ->select('new_quotations_features.*','product_features.title');
-                }])->with('calculations')->get();
+            // $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->select('new_quotations.*','new_quotations_data.item_id','new_quotations_data.service_id','new_quotations.delivery_date as retailer_delivery_date','new_quotations.installation_date as retailer_installation_date','new_quotations.id as invoice_id','new_quotations_data.box_quantity','new_quotations_data.measure','new_quotations_data.max_width','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+            //     ->with(['features' => function($query)
+            //     {
+            //         $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
+            //             /*->where('new_quotations_features.sub_feature',0)*/
+            //             ->select('new_quotations_features.*','features.title','features.comment_box');
+            //     }])
+            //     ->with(['sub_features' => function($query)
+            //     {
+            //         $query->leftjoin('product_features','product_features.id','=','new_quotations_features.feature_id')
+            //             /*->where('new_quotations_features.sub_feature',1)*/
+            //             ->select('new_quotations_features.*','product_features.title');
+            //     }])->with('calculations')->get();
 
-            if (!$invoice) {
-                return redirect()->back();
-            }
+            // if (!$invoice) {
+            //     return redirect()->back();
+            // }
 
-            $supplier_products = array();
-            $product_titles = array();
-            $item_titles = array();
-            $service_titles = array();
-            $color_titles = array();
-            $model_titles = array();
-            $product_suppliers = array();
-            $sub_products = array();
-            $colors = array();
-            $models = array();
-            $features = array();
-            $sub_features = array();
+            // $supplier_products = array();
+            // $product_titles = array();
+            // $item_titles = array();
+            // $service_titles = array();
+            // $color_titles = array();
+            // $model_titles = array();
+            // $product_suppliers = array();
+            // $sub_products = array();
+            // $colors = array();
+            // $models = array();
+            // $features = array();
+            // $sub_features = array();
 
-            $f = 0;
-            $s = 0;
+            // $f = 0;
+            // $s = 0;
 
-            foreach ($invoice as $i => $item)
-            {
-                $product_titles[] = product::where('id',$item->product_id)->pluck('title')->first();
-                $item_titles[] = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.id',$item->item_id)->select('items.cat_name','categories.cat_name as category')->first();
-                $service_titles[] = Service::where('id',$item->service_id)->pluck('title')->first();
-                $color_titles[] = colors::where('id',$item->color)->pluck('title')->first();
-                $model_titles[] = product_models::where('id',$item->model_id)->pluck('model')->first();
-                $product_suppliers[] = User::where('id',$item->supplier_id)->first();
+            // foreach ($invoice as $i => $item)
+            // {
+            //     $product_titles[] = product::where('id',$item->product_id)->pluck('title')->first();
+            //     $item_titles[] = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.id',$item->item_id)->select('items.cat_name','categories.cat_name as category')->first();
+            //     $service_titles[] = Service::where('id',$item->service_id)->pluck('title')->first();
+            //     $color_titles[] = colors::where('id',$item->color)->pluck('title')->first();
+            //     $model_titles[] = product_models::where('id',$item->model_id)->pluck('model')->first();
+            //     $product_suppliers[] = User::where('id',$item->supplier_id)->first();
 
-                foreach ($item->features as $feature)
-                {
-                    $features[$f] = product_features::leftjoin('model_features','model_features.product_feature_id','=','product_features.id')->where('product_features.product_id',$item->product_id)->where('product_features.heading_id',$feature->feature_id)->where('product_features.sub_feature',0)->where('model_features.model_id',$item->model_id)->where('model_features.linked',1)->select('product_features.*')->get();
+            //     foreach ($item->features as $feature)
+            //     {
+            //         $features[$f] = product_features::leftjoin('model_features','model_features.product_feature_id','=','product_features.id')->where('product_features.product_id',$item->product_id)->where('product_features.heading_id',$feature->feature_id)->where('product_features.sub_feature',0)->where('model_features.model_id',$item->model_id)->where('model_features.linked',1)->select('product_features.*')->get();
 
-                    if($feature->ladderband)
-                    {
-                        $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->select('new_quotations_sub_products.*','product_ladderbands.title','product_ladderbands.code')->get();
-                    }
+            //         if($feature->ladderband)
+            //         {
+            //             $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->select('new_quotations_sub_products.*','product_ladderbands.title','product_ladderbands.code')->get();
+            //         }
 
-                    $f = $f + 1;
-                }
+            //         $f = $f + 1;
+            //     }
 
-                foreach ($item->sub_features as $sub_feature)
-                {
-                    $sub_features[$s] = product_features::where('product_id',$item->product_id)->where('main_id',$sub_feature->feature_id)->get();
-                    $s = $s + 1;
-                }
-            }
+            //     foreach ($item->sub_features as $sub_feature)
+            //     {
+            //         $sub_features[$s] = product_features::where('product_id',$item->product_id)->where('main_id',$sub_feature->feature_id)->get();
+            //         $s = $s + 1;
+            //     }
+            // }
 
-            return view('user.client_new_quotation', compact('product_titles','color_titles','model_titles','product_suppliers','features','sub_features','invoice','sub_products'));
+            // return view('user.client_new_quotation', compact('product_titles','color_titles','model_titles','product_suppliers','features','sub_features','invoice','sub_products'));
+            return view('user.client_new_quotation', compact('check'));
         }
         else
         {
@@ -5376,25 +5377,11 @@ class UserController extends Controller
 
                 if($form_type == 2)
                 {
-                    if(new_quotations::where('id',$request->quotation_id)->pluck('status')->first() == 2)
-                    {
-                        new_quotations::where('id',$request->quotation_id)->update(['status' => 1,'finished' => 0,'accepted' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
-                    }
-                    else
-                    {
-                        new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
-                    }
+                    new_quotations::where('id',$request->quotation_id)->update(['finished' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
                 }
                 else
                 {
-                    if(new_quotations::where('id',$request->quotation_id)->pluck('status')->first() == 2)
-                    {
-                        new_quotations::where('id',$request->quotation_id)->update(['status' => 1,'finished' => 0,'accepted' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
-                    }
-                    else
-                    {
-                        new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
-                    }
+                    new_quotations::where('id',$request->quotation_id)->update(['finished' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
                 }
 
                 $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
@@ -5701,8 +5688,8 @@ class UserController extends Controller
                     $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
                     $order->amount = $request->total[$i];
                     $order->delivery_days = $request->delivery_days[$i];
-                    $order->delivery_date = $delivery_date;
-                    $order->retailer_delivery_date = $delivery_date;
+                    // $order->delivery_date = $delivery_date;
+                    // $order->retailer_delivery_date = $delivery_date;
                     $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
                     $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                     $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
@@ -7014,7 +7001,7 @@ class UserController extends Controller
 
         if($data)
         {
-            $invoice = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('products','products.id','=','new_orders.product_id')->leftjoin('product_models','product_models.id','=','new_orders.model_id')->leftjoin('colors','colors.id','=','new_orders.color')->where('new_quotations.id', $id)->where('new_orders.supplier_id', $user_id)->select('colors.title as color_title','product_models.model','new_quotations.*','new_quotations.id as invoice_id','new_orders.approved','new_orders.delivery_days','new_orders.delivery_date','new_orders.id','new_orders.supplier_id','new_orders.product_id','new_orders.color','new_orders.qty','products.title as product_title')->get();
+            $invoice = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('products','products.id','=','new_orders.product_id')->leftjoin('product_models','product_models.id','=','new_orders.model_id')->leftjoin('colors','colors.id','=','new_orders.color')->where('new_quotations.id', $id)->where('new_orders.supplier_id', $user_id)->select('colors.title as color_title','product_models.model','new_quotations.*','new_quotations.id as invoice_id','new_orders.approved','new_orders.delivery_days','new_orders.delivery_date','new_orders.retailer_delivery_date','new_orders.id','new_orders.supplier_id','new_orders.product_id','new_orders.color','new_orders.qty','products.title as product_title')->get();
 
             return view('user.change_delivery_date',compact('data','invoice'));
         }
@@ -10191,7 +10178,6 @@ class UserController extends Controller
         }
 
         $user->update($input);
-
 
         Session::flash('success', $this->lang->success);
         return redirect()->route('client-profile');

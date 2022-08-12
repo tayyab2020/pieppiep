@@ -626,4 +626,6 @@ return [
     'Message delivered successfully!' => 'Message delivered successfully!',
     'See Messages' => 'See Messages',
     'No messages found....' => 'No messages found....',
+    'Retailer Delivery Date' => 'Retailer Delivery Date',
+    'Tax number' => 'Tax number',
 ];

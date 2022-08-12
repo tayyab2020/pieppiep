@@ -1730,7 +1730,8 @@
 
             format: 'yyyy-mm-dd',
             startDate: endD,
-            language: 'du'
+            language: 'du',
+            daysOfWeekDisabled: [0,6]
 
         });
 

@@ -70,7 +70,7 @@
                                                                         </td>
                                                                         <td>{{$item->qty}}</td>
                                                                         <td style="padding: 0;">
-                                                                            <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->delivery_date ? date('d-m-Y',strtotime($item->delivery_date)) : null}}" type="text" class="delivery_date" name="delivery_dates[]">
+                                                                            <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->delivery_date ? date('d-m-Y',strtotime($item->delivery_date)) : ($item->retailer_delivery_date ? date('d-m-Y',strtotime($item->retailer_delivery_date)) : null)}}" type="text" class="delivery_date" name="delivery_dates[]">
                                                                         </td>
                                                                     </tr>
 

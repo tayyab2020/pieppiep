@@ -70,6 +70,8 @@
                                             <p style="margin: 0;font-size: 22px;">{{$user->postcode}} {{$user->city}}</p>
                                             <p style="margin: 0;font-size: 22px;">TEL: {{$user->phone}}</p>
                                             <p style="margin: 0;font-size: 22px;">{{$user->email}}</p>
+                                            <p style="margin: 0;font-size: 22px;">IBAN: {{$user->bank_account}}</p>
+                                            <p style="margin: 0;font-size: 22px;">BTW: {{$user->tax_number}}</p>
                                         </div>
 
                                     @else
@@ -114,7 +116,7 @@
 
                                     <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
                                         <br><br><br><br><br>
-                                        <p class="text-muted" style="font-size: 22px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
+                                        <p style="font-size: 22px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
                                     </div>
 
                                 </div>
@@ -665,41 +667,41 @@
                                                 <tbody>
 
                                                 <tr>
-                                                    <td style="width: 40%;padding: 5px;">
+                                                    <td style="width: 50%;padding: 10px 0;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 26px;font-weight: bold;">@if(($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') && $delivery_date) {{__('text.PDF Delivery Date')}}: @endif</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 22px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$delivery_date}} @endif</span>
+                                                            <span style="font-size: 22px;font-weight: bold;">@if(($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') && $delivery_date) {{__('text.PDF Delivery Date')}}: @endif</span>
+                                                            <span style="font-size: 22px;">@if($role == 'retailer' || $role == 'invoice' || $role == 'invoice1') {{$delivery_date}} @endif</span>
                                                         </div>
                                                     </td>
-                                                    <td style="width: 60%;padding: 5px;padding-left: 20px;">
-                                                        <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;font-weight: bold;">TOTAALPRIJS EX. BTW</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">{{$request->negative_invoice ? '-' : null}} € {{$request->net_amount}}</span>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td style="width: 40%;padding: 5px;">
-                                                        <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;font-weight: bold;">@if($installation_date) {{__('text.PDF Installation Date')}}: @endif</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">{{$installation_date}}</span>
-                                                        </div>
-                                                    </td>
-                                                    <td style="width: 60%;padding: 5px;padding-left: 20px;">
-                                                        <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;font-weight: bold;">BTW 21% over € {{$request->net_amount}}</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">{{$request->negative_invoice ? '-' : null}} € {{$request->tax_amount}}</span>
+                                                    <td style="width: 50%;padding: 10px 0;">
+                                                        <div style="display: inline-block;width: 100%;text-align: right;">
+                                                            <span style="font-size: 22px;font-weight: bold;">Totaalprijs ex. BTW</span>
+                                                            <span style="font-size: 22px;">&nbsp;&nbsp; {{$request->negative_invoice ? '-' : null}} € {{$request->net_amount}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
 
                                                 <tr>
-                                                    <td style="width: 40%;font-size: 20px;padding: 5px;"></td>
-                                                    <td style="width: 60%;font-size: 20px;padding: 5px;padding-left: 20px;">
+                                                    <td style="width: 50%;padding: 10px 0;">
                                                         <div style="display: inline-block;width: 100%;">
-                                                            <span style="width: 50% !important;display: inline-block;text-align: left;font-size: 22px;font-weight: bold;">Te betalen</span>
-                                                            <span style="width: 50% !important;display: inline-block;text-align: right;font-size: 20px;">{{$request->negative_invoice ? '-' : null}} € {{$request->total_amount}}</span>
+                                                            <span style="font-size: 22px;font-weight: bold;">@if($installation_date) {{__('text.PDF Installation Date')}}: @endif</span>
+                                                            <span style="font-size: 22px;">{{$installation_date}}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 50%;padding: 10px 0;">
+                                                        <div style="display: inline-block;width: 100%;text-align: right;">
+                                                            <span style="font-size: 22px;font-weight: bold;">BTW 21% over € {{$request->net_amount}}</span>
+                                                            <span style="font-size: 22px;">&nbsp;&nbsp; {{$request->negative_invoice ? '-' : null}} € {{$request->tax_amount}}</span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td style="width: 50%;padding: 10px 0;"></td>
+                                                    <td style="width: 50%;padding: 10px 0;">
+                                                        <div style="display: inline-block;width: 100%;text-align: right;">
+                                                            <span style="font-size: 22px;font-weight: bold;">Te betalen</span>
+                                                            <span style="font-size: 22px;">&nbsp;&nbsp; {{$request->negative_invoice ? '-' : null}} € {{$request->total_amount}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
