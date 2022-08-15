@@ -200,7 +200,7 @@
 																				<label class="content-label">{{__('text.Product')}}</label>
 
 																				<div class="autocomplete" style="width:100%;">
-																					<input value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="background: transparent;" value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
 																				</div>
 
 																				<input type="hidden" value="{{$item->item_id != 0 ? $item->item_id.'I' : ($item->service_id != 0 ? $item->service_id.'S' : $item->product_id)}}" name="products[]" id="product_id">
@@ -216,7 +216,7 @@
 
 																				<div style="display: flex;align-items: center;">
 																					@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
-																					<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
 																				</div>
 																			</div>
 
@@ -305,8 +305,8 @@
 																							<span style="font-size: 15px;padding-right: 10px;font-weight: 600;">%</span>
                                                             							
 																							<label style="margin: 0;" class="switch">
-                                                                								<input {{$item->discount_option ? 'checked' : null}} class="discount_option" type="checkbox">
-                                                                								<span class="slider round"></span>
+                                                                								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) disabled @endif {{$item->discount_option ? 'checked' : null}} class="discount_option" type="checkbox">
+                                                                								<span @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) style="cursor: not-allowed;" @endif class="slider round"></span>
                                                             								</label>
                                                             						
 																							<span style="font-size: 15px;padding-left: 10px;">€</span>
@@ -316,7 +316,7 @@
 																					</div>
 
 																					<input value="{{$item->discount_option}}" class="discount_option_values" name="discount_option_values[]" type="hidden">
-																					<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
 
 																				</div>
 
@@ -838,7 +838,7 @@
 																						<div class="attribute item2 width-box" style="width: 10%;">
 
 																							<div class="m-box">
-																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 1 && $temp->width != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->width ? str_replace('.', ',',floatval($temp->width)) : NULL}}" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width{{$i+1}}[]" type="text">
+																								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 1 && $temp->width != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->width ? str_replace('.', ',',floatval($temp->width)) : NULL}}" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
 																							</div>
 
@@ -847,7 +847,7 @@
 																						<div class="attribute item3 height-box" style="width: 10%;">
 
 																							<div class="m-box">
-																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 0 && $temp->height != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->height ? str_replace('.', ',',floatval($temp->height)) : NULL}}" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height{{$i+1}}[]" type="text">
+																								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 0 && $temp->height != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->height ? str_replace('.', ',',floatval($temp->height)) : NULL}}" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
 																							</div>
 
@@ -856,7 +856,7 @@
 																						<div class="attribute item4" style="width: 10%;">
 
 																							<div class="m-box">
-																								<input {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->cutting_lose}}" class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage{{$i+1}}[]" type="text">
+																								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->cutting_lose}}" class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																							</div>
 
@@ -865,7 +865,7 @@
 																						<div class="attribute item5 m2_box" @if($key->measure == 'M1') style="width: 10%;display: none;" @else style="width: 10%;" @endif>
 
 																							<div class="m-box">
-																								<input value="{{$temp->total_boxes}}" class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" autocomplete="off" name="total_boxes{{$i+1}}[]" maskedformat="9,1" type="text">
+																								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif value="{{$temp->total_boxes}}" class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" autocomplete="off" name="total_boxes{{$i+1}}[]" maskedformat="9,1" type="text">
 																								<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																							</div>
 
@@ -874,7 +874,7 @@
 																						<div class="attribute item5 m1_box" @if($key->measure == 'M1') style="width: 10%;" @else style="width: 10%;display: none;" @endif>
 
 																							<div style="display: flex;align-items: center;">
-																								<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" {{$temp->parent_row != NULL ? 'readonly' : null}} name="turn{{$i+1}}[]">
+																								<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" {{((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) || $temp->parent_row != NULL ? 'readonly' : null}} name="turn{{$i+1}}[]">
 																									<option {{$temp->turn == 0 ? 'selected' : null}} {{$temp->parent_row != NULL && $temp->turn == 1 ? 'disabled' : null}} value="0">{{__('text.No')}}</option>
 																									<option {{$temp->turn == 1 ? 'selected' : null}} {{$temp->parent_row != NULL && $temp->turn == 0 ? 'disabled' : null}} value="1">{{__('text.Yes')}}</option>
 																								</select>
@@ -910,7 +910,7 @@
 																						<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
 																							<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
 
-																								@if($temp->parent_row == NULL)
+																								@if(((Route::currentRouteName() != 'view-new-quotation') || (isset($invoice) && ($invoice[0]->finished == 0))) && $temp->parent_row == NULL)
 
 																									<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																										<i id="next-row-icon" class="fa fa-fw fa-plus"></i>

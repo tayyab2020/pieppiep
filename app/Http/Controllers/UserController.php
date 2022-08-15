@@ -5373,15 +5373,17 @@ class UserController extends Controller
             }
             else
             {
+                $invoice = new_quotations::where('id',$request->quotation_id)->first();
+                $quotation_invoice_number = $invoice->quotation_invoice_number;
                 $ask = new_quotations::where('id',$request->quotation_id)->pluck('ask_customization')->first();
 
                 if($form_type == 2)
                 {
-                    new_quotations::where('id',$request->quotation_id)->update(['finished' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
+                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
                 }
                 else
                 {
-                    new_quotations::where('id',$request->quotation_id)->update(['finished' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
+                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
                 }
 
                 $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
@@ -5395,18 +5397,22 @@ class UserController extends Controller
                 if($form_type == 1)
                 {
                     new_quotations_data_calculations::whereIn('quotation_data_id',$data_ids)->delete();
-                    new_orders_calculations::whereIn('order_id',$order_ids)->delete();
+
+                    if(!$invoice->finished)
+                    {
+                        new_orders_calculations::whereIn('order_id',$order_ids)->delete();
+                    }
                 }
 
                 new_quotations_features::whereIn('quotation_data_id',$data_ids)->delete();
                 new_quotations_sub_products::whereIn('feature_row_id',$feature_ids)->delete();
 
-                new_orders::where('quotation_id',$request->quotation_id)->delete();
-                new_orders_features::whereIn('order_data_id',$order_ids)->delete();
-                new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
-
-                $invoice = new_quotations::where('id',$request->quotation_id)->first();
-                $quotation_invoice_number = $invoice->quotation_invoice_number;
+                if(!$invoice->finished)
+                {
+                    new_orders::where('quotation_id',$request->quotation_id)->delete();
+                    new_orders_features::whereIn('order_data_id',$order_ids)->delete();
+                    new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
+                }
             }
 
         }
@@ -5758,7 +5764,11 @@ class UserController extends Controller
                     }
 
                     $invoice_items->save();
-                    $order->save();
+
+                    if(!$invoice->finished)
+                    {
+                        $order->save();   
+                    }
 
                     if($form_type == 1)
                     {
@@ -5801,21 +5811,32 @@ class UserController extends Controller
                             $calculations->turn = $request->$turn[$c];
                             $calculations->save();
 
-                            $order_calculations = new new_orders_calculations;
-                            $order_calculations->order_id = $order->id;
-                            $order_calculations->calculator_row = $cal;
-                            $order_calculations->parent_row = $parent_row;
-                            $order_calculations->description = $request->$description[$c];
-                            $order_calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
-                            $order_calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
-                            $order_calculations->cutting_lose = $request->$cutting_lose[$c];
-                            $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
-                            $order_calculations->box_quantity = $request->$box_quantity[$c];
-                            $order_calculations->total_boxes = $request->$total_boxes[$c];
-                            $order_calculations->max_width = $request->$max_width[$c];
-                            $order_calculations->turn = $request->$turn[$c];
-                            $order_calculations->save();
+                            if(!$invoice->finished)
+                            {
+                                $order_calculations = new new_orders_calculations;
+                                $order_calculations->order_id = $order->id;
+                                $order_calculations->calculator_row = $cal;
+                                $order_calculations->parent_row = $parent_row;
+                                $order_calculations->description = $request->$description[$c];
+                                $order_calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
+                                $order_calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
+                                $order_calculations->cutting_lose = $request->$cutting_lose[$c];
+                                $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
+                                $order_calculations->box_quantity = $request->$box_quantity[$c];
+                                $order_calculations->total_boxes = $request->$total_boxes[$c];
+                                $order_calculations->max_width = $request->$max_width[$c];
+                                $order_calculations->turn = $request->$turn[$c];
+                                $order_calculations->save();
+                            }
+                            else
+                            {
+                                $od = new_orders_calculations::leftjoin('new_orders','new_orders.id','=','new_orders_calculations.order_id')->where('new_orders.quotation_id',$invoice->id)->skip($c)->select('new_orders_calculations.*')->first();
+                                $od->description = $request->$description[$c];
+                                $od->save();
+                            }
+
                         }
+
                     }
 
                     $feature_row = 'features'.$row_id;
@@ -5847,13 +5868,16 @@ class UserController extends Controller
                                 $post->ladderband = $key1;
                                 $post->save();
 
-                                $post_order_features = new new_orders_features;
-                                $post_order_features->order_data_id = $order->id;
-                                $post_order_features->price = $f_prices[$f];
-                                $post_order_features->feature_id = $f_ids[$f];
-                                $post_order_features->feature_sub_id = 0;
-                                $post_order_features->ladderband = $key1;
-                                $post_order_features->save();
+                                if(!$invoice->finished)
+                                {
+                                    $post_order_features = new new_orders_features;
+                                    $post_order_features->order_data_id = $order->id;
+                                    $post_order_features->price = $f_prices[$f];
+                                    $post_order_features->feature_id = $f_ids[$f];
+                                    $post_order_features->feature_sub_id = 0;
+                                    $post_order_features->ladderband = $key1;
+                                    $post_order_features->save();
+                                }
 
                                 if($key1)
                                 {
@@ -5875,12 +5899,15 @@ class UserController extends Controller
                                         $post1->size2_value = $size2_value[$s];
                                         $post1->save();
 
-                                        $post_orders_sub_products = new new_orders_sub_products;
-                                        $post_orders_sub_products->feature_row_id = $post_order_features->id;
-                                        $post_orders_sub_products->sub_product_id = $key2;
-                                        $post_orders_sub_products->size1_value = $size1_value[$s];
-                                        $post_orders_sub_products->size2_value = $size2_value[$s];
-                                        $post_orders_sub_products->save();
+                                        if(!$invoice->finished)
+                                        {
+                                            $post_orders_sub_products = new new_orders_sub_products;
+                                            $post_orders_sub_products->feature_row_id = $post_order_features->id;
+                                            $post_orders_sub_products->sub_product_id = $key2;
+                                            $post_orders_sub_products->size1_value = $size1_value[$s];
+                                            $post_orders_sub_products->size2_value = $size2_value[$s];
+                                            $post_orders_sub_products->save();
+                                        }
 
                                         if($size1_value[$s] == 1 || $size2_value[$s] == 1)
                                         {
@@ -5909,14 +5936,17 @@ class UserController extends Controller
                                 $post->comment = $comment;
                                 $post->save();
 
-                                $post_order_features = new new_orders_features;
-                                $post_order_features->order_data_id = $order->id;
-                                $post_order_features->price = $f_prices[$f];
-                                $post_order_features->feature_id = $f_ids[$f];
-                                $post_order_features->feature_sub_id = $key1;
-                                $post_order_features->sub_feature = $is_sub_feature[$f];
-                                $post_order_features->comment = $comment;
-                                $post_order_features->save();
+                                if(!$invoice->finished)
+                                {
+                                    $post_order_features = new new_orders_features;
+                                    $post_order_features->order_data_id = $order->id;
+                                    $post_order_features->price = $f_prices[$f];
+                                    $post_order_features->feature_id = $f_ids[$f];
+                                    $post_order_features->feature_sub_id = $key1;
+                                    $post_order_features->sub_feature = $is_sub_feature[$f];
+                                    $post_order_features->comment = $comment;
+                                    $post_order_features->save();
+                                }
                             }
 
                             /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
@@ -6228,24 +6258,27 @@ class UserController extends Controller
             $file = public_path() . '/assets/newQuotations/' . $filename;
             $pdf->save($file);
 
-            if (array_filter($suppliers)) {
+            if(!$invoice->finished)
+            {
+                if (array_filter($suppliers)) {
 
-                $invoice->processing = 1;
-                $invoice->save();
-                $quotation_id = $invoice->id;
-
-                if($form_type == 1)
-                {
-                    $role = 'order';
-                    CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
-                }
-                else
-                {
-                    $role = 'supplier2';
-                    CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
-                }
-
-           }
+                    $invoice->processing = 1;
+                    $invoice->save();
+                    $quotation_id = $invoice->id;
+    
+                    if($form_type == 1)
+                    {
+                        $role = 'order';
+                        CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
+                    }
+                    else
+                    {
+                        $role = 'supplier2';
+                        CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
+                    }
+    
+               }
+            }
 
         }
         else
