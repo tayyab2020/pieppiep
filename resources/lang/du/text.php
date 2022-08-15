@@ -350,7 +350,7 @@ return [
     'This email address is already taken' => 'Dit emailadres is al ingebruik',
     'Quotation Email Template' => 'Offerte mail template',
     'Update Changes' => 'Wijzigingen opslaan',
-    'Variable like {name} will be replaced by name of user.' => 'Variabel zoals {naam} wordt vervangen door naam verkoper.',
+    'Variable like {name} will be replaced by name of user.' => 'Variabel zoals {naam} wordt vervangen door naam ontvanger.',
     'Email Template' => 'Email template',
     'Subject' => 'Onderwerp',
     'Factuur: {factuur_nummer}' => 'Factuur: {factuur_nummer}',
