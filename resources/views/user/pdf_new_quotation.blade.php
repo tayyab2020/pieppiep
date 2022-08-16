@@ -52,7 +52,7 @@
 
                                         <p style="font-size: 22px;" class="mb-1 m-rest">{{$client_address}}</p>
                                         <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
-                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->email}}</p>
+                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->fake_email == 0 ? $client->email : null}}</p>
 
                                     @endif
 

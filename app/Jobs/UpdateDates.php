@@ -112,7 +112,7 @@ class UpdateDates implements ShouldQueue
 
         if($check->customer_details)
         {
-            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email','users.fake_email')->first();
         }
         else
         {

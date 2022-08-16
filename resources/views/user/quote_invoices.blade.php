@@ -1769,7 +1769,16 @@
                 success: function (data) {
 
                     $('#quotation_id').val(id);
-                    $("[name='mail_to']").val(data[0]);
+
+                    if((data[3] == null) || (data[3] == 0))
+                    {
+                        $("[name='mail_to']").val(data[0]);
+                    }
+                    else
+                    {
+                        $("[name='mail_to']").val("");
+                    }
+                    
                     $("[name='mail_subject']").val(data[1]);
                     $("[name='mail_body']").val(data[2]);
                     $('#myModal2').find(".note-editable").html(data[2]);
@@ -1905,7 +1914,16 @@
                 success: function (data) {
 
                     $('#quotation_id2').val(id);
-                    $("[name='mail_to2']").val(data[0]);
+
+                    if((data[3] == null) || (data[3] == 0))
+                    {
+                        $("[name='mail_to2']").val(data[0]);
+                    }
+                    else
+                    {
+                        $("[name='mail_to2']").val("");
+                    }
+
                     $("[name='mail_subject2']").val(data[1]);
                     $("[name='mail_body2']").val(data[2]);
                     $('#myModal4').find(".note-editable").html(data[2]);
