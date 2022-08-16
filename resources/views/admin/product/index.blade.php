@@ -23,7 +23,7 @@
 
                                             @if(auth()->user()->can('product-create'))
 
-                                                @if(isset($supplier_global_categories[0]))
+                                                @if(isset($supplier_global_categories))
 
                                                     <a style="margin-right: 10px;" href="{{$supplier_global_categories[0] ? route('admin-product-create',['cat' => $supplier_global_categories[0]->cat_name]) : route('admin-product-create',['cat' => $supplier_global_categories[1]->cat_name])}}" class="btn add-newProduct-btn"><i style="font-size: 12px;" class="fa fa-plus"></i> {{__('text.Add New Product')}}</a>
 
