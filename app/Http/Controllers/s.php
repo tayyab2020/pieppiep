@@ -581,7 +581,7 @@ class UserController extends Controller
             if($user->role_id == 2)
             {
                 $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
-                $orders = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_orders.supplier_id')->whereIn('new_orders.supplier_id',$suppliers)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->orderBy('new_orders.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_orders.delivery_date','new_orders.order_date','new_orders.approved','new_quotations.*')->get();
+                $orders = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_orders.supplier_id')->whereIn('new_orders.supplier_id',$suppliers)->where('new_quotations.finished',1)->orderBy('new_orders.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_orders.delivery_date','new_orders.order_date','new_orders.approved','new_quotations.*')->get();
             }
             else
             {
@@ -2333,7 +2333,7 @@ class UserController extends Controller
 
             $retailer_name = $user->name;
 
-            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('new_quotations.mail_to','new_quotations.quotation_invoice_number','users.email','users.fake_email','customers_details.name','customers_details.family_name')->first();
+            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('new_quotations.quotation_invoice_number','users.email','customers_details.name','customers_details.family_name')->first();
 
             if (!$invoice) {
                 return redirect()->back();
@@ -2341,28 +2341,26 @@ class UserController extends Controller
 
             new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now]);
 
+            $client_email = $invoice->email;
             $client_name = $invoice->name;
-            $valid_email = $invoice->fake_email;
-            $mail_to = $invoice->mail_to;
-            $client_email = $valid_email ? $mail_to : $invoice->email;
 
-            if($this->lang->lang == 'du')
-            {
-                $msg = "Beste " . $client_name . ",<br><br><b>" . $user->company_name . "</b> heeft namens jou je offerte met offertenummer <b>" . $invoice->quotation_invoice_number . "</b> geaccepteerd.<br><br>Met vriendelijke groet,<br><br>$retailer_name<br><br>$user->company_name";
-            }
-            else
-            {
-                $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>$retailer_name<br><br>$user->company_name";
-            }
+           if($this->lang->lang == 'du')
+           {
+               $msg = "Beste " . $client_name . ",<br><br><b>" . $user->company_name . "</b> heeft namens jou je offerte met offertenummer <b>" . $invoice->quotation_invoice_number . "</b> geaccepteerd.<br><br>Met vriendelijke groet,<br><br>$retailer_name<br><br>$user->company_name";
+           }
+           else
+           {
+               $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>$retailer_name<br><br>$user->company_name";
+           }
    
-            \Mail::send(array(), array(), function ($message) use ($msg, $client_email, $client_name, $invoice, $user) {
+           \Mail::send(array(), array(), function ($message) use ($msg, $client_email, $client_name, $invoice, $user) {
                 $message
                     ->to($client_email)
                     ->from('noreply@pieppiep.com', $user->company_name)
                     ->replyTo($user->email, $user->company_name)
                     ->subject(__('text.Quotation Accepted!'))
                     ->setBody($msg,'text/html');
-            });
+           });
         }
         else
         {
@@ -2961,7 +2959,7 @@ class UserController extends Controller
 
                     if($this->lang->lang == 'du')
                     {
-                        $msg = "Beste $user_name,<br><br>Er is een account voor je gecreëerd door " . $company_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>$user_name<br><br>Klantenservice<br><br>$company_name";
+                        $msg = "Beste $user_name,<br><br>Er is een account voor je gecreÃ«erd door " . $company_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>$user_name<br><br>Klantenservice<br><br>$company_name";
                     }
                     else
                     {
@@ -3338,7 +3336,7 @@ class UserController extends Controller
 
                 if($this->lang->lang == 'du')
                 {
-                    $msg = "Beste $user_name,<br><br>Er is een account voor je gecreëerd door " . $company_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>$user_name<br><br>Klantenservice<br><br>$company_name";
+                    $msg = "Beste $user_name,<br><br>Er is een account voor je gecreÃ«erd door " . $company_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>$user_name<br><br>Klantenservice<br><br>$company_name";
                 }
                 else
                 {
@@ -3400,7 +3398,7 @@ class UserController extends Controller
         }
         else
         {
-            $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->leftjoin('customers_details','customers_details.user_id','=','users.id')->where('new_quotations.id',$id)->select('new_quotations.*','customers_details.name','users.email','users.fake_email')->first();
+            $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->leftjoin('customers_details','customers_details.user_id','=','users.id')->where('new_quotations.id',$id)->select('new_quotations.*','customers_details.name','users.email')->first();
         }
 
         if($req_type == 'quotation')
@@ -3466,7 +3464,7 @@ class UserController extends Controller
             $mail_body_template = str_replace('{van_bedrijfsnaam}',$user->company_name,$mail_body_template);
         }
 
-        $post = array($data->email,$mail_subject_template,$mail_body_template,$data->fake_email);
+        $post = array($data->email,$mail_subject_template,$mail_body_template);
 
         return $post;
     }
@@ -4711,7 +4709,7 @@ class UserController extends Controller
         }
 
         $products = $request->products;
-        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email','users.fake_email')->first();
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email')->first();
 
         if($request->form_type == 2)
         {
@@ -5159,7 +5157,7 @@ class UserController extends Controller
         $company_name = $user->company_name;
         $products = $request->products;
 
-        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email','users.fake_email')->first();
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email')->first();
 
         if($request->quotation_id)
         {
@@ -7159,9 +7157,9 @@ class UserController extends Controller
             }
             else
             {
-                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email','users.fake_email')->first();
+                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email')->first();
                 $client_name = $client->name . ' ' . $client->family_name;
-                $client_email = $client->fake_email ? $data->mail_to : $client->email;
+                $client_email = $client->email;
             }
 
             $quotation_invoice_number = $data->quotation_invoice_number;
@@ -7360,7 +7358,7 @@ class UserController extends Controller
             }
             else
             {
-                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->customer_details)->select('customers_details.*','users.email','users.fake_email')->first();
+                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->customer_details)->select('customers_details.*','users.email')->first();
             }
 
             $request = new_quotations::where('id',$invoice_id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
@@ -8596,7 +8594,7 @@ class UserController extends Controller
                 return $data;
             }
 
-            if ($size > '2097152‬') {
+            if ($size > '2097152â€¬') {
                 $msg = $this->lang->tpe;
                 $type = 1;
                 $cart = carts::where('user_ip', '=', $ip_address)->get();
