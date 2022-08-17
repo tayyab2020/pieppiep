@@ -3014,7 +3014,7 @@ class UserController extends Controller
                     'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                     'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                     /*'company_name' => 'required',*/
-                    'registration_number' => 'required',
+                    // 'registration_number' => 'required',
                     'postcode' => 'required',
                     'city' => 'required',
                     /*'bank_account' => 'required',*/
@@ -3034,7 +3034,7 @@ class UserController extends Controller
                         'family_name.max' => $this->lang->fnmrv,
                         'family_name.regex' => $this->lang->fniv,
                         /*'company_name.required' => $this->lang->cnrv,*/
-                        'registration_number.required' => $this->lang->rnrv,
+                        // 'registration_number.required' => $this->lang->rnrv,
                         /*'bank_account.required' => $this->lang->barv,
                         'tax_number.required' => $this->lang->tnrv,*/
                         'postcode.required' => $this->lang->pcrv,
@@ -3062,7 +3062,7 @@ class UserController extends Controller
                     'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                     'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                     /*'company_name' => 'required',*/
-                    'registration_number' => 'required',
+                    // 'registration_number' => 'required',
                     'postcode' => 'required',
                     'city' => 'required',
                     /*'bank_account' => 'required',*/
@@ -3081,7 +3081,7 @@ class UserController extends Controller
                         'family_name.max' => $this->lang->fnmrv,
                         'family_name.regex' => $this->lang->fniv,
                         /*'company_name.required' => $this->lang->cnrv,*/
-                        'registration_number.required' => $this->lang->rnrv,
+                        // 'registration_number.required' => $this->lang->rnrv,
                         /*'bank_account.required' => $this->lang->barv,
                         'tax_number.required' => $this->lang->tnrv,*/
                         'postcode.required' => $this->lang->pcrv,
@@ -3092,7 +3092,6 @@ class UserController extends Controller
 
                 User::where('id',$request->emp_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'registration_number' => $request->registration_number, 'company_name' => $company_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone, 'email' => $request->email]);
             }
-
 
             Session::flash('success', 'Employee information updated successfully');
             return redirect()->route('employees');
@@ -3112,7 +3111,7 @@ class UserController extends Controller
                 'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                 'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                 /*'company_name' => 'required',*/
-                'registration_number' => 'required',
+                // 'registration_number' => 'required',
                 'postcode' => 'required',
                 'city' => 'required',
                 /*'bank_account' => 'required',*/
@@ -3132,7 +3131,7 @@ class UserController extends Controller
                     'family_name.max' => $this->lang->fnmrv,
                     'family_name.regex' => $this->lang->fniv,
                     /*'company_name.required' => $this->lang->cnrv,*/
-                    'registration_number.required' => $this->lang->rnrv,
+                    // 'registration_number.required' => $this->lang->rnrv,
                     /*'bank_account.required' => $this->lang->barv,
                     'tax_number.required' => $this->lang->tnrv,*/
                     'postcode.required' => $this->lang->pcrv,

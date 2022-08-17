@@ -39,9 +39,9 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="">{{__('text.Registration Number')}}*</label>
+                                            <label class="control-label col-sm-4" for="">{{__('text.Registration Number')}}</label>
                                             <div class="col-sm-6">
-                                                <input class="form-control" value="{{isset($employee->registration_number) ? $employee->registration_number : old('registration_number')}}" name="registration_number" id="registration_number" placeholder="" required="" type="text">
+                                                <input class="form-control" value="{{isset($employee->registration_number) ? $employee->registration_number : old('registration_number')}}" name="registration_number" id="registration_number" placeholder="" type="text">
                                             </div>
                                         </div>
 
