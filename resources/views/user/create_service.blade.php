@@ -167,7 +167,7 @@
 {{--                                            </div>--}}
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">VAT Percentage</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.VAT Percentage')}}</label>
                                                 <div class="col-sm-6">
                                                     <input readonly name="product_vat" value="21" class="form-control product_vat" id="blood_group_slug" type="text">
                                                 </div>
@@ -181,9 +181,9 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">Sell Rate*</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Sell Rate')}}</label>
                                                 <div class="col-sm-6">
-                                                    <input maskedFormat="9,1" autocomplete="off" name="product_sell_rate" step="any" value="{{isset($my_service) ? number_format((float)$my_service->sell_rate, 2, ',', '.') : null}}" class="form-control product_sell_rate" id="blood_group_slug" placeholder="Sell Rate" required="" type="text">
+                                                    <input maskedFormat="9,1" autocomplete="off" name="product_sell_rate" step="any" value="{{isset($my_service) ? number_format((float)$my_service->sell_rate, 2, ',', '.') : null}}" class="form-control product_sell_rate" id="blood_group_slug" placeholder="{{__('text.Sell Rate')}}" required="" type="text">
                                                 </div>
                                             </div>
 

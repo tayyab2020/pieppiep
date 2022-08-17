@@ -100,7 +100,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-sm-4" for="blood_group_slug">VAT Percentage</label>
+                                                <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.VAT Percentage')}}</label>
                                                 <div class="col-sm-6">
                                                     <input readonly name="product_vat" value="{{isset($my_product) ? $my_product->vat_percentage : 21}}" class="form-control product_vat" id="blood_group_slug" type="text">
                                                 </div>
@@ -194,7 +194,7 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-sm-4" for="blood_group_slug">Sell Rate*</label>
+                                                            <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Sell Rate')}}</label>
                                                             <div class="col-sm-6">
                                                                 <input maskedFormat="9,1" autocomplete="off" name="product_sell_rate[]" step="any" value="{{isset($size_rates[$x]) ? number_format((float)$size_sell_rates[$x], 2, ',', '.') : null}}" class="form-control product_sell_rate" id="blood_group_slug" placeholder="" required="" type="text">
                                                             </div>
@@ -214,7 +214,7 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm-4" for="blood_group_slug">Sell Rate*</label>
+                                                    <label class="control-label col-sm-4" for="blood_group_slug">{{__('text.Sell Rate')}}</label>
                                                     <div class="col-sm-6">
                                                         <input maskedFormat="9,1" autocomplete="off" name="product_sell_rate[]" step="any" value="{{isset($my_product) ? number_format((float)$my_product->size_sell_rates, 2, ',', '.') : null}}" class="form-control product_sell_rate" id="blood_group_slug" placeholder="" required="" type="text">
                                                     </div>

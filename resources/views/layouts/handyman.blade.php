@@ -1523,13 +1523,13 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                     @if(auth()->user()->can('my-services'))
 
-                        <li><a href="{{route('my-services')}}"><i class="fa fa-angle-right"></i> Services Overview</a></li>
+                        <li><a href="{{route('my-services')}}"><i class="fa fa-angle-right"></i>{{__('text.Services Overview')}} </a></li>
 
                     @endif
 
                     @if(auth()->user()->can('service-create'))
 
-                        <li><a href="{{route('service-create')}}"><i class="fa fa-angle-right"></i> Add Services</a></li>
+                        <li><a href="{{route('service-create')}}"><i class="fa fa-angle-right"></i>{{__('text.Add Services')}}</a></li>
 
                     @endif
 
