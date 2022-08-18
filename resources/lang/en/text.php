@@ -633,4 +633,7 @@ return [
     'week' => 'week',
     'month' => 'month',
     'all-day' => 'all-day',
+    'VAT Percentage' => 'VAT Percentage',
+    'Services Overview' => 'Services Overview',
+    'Add services' => 'Add services',
 ];

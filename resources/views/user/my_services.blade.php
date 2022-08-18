@@ -134,11 +134,11 @@
                                                     <div class="card" style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);margin-bottom: 0;">
                                                         <div style="display: flex;justify-content: space-between;align-items: center;" class="header">
 
-                                                            <h2 style="font-weight: bold;">Services Overview</h2>
+                                                            <h2 style="font-weight: bold;">{{__('text.Services Overview')}}/h2>
 
                                                             @if(auth()->user()->can('service-create'))
 
-                                                                <a href="{{route('service-create')}}" class="btn btn-success"><i class="fa fa-plus"></i> Add Services</a></li>
+                                                                <a href="{{route('service-create')}}" class="btn btn-success"><i class="fa fa-plus"></i>{{__('text.Add Services')}}<</a></li>
 
                                                             @endif
 

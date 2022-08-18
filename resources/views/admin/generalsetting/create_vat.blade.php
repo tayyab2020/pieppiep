@@ -21,7 +21,7 @@
                                         <input type="hidden" name="vat_id" value="{{ isset($data) ? $data->id : '' }}">
 
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4" for="phone">Vat Percentage *</label>
+                                            <label class="control-label col-sm-4" for="phone">{{__('text.VAT Percentage')}} *</label>
                                             <div class="col-sm-6">
                                                 <input style="width: 94%;float: left;" value="{{ isset($data) ? $data->vat_percentage : '' }}" name="vat_percentage" id="vat_percentage" class="form-control" placeholder="Enter VAT %" type="number" required>
                                                 <div style="padding: 10px;display: inline-block;width: 6%;height: 40px;border: 1px solid #ccc;text-align: center;cursor: not-allowed;">%</div>
