@@ -2738,6 +2738,7 @@
 			var calendarEl = document.getElementById('calendar');
 
 			calendar = new FullCalendar.Calendar(calendarEl, {
+				allDayText: '{{__("text.all-day")}}',
 				headerToolbar: {
 					left: 'prev,next today',
 					center: 'title',

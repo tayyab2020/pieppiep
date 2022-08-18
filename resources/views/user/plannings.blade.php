@@ -348,10 +348,7 @@
 
             if(date)
             {
-                if(!$('.appointment_end').val())
-                {
-                    $('.appointment_end').val(date);
-                }
+                $('.appointment_end').val(date);
             }
 
         });
@@ -792,6 +789,7 @@
             var calendarEl = document.getElementById('calendar');
 
             calendar = new FullCalendar.Calendar(calendarEl, {
+                allDayText: '{{__("text.all-day")}}',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',

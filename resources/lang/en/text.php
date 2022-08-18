@@ -632,4 +632,5 @@ return [
     'day' => 'day',
     'week' => 'week',
     'month' => 'month',
+    'all-day' => 'all-day',
 ];
