@@ -1352,12 +1352,12 @@
 							<select class="appointment_title">
 
 								<option value="">{{__('text.Select Event Title')}}</option>
-								<option value="Delivery Date">{{__('text.Delivery Date')}}</option>
-								<option value="Installation Date">{{__('text.Installation Date')}}</option>
+                                <option data-text="{{__('text.Delivery Date')}}" value="Delivery Date">{{__('text.Delivery Date')}}</option>
+                                <option data-text="{{__('text.Installation Date')}}" value="Installation Date">{{__('text.Installation Date')}}</option>
 
 								@foreach($event_titles as $title)
 
-									<option value="{{$title->title}}">{{$title->title}}</option>
+                                    <option data-text="{{$title->title}}" value="{{$title->title}}">{{$title->title}}</option>
 
 								@endforeach
 
@@ -2464,6 +2464,19 @@
 				var appointment_desc = $('.appointment_description').val();
 				var appointment_tags = $('.appointment_tags').val();
 
+                if(title == "Delivery Date")
+                {
+                    var event_title = "{{__('text.Delivery Date')}}";
+                }
+                else if(title == "Installation Date")
+                {
+                    var event_title = "{{__('text.Installation Date')}}";
+                }
+                else
+                {
+                    var event_title = title;
+                }
+
 				if (format_start <= format_end){
 
 					$('.appointment_end').css('border','');
@@ -2482,13 +2495,13 @@
 					if(id)
 					{
 						var event = calendar.getEventById(id);
-						event.setDates(format_start,format_end);
+                        event.setDates(format_start,format_end + ':01');
 						event.setExtendedProp('quotation_id', appointment_quotation_id);
 						event.setExtendedProp('event_type', event_type);
 						event.setExtendedProp('retailer_client_id', customer_id);
 						event.setExtendedProp('supplier_id', supplier_id);
                         event.setExtendedProp('employee_id', employee_id);
-						event.setProp('title', title);
+                        event.setProp('title', event_title);
 						event.setExtendedProp('description',appointment_desc);
 						event.setExtendedProp('tags',appointment_tags);
 						event.setExtendedProp('client_quotation_fname',client_quotation_fname);
@@ -2540,7 +2553,7 @@
 						calendar.addEvent({
 							id: id,
 							quotation_id: appointment_quotation_id,
-							title: title,
+                            title: event_title,
 							start: format_start,
 							end: format_end + ':01',
 							description: appointment_desc,
@@ -2669,7 +2682,8 @@
 
 			$('#event_id').val(id);
 			$('.appointment_quotation_number').val(quotation_id);
-			$('.appointment_title').val(title);
+            // $('.appointment_title').val(title);
+            $(".appointment_title option[data-text='" + title + "']").prop("selected", true);
 			$('.appointment_start').val(start);
 			$('.appointment_end').val(end);
 			$('.appointment_description').val(description);
@@ -2823,32 +2837,44 @@
 					var actualAppointment = $(arg.el);
 					var event = arg.event;
 					var id = arg.event._def.publicId;
+					var title = event._def.title;
 
-						if(event._def.extendedProps.quotation_id)
-                    	{
-							if(event._def.extendedProps.client_quotation_fname || event._def.extendedProps.client_quotation_lname)
-							{
-								actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
-							}
-							else
-							{
-								actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;"></span>');
-							}
-                    	}
-                    	else if(event._def.extendedProps.retailer_client_id)
-                    	{
-                        	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_fname + ' ' + event._def.extendedProps.client_lname +'</span>');
-                    	}
-                    	else if(event._def.extendedProps.supplier_id)
-                    	{
-                        	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.company_name +'</span>');
-                    	}
-                    	else
-                    	{
-                        	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.employee_fname + ' ' + event._def.extendedProps.employee_lname +'</span>');
-                    	}
+                    if(title == "Delivery Date")
+                    {
+                        title = "{{__('text.Delivery Date')}}";
+                    }
+                    else if(title == "Installation Date")
+                    {
+                        title = "{{__('text.Installation Date')}}";
+                    }
 
-						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
+                    event.setProp('title', title);
+
+					if(event._def.extendedProps.quotation_id)
+                	{
+						if(event._def.extendedProps.client_quotation_fname || event._def.extendedProps.client_quotation_lname)
+						{
+							actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
+						}
+						else
+						{
+							actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;"></span>');
+						}
+                    }
+                    else if(event._def.extendedProps.retailer_client_id)
+                	{
+                    	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_fname + ' ' + event._def.extendedProps.client_lname +'</span>');
+                	}
+                	else if(event._def.extendedProps.supplier_id)
+                	{
+                        actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.company_name +'</span>');
+                    }
+                	else
+                	{
+                    	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.employee_fname + ' ' + event._def.extendedProps.employee_lname +'</span>');
+                	}
+
+                    var buttonsHtml = '<div class="fc-buttons">' + '<button type="button" class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
 
 					actualAppointment.append(buttonsHtml);
 
@@ -2866,7 +2892,7 @@
 				eventTimeFormat: { // like '14:30:00'
     				hour: '2-digit',
 					minute: '2-digit',
-					hour12:false
+					hour12: false
 				},
 				displayEventEnd: true,
 				editable: true,
