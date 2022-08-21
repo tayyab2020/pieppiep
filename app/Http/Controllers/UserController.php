@@ -7363,8 +7363,8 @@ class UserController extends Controller
 
             $request = new_quotations::where('id',$invoice_id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
             $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
-            $delivery_date = date('d-m-Y',strtotime($request->delivery_date)) . ' - ' . date('d-m-Y',strtotime($request->delivery_date_end));
-            $installation_date = date('d-m-Y',strtotime($request->installation_date)) . ' - ' . date('d-m-Y',strtotime($request->installation_date_end));
+            $delivery_date = $request->delivery_date ? date('d-m-Y',strtotime($request->delivery_date)) . ' - ' . date('d-m-Y',strtotime($request->delivery_date_end)) : "";
+            $installation_date = $request->installation_date ? date('d-m-Y',strtotime($request->installation_date)) . ' - ' . date('d-m-Y',strtotime($request->installation_date_end)) : "";
 
             $product_titles = array();
             $color_titles = array();
