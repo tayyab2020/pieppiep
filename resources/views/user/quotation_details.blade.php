@@ -168,6 +168,31 @@
 
                                                                     </tr>
 
+                                                                    @if(!$item->item_id && !$item->service_id)
+
+                                                                        @foreach($calculations[$i] as $cal)
+
+                                                                            @if($cal->box_quantity)
+
+                                                                                <tr>
+                                                                                    <td style="padding-right: 0;" colspan="2">
+                                                                                        <div style="border: 1px solid #949494;border-right: 0;padding: 0 10px;border-top-left-radius: 5px;border-bottom-left-radius: 5px;">
+                                                                                            {{$cal->description ? $cal->description : $item->product_title . ', '. $item->model . ', ' . $item->color_title}}
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td style="padding-left: 0;" colspan="6">
+                                                                                        <div style="border: 1px solid #949494;border-left: 0;border-top-right-radius: 5px;border-bottom-right-radius: 5px;padding: 0 10px;">
+                                                                                            {{$cal->box_quantity}}
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+
+                                                                            @endif
+
+                                                                        @endforeach
+
+                                                                    @endif
+
                                                                 @endforeach
 
                                                                 </tbody>
@@ -1067,7 +1092,7 @@
 
                 var flag = 0;
 
-                $("[name='delivery_dates[]']").each(function(i, obj) {
+                $(".delivery_date").each(function(i, obj) {
 
                     if(!obj.value)
                     {

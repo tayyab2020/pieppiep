@@ -6983,9 +6983,23 @@ class UserController extends Controller
 
         $invoices = $invoices->concat($new_invoices);
 
+        $calculations = array();
+
+        foreach($invoices as $key)
+        {
+            if(!$key->item_id && !$key->service_id)
+            {
+                $calculations[] = new_orders_calculations::where("order_id",$key->id)->get();
+            }
+            else
+            {
+                $calculations[] = "";
+            }
+        }
+
         if(count($invoices) > 0)
         {
-            return view('user.quotation_details',compact('invoices','suppliers'));
+            return view('user.quotation_details',compact('invoices','suppliers','calculations'));
         }
         else
         {
