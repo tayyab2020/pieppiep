@@ -34,7 +34,7 @@ class SendOrder implements ShouldQueue
     private $mail_subject = null;
     private $mail_body = null;
     private $retailer_delivery_date = null;
-    private $deliver_to = null;
+    private $deliver_to = 1;
     public $timeout = 0;
 
     /**
