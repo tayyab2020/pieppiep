@@ -200,7 +200,7 @@
 																				<label class="content-label">{{__('text.Product')}}</label>
 
 																				<div class="autocomplete" style="width:100%;">
-																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="background: transparent;" value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																					<textarea @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="background: transparent;resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}</textarea>
 																				</div>
 
 																				<input type="hidden" value="{{$item->item_id != 0 ? $item->item_id.'I' : ($item->service_id != 0 ? $item->service_id.'S' : $item->product_id)}}" name="products[]" id="product_id">
@@ -214,9 +214,9 @@
 
 																				<label class="content-label">{{__('text.Qty')}}</label>
 
-																				<div style="display: flex;align-items: center;">
+																				<div style="display: flex;align-items: center;height: 100%;">
 																					@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
-																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
 																				</div>
 																			</div>
 
@@ -359,7 +359,7 @@
 																			<label class="content-label">{{__('text.Product')}}</label>
 
 																			<div class="autocomplete" style="width:100%;">
-																				<input id="productInput" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.($product_request->model ? $product_request->model.', ' : null).$product_request->color.', ('.$product_request->company_name.')' . ' € ' . number_format((float)$product_request->estimated_price, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$product_request->estimated_price_quantity, 2, ',', '') . ' m²' : $product_request->title.', Service') : null}}" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																				<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">{{ isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.($product_request->model ? $product_request->model.', ' : null).$product_request->color.', ('.$product_request->company_name.')' . ' € ' . number_format((float)$product_request->estimated_price, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$product_request->estimated_price_quantity, 2, ',', '') . ' m²' : $product_request->title.', Service') : null }}</textarea>
 																			</div>
 
 																			<input type="hidden" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->id : $product_request->id.'S') : null}}" name="products[]" id="product_id">
@@ -373,8 +373,8 @@
 
 																			<label class="content-label">{{__('text.Qty')}}</label>
 
-																			<div style="display: flex;align-items: center;">
-																				<input type="text" value="{{isset($request_id) && $request_id ? number_format((float)$quote_qty, 2, ',', '') : 1}}" name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																			<div style="display: flex;align-items: center;height: 100%;">
+																				<input type="text" value="{{isset($request_id) && $request_id ? number_format((float)$quote_qty, 2, ',', '') : 1}}" name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
 																			</div>
 																		</div>
 
@@ -1740,9 +1740,8 @@
 
 		.quote-product {
 			border: 0;
-			padding: 0 5px;
+			padding: 15px;
 			width: 100%;
-			height: 35px !important;
 		}
 
 		.autocomplete-items {
@@ -2054,7 +2053,7 @@
 		{
 			display: flex;
 			flex-direction: row;
-			align-items: center;
+			align-items: stretch;
 		}
 
 		.header-div .headings
@@ -2080,7 +2079,7 @@
 			font-weight: 500;
 			padding: 0;
 			color: #3c3c3c;
-			height: 40px;
+			height: auto;
 			display: flex;
 			align-items: center;
 		}
@@ -3840,7 +3839,7 @@
 							'\n' +
 							'                                                                <div class="autocomplete" style="width:100%;">\n' +
 							'\n' +
-							'																	<input id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
+							'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}"></textarea>\n' +
 							'\n' +
 							'                                                                </div>\n' +
 							'\n' +
@@ -3855,9 +3854,9 @@
 							'\n' +
 							'                       									 	<label class="content-label">Qty</label>\n' +
 							'\n' +
-							'																 <div style="display: flex;align-items: center;">\n' +
+							'																 <div style="display: flex;align-items: center;height: 100%;">\n' +
 							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
-							'																 	<input type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
+							'																 	<input type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">\n' +
 							'																 </div>\n' +
 							'                                                            </div>\n' +
 							'\n' +
@@ -4027,7 +4026,7 @@
 							'\n' +
 							'                                                                <div class="autocomplete" style="width:100%;">\n' +
 							'\n' +
-							'																	<input id="productInput" value="'+product_text+'" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
+							'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">'+product_text+'</textarea>\n' +
 							'\n' +
 							'                                                                </div>\n' +
 							'\n' +
@@ -4042,9 +4041,9 @@
 							'\n' +
 							'                       									 	<label class="content-label">Qty</label>\n' +
 							'\n' +
-							'																 <div style="display: flex;align-items: center;">\n' +
+							'																 <div style="display: flex;align-items: center;height: 100%;">\n' +
 							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
-							'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
+							'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">\n' +
 							'																 </div>\n' +
 							'                                                            </div>\n' +
 							'\n' +
@@ -4710,13 +4709,18 @@
 				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
 				var val = String.fromCharCode(charCode);
 
+				if(val == '.')
+				{
+					val = ',';
+				}
+
 				if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
 				{
 					e.preventDefault();
 					return false;
 				}
 
-				if (e.which == 44) {
+				if (e.which == 44 || e.which == 46) {
 					if (this.value.indexOf(',') > -1) {
 						e.preventDefault();
 						return false;
@@ -4725,8 +4729,17 @@
 
 				var num = $(this).attr("maskedFormat").toString().split(',');
 				var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+
 				if (!regex.test(this.value)) {
 					this.value = this.value.substring(0, this.value.length - 1);
+				}
+				else{
+					if(e.which == 46)
+					{
+						this.value = this.value + String.fromCharCode(44);
+						e.preventDefault();
+						return false;
+					}
 				}
 
 			});
