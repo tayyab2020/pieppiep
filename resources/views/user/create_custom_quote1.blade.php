@@ -200,7 +200,7 @@
 																				<label class="content-label">{{__('text.Product')}}</label>
 
 																				<div class="autocomplete" style="width:100%;">
-																					<input value="{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																					<textarea @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="background: transparent;resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}</textarea>
 																				</div>
 
 																				<input type="hidden" value="{{$item->item_id != 0 ? $item->item_id.'I' : ($item->service_id != 0 ? $item->service_id.'S' : $item->product_id)}}" name="products[]" id="product_id">
@@ -214,9 +214,9 @@
 
 																				<label class="content-label">{{__('text.Qty')}}</label>
 
-																				<div style="display: flex;align-items: center;">
+																				<div style="display: flex;align-items: center;height: 100%;">
 																					@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
-																					<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
 																				</div>
 																			</div>
 
@@ -305,8 +305,8 @@
 																							<span style="font-size: 15px;padding-right: 10px;font-weight: 600;">%</span>
                                                             							
 																							<label style="margin: 0;" class="switch">
-                                                                								<input {{$item->discount_option ? 'checked' : null}} class="discount_option" type="checkbox">
-                                                                								<span class="slider round"></span>
+                                                                								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) disabled @endif {{$item->discount_option ? 'checked' : null}} class="discount_option" type="checkbox">
+                                                                								<span @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) style="cursor: not-allowed;" @endif class="slider round"></span>
                                                             								</label>
                                                             						
 																							<span style="font-size: 15px;padding-left: 10px;">€</span>
@@ -316,7 +316,7 @@
 																					</div>
 
 																					<input value="{{$item->discount_option}}" class="discount_option_values" name="discount_option_values[]" type="hidden">
-																					<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
 
 																				</div>
 
@@ -359,7 +359,7 @@
 																			<label class="content-label">{{__('text.Product')}}</label>
 
 																			<div class="autocomplete" style="width:100%;">
-																				<input id="productInput" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.($product_request->model ? $product_request->model.', ' : null).$product_request->color.', ('.$product_request->company_name.')' . ' € ' . number_format((float)$product_request->estimated_price, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$product_request->estimated_price_quantity, 2, ',', '') . ' m²' : $product_request->title.', Service') : null}}" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																				<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">{{ isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.($product_request->model ? $product_request->model.', ' : null).$product_request->color.', ('.$product_request->company_name.')' . ' € ' . number_format((float)$product_request->estimated_price, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$product_request->estimated_price_quantity, 2, ',', '') . ' m²' : $product_request->title.', Service') : null }}</textarea>
 																			</div>
 
 																			<input type="hidden" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->id : $product_request->id.'S') : null}}" name="products[]" id="product_id">
@@ -373,8 +373,8 @@
 
 																			<label class="content-label">{{__('text.Qty')}}</label>
 
-																			<div style="display: flex;align-items: center;">
-																				<input type="text" value="{{isset($request_id) && $request_id ? number_format((float)$quote_qty, 2, ',', '') : 1}}" name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																			<div style="display: flex;align-items: center;height: 100%;">
+																				<input type="text" value="{{isset($request_id) && $request_id ? number_format((float)$quote_qty, 2, ',', '') : 1}}" name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
 																			</div>
 																		</div>
 
@@ -838,7 +838,7 @@
 																						<div class="attribute item2 width-box" style="width: 10%;">
 
 																							<div class="m-box">
-																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 1 && $temp->width != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->width ? str_replace('.', ',',floatval($temp->width)) : NULL}}" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width{{$i+1}}[]" type="text">
+																								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 1 && $temp->width != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->width ? str_replace('.', ',',floatval($temp->width)) : NULL}}" id="width" class="form-control width m-input" maskedformat="9,1" autocomplete="off" name="width{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="width_unit1[]" class="measure-unit">
 																							</div>
 
@@ -847,7 +847,7 @@
 																						<div class="attribute item3 height-box" style="width: 10%;">
 
 																							<div class="m-box">
-																								<input @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 0 && $temp->height != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->height ? str_replace('.', ',',floatval($temp->height)) : NULL}}" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height{{$i+1}}[]" type="text">
+																								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif @if($key->measure == 'M1' && $temp->parent_row == NULL && $temp->turn == 0 && $temp->height != NULL) style="border: 1px solid #ccc;background-color: rgb(144, 238, 144);" @else style="border: 1px solid #ccc;" @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->height ? str_replace('.', ',',floatval($temp->height)) : NULL}}" id="height" class="form-control height m-input" maskedformat="9,1" autocomplete="off" name="height{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" value="cm" readonly="" type="text" name="height_unit1[]" class="measure-unit">
 																							</div>
 
@@ -856,7 +856,7 @@
 																						<div class="attribute item4" style="width: 10%;">
 
 																							<div class="m-box">
-																								<input {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->cutting_lose}}" class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage{{$i+1}}[]" type="text">
+																								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif {{$temp->parent_row != NULL ? 'readonly' : null}} value="{{$temp->cutting_lose}}" class="form-control cutting_lose_percentage m-input" id="cutting_lose_percentage" style="border: 1px solid #ccc;" maskedformat="9,1" autocomplete="off" name="cutting_lose_percentage{{$i+1}}[]" type="text">
 																								<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																							</div>
 
@@ -865,7 +865,7 @@
 																						<div class="attribute item5 m2_box" @if($key->measure == 'M1') style="width: 10%;display: none;" @else style="width: 10%;" @endif>
 
 																							<div class="m-box">
-																								<input value="{{$temp->total_boxes}}" class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" autocomplete="off" name="total_boxes{{$i+1}}[]" maskedformat="9,1" type="text">
+																								<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif value="{{$temp->total_boxes}}" class="form-control total_boxes m-input" style="background: transparent;border: 1px solid #ccc;" autocomplete="off" name="total_boxes{{$i+1}}[]" maskedformat="9,1" type="text">
 																								<input style="border: 0;outline: none;" readonly="" type="text" class="measure-unit">
 																							</div>
 
@@ -874,7 +874,7 @@
 																						<div class="attribute item5 m1_box" @if($key->measure == 'M1') style="width: 10%;" @else style="width: 10%;display: none;" @endif>
 
 																							<div style="display: flex;align-items: center;">
-																								<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" {{$temp->parent_row != NULL ? 'readonly' : null}} name="turn{{$i+1}}[]">
+																								<select style="border-radius: 5px;width: 70%;height: 35px;" class="form-control turn" {{((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) || $temp->parent_row != NULL ? 'readonly' : null}} name="turn{{$i+1}}[]">
 																									<option {{$temp->turn == 0 ? 'selected' : null}} {{$temp->parent_row != NULL && $temp->turn == 1 ? 'disabled' : null}} value="0">{{__('text.No')}}</option>
 																									<option {{$temp->turn == 1 ? 'selected' : null}} {{$temp->parent_row != NULL && $temp->turn == 0 ? 'disabled' : null}} value="1">{{__('text.Yes')}}</option>
 																								</select>
@@ -910,7 +910,7 @@
 																						<div class="attribute item8 last-content" style="padding: 0;width: 18%;">
 																							<div class="res-white" style="display: flex;justify-content: flex-start;align-items: center;width: 100%;">
 
-																								@if($temp->parent_row == NULL)
+																								@if(((Route::currentRouteName() != 'view-new-quotation') || (isset($invoice) && ($invoice[0]->finished == 0))) && $temp->parent_row == NULL)
 
 																									<span id="next-row-span" class="tooltip1 add-attribute-row" style="cursor: pointer;font-size: 20px;margin-left: 10px;width: 20px;height: 20px;line-height: 20px;">
 																										<i id="next-row-icon" class="fa fa-fw fa-plus"></i>
@@ -1503,12 +1503,12 @@
 							<select class="appointment_title">
 
 								<option value="">{{__('text.Select Event Title')}}</option>
-								<option value="Delivery Date">{{__('text.Delivery Date')}}</option>
-								<option value="Installation Date">{{__('text.Installation Date')}}</option>
+                                <option data-text="{{__('text.Delivery Date')}}" value="Delivery Date">{{__('text.Delivery Date')}}</option>
+                                <option data-text="{{__('text.Installation Date')}}" value="Installation Date">{{__('text.Installation Date')}}</option>
 
 								@foreach($event_titles as $title)
 
-									<option value="{{$title->title}}">{{$title->title}}</option>
+                                    <option data-text="{{$title->title}}" value="{{$title->title}}">{{$title->title}}</option>
 
 								@endforeach
 
@@ -1740,9 +1740,8 @@
 
 		.quote-product {
 			border: 0;
-			padding: 0 5px;
+			padding: 15px;
 			width: 100%;
-			height: 35px !important;
 		}
 
 		.autocomplete-items {
@@ -2054,7 +2053,7 @@
 		{
 			display: flex;
 			flex-direction: row;
-			align-items: center;
+			align-items: stretch;
 		}
 
 		.header-div .headings
@@ -2080,7 +2079,7 @@
 			font-weight: 500;
 			padding: 0;
 			color: #3c3c3c;
-			height: 40px;
+			height: auto;
 			display: flex;
 			align-items: center;
 		}
@@ -2506,6 +2505,7 @@
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap" defer></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/nl.js"></script>
 
 	<script type="text/javascript">
 
@@ -2714,6 +2714,19 @@
 				var appointment_desc = $('.appointment_description').val();
 				var appointment_tags = $('.appointment_tags').val();
 
+                if(title == "Delivery Date")
+                {
+                    var event_title = "{{__('text.Delivery Date')}}";
+                }
+                else if(title == "Installation Date")
+                {
+                    var event_title = "{{__('text.Installation Date')}}";
+                }
+                else
+                {
+                    var event_title = title;
+                }
+
 				if (format_start <= format_end){
 
 					$('.appointment_end').css('border','');
@@ -2732,13 +2745,13 @@
 					if(id)
 					{
 						var event = calendar.getEventById(id);
-						event.setDates(format_start,format_end);
+                        event.setDates(format_start,format_end + ':01');
 						event.setExtendedProp('quotation_id', appointment_quotation_id);
 						event.setExtendedProp('event_type', event_type);
 						event.setExtendedProp('retailer_client_id', customer_id);
 						event.setExtendedProp('supplier_id', supplier_id);
                         event.setExtendedProp('employee_id', employee_id);
-						event.setProp('title', title);
+                        event.setProp('title', event_title);
 						event.setExtendedProp('description',appointment_desc);
 						event.setExtendedProp('tags',appointment_tags);
 						event.setExtendedProp('client_quotation_fname',client_quotation_fname);
@@ -2790,7 +2803,7 @@
 						calendar.addEvent({
 							id: id,
 							quotation_id: appointment_quotation_id,
-							title: title,
+                            title: event_title,
 							start: format_start,
 							end: format_end + ':01',
 							description: appointment_desc,
@@ -2919,7 +2932,8 @@
 
 			$('#event_id').val(id);
 			$('.appointment_quotation_number').val(quotation_id);
-			$('.appointment_title').val(title);
+            // $('.appointment_title').val(title);
+            $(".appointment_title option[data-text='" + title + "']").prop("selected", true);
 			$('.appointment_start').val(start);
 			$('.appointment_end').val(end);
 			$('.appointment_description').val(description);
@@ -2988,11 +3002,18 @@
 			var calendarEl = document.getElementById('calendar');
 
 			calendar = new FullCalendar.Calendar(calendarEl, {
+				allDayText: '{{__("text.all-day")}}',
 				headerToolbar: {
 					left: 'prev,next today',
 					center: 'title',
 					right: 'dayGridMonth,timeGridWeek,timeGridDay'
 				},
+				buttonText: {
+                    today: '{{__('text.today')}}',
+                    day: '{{__('text.day')}}',
+                    week:'{{__('text.week')}}',
+                    month:'{{__('text.month')}}'
+                },
 				initialDate: new Date(),
 				navLinks: true, // can click day/week names to navigate views
 				selectable: true,
@@ -3066,6 +3087,18 @@
 					var actualAppointment = $(arg.el);
 					var event = arg.event;
 					var id = arg.event._def.publicId;
+					var title = event._def.title;
+
+                    if(title == "Delivery Date")
+                    {
+                        title = "{{__('text.Delivery Date')}}";
+                    }
+                    else if(title == "Installation Date")
+                    {
+                        title = "{{__('text.Installation Date')}}";
+                    }
+
+                    event.setProp('title', title);
 
 					if(event._def.extendedProps.quotation_id)
 					{
@@ -3091,7 +3124,7 @@
 						actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.employee_fname + ' ' + event._def.extendedProps.employee_lname +'</span>');
 					}
 
-					var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
+                    var buttonsHtml = '<div class="fc-buttons">' + '<button type="button" class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
 
 					actualAppointment.append(buttonsHtml);
 
@@ -3109,7 +3142,7 @@
 				eventTimeFormat: { // like '14:30:00'
     				hour: '2-digit',
 					minute: '2-digit',
-					hour12:false
+					hour12: false
 				},
 				displayEventEnd: true,
 				editable: true,
@@ -3526,6 +3559,7 @@
 				defaultDate: '',
 				ignoreReadonly: true,
 				sideBySide: true,
+				locale:'du'
 			});
 
 			$('.appointment_end').datetimepicker({
@@ -3533,6 +3567,7 @@
 				defaultDate: '',
 				ignoreReadonly: true,
 				sideBySide: true,
+				locale:'du'
 			});
 
 			$(document).on('change', ".discount_option", function (e) {
@@ -3804,7 +3839,7 @@
 							'\n' +
 							'                                                                <div class="autocomplete" style="width:100%;">\n' +
 							'\n' +
-							'																	<input id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
+							'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}"></textarea>\n' +
 							'\n' +
 							'                                                                </div>\n' +
 							'\n' +
@@ -3819,9 +3854,9 @@
 							'\n' +
 							'                       									 	<label class="content-label">Qty</label>\n' +
 							'\n' +
-							'																 <div style="display: flex;align-items: center;">\n' +
+							'																 <div style="display: flex;align-items: center;height: 100%;">\n' +
 							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
-							'																 	<input type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
+							'																 	<input type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">\n' +
 							'																 </div>\n' +
 							'                                                            </div>\n' +
 							'\n' +
@@ -3991,7 +4026,7 @@
 							'\n' +
 							'                                                                <div class="autocomplete" style="width:100%;">\n' +
 							'\n' +
-							'																	<input id="productInput" value="'+product_text+'" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
+							'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">'+product_text+'</textarea>\n' +
 							'\n' +
 							'                                                                </div>\n' +
 							'\n' +
@@ -4006,9 +4041,9 @@
 							'\n' +
 							'                       									 	<label class="content-label">Qty</label>\n' +
 							'\n' +
-							'																 <div style="display: flex;align-items: center;">\n' +
+							'																 <div style="display: flex;align-items: center;height: 100%;">\n' +
 							'<?php if(Route::currentRouteName() == 'create-new-negative-invoice'){ echo '-'; } ?>'+
-							'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
+							'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">\n' +
 							'																 </div>\n' +
 							'                                                            </div>\n' +
 							'\n' +
@@ -4674,13 +4709,18 @@
 				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
 				var val = String.fromCharCode(charCode);
 
+				if(val == '.')
+				{
+					val = ',';
+				}
+
 				if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
 				{
 					e.preventDefault();
 					return false;
 				}
 
-				if (e.which == 44) {
+				if (e.which == 44 || e.which == 46) {
 					if (this.value.indexOf(',') > -1) {
 						e.preventDefault();
 						return false;
@@ -4689,8 +4729,17 @@
 
 				var num = $(this).attr("maskedFormat").toString().split(',');
 				var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
+
 				if (!regex.test(this.value)) {
 					this.value = this.value.substring(0, this.value.length - 1);
+				}
+				else{
+					if(e.which == 46)
+					{
+						this.value = this.value + String.fromCharCode(44);
+						e.preventDefault();
+						return false;
+					}
 				}
 
 			});

@@ -866,8 +866,11 @@
         padding-bottom: .3125rem
     }
 
-    .navbar-brand img {
-        width: 135px
+    @media (min-width: 768px)
+    {
+        .navbar-brand img {
+            width: 200px !important;
+        }
     }
 
     .mainmenu ul {
@@ -1601,6 +1604,11 @@
 
 <style>
 
+    .bottom-menu:before, .bottom-menu:after
+    {
+        display: none !important;
+    }
+
     .exact-ac .country-selector-bar {
         display: none;
     }
@@ -1789,7 +1797,12 @@
             <li><a href="/Algemene-voorwaarden-consumenten">Algemene voorwaarden consumenten</a></li>
             <li><a href="/Algemene-voorwaarden-zakelijk">Algemene voorwaarden zakelijk</a></li>
         </ul>
-        
+
+        <!-- <a href="/country-selector" class="country-selector ">
+            <span class="pretext">NL</span>
+            <span class="posttext">Select your country</span>
+        </a> -->
+
     </div>
 </section>
 

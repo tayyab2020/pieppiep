@@ -160,6 +160,15 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group">
+                                                    <label for="tax_number"
+                                                           class="col-sm-3 control-label">{{__('text.Tax number')}}</label>
+                                                    <div class="col-sm-8">
+                                                        <input class="form-control" id="tax_number"
+                                                               name="tax_number" placeholder="{{__('text.Tax number')}}"
+                                                               type="text" value="{{$user->tax_number}}">
+                                                    </div>
+                                                </div>
 
                                                 <div class="form-group" style="display: none;">
                                                     <label for="profile_description"

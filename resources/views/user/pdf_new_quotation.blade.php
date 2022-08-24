@@ -21,18 +21,20 @@
 
                                 <div class="col-md-4 col-sm-4 col-xs-12">
 
-                                    <p style="margin: 0"><b>{{$user->name}} {{$user->family_name}}</b></p>
-                                    <p style="margin: 0">{{$user->company_name}}</p>
-                                    <p style="margin: 0">{{$address}}</p>
-                                    <p style="margin: 0">{{$user->postcode}} {{$user->city}}</p>
-                                    <p style="margin: 0">TEL: {{$user->phone}}</p>
-                                    <p style="margin: 0">{{$user->email}}</p>
+                                    <p style="margin: 0;font-size: 22px;"><b>{{$user->name}} {{$user->family_name}}</b></p>
+                                    <p style="margin: 0;font-size: 22px;">{{$user->company_name}}</p>
+                                    <p style="margin: 0;font-size: 22px;">{{$address}}</p>
+                                    <p style="margin: 0;font-size: 22px;">{{$user->postcode}} {{$user->city}}</p>
+                                    <p style="margin: 0;font-size: 22px;">TEL: {{$user->phone}}</p>
+                                    <p style="margin: 0;font-size: 22px;">{{$user->email}}</p>
+                                    <p style="margin: 0;font-size: 22px;">IBAN: {{$user->bank_account}}</p>
+                                    <p style="margin: 0;font-size: 22px;">BTW: {{$user->tax_number}}</p>
                                     <br>
-                                    @if($role != 'retailer' && $role != 'supplier1' && $role != 'supplier2') <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> {{$user->quotation_prefix}}: {{$quotation_invoice_number}}</p> @endif
+                                    @if($role != 'retailer' && $role != 'supplier1' && $role != 'supplier2') <p style="font-size: 26px;" class="font-weight-bold mb-4 m-heading"> {{$user->quotation_prefix}}: {{$quotation_invoice_number}}</p> @endif
 
-                                    <p style="font-size: 22px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @elseif($role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', array_filter($order_numbers_string)), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}}@endif</p>
+                                    <p style="font-size: 26px;" class="font-weight-bold mb-4 m-heading"> @if($role == 'retailer') OF: {{$quotation_invoice_number}} @elseif($role == 'supplier' || $role == 'supplier1') {{$supplier_data->order_prefix}}: {{$order_number}} @elseif($role == 'invoice') FA: {{$order_number}} @elseif($role == 'supplier2') <?php $order_numbers_string = array_unique($order_numbers); $order_numbers_string = rtrim(implode(',', array_filter($order_numbers_string)), ','); echo $user->role_id == 2 ? 'OR: ['.$order_numbers_string.']' : $user->order_prefix.': ['.$order_numbers_string.']'; ?> @else OR: {{$order_number}}@endif</p>
 
-                                    <p class="text-muted" style="font-size: 15px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
+                                    <p style="font-size: 22px;margin-top: 10px;">{{__('text.Created at')}}: {{$date}}</p>
 
                                 </div>
 
@@ -44,10 +46,15 @@
 
                                 <div class="col-md-4 col-sm-4 col-xs-12 text-right inv-rigth" style="float: right;">
 
-                                    <p class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
-                                    <p class="mb-1 m-rest">{{$client_address}}</p>
-                                    <p class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
-                                    <p class="mb-1 m-rest">{{$client->email}}</p>
+                                    <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->name}} {{$client->family_name}}</p>
+                                    
+                                    @if(($role != 'supplier' && $role != 'supplier1') || (isset($request->deliver_to[0]) && $request->deliver_to[0] == 2))
+
+                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client_address}}</p>
+                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->postcode}} {{$client->city}}</p>
+                                        <p style="font-size: 22px;" class="mb-1 m-rest">{{$client->fake_email == 0 ? $client->email : null}}</p>
+
+                                    @endif
 
                                 </div>
                         </div>
@@ -107,7 +114,7 @@
                                             <td>{{$product_titles[$i]}}</td>
                                             @if($role == 'supplier2')
 
-                                                <td>{{$suppliers[$i]->name . ' ' . $suppliers[$i]->family_name}}</td>
+                                                <td>{{$suppliers[$i]->company_name}}</td>
                                                 <td>{{$order_numbers[$i]}}</td>
 
                                             @endif

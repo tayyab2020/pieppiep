@@ -401,6 +401,7 @@
 
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
+                                                                                <li><a href="{{ url('/aanbieder/messages/'.$key->invoice_id) }}">{{__('text.See Messages')}}</a></li>
                                                                                 <li><a href="{{ url('/aanbieder/view-new-quotation/'.$key->invoice_id) }}">{{__('text.View Quotation')}}</a></li>
 
                                                                                 @if($key->accepted)
@@ -465,7 +466,7 @@
 
                                                                             @else
 
-                                                                                <li><a href="{{ url('/aanbieder/edit-order/'.$key->invoice_id) }}">{{__('text.View Order')}}</a></li>
+                                                                                <li><a href="{{ url('/aanbieder/view-order/'.$key->invoice_id) }}">{{__('text.View Order')}}</a></li>
 
                                                                             @endif
 
@@ -684,6 +685,16 @@
                         <h4 class="modal-title">{{__('text.Order Mail Body')}}</h4>
                     </div>
                     <div class="modal-body">
+
+                        <div style="margin: 20px 0;" class="row">
+                            <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label>{{__('text.Deliver To')}}</label>
+                                <select name="deliver_to" id="deliver_to">
+                                    <option value="1">{{__('text.Retailer')}}</option>
+                                    <option value="2">{{__('text.Customer')}}</option>
+                                </select>
+                            </div>
+                        </div>
 
                         <div style="margin: 20px 0;" class="row">
                             <div style="display: flex;flex-direction: column;align-items: flex-start;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1460,6 +1471,20 @@
 
         }
 
+        .select2-container--default .select2-selection--single {
+			border: 1px solid #ccc;
+		}
+
+        .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__rendered, .select2-container--default .select2-selection--single .select2-selection__arrow, .select2-container--default .select2-selection--single .select2-selection__rendered
+		{
+			line-height: 40px;
+			height: 40px;
+		}
+
+        .select2-container
+        {
+            margin-bottom: 20px;
+        }
 
     </style>
 
@@ -1471,13 +1496,35 @@
 
     <script type="text/javascript">
 
+        $("#deliver_to").select2({
+			width: '100%',
+			height: '200px',
+			placeholder: "{{__('text.Deliver To')}}",
+			allowClear: false,
+			"language": {
+				"noResults": function () {
+					return '{{__('text.No results found')}}';
+				}
+			},
+		});
+
         var todayDate = new Date().getDate();
         var endD = new Date(new Date().setDate(todayDate + 1));
+
+        $.fn.datepicker.dates['du'] = {
+            days: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"],
+            daysShort: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+            daysMin: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+            months: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
+            monthsShort: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
+        };
 
         $('#delivery_date_picker').datepicker({
 
             format: 'yyyy-mm-dd',
             startDate: endD,
+            language: 'du',
+            daysOfWeekDisabled: [0,6]
 
         });
 
@@ -1515,7 +1562,16 @@
                 success: function (data) {
 
                     $('#quotation_id').val(id);
-                    $("[name='mail_to']").val(data[0]);
+                    
+                    if((data[3] == null) || (data[3] == 0))
+                    {
+                        $("[name='mail_to']").val(data[0]);
+                    }
+                    else
+                    {
+                        $("[name='mail_to']").val("");
+                    }
+                    
                     $("[name='mail_subject']").val(data[1]);
                     $("[name='mail_body']").val(data[2]);
                     $('#myModal2').find(".note-editable").html(data[2]);
@@ -1661,7 +1717,16 @@
                 success: function (data) {
 
                     $('#quotation_id2').val(id);
-                    $("[name='mail_to2']").val(data[0]);
+
+                    if((data[3] == null) || (data[3] == 0))
+                    {
+                        $("[name='mail_to2']").val(data[0]);
+                    }
+                    else
+                    {
+                        $("[name='mail_to2']").val("");
+                    }
+
                     $("[name='mail_subject2']").val(data[1]);
                     $("[name='mail_body2']").val(data[2]);
                     $('#myModal4').find(".note-editable").html(data[2]);

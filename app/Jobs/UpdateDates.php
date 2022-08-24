@@ -23,6 +23,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\user_languages;
+use App\Language;
 
 class UpdateDates implements ShouldQueue
 {
@@ -31,6 +33,7 @@ class UpdateDates implements ShouldQueue
     private $request = null;
     private $user = null;
     public $timeout = 0;
+    public $lang;
 
     /**
      * Create a new job instance.
@@ -41,6 +44,38 @@ class UpdateDates implements ShouldQueue
     {
         $this->request = $request;
         $this->user = $user;
+
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+        } //whether ip is from proxy
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } //whether ip is from remote address
+        else {
+            $ip_address = $_SERVER['REMOTE_ADDR'];
+        }
+
+        $language = user_languages::where('ip', '=', $ip_address)->first();
+
+        if ($language == '') {
+
+            $language = new user_languages;
+            $language->ip = $ip_address;
+            $language->lang = 'eng';
+            $language->save();
+
+        }
+
+        if ($language->lang == 'eng') {
+
+            $this->lang = Language::where('lang', '=', 'eng')->first();
+
+        } else {
+
+            $this->lang = Language::where('lang', '=', 'du')->first();
+
+        }
+
     }
 
     /**
@@ -77,7 +112,7 @@ class UpdateDates implements ShouldQueue
 
         if($check->customer_details)
         {
-            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email','users.fake_email')->first();
         }
         else
         {
@@ -102,6 +137,7 @@ class UpdateDates implements ShouldQueue
         $delivery = array();
         $feature_sub_titles = array();
         $calculator_rows = array();
+        $deliver_to = array();
 
         foreach ($request->products as $x => $temp)
         {
@@ -115,6 +151,7 @@ class UpdateDates implements ShouldQueue
             $height[] = $temp->height;
             $height_unit[] = $temp->height_unit;
             $delivery[] = $delivery_dates[$x];
+            $deliver_to[] = $temp->deliver_to;
 
             if($form_type == 1)
             {
@@ -161,6 +198,7 @@ class UpdateDates implements ShouldQueue
         $request->height = $height;
         $request->height_unit = $height_unit;
         $request->delivery_date = $delivery;
+        $request->deliver_to = $deliver_to;
 
         $quotation_invoice_number = $request->quotation_invoice_number;
         $filename = $order_number . '.pdf';
@@ -189,12 +227,11 @@ class UpdateDates implements ShouldQueue
             {
                 $msg = " Beste".$retailer_company.", <br><br>Update: leverdatum is bijgewerkt door ".$supplier_name." voor offerte: <b>" . $quotation_invoice_number . "</b>.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> Pieppiep";
             }
-
-        else
-
-        {
-            $msg = " Dear ".$retailer_company.", <br><br>Recent activity: delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer sercvice<br><br> Pieppiep";
-        }
+            else
+            {
+                $msg = " Dear ".$retailer_company.", <br><br>Recent activity: delivery date(s) has been updated by supplier ".$supplier_name." for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer sercvice<br><br> Pieppiep";
+            }
+            
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $msg, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)
@@ -213,6 +250,7 @@ class UpdateDates implements ShouldQueue
             {
                 $msg= "Dear ".$retailer_company.", <br><br> Recent activity: order has been approved by supplier <b>".$supplier_name."</b> for quotation: <b>" . $quotation_invoice_number . "</b>.<br><br>Kind regards,<br><br>Customer service<br><br> Pieppiep"; 
             }
+            
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $msg, $retailer_company, $supplier_name, $quotation_invoice_number, $supplier_email) {
                 $message->to($retailer_email)
                     ->from('noreply@pieppiep.com', $supplier_name)

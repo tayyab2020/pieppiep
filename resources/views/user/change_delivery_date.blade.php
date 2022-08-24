@@ -70,9 +70,30 @@
                                                                         </td>
                                                                         <td>{{$item->qty}}</td>
                                                                         <td style="padding: 0;">
-                                                                            <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->delivery_date ? date('d-m-Y',strtotime($item->delivery_date)) : null}}" type="text" class="delivery_date" name="delivery_dates[]">
+                                                                            <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->delivery_date ? date('d-m-Y',strtotime($item->delivery_date)) : ($item->retailer_delivery_date ? date('d-m-Y',strtotime($item->retailer_delivery_date)) : null)}}" type="text" class="delivery_date" name="delivery_dates[]">
                                                                         </td>
                                                                     </tr>
+
+                                                                    @foreach($item->calculations as $cal)
+
+                                                                        @if(($item->measure == 'M1' || $item->measure == 'Custom Sized') && $cal->box_quantity)
+
+                                                                            <tr>
+                                                                                <td style="padding-right: 0;" colspan="2">
+                                                                                    <div style="border: 1px solid #949494;border-right: 0;padding: 0 10px;border-top-left-radius: 5px;border-bottom-left-radius: 5px;">
+                                                                                        {{$cal->description ? $cal->description : $item->product_title . ', '. $item->model . ', ' . $item->color_title}}
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td style="padding-left: 0;" colspan="6">
+                                                                                    <div style="border: 1px solid #949494;border-left: 0;border-top-right-radius: 5px;border-bottom-right-radius: 5px;padding: 0 10px;">
+                                                                                        {{$cal->box_quantity}}
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            @endif
+
+                                                                    @endforeach
 
                                                                 @endforeach
 
@@ -946,10 +967,19 @@
 
         $(document).ready(function() {
 
+            $.fn.datepicker.dates['du'] = {
+                days: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"],
+                daysShort: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+                daysMin: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+                months: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
+                monthsShort: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
+            };
+
             $('.delivery_date').datepicker({
 
                 format: 'dd-mm-yyyy',
                 startDate: new Date(),
+                language: 'du'
 
             });
 

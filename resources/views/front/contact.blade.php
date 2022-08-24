@@ -1,6 +1,7 @@
-@extends('layouts.front')
+@extends('layouts.front_new')
 @section('content')
-<div class="section-padding contact-area-wrapper wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+
+        <div class="section-padding contact-area-wrapper wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;padding: 150px 0 0 0;">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -16,7 +17,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-7 col-sm-7">
+                    <div class="col-md-8 col-sm-7">
                         <h3>{{$ps->contact_title}}</h3>
                         <p>{{$ps->contact_text}}</p>
                         <div class="comments-area">
@@ -60,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-md-offset-1 col-sm-5">
+                    <div class="col-md-4 col-sm-5">
                         <div class="contact-info padding-top-100">
                              @if($gs->street != null)
                           <p class="contact-info">
@@ -106,6 +107,16 @@
                 </div>
             </div>
         </div>
+
+        <style>
+
+            .contact-info div
+            {
+                margin-left: 20px;
+            }
+            
+        </style>
+
 @endsection
 
 @section('scripts')

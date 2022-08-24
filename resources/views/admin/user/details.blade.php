@@ -145,7 +145,7 @@
 
                                                     <div class="form-check">
                                                         <input {{in_array($key->id, $retailer_ids) ? 'checked' : null}} class="form-check-input" type="checkbox" name="retailers[]" value="{{$key->id}}" id="flexCheckChecked{{$x}}"/>
-                                                        <label class="form-check-label" for="flexCheckChecked{{$x}}">{{$key->name . ' ' . $key->family_name}}</label>
+                                                        <label class="form-check-label" for="flexCheckChecked{{$x}}">{{$key->company_name}}</label>
                                                     </div>
 
                                                 @endforeach

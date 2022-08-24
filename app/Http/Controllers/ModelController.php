@@ -299,7 +299,7 @@ class ModelController extends Controller
 
                 \Mail::send(array(), array(), function ($message) use ($admin_email,$supplier_company,$type) {
                     $message->to($admin_email)
-                        ->from('info@vloerofferte.nl')
+                        ->from('noreply@pieppiep.com')
                         ->subject('Brand Edit Request')
                         ->setBody('Dear Nordin Adoui, A new type edit request has been submitted by <b>'.$supplier_company.'</b> for type: <b>'.$type.'</b>.', 'text/html');
                 });

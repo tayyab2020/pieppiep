@@ -91,6 +91,7 @@ use App\retailer_services;
 use Excel;
 use App\planning_titles;
 use Faker\Generator as Faker;
+use App\client_quotation_msgs;
 
 class UserController extends Controller
 {
@@ -113,10 +114,8 @@ class UserController extends Controller
             $ip_address = $_SERVER['REMOTE_ADDR'];
         }
 
-
         $language = user_languages::where('ip', '=', $ip_address)->first();
         $this->sl = Sociallink::findOrFail(1);
-
 
         if ($language == '') {
 
@@ -124,8 +123,8 @@ class UserController extends Controller
             $language->ip = $ip_address;
             $language->lang = 'eng';
             $language->save();
+        
         }
-
 
         if ($language->lang == 'eng') {
 
@@ -557,7 +556,7 @@ class UserController extends Controller
             User::where('id',$request->user_id)->update(['order_prefix' => $request->order_prefix ? $request->order_prefix : 'OR', 'counter_order' => ltrim($request->order_counter, '0'), 'order_client_id' => $request->order_client_id]);
         }
 
-        Session::flash('success', 'Information updated successfully.');
+        Session::flash('success', __('text.Information updated successfully.'));
 
         return redirect()->back();
     }
@@ -582,7 +581,7 @@ class UserController extends Controller
             if($user->role_id == 2)
             {
                 $suppliers = User::leftjoin('retailers_requests','retailers_requests.retailer_id','=','users.id')->where('users.id',$user_id)->where('retailers_requests.status',1)->where('retailers_requests.active',1)->pluck('retailers_requests.supplier_id');
-                $orders = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_orders.supplier_id')->whereIn('new_orders.supplier_id',$suppliers)->where('new_quotations.finished',1)->orderBy('new_orders.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_orders.delivery_date','new_orders.order_date','new_orders.approved','new_quotations.*')->get();
+                $orders = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->leftjoin('users','users.id','=','new_orders.supplier_id')->whereIn('new_orders.supplier_id',$suppliers)->where('new_quotations.creator_id',$user_id)->where('new_quotations.finished',1)->orderBy('new_orders.id', 'desc')->take(10)->select('users.company_name','customers_details.name','new_orders.delivery_date','new_orders.order_date','new_orders.approved','new_quotations.*')->get();
             }
             else
             {
@@ -774,9 +773,9 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
             $message->to($retailer_email)
-                ->from('info@vloerofferte.nl')
+                ->from('noreply@pieppiep.com')
                 ->subject('Request Accepted!')
-                ->setBody("Supplier Mr/Mrs " . $supplier_name . " has accepted your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("Supplier Mr/Mrs " . $supplier_name . " has accepted your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
         Session::flash('success', __('text.Request accepted successfully!'));
@@ -806,9 +805,9 @@ class UserController extends Controller
 
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
                 $message->to($retailer_email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('noreply@pieppiep.com')
                     ->subject('Request Accepted!')
-                    ->setBody("Supplier Mr/Mrs " . $supplier_name . " has reactivated your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("Supplier Mr/Mrs " . $supplier_name . " has reactivated your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
 
             Session::flash('success', 'Request activated successfully!');
@@ -819,9 +818,9 @@ class UserController extends Controller
 
             \Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
                 $message->to($retailer_email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('noreply@pieppiep.com')
                     ->subject('Request Accepted!')
-                    ->setBody("Supplier Mr/Mrs " . $supplier_name . " has suspended your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("Supplier Mr/Mrs " . $supplier_name . " has suspended your request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
 
             Session::flash('success', __('text.Request suspended successfully!'));
@@ -850,9 +849,9 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($retailer_email, $supplier_name) {
             $message->to($retailer_email)
-                ->from('info@vloerofferte.nl')
+                ->from('noreply@pieppiep.com')
                 ->subject('Request Accepted!')
-                ->setBody("Supplier Mr/Mrs " . $supplier_name . " has deleted your request. You can no longer see details of this supplier.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("Supplier Mr/Mrs " . $supplier_name . " has deleted your request. You can no longer see details of this supplier.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
         Session::flash('success', __('text.Request deleted successfully!'));
@@ -963,9 +962,9 @@ class UserController extends Controller
         {
             \Mail::send(array(), array(), function ($message) use ($supplier_email, $retailer_name, $link) {
                 $message->to($supplier_email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('noreply@pieppiep.com')
                     ->subject('Retailer Request!')
-                    ->setBody("Retailer Mr/Mrs " . $retailer_name . " request for the client role is pending for your further action. Click <a href='" . $link . "'>here</a> to accept or ignore his request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("Retailer Mr/Mrs " . $retailer_name . " request for the client role is pending for your further action. Click <a href='" . $link . "'>here</a> to accept or ignore his request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
         }
         else
@@ -978,9 +977,9 @@ class UserController extends Controller
 
             \Mail::send(array(), array(), function ($message) use ($supplier_email, $retailer_name, $link) {
                 $message->to($supplier_email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('noreply@pieppiep.com')
                     ->subject('Retailer Request!')
-                    ->setBody("A retailer Mr/Mrs " . $retailer_name . " submitted a client request. Click <a href='" . $link . "'>here</a> to accept or ignore his request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("A retailer Mr/Mrs " . $retailer_name . " submitted a client request. Click <a href='" . $link . "'>here</a> to accept or ignore his request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
         }
 
@@ -1563,23 +1562,76 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($retailer_email, $user_name, $invoice, $user) {
             $message->to($retailer_email)
-                ->from('info@pieppiep.com')
+                ->from('noreply@pieppiep.com')
                 ->subject(__('text.Quotation Review Request!'))
-                ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " submitted review request against your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " submitted review request against your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
         $admin_email = $this->sl->admin_email;
 
         \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice, $user) {
             $message->to($admin_email)
-                ->from('info@pieppiep.com')
+                ->from('noreply@pieppiep.com')
                 ->subject('Quotation Review Request!')
-                ->setBody("A quotation review request has been submitted by Mr/Mrs " . $user->name . " against quotation QUO# " . $invoice->quotation_invoice_number . "<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("A quotation review request has been submitted by Mr/Mrs " . $user->name . " against quotation QUO# " . $invoice->quotation_invoice_number . "<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
         Session::flash('success', __('text.Request submitted successfully!'));
 
         return redirect()->back();
+    }
+
+    public function SendMsg(Request $request)
+    {
+        $id = $request->invoice_id;
+        $msg = $request->msg;
+
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+
+        $invoice = new_quotations::leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->leftjoin('users', 'users.id', '=', 'new_quotations.creator_id')->where('new_quotations.id', $id)->where(function($query) use ($user_id) {
+            $query->where('quotes.user_id', $user_id)->orWhere('new_quotations.user_id',$user_id);
+        })->first();
+
+        if (!$invoice) {
+            return redirect()->back();
+        }
+
+        $post = new client_quotation_msgs;
+        $post->text = $msg;
+        $post->quotation_id = $id;
+        $post->save();
+
+        $retailer_email = $invoice->email;
+        $user_name = $invoice->name;
+
+        \Mail::send(array(), array(), function ($message) use ($retailer_email, $user_name, $invoice, $user) {
+            $message->to($retailer_email)
+                ->from('info@pieppiep.com')
+                ->subject(__('text.Message for quotation'))
+                ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " sent a message regarding your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+        });
+
+        $admin_email = $this->sl->admin_email;
+
+        \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice, $user) {
+            $message->to($admin_email)
+                ->from('noreply@pieppiep.com')
+                ->subject('Quotation Review Request!')
+                ->setBody("A message was delivered by Mr/Mrs " . $user->name . " against quotation QUO# " . $invoice->quotation_invoice_number . "<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
+        });
+
+        Session::flash('success', __('text.Message delivered successfully!'));
+
+        return redirect()->back();
+    }
+
+    public function Messages($id)
+    {
+        $messages = client_quotation_msgs::where('quotation_id',$id)->get();
+
+        return view('user.messages',compact('messages'));
     }
 
     public function CustomQuotationAskCustomization(Request $request)
@@ -1604,9 +1656,9 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($handyman_email, $user_name, $invoice, $user) {
             $message->to($handyman_email)
-                ->from('info@vloerofferte.nl')
+                ->from('noreply@pieppiep.com')
                 ->subject(__('text.Quotation Review Request!'))
-                ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " submitted review request against your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " submitted review request against your quotation QUO# " . $invoice->quotation_invoice_number . "<br>Kindly take further action on this request.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
 
@@ -1787,21 +1839,24 @@ class UserController extends Controller
 
         $retailer_email = $invoice[0]->email;
         $user_name = $invoice[0]->name;
+        $user_lastName = $invoice[0]->family_name;
+        $retailer_name = $user_name . ' ' . $user_lastName;
+        $company_name = $invoice[0]->company_name;
 
         $link = url('/') . '/aanbieder/dashboard';
 
         if($this->lang->lang == 'du')
         {
-            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>Vloerofferte";
+            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>Pieppiep";
         }
         else
         {
-            $msg = "Dear" . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+            $msg = "Dear " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br>Pieppiep";
         }
 
         \Mail::send(array(), array(), function ($message) use ($msg, $retailer_email, $user_name, $invoice) {
             $message->to($retailer_email)
-                ->from('info@pieppiep.com')
+                ->from('noreply@pieppiep.com')
                 ->subject(__('text.Quotation Accepted!'))
                 ->setBody($msg, 'text/html');
         });
@@ -1812,7 +1867,7 @@ class UserController extends Controller
             $message->to($admin_email)
                 ->from('info@pieppiep.com')
                 ->subject('Quotation Accepted!')
-                ->setBody("A quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted.<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("A quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted.<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
         Session::flash('success', __('text.Quotation accepted successfully!'));
@@ -1979,21 +2034,24 @@ class UserController extends Controller
 
         $retailer_email = $invoice[0]->email;
         $user_name = $invoice[0]->name;
+        $user_lastName = $invoice[0]->family_name;
+        $retailer_name = $user_name . ' ' . $user_lastName;
+        $company_name = $invoice[0]->company_name;
 
         $link = url('/') . '/aanbieder/dashboard';
 
         if($this->lang->lang == 'du')
         {
-            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>Vloerofferte";
+            $msg = "Beste " . $user_name . ",<br><br>Gefeliciteerd de klant heeft je offerte geaccepteerd QUO# " . $invoice[0]->quotation_invoice_number . "<br>Zodra, de klant het volledig bedrag heeft voldaan ontvang je de contactgegevens, bezorgadres en bezorgmoment. Je ontvang van ons een mail als de klant heeft betaald, tot die tijd adviseren we je de goederen nog niet te leveren. <a href='" . $link . "'>Klik hier</a> om naar je dashboard te gaan.<br><br>Met vriendelijke groeten,<br><br>Pieppiep";
         }
         else
         {
-            $msg = "Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+            $msg = "Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Your quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted by your client.<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br>Pieppiep";
         }
 
         \Mail::send(array(), array(), function ($message) use ($msg, $retailer_email, $user_name, $invoice) {
             $message->to($retailer_email)
-                ->from('info@vloerofferte.nl')
+                ->from('noreply@pieppiep.com')
                 ->subject(__('text.Quotation Accepted!'))
                 ->setBody($msg, 'text/html');
         });
@@ -2003,9 +2061,9 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($admin_email, $user_name, $invoice) {
             $message->to($admin_email)
-                ->from('info@vloerofferte.nl')
+                ->from('info@pieppiep.com')
                 ->subject('Quotation Accepted!')
-                ->setBody("A quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted.<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("A quotation QUO# " . $invoice[0]->quotation_invoice_number . " has been accepted.<br>Retailer: " . $user_name . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
         return 'true';
@@ -2202,9 +2260,9 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($handyman_email, $user_name, $invoice, $user) {
             $message->to($handyman_email)
-                ->from('info@vloerofferte.nl')
+                ->from('noreply@pieppiep.com')
                 ->subject(__('text.Quotation Accepted!'))
-                ->setBody("Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                ->setBody("Congratulations! Dear Mr/Mrs " . $user_name . ",<br><br>Mr/Mrs " . $user->name . " has accepted your quotation QUO# " . $invoice->quotation_invoice_number . "<br>You can convert your quotation into invoice once job is completed,<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
         });
 
 
@@ -2248,7 +2306,7 @@ class UserController extends Controller
 
         \Mail::send(array(), array(), function ($message) use ($msg,$creator_email, $creator_name, $invoice) {
             $message->to($creator_email)
-                ->from('info@pieppiep.com')
+                ->from('noreply@pieppiep.com')
                 ->subject(__('text.Quotation Accepted!'))
                 ->setBody($msg,'text/html');
         });
@@ -2273,7 +2331,9 @@ class UserController extends Controller
                 $user_id = $user->id;
             }
 
-            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('new_quotations.quotation_invoice_number','users.email','customers_details.name','customers_details.family_name')->first();
+            $retailer_name = $user->name;
+
+            $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.status',1)->select('new_quotations.mail_to','new_quotations.quotation_invoice_number','users.email','users.fake_email','customers_details.name','customers_details.family_name')->first();
 
             if (!$invoice) {
                 return redirect()->back();
@@ -2281,26 +2341,28 @@ class UserController extends Controller
 
             new_quotations::where('id', $id)->update(['status' => 2, 'ask_customization' => 0, 'accepted' => 1, 'accept_date' => $now]);
 
-            $client_email = $invoice->email;
-            $client_name = $invoice->name . ' ' . $invoice->family_name;
+            $client_name = $invoice->name;
+            $valid_email = $invoice->fake_email;
+            $mail_to = $invoice->mail_to;
+            $client_email = $valid_email ? $mail_to : $invoice->email;
 
-           if($this->lang->lang == 'du')
-           {
-               $msg = "Beste " . $client_name . ",<br><br><b>" . $user->company_name . "</b> heeft namens jou je offerte met offertenummer <b>" . $invoice->quotation_invoice_number . "</b> geaccepteerd.<br><br>Met vriendelijke groet,<br><br>Klantenservice<br><br> $user->company_name";
-           }
-           else
-           {
-               $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>Customer service<br><br> $user->company_name";
-           }
+            if($this->lang->lang == 'du')
+            {
+                $msg = "Beste " . $client_name . ",<br><br><b>" . $user->company_name . "</b> heeft namens jou je offerte met offertenummer <b>" . $invoice->quotation_invoice_number . "</b> geaccepteerd.<br><br>Met vriendelijke groet,<br><br>$retailer_name<br><br>$user->company_name";
+            }
+            else
+            {
+                $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>$retailer_name<br><br>$user->company_name";
+            }
    
-           \Mail::send(array(), array(), function ($message) use ($msg, $client_email, $client_name, $invoice, $user) {
+            \Mail::send(array(), array(), function ($message) use ($msg, $client_email, $client_name, $invoice, $user) {
                 $message
                     ->to($client_email)
                     ->from('noreply@pieppiep.com', $user->company_name)
                     ->replyTo($user->email, $user->company_name)
                     ->subject(__('text.Quotation Accepted!'))
                     ->setBody($msg,'text/html');
-           });
+            });
         }
         else
         {
@@ -2603,7 +2665,7 @@ class UserController extends Controller
 
         $user->syncPermissions($request->permissions);
 
-        Session::flash('success', 'Permission(s) assigned successfully');
+        Session::flash('success', __('text.Permission(s) assigned successfully.'));
         return redirect()->route('employee-permissions',$request->user_id);
     }
 
@@ -2903,12 +2965,12 @@ class UserController extends Controller
                     }
                     else
                     {
-                        $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
+                        $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>$user_name<br><br>Klantenservice<br><br>$company_name";
                     }
 
                     \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
                         $message->to($user_email)
-                            ->from('noreply@pieppiep.com',$company_name)
+                            ->from('info@vloerofferte.nl',$company_name)
                             ->replyTo($retailer_email,$company_name)
                             ->subject(__('text.Account Created!'))
                             ->setBody($msg,'text/html');
@@ -2952,7 +3014,7 @@ class UserController extends Controller
                     'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                     'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                     /*'company_name' => 'required',*/
-                    'registration_number' => 'required',
+                    // 'registration_number' => 'required',
                     'postcode' => 'required',
                     'city' => 'required',
                     /*'bank_account' => 'required',*/
@@ -2972,7 +3034,7 @@ class UserController extends Controller
                         'family_name.max' => $this->lang->fnmrv,
                         'family_name.regex' => $this->lang->fniv,
                         /*'company_name.required' => $this->lang->cnrv,*/
-                        'registration_number.required' => $this->lang->rnrv,
+                        // 'registration_number.required' => $this->lang->rnrv,
                         /*'bank_account.required' => $this->lang->barv,
                         'tax_number.required' => $this->lang->tnrv,*/
                         'postcode.required' => $this->lang->pcrv,
@@ -3000,7 +3062,7 @@ class UserController extends Controller
                     'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                     'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                     /*'company_name' => 'required',*/
-                    'registration_number' => 'required',
+                    // 'registration_number' => 'required',
                     'postcode' => 'required',
                     'city' => 'required',
                     /*'bank_account' => 'required',*/
@@ -3019,7 +3081,7 @@ class UserController extends Controller
                         'family_name.max' => $this->lang->fnmrv,
                         'family_name.regex' => $this->lang->fniv,
                         /*'company_name.required' => $this->lang->cnrv,*/
-                        'registration_number.required' => $this->lang->rnrv,
+                        // 'registration_number.required' => $this->lang->rnrv,
                         /*'bank_account.required' => $this->lang->barv,
                         'tax_number.required' => $this->lang->tnrv,*/
                         'postcode.required' => $this->lang->pcrv,
@@ -3030,7 +3092,6 @@ class UserController extends Controller
 
                 User::where('id',$request->emp_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'registration_number' => $request->registration_number, 'company_name' => $company_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone, 'email' => $request->email]);
             }
-
 
             Session::flash('success', 'Employee information updated successfully');
             return redirect()->route('employees');
@@ -3050,7 +3111,7 @@ class UserController extends Controller
                 'name'   => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                 'family_name' => 'required|regex:/(^[A-Za-z ]+$)+/|max:15',
                 /*'company_name' => 'required',*/
-                'registration_number' => 'required',
+                // 'registration_number' => 'required',
                 'postcode' => 'required',
                 'city' => 'required',
                 /*'bank_account' => 'required',*/
@@ -3070,7 +3131,7 @@ class UserController extends Controller
                     'family_name.max' => $this->lang->fnmrv,
                     'family_name.regex' => $this->lang->fniv,
                     /*'company_name.required' => $this->lang->cnrv,*/
-                    'registration_number.required' => $this->lang->rnrv,
+                    // 'registration_number.required' => $this->lang->rnrv,
                     /*'bank_account.required' => $this->lang->barv,
                     'tax_number.required' => $this->lang->tnrv,*/
                     'postcode.required' => $this->lang->pcrv,
@@ -3280,12 +3341,12 @@ class UserController extends Controller
                 }
                 else
                 {
-                    $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte<br><br>$company_name";
+                    $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>$user_name<br><br>Klantenservice<br><br>$company_name";
                 }
 
                 \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
                     $message->to($user_email)
-                        ->from('noreply@pieppiep.com', $company_name)
+                        ->from('info@vloerofferte.nl', $company_name)
                         ->replyTo($retailer_email, $company_name)
                         ->subject(__('text.Account Created!'))
                         ->setBody($msg, 'text/html');
@@ -3338,7 +3399,7 @@ class UserController extends Controller
         }
         else
         {
-            $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->leftjoin('customers_details','customers_details.user_id','=','users.id')->where('new_quotations.id',$id)->select('new_quotations.*','customers_details.name','users.email')->first();
+            $data = new_quotations::leftjoin('users','users.id','=','new_quotations.user_id')->leftjoin('customers_details','customers_details.user_id','=','users.id')->where('new_quotations.id',$id)->select('new_quotations.*','customers_details.name','users.email','users.fake_email')->first();
         }
 
         if($req_type == 'quotation')
@@ -3348,7 +3409,7 @@ class UserController extends Controller
             if(!$mail_template)
             {
                 $mail_subject_template = 'Offerte: {offerte_nummer}';
-                $mail_body_template = '<div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Beste {aan_voornaam},</span></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;"><br></span></span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr;"><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px; color: windowtext; margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Hierbij de offerte met offertenummer {offerte_nummer}.</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><br></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 16px; font-variant-ligatures: none;">{Click here to accept this quote directly online or click here to view quotes in your account}</span><br></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1287498014" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{217}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 12pt;">&nbsp;</span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="588099994" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{36}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Met vriendelijke groet,</span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_voornaam}</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_bedrijfsnaam}</span></span></p></div>';
+                $mail_body_template = '<div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Beste {aan_voornaam},</span></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="1734808987" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{183}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;"><br></span></span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr;"><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px; color: windowtext; margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">Hierbij de offerte met offertenummer {offerte_nummer}.</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><br></p><p class="Paragraph SCXW193241479 BCX0" paraid="2025117577" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{193}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 16px; font-variant-ligatures: none;">{Klik hier om de offerte in je account te bekijken}</span><br></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="1287498014" paraeid="{d22048a8-261e-4878-810c-cb993567f9d4}{217}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span style="color: rgb(85, 85, 85); font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif; font-size: 12pt;">&nbsp;</span></p></div><div class="OutlineElement Ltr  BCX0 SCXW193241479" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow: visible; cursor: text; clear: both; position: relative; direction: ltr; color: rgb(0, 0, 0); font-family: &quot;Segoe UI&quot;, &quot;Segoe UI Web&quot;, Arial, Verdana, sans-serif; font-size: 12px;"><p class="Paragraph SCXW193241479 BCX0" paraid="588099994" paraeid="{067a829f-0db6-4a3a-8ad2-66efb8a422c4}{36}" style="margin-bottom: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; overflow-wrap: break-word; vertical-align: baseline; font-kerning: none; color: windowtext;"><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;">Met vriendelijke groet,</span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><span class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;">&nbsp;</span><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_voornaam}</span></span><span class="LineBreakBlob BlobObject DragDrop SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-size: 12pt; line-height: 18px; font-family: WordVisiCarriageReturn_MSFontService, open_sansregular, open_sansregular_EmbeddedFont, sans-serif; color: rgb(85, 85, 85);"><br class="SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; white-space: pre !important;"></span><span data-contrast="none" xml:lang="NL-NL" lang="NL-NL" class="TextRun SCXW193241479 BCX0" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; font-variant-ligatures: none !important; color: rgb(85, 85, 85); font-size: 12pt; line-height: 18px; font-family: open_sansregular, open_sansregular_EmbeddedFont, sans-serif;"><span class="NormalTextRun SCXW193241479 BCX0" data-ccp-parastyle="Normal (Web)" style="margin: 0px; padding: 0px; user-select: text; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent;">{van_bedrijfsnaam}</span></span></p></div>';
             }
             else
             {
@@ -3363,7 +3424,7 @@ class UserController extends Controller
             $mail_body_template = str_replace('{aan_voornaam}',$data->name,$mail_body_template);
             $mail_body_template = str_replace('{offerte_nummer}',$data->quotation_invoice_number,$mail_body_template);
             $mail_body_template = str_replace('{Click here to accept this quote directly online or click here to view quotes in your account}','Click <a style="color: blue;" href="'.$link.'">here</a> to accept this quote directly online or click <a style="color: blue;" href="'.$quotations_link.'">here</a> to view quotes in your account',$mail_body_template);
-            $mail_body_template = str_replace('{Klik hier om de offerte te accepteren of klik hier om de offerte in je account te bekijken}','Klik <a style="color: blue;" href="'.$link.'">hier</a> om de offerte te accepteren of klik <a style="color: blue;" href="'.$quotations_link.'">hier</a> hier om de offerte in je account te bekijken',$mail_body_template);
+            $mail_body_template = str_replace('{Klik hier om de offerte in je account te bekijken}','Klik <a style="color: blue;" href="'.$quotations_link.'">hier</a> hier om de offerte in je account te bekijken',$mail_body_template);
             $mail_body_template = str_replace('{van_voornaam}',$user->name,$mail_body_template);
             $mail_body_template = str_replace('{van_bedrijfsnaam}',$user->company_name,$mail_body_template);
         }
@@ -3404,7 +3465,7 @@ class UserController extends Controller
             $mail_body_template = str_replace('{van_bedrijfsnaam}',$user->company_name,$mail_body_template);
         }
 
-        $post = array($data->email,$mail_subject_template,$mail_body_template);
+        $post = array($data->email,$mail_subject_template,$mail_body_template,$data->fake_email);
 
         return $post;
     }
@@ -3630,69 +3691,70 @@ class UserController extends Controller
 
         if($check)
         {
-            $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->select('new_quotations.*','new_quotations_data.item_id','new_quotations_data.service_id','new_quotations.delivery_date as retailer_delivery_date','new_quotations.installation_date as retailer_installation_date','new_quotations.id as invoice_id','new_quotations_data.box_quantity','new_quotations_data.measure','new_quotations_data.max_width','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
-                ->with(['features' => function($query)
-                {
-                    $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
-                        /*->where('new_quotations_features.sub_feature',0)*/
-                        ->select('new_quotations_features.*','features.title','features.comment_box');
-                }])
-                ->with(['sub_features' => function($query)
-                {
-                    $query->leftjoin('product_features','product_features.id','=','new_quotations_features.feature_id')
-                        /*->where('new_quotations_features.sub_feature',1)*/
-                        ->select('new_quotations_features.*','product_features.title');
-                }])->with('calculations')->get();
+            // $invoice = new_quotations_data::leftjoin('new_quotations','new_quotations.id','=','new_quotations_data.quotation_id')->leftjoin('products','products.id','=','new_quotations_data.product_id')->where('new_quotations.id', $id)->select('new_quotations.*','new_quotations_data.item_id','new_quotations_data.service_id','new_quotations.delivery_date as retailer_delivery_date','new_quotations.installation_date as retailer_installation_date','new_quotations.id as invoice_id','new_quotations_data.box_quantity','new_quotations_data.measure','new_quotations_data.max_width','new_quotations_data.order_number','new_quotations_data.discount','new_quotations_data.labor_discount','new_quotations_data.total_discount','new_quotations_data.price_before_labor','new_quotations_data.labor_impact','new_quotations_data.model_impact_value','new_quotations_data.childsafe','new_quotations_data.childsafe_question','new_quotations_data.childsafe_answer','new_quotations_data.childsafe_x','new_quotations_data.childsafe_y','new_quotations_data.childsafe_diff','new_quotations_data.model_id','new_quotations_data.delivery_days','new_quotations_data.delivery_date','new_quotations_data.id','new_quotations_data.supplier_id','new_quotations_data.product_id','new_quotations_data.row_id','new_quotations_data.rate','new_quotations_data.basic_price','new_quotations_data.qty','new_quotations_data.amount','new_quotations_data.color','new_quotations_data.width','new_quotations_data.width_unit','new_quotations_data.height','new_quotations_data.height_unit','new_quotations_data.price_based_option','new_quotations_data.base_price','new_quotations_data.supplier_margin','new_quotations_data.retailer_margin','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+            //     ->with(['features' => function($query)
+            //     {
+            //         $query->leftjoin('features','features.id','=','new_quotations_features.feature_id')
+            //             /*->where('new_quotations_features.sub_feature',0)*/
+            //             ->select('new_quotations_features.*','features.title','features.comment_box');
+            //     }])
+            //     ->with(['sub_features' => function($query)
+            //     {
+            //         $query->leftjoin('product_features','product_features.id','=','new_quotations_features.feature_id')
+            //             /*->where('new_quotations_features.sub_feature',1)*/
+            //             ->select('new_quotations_features.*','product_features.title');
+            //     }])->with('calculations')->get();
 
-            if (!$invoice) {
-                return redirect()->back();
-            }
+            // if (!$invoice) {
+            //     return redirect()->back();
+            // }
 
-            $supplier_products = array();
-            $product_titles = array();
-            $item_titles = array();
-            $service_titles = array();
-            $color_titles = array();
-            $model_titles = array();
-            $product_suppliers = array();
-            $sub_products = array();
-            $colors = array();
-            $models = array();
-            $features = array();
-            $sub_features = array();
+            // $supplier_products = array();
+            // $product_titles = array();
+            // $item_titles = array();
+            // $service_titles = array();
+            // $color_titles = array();
+            // $model_titles = array();
+            // $product_suppliers = array();
+            // $sub_products = array();
+            // $colors = array();
+            // $models = array();
+            // $features = array();
+            // $sub_features = array();
 
-            $f = 0;
-            $s = 0;
+            // $f = 0;
+            // $s = 0;
 
-            foreach ($invoice as $i => $item)
-            {
-                $product_titles[] = product::where('id',$item->product_id)->pluck('title')->first();
-                $item_titles[] = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.id',$item->item_id)->select('items.cat_name','categories.cat_name as category')->first();
-                $service_titles[] = Service::where('id',$item->service_id)->pluck('title')->first();
-                $color_titles[] = colors::where('id',$item->color)->pluck('title')->first();
-                $model_titles[] = product_models::where('id',$item->model_id)->pluck('model')->first();
-                $product_suppliers[] = User::where('id',$item->supplier_id)->first();
+            // foreach ($invoice as $i => $item)
+            // {
+            //     $product_titles[] = product::where('id',$item->product_id)->pluck('title')->first();
+            //     $item_titles[] = items::leftjoin('categories','categories.id','=','items.category_id')->where('items.id',$item->item_id)->select('items.cat_name','categories.cat_name as category')->first();
+            //     $service_titles[] = Service::where('id',$item->service_id)->pluck('title')->first();
+            //     $color_titles[] = colors::where('id',$item->color)->pluck('title')->first();
+            //     $model_titles[] = product_models::where('id',$item->model_id)->pluck('model')->first();
+            //     $product_suppliers[] = User::where('id',$item->supplier_id)->first();
 
-                foreach ($item->features as $feature)
-                {
-                    $features[$f] = product_features::leftjoin('model_features','model_features.product_feature_id','=','product_features.id')->where('product_features.product_id',$item->product_id)->where('product_features.heading_id',$feature->feature_id)->where('product_features.sub_feature',0)->where('model_features.model_id',$item->model_id)->where('model_features.linked',1)->select('product_features.*')->get();
+            //     foreach ($item->features as $feature)
+            //     {
+            //         $features[$f] = product_features::leftjoin('model_features','model_features.product_feature_id','=','product_features.id')->where('product_features.product_id',$item->product_id)->where('product_features.heading_id',$feature->feature_id)->where('product_features.sub_feature',0)->where('model_features.model_id',$item->model_id)->where('model_features.linked',1)->select('product_features.*')->get();
 
-                    if($feature->ladderband)
-                    {
-                        $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->select('new_quotations_sub_products.*','product_ladderbands.title','product_ladderbands.code')->get();
-                    }
+            //         if($feature->ladderband)
+            //         {
+            //             $sub_products[$i] = new_quotations_sub_products::leftjoin('product_ladderbands','product_ladderbands.id','=','new_quotations_sub_products.sub_product_id')->where('new_quotations_sub_products.feature_row_id',$feature->id)->select('new_quotations_sub_products.*','product_ladderbands.title','product_ladderbands.code')->get();
+            //         }
 
-                    $f = $f + 1;
-                }
+            //         $f = $f + 1;
+            //     }
 
-                foreach ($item->sub_features as $sub_feature)
-                {
-                    $sub_features[$s] = product_features::where('product_id',$item->product_id)->where('main_id',$sub_feature->feature_id)->get();
-                    $s = $s + 1;
-                }
-            }
+            //     foreach ($item->sub_features as $sub_feature)
+            //     {
+            //         $sub_features[$s] = product_features::where('product_id',$item->product_id)->where('main_id',$sub_feature->feature_id)->get();
+            //         $s = $s + 1;
+            //     }
+            // }
 
-            return view('user.client_new_quotation', compact('product_titles','color_titles','model_titles','product_suppliers','features','sub_features','invoice','sub_products'));
+            // return view('user.client_new_quotation', compact('product_titles','color_titles','model_titles','product_suppliers','features','sub_features','invoice','sub_products'));
+            return view('user.client_new_quotation', compact('check'));
         }
         else
         {
@@ -4079,7 +4141,14 @@ class UserController extends Controller
         }
         else
         {
-            $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            if($user_role == 2)
+            {
+                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_quotations.creator_id',$user_id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            }
+            else
+            {
+                $check = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->where('new_orders.quotation_id',$id)->where('new_orders.supplier_id',$user_id)->select('new_quotations.*','new_orders.approved','new_orders.order_sent','new_orders.supplier_id','new_orders.quotation_id')->first();
+            }
         }
 
         if($check)
@@ -4146,7 +4215,7 @@ class UserController extends Controller
                     $suppliers = User::whereIn('id',$suppliers)->get();
                 }
 
-                $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+                $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->where('new_orders.supplier_id',$supplier_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
                     ->with(['features' => function($query)
                     {
                         $query->leftjoin('features','features.id','=','new_orders_features.feature_id')
@@ -4251,7 +4320,6 @@ class UserController extends Controller
 
         $event_titles = planning_titles::where('user_id',$user_id)->get();
         $plannings = quotation_appointments::leftjoin('new_quotations','new_quotations.id','=','quotation_appointments.quotation_id')->leftjoin('customers_details as t1','t1.id','=','new_quotations.customer_details')->leftjoin('customers_details as t2','t2.id','=','quotation_appointments.retailer_client_id')->leftjoin('users as t3','t3.id','=','quotation_appointments.supplier_id')->leftjoin('users as t4','t4.id','=','quotation_appointments.employee_id')->where('quotation_appointments.user_id',$user_id)->select('quotation_appointments.*','t1.name as client_quotation_fname','t1.family_name as client_quotation_lname','t2.name as client_fname','t2.family_name as client_lname','t3.company_name','t4.name as employee_fname','t4.family_name as employee_lname')->get();
-
         $plannings = json_encode($plannings);
         $quotation_ids = new_quotations::leftjoin('customers_details','customers_details.id','=','new_quotations.customer_details')->where('new_quotations.creator_id',$user_id)->select('new_quotations.id','new_quotations.quotation_invoice_number','customers_details.name','customers_details.family_name')->get();
         $last_event_id = quotation_appointments::latest('id')->pluck('id')->first();
@@ -4336,7 +4404,7 @@ class UserController extends Controller
             quotation_appointments::whereNotIn('id',$ap_array)->where('user_id',$user_id)->delete();
         }
 
-        Session::flash('success', 'Task completed successfully.');
+        Session::flash('success', __('text.Task completed successfully.'));
         return redirect()->back();
     }
 
@@ -4641,7 +4709,7 @@ class UserController extends Controller
         }
 
         $products = $request->products;
-        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email')->first();
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email','users.fake_email')->first();
 
         if($request->form_type == 2)
         {
@@ -4961,6 +5029,7 @@ class UserController extends Controller
             $total = array();
             $total_discount = array();
             $feature_sub_titles = array();
+            $deliver_to = array();
 
             foreach ($request->products as $x => $temp)
             {
@@ -4981,6 +5050,7 @@ class UserController extends Controller
                 $labor_discount[] = $temp->labor_discount;
                 $total[] = $temp->amount;
                 $total_discount[] = $temp->total_discount;
+                $deliver_to[] = $temp->deliver_to;
 
                 $features = new_orders_features::where('order_data_id',$temp->id)->get();
 
@@ -5029,6 +5099,7 @@ class UserController extends Controller
             $request->labor_discount = $labor_discount;
             $request->total = $total;
             $request->total_discount = $total_discount;
+            $request->deliver_to = $deliver_to;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
             $filename = $order_number . '.pdf';
@@ -5086,7 +5157,7 @@ class UserController extends Controller
         $company_name = $user->company_name;
         $products = $request->products;
 
-        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email')->first();
+        $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $request->customer)->select('customers_details.*','users.email','users.fake_email')->first();
 
         if($request->quotation_id)
         {
@@ -5302,29 +5373,17 @@ class UserController extends Controller
             }
             else
             {
+                $invoice = new_quotations::where('id',$request->quotation_id)->first();
+                $quotation_invoice_number = $invoice->quotation_invoice_number;
                 $ask = new_quotations::where('id',$request->quotation_id)->pluck('ask_customization')->first();
 
                 if($form_type == 2)
                 {
-                    if(new_quotations::where('id',$request->quotation_id)->pluck('status')->first() == 2)
-                    {
-                        new_quotations::where('id',$request->quotation_id)->update(['status' => 1,'accepted' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
-                    }
-                    else
-                    {
-                        new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
-                    }
+                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => str_replace(',', '.',str_replace('.', '',$request->labor_cost_total)), 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->customer, 'user_id' => $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
                 }
                 else
                 {
-                    if(new_quotations::where('id',$request->quotation_id)->pluck('status')->first() == 2)
-                    {
-                        new_quotations::where('id',$request->quotation_id)->update(['status' => 1,'accepted' => 0,'description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
-                    }
-                    else
-                    {
-                        new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
-                    }
+                    new_quotations::where('id',$request->quotation_id)->update(['description' => $request->description,'delivery_date' => $delivery_date_start,'delivery_date_end' => $delivery_date_end,'installation_date' => $installation_date_start,'installation_date_end' => $installation_date_end,'price_before_labor_total' => str_replace(',', '.',str_replace('.', '',$request->price_before_labor_total)), 'labor_cost_total' => 0, 'net_amount' => str_replace(',', '.',str_replace('.', '',$request->net_amount)), 'tax_amount' => str_replace(',', '.',str_replace('.', '',$request->tax_amount)), 'customer_details' => $request->quote_request_id ? 0 : $request->customer, 'user_id' => $request->quote_request_id ? 0 : $client->user_id, 'ask_customization' => 0, 'subtotal' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'grand_total' => str_replace(',', '.',str_replace('.', '',$request->total_amount)), 'mail_to' => $request->mail_to]);
                 }
 
                 $data_ids = new_quotations_data::where('quotation_id',$request->quotation_id)->pluck('id');
@@ -5338,18 +5397,22 @@ class UserController extends Controller
                 if($form_type == 1)
                 {
                     new_quotations_data_calculations::whereIn('quotation_data_id',$data_ids)->delete();
-                    new_orders_calculations::whereIn('order_id',$order_ids)->delete();
+
+                    if(!$invoice->finished)
+                    {
+                        new_orders_calculations::whereIn('order_id',$order_ids)->delete();
+                    }
                 }
 
                 new_quotations_features::whereIn('quotation_data_id',$data_ids)->delete();
                 new_quotations_sub_products::whereIn('feature_row_id',$feature_ids)->delete();
 
-                new_orders::where('quotation_id',$request->quotation_id)->delete();
-                new_orders_features::whereIn('order_data_id',$order_ids)->delete();
-                new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
-
-                $invoice = new_quotations::where('id',$request->quotation_id)->first();
-                $quotation_invoice_number = $invoice->quotation_invoice_number;
+                if(!$invoice->finished)
+                {
+                    new_orders::where('quotation_id',$request->quotation_id)->delete();
+                    new_orders_features::whereIn('order_data_id',$order_ids)->delete();
+                    new_orders_sub_products::whereIn('feature_row_id',$order_feature_ids)->delete();
+                }
             }
 
         }
@@ -5492,12 +5555,12 @@ class UserController extends Controller
             }
 
             date_default_timezone_set('Europe/Amsterdam');
-            $delivery_date = date('Y-m-d', strtotime($delivery_date_start . ' -1 day'));
+            $delivery_date = date('Y-m-d', strtotime($delivery_date_start . ' +1 day'));
             $is_weekend = date('N', strtotime($delivery_date)) >= 6;
 
             while($is_weekend)
             {
-                $delivery_date = date('Y-m-d', strtotime($delivery_date. '- 1 day'));
+                $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 day'));
                 $is_weekend = date('N', strtotime($delivery_date)) >= 6;
             }
 
@@ -5631,8 +5694,8 @@ class UserController extends Controller
                     $order->qty = $request->qty[$i] ? str_replace(',', '.',$request->qty[$i]) : 0;
                     $order->amount = $request->total[$i];
                     $order->delivery_days = $request->delivery_days[$i];
-                    $order->delivery_date = $delivery_date;
-                    $order->retailer_delivery_date = $delivery_date;
+                    // $order->delivery_date = $delivery_date;
+                    // $order->retailer_delivery_date = $delivery_date;
                     $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
                     $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                     $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
@@ -5701,7 +5764,11 @@ class UserController extends Controller
                     }
 
                     $invoice_items->save();
-                    $order->save();
+
+                    if(!$invoice->finished)
+                    {
+                        $order->save();   
+                    }
 
                     if($form_type == 1)
                     {
@@ -5744,21 +5811,32 @@ class UserController extends Controller
                             $calculations->turn = $request->$turn[$c];
                             $calculations->save();
 
-                            $order_calculations = new new_orders_calculations;
-                            $order_calculations->order_id = $order->id;
-                            $order_calculations->calculator_row = $cal;
-                            $order_calculations->parent_row = $parent_row;
-                            $order_calculations->description = $request->$description[$c];
-                            $order_calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
-                            $order_calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
-                            $order_calculations->cutting_lose = $request->$cutting_lose[$c];
-                            $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
-                            $order_calculations->box_quantity = $request->$box_quantity[$c];
-                            $order_calculations->total_boxes = $request->$total_boxes[$c];
-                            $order_calculations->max_width = $request->$max_width[$c];
-                            $order_calculations->turn = $request->$turn[$c];
-                            $order_calculations->save();
+                            if(!$invoice->finished)
+                            {
+                                $order_calculations = new new_orders_calculations;
+                                $order_calculations->order_id = $order->id;
+                                $order_calculations->calculator_row = $cal;
+                                $order_calculations->parent_row = $parent_row;
+                                $order_calculations->description = $request->$description[$c];
+                                $order_calculations->width = $request->$width[$c] ? str_replace(',', '.',$request->$width[$c]) : NULL;
+                                $order_calculations->height = $request->$height[$c] ? str_replace(',', '.',$request->$height[$c]) : NULL;
+                                $order_calculations->cutting_lose = $request->$cutting_lose[$c];
+                                $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
+                                $order_calculations->box_quantity = $request->$box_quantity[$c];
+                                $order_calculations->total_boxes = $request->$total_boxes[$c];
+                                $order_calculations->max_width = $request->$max_width[$c];
+                                $order_calculations->turn = $request->$turn[$c];
+                                $order_calculations->save();
+                            }
+                            else
+                            {
+                                $od = new_orders_calculations::leftjoin('new_orders','new_orders.id','=','new_orders_calculations.order_id')->where('new_orders.quotation_id',$invoice->id)->skip($c)->select('new_orders_calculations.*')->first();
+                                $od->description = $request->$description[$c];
+                                $od->save();
+                            }
+
                         }
+
                     }
 
                     $feature_row = 'features'.$row_id;
@@ -5790,13 +5868,16 @@ class UserController extends Controller
                                 $post->ladderband = $key1;
                                 $post->save();
 
-                                $post_order_features = new new_orders_features;
-                                $post_order_features->order_data_id = $order->id;
-                                $post_order_features->price = $f_prices[$f];
-                                $post_order_features->feature_id = $f_ids[$f];
-                                $post_order_features->feature_sub_id = 0;
-                                $post_order_features->ladderband = $key1;
-                                $post_order_features->save();
+                                if(!$invoice->finished)
+                                {
+                                    $post_order_features = new new_orders_features;
+                                    $post_order_features->order_data_id = $order->id;
+                                    $post_order_features->price = $f_prices[$f];
+                                    $post_order_features->feature_id = $f_ids[$f];
+                                    $post_order_features->feature_sub_id = 0;
+                                    $post_order_features->ladderband = $key1;
+                                    $post_order_features->save();
+                                }
 
                                 if($key1)
                                 {
@@ -5818,12 +5899,15 @@ class UserController extends Controller
                                         $post1->size2_value = $size2_value[$s];
                                         $post1->save();
 
-                                        $post_orders_sub_products = new new_orders_sub_products;
-                                        $post_orders_sub_products->feature_row_id = $post_order_features->id;
-                                        $post_orders_sub_products->sub_product_id = $key2;
-                                        $post_orders_sub_products->size1_value = $size1_value[$s];
-                                        $post_orders_sub_products->size2_value = $size2_value[$s];
-                                        $post_orders_sub_products->save();
+                                        if(!$invoice->finished)
+                                        {
+                                            $post_orders_sub_products = new new_orders_sub_products;
+                                            $post_orders_sub_products->feature_row_id = $post_order_features->id;
+                                            $post_orders_sub_products->sub_product_id = $key2;
+                                            $post_orders_sub_products->size1_value = $size1_value[$s];
+                                            $post_orders_sub_products->size2_value = $size2_value[$s];
+                                            $post_orders_sub_products->save();
+                                        }
 
                                         if($size1_value[$s] == 1 || $size2_value[$s] == 1)
                                         {
@@ -5852,14 +5936,17 @@ class UserController extends Controller
                                 $post->comment = $comment;
                                 $post->save();
 
-                                $post_order_features = new new_orders_features;
-                                $post_order_features->order_data_id = $order->id;
-                                $post_order_features->price = $f_prices[$f];
-                                $post_order_features->feature_id = $f_ids[$f];
-                                $post_order_features->feature_sub_id = $key1;
-                                $post_order_features->sub_feature = $is_sub_feature[$f];
-                                $post_order_features->comment = $comment;
-                                $post_order_features->save();
+                                if(!$invoice->finished)
+                                {
+                                    $post_order_features = new new_orders_features;
+                                    $post_order_features->order_data_id = $order->id;
+                                    $post_order_features->price = $f_prices[$f];
+                                    $post_order_features->feature_id = $f_ids[$f];
+                                    $post_order_features->feature_sub_id = $key1;
+                                    $post_order_features->sub_feature = $is_sub_feature[$f];
+                                    $post_order_features->comment = $comment;
+                                    $post_order_features->save();
+                                }
                             }
 
                             /*$feature_titles[$i][] = features::where('id',$f_ids[$f])->first();*/
@@ -6144,7 +6231,7 @@ class UserController extends Controller
             
                     \Mail::send(array(), array(), function ($message) use ($msg, $client, $quotation_invoice_number, $user_email, $company_name) {
                         $message->to($client->email)
-                            ->from('noreply@pieppiep.com', $company_name)
+                            ->from('info@vloerofferte.nl', $company_name)
                             ->replyTo($user_email, $company_name)
                             ->subject(__('text.Quotation updated!'))
                             ->setBody($msg,'text/html');
@@ -6171,24 +6258,27 @@ class UserController extends Controller
             $file = public_path() . '/assets/newQuotations/' . $filename;
             $pdf->save($file);
 
-            if (array_filter($suppliers)) {
+            if(!$invoice->finished)
+            {
+                if (array_filter($suppliers)) {
 
-                $invoice->processing = 1;
-                $invoice->save();
-                $quotation_id = $invoice->id;
-
-                if($form_type == 1)
-                {
-                    $role = 'order';
-                    CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
-                }
-                else
-                {
-                    $role = 'supplier2';
-                    CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
-                }
-
-           }
+                    $invoice->processing = 1;
+                    $invoice->save();
+                    $quotation_id = $invoice->id;
+    
+                    if($form_type == 1)
+                    {
+                        $role = 'order';
+                        CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
+                    }
+                    else
+                    {
+                        $role = 'supplier2';
+                        CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
+                    }
+    
+               }
+            }
 
         }
         else
@@ -6410,7 +6500,7 @@ class UserController extends Controller
                     'quotation_invoice_number' => $quotation_invoice_number,
                     'type' => $type
                 ), function ($message) use ($file, $admin_email, $filename) {
-                    $message->from('info@vloerofferte.nl');
+                    $message->from('info@pieppiep.com');
                     $message->to($admin_email)->subject(__('text.Quotation Created!'));
 
                     $message->attach($file, [
@@ -6539,7 +6629,7 @@ class UserController extends Controller
                     'quotation_invoice_number' => $quotation_invoice_number,
                     'type' => $type
                 ), function ($message) use ($file, $admin_email, $filename) {
-                    $message->from('info@vloerofferte.nl');
+                    $message->from('info@pieppiep.com');
                     $message->to($admin_email)->subject(__('text.Quotation Edited!'));
 
                     $message->attach($file, [
@@ -6650,7 +6740,7 @@ class UserController extends Controller
                     'quotation_invoice_number' => $quotation_invoice_number,
                     'type' => $type
                 ), function ($message) use ($file, $admin_email, $filename) {
-                    $message->from('info@vloerofferte.nl');
+                    $message->from('info@pieppiep.com');
                     $message->to($admin_email)->subject(__('text.Invoice Generated!'));
 
                     $message->attach($file, [
@@ -6862,7 +6952,7 @@ class UserController extends Controller
             $check->processing = 1;
             $check->save();
 
-            SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1,$request->delivery_date);
+            SendOrder::dispatch($request->quotation_id1,$user,$request->mail_subject1,$request->mail_body1,$request->delivery_date,$request->deliver_to);
 
             Session::flash('success', __('text.Order will be sent to supplier(s) soon...'));
             return redirect()->route('customer-quotations');
@@ -6944,8 +7034,8 @@ class UserController extends Controller
 
         if($data)
         {
-            $invoice = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('products','products.id','=','new_orders.product_id')->leftjoin('product_models','product_models.id','=','new_orders.model_id')->leftjoin('colors','colors.id','=','new_orders.color')->where('new_quotations.id', $id)->where('new_orders.supplier_id', $user_id)->select('colors.title as color_title','product_models.model','new_quotations.*','new_quotations.id as invoice_id','new_orders.approved','new_orders.delivery_days','new_orders.delivery_date','new_orders.id','new_orders.supplier_id','new_orders.product_id','new_orders.color','new_orders.qty','products.title as product_title')->get();
-
+            $invoice = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('products','products.id','=','new_orders.product_id')->leftjoin('product_models','product_models.id','=','new_orders.model_id')->leftjoin('colors','colors.id','=','new_orders.color')->where('new_quotations.id', $id)->where('new_orders.supplier_id', $user_id)->with("calculations")->select('colors.title as color_title','product_models.model','new_quotations.*','new_quotations.id as invoice_id','new_orders.approved','new_orders.delivery_days','new_orders.delivery_date','new_orders.retailer_delivery_date','new_orders.id','new_orders.supplier_id','new_orders.product_id','new_orders.color','new_orders.qty','new_orders.measure','products.title as product_title')->get();
+            
             return view('user.change_delivery_date',compact('data','invoice'));
         }
         else
@@ -7050,6 +7140,7 @@ class UserController extends Controller
         $user_id = $user->id;
         $retailer_company = $user->company_name;
         $retailer_email = $user->email;
+        $retailer_name = $user->name;
 
         $data = new_quotations::where('id',$id)->where('creator_id', $user_id)->first();
 
@@ -7066,9 +7157,9 @@ class UserController extends Controller
             }
             else
             {
-                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email')->first();
+                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $data->customer_details)->select('customers_details.*','users.email','users.fake_email')->first();
                 $client_name = $client->name . ' ' . $client->family_name;
-                $client_email = $client->email;
+                $client_email = $client->fake_email ? $data->mail_to : $client->email;
             }
 
             $quotation_invoice_number = $data->quotation_invoice_number;
@@ -7163,7 +7254,7 @@ class UserController extends Controller
         new_quotations::where('id', $request->quotation_id2)->update(['mail_invoice_to' => $request->mail_to2]);
         new_invoices::where('quotation_id', $request->quotation_id2)->update(['mail_invoice_to' => $request->mail_to2]);
 
-        Session::flash("success", "{{__('text.Invoice sent to customer successfully!')}} ");
+        Session::flash("success", __('text.Invoice sent to customer successfully!'));
         return redirect()->back();
     }
 
@@ -7209,7 +7300,7 @@ class UserController extends Controller
                 'msg' => $msg,
             ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename) {
                 $message->to($mail_to)
-                    ->from('info@pieppiep.com')
+                    ->from('noreply@pieppiep.com')
                     ->subject($subject)
                     ->attach($file, [
                         'as' => $filename,
@@ -7221,7 +7312,7 @@ class UserController extends Controller
         new_invoices::where('quotation_id', $request->quotation_id3)->update(['mail_negative_invoice_to' => $request->mail_to3]);
         new_negative_invoices::where('quotation_id', $request->quotation_id3)->update(['mail_negative_invoice_to' => $request->mail_to3]);
 
-        Session::flash("success", "{{__('text.Negative Invoice sent to customer successfully!')}} ");
+        Session::flash("success", __('text.Negative Invoice sent to customer successfully!'));
         return redirect()->back();
     }
 
@@ -7267,13 +7358,13 @@ class UserController extends Controller
             }
             else
             {
-                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->customer_details)->select('customers_details.*','users.email')->first();
+                $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id',$data->customer_details)->select('customers_details.*','users.email','users.fake_email')->first();
             }
 
             $request = new_quotations::where('id',$invoice_id)->select('new_quotations.*','new_quotations.subtotal as total_amount')->first();
             $request->products = new_quotations_data::where('quotation_id',$invoice_id)->get();
-            $delivery_date = date('d-m-Y',strtotime($request->delivery_date)) . ' - ' . date('d-m-Y',strtotime($request->delivery_date_end));
-            $installation_date = date('d-m-Y',strtotime($request->installation_date)) . ' - ' . date('d-m-Y',strtotime($request->installation_date_end));
+            $delivery_date = $request->delivery_date ? date('d-m-Y',strtotime($request->delivery_date)) . ' - ' . date('d-m-Y',strtotime($request->delivery_date_end)) : "";
+            $installation_date = $request->installation_date ? date('d-m-Y',strtotime($request->installation_date)) . ' - ' . date('d-m-Y',strtotime($request->installation_date_end)) : "";
 
             $product_titles = array();
             $color_titles = array();
@@ -10121,7 +10212,6 @@ class UserController extends Controller
 
         $user->update($input);
 
-
         Session::flash('success', $this->lang->success);
         return redirect()->route('client-profile');
     }
@@ -10377,9 +10467,9 @@ class UserController extends Controller
 
                 \Mail::send(array(), array(), function ($message) use ($admin_email, $client) {
                     $message->to($admin_email)
-                        ->from('info@vloerofferte.nl')
+                        ->from('info@pieppiep.com')
                         ->subject('Invoice Status Changed')
-                        ->setBody("Recent activity: Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                        ->setBody("Recent activity: Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
                 });
 
                 Session::flash('success', __('text.Status Updated Successfully!'));
@@ -10412,11 +10502,11 @@ class UserController extends Controller
 
             if($this->lang->lang == 'du')
             {
-                $msg = "Beste $retailer->name,<br><br>Je klant heeft de status voor factuur INV# <b>" . $retailer->quotation_invoice_number . "</b> gewijzigd naar goederen ontvangen.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
+                $msg = "Beste $retailer->name,<br><br>Je klant heeft de status voor factuur INV# <b>" . $retailer->quotation_invoice_number . "</b> gewijzigd naar goederen ontvangen.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Pieppiep";
             }
             else
             {
-                $msg = "Dear <b>Mr/Mrs " . $retailer->name . "</b>,<br><br>Goods for quotation INV# <b>" . $retailer->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+                $msg = "Dear <b>Mr/Mrs " . $retailer->name . "</b>,<br><br>Goods for quotation INV# <b>" . $retailer->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
             }
 
             \Mail::send(array(), array(), function ($message) use ($msg,$retailer) {
@@ -10428,9 +10518,9 @@ class UserController extends Controller
 
             \Mail::send(array(), array(), function ($message) use ($admin_email, $retailer) {
                 $message->to($admin_email)
-                    ->from('noreply@pieppiep.com')
+                    ->from('info@pieppiep.com')
                     ->subject('Invoice Status Changed')
-                    ->setBody("Recent activity: Goods for quotation INV# <b>" . $retailer->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("Recent activity: Goods for quotation INV# <b>" . $retailer->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
 
             Session::flash('success', __('text.Status Updated Successfully!'));
@@ -10476,9 +10566,9 @@ class UserController extends Controller
 
                 \Mail::send(array(), array(), function ($message) use ($admin_email, $client) {
                     $message->to($admin_email)
-                        ->from('info@vloerofferte.nl')
+                        ->from('info@pieppiep.com')
                         ->subject('Invoice Status Changed')
-                        ->setBody("Recent activity: Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                        ->setBody("Recent activity: Goods for quotation INV# <b>" . $client->quotation_invoice_number . "</b> have been marked as delivered.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
                 });
 
                 Session::flash('success', __('text.Status Updated Successfully!'));
@@ -10509,25 +10599,25 @@ class UserController extends Controller
 
             if($this->lang->lang == 'du')
             {
-                $msg = "Beste $handyman->name,<br><br>Je klant heeft de status voor factuur INV# <b>" . $handyman->quotation_invoice_number . "</b> gewijzigd naar goederen ontvangen.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Vloerofferte";
+                $msg = "Beste $handyman->name,<br><br>Je klant heeft de status voor factuur INV# <b>" . $handyman->quotation_invoice_number . "</b> gewijzigd naar goederen ontvangen.<br><br>Met vriendelijke groeten,<br><br>Klantenservice<br><br> Piepiep";
             }
             else
             {
-                $msg = "Dear <b>Mr/Mrs " . $handyman->name . "</b>,<br><br>Goods for quotation INV# <b>" . $handyman->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte";
+                $msg = "Dear <b>Mr/Mrs " . $handyman->name . "</b>,<br><br>Goods for quotation INV# <b>" . $handyman->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep";
             }
 
             \Mail::send(array(), array(), function ($message) use ($msg,$handyman) {
                 $message->to($handyman->email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('noreply@pieppiep.com')
                     ->subject(__('text.Invoice Status Changed'))
                     ->setBody($msg, 'text/html');
             });
 
             \Mail::send(array(), array(), function ($message) use ($admin_email, $handyman) {
                 $message->to($admin_email)
-                    ->from('info@vloerofferte.nl')
+                    ->from('info@pieppiep.com')
                     ->subject('Invoice Status Changed')
-                    ->setBody("Recent activity: Goods for quotation INV# <b>" . $handyman->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte", 'text/html');
+                    ->setBody("Recent activity: Goods for quotation INV# <b>" . $handyman->quotation_invoice_number . "</b> have been marked as received.<br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep", 'text/html');
             });
 
             Session::flash('success', __('text.Status Updated Successfully!'));

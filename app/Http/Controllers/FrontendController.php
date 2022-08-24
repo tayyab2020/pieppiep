@@ -493,7 +493,7 @@ class FrontendController extends Controller
         }
 
 
-        $cart = carts::leftjoin('users', 'users.id', '=', 'carts.handyman_id')->leftjoin('categories', 'categories.id', '=', 'carts.service_id')->leftjoin('service_types', 'service_types.id', '=', 'carts.rate_id')->where('user_ip', '=', $ip_address)->Select('carts.id', 'carts.handyman_id', 'users.name', 'users.email', 'users.photo', 'users.family_name', 'categories.cat_name', 'categories.cat_slug', 'categories.vat_percentage', 'service_types.type', 'carts.service_id', 'carts.rate', 'carts.rate_id', 'carts.service_rate', 'carts.booking_date', 'carts.main_id')->get();
+        $cart = carts::leftjoin('users', 'users.id', '=', 'carts.handyman_id')->leftjoin('categories', 'categories.id', '=', 'carts.service_id')->leftjoin('service_types', 'service_types.id', '=', 'carts.rate_id')->where('user_ip', '=', $ip_address)->select('carts.id', 'carts.handyman_id', 'users.name', 'users.email', 'users.photo', 'users.family_name', 'categories.cat_name', 'categories.cat_slug', 'categories.vat_percentage', 'service_types.type', 'carts.service_id', 'carts.rate', 'carts.rate_id', 'carts.service_rate', 'carts.booking_date', 'carts.main_id')->get();
 
 
         if (!$cart->isEmpty()) {

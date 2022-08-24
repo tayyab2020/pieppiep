@@ -154,7 +154,7 @@
 																		<label class="content-label">Product</label>
 
 																		<div class="autocomplete" style="width:100%;">
-																			<input value="{{$product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')'}}" id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">
+																			<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">{{$product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')'}}</textarea>
 																		</div>
 
 																		<input type="hidden" value="{{$item->product_id}}" name="products[]" id="product_id">
@@ -168,8 +168,8 @@
 
 																		<label class="content-label">Qty</label>
 
-																		<div style="display: flex;align-items: center;">
-																			<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">
+																		<div style="display: flex;align-items: center;height: 100%;">
+																			<input type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
 																		</div>
 																	</div>
 
@@ -973,9 +973,8 @@
 
 	.quote-product {
 		border: 0;
-		padding: 0 5px;
+		padding: 15px;
 		width: 100%;
-		height: 35px !important;
 	}
 
 	.autocomplete-items {
@@ -1287,7 +1286,7 @@
     {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: stretch;
     }
 
     .header-div .headings
@@ -1313,7 +1312,7 @@
 		font-weight: 500;
 		padding: 0;
 		color: #3c3c3c;
-        height: 40px;
+        height: auto;
         display: flex;
         align-items: center;
 	}
@@ -1872,7 +1871,7 @@
 					'\n' +
 					'                                                                <div class="autocomplete" style="width:100%;">\n' +
 					'\n' +
-					'																	<input id="productInput" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
+					'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}"></textarea>\n' +
 					'\n' +
 					'                                                                </div>\n' +
 					'\n' +
@@ -1887,8 +1886,8 @@
 					'\n' +
 					'                       									 	<label class="content-label">Qty</label>\n' +
 					'\n' +
-					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
+					'																 <div style="display: flex;align-items: center;height: 100%;">\n' +
+					'																 	<input type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">\n' +
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -2005,7 +2004,7 @@
 					'\n' +
 					'                                                                <div class="autocomplete" style="width:100%;">\n' +
 					'\n' +
-					'																	<input id="productInput" value="'+product_text+'" autocomplete="off" class="form-control quote-product" type="text" name="product" placeholder="{{__('text.Select Product')}}">\n' +
+					'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">'+product_text+'</textarea>\n' +
 					'\n' +
 					'                                                                </div>\n' +
 					'\n' +
@@ -2020,8 +2019,8 @@
 					'\n' +
 					'                       									 	<label class="content-label">Qty</label>\n' +
 					'\n' +
-					'																 <div style="display: flex;align-items: center;">\n' +
-					'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;" class="form-control qty res-white">\n' +
+					'																 <div style="display: flex;align-items: center;height: 100%;">\n' +
+					'																 	<input value="' + qty + '" type="text" name="qty[]" maskedFormat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">\n' +
 					'																 </div>\n' +
 					'                                                            </div>\n' +
 					'\n' +
@@ -2604,13 +2603,18 @@
 			var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
 			var val = String.fromCharCode(charCode);
 
+			if(val == '.')
+			{
+				val = ',';
+			}
+
 			if (!val.match(/^[0-9]*\,?[0-9]*$/))  // For characters validation
 			{
 				e.preventDefault();
 				return false;
 			}
 
-			if (e.which == 44) {
+			if (e.which == 44 || e.which == 46) {
 				if (this.value.indexOf(',') > -1) {
 					e.preventDefault();
 					return false;
@@ -2621,6 +2625,14 @@
 			var regex = new RegExp("^\\d{0," + num[0] + "}(\\,\\d{0," + num[1] + "})?$");
 			if (!regex.test(this.value)) {
 				this.value = this.value.substring(0, this.value.length - 1);
+			}
+			else{
+					if(e.which == 46)
+					{
+						this.value = this.value + String.fromCharCode(44);
+						e.preventDefault();
+						return false;
+					}
 			}
 
 		});

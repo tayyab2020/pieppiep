@@ -34,6 +34,7 @@ class SendOrder implements ShouldQueue
     private $mail_subject = null;
     private $mail_body = null;
     private $retailer_delivery_date = null;
+    private $deliver_to = 1;
     public $timeout = 0;
 
     /**
@@ -41,13 +42,14 @@ class SendOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($id,$user,$mail_subject,$mail_body,$retailer_delivery_date)
+    public function __construct($id,$user,$mail_subject,$mail_body,$retailer_delivery_date,$deliver_to)
     {
         $this->id = $id;
         $this->user = $user;
         $this->mail_subject = $mail_subject;
         $this->mail_body = $mail_body;
         $this->retailer_delivery_date = $retailer_delivery_date;
+        $this->deliver_to = $deliver_to;
     }
 
     /**
@@ -64,6 +66,7 @@ class SendOrder implements ShouldQueue
         $mail_subject = $this->mail_subject;
         $mail_body = $this->mail_body;
         $retailer_delivery_date = $this->retailer_delivery_date;
+        $deliver_to = $this->deliver_to;
         $sup_mail = array();
 
         if($main_id)
@@ -80,7 +83,7 @@ class SendOrder implements ShouldQueue
 
         if($check->customer_details)
         {
-            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email')->first();
+            $client = customers_details::leftjoin('users','users.id','=','customers_details.user_id')->where('customers_details.id', $check->customer_details)->select('customers_details.*','users.email','users.fake_email')->first();
         }
         else
         {
@@ -119,6 +122,7 @@ class SendOrder implements ShouldQueue
             $labor_discount = array();
             $total = array();
             $total_discount = array();
+            $deliver_to1 = array();
             $feature_sub_titles = array();
             $calculator_rows = array();
 
@@ -141,6 +145,7 @@ class SendOrder implements ShouldQueue
                 $labor_discount[] = $temp->labor_discount;
                 $total[] = $temp->amount;
                 $total_discount[] = $temp->total_discount;
+                $deliver_to1[] = $deliver_to;
 
                 if($form_type == 1)
                 {
@@ -194,6 +199,7 @@ class SendOrder implements ShouldQueue
             $request->labor_discount = $labor_discount;
             $request->total = $total;
             $request->total_discount = $total_discount;
+            $request->deliver_to = $deliver_to1;
 
             $quotation_invoice_number = $request->quotation_invoice_number;
             $order_number = new_orders::where('quotation_id',$id)->where('supplier_id',$key)->first();
@@ -202,7 +208,7 @@ class SendOrder implements ShouldQueue
             $file = public_path() . '/assets/supplierQuotations/' . $filename;
 
             // new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d')]);
-            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d'),'retailer_delivery_date' => $retailer_delivery_date]);
+            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d'),'retailer_delivery_date' => $retailer_delivery_date, 'deliver_to' => $deliver_to]);
 
             ini_set('max_execution_time', 180);
 

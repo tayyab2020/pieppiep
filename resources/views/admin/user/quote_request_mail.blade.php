@@ -12,11 +12,11 @@
         <br>
         3. Je aanvraag wordt door ons gecontroleerd. Als alles in orde is, versturen wij jouw offerte door naar de klant.
         <br><br>
-        Met vriendelijke groeten, <br><br>Vloerofferte
+        Met vriendelijke groeten, <br><br>Pieppiep
     </p>
 
     {{--<p>
-        Dear Mr/Mrs {{$username}},<br><br>You have received a quotation request. Client is waiting for your response. You can go to your dashboard through <a href='{{$link}}'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Vloerofferte
+        Dear Mr/Mrs {{$username}},<br><br>You have received a quotation request. Client is waiting for your response. You can go to your dashboard through <a href='{{$link}}'>here.</a><br><br>Kind regards,<br><br>Klantenservice<br><br> Pieppiep
     </p>--}}
 
 </body>

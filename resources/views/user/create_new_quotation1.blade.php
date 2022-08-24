@@ -168,17 +168,42 @@
 
 																				<label class="content-label">Supplier</label>
 
-																				<select name="suppliers[]" class="js-data-example-ajax1">
+																				@if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)))
 
-																					<option value=""></option>
+																					<?php
 
-																					@foreach($suppliers as $key)
+																						$supplier = "";
+																						$supplier_id = "";
 
-																						<option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
+																						foreach($suppliers as $key)
+																						{
+																							if($key->id == $item->supplier_id)
+																							{
+																								$supplier_id = $key->id;
+																								$supplier = $key->company_name;
+																							}
+																						}
 
-																					@endforeach
+																					?>
 
-																				</select>
+																					<input readonly style="background: transparent;border: 0;" type="text" value="{{$supplier}}" class="form-control">
+																					<input type="hidden" value="{{$supplier_id}}" name="suppliers[]">
+
+																				@else
+																				
+																					<select name="suppliers[]" class="js-data-example-ajax1">
+
+																						<option value=""></option>
+
+																						@foreach($suppliers as $key)
+
+																							<option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
+
+																						@endforeach
+
+																					</select>
+
+																				@endif
 
 																			</div>
 
@@ -186,17 +211,42 @@
 
 																				<label class="content-label">Product</label>
 
-																				<select name="products[]" class="js-data-example-ajax">
+																				@if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)))
 
-																					<option value=""></option>
+																					<?php
 
-																					@foreach($supplier_products[$i] as $key)
+																						$product = "";
+																						$product_id = "";
 
-																						<option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+																						foreach($supplier_products[$i] as $key)
+																						{
+																							if($key->id == $item->product_id)
+																							{
+																								$product_id = $key->id;
+																								$product = $key->title;
+																							}
+																						}
 
-																					@endforeach
+																					?>
 
-																				</select>
+																					<input readonly style="background: transparent;border: 0;" type="text" value="{{$product}}" class="form-control">
+																					<input type="hidden" value="{{$product_id}}" name="products[]">
+
+																				@else
+
+																					<select name="products[]" class="js-data-example-ajax">
+
+																						<option value=""></option>
+
+																						@foreach($supplier_products[$i] as $key)
+
+																							<option {{$key->id == $item->product_id ? 'selected' : null}} value="{{$key->id}}">{{$key->title}}</option>
+
+																						@endforeach
+
+																					</select>
+
+																				@endif
 
 																			</div>
 
@@ -205,7 +255,7 @@
 																				<label class="content-label">Width</label>
 
 																				<div class="m-box">
-																					<input {{$item->price_based_option == 3 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
+																					<input {{(Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) || $item->price_based_option == 3 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->width))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="width[]" type="text">
 																					<input style="border: 0;outline: none;" readonly type="text" name="width_unit[]" class="measure-unit" value="{{$item->width_unit}}">
 																				</div>
 																			</div>
@@ -215,7 +265,7 @@
 																				<label class="content-label">Height</label>
 
 																				<div class="m-box">
-																					<input {{$item->price_based_option == 2 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
+																					<input {{(Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) || $item->price_based_option == 2 ? 'readonly' : null}} value="{{str_replace('.', ',', floatval($item->height))}}" class="form-control m-input" maskedFormat="9,1" autocomplete="off" name="height[]" type="text">
 																					<input style="border: 0;outline: none;" readonly type="text" name="height_unit[]" class="measure-unit" value="{{$item->height_unit}}">
 																				</div>
 																			</div>
@@ -237,7 +287,7 @@
 
 																				<div style="display: flex;align-items: center;">
 																					<span>€</span>
-																					<input type="text" value="{{number_format((float)$item->labor_impact, 2, ',', '')}}" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif type="text" value="{{number_format((float)$item->labor_impact, 2, ',', '')}}" name="labor_impact[]" maskedFormat="9,1" class="form-control labor_impact res-white">
 																					<input type="hidden" value="{{$item->labor_impact/$item->qty}}" class="labor_impact_old">
 																				</div>
 																			</div>
@@ -309,17 +359,42 @@
 
 																					<label>{{__('text.Color')}}</label>
 
-																					<select name="colors[]" class="js-data-example-ajax2">
+																					@if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)))
 
-																						<option value=""></option>
+																						<?php
 
-																						@foreach($colors[$i] as $color)
+																							$color1 = "";
+																							$color_id = "";
 
-																							<option {{$color->id == $item->color ? 'selected' : null}} value="{{$color->id}}">{{$color->title}}</option>
+																							foreach($colors[$i] as $color)
+																							{
+																								if($color->id == $item->color)
+																								{
+																									$color_id = $color->id;
+																									$color1 = $color->title;
+																								}
+																							}
 
-																						@endforeach
+																						?>
 
-																					</select>
+																						<input readonly style="background: transparent;border-radius: 4px;height: 35px;" type="text" value="{{$color1}}" class="form-control">
+																						<input type="hidden" value="{{$color_id}}" name="colors[]">
+
+																					@else
+
+																						<select name="colors[]" class="js-data-example-ajax2">
+
+																							<option value=""></option>
+
+																							@foreach($colors[$i] as $color)
+
+																								<option {{$color->id == $item->color ? 'selected' : null}} value="{{$color->id}}">{{$color->title}}</option>
+
+																							@endforeach
+
+																						</select>
+
+																					@endif
 
 																				</div>
 
@@ -327,17 +402,42 @@
 
 																					<label>{{__('text.Model')}}</label>
 
-																					<select name="models[]" class="js-data-example-ajax3">
+																					@if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)))
 
-																						<option value=""></option>
+																						<?php
 
-																						@foreach($models[$i] as $model)
+																							$model1 = "";
+																							$model_id = "";
 
-																							<option {{$model->id == $item->model_id ? 'selected' : null}} value="{{$model->id}}">{{$model->model}}</option>
+																							foreach($models[$i] as $model)
+																							{
+																								if($model->id == $item->model_id)
+																								{
+																									$model_id = $model->id;
+																									$model1 = $model->model;
+																								}
+																							}
 
-																						@endforeach
+																						?>
 
-																					</select>
+																						<input readonly style="background: transparent;border-radius: 4px;height: 35px;" type="text" value="{{$model1}}" class="form-control">
+																						<input type="hidden" value="{{$model_id}}" name="models[]">
+
+																					@else
+
+																						<select name="models[]" class="js-data-example-ajax3">
+
+																							<option value=""></option>
+
+																							@foreach($models[$i] as $model)
+
+																								<option {{$model->id == $item->model_id ? 'selected' : null}} value="{{$model->id}}">{{$model->model}}</option>
+
+																							@endforeach
+
+																						</select>
+
+																					@endif
 
 																					<input type="hidden" class="model_impact_value" name="model_impact_value[]" value="{{$item->model_impact_value}}">
 
@@ -347,7 +447,7 @@
 
 																					<label>{{__('text.Discount')}} % </label>
 
-																					<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
 
 																				</div>
 
@@ -355,7 +455,7 @@
 
 																					<label>{{__('text.Labor Discount')}} % </label>
 
-																					<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="{{$item->labor_discount}}" name="labor_discount[]">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control labor_discount_values" value="{{$item->labor_discount}}" name="labor_discount[]">
 
 																				</div>
 
@@ -704,8 +804,8 @@
 																						<label
 																								style="margin-right: 10px;margin-bottom: 0;">{{__('text.Quantity')}}</label>
 																						@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
-																						<input value="{{$key1->qty}}"
-																							   style="border: none;border-bottom: 1px solid lightgrey;"
+																						<input value="{{$key1->qty}}" @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif
+																							   style="border: none;border-bottom: 1px solid lightgrey;background: transparent;"
 																							   maskedformat="9,1" name="qty[]"
 																							   class="form-control"
 																							   type="text"><span>pcs</span>
@@ -717,14 +817,14 @@
 																					<div class="row childsafe-content-box" style="margin: 0;display: flex;align-items: center;">
 																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																							<label style="margin-right: 10px;margin-bottom: 0;">Montagehoogte</label>
-																							<input value="{{$key1->childsafe_x}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
+																							<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif value="{{$key1->childsafe_x}}" style="border: none;border-bottom: 1px solid lightgrey;background: transparent;" type="number" class="form-control childsafe_values" id="childsafe_x" name="childsafe_x{{$x+1}}">
 																						</div>
 																					</div>
 
 																					<div class="row childsafe-content-box1" style="margin: 0;display: flex;align-items: center;">
 																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;" class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
 																							<label style="margin-right: 10px;margin-bottom: 0;">Kettinglengte</label>
-																							<input value="{{$key1->childsafe_y}}" style="border: none;border-bottom: 1px solid lightgrey;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
+																							<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif value="{{$key1->childsafe_y}}" style="border: none;border-bottom: 1px solid lightgrey;background: transparent;" type="number" class="form-control childsafe_values" id="childsafe_y" name="childsafe_y{{$x+1}}">
 																						</div>
 																					</div>
 
@@ -733,39 +833,28 @@
 
 																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																							 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																							<label
-																									style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>
+																							<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}</label>
 																							<select
 																									style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																									class="form-control childsafe-select"
 																									name="childsafe_option{{$x+1}}">
 
-																								<option value="">{{__('text.Select any option')}}
-																								</option>
+																								<option {{(Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null}} value="">{{__('text.Select any option')}}</option>
 
 																								@if($key1->childsafe_diff <= 150)
-																									<option {{$key1->childsafe_question
-																					== 1 ? 'selected' : null}}
-																											value="1">{{__('text.Please note not childsafe')}}
-																									</option>
-																									<option {{$key1->childsafe_question
-																						== 2 ? 'selected' : null}}
-																											value="2">{{__('text.Add childsafety clip')}}
-																									</option>
+
+																									<option {{$key1->childsafe_question == 1 ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}} value="1">{{__('text.Please note not childsafe')}}</option>
+																									<option {{$key1->childsafe_question == 2 ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}} value="2">{{__('text.Add childsafety clip')}}</option>
 
 																								@else
 
-																									<option {{$key1->childsafe_question
-																						== 2 ? 'selected' : null}}
-																											value="2">{{__('text.Add childsafety clip')}}
-																									</option>
-																									<option {{$key1->childsafe_question
-																						== 3 ? 'selected' : null}}
-																											value="3">{{__('text.Yes childsafe')}}</option>
+																									<option {{$key1->childsafe_question == 2 ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}} value="2">{{__('text.Add childsafety clip')}}</option>
+																									<option {{$key1->childsafe_question == 3 ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}} value="3">{{__('text.Yes childsafe')}}</option>
 
 																								@endif
 
 																							</select>
+
 																							<input value="{{$key1->childsafe_diff}}"
 																								   name="childsafe_diff{{$x + 1}}"
 																								   class="childsafe_diff" type="hidden">
@@ -778,22 +867,19 @@
 
 																						<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																							 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																							<label
-																									style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe')}}
-																								Answer</label>
+																							<label style="margin-right: 10px;margin-bottom: 0;">{{__('text.Childsafe Answer')}}</label>
 																							<select
 																									style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																									class="form-control childsafe-answer"
 																									name="childsafe_answer{{$x+1}}">
+
 																								@if($key1->childsafe_question == 1)
-																									<option {{$key1->childsafe_answer == 1 ?
-																					'selected' : null}} value="1">{{__('text.Make it childsafe')}}</option>
-																									<option {{$key1->childsafe_answer == 2 ?
-																					'selected' : null}} value="2">{{__('text.Yes i agree')}}</option>
+																									<option {{$key1->childsafe_answer == 1 ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}} value="1">{{__('text.Make it childsafe')}}</option>
+																									<option {{$key1->childsafe_answer == 2 ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}} value="2">{{__('text.Yes i agree')}}</option>
 																								@else
-																									<option selected value="3">{{__('text.Is childsafe')}}
-																									</option>
+																									<option selected value="3">{{__('text.Is childsafe')}}</option>
 																								@endif
+
 																							</select>
 																						</div>
 
@@ -817,13 +903,10 @@
 																										style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																										class="form-control feature-select"
 																										name="features{{$x+1}}[]">
-																									<option {{$feature->ladderband == 0 ?
-																					'selected' : null}} value="0">{{__('text.No')}}
-																									</option>
-																									<option {{$feature->ladderband == 1 ?
-																					'selected' : null}} value="1">{{__('text.Yes')}}
-																									</option>
+																									<option {{$feature->ladderband == 0 ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}} value="0">{{__('text.No')}}</option>
+																									<option {{$feature->ladderband == 1 ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}} value="1">{{__('text.Yes')}}</option>
 																								</select>
+																								
 																								<input value="{{$feature->price}}"
 																									   name="f_price{{$x + 1}}[]"
 																									   class="f_price" type="hidden">
@@ -852,21 +935,17 @@
 
 																							<div style="display: flex;align-items: center;font-family: Dlp-Brown,Helvetica Neue,sans-serif;font-size: 12px;"
 																								 class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-																								<label
-																										style="margin-right: 10px;margin-bottom: 0;">{{$feature->title}}</label>
+																								<label style="margin-right: 10px;margin-bottom: 0;">{{$feature->title}}</label>
 																								<select
 																										style="border: none;border-bottom: 1px solid lightgrey;height: 30px;padding: 0;"
 																										class="form-control feature-select"
 																										name="features{{$x+1}}[]">
 
-																									<option value="0">{{__('text.Select Feature')}}
-																									</option>
+																									<option {{(Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null}} value="0">{{__('text.Select Feature')}}</option>
 
 																									@foreach($features[$f] as $temp)
 
-																										<option {{$temp->id ==
-																					$feature->feature_sub_id ?
-																					'selected' : null}}
+																										<option {{$temp->id == $feature->feature_sub_id ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}}
 																												value="{{$temp->id}}">{{$temp->title}}
 																										</option>
 
@@ -911,14 +990,11 @@
 																												class="form-control feature-select"
 																												name="features{{$x+1}}[]">
 
-																											<option value="0">{{__('text.Select Feature')}}
-																											</option>
+																											<option {{(Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null}} value="0">{{__('text.Select Feature')}}</option>
 
 																											@foreach($sub_features[$s] as $temp)
 
-																												<option {{$temp->id ==
-																					$sub_feature->feature_sub_id ?
-																					'selected' : null}}
+																												<option {{$temp->id == $sub_feature->feature_sub_id ? 'selected' : ((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1)) ? 'disabled' : null)}}
 																														value="{{$temp->id}}">{{$temp->title}}
 																												</option>
 
@@ -1276,12 +1352,12 @@
 							<select class="appointment_title">
 
 								<option value="">{{__('text.Select Event Title')}}</option>
-								<option value="Delivery Date">{{__('text.Delivery Date')}}</option>
-								<option value="Installation Date">{{__('text.Installation Date')}}</option>
+                                <option data-text="{{__('text.Delivery Date')}}" value="Delivery Date">{{__('text.Delivery Date')}}</option>
+                                <option data-text="{{__('text.Installation Date')}}" value="Installation Date">{{__('text.Installation Date')}}</option>
 
 								@foreach($event_titles as $title)
 
-									<option value="{{$title->title}}">{{$title->title}}</option>
+                                    <option data-text="{{$title->title}}" value="{{$title->title}}">{{$title->title}}</option>
 
 								@endforeach
 
@@ -2179,6 +2255,7 @@
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&libraries=places&callback=initMap" defer></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/nl.js"></script>
 
 	<script type="text/javascript">
 
@@ -2387,6 +2464,19 @@
 				var appointment_desc = $('.appointment_description').val();
 				var appointment_tags = $('.appointment_tags').val();
 
+                if(title == "Delivery Date")
+                {
+                    var event_title = "{{__('text.Delivery Date')}}";
+                }
+                else if(title == "Installation Date")
+                {
+                    var event_title = "{{__('text.Installation Date')}}";
+                }
+                else
+                {
+                    var event_title = title;
+                }
+
 				if (format_start <= format_end){
 
 					$('.appointment_end').css('border','');
@@ -2405,13 +2495,13 @@
 					if(id)
 					{
 						var event = calendar.getEventById(id);
-						event.setDates(format_start,format_end);
+                        event.setDates(format_start,format_end + ':01');
 						event.setExtendedProp('quotation_id', appointment_quotation_id);
 						event.setExtendedProp('event_type', event_type);
 						event.setExtendedProp('retailer_client_id', customer_id);
 						event.setExtendedProp('supplier_id', supplier_id);
                         event.setExtendedProp('employee_id', employee_id);
-						event.setProp('title', title);
+                        event.setProp('title', event_title);
 						event.setExtendedProp('description',appointment_desc);
 						event.setExtendedProp('tags',appointment_tags);
 						event.setExtendedProp('client_quotation_fname',client_quotation_fname);
@@ -2463,7 +2553,7 @@
 						calendar.addEvent({
 							id: id,
 							quotation_id: appointment_quotation_id,
-							title: title,
+                            title: event_title,
 							start: format_start,
 							end: format_end + ':01',
 							description: appointment_desc,
@@ -2592,7 +2682,8 @@
 
 			$('#event_id').val(id);
 			$('.appointment_quotation_number').val(quotation_id);
-			$('.appointment_title').val(title);
+            // $('.appointment_title').val(title);
+            $(".appointment_title option[data-text='" + title + "']").prop("selected", true);
 			$('.appointment_start').val(start);
 			$('.appointment_end').val(end);
 			$('.appointment_description').val(description);
@@ -2661,11 +2752,18 @@
 			var calendarEl = document.getElementById('calendar');
 
 			calendar = new FullCalendar.Calendar(calendarEl, {
+				allDayText: '{{__("text.all-day")}}',
 				headerToolbar: {
 					left: 'prev,next today',
 					center: 'title',
 					right: 'dayGridMonth,timeGridWeek,timeGridDay'
 				},
+				buttonText: {
+                    today: '{{__('text.today')}}',
+                    day: '{{__('text.day')}}',
+                    week:'{{__('text.week')}}',
+                    month:'{{__('text.month')}}'
+                },
 				initialDate: new Date(),
 				navLinks: true, // can click day/week names to navigate views
 				selectable: true,
@@ -2739,32 +2837,44 @@
 					var actualAppointment = $(arg.el);
 					var event = arg.event;
 					var id = arg.event._def.publicId;
+					var title = event._def.title;
 
-						if(event._def.extendedProps.quotation_id)
-                    	{
-							if(event._def.extendedProps.client_quotation_fname || event._def.extendedProps.client_quotation_lname)
-							{
-								actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
-							}
-							else
-							{
-								actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;"></span>');
-							}
-                    	}
-                    	else if(event._def.extendedProps.retailer_client_id)
-                    	{
-                        	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_fname + ' ' + event._def.extendedProps.client_lname +'</span>');
-                    	}
-                    	else if(event._def.extendedProps.supplier_id)
-                    	{
-                        	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.company_name +'</span>');
-                    	}
-                    	else
-                    	{
-                        	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.employee_fname + ' ' + event._def.extendedProps.employee_lname +'</span>');
-                    	}
+                    if(title == "Delivery Date")
+                    {
+                        title = "{{__('text.Delivery Date')}}";
+                    }
+                    else if(title == "Installation Date")
+                    {
+                        title = "{{__('text.Installation Date')}}";
+                    }
 
-						var buttonsHtml = '<div class="fc-buttons">' + '<button class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
+                    event.setProp('title', title);
+
+					if(event._def.extendedProps.quotation_id)
+                	{
+						if(event._def.extendedProps.client_quotation_fname || event._def.extendedProps.client_quotation_lname)
+						{
+							actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_quotation_fname + ' ' + event._def.extendedProps.client_quotation_lname +'</span>');
+						}
+						else
+						{
+							actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;"></span>');
+						}
+                    }
+                    else if(event._def.extendedProps.retailer_client_id)
+                	{
+                    	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.client_fname + ' ' + event._def.extendedProps.client_lname +'</span>');
+                	}
+                	else if(event._def.extendedProps.supplier_id)
+                	{
+                        actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.company_name +'</span>');
+                    }
+                	else
+                	{
+                    	actualAppointment.find('.fc-event-title').append("<br/>" + '<span class="extended_title" data-id="'+id+'" style="font-size: 12px;">'+ event._def.extendedProps.employee_fname + ' ' + event._def.extendedProps.employee_lname +'</span>');
+                	}
+
+                    var buttonsHtml = '<div class="fc-buttons">' + '<button type="button" class="btn btn-default edit-event" title="Edit"><i class="fa fa-pencil"></i></button>' + '<button class="btn btn-default remove-event" title="Remove"><i class="fa fa-trash"></i></button>' + '</div>';
 
 					actualAppointment.append(buttonsHtml);
 
@@ -2782,7 +2892,7 @@
 				eventTimeFormat: { // like '14:30:00'
     				hour: '2-digit',
 					minute: '2-digit',
-					hour12:false
+					hour12: false
 				},
 				displayEventEnd: true,
 				editable: true,
@@ -3124,6 +3234,7 @@
 				defaultDate: '',
 				ignoreReadonly: true,
 				sideBySide: true,
+				locale:'du'
 			});
 
 			$('.appointment_end').datetimepicker({
@@ -3131,6 +3242,7 @@
 				defaultDate: '',
 				ignoreReadonly: true,
 				sideBySide: true,
+				locale:'du'
 			});
 
 			$(".js-data-example-ajax").select2({
