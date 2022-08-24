@@ -466,7 +466,7 @@ return [
     'Cancel' => 'Annuleren',
     'Order has been updated successfully!' => 'Order is bijgewerkt!',
     'Service Fee' => 'Commissie bedrag',
-    'Order Number' => 'Order numer',
+    'Order Number' => 'Order nummer',
     'Customer Details' => 'Klantgegevens',
     'Calculations' => 'Berekeningen',
     'Quotation Details' => 'Offerte details',
@@ -636,4 +636,5 @@ return [
     'VAT Percentage' => 'BTW tarief',
     'Services Overview' => 'Diensten',
     'Add services' => 'Diensten toevoegen',
+    'Grand Total Overview' => 'Bedrag €',
 ];

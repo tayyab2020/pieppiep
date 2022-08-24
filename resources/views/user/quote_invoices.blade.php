@@ -73,8 +73,6 @@
 
                                                         <tr role="row">
 
-                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">ID</th>
-
                                                             <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">{{__('text.Quotation Number')}}</th>
 
                                                             <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">{{__('text.Order Number')}}</th>
@@ -90,8 +88,6 @@
                                                     @else
 
                                                         <tr role="row">
-
-                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">ID</th>
 
                                                             <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">@if(Route::currentRouteName() == 'quotations' || Route::currentRouteName() == 'new-invoices' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'customer-quotations') {{__('text.Quotation Number')}} @else {{__('text.Invoice Number')}} @endif</th>
 
@@ -173,8 +169,6 @@
 
                                                                 <tr role="row" class="odd">
 
-                                                                    <td>{{$t}}</td>
-
                                                                     <td><a href="">OF# {{$key->quotation_invoice_number}}</a></td>
 
                                                                     <td><a href="">OR# {{$sup->order_number}}</a></td>
@@ -240,8 +234,6 @@
                                                         @else
 
                                                             <tr role="row" class="odd">
-
-                                                                <td>{{$key->invoice_id}}</td>
 
                                                                 @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'new-quotations' || Route::currentRouteName() == 'new-invoices')
 
@@ -1996,7 +1988,7 @@
         }
 
         $('#example').DataTable({
-            order: [[0, 'desc']],
+            order: [[1, 'desc']],
             "oLanguage": {
                 "sLengthMenu": "<?php echo __('text.Show') . ' _MENU_ ' . __('text.records'); ?>",
                 "sSearch": "<?php echo __('text.Search') . ':' ?>",
