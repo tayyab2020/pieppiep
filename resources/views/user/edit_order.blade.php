@@ -101,7 +101,12 @@
 
                                                                 @if(Route::currentRouteName() == 'view-order')
 
-                                                                    <div class="headings" style="width: 11%;">{{__('text.Supplier')}}</div>
+																	@if(Auth::guard('user')->user()->role_id == 2)
+																		
+																		<div class="headings" style="width: 11%;">{{__('text.Supplier')}}</div>
+																		
+																	@endif
+
                                                                     <div class="headings" style="width: 11%;">{{__('text.Product')}}</div>
 
                                                                 @else
@@ -114,7 +119,7 @@
                                                                 <div class="headings" style="width: 15%;">{{__('text.Model')}}</div>
                                                                 <div class="headings" style="width: 15%;">{{__('text.Width')}}</div>
                                                                 <div class="headings" style="width: 15%;">{{__('text.Height')}}</div>
-                                                                <div class="headings" style="width: 16%;"></div>
+                                                                <div class="headings" @if(Auth::guard('user')->user()->role_id == 2) style="width: 16%;" @else style="width: 27%;" @endif></div>
 
                                                             </div>
 
@@ -140,23 +145,27 @@
 
                                                                     @if(Route::currentRouteName() == 'view-order')
 
-                                                                        <div style="width: 11%;" class="suppliers content item16 full-res">
+																		@if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                            <label class="content-label">Supplier</label>
+																			<div style="width: 11%;" class="suppliers content item16 full-res">
 
-                                                                            <select name="suppliers[]" class="js-data-example-ajax4">
+                                                                            	<label class="content-label">Supplier</label>
 
-                                                                                <option value=""></option>
+                                                                            	<select name="suppliers[]" class="js-data-example-ajax4">
 
-                                                                                @foreach($suppliers as $key)
+                                                                                	<option value=""></option>
 
-                                                                                    <option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
+                                                                                	@foreach($suppliers as $key)
 
-                                                                                @endforeach
+                                                                                    	<option {{$key->id == $item->supplier_id ? 'selected' : null}} value="{{$key->id}}">{{$key->company_name}}</option>
 
-                                                                            </select>
+                                                                                	@endforeach
 
-                                                                        </div>
+                                                                            	</select>
+
+                                                                        	</div>
+
+																		@endif
 
                                                                         <div style="width: 11%;" class="products content item3 full-res">
 
@@ -256,7 +265,7 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="content item10 last-content" id="next-row-td" style="padding: 0;width: 16%;">
+                                                                    <div class="content item10 last-content" id="next-row-td" @if(Auth::guard('user')->user()->role_id == 2) style="padding: 0;width: 16%;" @else style="padding: 0;width: 27%;" @endif>
 
 																		@if(Auth::guard('user')->user()->role_id == 2 && !$check->order_sent && !$check->processing && !$check->finished)
 

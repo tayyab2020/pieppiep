@@ -6983,23 +6983,9 @@ class UserController extends Controller
 
         $invoices = $invoices->concat($new_invoices);
 
-        $calculations = array();
-
-        foreach($invoices as $key)
-        {
-            if(!$key->item_id && !$key->service_id)
-            {
-                $calculations[] = new_orders_calculations::where("order_id",$key->id)->get();
-            }
-            else
-            {
-                $calculations[] = "";
-            }
-        }
-
         if(count($invoices) > 0)
         {
-            return view('user.quotation_details',compact('invoices','suppliers','calculations'));
+            return view('user.quotation_details',compact('invoices','suppliers'));
         }
         else
         {
@@ -7048,8 +7034,8 @@ class UserController extends Controller
 
         if($data)
         {
-            $invoice = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('products','products.id','=','new_orders.product_id')->leftjoin('product_models','product_models.id','=','new_orders.model_id')->leftjoin('colors','colors.id','=','new_orders.color')->where('new_quotations.id', $id)->where('new_orders.supplier_id', $user_id)->select('colors.title as color_title','product_models.model','new_quotations.*','new_quotations.id as invoice_id','new_orders.approved','new_orders.delivery_days','new_orders.delivery_date','new_orders.retailer_delivery_date','new_orders.id','new_orders.supplier_id','new_orders.product_id','new_orders.color','new_orders.qty','products.title as product_title')->get();
-
+            $invoice = new_orders::leftjoin('new_quotations','new_quotations.id','=','new_orders.quotation_id')->leftjoin('products','products.id','=','new_orders.product_id')->leftjoin('product_models','product_models.id','=','new_orders.model_id')->leftjoin('colors','colors.id','=','new_orders.color')->where('new_quotations.id', $id)->where('new_orders.supplier_id', $user_id)->with("calculations")->select('colors.title as color_title','product_models.model','new_quotations.*','new_quotations.id as invoice_id','new_orders.approved','new_orders.delivery_days','new_orders.delivery_date','new_orders.retailer_delivery_date','new_orders.id','new_orders.supplier_id','new_orders.product_id','new_orders.color','new_orders.qty','new_orders.measure','products.title as product_title')->get();
+            
             return view('user.change_delivery_date',compact('data','invoice'));
         }
         else
