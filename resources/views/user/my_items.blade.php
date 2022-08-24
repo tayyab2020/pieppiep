@@ -39,8 +39,8 @@
                                                     <tr role="row">
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 344px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">{{__('text.Photo')}}</th>
                                                         <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">{{__('text.Item')}}</th>
-                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">{{__('text.Rate')}}</th>
-                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">{{__('text.Description')}}</th>
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">{{__('text.Sell Rate')}}</th>
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 144px;" aria-sort="ascending" aria-label="Blood Group Name: activate to sort column descending">{{__('text.Supplier')}}</th>
                                                         <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 314px;" aria-label="Actions: activate to sort column ascending">{{__('text.Actions')}}</th>
                                                     </tr>
                                                     </thead>
@@ -50,8 +50,8 @@
                                                         <tr role="row" class="odd">
                                                             <td tabindex="0" class="sorting_1"><img src="{{ $item->photo ? asset('assets/item_images/'.$item->photo):'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG'}}" alt="Item's Photo" style="max-height: 100px;"></td>
                                                             <td>{{$item->cat_name}}</td>
-                                                            <td>{{number_format((float)$item->rate, 2, ',', '.')}}</td>
-                                                            <td>{!!$item->description!!}</td>
+                                                            <td>€ {{number_format((float)$item->sell_rate, 2, ',', '.')}}</td>
+                                                            <td>{!!$item->supplier!!}</td>
                                                             <td>
                                                                 @if(auth()->user()->can('edit-item'))
                                                                     <a href="{{route('edit-item',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
