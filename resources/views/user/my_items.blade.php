@@ -51,15 +51,15 @@
                                                             <td tabindex="0" class="sorting_1"><img src="{{ $item->photo ? asset('assets/item_images/'.$item->photo):'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSCM_FnlKpZr_N7Pej8GA40qv63zVgNc0MFfejo35drsuxLUcYG'}}" alt="Item's Photo" style="max-height: 100px;"></td>
                                                             <td>{{$item->cat_name}}</td>
                                                             <td>€ {{number_format((float)$item->sell_rate, 2, ',', '.')}}</td>
-                                                            <td>{!!$item->supplier!!}</td>
+                                                            <td>{{$item->supplier}}</td>
                                                             <td>
                                                                 @if(auth()->user()->can('edit-item'))
                                                                     <a href="{{route('edit-item',$item->id)}}" class="btn btn-primary product-btn"><i class="fa fa-edit"></i> {{__('text.Edit')}}</a>
                                                                 @endif
 
-                                                                    @if(auth()->user()->can('delete-item'))
-                                                                        <a href="{{route('delete-item',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
-                                                                    @endif
+                                                                @if(auth()->user()->can('delete-item'))
+                                                                    <a href="{{route('delete-item',$item->id)}}" class="btn btn-danger product-btn"><i class="fa fa-trash"></i> {{__('text.Remove')}}</a>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach
