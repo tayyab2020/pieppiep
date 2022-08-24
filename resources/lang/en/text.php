@@ -636,4 +636,5 @@ return [
     'VAT Percentage' => 'VAT Percentage',
     'Services Overview' => 'Services Overview',
     'Add services' => 'Add services',
+    'Grand Total Overview' => 'Amount €',
 ];

@@ -33,15 +33,13 @@
 
                                                         <tr role="row">
 
-                                                            <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending">ID</th>
-
                                                             <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="client">{{__('text.Quotation Number')}}</th>
 
                                                             <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 171px;" aria-label="Donor's Name: activate to sort column ascending" id="handyman">{{__('text.Customer Name')}}</th>
 
                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Grand Total')}}</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="product-table_wrapper" rowspan="1" colspan="1" style="width: 134px;" aria-label="Blood Group: activate to sort column ascending" id="rate">{{__('text.Grand Total Overview')}}</th>
 
                                                             @endif
 
@@ -63,15 +61,13 @@
 
                                                             <tr role="row" class="odd">
 
-                                                                <td>{{$i+1}}</td>
-
                                                                 <td><a href="{{ url('/aanbieder/bekijk-eigen-offerte/'.$key->invoice_id) }}">@if(Auth::guard('user')->user()->role_id == 4) OR# {{$key->order_number}} @else OF# {{$key->quotation_invoice_number}} @endif</a></td>
 
                                                                 <td>{{$key->name}} {{$key->family_name}}</td>
 
                                                                 @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                    <td>{{number_format((float)$key->grand_total, 2, ',', '.')}}</td>
+                                                                    <td>€ {{number_format((float)$key->grand_total, 2, ',', '.')}}</td>
 
                                                                 @endif
 
@@ -209,15 +205,13 @@
 
                                                             <tr role="row" class="odd">
 
-                                                                <td>{{$i+1}}</td>
-
                                                                 <td><a href="">@if(Auth::guard('user')->user()->role_id == 4) OR# {{$key->order_number}} @else OF# {{$key->quotation_invoice_number}} @endif</a></td>
 
                                                                 <td>{{$key->quote_request_id && $key->paid ? $key->quote_name . ' ' . $key->quote_familyname : $key->name . ' ' . $key->family_name}}</td>
 
                                                                 @if(Auth::guard('user')->user()->role_id == 2)
 
-                                                                    <td>{{number_format((float)$key->grand_total, 2, ',', '.')}}</td>
+                                                                    <td>€ {{number_format((float)$key->grand_total, 2, ',', '.')}}</td>    
 
                                                                 @endif
 
@@ -1805,7 +1799,7 @@
         <script>
 
             $('#example').DataTable({
-                order: [[5, 'desc']],
+                order: [[4, 'desc']],
                 "oLanguage": {
                     "sLengthMenu": "<?php echo __('text.Show') . ' _MENU_ ' . __('text.records'); ?>",
                     "sSearch": "<?php echo __('text.Search') . ':' ?>",
@@ -1828,7 +1822,7 @@
         <script>
 
             $('#example').DataTable({
-                order: [[4, 'desc']],
+                order: [[3, 'desc']],
                 "oLanguage": {
                     "sLengthMenu": "<?php echo __('text.Show') . ' _MENU_ ' . __('text.records'); ?>",
                     "sSearch": "<?php echo __('text.Search') . ':' ?>",
