@@ -1746,7 +1746,7 @@
 
                 <div class="hidden-xs"  >
                     <ul>
-                        <li><a href="tel:0201111111">020 - 1234 567</a></li>
+                        <li><a href="tel:0201111111">020 - 210 11 87</a></li>
                         <li><a href="/contact">Contactformulier</a></li>
                     </ul>
                 </div>
@@ -1783,18 +1783,13 @@
         <div class="copyright">&copy; Pieppiep 2022</div>
 
         <ul>
-            <li><a href="/privacy-statement">Privacy statement</a></li>
+            <li><a href="/privacy-verklaring">Privacy verklaring</a></li>
             <li><a href="/cookies">Cookies</a></li>
-            <li><a href="/disclaimer">Disclaimer</a></li>
-            <li><a href="/site-conditions">Site conditions</a></li>
-            <li><a href="/terms-and-conditions">Terms & conditions</a></li>
-            <li><a href="/information-security">Information security</a></li>
+            <li><a href="/Verwerkersovereenkomst">Verwerkersovereenkomst</a></li>
+            <li><a href="/Algemene-voorwaarden-consumenten">Algemene voorwaarden consumenten</a></li>
+            <li><a href="/Algemene-voorwaarden-zakelijk">Algemene voorwaarden zakelijk</a></li>
         </ul>
-
-        <a href="/country-selector" class="country-selector ">
-            <span class="pretext">NL</span>
-            <span class="posttext">Select your country</span>
-        </a>
+        
     </div>
 </section>
 
