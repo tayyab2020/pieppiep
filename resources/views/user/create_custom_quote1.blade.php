@@ -115,7 +115,7 @@
 
 											<div style="display: inline-block;width: 100%;">
 
-												<div class="alert-box">
+												<div style="margin-top: 20px;" class="alert-box">
 
 												</div>
 
@@ -1383,7 +1383,7 @@
 							<div class="input-group-addon">
 								<i class="fa fa-user"></i>
 							</div>
-							<input id="family_name" name="family_name" class="form-control validation"
+							<input id="family_name" name="family_name" class="form-control"
 								   placeholder="{{$lang->fn}}" type="text">
 						</div>
 					</div>
@@ -3416,7 +3416,15 @@
 								$('#cover').hide();
 
 								var newStateVal = data.data.id;
-								var newName = data.data.name + " " + data.data.family_name;
+
+								if(data.data.family_name)
+								{
+									var newName = data.data.name + " " + data.data.family_name;
+								}
+								else
+								{
+									var newName = data.data.name;
+								}
 
 								// Set the value, creating a new option if necessary
 								if ($(".customer-select").find("option[value=" + newStateVal + "]").length) {

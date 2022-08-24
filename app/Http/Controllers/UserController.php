@@ -3303,7 +3303,7 @@ class UserController extends Controller
             $user->role_id = 3;
             $user->category_id = 20;
             $user->name = $request->name;
-            $user->family_name = $request->family_name;
+            $user->family_name = $request->family_name ? $request->family_name : '';
             $user->business_name = $request->business_name;
             $user->postcode = $request->postcode;
             $user->address = $request->address;
@@ -3317,11 +3317,10 @@ class UserController extends Controller
             $user->save();
 
             $details = new customers_details();
-
             $details->user_id = $user->id;
             $details->retailer_id = $user_id;
             $details->name = $request->name;
-            $details->family_name = $request->family_name;
+            $details->family_name = $request->family_name ? $request->family_name : '';
             $details->business_name = $request->business_name;
             $details->postcode = $request->postcode;
             $details->address = $request->address;
@@ -3363,7 +3362,7 @@ class UserController extends Controller
             $details->user_id = $check->id;
             $details->retailer_id = $user_id;
             $details->name = $request->name;
-            $details->family_name = $request->family_name;
+            $details->family_name = $request->family_name ? $request->family_name : '';
             $details->business_name = $request->business_name;
             $details->postcode = $request->postcode;
             $details->address = $request->address;

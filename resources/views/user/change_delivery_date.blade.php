@@ -86,7 +86,7 @@
                                                                                 </td>
                                                                                 <td style="padding-left: 0;" colspan="6">
                                                                                     <div style="border: 1px solid #949494;border-left: 0;border-top-right-radius: 5px;border-bottom-right-radius: 5px;padding: 0 10px;">
-                                                                                        {{number_format((float)$cal->box_quantity, 2, ',', '.')}}
+                                                                                        {{number_format((float)$item->qty, 2, ',', '.')}}
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
