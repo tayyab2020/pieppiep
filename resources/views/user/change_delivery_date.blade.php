@@ -68,7 +68,7 @@
                                                                         <td class="products">
                                                                             {{$item->product_title . ', '. $item->model . ', ' . $item->color_title}}
                                                                         </td>
-                                                                        <td>{{$item->qty}}</td>
+                                                                        <td>{{number_format((float)$item->qty, 2, ',', '.')}}</td>
                                                                         <td style="padding: 0;">
                                                                             <input style="border: 0;outline: none;width: 100%;" autocomplete="off" value="{{$item->delivery_date ? date('d-m-Y',strtotime($item->delivery_date)) : ($item->retailer_delivery_date ? date('d-m-Y',strtotime($item->retailer_delivery_date)) : null)}}" type="text" class="delivery_date" name="delivery_dates[]">
                                                                         </td>
@@ -86,7 +86,7 @@
                                                                                 </td>
                                                                                 <td style="padding-left: 0;" colspan="6">
                                                                                     <div style="border: 1px solid #949494;border-left: 0;border-top-right-radius: 5px;border-bottom-right-radius: 5px;padding: 0 10px;">
-                                                                                        {{$cal->box_quantity}}
+                                                                                        {{number_format((float)$cal->box_quantity, 2, ',', '.')}}
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
