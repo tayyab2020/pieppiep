@@ -109,7 +109,7 @@
 
 											<div style="display: inline-block;width: 100%;">
 
-												<div class="alert-box">
+												<div style="margin-top: 20px;" class="alert-box">
 
 												</div>
 
