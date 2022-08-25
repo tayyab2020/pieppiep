@@ -208,7 +208,7 @@ class SendOrder implements ShouldQueue
             $file = public_path() . '/assets/supplierQuotations/' . $filename;
 
             // new_quotations_data::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d')]);
-            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d'),'retailer_delivery_date' => $retailer_delivery_date, 'deliver_to' => $deliver_to]);
+            new_orders::where('quotation_id',$id)->where('supplier_id',$key)->update(['order_sent' => 1,'order_date' => date('Y-m-d'),'retailer_delivery_date' => date('Y-m-d',strtotime($retailer_delivery_date)), 'deliver_to' => $deliver_to]);
 
             ini_set('max_execution_time', 180);
 

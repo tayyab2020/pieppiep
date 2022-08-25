@@ -1515,7 +1515,7 @@
 
         $('#delivery_date_picker').datepicker({
 
-            format: 'yyyy-mm-dd',
+            format: 'dd-mm-yyyy',
             startDate: endD,
             language: 'du',
             daysOfWeekDisabled: [0,6]
