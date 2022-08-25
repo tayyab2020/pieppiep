@@ -15,7 +15,7 @@ class new_quotations extends Model
 
     public function orders()
     {
-        return $this->hasMany(new_orders::class, 'quotation_id','id');
+        return $this->hasMany(new_orders::class, 'quotation_id','id')->leftjoin("users","users.id","=","new_orders.supplier_id")->select("new_orders.*","users.company_name");
     }
 
     public function invoices()

@@ -504,7 +504,7 @@
 
                                                                                         @foreach($data as $d => $data1)
 
-                                                                                            <li><a href="{{ url('/aanbieder/download-order-pdf/'.$data1->id) }}">{{__('text.Download Supplier :attribute Order PDF',['attribute' => $d+1])}}</a></li>
+                                                                                            <li><a href="{{ url('/aanbieder/download-order-pdf/'.$data1->id) }}">{{__('text.Download Supplier (:attribute) Order PDF',['attribute' => $data1->company_name])}}</a></li>
 
                                                                                         @endforeach
 
@@ -516,7 +516,7 @@
 
                                                                                         @if($data1->approved)
 
-                                                                                            <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">{{__('text.Download Supplier :attribute Order Confirmation PDF',['attribute' => $d+1])}}</a></li>
+                                                                                            <li><a href="{{ url('/aanbieder/download-order-confirmation-pdf/'.$data1->id) }}">{{__('text.Download Supplier (:attribute) Order Confirmation PDF',['attribute' => $data1->company_name])}}</a></li>
 
                                                                                         @endif
 
