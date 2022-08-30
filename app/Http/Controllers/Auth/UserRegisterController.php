@@ -82,9 +82,7 @@ class UserRegisterController extends Controller
 
     public function showHandymanRegisterForm()
     {
-        $terms = documents::where('role',1)->where('document_type',1)->first();
-
-        return view('user.handyman_register',compact('terms'));
+        return view('user.handyman_register');
     }
 
     public function register(Request $request)
