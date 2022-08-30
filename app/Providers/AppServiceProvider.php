@@ -7,7 +7,7 @@ use App\handyman_quotes;
 use App\Pages;
 use App\Products;
 use App\Service;
-use App\terms_conditions;
+use App\documents;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use App\Generalsetting;
@@ -139,7 +139,7 @@ class AppServiceProvider extends ServiceProvider
                 $quote_cats = Category::get();
                 $quote_products = Products::leftjoin('categories','categories.id','=','products.category_id')->select('products.id','products.title','categories.cat_name')->get();
                 $quote_services = Service::all();
-                $quote_data = terms_conditions::where("role",2)->first();
+                $quote_data = documents::where("role",2)->where('document_type',1)->first();
 
                 $settings->with('quote_cats', $quote_cats);
                 $settings->with('quote_products', $quote_products);

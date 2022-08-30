@@ -45,7 +45,7 @@ use App\Sociallink;
 use App\booking_images;
 use App\Language;
 use App\handyman_unavailability_hours;
-use App\terms_conditions;
+use App\documents;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\sub_categories;
@@ -141,6 +141,91 @@ class FrontendController extends Controller
         }
 
         $this->sl = Sociallink::findOrFail(1);
+    }
+
+    public function privacy()
+    {
+        $privacy = documents::where('document_type',2)->first();
+
+        if(!$privacy)
+        {
+            return redirect()->route('front.index');
+        }
+
+        $filePath = public_path('assets/'.$privacy->file);
+
+        return \Response::make(file_get_contents($filePath), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$privacy->file.'"'
+        ]);
+    }
+
+    public function cookies()
+    {
+        $cookies = documents::where('document_type',3)->first();
+
+        if(!$cookies)
+        {
+            return redirect()->route('front.index');
+        }
+
+        $filePath = public_path('assets/'.$cookies->file);
+
+        return \Response::make(file_get_contents($filePath), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$cookies->file.'"'
+        ]);
+    }
+
+    public function verwerkersovereenkomst()
+    {
+        $verwerkersovereenkomst = documents::where('document_type',4)->first();
+
+        if(!$verwerkersovereenkomst)
+        {
+            return redirect()->route('front.index');
+        }
+
+        $filePath = public_path('assets/'.$verwerkersovereenkomst->file);
+
+        return \Response::make(file_get_contents($filePath), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$verwerkersovereenkomst->file.'"'
+        ]);
+    }
+
+    public function AlgemeneVoorwaardenConsumenten()
+    {
+        $terms1 = documents::where('document_type',5)->first();
+
+        if(!$terms1)
+        {
+            return redirect()->route('front.index');
+        }
+
+        $filePath = public_path('assets/'.$terms1->file);
+
+        return \Response::make(file_get_contents($filePath), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$terms1->file.'"'
+        ]);
+    }
+
+    public function AlgemeneVoorwaardenZakelijk()
+    {
+        $terms2 = documents::where('document_type',6)->first();
+
+        if(!$terms2)
+        {
+            return redirect()->route('front.index');
+        }
+
+        $filePath = public_path('assets/'.$terms2->file);
+
+        return \Response::make(file_get_contents($filePath), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$terms2->file.'"'
+        ]);
     }
 
     public function DownloadQuoteRequestApi(Request $request)
@@ -524,8 +609,7 @@ class FrontendController extends Controller
         $vat_percentage = $settings->vat;
         $service_fee = $settings->service_fee;
 
-        $terms = terms_conditions::where('role', 2)->first();
-
+        $terms = documents::where('role', 2)->where('document_type',1)->first();
 
         return view('front.cart', compact('cart', 'cart_count', 'ip_address', 'vat_percentage', 'service_fee', 'terms'));
 

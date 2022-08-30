@@ -12,6 +12,11 @@
 */
 
   Route::get('/','FrontendController@index')->name('front.index');
+  Route::get('/privacy-verklaring','FrontendController@privacy');
+  Route::get('/cookies','FrontendController@cookies');
+  Route::get('/verwerkersovereenkomst','FrontendController@verwerkersovereenkomst');
+  Route::get('/algemene-voorwaarden-consumenten','FrontendController@AlgemeneVoorwaardenConsumenten');
+  Route::get('/algemene-voorwaarden-zakelijk','FrontendController@AlgemeneVoorwaardenZakelijk');
   Route::post('/download-quote-request-api','FrontendController@DownloadQuoteRequestApi')->name('download-quote-request-api');
   Route::post('/accept-quotation-api','FrontendController@AcceptQuotationApi')->name('accept-quotation-api');
   Route::get('/products','FrontendController@products')->name('front.products');
@@ -441,6 +446,8 @@
   Route::post('/login', 'Auth\AdminLoginController@login')->name('admin-login-submit');
   Route::get('/logout', 'Auth\AdminLoginController@logout')->name('admin-logout');
   Route::post('/admin-status-update', 'AdminController@AdminStatusUpdate')->name('admin-status-update');
+  Route::get('/documents-index', 'AdminController@Documents')->name('admin-documents-index');
+  Route::post('/documents-post', 'AdminController@DocumentsPost')->name('admin-documents-post');
   Route::get('/handyman-terms', 'AdminController@HandymanTerms')->name('admin-handyman-terms');
   Route::get('/client-terms', 'AdminController@ClientTerms')->name('admin-client-terms');
   Route::post('/handyman-terms-post', 'AdminController@HandymanTermsPost')->name('admin-handyman-terms-post');

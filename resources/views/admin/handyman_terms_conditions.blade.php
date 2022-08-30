@@ -30,7 +30,7 @@
                                           <div class="form-group">
                                             <label class="control-label col-sm-4" for="setup_new_background">Setup New PDF Template *</label>
                                             <div class="col-sm-6">
-                                              <input name="file"  type="file" required>
+                                              <input name="file" type="file" required>
                                             </div>
                                           </div>
                                             <hr>

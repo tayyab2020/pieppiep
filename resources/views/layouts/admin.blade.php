@@ -172,6 +172,8 @@
 
                                         <li><a href="{{route('admin-filter-settings')}}"><i class="fa fa-fw fa-cogs"></i> Filter settings</a></li>
 
+                                        <li><a href="{{route('admin-documents-index')}}"><i class="fa fa-angle-right"></i> Documents</a></li>
+
                                         <li><a href="{{route('admin-gs-payments')}}"><i class="fa fa-angle-right"></i> Payment Informations</a></li>
 
                                         <li><a href="{{route('admin-gs-vats')}}"><i class="fa fa-angle-right"></i> VAT Settings</a></li>

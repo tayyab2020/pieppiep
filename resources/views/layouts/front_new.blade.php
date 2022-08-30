@@ -1750,8 +1750,6 @@
 
                 <h4>Start een gesprek</h4>
 
-
-
                 <div class="hidden-xs"  >
                     <ul>
                         <li><a href="tel:0201111111">020 - 210 11 87</a></li>
@@ -1793,9 +1791,9 @@
         <ul>
             <li><a href="/privacy-verklaring">Privacy verklaring</a></li>
             <li><a href="/cookies">Cookies</a></li>
-            <li><a href="/Verwerkersovereenkomst">Verwerkersovereenkomst</a></li>
-            <li><a href="/Algemene-voorwaarden-consumenten">Algemene voorwaarden consumenten</a></li>
-            <li><a href="/Algemene-voorwaarden-zakelijk">Algemene voorwaarden zakelijk</a></li>
+            <li><a href="/verwerkersovereenkomst">Verwerkersovereenkomst</a></li>
+            <li><a href="/algemene-voorwaarden-consumenten">Algemene voorwaarden consumenten</a></li>
+            <li><a href="/algemene-voorwaarden-zakelijk">Algemene voorwaarden zakelijk</a></li>
         </ul>
 
         <!-- <a href="/country-selector" class="country-selector ">

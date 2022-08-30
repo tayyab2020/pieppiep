@@ -23,7 +23,7 @@ use PDF;
 use App\how_it_works;
 use App\reasons_to_book;
 use App\cancelled_invoices;
-use App\terms_conditions;
+use App\documents;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -179,18 +179,197 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-     public function HandymanTerms()
+    public function Documents()
     {
-        $data = terms_conditions::where("role",1)->first();
+        $privacy = documents::where('document_type',2)->first();
+        $cookies = documents::where('document_type',3)->first();
+        $processing_agreement = documents::where('document_type',4)->first();
+        $terms1 = documents::where('document_type',5)->first();
+        $terms2 = documents::where('document_type',6)->first();
+
+        return view('admin.documents',compact('privacy','cookies','processing_agreement','terms1','terms2'));
+    }
+
+    public function DocumentsPost(Request $request)
+    {
+        $input = $request->all();
+        
+        $privacy = documents::where('document_type',2)->first();
+
+        if($privacy)
+        {
+            if($file = $request->file('file1'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                if($privacy->file != null)
+                {
+                    \File::delete(public_path().'/assets/'.$privacy->file);
+                }
+                $input['file'] = $name;
+                $privacy->update($input);
+            }
+        }
+        else
+        {
+            if($file = $request->file('file1'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                $privacy = new documents;
+                $privacy->role = 0;
+                $privacy->document_type = 2;
+                $privacy->file = $name;
+                $privacy->save();
+            }
+        }
+
+        $cookies = documents::where('document_type',3)->first();
+
+        if($cookies)
+        {
+            if($file = $request->file('file2'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                if($cookies->file != null)
+                {
+                    \File::delete(public_path().'/assets/'.$cookies->file);
+                }
+                $input['file'] = $name;
+                $cookies->update($input);
+            }
+
+        }
+        else
+        {
+            if($file = $request->file('file2'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                $cookies = new documents;
+                $cookies->role = 0;
+                $cookies->document_type = 3;
+                $cookies->file = $name;
+                $cookies->save();
+            }
+        }
+
+        $processing_agreement = documents::where('document_type',4)->first();
+
+        if($processing_agreement)
+        {
+            if($file = $request->file('file3'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                if($processing_agreement->file != null)
+                {
+                    \File::delete(public_path().'/assets/'.$processing_agreement->file);
+                }
+                $input['file'] = $name;
+                $processing_agreement->update($input);
+            }
+        }
+        else
+        {
+            if($file = $request->file('file3'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                $processing_agreement = new documents;
+                $processing_agreement->role = 0;
+                $processing_agreement->document_type = 4;
+                $processing_agreement->file = $name;
+                $processing_agreement->save();
+            }
+        }
+
+        $terms1 = documents::where('document_type',5)->first();
+
+        if($terms1)
+        {
+            if($file = $request->file('file4'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                if($terms1->file != null)
+                {
+                    \File::delete(public_path().'/assets/'.$terms1->file);
+                }
+                $input['file'] = $name;
+                $terms1->update($input);
+            }
+        }
+        else
+        {
+            if($file = $request->file('file4'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                $terms1 = new documents;
+                $terms1->role = 0;
+                $terms1->document_type = 5;
+                $terms1->file = $name;
+                $terms1->save();
+            }
+        }
+
+        $terms2 = documents::where('document_type',6)->first();
+
+        if($terms2)
+        {
+            if($file = $request->file('file5'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                if($terms2->file != null)
+                {
+                    \File::delete(public_path().'/assets/'.$terms2->file);
+                }
+                $input['file'] = $name;
+                $terms2->update($input);
+            }
+        }
+        else
+        {
+            if($file = $request->file('file5'))
+            {
+                $name = time().$file->getClientOriginalName();
+                $file->move('assets',$name);
+
+                $terms2 = new documents;
+                $terms2->role = 0;
+                $terms2->document_type = 6;
+                $terms2->file = $name;
+                $terms2->save();
+            }
+        }
+
+        Session::flash('success', 'Task Successfull!');
+        return redirect()->route('admin-documents-index');
+    }
+
+    public function HandymanTerms()
+    {
+        $data = documents::where("role",1)->where('document_type',1)->first();
 
         return view('admin.handyman_terms_conditions',compact('data'));
     }
 
     public function HandymanTermsPost(StoreValidationRequest $request)
     {
-
         $input = $request->all();
-        $terms = terms_conditions::where("role",1)->first();
+        $terms = documents::where("role",1)->where('document_type',1)->first();
 
         if($terms)
         {
@@ -221,11 +400,11 @@ class AdminController extends Controller
             }
 
 
-            $terms = new terms_conditions;
+            $terms = new documents;
             $terms->role = 1;
+            $terms->document_type = 1;
             $terms->file = $name;
             $terms->save();
-
 
         }
 
@@ -233,10 +412,9 @@ class AdminController extends Controller
         return redirect()->route('admin-handyman-terms');
     }
 
-
-     public function ClientTerms()
+    public function ClientTerms()
     {
-        $data = terms_conditions::where("role",2)->first();
+        $data = documents::where("role",2)->where('document_type',1)->first();
 
         return view('admin.client_terms_conditions',compact('data'));
     }
@@ -246,7 +424,7 @@ class AdminController extends Controller
     {
 
         $input = $request->all();
-        $terms = terms_conditions::where("role",2)->first();
+        $terms = documents::where("role",2)->where('document_type',1)->first();
 
         if($terms)
         {
@@ -276,8 +454,9 @@ class AdminController extends Controller
             }
 
 
-            $terms = new terms_conditions;
+            $terms = new documents;
             $terms->role = 2;
+            $terms->document_type = 1;
             $terms->file = $name;
             $terms->save();
 

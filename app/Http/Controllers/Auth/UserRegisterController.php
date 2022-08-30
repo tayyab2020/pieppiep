@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use App\Category;
 use App\User;
-use App\terms_conditions;
+use App\documents;
 use APP\Rules\Captcha;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
@@ -82,7 +82,7 @@ class UserRegisterController extends Controller
 
     public function showHandymanRegisterForm()
     {
-        $terms = terms_conditions::where('role',1)->first();
+        $terms = documents::where('role',1)->where('document_type',1)->first();
 
         return view('user.handyman_register',compact('terms'));
     }
