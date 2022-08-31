@@ -237,7 +237,7 @@
 
                                   <div style="margin: auto;margin-bottom: 40px;margin-top:30px;width: 50%;text-align: center;">
 
-                                  <input type="checkbox" name="terms" id="terms" required> <span style="position: relative;bottom: 2px;"> {{$lang->iagt}} <a target="_blank" href="/algemene-voorwaarden-consumenten" style="color: blue;">{{$lang->tact}}</a></span>
+                                  <input type="checkbox" name="terms" id="terms" required> <span style="position: relative;bottom: 2px;"> {{$lang->iagt}} <a target="_blank" href="/algemene-voorwaarden-zakelijk" style="color: blue;">{{$lang->tact}}</a></span>
                             </div>
 
                               <div class="form-group text-center">
@@ -247,7 +247,6 @@
                                     <a href="{{route('user-login')}}">{{$lang->al}}</a>
                               </div>
                             </form>
-
 
 
                         </div>
