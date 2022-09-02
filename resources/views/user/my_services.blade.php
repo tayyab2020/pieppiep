@@ -414,9 +414,10 @@
 
                     $('.services-checkboxes').each(function(index, tr)
                     {
-                        var is_numeric = $(this).parents('tr').find('*[data-type="rate"]').text().match(/^\d+$/);
+                        var rate = $(this).parents('tr').find('.product_rate').val();
+                        var sell_rate = $(this).parents('tr').find('.product_sell_rate').val();
 
-                        if(is_numeric)
+                        if(rate && sell_rate)
                         {
                             var check = $(this).is(':checked');
 
