@@ -412,9 +412,23 @@
             
                 $(".select-all").click(function(){
 
-                    var check = $('.services-checkboxes:checked').length > 0 ? true : false;
+                    $('.services-checkboxes').each(function(index, tr)
+                    {
+                        var is_numeric = $(this).parents('tr').find('*[data-type="rate"]').text().match(/^\d+$/);
 
-                    $('.services-checkboxes').prop('checked', !check);
+                        if(is_numeric)
+                        {
+                            var check = $(this).is(':checked');
+
+                            if(!check)
+                            {
+                                $(this).prop('checked', true);
+                            }
+                            
+                        }
+
+                    });
+
                 });
 
                 var table = $('#example1').DataTable(
