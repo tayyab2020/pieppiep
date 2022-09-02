@@ -635,6 +635,6 @@ return [
     'all-day' => 'all-day',
     'VAT Percentage' => 'VAT Percentage',
     'Services Overview' => 'Services Overview',
-    'Add services' => 'Add services',
+    'Add Services' => 'Add Services',
     'Grand Total Overview' => 'Amount €',
 ];

@@ -1764,7 +1764,7 @@
                 <h4>Contact</h4>
 
 
-                <p>Herengracht 420<br />1017 BZ Amsterdam<br />Nederland<br/><a href="mailto:info@pieppiep.nl">info@pieppiep.nl</a></p>
+                <p>Herengracht 420<br />1017 BZ Amsterdam<br />Nederland<br/><a href="mailto:info@pieppiep.nl">info@pieppiep.com</a></p>
             </div>
 
             <div class=" col-xs-12 col-md-3">

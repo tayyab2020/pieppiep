@@ -635,6 +635,6 @@ return [
     'all-day' => 'all-day',
     'VAT Percentage' => 'BTW tarief',
     'Services Overview' => 'Diensten',
-    'Add services' => 'Diensten toevoegen',
+    'Add Services' => 'Diensten toevoegen',
     'Grand Total Overview' => 'Bedrag €',
 ];

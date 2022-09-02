@@ -34,9 +34,11 @@
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                                                         <div class="card" style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);margin-bottom: 0;">
-                                                            <div class="header">
+                                                            <div style="display: flex;justify-content: space-between;" class="header">
 
                                                                 <h2 style="font-weight: bold;">Select Services</h2>
+
+                                                                <label style="border-radius: 20px;" class="btn btn-success select-all" for="selectCheck">Select All</label>
 
                                                                 <ul class="header-dropdown m-r--5">
                                                                     <li class="dropdown">
@@ -108,8 +110,11 @@
                                                                             {{--<input class="model_number" name="model_number[]" value="" type="hidden">--}}
 
                                                                         </tr>
+
                                                                     @endforeach
+
                                                                     </tbody>
+                                                                
                                                                 </table>
 
                                                                 @if(auth()->user()->can('service-store'))
@@ -134,11 +139,11 @@
                                                     <div class="card" style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);margin-bottom: 0;">
                                                         <div style="display: flex;justify-content: space-between;align-items: center;" class="header">
 
-                                                            <h2 style="font-weight: bold;">{{__('text.Services Overview')}}/h2>
+                                                            <h2 style="font-weight: bold;">{{__('text.Services Overview')}}</h2>
 
                                                             @if(auth()->user()->can('service-create'))
 
-                                                                <a href="{{route('service-create')}}" class="btn btn-success"><i class="fa fa-plus"></i>{{__('text.Add Services')}}<</a></li>
+                                                                <a href="{{route('service-create')}}" class="btn btn-success"><i class="fa fa-plus"></i>{{__('text.Add Services')}}</a></li>
 
                                                             @endif
 
@@ -404,6 +409,13 @@
         @section('scripts')
 
             <script type="text/javascript">
+            
+                $(".select-all").click(function(){
+
+                    var check = $('.services-checkboxes:checked').length > 0 ? true : false;
+
+                    $('.services-checkboxes').prop('checked', !check);
+                });
 
                 var table = $('#example1').DataTable(
                     {
