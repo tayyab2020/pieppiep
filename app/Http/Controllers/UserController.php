@@ -6887,20 +6887,21 @@ class UserController extends Controller
             $subject = $request->mail_subject;
             $msg = $request->mail_body;
 
-
             \Mail::send('user.global_mail',
                 array(
                     'msg' => $msg,
                 ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$user_name,$user_email,$company_name) {
                     $message->to($mail_to)
                         ->from('noreply@pieppiep.com', $company_name)
+                        ->cc($user_email)
                         ->replyTo($user_email, $company_name)
                         ->subject($subject)
                         ->attach($file, [
                             'as' => $filename,
                             'mime' => 'application/pdf',
                         ]);
-                });
+                }
+            );
 
             new_quotations::where('id', $request->quotation_id)->update(['mail_to' => $request->mail_to]);
 
@@ -7242,13 +7243,15 @@ class UserController extends Controller
             ), function ($message) use ($request,$mail_to,$subject,$msg,$file,$filename,$retailer_company,$retailer_email) {
                 $message->to($mail_to)
                     ->from('noreply@pieppiep.com', $retailer_company)
+                    ->cc($retailer_email)
                     ->replyTo($retailer_email, $retailer_company)
                     ->subject($subject)
                     ->attach($file, [
                         'as' => $filename,
                         'mime' => 'application/pdf',
                     ]);
-            });
+            }
+        );
 
         new_quotations::where('id', $request->quotation_id2)->update(['mail_invoice_to' => $request->mail_to2]);
         new_invoices::where('quotation_id', $request->quotation_id2)->update(['mail_invoice_to' => $request->mail_to2]);

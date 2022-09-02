@@ -249,13 +249,15 @@ class SendOrder implements ShouldQueue
                 ), function ($message) use ($sup,$mail_subject,$retailer_company,$retailer_email) {
                     $message->to($sup['email'])
                         ->from('noreply@pieppiep.com', $retailer_company)
+                        ->cc($retailer_email)
                         ->replyTo($retailer_email, $retailer_company)
                         ->subject($mail_subject)
                         ->attach($sup['file'], [
                             'as' => $sup['file_name'],
                             'mime' => 'application/pdf',
                         ]);
-                });
+                }
+            );
 
             /*\Mail::send('user.custom_quotation_mail',
                 array(
