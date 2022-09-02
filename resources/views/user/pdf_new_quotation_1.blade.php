@@ -286,7 +286,7 @@
                                                         $arb_price = $request->labor_impact[$i] == 0 ? 0 : str_replace(',', '.',$request->labor_impact[$i]) / $arb_qty;
                                                         $arb_price = number_format((float)($arb_price), 2, ',', '.');
                                                         $arb_qty = number_format((float)($arb_qty), 2, ',', '.');
-                                                        $arb_discount = str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
+                                                        $arb_discount = str_replace(',', '.',$request->price_before_labor[$i]) * ($request->discount[$i] == 0 ? 0 : $request->discount[$i]/100);
                                                         $arb = $request->rate[$i] - $arb_discount;
                                                         $arb = number_format((float)($arb), 2, ',', '.');
                                                         $arb_discount = number_format((float)($arb_discount), 2, ',', '.');
@@ -386,7 +386,7 @@
 
                                                                         if($role == 'retailer' || $role == 'invoice1')
                                                                             {
-                                                                                $estimated_price = number_format((float)(str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i]))/$request->estimated_price_quantity[$i]), 2, ',', '');
+                                                                                $estimated_price = number_format((float)(str_replace(',', '.',$request->price_before_labor[$i])/$request->estimated_price_quantity[$i]), 2, ',', '');
                                                                                 $estimated_quantity = number_format((float)$request->estimated_price_quantity[$i], 2, ',', '');
                                                                             }
                                                                         else

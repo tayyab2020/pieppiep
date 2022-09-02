@@ -5577,7 +5577,18 @@ class UserController extends Controller
                 $invoice_items = new new_quotations_data;
                 $invoice_items->quotation_id = $invoice->id;
 
-                if (strpos($key, 'I') > -1) {
+                if(!$key)
+                {
+                    $order_numbers[$i] = '';
+
+                    $invoice_items->item_id = 0;
+                    $invoice_items->service_id = 0;
+                    $invoice_items->supplier_id = 0;
+                    $invoice_items->product_id = 0;
+                    $invoice_items->model_id = 0;
+                    $invoice_items->color = 0;
+                }
+                elseif (strpos($key, 'I') > -1) {
 
                     $order_numbers[$i] = '';
 
@@ -5674,12 +5685,12 @@ class UserController extends Controller
                 $invoice_items->amount = $request->total[$i];
                 $invoice_items->delivery_days = $request->delivery_days[$i] ? $request->delivery_days[$i] : 1;
                 $invoice_items->delivery_date = $delivery_date;
-                $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
+                $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
                 $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                 $invoice_items->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
 
-                if (strpos($key, 'I') == 0 && strpos($key, 'S') == 0) {
+                if ($key && strpos($key, 'I') == 0 && strpos($key, 'S') == 0) {
 
                     $order = new new_orders;
                     $order->order_number = $order_number;
@@ -5695,7 +5706,7 @@ class UserController extends Controller
                     $order->delivery_days = $request->delivery_days[$i];
                     // $order->delivery_date = $delivery_date;
                     // $order->retailer_delivery_date = $delivery_date;
-                    $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
+                    $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
                     $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                     $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                     $order->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
@@ -6040,7 +6051,7 @@ class UserController extends Controller
                 $invoice_items->amount = $request->total[$i];
                 $invoice_items->delivery_days = $request->delivery_days[$i];
                 $invoice_items->delivery_date = $delivery_date;
-                $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',str_replace('.', '',$request->price_before_labor[$i])) : 0;
+                $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
                 $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
                 $invoice_items->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;

@@ -226,7 +226,7 @@
 
 																				<div style="display: flex;align-items: center;">
 																					<span>€</span>
-																					<input type="text" value="{{number_format((float)$item->price_before_labor, 2, ',', '.')}}" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																					<input type="text" maskedformat="9,1" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																					<input type="hidden" value="{{$item->price_before_labor}}" class="price_before_labor_old">
 																				</div>
 																			</div>
@@ -384,7 +384,7 @@
 
 																			<div style="display: flex;align-items: center;">
 																				<span>€</span>
-																				<input type="text" value="0" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																				<input type="text" maskedformat="9,1" value="0" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
 																				<input type="hidden" value="0" class="price_before_labor_old">
 																			</div>
 																		</div>
@@ -3874,7 +3874,7 @@
 							'\n' +
 							'																 <div style="display: flex;align-items: center;">\n' +
 							'																	<span>€</span>\n' +
-							'																 	<input type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
+							'																 	<input type="text" maskedformat="9,1" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
 							'																	<input type="hidden" class="price_before_labor_old">\n' +
 							'																 </div>\n' +
 							'                                                            </div>\n' +
@@ -4061,7 +4061,7 @@
 							'\n' +
 							'																 <div style="display: flex;align-items: center;">\n' +
 							'																	<span>€</span>\n' +
-							'																 	<input value="' + price_before_labor + '" type="text" readonly name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
+							'																 	<input value="' + price_before_labor + '" type="text" maskedformat="9,1" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
 							'																	<input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
 							'																 </div>\n' +
 							'                                                            </div>\n' +
@@ -4505,51 +4505,51 @@
 					}
 				}
 
-				$("[name='products[]']").each(function (i, obj) {
+				// $("[name='products[]']").each(function (i, obj) {
 
-					if (!obj.value) {
-						flag = 1;
-						$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
-					}
-					else {
-						$(obj).parents('.products').find('#productInput').css('border', '0');
-					}
+				// 	if (!obj.value) {
+				// 		flag = 1;
+				// 		$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
+				// 	}
+				// 	else {
+				// 		$(obj).parents('.products').find('#productInput').css('border', '0');
+				// 	}
 
-				});
+				// });
 
-				$("[name='colors[]']").each(function (i, obj) {
+				// $("[name='colors[]']").each(function (i, obj) {
 
-					var product_id = $("[name='products[]']").eq(i).val();
+				// 	var product_id = $("[name='products[]']").eq(i).val();
 
-					if(!product_id.includes('S') && !product_id.includes('I'))
-					{
-						if (!obj.value) {
-							flag = 1;
-							$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
-						}
-						else {
-							$(obj).parents('.products').find('#productInput').css('border', '0');
-						}
-					}
+				// 	if(!product_id.includes('S') && !product_id.includes('I'))
+				// 	{
+				// 		if (!obj.value) {
+				// 			flag = 1;
+				// 			$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
+				// 		}
+				// 		else {
+				// 			$(obj).parents('.products').find('#productInput').css('border', '0');
+				// 		}
+				// 	}
 
-				});
+				// });
 
-				$("[name='models[]']").each(function (i, obj) {
+				// $("[name='models[]']").each(function (i, obj) {
 
-					var product_id = $("[name='products[]']").eq(i).val();
+				// 	var product_id = $("[name='products[]']").eq(i).val();
 
-					if(!product_id.includes('S') && !product_id.includes('I'))
-					{
-						if (!obj.value) {
-							flag = 1;
-							$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
-						}
-						else {
-							$(obj).parents('.products').find('#productInput').css('border', '0');
-						}
-					}
+				// 	if(!product_id.includes('S') && !product_id.includes('I'))
+				// 	{
+				// 		if (!obj.value) {
+				// 			flag = 1;
+				// 			$(obj).parents('.products').find('#productInput').css('border', '1px solid red');
+				// 		}
+				// 		else {
+				// 			$(obj).parents('.products').find('#productInput').css('border', '0');
+				// 		}
+				// 	}
 
-				});
+				// });
 
 				var conflict_feature = 0;
 
@@ -4711,7 +4711,7 @@
 
 			});
 
-			$(document).on('keypress', "input[name='qty[]']", function (e) {
+			$(document).on('keypress', "input[name='qty[]'], input[name='price_before_labor[]']", function (e) {
 
 				e = e || window.event;
 				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -4777,6 +4777,22 @@
 
 			});
 
+			$(document).on('input', "input[name='price_before_labor[]']", function (e) {
+
+				var value = $(this).val();
+
+				if ($(this).val().slice($(this).val().length - 1) == ',') {
+					var val = $(this).val();
+					val = val + '00';
+					value = val;
+				}
+
+				$(this).next(".price_before_labor_old").val(value.replace(/\,/g, '.'));
+
+				calculate_total();
+
+			});
+
 
 			$(document).on('input', "input[name='qty[]']", function (e) {
 
@@ -4825,7 +4841,7 @@
 
 			});
 
-			$(document).on('focusout', "input[name='qty[]']", function (e) {
+			$(document).on('focusout', "input[name='qty[]'], input[name='price_before_labor[]']", function (e) {
 
 				if (!$(this).val()) {
 					$(this).val(0);
@@ -5995,7 +6011,7 @@
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(estimated_price_per_box));
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box.replace(/\./g, ','));
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
@@ -6224,7 +6240,7 @@
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val(0);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(0);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val(0);
-								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(estimated_price_per_box));
+								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(estimated_price_per_box.replace(/\./g, ','));
 								$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor_old').val(estimated_price_per_box_old);
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact').val('');
 								// $('#products_table').find(`[data-id='${row_id}']`).find('.labor_impact_old').val('');
@@ -6276,6 +6292,11 @@
 				/*execute a function when someone writes in the text field:*/
 				inp.addEventListener("input", function(e) {
 
+					$(inp).parents(".products").find("#product_id").val("");
+					$(inp).parents(".products").find("#supplier_id").val("");
+					$(inp).parents(".products").find("#color_id").val("");
+					$(inp).parents(".products").find("#model_id").val("");
+
 					var current = $(this);
 					var a, b, i, val = this.value;
 					/*close any already open lists of autocompleted values*/
@@ -6318,6 +6339,7 @@
 							/*insert a input field that will hold the current array item's value:*/
 							b.innerHTML += "<input type='hidden' value='" + arr[i] + "'><input type='hidden' value='" + values[i] + "'><input type='hidden' value='" + model_ids[i] + "'><input type='hidden' value='" + color_ids[i] + "'><input type='hidden' value='" + supplier_ids[i] + "'>";
 							/*execute a function when someone clicks on the item value (DIV element):*/
+
 							b.addEventListener("click", function(e) {
 
 								/*insert the value for the autocomplete text field:*/
