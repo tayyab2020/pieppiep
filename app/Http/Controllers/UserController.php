@@ -4884,7 +4884,7 @@ class UserController extends Controller
                     $order_calculations->cutting_lose = $request->$cutting_lose[$c];
                     $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
                     $order_calculations->box_quantity = $request->$box_quantity[$c];
-                    $order_calculations->total_boxes = $request->$total_boxes[$c];
+                    $order_calculations->total_boxes = $request->$total_boxes[$c] ? str_replace(',', '.',$request->$total_boxes[$c]) : NULL;
                     $order_calculations->max_width = $request->$max_width[$c];
                     $order_calculations->turn = $request->$turn[$c];
                     $order_calculations->save();
@@ -5816,7 +5816,7 @@ class UserController extends Controller
                             $calculations->cutting_lose = $request->$cutting_lose[$c];
                             $calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
                             $calculations->box_quantity = $request->$box_quantity[$c];
-                            $calculations->total_boxes = $request->$total_boxes[$c];
+                            $calculations->total_boxes = $request->$total_boxes[$c] ? str_replace(',', '.',$request->$total_boxes[$c]) : NULL;
                             $calculations->max_width = $request->$max_width[$c];
                             $calculations->turn = $request->$turn[$c];
                             $calculations->save();
@@ -5833,7 +5833,7 @@ class UserController extends Controller
                                 $order_calculations->cutting_lose = $request->$cutting_lose[$c];
                                 $order_calculations->box_quantity_supplier = $request->$box_quantity_supplier[$c];
                                 $order_calculations->box_quantity = $request->$box_quantity[$c];
-                                $order_calculations->total_boxes = $request->$total_boxes[$c];
+                                $order_calculations->total_boxes = $request->$total_boxes[$c] ? str_replace(',', '.',$request->$total_boxes[$c]) : NULL;
                                 $order_calculations->max_width = $request->$max_width[$c];
                                 $order_calculations->turn = $request->$turn[$c];
                                 $order_calculations->save();
