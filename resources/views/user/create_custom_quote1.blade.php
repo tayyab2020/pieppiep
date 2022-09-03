@@ -200,7 +200,7 @@
 																				<label class="content-label">{{__('text.Product')}}</label>
 
 																				<div class="autocomplete" style="width:100%;">
-																					<textarea @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="background: transparent;resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²')}}</textarea>
+																					<textarea @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="background: transparent;resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product_descriptions[]" placeholder="{{__('text.Select Product')}}">{{$item->item_id != 0 ? $item_titles[$i]->cat_name . ', Item, (' . $item_titles[$i]->category . ')' : ($item->service_id != 0 ? $service_titles[$i] . ', Service' : ($item->product_id ? $product_titles[$i].', '.$model_titles[$i].', '.$color_titles[$i].', ('.$product_suppliers[$i]->company_name.')' . ' € ' . number_format((float)($item->price_before_labor/$item->box_quantity), 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$item->box_quantity, 2, ',', '') . ' m²' : $item->product_description))}}</textarea>
 																				</div>
 
 																				<input type="hidden" value="{{$item->item_id != 0 ? $item->item_id.'I' : ($item->service_id != 0 ? $item->service_id.'S' : $item->product_id)}}" name="products[]" id="product_id">
@@ -359,7 +359,7 @@
 																			<label class="content-label">{{__('text.Product')}}</label>
 
 																			<div class="autocomplete" style="width:100%;">
-																				<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">{{ isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.($product_request->model ? $product_request->model.', ' : null).$product_request->color.', ('.$product_request->company_name.')' . ' € ' . number_format((float)$product_request->estimated_price, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$product_request->estimated_price_quantity, 2, ',', '') . ' m²' : $product_request->title.', Service') : null }}</textarea>
+																				<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product_descriptions[]" placeholder="{{__('text.Select Product')}}">{{ isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->title.', '.($product_request->model ? $product_request->model.', ' : null).$product_request->color.', ('.$product_request->company_name.')' . ' € ' . number_format((float)$product_request->estimated_price, 2, ',', '') . ' per m², pakinhoud ' . number_format((float)$product_request->estimated_price_quantity, 2, ',', '') . ' m²' : $product_request->title.', Service') : null }}</textarea>
 																			</div>
 
 																			<input type="hidden" value="{{isset($request_id) && $request_id ? ($quote->quote_service ? $product_request->id : $product_request->id.'S') : null}}" name="products[]" id="product_id">
@@ -3595,7 +3595,7 @@
 
 			});
 
-			function calculate_total(qty_changed = 0,labor_changed = 0) {
+			function calculate_total(qty_changed = 0,labor_changed = 0,art_changed = 0) {
 
 				var total = 0;
 				var price_before_labor_total = 0;
@@ -3645,11 +3645,14 @@
 
 					if(qty_changed == 0)
 					{
-						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-						old_discount = old_discount.replace(/\,/g, '.');
-						old_discount = parseFloat(old_discount).toFixed(2);
+						if(art_changed == 0)
+						{
+							var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
+							old_discount = old_discount.replace(/\,/g, '.');
+							old_discount = parseFloat(old_discount).toFixed(2);
 
-						rate = rate - old_discount;
+							rate = rate - old_discount;
+						}
 
 						var discount_option = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_option_values').val();
 						var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
@@ -3847,7 +3850,7 @@
 							'\n' +
 							'                                                                <div class="autocomplete" style="width:100%;">\n' +
 							'\n' +
-							'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}"></textarea>\n' +
+							'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product_descriptions[]" placeholder="{{__('text.Select Product')}}"></textarea>\n' +
 							'\n' +
 							'                                                                </div>\n' +
 							'\n' +
@@ -4034,7 +4037,7 @@
 							'\n' +
 							'                                                                <div class="autocomplete" style="width:100%;">\n' +
 							'\n' +
-							'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product" placeholder="{{__('text.Select Product')}}">'+product_text+'</textarea>\n' +
+							'																	<textarea style="resize: vertical;word-break: break-word;" id="productInput" autocomplete="off" class="form-control quote-product" name="product_descriptions[]" placeholder="{{__('text.Select Product')}}">'+product_text+'</textarea>\n' +
 							'\n' +
 							'                                                                </div>\n' +
 							'\n' +
@@ -4788,8 +4791,9 @@
 				}
 
 				$(this).next(".price_before_labor_old").val(value.replace(/\,/g, '.'));
+				$(this).parents(".content-div").find("#row_total").val(parseFloat(value.replace(/\,/g, '.')));
 
-				calculate_total();
+				calculate_total(0,0,1);
 
 			});
 
@@ -6297,6 +6301,17 @@
 					$(inp).parents(".products").find("#supplier_id").val("");
 					$(inp).parents(".products").find("#color_id").val("");
 					$(inp).parents(".products").find("#model_id").val("");
+					$(inp).parents(".content-div").find("#childsafe").val(0);
+					$(inp).parents(".content-div").find("#ladderband").val(0);
+					$(inp).parents(".content-div").find("#ladderband_value").val(0);
+					$(inp).parents(".content-div").find("#ladderband_price_impact").val(0);
+					$(inp).parents(".content-div").find("#ladderband_impact_type").val(0);
+					$(inp).parents(".content-div").find("#area_conflict").val(0);
+					$(inp).parents(".content-div").find("#delivery_days").val("");
+					$(inp).parents(".content-div").find("#supplier_margin").val("");
+					$(inp).parents(".content-div").find("#retailer_margin").val("");
+					$(inp).parents(".content-div").find("#measure").val("");
+					$(inp).parents(".content-div").find("#max_width").val("");
 
 					var current = $(this);
 					var a, b, i, val = this.value;

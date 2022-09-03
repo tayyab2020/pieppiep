@@ -382,22 +382,30 @@
 
                                                                 @else
 
-                                                                    <?php
+                                                                    @if($key)
 
-                                                                        if($role == 'retailer' || $role == 'invoice1')
-                                                                            {
-                                                                                $estimated_price = number_format((float)(str_replace(',', '.',$request->price_before_labor[$i])/$request->estimated_price_quantity[$i]), 2, ',', '');
-                                                                                $estimated_quantity = number_format((float)$request->estimated_price_quantity[$i], 2, ',', '');
-                                                                            }
-                                                                        else
-                                                                            {
-                                                                                $estimated_price = number_format((float)($key->price_before_labor/$key->box_quantity), 2, ',', '');
-                                                                                $estimated_quantity = number_format((float)$key->box_quantity, 2, ',', '');
-                                                                            }
+                                                                        <?php
 
-                                                                    ?>
+                                                                            if($role == 'retailer' || $role == 'invoice1')
+                                                                                {
+                                                                                    $estimated_price = number_format((float)(str_replace(',', '.',$request->price_before_labor[$i])/$request->estimated_price_quantity[$i]), 2, ',', '');
+                                                                                    $estimated_quantity = number_format((float)$request->estimated_price_quantity[$i], 2, ',', '');
+                                                                                }
+                                                                            else
+                                                                                {
+                                                                                    $estimated_price = number_format((float)($key->price_before_labor/$key->box_quantity), 2, ',', '');
+                                                                                    $estimated_quantity = number_format((float)$key->box_quantity, 2, ',', '');
+                                                                                }
 
-                                                                    <td style="font-size: 22px;width: 60% !important;">{!! $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . '<br> € ' . $estimated_price . ' per m², pakinhoud ' . $estimated_quantity . ' m²' !!}</td>
+                                                                        ?>
+
+                                                                        <td style="font-size: 22px;width: 60% !important;">{!! $product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . '<br> € ' . $estimated_price . ' per m², pakinhoud ' . $estimated_quantity . ' m²' !!}</td>
+
+                                                                    @else
+
+                                                                        <td style="font-size: 22px;width: 60% !important;">{{$request->product_descriptions[$i]}}</td>
+
+                                                                    @endif
 
                                                                 @endif
 
