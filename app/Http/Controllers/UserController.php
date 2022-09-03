@@ -2847,7 +2847,109 @@ class UserController extends Controller
 
         if($request->org_id)
         {
-            customers_details::where('id',$request->org_id)->update(['name' => $request->name, 'family_name' => $request->family_name, 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone]);
+            $customer_id = customers_details::where('id',$request->org_id)->pluck('user_id')->first();
+
+            $check = User::where('email',$request->email)->where('id','!=',$customer_id)->first();
+            $f_e = User::where('id',$customer_id)->first();
+
+            if($check)
+            {
+                Session::flash('unsuccess', __('text.This email address is already taken'));
+                return redirect()->route('customers');
+            }
+            else
+            {
+                if(!$request->email)
+                {
+                    if($f_e->fake_email)
+                    {
+                        $user_email = $f_e->email;    
+                    }
+                    else
+                    {
+                        $faker = \Faker\Factory::create();
+                        $user_email = $faker->unique()->email;
+                    }
+                    
+                    $fake_email = 1;
+                }
+                else
+                {
+                    $user_email = $request->email;
+                    $fake_email = 0;
+                }
+
+                $check1 = User::where('email',$request->email)->where('id',$customer_id)->first();
+
+                if($check1)
+                {
+                    customers_details::where('id',$request->org_id)->update(['name' => $request->name, 'family_name' => $request->family_name ? $request->family_name : '', 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone]);
+                }
+                else
+                {
+                    $other_retailers_link = customers_details::where('user_id',$customer_id)->where('retailer_id','!=',$user_id)->first();
+
+                    if($other_retailers_link)
+                    {
+                        $user_name = $request->name;
+    
+                        $retailer = User::where('id',$user_id)->first();
+                        $retailer_name = $retailer->name;
+                        $company_name = $retailer->company_name;
+                        $retailer_email = $retailer->email;
+    
+                        $org_password = Str::random(8);
+                        $password = Hash::make($org_password);
+    
+                        $user = new User;
+                        $user->category_id = 20;
+                        $user->role_id = 3;
+                        $user->password = $password;
+                        $user->name = $request->name;
+                        $user->family_name = $request->family_name ? $request->family_name : '';
+                        $user->business_name = $request->business_name;
+                        $user->address = $request->address;
+                        $user->postcode = $request->postcode;
+                        $user->city = $request->city;
+                        $user->phone = $request->phone;
+                        $user->email = $user_email;
+                        $user->parent_id = $user_id;
+                        $user->allowed = 0;
+                        $user->fake_email = $fake_email;
+                        $user->save();
+    
+                        customers_details::where('id',$request->org_id)->update(['user_id' => $user->id, 'name' => $request->name, 'family_name' => $request->family_name ? $request->family_name : '', 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone]);
+    
+                        if($request->email)
+                        {
+                            $link = url('/') . '/aanbieder/client-new-quotations';
+    
+                            if($this->lang->lang == 'du')
+                            {
+                                $msg = "Beste $user_name,<br><br>Er is een account voor je gecreëerd door " . $company_name . ". Hier kan je offertes bekijken, verzoek tot aanpassen of de offerte accepteren. <a href='" . $link . "'>Klik hier</a>, om je naar je persoonlijke dashboard te gaan.<br><br><b>Wachtwoord:</b><br><br>Je wachtwoord is: " . $org_password . "<br><br>Met vriendelijke groeten,<br><br>$retailer_name<br><br>Klantenservice<br><br>$company_name";
+                            }
+                            else
+                            {
+                                $msg = "Dear Mr/Mrs " . $user_name . ",<br><br>Your account has been created by retailer " . $retailer_name . " for quotations. Kindly complete your profile and change your password. You can go to your dashboard through <a href='" . $link . "'>here.</a><br><br>Your Password: " . $org_password . "<br><br>Kind regards,<br><br>$retailer_name<br><br>Klantenservice<br><br>$company_name";
+                            }
+    
+                            \Mail::send(array(), array(), function ($message) use ($msg, $user_email, $user_name, $retailer_name, $link, $org_password, $company_name, $retailer_email) {
+                                $message->to($user_email)
+                                    ->from('info@vloerofferte.nl',$company_name)
+                                    ->replyTo($retailer_email,$company_name)
+                                    ->subject(__('text.Account Created!'))
+                                    ->setBody($msg,'text/html');
+                            });
+                        }
+                    }
+                    else
+                    {
+                        User::where('id',$customer_id)->update(["email" => $user_email, "fake_email" => $fake_email]);
+                        customers_details::where('id',$request->org_id)->update(['name' => $request->name, 'family_name' => $request->family_name ? $request->family_name : '', 'business_name' => $request->business_name, 'address' => $request->address, 'postcode' => $request->postcode, 'city' => $request->city, 'phone' => $request->phone]);
+                    }
+                }
+
+            }
 
             Session::flash('success', __('text.Customer details updated successfully'));
             return redirect()->route('customers');
@@ -2881,7 +2983,7 @@ class UserController extends Controller
                             $details->user_id = $check->id;
                             $details->retailer_id = $user_id;
                             $details->name = $request->name;
-                            $details->family_name = $request->family_name;
+                            $details->family_name = $request->family_name ? $request->family_name : '';
                             $details->business_name = $request->business_name;
                             $details->postcode = $request->postcode;
                             $details->address = $request->address;
@@ -2927,7 +3029,7 @@ class UserController extends Controller
                 $user->role_id = 3;
                 $user->password = $password;
                 $user->name = $request->name;
-                $user->family_name = $request->family_name;
+                $user->family_name = $request->family_name ? $request->family_name : '';
                 $user->business_name = $request->business_name;
                 $user->address = $request->address;
                 $user->postcode = $request->postcode;
@@ -2945,7 +3047,7 @@ class UserController extends Controller
                 $details->user_id = $user->id;
                 $details->retailer_id = $user_id;
                 $details->name = $request->name;
-                $details->family_name = $request->family_name;
+                $details->family_name = $request->family_name ? $request->family_name : '';
                 $details->business_name = $request->business_name;
                 $details->postcode = $request->postcode;
                 $details->address = $request->address;
