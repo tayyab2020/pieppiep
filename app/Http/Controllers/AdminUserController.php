@@ -598,6 +598,9 @@ class AdminUserController extends Controller
 
                 if(($response_a['rows'][0]['elements'][0]['status']) != 'ZERO_RESULTS')
                 {
+                    var_dump($response_a);
+                    exit();
+                    
                     $dist = $response_a['rows'][0]['elements'][0]['distance']['value'];
                     /*$time = $response_a['rows'][0]['elements'][0]['duration']['text'];*/
 
