@@ -553,9 +553,6 @@ class AdminUserController extends Controller
         $result_string = file_get_contents($url);
         $result = json_decode($result_string, true);
 
-        var_dump($result);
-        exit();
-
         $history = handyman_quotes::leftjoin('users','users.id','=','handyman_quotes.handyman_id')->where('handyman_quotes.quote_id',$id)->select('users.*','handyman_quotes.created_at as quote_date')->get();
 
         if(($result['status']) != 'ZERO_RESULTS' && $result['status'] != 'REQUEST_DENIED')
@@ -589,6 +586,9 @@ class AdminUserController extends Controller
                 $radius = $key->radius;
 
                 $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat.",".$lng."&destinations=".$user_latitude.",".$user_longitude."&mode=driving&key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM";
+
+                var_dump($url);
+                exit();
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
