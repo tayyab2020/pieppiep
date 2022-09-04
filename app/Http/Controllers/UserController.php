@@ -1784,9 +1784,18 @@ class UserController extends Controller
             }
             else
             {
-                $product_titles[] = product::where('id',$key->product_id)->pluck('title')->first();
-                $color_titles[] = colors::where('id',$key->color)->pluck('title')->first();
-                $model_titles[] = product_models::where('id',$key->model_id)->pluck('model')->first();
+                if($key->product_id != 0)
+                {
+                    $product_titles[] = product::where('id',$key->product_id)->pluck('title')->first();
+                    $color_titles[] = colors::where('id',$key->color)->pluck('title')->first();
+                    $model_titles[] = product_models::where('id',$key->model_id)->pluck('model')->first();
+                }
+                else
+                {
+                    $product_titles[] = $key->description;
+                    $color_titles[] = '';
+                    $model_titles[] = '';
+                }
             }
 
             $calculations[$i] = $key->calculations()->get();
@@ -1979,9 +1988,18 @@ class UserController extends Controller
             }
             else
             {
-                $product_titles[] = product::where('id',$key->product_id)->pluck('title')->first();
-                $color_titles[] = colors::where('id',$key->color)->pluck('title')->first();
-                $model_titles[] = product_models::where('id',$key->model_id)->pluck('model')->first();
+                if($key->product_id != 0)
+                {
+                    $product_titles[] = product::where('id',$key->product_id)->pluck('title')->first();
+                    $color_titles[] = colors::where('id',$key->color)->pluck('title')->first();
+                    $model_titles[] = product_models::where('id',$key->model_id)->pluck('model')->first();
+                }
+                else
+                {
+                    $product_titles[] = $key->description;
+                    $color_titles[] = '';
+                    $model_titles[] = '';
+                }
             }
 
             $calculations[$i] = $key->calculations()->get();
@@ -5649,10 +5667,20 @@ class UserController extends Controller
             }
             else
             {
-                $product_titles[] = product::where('id',$key)->pluck('title')->first();
-                $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
-                $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
-                $suppliers[] = User::where('id',$request->suppliers[$i])->first();
+                if($key && $key != 0)
+                {
+                    $product_titles[] = product::where('id',$key)->pluck('title')->first();
+                    $color_titles[] = colors::where('id',$request->colors[$i])->pluck('title')->first();
+                    $model_titles[] = product_models::where('id',$request->models[$i])->pluck('model')->first();
+                    $suppliers[] = User::where('id',$request->suppliers[$i])->first();
+                }
+                else
+                {
+                    $product_titles[] = $request->product_descriptions[$i];
+                    $color_titles[] = '';
+                    $model_titles[] = '';
+                    $suppliers[] = NULL;
+                }
             }
 
             date_default_timezone_set('Europe/Amsterdam');
@@ -7534,9 +7562,18 @@ class UserController extends Controller
                 }
                 else
                 {
-                    $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
-                    $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
-                    $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
+                    if($temp->product_id != 0)
+                    {
+                        $product_titles[] = product::where('id',$temp->product_id)->pluck('title')->first();
+                        $color_titles[] = colors::where('id',$temp->color)->pluck('title')->first();
+                        $model_titles[] = product_models::where('id',$temp->model_id)->pluck('model')->first();
+                    }
+                    else
+                    {
+                        $product_titles[] = $temp->description;
+                        $color_titles[] = '';
+                        $model_titles[] = '';
+                    }
                 }
 
                 $qty[] = $temp->qty;

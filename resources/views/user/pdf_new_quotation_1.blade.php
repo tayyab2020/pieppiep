@@ -382,7 +382,7 @@
 
                                                                 @else
 
-                                                                    @if($key)
+                                                                    @if($key || (isset($key->product_id) && $key->product_id != 0))
 
                                                                         <?php
 
@@ -403,7 +403,7 @@
 
                                                                     @else
 
-                                                                        <td style="font-size: 22px;width: 60% !important;">{{$request->product_descriptions[$i]}}</td>
+                                                                        <td style="font-size: 22px;width: 60% !important;">{{ $product_titles[$i] }}</td>
 
                                                                     @endif
 
@@ -733,11 +733,15 @@
 
                                 @if($form_type == 1 && $role != 'invoice' && $role != 'invoice1' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
+                                    <?php $flag1 = 0; ?>
+
                                     <div class="page_break">
 
                                         @foreach($request->products as $i => $key)
 
-                                            @if(strpos($key, 'I') == 0 && strpos($key, 'S') == 0 && $request->measure[$i] != 'Per Piece')
+                                            @if($key && strpos($key, 'I') == 0 && strpos($key, 'S') == 0 && $request->measure[$i] != 'Per Piece')
+                                            
+                                                <?php $flag1 = 1; ?>
 
                                                 <h2 style="text-align: center;display: inline-block;width: 100%;margin-top: 50px;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i] . ' ' . __('text.Calculations')}}</h2>
 
@@ -862,6 +866,16 @@
                                             @endif
 
                                         @endforeach
+
+                                        <?php if($flag1 == 0){ ?>
+
+                                            <style>
+                                            
+                                                .page_break { display: none; }
+
+                                            </style>
+
+                                        <?php } ?>
 
                                     </div>
 

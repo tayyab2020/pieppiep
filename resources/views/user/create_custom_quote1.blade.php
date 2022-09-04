@@ -3595,7 +3595,7 @@
 
 			});
 
-			function calculate_total(qty_changed = 0,labor_changed = 0,art_changed = 0) {
+			function calculate_total(qty_changed = 0,labor_changed = 0) {
 
 				var total = 0;
 				var price_before_labor_total = 0;
@@ -3645,14 +3645,12 @@
 
 					if(qty_changed == 0)
 					{
-						if(art_changed == 0)
-						{
-							var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val();
-							old_discount = old_discount.replace(/\,/g, '.');
-							old_discount = parseFloat(old_discount).toFixed(2);
+						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
+						old_discount = old_discount * qty;
+						// old_discount = old_discount.replace(/\,/g, '.');
+						// old_discount = parseFloat(old_discount).toFixed(2);
 
-							rate = rate - old_discount;
-						}
+						rate = rate - old_discount;
 
 						var discount_option = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_option_values').val();
 						var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
@@ -4792,8 +4790,9 @@
 
 				$(this).next(".price_before_labor_old").val(value.replace(/\,/g, '.'));
 				$(this).parents(".content-div").find("#row_total").val(parseFloat(value.replace(/\,/g, '.')));
+				$(this).parents(".content-div").find(".total_discount_old").val(-0.00);
 
-				calculate_total(0,0,1);
+				calculate_total();
 
 			});
 
@@ -6312,6 +6311,9 @@
 					$(inp).parents(".content-div").find("#retailer_margin").val("");
 					$(inp).parents(".content-div").find("#measure").val("");
 					$(inp).parents(".content-div").find("#max_width").val("");
+
+					var row_id = $(inp).parents(".content-div").data('id');
+					$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
 
 					var current = $(this);
 					var a, b, i, val = this.value;

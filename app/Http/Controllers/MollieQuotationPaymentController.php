@@ -131,9 +131,19 @@ class MollieQuotationPaymentController extends Controller {
                 }
                 else
                 {
-                    $product_titles[] = product::where('id',$key->product_id)->pluck('title')->first();
-                    $color_titles[] = colors::where('id',$key->color)->pluck('title')->first();
-                    $model_titles[] = product_models::where('id',$key->model_id)->pluck('model')->first();
+                    if($key->product_id != 0)
+                    {
+                        $product_titles[] = product::where('id',$key->product_id)->pluck('title')->first();
+                        $color_titles[] = colors::where('id',$key->color)->pluck('title')->first();
+                        $model_titles[] = product_models::where('id',$key->model_id)->pluck('model')->first();
+                    }
+                    else
+                    {
+                        $product_titles[] = $key->description;
+                        $color_titles[] = '';
+                        $model_titles[] = '';
+                    }
+                    
                 }
 
                 $calculations[$i] = $key->calculations()->get();
