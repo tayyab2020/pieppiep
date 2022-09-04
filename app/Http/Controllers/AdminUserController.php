@@ -585,38 +585,41 @@ class AdminUserController extends Controller
                 $lng = $key->longitude;
                 $radius = $key->radius;
 
-                $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat.",".$lng."&destinations=".$user_latitude.",".$user_longitude."&mode=driving&key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM";
-
-                var_dump($url);
-                exit();
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-                $response = curl_exec($ch);
-                curl_close($ch);
-                $response_a = json_decode($response, true);
-
-                if(($response_a['rows'][0]['elements'][0]['status']) != 'ZERO_RESULTS')
+                if($lat && $lng && $radius)
                 {
-                    var_dump($response_a);
-                    exit();
+                    $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat.",".$lng."&destinations=".$user_latitude.",".$user_longitude."&mode=driving&key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM";
 
-                    $dist = $response_a['rows'][0]['elements'][0]['distance']['value'];
-                    /*$time = $response_a['rows'][0]['elements'][0]['duration']['text'];*/
-
-                    $distance = $dist/1000;
-
-                    $key->distance = $distance;
-
-                    if($distance <= $radius)
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+                    $response_a = json_decode($response, true);
+    
+                    if(($response_a['rows'][0]['elements'][0]['status']) != 'ZERO_RESULTS')
                     {
-                        $key->preferred = 1;
+                        $dist = $response_a['rows'][0]['elements'][0]['distance']['value'];
+                        /*$time = $response_a['rows'][0]['elements'][0]['duration']['text'];*/
+    
+                        $distance = $dist/1000;
+    
+                        $key->distance = $distance;
+    
+                        if($distance <= $radius)
+                        {
+                            $key->preferred = 1;
+                        }
+                        else
+                        {
+                            $key->preferred = 0;
+                        }
                     }
                     else
                     {
+                        $key->distance = 'N/A';
                         $key->preferred = 0;
                     }
                 }
