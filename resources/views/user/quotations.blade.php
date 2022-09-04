@@ -468,7 +468,7 @@
 
                                                                                 @if($key->accepted && !$key->processing && !$key->finished)
 
-                                                                                    <li><a class="send-new-order" data-id="{{$key->invoice_id}}" data-date="{{$key->delivery_date ? date('Y-m-d',strtotime($key->delivery_date)) : null}}" href="javascript:void(0)">{{__('text.Send Order')}}</a></li>
+                                                                                    <li><a class="send-new-order" data-id="{{$key->invoice_id}}" data-date="{{$key->delivery_date ? date('d-m-Y',strtotime($key->delivery_date)) : null}}" href="javascript:void(0)">{{__('text.Send Order')}}</a></li>
 
                                                                                 @endif
 

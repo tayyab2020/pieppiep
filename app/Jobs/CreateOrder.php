@@ -27,6 +27,7 @@ class CreateOrder implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $orderPDF_delivery_date = null;
     private $quotation_id = null;
     private $form_type = null;
     private $role = null;
@@ -49,8 +50,9 @@ class CreateOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request,$quotation_invoice_number,$suppliers,$order_numbers)
+    public function __construct($orderPDF_delivery_date,$quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request,$quotation_invoice_number,$suppliers,$order_numbers)
     {
+        $this->orderPDF_delivery_date = $orderPDF_delivery_date;
         $this->quotation_id = $quotation_id;
         $this->form_type = $form_type;
         $this->role = $role;
@@ -75,6 +77,7 @@ class CreateOrder implements ShouldQueue
      */
     public function handle()
     {
+        $orderPDF_delivery_date = $this->orderPDF_delivery_date;
         $quotation_id = $this->quotation_id;
         $form_type = $this->form_type;
         $role = $this->role;
@@ -105,11 +108,11 @@ class CreateOrder implements ShouldQueue
 
         if($form_type == 1)
         {
-            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $pdf = PDF::loadView('user.pdf_new_quotation_1', compact('orderPDF_delivery_date','form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'portrait')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
         }
         else
         {
-            $pdf = PDF::loadView('user.pdf_new_quotation', compact('form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
+            $pdf = PDF::loadView('user.pdf_new_quotation', compact('orderPDF_delivery_date','form_type','suppliers','order_numbers','role','product_titles','color_titles','model_titles','feature_sub_titles','sub_titles','date','client','user','request','quotation_invoice_number'))->setPaper('letter', 'landscape')->setOptions(['dpi' => 160,'isRemoteEnabled' => true]);
         }
         
         $file = public_path() . '/assets/Orders/' . $filename;

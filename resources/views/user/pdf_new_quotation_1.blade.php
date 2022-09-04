@@ -117,6 +117,14 @@
                                     <div class="col-md-6 col-sm-6 col-xs-12 text-right inv-rigth" style="float: right;">
                                         <br><br><br><br><br>
                                         <p style="font-size: 22px;margin-top: 40px;margin-bottom: 0;">{{__('text.Created at')}} {{$date}}</p>
+
+                                        @if($role == 'order')
+
+                                            <br>
+                                            <p style="font-size: 22px;margin-top: 40px;margin-bottom: 0;">{{__('text.Delivery Date')}} {{date('d-m-Y',strtotime($orderPDF_delivery_date))}}</p>
+
+                                        @endif
+                                        
                                     </div>
 
                                 </div>
@@ -223,9 +231,9 @@
                                     <th style="width: 60% !important;font-size: 26px;">{{__('text.Description')}}</th>
                                     <th style="width: 10% !important;font-size: 26px;text-align: center;">{{__('text.Qty')}}</th>
 
-                                    @if($role == 'supplier')
+                                    @if($role == 'supplier' || $role == 'supplier1')
 
-                                        <th style="width: 10% !important;font-size: 26px;">{{__('text.Delivery Date')}}</th>
+                                        <th style="width: 30% !important;font-size: 26px;text-align: center;">{{__('text.Delivery Date')}}</th>
 
                                     @endif
 
@@ -354,9 +362,9 @@
                                                                     <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i] . ', ' . $model_titles[$i] . ', ' . $color_titles[$i]}}</td>
                                                                     <td style="font-size: 22px;width: 10% !important;text-align: center;">{{count($calculator_rows[$i]) == 1 ? $request->qty[$i] : str_replace('.', ',',$box_quantity)}}</td>
 
-                                                                    @if($role == 'supplier')
+                                                                    @if($role == 'supplier' || $role == 'supplier1')
 
-                                                                        <td style="font-size: 22px;width: 10% !important;">{{$request->delivery_date[$i]}}</td>
+                                                                        <td style="font-size: 22px;width: 30% !important;text-align: center;">{{$request->delivery_date[$i]}}</td>
 
                                                                     @endif
 
@@ -382,7 +390,7 @@
 
                                                                 @else
 
-                                                                    @if($key || (isset($key->product_id) && $key->product_id != 0))
+                                                                    @if((is_numeric($key) && $key != 0) || (isset($key->product_id) && $key->product_id != 0))
 
                                                                         <?php
 

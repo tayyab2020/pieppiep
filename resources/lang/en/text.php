@@ -637,4 +637,5 @@ return [
     'Services Overview' => 'Services Overview',
     'Add Services' => 'Add Services',
     'Grand Total Overview' => 'Amount €',
+    'Download Negative Invoice PDF' => 'Download Negative Invoice PDF'
 ];

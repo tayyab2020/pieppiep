@@ -137,7 +137,7 @@ class SendOrder implements ShouldQueue
                 $width_unit[] = $temp->width_unit;
                 $height[] = $temp->height;
                 $height_unit[] = $temp->height_unit;
-                $delivery[] = $temp->delivery_date;
+                $delivery[] = date('d-m-Y',strtotime($retailer_delivery_date));
                 $labor_impact[] = $temp->labor_impact;
                 $price_before_labor[] = $temp->price_before_labor;
                 $discount[] = $temp->discount;

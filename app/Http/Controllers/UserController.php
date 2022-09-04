@@ -5642,6 +5642,27 @@ class UserController extends Controller
         $order_numbers = array();
         $feature_sub_titles = array();
 
+        date_default_timezone_set('Europe/Amsterdam');
+        $delivery_date = date('Y-m-d', strtotime($delivery_date_start . ' +1 day'));
+        $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+
+        while($is_weekend)
+        {
+            $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 day'));
+            $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+        }
+
+        $orderPDF_delivery_date = $delivery_date;
+
+        // $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
+        // $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+
+        // while($is_weekend)
+        // {
+        //     $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 days'));
+        //     $is_weekend = date('N', strtotime($delivery_date)) >= 6;
+        // }
+
         foreach ($products as $i => $key) {
 
             /*$feature_titles[$i][] = 'empty';*/
@@ -5682,25 +5703,6 @@ class UserController extends Controller
                     $suppliers[] = NULL;
                 }
             }
-
-            date_default_timezone_set('Europe/Amsterdam');
-            $delivery_date = date('Y-m-d', strtotime($delivery_date_start . ' +1 day'));
-            $is_weekend = date('N', strtotime($delivery_date)) >= 6;
-
-            while($is_weekend)
-            {
-                $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 day'));
-                $is_weekend = date('N', strtotime($delivery_date)) >= 6;
-            }
-
-            // $delivery_date = date('Y-m-d', strtotime("+".$request->delivery_days[$i].' days'));
-            // $is_weekend = date('N', strtotime($delivery_date)) >= 6;
-
-            // while($is_weekend)
-            // {
-            //     $delivery_date = date('Y-m-d', strtotime($delivery_date. '+ 1 days'));
-            //     $is_weekend = date('N', strtotime($delivery_date)) >= 6;
-            // }
 
             if(!$request->is_invoice)
             {
@@ -6190,7 +6192,7 @@ class UserController extends Controller
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                 $invoice_items->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
 
-                if (strpos($key, 'I') == 0 && strpos($key, 'S') == 0) {
+                if ($key && strpos($key, 'I') == 0 && strpos($key, 'S') == 0) {
 
                     if($request->childsafe[$i])
                     {
@@ -6412,12 +6414,12 @@ class UserController extends Controller
                     if($form_type == 1)
                     {
                         $role = 'order';
-                        CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
+                        CreateOrder::dispatch($orderPDF_delivery_date,$quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
                     }
                     else
                     {
                         $role = 'supplier2';
-                        CreateOrder::dispatch($quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
+                        CreateOrder::dispatch($orderPDF_delivery_date,$quotation_id,$form_type,$role,$product_titles,$color_titles,$model_titles,$feature_sub_titles,$sub_titles,$date,$client,$user,$request->all(),$quotation_invoice_number,$suppliers,$order_numbers);
                     }
     
                }

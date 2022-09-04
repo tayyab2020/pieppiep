@@ -91,7 +91,7 @@
 
                                                                             @else
 
-                                                                                {{$item->product_title . ', '. $item->model . ', ' . $item->color_title}}
+                                                                                {{$item->product_id ? $item->product_title . ', '. $item->model . ', ' . $item->color_title : $item->description}}
 
                                                                             @endif
                                                                         </td>
