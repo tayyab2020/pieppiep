@@ -550,11 +550,11 @@ class AdminUserController extends Controller
 
         $url = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&address=".urlencode($search).",+Netherlands&sensor=false";
 
-        var_dump($url);
-        exit();
-
         $result_string = file_get_contents($url);
         $result = json_decode($result_string, true);
+
+        var_dump($result);
+        exit();
 
         $history = handyman_quotes::leftjoin('users','users.id','=','handyman_quotes.handyman_id')->where('handyman_quotes.quote_id',$id)->select('users.*','handyman_quotes.created_at as quote_date')->get();
 
