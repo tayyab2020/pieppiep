@@ -550,6 +550,9 @@ class AdminUserController extends Controller
 
         $url = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBNRJukOohRJ1tW0tMG4tzpDXFz68OnonM&address=".urlencode($search).",+Netherlands&sensor=false";
 
+        var_dump($url);
+        exit();
+
         $result_string = file_get_contents($url);
         $result = json_decode($result_string, true);
 
@@ -600,7 +603,7 @@ class AdminUserController extends Controller
                 {
                     var_dump($response_a);
                     exit();
-                    
+
                     $dist = $response_a['rows'][0]['elements'][0]['distance']['value'];
                     /*$time = $response_a['rows'][0]['elements'][0]['duration']['text'];*/
 
