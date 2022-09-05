@@ -50,9 +50,13 @@
 
                                                             <td>
 
-                                                                @if($user->status != 1)
+                                                                @if(!isset($user->status))
 
                                                                     <button class="btn btn-info">{{__('text.Not Requested')}}</button>
+
+                                                                @elseif($user->status != 1)
+
+                                                                    <button class="btn btn-warning">{{__('text.Response Pending')}}</button>
 
                                                                 @else
 
