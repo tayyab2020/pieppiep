@@ -237,7 +237,7 @@
 
 																				<span>€</span>
 																				<input type="text" value="{{str_replace('.', ',',floatval($item->total_discount))}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
-																				<input type="hidden" value="{{$item->total_discount/$item->qty}}" class="total_discount_old">
+																				<input type="hidden" value="{{$item->qty != 0 ? $item->total_discount/$item->qty : 0}}" class="total_discount_old">
 																			</div>
 
 																			<div style="width: 7%;" class="content item9">
@@ -3643,73 +3643,172 @@
 					// 	$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 					// }
 
-					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
-						old_discount = old_discount * qty;
-						// old_discount = old_discount.replace(/\,/g, '.');
-						// old_discount = parseFloat(old_discount).toFixed(2);
+					// if(qty_changed == 0)
+					// {
+					// 	var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
+					// 	old_discount = old_discount * qty;
+					// 	// old_discount = old_discount.replace(/\,/g, '.');
+					// 	// old_discount = parseFloat(old_discount).toFixed(2);
 
-						rate = rate - old_discount;
+					// 	rate = rate - old_discount;
 
-						var discount_option = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_option_values').val();
-						var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
-						// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
+					// 	var discount_option = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_option_values').val();
+					// 	var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
+					// 	// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
 
-						if(!discount)
-						{
-							discount = 0;
-						}
+					// 	if(!discount)
+					// 	{
+					// 		discount = 0;
+					// 	}
 
-						// if(!labor_discount)
-						// {
-						// 	labor_discount = 0;
-						// }
+					// 	// if(!labor_discount)
+					// 	// {
+					// 	// 	labor_discount = 0;
+					// 	// }
 
-						if(discount_option == 1)
-						{
-							var discount_val = discount;
-						}
-						else
-						{
-							var discount_val = parseFloat(rate) * (discount/100);
-						}
+					// 	if(discount_option == 1)
+					// 	{
+					// 		var discount_val = discount;
+					// 	}
+					// 	else
+					// 	{
+					// 		var discount_val = parseFloat(rate) * (discount/100);
+					// 	}
 						
-						// var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
+					// 	// var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
 
-						// var total_discount = discount_val + labor_discount_val;
-						var total_discount = discount_val;
+					// 	// var total_discount = discount_val + labor_discount_val;
+					// 	var total_discount = discount_val;
 
-						if(isNaN(total_discount))
-						{
-							total_discount = 0;
-						}
+					// 	if(isNaN(total_discount))
+					// 	{
+					// 		total_discount = 0;
+					// 	}
 
-						total_discount = parseFloat(total_discount).toFixed(2);
+					// 	total_discount = parseFloat(total_discount).toFixed(2);
 
-						var old_discount = total_discount / qty;
-						old_discount = parseFloat(old_discount).toFixed(2);
+					// 	var old_discount = total_discount / qty;
+					// 	old_discount = parseFloat(old_discount).toFixed(2);
 
-						if(isNaN(old_discount))
-						{
-							old_discount = 0;
-						}
+					// 	if(isNaN(old_discount))
+					// 	{
+					// 		old_discount = 0;
+					// 	}
 
-						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val('-' + total_discount.replace(/\./g, ','));
-						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val('-' + old_discount);
+					// 	$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val('-' + total_discount.replace(/\./g, ','));
+					// 	$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val('-' + old_discount);
 
-						rate = parseFloat(rate) - parseFloat(total_discount);
-						var price = rate / qty;
+					// 	rate = parseFloat(rate) - parseFloat(total_discount);
+					// 	var price = rate / qty;
 
-						if(isNaN(price))
-						{
-							price = 0;
-						}
+					// 	if(isNaN(price))
+					// 	{
+					// 		price = 0;
+					// 	}
 
-						price = parseFloat(price).toFixed(2);
+					// 	price = parseFloat(price).toFixed(2);
 
-						if(qty != 0)
-						{
-							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-						}
+					// 	if(qty != 0)
+					// 	{
+					// 		$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+					// 	}
+
+					// }
+					// else
+					// {
+					// 	var price = rate / qty;
+
+					// 	if(isNaN(price))
+					// 	{
+					// 		price = 0;
+					// 	}
+
+					// 	price = parseFloat(price).toFixed(2);
+
+					// 	if(qty != 0)
+					// 	{
+					// 		$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+					// 	}
+
+					// 	var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
+					// 	old_discount = old_discount * qty;
+					// 	old_discount = parseFloat(old_discount).toFixed(2);
+
+					// 	if(isNaN(old_discount))
+					// 	{
+					// 		old_discount = 0;
+					// 	}
+
+					// 	$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(old_discount.replace(/\./g, ','));
+					// }
+
+					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
+					old_discount = old_discount * qty;
+					// old_discount = old_discount.replace(/\,/g, '.');
+					// old_discount = parseFloat(old_discount).toFixed(2);
+
+					rate = rate - old_discount;
+
+					var discount_option = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_option_values').val();
+					var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
+					// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
+
+					if(!discount)
+					{
+						discount = 0;
+					}
+
+					// if(!labor_discount)
+					// {
+					// 	labor_discount = 0;
+					// }
+
+					if(discount_option == 1)
+					{
+						var discount_val = discount;
+					}
+					else
+					{
+						var discount_val = parseFloat(rate) * (discount/100);
+					}
+						
+					// var labor_discount_val = parseFloat(labor_impact) * (labor_discount/100);
+
+					// var total_discount = discount_val + labor_discount_val;
+					var total_discount = discount_val;
+
+					if(isNaN(total_discount))
+					{
+						total_discount = 0;
+					}
+
+					total_discount = parseFloat(total_discount).toFixed(2);
+
+					var old_discount = total_discount / qty;
+					old_discount = parseFloat(old_discount).toFixed(2);
+
+					if(isNaN(old_discount))
+					{
+						old_discount = 0;
+					}
+
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val('-' + total_discount.replace(/\./g, ','));
+					$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val('-' + old_discount);
+
+					rate = parseFloat(rate) - parseFloat(total_discount);
+					var price = rate / qty;
+
+					if(isNaN(price))
+					{
+						price = 0;
+					}
+
+					price = parseFloat(price).toFixed(2);
+
+					if(qty != 0)
+					{
+						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+					}
 
 					rate = parseFloat(rate);
 					rate = rate.toFixed(2);
