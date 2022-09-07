@@ -3643,9 +3643,7 @@
 					// 	$('#products_table').find(`[data-id='${row_id}']`).find('.price_before_labor').val(price_before_labor.replace(/\./g, ','));
 					// }
 
-					if(qty_changed == 0)
-					{
-						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
+					var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
 						old_discount = old_discount * qty;
 						// old_discount = old_discount.replace(/\,/g, '.');
 						// old_discount = parseFloat(old_discount).toFixed(2);
@@ -3679,12 +3677,13 @@
 
 						// var total_discount = discount_val + labor_discount_val;
 						var total_discount = discount_val;
-						total_discount = parseFloat(total_discount).toFixed(2);
 
 						if(isNaN(total_discount))
 						{
 							total_discount = 0;
 						}
+
+						total_discount = parseFloat(total_discount).toFixed(2);
 
 						var old_discount = total_discount / qty;
 						old_discount = parseFloat(old_discount).toFixed(2);
@@ -3711,33 +3710,6 @@
 						{
 							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
 						}
-
-					}
-					else
-					{
-						var price = rate / qty;
-
-						if(isNaN(price))
-						{
-							price = 0;
-						}
-
-						if(qty != 0)
-						{
-							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
-						}
-
-						var old_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val();
-						old_discount = old_discount * qty;
-						old_discount = parseFloat(old_discount).toFixed(2);
-
-						if(isNaN(old_discount))
-						{
-							old_discount = 0;
-						}
-
-						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val(old_discount.replace(/\./g, ','));
-					}
 
 					rate = parseFloat(rate);
 					rate = rate.toFixed(2);
