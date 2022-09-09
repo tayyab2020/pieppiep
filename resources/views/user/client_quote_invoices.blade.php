@@ -1927,8 +1927,8 @@
 
             var p = $(this);
             var current_stage = p.parent().find('.current-stage');
-            var accept_date = $(this).prev().prev().children('input').val();
-            var delivery_date = $(this).prev().children('input').val();
+            var accept_date = $(this).parents("tr").find(".accept_date").children('input').val();
+            var delivery_date = $(this).parents("tr").find(".delivery_date").children('input').val();
 
             if(accept_date !== '-' && delivery_date !== '-')
             {

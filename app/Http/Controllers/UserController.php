@@ -2426,6 +2426,62 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function DiscardQuotation($id)
+    {
+        $now = date('d-m-Y H:i:s');
+        $user = Auth::guard('user')->user();
+        $user_id = $user->id;
+        $user_role = $user->role_id;
+
+        $main_id = $user->main_id;
+
+        if($main_id)
+        {
+            $user = User::where('id',$main_id)->first();
+            $user_id = $user->id;
+        }
+
+        $retailer_name = $user->name;
+
+        $invoice = new_quotations::leftjoin('users', 'users.id', '=', 'new_quotations.user_id')->leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->where('new_quotations.id', $id)->where('new_quotations.creator_id', $user_id)->where('new_quotations.accepted',1)->where('new_quotations.finished',0)->select('new_quotations.mail_to','new_quotations.quotation_invoice_number','users.email','users.fake_email','customers_details.name','customers_details.family_name')->first();
+
+        if (!$invoice) {
+            return redirect()->back();
+        }
+
+        $quote_request_id = new_quotations::where('id', $id)->pluck("quote_request_id")->first();
+
+        quotes::where('id', $quote_request_id)->update(['status' => 1]);
+        new_quotations::where('id', $id)->update(['status' => 1, 'accepted' => 0, 'accept_date' => NULL]);
+
+        // $client_name = $invoice->name;
+        // $valid_email = $invoice->fake_email;
+        // $mail_to = $invoice->mail_to;
+        // $client_email = $valid_email ? $mail_to : $invoice->email;
+
+        // if($this->lang->lang == 'du')
+        // {
+        //     $msg = "Beste " . $client_name . ",<br><br><b>" . $user->company_name . "</b> heeft namens jou je offerte met offertenummer <b>" . $invoice->quotation_invoice_number . "</b> geaccepteerd.<br><br>Met vriendelijke groet,<br><br>$retailer_name<br><br>$user->company_name";
+        // }
+        // else
+        // {
+        //     $msg = "Dear " . $client_name . ",<br><br><b>" . $user->company_name . "</b> has accepted Quotation: <b>" . $invoice->quotation_invoice_number . "</b> on your behalf.<br><br>Kind regards,<br><br>$retailer_name<br><br>$user->company_name";
+        // }
+   
+        // \Mail::send(array(), array(), function ($message) use ($msg, $client_email, $client_name, $invoice, $user) {
+        //     $message
+        //         ->to($client_email)
+        //         ->from('noreply@pieppiep.com', $user->company_name)
+        //         ->replyTo($user->email, $user->company_name)
+        //         ->subject(__('text.Quotation Discarded!'))
+        //         ->setBody($msg,'text/html');
+        // });
+
+        Session::flash('success', __('text.Quotation has been discarded.'));
+
+        return redirect()->back();
+    }
+
     public function HandymanQuoteRequest($id)
     {
         $user = Auth::guard('user')->user();
