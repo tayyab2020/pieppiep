@@ -337,8 +337,8 @@
 
 																		<input type="hidden" id="order_number" name="order_number[]">
 																		<input type="hidden" id="basic_price" name="basic_price[]">
-																		<input type="hidden" id="rate" name="rate[]">
-																		<input type="hidden" id="row_total" name="total[]">
+																		<input type="hidden" id="rate" value="0.00" name="rate[]">
+																		<input type="hidden" id="row_total" value="0.00" name="total[]">
 																		<input type="hidden" value="1" id="row_id" name="row_id[]">
 																		<input type="hidden" value="0" id="childsafe" name="childsafe[]">
 																		<input type="hidden" value="0" id="ladderband" name="ladderband[]">
