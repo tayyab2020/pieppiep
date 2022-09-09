@@ -639,4 +639,7 @@ return [
     'Grand Total Overview' => 'Bedrag €',
     'Download Negative Invoice PDF' => 'Download Negative Invoice PDF',
     'Response Pending' => 'Response Pending',
+    'Discard Quotation' => 'Discard Quotation',
+    'Quotation Discarded!' => 'Quotation Discarded!',
+    'Quotation has been discarded.' => 'Quotation has been discarded.',
 ];

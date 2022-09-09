@@ -382,11 +382,11 @@
 
                                                                 @if(strpos($key, 'I') > -1 || (isset($key->item_id) && $key->item_id != 0))
 
-                                                                    <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i] . ' (Item)'}}</td>
+                                                                    <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i]}}</td>
 
                                                                 @elseif(strpos($key, 'S') > -1 || (isset($key->service_id) && $key->service_id != 0))
 
-                                                                    <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i] . ' (Service)'}}</td>
+                                                                    <td style="font-size: 22px;width: 60% !important;">{{$product_titles[$i]}}</td>
 
                                                                 @else
 
@@ -423,7 +423,15 @@
 
                                                             @endif
 
-                                                            <td style="font-size: 22px;width: 10% !important;text-align: center;">{{$request->negative_invoice ? '-' : null}} {{$request->qty[$i]}}</td>
+                                                            @if(number_format((float)($request->qty[$i] ? $request->qty[$i] : 0), 2, '.', '') != 0 && $request->price_before_labor_old[$i] != 0)
+
+                                                                <td style="font-size: 22px;width: 10% !important;text-align: center;">{{$request->negative_invoice ? '-' : null}} {{$request->qty[$i]}}</td>
+
+                                                            @else
+
+                                                                <td></td>
+
+                                                            @endif
 
                                                             @if($role == 'supplier2')
 
@@ -432,8 +440,17 @@
 
                                                             @endif
 
-                                                            <td style="font-size: 22px;text-align: center;width: 15% !important;">{{number_format((float)($request->total[$i]), 2, ',', '.')}}</td>
-                                                            <td style="font-size: 22px;text-align: center;width: 15% !important;">{{$request->negative_invoice ? '-' : null}} {{$arb}}</td>
+                                                            @if(number_format((float)($request->qty[$i] ? $request->qty[$i] : 0), 2, '.', '') != 0 && $request->price_before_labor_old[$i] != 0)
+
+                                                                <td style="font-size: 22px;text-align: center;width: 15% !important;">{{number_format((float)($request->price_before_labor_old[$i]), 2, ',', '.')}}</td>
+                                                                <td style="font-size: 22px;text-align: center;width: 15% !important;">{{$request->negative_invoice ? '-' : null}} {{$arb}}</td>
+
+                                                            @else
+
+                                                                <td></td>
+                                                                <td></td>
+
+                                                            @endif
 
                                                         </tr>
 

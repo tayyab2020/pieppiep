@@ -446,6 +446,13 @@
                                                                             @endif
 
 
+                                                                            @if($key->accepted && !$key->finished)
+
+                                                                                <li><a href="{{ url('/aanbieder/discard-quotation/'.$key->invoice_id) }}">{{__('text.Discard Quotation')}}</a></li>
+
+                                                                            @endif
+
+
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
 
                                                                                 @if(!$key->quote_request_id || $key->paid)

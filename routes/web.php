@@ -169,6 +169,7 @@
   Route::get('/eigen-offerte/accepteren-offerte/{id}', 'UserController@CustomQuotationAcceptQuotation');
   Route::get('/accept-new-quotation/{id}', 'UserController@AcceptNewQuotation')->name('accept-new-quotation');
   Route::get('/accept-new-quotation-mail/{id}', 'UserController@AcceptNewQuotationMail')->name('accept-new-quotation-mail');
+  Route::get('/discard-quotation/{id}', 'UserController@DiscardQuotation')->name('discard-quotation');
   Route::post('/send-invoice', 'UserController@SendInvoice')->name('send-new-invoice');
   Route::post('/send-negative-invoice', 'UserController@SendNegativeInvoice')->name('send-negative-invoice');
   Route::get('/bekijk-offerteaanvraag-aanbieder/{id}', 'UserController@HandymanQuoteRequest');
