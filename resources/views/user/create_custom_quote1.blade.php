@@ -226,8 +226,8 @@
 
 																				<div style="display: flex;align-items: center;">
 																					<span>€</span>
-																					<input type="text" maskedformat="9,1" value="{{str_replace('.', ',',floatval($item->price_before_labor))}}" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																					<input type="hidden" value="{{$item->price_before_labor}}" class="price_before_labor_old">
+																					<input type="text" maskedformat="9,1" value="{{number_format((float)$item->price_before_labor, 2, ',', '')}}" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
+																					<input type="hidden" value="{{$item->price_before_labor}}" name="price_before_labor_old[]" class="price_before_labor_old">
 																				</div>
 																			</div>
 
@@ -236,7 +236,7 @@
 																				<label class="content-label">{{__('text.Discount')}}</label>
 
 																				<span>€</span>
-																				<input type="text" value="{{str_replace('.', ',',floatval($item->total_discount))}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
+																				<input type="text" value="{{number_format((float)$item->total_discount, 2, ',', '')}}" name="total_discount[]" readonly style="border: 0;background: transparent;padding: 0 5px;height: 30px;" class="form-control total_discount res-white">
 																				<input type="hidden" value="{{$item->qty != 0 ? $item->total_discount/$item->qty : 0}}" class="total_discount_old">
 																			</div>
 
@@ -385,7 +385,7 @@
 																			<div style="display: flex;align-items: center;">
 																				<span>€</span>
 																				<input type="text" maskedformat="9,1" value="0" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">
-																				<input type="hidden" value="0" class="price_before_labor_old">
+																				<input type="hidden" value="0" name="price_before_labor_old[]" class="price_before_labor_old">
 																			</div>
 																		</div>
 
@@ -3595,7 +3595,7 @@
 
 			});
 
-			function calculate_total(qty_changed = 0,labor_changed = 0) {
+			function calculate_total() {
 
 				var total = 0;
 				var price_before_labor_total = 0;
@@ -3824,7 +3824,7 @@
 					$(this).parent().find('#rate').val(rate);
 					$('#products_table').find(`[data-id='${row_id}']`).find('.price').text('€ ' + new Intl.NumberFormat('nl-NL',{minimumFractionDigits: 2,maximumFractionDigits: 2}).format(rate));
 
-					var art = price_before_labor;
+					var art = price_before_labor ? price_before_labor : 0;
 					price_before_labor_total = parseFloat(price_before_labor_total) + parseFloat(art);
 					price_before_labor_total = parseFloat(price_before_labor_total).toFixed(2);
 
@@ -3947,7 +3947,7 @@
 							'																 <div style="display: flex;align-items: center;">\n' +
 							'																	<span>€</span>\n' +
 							'																 	<input type="text" maskedformat="9,1" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
-							'																	<input type="hidden" class="price_before_labor_old">\n' +
+							'																	<input type="hidden" name="price_before_labor_old[]" class="price_before_labor_old">\n' +
 							'																 </div>\n' +
 							'                                                            </div>\n' +
 							'\n' +
@@ -4134,7 +4134,7 @@
 							'																 <div style="display: flex;align-items: center;">\n' +
 							'																	<span>€</span>\n' +
 							'																 	<input value="' + price_before_labor + '" type="text" maskedformat="9,1" name="price_before_labor[]" style="border: 0;background: transparent;padding: 0 5px;" class="form-control price_before_labor res-white">\n' +
-							'																	<input value="' + price_before_labor_old + '" type="hidden" class="price_before_labor_old">\n' +
+							'																	<input value="' + price_before_labor_old + '" type="hidden" name="price_before_labor_old[]" class="price_before_labor_old">\n' +
 							'																 </div>\n' +
 							'                                                            </div>\n' +
 							'\n' +
@@ -4870,7 +4870,7 @@
 
 			$(document).on('input', "input[name='qty[]']", function (e) {
 
-				calculate_total(1);
+				calculate_total();
 
 			});
 
@@ -5500,7 +5500,7 @@
 
 				$("#products_table").find(`.content-div[data-id='${product_row}']`).find('.qty').val(total_qty);
 
-				calculate_total(1,0);
+				calculate_total();
 			}
 
 			// $(document).on('input', '.labor_impact', function () {
@@ -6082,6 +6082,9 @@
 									data.max_width = 0;
 								}
 
+								estimated_price_per_box = parseFloat(estimated_price_per_box).toFixed(2);
+								estimated_price_per_box_old = parseFloat(estimated_price_per_box_old).toFixed(2);
+
 								$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val(data.max_width);
 								$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val(data.measure);
 								$('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val(0);
@@ -6310,6 +6313,9 @@
 									var estimated_price_per_box_old = 0;
 								}
 
+								estimated_price_per_box = parseFloat(estimated_price_per_box).toFixed(2);
+								estimated_price_per_box_old = parseFloat(estimated_price_per_box_old).toFixed(2);
+
 								$('#products_table').find(`[data-id='${row_id}']`).find('.qty').val(quote_qty);
 								$('#products_table').find(`[data-id='${row_id}']`).find('#max_width').val('');
 								$('#products_table').find(`[data-id='${row_id}']`).find('#measure').val('');
@@ -6369,24 +6375,28 @@
 				/*execute a function when someone writes in the text field:*/
 				inp.addEventListener("input", function(e) {
 
-					$(inp).parents(".products").find("#product_id").val("");
-					$(inp).parents(".products").find("#supplier_id").val("");
-					$(inp).parents(".products").find("#color_id").val("");
-					$(inp).parents(".products").find("#model_id").val("");
-					$(inp).parents(".content-div").find("#childsafe").val(0);
-					$(inp).parents(".content-div").find("#ladderband").val(0);
-					$(inp).parents(".content-div").find("#ladderband_value").val(0);
-					$(inp).parents(".content-div").find("#ladderband_price_impact").val(0);
-					$(inp).parents(".content-div").find("#ladderband_impact_type").val(0);
-					$(inp).parents(".content-div").find("#area_conflict").val(0);
-					$(inp).parents(".content-div").find("#delivery_days").val("");
-					$(inp).parents(".content-div").find("#supplier_margin").val("");
-					$(inp).parents(".content-div").find("#retailer_margin").val("");
-					$(inp).parents(".content-div").find("#measure").val("");
-					$(inp).parents(".content-div").find("#max_width").val("");
+					if($(inp).val() == "")
+					{
+						$(inp).parents(".products").find("#product_id").val("");
+						$(inp).parents(".products").find("#supplier_id").val("");
+						$(inp).parents(".products").find("#color_id").val("");
+						$(inp).parents(".products").find("#model_id").val("");
+						$(inp).parents(".content-div").find("#childsafe").val(0);
+						$(inp).parents(".content-div").find("#ladderband").val(0);
+						$(inp).parents(".content-div").find("#ladderband_value").val(0);
+						$(inp).parents(".content-div").find("#ladderband_price_impact").val(0);
+						$(inp).parents(".content-div").find("#ladderband_impact_type").val(0);
+						$(inp).parents(".content-div").find("#area_conflict").val(0);
+						$(inp).parents(".content-div").find("#delivery_days").val("");
+						$(inp).parents(".content-div").find("#supplier_margin").val("");
+						$(inp).parents(".content-div").find("#retailer_margin").val("");
+						$(inp).parents(".content-div").find("#measure").val("");
+						$(inp).parents(".content-div").find("#max_width").val("");
 
-					var row_id = $(inp).parents(".content-div").data('id');
-					$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
+						var row_id = $(inp).parents(".content-div").data('id');
+						$('#menu2').find(`.attributes_table[data-id='${row_id}']`).find('.attribute-content-div').remove();
+
+					}
 
 					var current = $(this);
 					var a, b, i, val = this.value;
