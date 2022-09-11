@@ -577,6 +577,13 @@
 
 																<li style="margin-bottom: 0;display: none;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">{{__('text.Features')}}</a></li>
 
+
+																@if($general_terms && (((Route::currentRouteName() == 'create-custom-quotation' || Route::currentRouteName() == 'view-new-quotation') && $general_terms->show_quote) || ((Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice') && $general_terms->show_invoice)))
+
+																	<li style="margin-bottom: 0;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu3" aria-expanded="false">{{__('text.General Terms')}}</a></li>
+
+																@endif
+
 															</ul>
 
 															<div style="padding: 30px 15px 20px 15px;border: 0;border-top: 1px solid #24232329;" class="tab-content">
@@ -1185,6 +1192,30 @@
 																	@endif
 
 																</div>
+
+																@if(($general_terms && (Route::currentRouteName() == 'create-custom-quotation' && $general_terms->show_quote)))
+
+																	<div id="menu3" class="tab-pane">
+																		<div class="form-group">
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+																				<input type="hidden" name="general_terms" value="{{$general_terms->description}}">
+                                            									<div class="summernote">{!! $general_terms->description !!}</div>
+																			</div>
+                                        								</div>
+																	</div>
+
+																@elseif($general_terms && (((Route::currentRouteName() == 'view-new-quotation') && $general_terms->show_quote) || ((Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice') && $general_terms->show_invoice)))
+
+																	<div id="menu3" class="tab-pane">
+																		<div class="form-group">
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+																				<input type="hidden" name="general_terms" value="{{$invoice[0]->general_terms}}">
+                                            									<div class="summernote">{!! $invoice[0]->general_terms !!}</div>
+																			</div>
+                                        								</div>
+																	</div>
+
+																@endif
 
 															</div>
 
@@ -2508,6 +2539,33 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/nl.js"></script>
 
 	<script type="text/javascript">
+
+		$('.summernote').summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['fontsize', ['fontsize']],
+                /*['color', ['color']],*/
+                ['fontname', ['fontname']],
+                ['forecolor', ['forecolor']],
+                ['backcolor', ['backcolor']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['view', ['fullscreen', 'codeview']],
+                ['insert', ['link', 'picture', 'video']],
+            ],
+            height: 300,   //set editable area's height
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            },
+            callbacks: {
+                onChange: function(contents, $editable) {
+                    $(this).prev('input').val(contents);
+                }
+            }
+        });
+
 
 		$('.appointment_start').on('dp.change', function(e) {
 

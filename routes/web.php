@@ -79,6 +79,8 @@
 
   Route::prefix('aanbieder')->group(function() {
 
+  Route::get('/retailer-general-terms', 'UserController@RetailerGeneralTerms')->name('retailer-general-terms');
+  Route::post('/retailer-general-terms', 'UserController@RetailerGeneralTermsPost')->name('save-retailer-general-terms');
   Route::get('/new-quotations', 'UserController@NewQuotations')->name('new-quotations');
   Route::get('/new-orders', 'UserController@NewOrders')->name('new-orders');
   Route::get('/new-invoices', 'UserController@NewInvoices')->name('new-invoices');

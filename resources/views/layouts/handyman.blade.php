@@ -1320,9 +1320,9 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
             @endif--}}
 
 
-            @if(auth()->user()->hasAnyPermission(['customer-quotations', 'customer-invoices', 'handyman-quotation-requests']))
+            @if(auth()->user()->hasAnyPermission(['create-new-quotation', 'customer-quotations', 'customer-invoices', 'handyman-quotation-requests', 'retailer-general-terms']))
 
-                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'new-orders' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'handyman-quotation-requests') class="active1" @endif href="javascript:"><span class="icon sales-icon"></span> <span>{{__('text.Sales')}}</span></a>
+                <li><a @if(Route::currentRouteName() == 'customer-quotations' || Route::currentRouteName() == 'new-orders' || Route::currentRouteName() == 'customer-invoices' || Route::currentRouteName() == 'handyman-quotation-requests' || Route::currentRouteName() == 'retailer-general-terms') class="active1" @endif href="javascript:"><span class="icon sales-icon"></span> <span>{{__('text.Sales')}}</span></a>
 
                     <ul class="hide">
 
@@ -1332,9 +1332,15 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
 
                         <div style="overflow-y: auto;height: 100%;">
 
-                            @if(auth()->user()->can('create-new-quotation'))
+                            @if(auth()->user()->role_id == 2 && auth()->user()->can('create-new-quotation'))
 
-                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> @if(auth()->user()->role_id == 2) {{__('text.New Quotations')}} @else {{__('text.New Orders')}} @endif</a></li>
+                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> {{__('text.New Quotations')}}</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->role_id == 4 && auth()->user()->can('customer-quotations'))
+
+                                <li><a href="{{route('customer-quotations')}}"><i class="fa fa-angle-right"></i> {{__('text.New Orders')}}</a></li>
 
                             @endif
 
@@ -1361,6 +1367,12 @@ color: <?php if($gs->btn_col != null) { echo $gs->btn_col. ' !important;'; } els
                                 <li><a href="{{route('new-orders')}}"><i class="fa fa-angle-right"></i> {{__('text.New Orders')}}</a></li>
 
                                 <li><a href="{{route('customer-invoices')}}"><i class="fa fa-angle-right"></i> {{__('text.New Invoices')}}</a></li>
+
+                            @endif
+
+                            @if(auth()->user()->role_id == 2 && auth()->user()->can('retailer-general-terms'))
+
+                                <li><a href="{{route('retailer-general-terms')}}"><i class="fa fa-angle-right"></i> {{__('text.General Terms')}}</a></li>
 
                             @endif
 
