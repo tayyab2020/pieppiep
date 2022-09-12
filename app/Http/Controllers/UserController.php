@@ -1051,7 +1051,7 @@ class UserController extends Controller
         {
             if($user_role == 2)
             {
-                $new_invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name', 'quotes.quote_name', 'quotes.quote_familyname')->with('orders')->with('invoices')->get();
+                $new_invoices = new_quotations::leftjoin('customers_details', 'customers_details.id', '=', 'new_quotations.customer_details')->leftjoin('quotes', 'quotes.id', '=', 'new_quotations.quote_request_id')->where('new_quotations.creator_id', $user_id)->where('new_quotations.status','!=',3)->orderBy('new_quotations.created_at', 'desc')->select('new_quotations.*', 'new_quotations.id as invoice_id', 'new_quotations.created_at as invoice_date', 'customers_details.name', 'customers_details.family_name', 'quotes.quote_name', 'quotes.quote_familyname')->with('orders')->with('invoices')->with('messages')->get();
             }
             else
             {
@@ -5518,9 +5518,9 @@ class UserController extends Controller
                             $org_invoice_data->user_id = $request->quote_request_id ? 0 : $client->user_id;
                             $org_invoice_data->customer_details = $request->quote_request_id ? 0 : $request->customer;
                             $org_invoice_data->labor_cost_total = 0;
-                            $org_invoice_data->general_terms = $request->general_terms;
                         }
 
+                        $org_invoice_data->general_terms = $request->general_terms;
                         $org_invoice_data->net_amount = str_replace(',', '.',str_replace('.', '',$request->net_amount));
                         $org_invoice_data->tax_amount = str_replace(',', '.',str_replace('.', '',$request->tax_amount));
                         $org_invoice_data->delivery_date = $delivery_date_start;
