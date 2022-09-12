@@ -6563,7 +6563,7 @@ class UserController extends Controller
 
         if($id)
         {
-            retailer_general_terms::where('retailer_id',$user_id)->update(['description' => $request->description, 'show_quote' => $request->show_quote ? 1 : 0, 'show_invoice' => $request->show_invoice ? 1 : 0]);
+            retailer_general_terms::where('retailer_id',$user_id)->update(['description' => $request->description]);
 
             Session::flash('success', 'Task completed successfully.');
             return redirect()->back();
@@ -6573,8 +6573,6 @@ class UserController extends Controller
             $post = new retailer_general_terms;
             $post->retailer_id = $user_id;
             $post->description = $request->description;
-            $post->show_quote = $request->show_quote ? 1 : 0;
-            $post->show_invoice = $request->show_invoice ? 1 : 0;
             $post->save();
 
             Session::flash('success', 'Task completed successfully.');

@@ -22,7 +22,7 @@
 
                                         <input type="hidden" name="id" value="{{isset($general_terms) ? $general_terms->id : null}}">
 
-                                        <div style="display: flex;width: 15%;justify-content: space-between;margin: 20px 0;" class="form-group">
+                                        <!-- <div style="display: flex;width: 15%;justify-content: space-between;margin: 20px 0;" class="form-group">
                                             <label style="margin: 0;">{{__('text.Show in quote')}}</label>
                                             <div style="display: flex;justify-content: center;align-items: center;margin-left: 10px;">
                                                 <label style="margin: 0;" class="switch">
@@ -40,7 +40,7 @@
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> -->
 
                                         <div class="form-group">
                                             <input type="hidden" name="description" value="{{isset($general_terms) ? $general_terms->description : ''}}">

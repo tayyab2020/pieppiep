@@ -577,12 +577,7 @@
 
 																<li style="margin-bottom: 0;display: none;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">{{__('text.Features')}}</a></li>
 
-
-																@if($general_terms && (((Route::currentRouteName() == 'create-custom-quotation' || Route::currentRouteName() == 'view-new-quotation') && $general_terms->show_quote) || ((Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice') && $general_terms->show_invoice)))
-
-																	<li style="margin-bottom: 0;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu3" aria-expanded="false">{{__('text.General Terms')}}</a></li>
-
-																@endif
+																<li style="margin-bottom: 0;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu3" aria-expanded="false">{{__('text.General Terms')}}</a></li>
 
 															</ul>
 
@@ -1193,18 +1188,18 @@
 
 																</div>
 
-																@if(($general_terms && (Route::currentRouteName() == 'create-custom-quotation' && $general_terms->show_quote)))
+																@if(Route::currentRouteName() == 'create-custom-quotation')
 
 																	<div id="menu3" class="tab-pane">
 																		<div class="form-group">
 																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-																				<input type="hidden" name="general_terms" value="{{$general_terms->description}}">
-                                            									<div class="summernote">{!! $general_terms->description !!}</div>
+																				<input type="hidden" name="general_terms" value="{{$general_terms ? $general_terms->description : ''}}">
+                                            									<div class="summernote">{!! $general_terms ? $general_terms->description : '' !!}</div>
 																			</div>
                                         								</div>
 																	</div>
 
-																@elseif($general_terms && (((Route::currentRouteName() == 'view-new-quotation') && $general_terms->show_quote) || ((Route::currentRouteName() == 'view-new-invoice' || Route::currentRouteName() == 'create-new-negative-invoice') && $general_terms->show_invoice)))
+																@else
 
 																	<div id="menu3" class="tab-pane">
 																		<div class="form-group">
