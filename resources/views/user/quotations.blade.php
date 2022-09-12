@@ -387,10 +387,13 @@
 
                                                                 <td data-sort="{{$date}}">{{$date1}}</td>
 
-                                                                <td>
+                                                                <td style="position: relative;">
                                                                     <div class="dropdown">
+
                                                                         <button style="outline: none;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{__('text.Action')}}
-                                                                            <span class="caret"></span></button>
+                                                                            <span class="caret"></span>
+                                                                        </button>
+
                                                                         <ul class="dropdown-menu">
 
                                                                             @if(Auth::guard('user')->user()->role_id == 2)
@@ -577,6 +580,21 @@
 
                                                                         </ul>
                                                                     </div>
+
+                                                                    @if(count($key->messages) > 0)
+
+                                                                        <main style="position: absolute;right: 0;bottom: 0;width: 3.5em;height: 3em;" rel="main">
+                                                                            <div style="width: 100%;height: 100%;" class="notification">
+                                                                                <svg viewbox="-10 0 35 20">
+                                                                                    <path class="notification--bell" d="M14 12v1H0v-1l0.73-0.58c0.77-0.77 0.81-3.55 1.19-4.42 0.77-3.77 4.08-5 4.08-5 0-0.55 0.45-1 1-1s1 0.45 1 1c0 0 3.39 1.23 4.16 5 0.38 1.88 0.42 3.66 1.19 4.42l0.66 0.58z"></path>
+                                                                                    <path class="notification--bellClapper" d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"></path>
+                                                                                </svg>
+                                                                                <span style="width: 16px;height: 16px;top: 0;font-weight: 100;" class="notification--num">{{count($key->messages)}}</span>
+                                                                            </div>
+                                                                        </main>
+
+                                                                    @endif
+
                                                                 </td>
                                                             </tr>
 
@@ -780,6 +798,11 @@
     </div>
 
     <style type="text/css">
+
+        table.dataTable.dtr-inline.collapsed>tbody>tr>td.child
+        {
+            position: relative;
+        }
 
         .note-editor
         {

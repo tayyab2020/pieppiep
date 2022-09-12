@@ -23,4 +23,9 @@ class new_quotations extends Model
         return $this->hasMany(new_invoices::class, 'quotation_id','id');
     }
 
+    public function messages()
+    {
+        return $this->hasMany(client_quotation_msgs::class, 'quotation_id','id');
+    }
+
 }
