@@ -642,4 +642,7 @@ return [
     'Discard Quotation' => 'Discard Quotation',
     'Quotation Discarded!' => 'Quotation Discarded!',
     'Quotation has been discarded.' => 'Quotation has been discarded.',
+    'General Terms' => 'General Terms',
+    'Show in quote' => 'Show in quote',
+    'Show in invoice' => 'Show in invoice',
 ];

@@ -337,8 +337,8 @@
 
 																		<input type="hidden" id="order_number" name="order_number[]">
 																		<input type="hidden" id="basic_price" name="basic_price[]">
-																		<input type="hidden" id="rate" name="rate[]">
-																		<input type="hidden" id="row_total" name="total[]">
+																		<input type="hidden" id="rate" value="0.00" name="rate[]">
+																		<input type="hidden" id="row_total" value="0.00" name="total[]">
 																		<input type="hidden" value="1" id="row_id" name="row_id[]">
 																		<input type="hidden" value="0" id="childsafe" name="childsafe[]">
 																		<input type="hidden" value="0" id="ladderband" name="ladderband[]">
@@ -576,6 +576,8 @@
 																<li style="margin-bottom: 0;" class="active"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu2" aria-expanded="false">{{__('text.Calculator')}}</a></li>
 
 																<li style="margin-bottom: 0;display: none;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu1" aria-expanded="false">{{__('text.Features')}}</a></li>
+
+																<li style="margin-bottom: 0;"><a style="border: 0;padding: 10px 30px;" data-toggle="tab" href="#menu3" aria-expanded="false">{{__('text.General Terms')}}</a></li>
 
 															</ul>
 
@@ -1185,6 +1187,30 @@
 																	@endif
 
 																</div>
+
+																@if(Route::currentRouteName() == 'create-custom-quotation')
+
+																	<div id="menu3" class="tab-pane">
+																		<div class="form-group">
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+																				<input type="hidden" name="general_terms" value="{{$general_terms ? $general_terms->description : ''}}">
+                                            									<div class="summernote">{!! $general_terms ? $general_terms->description : '' !!}</div>
+																			</div>
+                                        								</div>
+																	</div>
+
+																@else
+
+																	<div id="menu3" class="tab-pane">
+																		<div class="form-group">
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+																				<input type="hidden" name="general_terms" value="{{$invoice[0]->general_terms}}">
+                                            									<div class="summernote">{!! $invoice[0]->general_terms !!}</div>
+																			</div>
+                                        								</div>
+																	</div>
+
+																@endif
 
 															</div>
 
@@ -2508,6 +2534,33 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/nl.js"></script>
 
 	<script type="text/javascript">
+
+		$('.summernote').summernote({
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['fontsize', ['fontsize']],
+                /*['color', ['color']],*/
+                ['fontname', ['fontname']],
+                ['forecolor', ['forecolor']],
+                ['backcolor', ['backcolor']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['view', ['fullscreen', 'codeview']],
+                ['insert', ['link', 'picture', 'video']],
+            ],
+            height: 300,   //set editable area's height
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            },
+            callbacks: {
+                onChange: function(contents, $editable) {
+                    $(this).prev('input').val(contents);
+                }
+            }
+        });
+
 
 		$('.appointment_start').on('dp.change', function(e) {
 

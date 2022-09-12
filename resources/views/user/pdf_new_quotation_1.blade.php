@@ -906,6 +906,22 @@
 
                                 @endif
 
+                                @if($form_type == 1 && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3' && $request->general_terms)
+
+                                    <style>
+                                            
+                                        .page_break1 { page-break-before: always; }
+
+                                    </style>
+
+                                    <div class="page_break1">
+
+                                        {!! $request->general_terms !!}
+
+                                    </div>
+
+                                @endif
+
                         @endif
 
                         <style type="text/css">
