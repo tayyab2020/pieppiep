@@ -1630,6 +1630,7 @@ class UserController extends Controller
 
     public function Messages($id)
     {
+        client_quotation_msgs::where('quotation_id',$id)->update(["seen" => 1]);
         $messages = client_quotation_msgs::where('quotation_id',$id)->get();
 
         return view('user.messages',compact('messages'));

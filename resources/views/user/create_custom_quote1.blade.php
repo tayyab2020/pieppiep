@@ -5027,7 +5027,7 @@
 							{
 								var total_boxes = (parseFloat(height) + parseInt(cutting_lose_percentage))/100;
 								total_boxes = (Math.round(total_boxes * 10)) / 10;
-								total_boxes = parseFloat(total_boxes).toFixed(2);
+								total_boxes = Math.ceil(parseFloat(total_boxes).toFixed(2));
 
 								$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
 								$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#width').css('background-color','');
@@ -5219,7 +5219,7 @@
 							{
 								var total_boxes = (parseFloat(width) + parseInt(cutting_lose_percentage))/100;
 								total_boxes = (Math.round(total_boxes * 10)) / 10;
-								total_boxes = parseFloat(total_boxes).toFixed(2);
+								total_boxes = Math.ceil(parseFloat(total_boxes).toFixed(2));
 
 								$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
 								$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('#height').css('background-color','');
@@ -5439,7 +5439,7 @@
 								total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
 								total_quantity = total_quantity.toFixed(2);
 								var total_boxes = total_quantity/box_quantity;
-								total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+								total_boxes = Math.ceil(parseFloat(total_boxes).toFixed(2));
 
 								$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.total_boxes').val(total_quantity != '' ? total_quantity.replace(/\./g, ',') : '');
 								$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
@@ -5457,7 +5457,7 @@
 								var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
 								total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
 								var total_boxes = total_quantity/box_quantity;
-								total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+								total_boxes = Math.ceil(parseFloat(total_boxes).toFixed(2));
 								total_quantity = total_boxes * box_quantity;
 								total_quantity = ~~total_quantity;
 								total_quantity = total_quantity.toFixed(2);
@@ -5477,7 +5477,7 @@
 						if(box_quantity && total_quantity)
 						{
 							var total_boxes = parseFloat(total_quantity)/box_quantity;
-							total_boxes = Math.round(parseFloat(total_boxes).toFixed(2));
+							total_boxes = Math.ceil(parseFloat(total_boxes).toFixed(2));
 
 							$('#menu2').find(`.attributes_table[data-id='${product_row}']`).find(`.attribute-content-div[data-id='${row_id}']`).find('.box_quantity').val(total_boxes);
 						}
