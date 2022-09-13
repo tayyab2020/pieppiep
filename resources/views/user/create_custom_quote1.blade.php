@@ -316,7 +316,7 @@
 																					</div>
 
 																					<input value="{{$item->discount_option}}" class="discount_option_values" name="discount_option_values[]" type="hidden">
-																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{$item->discount}}" name="discount[]">
+																					<input maskedformat="9,1" @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="{{number_format((float)$item->discount, 2, ',', '')}}" name="discount[]">
 
 																				</div>
 
@@ -466,7 +466,7 @@
 																				</div>
 
 																				<input value="0" class="discount_option_values" name="discount_option_values[]" type="hidden">
-																				<input style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="0" name="discount[]">
+																				<input maskedformat="9,1" style="height: 35px;border-radius: 4px;" placeholder="{{__('text.Enter discount in percentage')}}" type="text" class="form-control discount_values" value="0" name="discount[]">
 
 																			</div>
 
@@ -3804,12 +3804,15 @@
 
 					var discount_option = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_option_values').val();
 					var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
+					discount = discount != '' ? discount.replace(/\,/g, '.') : '';
 					// var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
 
 					if(!discount)
 					{
 						discount = 0;
 					}
+
+					discount = parseFloat(discount).toFixed(2)
 
 					// if(!labor_discount)
 					// {
@@ -4092,7 +4095,7 @@
 							'																	</div>\n' +
 							'\n' +
 							'                                    								<input value="0" class="discount_option_values" name="discount_option_values[]" type="hidden">\n' +
-							'																	<input style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
+							'																	<input maskedformat="9,1" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" value="0" name="discount[]">\n' +
 							'\n' +
 							'																</div>\n' +
 							'\n' +
@@ -4245,7 +4248,7 @@
 							'																	</div>\n' +
 							'\n' +
 							'                                    								<input value="' + discount_option_val + '" class="discount_option_values" name="discount_option_values[]" type="hidden">\n' +
-							'																	<input value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" name="discount[]">\n' +
+							'																	<input maskedformat="9,1" value="' + discount + '" style="height: 35px;border-radius: 4px;" placeholder="Enter discount in percentage" type="text" class="form-control discount_values" name="discount[]">\n' +
 							'\n' +
 							'																</div>\n' +
 							'\n' +
@@ -4836,7 +4839,7 @@
 
 			});
 
-			$(document).on('keypress', "input[name='qty[]'], input[name='price_before_labor[]'], .total_boxes", function (e) {
+			$(document).on('keypress', "input[name='qty[]'], input[name='price_before_labor[]'], .total_boxes, .discount_values", function (e) {
 
 				e = e || window.event;
 				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -4877,7 +4880,7 @@
 
 			});
 
-			$(document).on('keypress', ".childsafe_values, .discount_values", function (e) {
+			$(document).on('keypress', ".childsafe_values", function (e) {
 
 				e = e || window.event;
 				var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
@@ -4968,7 +4971,7 @@
 
 			});
 
-			$(document).on('focusout', "input[name='qty[]'], input[name='price_before_labor[]'], .total_boxes", function (e) {
+			$(document).on('focusout', "input[name='qty[]'], input[name='price_before_labor[]'], .total_boxes, .discount_values", function (e) {
 
 				if (!$(this).val()) {
 					$(this).val(0);
@@ -5436,8 +5439,7 @@
 							if(box_quantity && cutting_lose_percentage)
 							{
 								var total_quantity = parseFloat(total_quantity) * ((100 + parseInt(cutting_lose_percentage))/100);
-								total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
-								total_quantity = total_quantity.toFixed(2);
+								total_quantity = parseFloat(total_quantity).toFixed(2);
 								var total_boxes = total_quantity/box_quantity;
 								total_boxes = Math.ceil(parseFloat(total_boxes).toFixed(2));
 
@@ -5455,7 +5457,7 @@
 							if(width && height && box_quantity && cutting_lose_percentage)
 							{
 								var total_quantity = ((width/100) * (height/100) * (1 + (cutting_lose_percentage/100)));
-								total_quantity = Math.round(parseFloat(total_quantity).toFixed(2));
+								total_quantity = parseFloat(total_quantity).toFixed(2);
 								var total_boxes = total_quantity/box_quantity;
 								total_boxes = Math.ceil(parseFloat(total_boxes).toFixed(2));
 								total_quantity = total_boxes * box_quantity;

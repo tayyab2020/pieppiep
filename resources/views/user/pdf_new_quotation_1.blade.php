@@ -756,6 +756,16 @@
 
                                 @endif
 
+                                @if($form_type == 1 && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3' && $request->general_terms)
+
+                                    <div class="row">
+
+                                        {!! $request->general_terms !!}
+
+                                    </div>
+
+                                @endif
+
                                 @if($form_type == 1 && $role != 'invoice' && $role != 'invoice1' && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3')
 
                                     <?php $flag1 = 0; ?>
@@ -901,22 +911,6 @@
                                             </style>
 
                                         <?php } ?>
-
-                                    </div>
-
-                                @endif
-
-                                @if($form_type == 1 && $role != 'order' && $role != 'supplier' && $role != 'supplier1' && $role != 'supplier2' && $role != 'supplier3' && $request->general_terms)
-
-                                    <style>
-                                            
-                                        .page_break1 { page-break-before: always; }
-
-                                    </style>
-
-                                    <div class="page_break1">
-
-                                        {!! $request->general_terms !!}
 
                                     </div>
 
