@@ -645,4 +645,5 @@ return [
     'General Terms' => 'General Terms',
     'Show in quote' => 'Show in quote',
     'Show in invoice' => 'Show in invoice',
+    'Factor' => 'Factor',
 ];
