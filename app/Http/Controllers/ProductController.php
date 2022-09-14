@@ -1399,14 +1399,14 @@ class ProductController extends Controller
 
                     foreach ($colors as $c => $key)
                     {
-                        if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                        if($key != NULL && $request->color_codes[$c] != NULL)
                         {
                             $col = new colors;
                             $col->title = $key;
                             $col->color_code = $request->color_codes[$c];
                             $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                             $col->product_id = $cat->id;
-                            $col->table_id = $request->price_tables[$c];
+                            $col->table_id = $request->price_tables[$c] ? $request->price_tables[$c] : NULL;
                             $col->save();
                         }
                     }

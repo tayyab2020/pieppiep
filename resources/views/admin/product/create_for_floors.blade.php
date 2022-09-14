@@ -421,7 +421,7 @@
                                                             }
                                                             .wrapper1 .file-upload {
                                                                 height: 50px;
-                                                                width: 170px;
+                                                                width: auto;
                                                                 border-radius: 5px;
                                                                 position: relative;
                                                                 display: flex;
@@ -435,6 +435,7 @@
                                                                 color: #fff;
                                                                 font-size: 16px;
                                                                 font-weight: 600;
+                                                                padding: 20px;
                                                             }
                                                             .wrapper1 .file-upload input[type='file'] {
                                                                 height: 50px;
@@ -446,7 +447,7 @@
                                                                 cursor: pointer;
                                                             }
                                                             .wrapper1 .file-upload:hover {
-                                                                background-position: 0 -101%;
+                                                                background-position: 0 -100%;
                                                                 color: #2590eb;
                                                             }
 
