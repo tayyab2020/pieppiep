@@ -633,13 +633,17 @@
 
                                                                         @foreach($colors_data as $i => $key)
 
-                                                                            <tr data-id="{{$i+1}}">
-                                                                                <td>{{$key->table_id}}</td>
-                                                                                <td>{{$key->table}}</td>
-                                                                                <td>{{$key->color}}</td>
-                                                                                <td>{{$key->color_code}}</td>
-                                                                                <td><a href="/aanbieder/price-tables/prices/view/{{$key->table_id}}">View</a></td>
-                                                                            </tr>
+                                                                            @if($key->table)
+
+                                                                                <tr data-id="{{$i+1}}">
+                                                                                    <td>{{$key->table_id}}</td>
+                                                                                    <td>{{$key->table}}</td>
+                                                                                    <td>{{$key->color}}</td>
+                                                                                    <td>{{$key->color_code}}</td>
+                                                                                    <td><a href="/aanbieder/price-tables/prices/view/{{$key->table_id}}">View</a></td>
+                                                                                </tr>
+
+                                                                            @endif                                                                            
 
                                                                         @endforeach
 
