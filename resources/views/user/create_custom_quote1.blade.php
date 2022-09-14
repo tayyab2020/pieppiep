@@ -3833,6 +3833,13 @@
 					// var total_discount = discount_val + labor_discount_val;
 					var total_discount = discount_val;
 
+					price = parseFloat(price).toFixed(2);
+
+					if(qty != 0)
+					{
+						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+					}
+
 					if(isNaN(total_discount))
 					{
 						total_discount = 0;
