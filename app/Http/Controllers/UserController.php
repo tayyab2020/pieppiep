@@ -4351,7 +4351,14 @@ class UserController extends Controller
 
                 $suppliers = array();
 
-                $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->where('new_orders.supplier_id',$supplier_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+                $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id);
+
+                if($user_role == 4)
+                {
+                    $invoice = $invoice->where('new_orders.supplier_id',$supplier_id);
+                }
+
+                $invoice = $invoice->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
                     ->with(['features' => function($query)
                     {
                         $query->leftjoin('features','features.id','=','new_orders_features.feature_id')
@@ -4395,7 +4402,15 @@ class UserController extends Controller
                     $suppliers = User::whereIn('id',$suppliers)->get();
                 }
 
-                $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id)->where('new_orders.supplier_id',$supplier_id)->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
+
+                $invoice = new_orders::leftjoin('products','products.id','=','new_orders.product_id')->where('new_orders.quotation_id', $quotation_id);
+
+                if($user_role == 4)
+                {
+                    $invoice = $invoice->where('new_orders.supplier_id',$supplier_id);
+                }
+
+                $invoice = $invoice->select('new_orders.*','products.ladderband','products.ladderband_value','products.ladderband_price_impact','products.ladderband_impact_type')
                     ->with(['features' => function($query)
                     {
                         $query->leftjoin('features','features.id','=','new_orders_features.feature_id')
