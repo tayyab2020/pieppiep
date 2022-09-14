@@ -581,7 +581,7 @@
                                                                         </ul>
                                                                     </div>
 
-                                                                    @if(count($key->unseen_messages) > 0)
+                                                                    @if(Auth::guard('user')->user()->role_id == 2 && count($key->unseen_messages) > 0)
 
                                                                         <a href="{{ url('/aanbieder/messages/'.$key->invoice_id) }}">
                                                                             <main style="position: absolute;right: 0;bottom: 0;width: 3.5em;height: 3em;" rel="main">
