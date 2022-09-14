@@ -1024,14 +1024,14 @@ class ProductController extends Controller
                     foreach ($colors as $c => $key)
                     {
                     
-                        if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                        if($key != NULL && $request->color_codes[$c] != NULL)
                         {
                             $col = new colors;
                             $col->title = $key;
                             $col->color_code = $request->color_codes[$c];
                             $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                             $col->product_id = $request->cat_id;
-                            $col->table_id = $request->price_tables[$c];
+                            $col->table_id = $request->price_tables[$c] ? $request->price_tables[$c] : NULL;
                             $col->save();
                         }
                     }
@@ -1049,26 +1049,26 @@ class ProductController extends Controller
                             if($col_check)
                             {
                             
-                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                                if($key != NULL && $request->color_codes[$c] != NULL)
                                 {
                                     $col_check->title = $key;
                                     $col_check->color_code = $request->color_codes[$c];
                                     $col_check->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                                    $col_check->table_id = $request->price_tables[$c];
+                                    $col_check->table_id = $request->price_tables[$c] ? $request->price_tables[$c] : NULL;
                                     $col_check->save();
                                 }
                             }
                             else
                             {
                             
-                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                                if($key != NULL && $request->color_codes[$c] != NULL)
                                 {
                                     $col = new colors;
                                     $col->title = $key;
                                     $col->color_code = $request->color_codes[$c];
                                     $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                                     $col->product_id = $request->cat_id;
-                                    $col->table_id = $request->price_tables[$c];
+                                    $col->table_id = $request->price_tables[$c] ? $request->price_tables[$c] : NULL;
                                     $col->save();
                                 }
                             }
