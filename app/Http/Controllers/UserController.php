@@ -5882,7 +5882,7 @@ class UserController extends Controller
                 $invoice_items->delivery_days = $request->delivery_days[$i] ? $request->delivery_days[$i] : 1;
                 $invoice_items->delivery_date = $delivery_date;
                 $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
-                $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
+                $invoice_items->discount = $request->discount[$i] ? str_replace(',', '.',$request->discount[$i]) : 0;
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                 $invoice_items->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
 
@@ -5904,7 +5904,7 @@ class UserController extends Controller
                     // $order->delivery_date = $delivery_date;
                     // $order->retailer_delivery_date = $delivery_date;
                     $order->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
-                    $order->discount = $request->discount[$i] ? $request->discount[$i] : 0;
+                    $order->discount = $request->discount[$i] ? str_replace(',', '.',$request->discount[$i]) : 0;
                     $order->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                     $order->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;
 
@@ -6250,7 +6250,7 @@ class UserController extends Controller
                 $invoice_items->delivery_days = $request->delivery_days[$i];
                 $invoice_items->delivery_date = $delivery_date;
                 $invoice_items->price_before_labor = $request->price_before_labor[$i] ? str_replace(',', '.',$request->price_before_labor[$i]) : 0;
-                $invoice_items->discount = $request->discount[$i] ? $request->discount[$i] : 0;
+                $invoice_items->discount = $request->discount[$i] ? str_replace(',', '.',$request->discount[$i]) : 0;
                 $invoice_items->discount_option = $request->discount_option_values[$i] ? 1 : 0;
                 $invoice_items->total_discount = $request->total_discount[$i] ? str_replace(',', '.',$request->total_discount[$i]) : 0;
                 $invoice_items->base_price = $request->base_price[$i] ? $request->base_price[$i] : 0;

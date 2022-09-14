@@ -206,9 +206,11 @@
                                                                             <td>
                                                                                 <select class="form-control" name="price_impact[]">
 
-                                                                                    <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">No</option>
-                                                                                    <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
-                                                                                    <option {{$key1->price_impact == 2 ? 'selected' : null}} value="2">m¹ Impact</option>
+                                                                                    <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">{{__('text.No')}}</option>
+                                                                                    <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">{{__('text.Fixed')}}</option>
+                                                                                    <option {{$key1->price_impact == 2 ? 'selected' : null}} value="2">{{__('text.m¹ Impact')}}</option>
+                                                                                    <option {{$key1->price_impact == 3 ? 'selected' : null}} value="3">{{__('text.m² Impact')}}</option>
+                                                                                    <option {{$key1->price_impact == 4 ? 'selected' : null}} value="4">{{__('text.Factor')}}</option>
 
                                                                                 </select>
                                                                             </td>
@@ -255,9 +257,11 @@
                                                                         <td>
                                                                             <select class="form-control" name="price_impact[]">
 
-                                                                                <option value="0">No</option>
-                                                                                <option value="1">Fixed</option>
-                                                                                <option value="2">m¹ Impact</option>
+                                                                                <option value="0">{{__('text.No')}}</option>
+                                                                                <option value="1">{{__('text.Fixed')}}</option>
+                                                                                <option value="2">{{__('text.m¹ Impact')}}</option>
+                                                                                <option value="3">{{__('text.m² Impact')}}</option>
+                                                                                <option value="4">{{__('text.Factor')}}</option>
 
                                                                             </select>
                                                                         </td>
@@ -445,9 +449,11 @@
                                                                                                 <td>
                                                                                                     <select class="form-control" name="price_impact{{$s+1}}[]">
 
-                                                                                                        <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">No</option>
-                                                                                                        <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">Fixed</option>
-                                                                                                        <option {{$key1->price_impact == 2 ? 'selected' : null}} value="2">m¹ Impact</option>
+                                                                                                        <option {{$key1->price_impact == 0 ? 'selected' : null}} value="0">{{__('text.No')}}</option>
+                                                                                                        <option {{$key1->price_impact == 1 ? 'selected' : null}} value="1">{{__('text.Fixed')}}</option>
+                                                                                                        <option {{$key1->price_impact == 2 ? 'selected' : null}} value="2">{{__('text.m¹ Impact')}}</option>
+                                                                                                        <option {{$key1->price_impact == 3 ? 'selected' : null}} value="3">{{__('text.m² Impact')}}</option>
+                                                                                                        <option {{$key1->price_impact == 4 ? 'selected' : null}} value="4">{{__('text.Factor')}}</option>
 
                                                                                                     </select>
                                                                                                 </td>
@@ -484,9 +490,11 @@
                                                                                         <td>
                                                                                             <select class="form-control" name="price_impact{{$s+1}}[]">
 
-                                                                                                <option value="0">No</option>
-                                                                                                <option value="1">Fixed</option>
-                                                                                                <option value="2">m¹ Impact</option>
+                                                                                                <option value="0">{{__('text.No')}}</option>
+                                                                                                <option value="1">{{__('text.Fixed')}}</option>
+                                                                                                <option value="2">{{__('text.m¹ Impact')}}</option>
+                                                                                                <option value="3">{{__('text.m² Impact')}}</option>
+                                                                                                <option value="4">{{__('text.Factor')}}</option>
 
                                                                                             </select>
                                                                                         </td>
@@ -546,9 +554,11 @@
                                                                             <td>
                                                                                 <select class="form-control" name="price_impact1[]">
 
-                                                                                    <option value="0">No</option>
-                                                                                    <option value="1">Fixed</option>
-                                                                                    <option value="2">m¹ Impact</option>
+                                                                                    <option value="0">{{__('text.No')}}</option>
+                                                                                    <option value="1">{{__('text.Fixed')}}</option>
+                                                                                    <option value="2">{{__('text.m¹ Impact')}}</option>
+                                                                                    <option value="3">{{__('text.m² Impact')}}</option>
+                                                                                    <option value="4">{{__('text.Factor')}}</option>
 
                                                                                 </select>
                                                                             </td>
@@ -1040,9 +1050,11 @@
             '                                                                                        <td>\n' +
             '                                                                                            <select class="form-control" name="price_impact'+id+'[]">\n' +
             '\n' +
-            '                                                                                                <option value="0">No</option>\n' +
-            '                                                                                                <option value="1">Fixed</option>\n' +
-            '                                                                                                <option value="2">m¹ Impact</option>\n' +
+            '                                                                                                <option value="0">{{__("text.No")}}</option>\n' +
+            '                                                                                                <option value="1">{{__("text.Fixed")}}</option>\n' +
+            '                                                                                                <option value="2">{{__("text.m¹ Impact")}}</option>\n' +
+            '                                                                                                <option value="3">{{__("text.m² Impact")}}</option>\n' +
+            '                                                                                                <option value="4">{{__("text.Factor")}}</option>\n' +
             '\n' +
             '                                                                                            </select>\n' +
             '                                                                                        </td>\n' +
@@ -1095,9 +1107,11 @@
                 '                                                                                        <td>\n' +
                 '                                                                                            <select class="form-control" name="price_impact'+heading_id+'[]">\n' +
                 '\n' +
-                '                                                                                                <option value="0">No</option>\n' +
-                '                                                                                                <option value="1">Fixed</option>\n' +
-                '                                                                                                <option value="2">m¹ Impact</option>\n' +
+                '                                                                                                <option value="0">{{__("text.No")}}</option>\n' +
+                '                                                                                                <option value="1">{{__("text.Fixed")}}</option>\n' +
+                '                                                                                                <option value="2">{{__("text.m¹ Impact")}}</option>\n' +
+                '                                                                                                <option value="3">{{__("text.m² Impact")}}</option>\n' +
+                '                                                                                                <option value="4">{{__("text.Factor")}}</option>\n' +
                 '\n' +
                 '                                                                                            </select>\n' +
                 '                                                                                        </td>\n' +
@@ -1155,9 +1169,11 @@
             '\n' +
             '                                                                                            <select class="form-control" name="price_impact[]">\n' +
             '\n' +
-            '                                                                                                <option value="0">No</option>\n' +
-            '                                                                                                <option value="1">Fixed</option>\n' +
-            '                                                                                                <option value="2">m¹ Impact</option>\n' +
+            '                                                                                                <option value="0">{{__("text.No")}}</option>\n' +
+            '                                                                                                <option value="1">{{__("text.Fixed")}}</option>\n' +
+            '                                                                                                <option value="2">{{__("text.m¹ Impact")}}</option>\n' +
+            '                                                                                                <option value="3">{{__("text.m² Impact")}}</option>\n' +
+            '                                                                                                <option value="4">{{__("text.Factor")}}</option>\n' +
             '\n' +
             '                                                                                            </select>\n' +
             '\n' +
@@ -1228,9 +1244,11 @@
             '                                                                                        <td>\n' +
             '                                                                                            <select class="form-control" name="price_impact'+feature_row+'[]">\n' +
             '\n' +
-            '                                                                                                <option value="0">No</option>\n' +
-            '                                                                                                <option value="1">Fixed</option>\n' +
-            '                                                                                                <option value="2">m¹ Impact</option>\n' +
+            '                                                                                                <option value="0">{{__("text.No")}}</option>\n' +
+            '                                                                                                <option value="1">{{__("text.Fixed")}}</option>\n' +
+            '                                                                                                <option value="2">{{__("text.m¹ Impact")}}</option>\n' +
+            '                                                                                                <option value="3">{{__("text.m² Impact")}}</option>\n' +
+            '                                                                                                <option value="4">{{__("text.Factor")}}</option>\n' +
             '\n' +
             '                                                                                            </select>\n' +
             '                                                                                        </td>\n' +
@@ -1303,9 +1321,11 @@
                 '\n' +
                 '                                                                                            <select class="form-control" name="price_impact[]">\n' +
                 '\n' +
-                '                                                                                                <option value="0">No</option>\n' +
-                '                                                                                                <option value="1">Fixed</option>\n' +
-                '                                                                                                <option value="2">m¹ Impact</option>\n' +
+                '                                                                                                <option value="0">{{__("text.No")}}</option>\n' +
+                '                                                                                                <option value="1">{{__("text.Fixed")}}</option>\n' +
+                '                                                                                                <option value="2">{{__("text.m¹ Impact")}}</option>\n' +
+                '                                                                                                <option value="3">{{__("text.m² Impact")}}</option>\n' +
+                '                                                                                                <option value="4">{{__("text.Factor")}}</option>\n' +
                 '\n' +
                 '                                                                                            </select>\n' +
                 '\n' +
@@ -1377,9 +1397,11 @@
                 '                                                                                        <td>\n' +
                 '                                                                                            <select class="form-control" name="price_impact'+f_row+'[]">\n' +
                 '\n' +
-                '                                                                                                <option value="0">No</option>\n' +
-                '                                                                                                <option value="1">Fixed</option>\n' +
-                '                                                                                                <option value="2">m¹ Impact</option>\n' +
+                '                                                                                                <option value="0">{{__("text.No")}}</option>\n' +
+                '                                                                                                <option value="1">{{__("text.Fixed")}}</option>\n' +
+                '                                                                                                <option value="2">{{__("text.m¹ Impact")}}</option>\n' +
+                '                                                                                                <option value="3">{{__("text.m² Impact")}}</option>\n' +
+                '                                                                                                <option value="4">{{__("text.Factor")}}</option>\n' +
                 '\n' +
                 '                                                                                            </select>\n' +
                 '                                                                                        </td>\n' +

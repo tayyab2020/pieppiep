@@ -662,6 +662,7 @@ class ProductController extends Controller
                         $fea->impact_type = $request->impact_type[$f];
                         $fea->variable = $request->price_impact[$f] == 2 ? 1 : 0;
                         $fea->m2_impact = $request->price_impact[$f] == 3 ? 1 : 0;
+                        $fea->factor = $request->price_impact[$f] == 4 ? 1 : 0;
                         $fea->save();
 
                         $s_titles = 'features'.$request->f_rows[$f];
@@ -688,6 +689,7 @@ class ProductController extends Controller
                                     $sub_feature->impact_type = $request->$s_impact_type[$s];
                                     $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
                                     $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                    $sub_feature->factor = $request->$s_price_impact[$s] == 4 ? 1 : 0;
                                     $sub_feature->save();
                                 }
                             }
@@ -718,6 +720,7 @@ class ProductController extends Controller
                                 $fea_check->impact_type = $request->impact_type[$f];
                                 $fea_check->variable = $request->price_impact[$f] == 2 ? 1 : 0;
                                 $fea_check->m2_impact = $request->price_impact[$f] == 3 ? 1 : 0;
+                                $fea_check->factor = $request->price_impact[$f] == 4 ? 1 : 0;
                                 $fea_check->save();
 
                                 $s_titles = 'features'.$request->f_rows[$f];
@@ -746,6 +749,7 @@ class ProductController extends Controller
                                                 $sub_fea_check->impact_type = $request->$s_impact_type[$s];
                                                 $sub_fea_check->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
                                                 $sub_fea_check->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                                $sub_fea_check->factor = $request->$s_price_impact[$s] == 4 ? 1 : 0;
                                                 $sub_fea_check->save();
                                             }
                                         }
@@ -764,6 +768,7 @@ class ProductController extends Controller
                                                 $sub_feature->impact_type = $request->$s_impact_type[$s];
                                                 $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
                                                 $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                                $sub_feature->factor = $request->$s_price_impact[$s] == 4 ? 1 : 0;
                                                 $sub_feature->save();
                                             }
                                         }
@@ -788,6 +793,7 @@ class ProductController extends Controller
                                 $fea->impact_type = $request->impact_type[$f];
                                 $fea->variable = $request->price_impact[$f] == 2 ? 1 : 0;
                                 $fea->m2_impact = $request->price_impact[$f] == 3 ? 1 : 0;
+                                $fea->factor = $request->price_impact[$f] == 4 ? 1 : 0;
                                 $fea->save();
 
                                 $s_titles = 'features'.$request->f_rows[$f];
@@ -814,6 +820,7 @@ class ProductController extends Controller
                                             $sub_feature->impact_type = $request->$s_impact_type[$s];
                                             $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
                                             $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                            $sub_feature->factor = $request->$s_price_impact[$s] == 4 ? 1 : 0;
                                             $sub_feature->save();
                                         }
                                     }
@@ -1017,14 +1024,14 @@ class ProductController extends Controller
                     foreach ($colors as $c => $key)
                     {
                     
-                        if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                        if($key != NULL && $request->color_codes[$c] != NULL)
                         {
                             $col = new colors;
                             $col->title = $key;
                             $col->color_code = $request->color_codes[$c];
                             $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                             $col->product_id = $request->cat_id;
-                            $col->table_id = $request->price_tables[$c];
+                            $col->table_id = $request->price_tables[$c] ? $request->price_tables[$c] : NULL;
                             $col->save();
                         }
                     }
@@ -1042,26 +1049,26 @@ class ProductController extends Controller
                             if($col_check)
                             {
                             
-                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                                if($key != NULL && $request->color_codes[$c] != NULL)
                                 {
                                     $col_check->title = $key;
                                     $col_check->color_code = $request->color_codes[$c];
                                     $col_check->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
-                                    $col_check->table_id = $request->price_tables[$c];
+                                    $col_check->table_id = $request->price_tables[$c] ? $request->price_tables[$c] : NULL;
                                     $col_check->save();
                                 }
                             }
                             else
                             {
                             
-                                if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                                if($key != NULL && $request->color_codes[$c] != NULL)
                                 {
                                     $col = new colors;
                                     $col->title = $key;
                                     $col->color_code = $request->color_codes[$c];
                                     $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                                     $col->product_id = $request->cat_id;
-                                    $col->table_id = $request->price_tables[$c];
+                                    $col->table_id = $request->price_tables[$c] ? $request->price_tables[$c] : NULL;
                                     $col->save();
                                 }
                             }
@@ -1286,6 +1293,7 @@ class ProductController extends Controller
                         $feature->impact_type = $request->impact_type[$f];
                         $feature->variable = $request->price_impact[$f] == 2 ? 1 : 0;
                         $feature->m2_impact = $request->price_impact[$f] == 3 ? 1 : 0;
+                        $feature->factor = $request->price_impact[$f] == 4 ? 1 : 0;
                         $feature->save();
 
                         $s_titles = 'features'.$request->f_rows[$f];
@@ -1312,6 +1320,7 @@ class ProductController extends Controller
                                     $sub_feature->impact_type = $request->$s_impact_type[$s];
                                     $sub_feature->variable = $request->$s_price_impact[$s] == 2 ? 1 : 0;
                                     $sub_feature->m2_impact = $request->$s_price_impact[$s] == 3 ? 1 : 0;
+                                    $sub_feature->factor = $request->$s_price_impact[$s] == 4 ? 1 : 0;
                                     $sub_feature->save();
                                 }
                             }
@@ -1390,14 +1399,14 @@ class ProductController extends Controller
 
                     foreach ($colors as $c => $key)
                     {
-                        if($key != NULL && $request->color_codes[$c] != NULL && $request->price_tables[$c] != NULL)
+                        if($key != NULL && $request->color_codes[$c] != NULL)
                         {
                             $col = new colors;
                             $col->title = $key;
                             $col->color_code = $request->color_codes[$c];
                             $col->max_height = $request->color_max_height[$c] ? str_replace(",",".",$request->color_max_height[$c]) : NULL;
                             $col->product_id = $cat->id;
-                            $col->table_id = $request->price_tables[$c];
+                            $col->table_id = $request->price_tables[$c] ? $request->price_tables[$c] : NULL;
                             $col->save();
                         }
                     }

@@ -3317,12 +3317,10 @@
 						var discount = $('#products_table').find(`[data-id='${row_id}']`).find('.discount-box').find('.discount_values').val();
 						var labor_discount = $('#products_table').find(`[data-id='${row_id}']`).find('.labor-discount-box').find('.labor_discount_values').val();
 
-
 						if(!discount)
 						{
 							discount = 0;
 						}
-
 
 						if(!labor_discount)
 						{
@@ -3336,8 +3334,20 @@
 
 						var total_discount = discount_val + labor_discount_val;
 						total_discount = parseFloat(total_discount).toFixed(2);
+
+						if(isNaN(total_discount))
+						{
+							total_discount = 0;
+						}
+
 						var old_discount = total_discount / qty;
 						old_discount = parseFloat(old_discount).toFixed(2);
+
+						if(isNaN(old_discount))
+						{
+							old_discount = 0;
+						}
+
 						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount').val('-' + total_discount.replace(/\./g, ','));
 						$('#products_table').find(`[data-id='${row_id}']`).find('.total_discount_old').val('-' + old_discount);
 
@@ -3345,8 +3355,19 @@
 						var price = rate / qty;
 						/*price = Math.round(price);*/
 
+						if(isNaN(price))
+						{
+							price = 0;
+						}
+
+						price = parseFloat(price).toFixed(2);
+
+						if(qty != 0)
+						{
+							$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
+						}
+
 						/*$('#products_table').find(`[data-id='${row_id}']`).find('#rate').val(rate);*/
-						$('#products_table').find(`[data-id='${row_id}']`).find('#row_total').val(price);
 
 					}
 					else
@@ -6578,6 +6599,49 @@
 
 							if (data[0] && data[0].price_impact == 1) {
 
+								if (data[0].impact_type == 0) {
+										
+									impact_value = data[0].value;
+
+									if(!margin)
+									{
+										if (supplier_margin && retailer_margin) {
+											if(supplier_margin != 0)
+											{
+												impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+											}
+										}
+									}
+
+									impact_value = parseFloat(impact_value).toFixed(2);
+									total = parseFloat(total) + parseFloat(impact_value);
+									total = total.toFixed(2);
+								}
+								else {
+									
+									impact_value = data[0].value;
+									var per = (impact_value) / 100;
+									impact_value = basic_price * per;
+
+									if(!margin)
+									{
+										if (supplier_margin && retailer_margin) {
+											if(supplier_margin != 0)
+											{
+												impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
+											}
+										}
+									}
+
+									impact_value = parseFloat(impact_value).toFixed(2);
+									total = parseFloat(total) + parseFloat(impact_value);
+									total = total.toFixed(2);
+
+								}
+
+							}
+							else {
+
 								if (data[0].variable == 1) {
 									impact_value = data[0].value;
 									impact_value = impact_value * (width / 100);
@@ -6596,49 +6660,18 @@
 									total = parseFloat(total) + parseFloat(impact_value);
 									total = total.toFixed(2);
 								}
-								else {
-									if (data[0].impact_type == 0) {
-										impact_value = data[0].value;
-
-										if(!margin)
-										{
-											if (supplier_margin && retailer_margin) {
-												if(supplier_margin != 0)
-												{
-													impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-												}
-											}
-										}
-
-										impact_value = parseFloat(impact_value).toFixed(2);
-										total = parseFloat(total) + parseFloat(impact_value);
-										total = total.toFixed(2);
+								else
+								{
+									if(data[0].factor == 1)
+									{
+										var new_qty = data[0].value * qty;
+										$('#menu1').find(`[data-id='${row_id}']`).find('input[name="qty[]"]').val(new_qty);
 									}
-									else {
-										impact_value = data[0].value;
-										var per = (impact_value) / 100;
-										impact_value = basic_price * per;
 
-										if(!margin)
-										{
-											if (supplier_margin && retailer_margin) {
-												if(supplier_margin != 0)
-												{
-													impact_value = (parseFloat(impact_value) / supplier_margin) * retailer_margin;
-												}
-											}
-										}
-
-										impact_value = parseFloat(impact_value).toFixed(2);
-										total = parseFloat(total) + parseFloat(impact_value);
-										total = total.toFixed(2);
-									}
+									impact_value = 0;
+									total = parseFloat(total) + parseFloat(impact_value);
+									total = total.toFixed(2);
 								}
-							}
-							else {
-								impact_value = 0;
-								total = parseFloat(total) + parseFloat(impact_value);
-								total = total.toFixed(2);
 							}
 
 							//total = Math.round(total);
