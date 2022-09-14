@@ -216,7 +216,7 @@
 
 																				<div style="display: flex;align-items: center;height: 100%;">
 																					@if(Route::currentRouteName() == 'create-new-negative-invoice') - @endif
-																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif type="text" value="{{str_replace('.', ',',floatval($item->qty))}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
+																					<input @if((Route::currentRouteName() == 'view-new-quotation') && (isset($invoice) && ($invoice[0]->finished == 1))) readonly @endif type="text" value="{{number_format((float)$item->qty, 2, ',', '')}}" maskedformat="9,1" name="qty[]" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
 																				</div>
 																			</div>
 
@@ -374,7 +374,7 @@
 																			<label class="content-label">{{__('text.Qty')}}</label>
 
 																			<div style="display: flex;align-items: center;height: 100%;">
-																				<input type="text" value="{{isset($request_id) && $request_id ? number_format((float)$quote_qty, 2, ',', '') : 1}}" name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
+																				<input type="text" value="{{isset($request_id) && $request_id ? number_format((float)$quote_qty, 2, ',', '') : '1,00'}}" name="qty[]" maskedformat="9,1" style="border: 0;background: transparent;padding: 0 5px;height: 100%;" class="form-control qty res-white">
 																			</div>
 																		</div>
 
